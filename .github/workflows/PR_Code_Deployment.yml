@@ -1,4 +1,4 @@
-name: PR Code Validation
+name: PR Code Deployment
 
 # Definition when the workflow should run
 on:
@@ -41,4 +41,4 @@ jobs:
 
       # deploy code without running test classes
       - name: 'Deploy source code'
-        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60
+        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --targetusername CI01
