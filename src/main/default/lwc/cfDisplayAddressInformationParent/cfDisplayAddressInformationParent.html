@@ -1,0 +1,135 @@
+<template>
+            <div class="slds-grid slds-wrap slds-is-relative ">
+            <div style="position: fixed;z-index: 999999;top: 0;right: 0;">
+  <omnistudio-toast class="flexcard-toast-element" theme="slds" title="" message="" styletype=""> </omnistudio-toast>
+</div>
+            <div if:true={showLoader} class="slds-is-absolute vloc-loader_override" style="height: 100%; width: 100%; min-height:50px; background: transparent; z-index: 99;">
+  <div>
+   <omnistudio-spinner
+      variant="brand"
+      alternative-text="Loading content..."
+      size="medium"
+      theme="slds"
+      ></omnistudio-spinner>
+  </div>
+</div>
+            <template if:false={hasPermission}>
+              You don't have required permissions to view this card.
+            </template>
+            <template if:true={hasPermission}>
+              <template if:true={hasRecords}>
+                        <template for:each={_records} for:item="record" for:index="rindex">
+                            <omnistudio-flex-card-state if:true={record}  key={record._flex.uniqueKey} data-recordid={record.Id} record={record} data-statue="true"  data-index="0" data-rindex={rindex} class="cf-vlocity-state-0 cf-vlocity-state slds-size_12-of-12 "  tracking-obj={_childCardTrackingObj} >
+      <div if:true={cardLoaded} class="slds-grid slds-wrap slds-card " style="      
+         ">
+          <div data-style-id="state0element0" class="slds-col   addressheader slds-size_12-of-12  " data-rindex={rindex} style="      
+         " >
+    <omnistudio-block data-style-id="state0element0_child"  card={card}  record={record}  label="Address Header"  collapsible="false"  collapsed-by-default="false"  theme="slds"  ><div class="slds-grid slds-wrap">
+          <div data-style-id="state0element0block_element0" class="slds-col   slds-size_1-of-12  " data-rindex={rindex} style="" ><omnistudio-flex-icon data-style-id="state0element0block_element0_child"   card={card}  record={record}  icon-type="Salesforce SVG"  icon-name="custom:custom64"  size="small"  extraclass="slds-icon_container slds-icon-custom-custom64"  variant="inverse"  imgsrc=""  theme="slds"  ></omnistudio-flex-icon>
+      </div><div data-style-id="state0element0block_element1" class="slds-col  addressInformtext slds-size_9-of-12  " data-rindex={rindex} style="      
+         " ><omnistudio-output-field data-style-id="state0element0block_element1_child"   card={card}  record={record}  merge-field="%3Cdiv%3E%3Cstrong%3E%3Cspan%20style=%22font-size:%2014pt;%22%3EAddress%20Information%20(%7BAddressCount%7D)%3C/span%3E%3C/strong%3E%3C/div%3E"  theme="slds"  ></omnistudio-output-field>
+      </div><div data-style-id="state0element0block_element2" class="slds-col   slds-size_1-of-12  " data-rindex={rindex} style="      
+         " >
+    <omnistudio-flex-menu data-style-id="state0element0block_element2_child" 
+    onupdateos={updateOmniscript} onselectcards={updateSelectedCards} onsetvalue={updateAction}  card={card}  record={record}  type="action"  size="xx-small"  variant="outline-brand"  icon-name="utility:down"  overflow="true"  position="right"  icon-position="left"  icon-size="x-small" 
+    theme="slds" > 
+     <omnistudio-flex-menu-item 
+    name="menu-item-1695639366527-0"
+    theme="slds"
+    data-style-id="state0element0block_element2_menuitem_0"
+    
+    class=""
+    >
+    <omnistudio-flex-action record={record} card={card}  action-list='\[{"key":"1695639366547-jubq4i9t2","label":"New Address","draggable":false,"isOpen":true,"card":"{card}","stateAction":{"id":"flex-action-1695646776587","type":"Custom","displayName":"Action","vlocityIcon":"standard-default","targetType":"Record","openUrlIn":"Current Window","Record":{}},"actionIndex":0}]'  label="New Address"  icon-name=""  re-render-flyout="undefined"  preload-flyout="undefined"  flyout-details='\{}'  flyout-channel="undefined"  class="state0element0block_element2_menuitem_0 flexActionElement" onexecuteaction={performAction} 
+    data-action-element-class="state0element0block_element2_menuitem_0" data-action-key="state0element0block_element2_menuitem_0" data-show-spinner="false" 
+    data-element-label="addressheadermenu2menuitem0" 
+    theme="slds" extra-class="slds-dropdown__item" 
+      action-wrapperclass=""
+      action-labelclass="slds-truncate menu-item-label"
+      menu-item-data="%7B%7D"
+      icon-size="x-small"
+      icon-extraclass="slds-icon-text-default slds-m-right_x-small" >
+     </omnistudio-flex-action>
+    </omnistudio-flex-menu-item>
+    </omnistudio-flex-menu>
+    </div>
+        </div></omnistudio-block>
+    </div><div data-style-id="state0element1" class="slds-col   slds-size_12-of-12 " data-rindex={rindex} style="" ><c-cf-display-address-information-child data-style-id="state0element1_child"  tracking-obj={_childCardTrackingObj}  is-inside-parent={insideParent} parent-uniquekey={uniqueKey}  card-node="\{record.Account}"  parent-record={record}  records={_records}  parent-mergefields={card}  record-id={recordId}  is-child-card-tracking-enabled="false"  object-api-name={objectApiName}  theme="slds"   onupdateparent={updateParentData}></c-cf-display-address-information-child>
+    </div><div data-style-id="state0element2" class="slds-col   bottomheader slds-size_12-of-12  " data-rindex={rindex} style="      
+     height:63.45px;    " >
+    <omnistudio-block data-style-id="state0element2_child"  card={card}  record={record}  label="Address Footer"  collapsible="false"  collapsed-by-default="false"  theme="slds"  ><div class="slds-grid slds-wrap">
+          <div data-style-id="state0element2block_element0" class="slds-col  slds-text-align_center view-all slds-size_12-of-12  " data-rindex={rindex} style="      
+         " ><omnistudio-flex-action data-style-id="state0element2block_element0_child"  tracking-obj={_childCardTrackingObj}  class= "state0element2block_element0_child flexActionElement" 
+        data-action-element-class="state0element2block_element0_child" data-action-key="state0element2block_element0" onexecuteaction={performAction} data-show-spinner="false"
+        data-element-label="viewall"   state-obj={record}  card={card}  record={record}  label="View All"  icon-name="standard-default"  action-list='\[{"stateAction":{"id":"flex-action-1695645428968","type":"Custom","targetType":"Object","openUrlIn":"New Tab/Window","Object":{"targetName":"AssociatedLocation","targetAction":"list"}},"key":"1695645234413-5aydu1xwn","label":"Action","draggable":true,"isOpen":true,"actionIndex":0}]'  hide-action-icon="true"  display-as-button="false"  flyout-details='\{}'  theme="slds"  ></omnistudio-flex-action>
+      </div>
+        </div></omnistudio-block>
+    </div>
+        </div>
+      </omnistudio-flex-card-state>
+                        </template>
+                      </template>
+                      <template if:false={hasRecords}>
+                            <omnistudio-flex-card-state  record={record} data-statue="false"  data-index="0" data-rindex={rindex} class="cf-vlocity-state-0 cf-vlocity-state slds-size_12-of-12 "  tracking-obj={_childCardTrackingObj} >
+      <div if:true={cardLoaded} class="slds-grid slds-wrap slds-card " style="      
+         ">
+          <div data-style-id="state0element0" class="slds-col   addressheader slds-size_12-of-12  " data-rindex={rindex} style="      
+         " >
+    <omnistudio-block data-style-id="state0element0_child"  card={card}  record={record}  label="Address Header"  collapsible="false"  collapsed-by-default="false"  theme="slds"  ><div class="slds-grid slds-wrap">
+          <div data-style-id="state0element0block_element0" class="slds-col   slds-size_1-of-12  " data-rindex={rindex} style="" ><omnistudio-flex-icon data-style-id="state0element0block_element0_child"   card={card}  record={record}  icon-type="Salesforce SVG"  icon-name="custom:custom64"  size="small"  extraclass="slds-icon_container slds-icon-custom-custom64"  variant="inverse"  imgsrc=""  theme="slds"  ></omnistudio-flex-icon>
+      </div><div data-style-id="state0element0block_element1" class="slds-col  addressInformtext slds-size_9-of-12  " data-rindex={rindex} style="      
+         " ><omnistudio-output-field data-style-id="state0element0block_element1_child"   card={card}  record={record}  merge-field="%3Cdiv%3E%3Cstrong%3E%3Cspan%20style=%22font-size:%2014pt;%22%3EAddress%20Information%20(%7BAddressCount%7D)%3C/span%3E%3C/strong%3E%3C/div%3E"  theme="slds"  ></omnistudio-output-field>
+      </div><div data-style-id="state0element0block_element2" class="slds-col   slds-size_1-of-12  " data-rindex={rindex} style="      
+         " >
+    <omnistudio-flex-menu data-style-id="state0element0block_element2_child" 
+    onupdateos={updateOmniscript} onselectcards={updateSelectedCards} onsetvalue={updateAction}  card={card}  record={record}  type="action"  size="xx-small"  variant="outline-brand"  icon-name="utility:down"  overflow="true"  position="right"  icon-position="left"  icon-size="x-small" 
+    theme="slds" > 
+     <omnistudio-flex-menu-item 
+    name="menu-item-1695639366527-0"
+    theme="slds"
+    data-style-id="state0element0block_element2_menuitem_0"
+    
+    class=""
+    >
+    <omnistudio-flex-action record={record} card={card}  action-list='\[{"key":"1695639366547-jubq4i9t2","label":"New Address","draggable":false,"isOpen":true,"card":"{card}","stateAction":{"id":"flex-action-1695646776587","type":"Custom","displayName":"Action","vlocityIcon":"standard-default","targetType":"Record","openUrlIn":"Current Window","Record":{}},"actionIndex":0}]'  label="New Address"  icon-name=""  re-render-flyout="undefined"  preload-flyout="undefined"  flyout-details='\{}'  flyout-channel="undefined"  class="state0element0block_element2_menuitem_0 flexActionElement" onexecuteaction={performAction} 
+    data-action-element-class="state0element0block_element2_menuitem_0" data-action-key="state0element0block_element2_menuitem_0" data-show-spinner="false" 
+    data-element-label="addressheadermenu2menuitem0" 
+    theme="slds" extra-class="slds-dropdown__item" 
+      action-wrapperclass=""
+      action-labelclass="slds-truncate menu-item-label"
+      menu-item-data="%7B%7D"
+      icon-size="x-small"
+      icon-extraclass="slds-icon-text-default slds-m-right_x-small" >
+     </omnistudio-flex-action>
+    </omnistudio-flex-menu-item>
+    </omnistudio-flex-menu>
+    </div>
+        </div></omnistudio-block>
+    </div><div data-style-id="state0element1" class="slds-col   slds-size_12-of-12 " data-rindex={rindex} style="" ><c-cf-display-address-information-child data-style-id="state0element1_child"  tracking-obj={_childCardTrackingObj}  is-inside-parent={insideParent} parent-uniquekey={uniqueKey}  card-node="\{record.Account}"  parent-record={record}  records={_records}  parent-mergefields={card}  record-id={recordId}  is-child-card-tracking-enabled="false"  object-api-name={objectApiName}  theme="slds"   onupdateparent={updateParentData}></c-cf-display-address-information-child>
+    </div><div data-style-id="state0element2" class="slds-col   bottomheader slds-size_12-of-12  " data-rindex={rindex} style="      
+     height:63.45px;    " >
+    <omnistudio-block data-style-id="state0element2_child"  card={card}  record={record}  label="Address Footer"  collapsible="false"  collapsed-by-default="false"  theme="slds"  ><div class="slds-grid slds-wrap">
+          <div data-style-id="state0element2block_element0" class="slds-col  slds-text-align_center view-all slds-size_12-of-12  " data-rindex={rindex} style="      
+         " ><omnistudio-flex-action data-style-id="state0element2block_element0_child"  tracking-obj={_childCardTrackingObj}  class= "state0element2block_element0_child flexActionElement" 
+        data-action-element-class="state0element2block_element0_child" data-action-key="state0element2block_element0" onexecuteaction={performAction} data-show-spinner="false"
+        data-element-label="viewall"   state-obj={record}  card={card}  record={record}  label="View All"  icon-name="standard-default"  action-list='\[{"stateAction":{"id":"flex-action-1695645428968","type":"Custom","targetType":"Object","openUrlIn":"New Tab/Window","Object":{"targetName":"AssociatedLocation","targetAction":"list"}},"key":"1695645234413-5aydu1xwn","label":"Action","draggable":true,"isOpen":true,"actionIndex":0}]'  hide-action-icon="true"  display-as-button="false"  flyout-details='\{}'  theme="slds"  ></omnistudio-flex-action>
+      </div>
+        </div></omnistudio-block>
+    </div>
+        </div>
+      </omnistudio-flex-card-state>
+                      </template>
+            </template>
+            <template if:true={hasError}>
+            {error}
+            </template>
+            
+      <omnistudio-action action-wrapperclass="slds-hide" re-render-flyout class="action-trigger slds-col" onupdateos={updateOmniscript} onselectcards={updateSelectedCards} onsetvalue={updateAction} onfireactionevent={actionEvtHandler}>
+      
+      </omnistudio-action>
+  
+            <omnistudio-action class="execute-action" re-render-flyout action-wrapperclass="slds-hide" onupdateos={updateOmniscript} onselectcards={updateSelectedCards} onsetvalue={updateAction} onfireactionevent={actionEvtHandler}>
+            
+            </omnistudio-action>
+            </div>
+          </template>
