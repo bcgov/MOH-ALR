@@ -1,0 +1,107 @@
+<template>
+            <div class="slds-grid slds-wrap slds-is-relative ">
+            <div style="position: fixed;z-index: 999999;top: 0;right: 0;">
+  <omnistudio-toast class="flexcard-toast-element" theme="slds" title="" message="" styletype=""> </omnistudio-toast>
+</div>
+            <div if:true={showLoader} class="slds-is-absolute vloc-loader_override" style="height: 100%; width: 100%; min-height:50px; background: transparent; z-index: 99;">
+  <div>
+   <omnistudio-spinner
+      variant="brand"
+      alternative-text="Loading content..."
+      size="medium"
+      theme="slds"
+      ></omnistudio-spinner>
+  </div>
+</div>
+            <template if:false={hasPermission}>
+              You don't have required permissions to view this card.
+            </template>
+            <template if:true={hasPermission}>
+              <template if:true={hasRecords}>
+                        <template for:each={_records} for:item="record" for:index="rindex">
+                            <omnistudio-flex-card-state if:true={record}  key={record._flex.uniqueKey} data-recordid={record.Id} record={record} data-statue="true"  data-index="0" data-rindex={rindex} class="cf-vlocity-state-0 cf-vlocity-state slds-size_12-of-12 "  tracking-obj={_childCardTrackingObj} >
+      <div if:true={cardLoaded} class="slds-grid slds-wrap slds-card " style="      
+         ">
+          <div data-style-id="state0element0" class="slds-col   unitcapacityheader slds-size_12-of-12  " data-rindex={rindex} style="      
+         " >
+    <omnistudio-block data-style-id="state0element0_child"  card={card}  record={record}  label="Block"  collapsible="false"  collapsed-by-default="false"  theme="slds"  ><div class="slds-grid slds-wrap">
+          <div data-style-id="state0element0block_element0" class="slds-col   slds-size_1-of-12  " data-rindex={rindex} style="" ><omnistudio-flex-icon data-style-id="state0element0block_element0_child"   card={card}  record={record}  icon-type="Salesforce SVG"  icon-name="standard:delegated_account"  size="small"  extraclass="slds-icon_container slds-icon-standard-delegated-account "  variant="inverse"  imgsrc=""  theme="slds"  ></omnistudio-flex-icon>
+      </div><div data-style-id="state0element0block_element1" class="slds-col   slds-size_9-of-12  " data-rindex={rindex} style="      
+         " ><omnistudio-output-field data-style-id="state0element0block_element1_child"   card={card}  record={record}  merge-field="%3Cdiv%3E%3Cspan%20style=%22font-size:%2012pt;%22%3E%3Cstrong%3EUnit%20and%20Capacity%20Totals%3C/strong%3E%3C/span%3E%3C/div%3E"  theme="slds"  ></omnistudio-output-field>
+      </div>
+        </div></omnistudio-block>
+    </div><div data-style-id="state0element1" class="slds-col   slds-p-around_x-small slds-size_12-of-12 " data-rindex={rindex} style="" >
+    <omnistudio-block data-style-id="state0element1_child"  card={card}  record={record}  label="Block"  collapsible="false"  collapsed-by-default="false"  theme="slds"  ><div class="slds-grid slds-wrap">
+          <div data-style-id="state0element1block_element0" class="slds-col  unitsinput slds-size_6-of-12  " data-rindex={rindex} style="      
+         " ><omnistudio-output-field data-style-id="state0element1block_element0_child"   card={card}  record={record}  placeholder="20"  type="text"  label="Total Assisted Living Units"  field-level-help="total registered units (public, private, per diem)."  field-name=""  theme="slds"  ></omnistudio-output-field>
+      </div><div data-style-id="state0element1block_element1" class="slds-col  unitsinput slds-size_6-of-12  " data-rindex={rindex} style="      
+         " ><omnistudio-output-field data-style-id="state0element1block_element1_child"   card={card}  record={record}  placeholder="2"  type="text"  label="Total Independent Units"  field-level-help="Under the RTA and living in a fully independent suite with no services at all."  theme="slds"  ></omnistudio-output-field>
+      </div><div data-style-id="state0element1block_element2" class="slds-col  unitsinput slds-size_6-of-12  " data-rindex={rindex} style="      
+         " ><omnistudio-output-field data-style-id="state0element1block_element2_child"   card={card}  record={record}  placeholder="10"  type="text"  label="Private Units"  theme="slds"  ></omnistudio-output-field>
+      </div><div data-style-id="state0element1block_element3" class="slds-col  unitsinput slds-size_6-of-12  " data-rindex={rindex} style="      
+         " ><omnistudio-output-field data-style-id="state0element1block_element3_child"   card={card}  record={record}  placeholder="2"  type="text"  label="Total Other Units"  theme="slds"  ></omnistudio-output-field>
+      </div><div data-style-id="state0element1block_element4" class="slds-col  unitsinput slds-size_6-of-12  " data-rindex={rindex} style="      
+         " ><omnistudio-output-field data-style-id="state0element1block_element4_child"   card={card}  record={record}  placeholder="5"  type="text"  label="Public Units"  theme="slds"  ></omnistudio-output-field>
+      </div><div data-style-id="state0element1block_element5" class="slds-col  unitsinput slds-size_6-of-12  " data-rindex={rindex} style="      
+         " ><omnistudio-output-field data-style-id="state0element1block_element5_child"   card={card}  record={record}  placeholder="24"  type="text"  label="Premise Capacity"  field-level-help="Total private, public, per diem units, independent living, licensed, other."  theme="slds"  ></omnistudio-output-field>
+      </div><div data-style-id="state0element1block_element6" class="slds-col  unitsinput slds-size_6-of-12  " data-rindex={rindex} style="      
+         " ><omnistudio-output-field data-style-id="state0element1block_element6_child"   card={card}  record={record}  placeholder="5"  type="text"  label="Per Diem Units"  theme="slds"  ></omnistudio-output-field>
+      </div><div data-style-id="state0element1block_element7" class="slds-col  unitsinput slds-size_6-of-12  " data-rindex={rindex} style="      
+         " ><omnistudio-output-field data-style-id="state0element1block_element7_child"   card={card}  record={record}  placeholder="110"  type="text"  label="Maximum Unit Capacity"  field-level-help="total maximum persons living in registered units (public, private, per diem)."  theme="slds"  ></omnistudio-output-field>
+      </div>
+        </div></omnistudio-block>
+    </div>
+        </div>
+      </omnistudio-flex-card-state>
+                        </template>
+                      </template>
+                      <template if:false={hasRecords}>
+                            <omnistudio-flex-card-state  record={record} data-statue="false"  data-index="0" data-rindex={rindex} class="cf-vlocity-state-0 cf-vlocity-state slds-size_12-of-12 "  tracking-obj={_childCardTrackingObj} >
+      <div if:true={cardLoaded} class="slds-grid slds-wrap slds-card " style="      
+         ">
+          <div data-style-id="state0element0" class="slds-col   unitcapacityheader slds-size_12-of-12  " data-rindex={rindex} style="      
+         " >
+    <omnistudio-block data-style-id="state0element0_child"  card={card}  record={record}  label="Block"  collapsible="false"  collapsed-by-default="false"  theme="slds"  ><div class="slds-grid slds-wrap">
+          <div data-style-id="state0element0block_element0" class="slds-col   slds-size_1-of-12  " data-rindex={rindex} style="" ><omnistudio-flex-icon data-style-id="state0element0block_element0_child"   card={card}  record={record}  icon-type="Salesforce SVG"  icon-name="standard:delegated_account"  size="small"  extraclass="slds-icon_container slds-icon-standard-delegated-account "  variant="inverse"  imgsrc=""  theme="slds"  ></omnistudio-flex-icon>
+      </div><div data-style-id="state0element0block_element1" class="slds-col   slds-size_9-of-12  " data-rindex={rindex} style="      
+         " ><omnistudio-output-field data-style-id="state0element0block_element1_child"   card={card}  record={record}  merge-field="%3Cdiv%3E%3Cspan%20style=%22font-size:%2012pt;%22%3E%3Cstrong%3EUnit%20and%20Capacity%20Totals%3C/strong%3E%3C/span%3E%3C/div%3E"  theme="slds"  ></omnistudio-output-field>
+      </div>
+        </div></omnistudio-block>
+    </div><div data-style-id="state0element1" class="slds-col   slds-p-around_x-small slds-size_12-of-12 " data-rindex={rindex} style="" >
+    <omnistudio-block data-style-id="state0element1_child"  card={card}  record={record}  label="Block"  collapsible="false"  collapsed-by-default="false"  theme="slds"  ><div class="slds-grid slds-wrap">
+          <div data-style-id="state0element1block_element0" class="slds-col  unitsinput slds-size_6-of-12  " data-rindex={rindex} style="      
+         " ><omnistudio-output-field data-style-id="state0element1block_element0_child"   card={card}  record={record}  placeholder="20"  type="text"  label="Total Assisted Living Units"  field-level-help="total registered units (public, private, per diem)."  field-name=""  theme="slds"  ></omnistudio-output-field>
+      </div><div data-style-id="state0element1block_element1" class="slds-col  unitsinput slds-size_6-of-12  " data-rindex={rindex} style="      
+         " ><omnistudio-output-field data-style-id="state0element1block_element1_child"   card={card}  record={record}  placeholder="2"  type="text"  label="Total Independent Units"  field-level-help="Under the RTA and living in a fully independent suite with no services at all."  theme="slds"  ></omnistudio-output-field>
+      </div><div data-style-id="state0element1block_element2" class="slds-col  unitsinput slds-size_6-of-12  " data-rindex={rindex} style="      
+         " ><omnistudio-output-field data-style-id="state0element1block_element2_child"   card={card}  record={record}  placeholder="10"  type="text"  label="Private Units"  theme="slds"  ></omnistudio-output-field>
+      </div><div data-style-id="state0element1block_element3" class="slds-col  unitsinput slds-size_6-of-12  " data-rindex={rindex} style="      
+         " ><omnistudio-output-field data-style-id="state0element1block_element3_child"   card={card}  record={record}  placeholder="2"  type="text"  label="Total Other Units"  theme="slds"  ></omnistudio-output-field>
+      </div><div data-style-id="state0element1block_element4" class="slds-col  unitsinput slds-size_6-of-12  " data-rindex={rindex} style="      
+         " ><omnistudio-output-field data-style-id="state0element1block_element4_child"   card={card}  record={record}  placeholder="5"  type="text"  label="Public Units"  theme="slds"  ></omnistudio-output-field>
+      </div><div data-style-id="state0element1block_element5" class="slds-col  unitsinput slds-size_6-of-12  " data-rindex={rindex} style="      
+         " ><omnistudio-output-field data-style-id="state0element1block_element5_child"   card={card}  record={record}  placeholder="24"  type="text"  label="Premise Capacity"  field-level-help="Total private, public, per diem units, independent living, licensed, other."  theme="slds"  ></omnistudio-output-field>
+      </div><div data-style-id="state0element1block_element6" class="slds-col  unitsinput slds-size_6-of-12  " data-rindex={rindex} style="      
+         " ><omnistudio-output-field data-style-id="state0element1block_element6_child"   card={card}  record={record}  placeholder="5"  type="text"  label="Per Diem Units"  theme="slds"  ></omnistudio-output-field>
+      </div><div data-style-id="state0element1block_element7" class="slds-col  unitsinput slds-size_6-of-12  " data-rindex={rindex} style="      
+         " ><omnistudio-output-field data-style-id="state0element1block_element7_child"   card={card}  record={record}  placeholder="110"  type="text"  label="Maximum Unit Capacity"  field-level-help="total maximum persons living in registered units (public, private, per diem)."  theme="slds"  ></omnistudio-output-field>
+      </div>
+        </div></omnistudio-block>
+    </div>
+        </div>
+      </omnistudio-flex-card-state>
+                      </template>
+            </template>
+            <template if:true={hasError}>
+            {error}
+            </template>
+            
+      <omnistudio-action action-wrapperclass="slds-hide" re-render-flyout class="action-trigger slds-col" onupdateos={updateOmniscript} onselectcards={updateSelectedCards} onsetvalue={updateAction} onfireactionevent={actionEvtHandler}>
+      
+      </omnistudio-action>
+  
+            <omnistudio-action class="execute-action" re-render-flyout action-wrapperclass="slds-hide" onupdateos={updateOmniscript} onselectcards={updateSelectedCards} onsetvalue={updateAction} onfireactionevent={actionEvtHandler}>
+            
+            </omnistudio-action>
+            </div>
+          </template>
