@@ -1,0 +1,74 @@
+# Unique name for this workflow
+name: STX Code Deployment
+
+# Definition when the workflow should run
+on:
+  ## Deploy manually
+  workflow_dispatch:
+    inputs:
+      create-tag:
+        type: boolean
+        default: true
+        description: Create Git tag after successful deployment
+
+# Jobs to be executed
+jobs:
+  Code-Deploy-Run:
+    runs-on: ubuntu-latest
+    environment: STX01
+    env:
+        SFDXAUTHURL: ${{ secrets.SFDXAUTHURL }}
+    steps:
+      # Install Salesforce CLI
+      - name: 'Install Salesforce CLI'
+        run: |
+          wget https://developer.salesforce.com/media/salesforce-cli/sfdx/channels/stable/sfdx-linux-x64.tar.xz
+          mkdir ~/sfdx
+          tar xJf sfdx-linux-x64.tar.xz -C ~/sfdx --strip-components 1
+          echo "$HOME/sfdx/bin" >> $GITHUB_PATH
+          ~/sfdx/bin/sfdx version
+      # Checkout the source code
+      - name: 'Checkout source code'
+        uses: actions/checkout@v3
+        with:
+          ref: commondev
+          fetch-depth: 0
+
+      # Authenticate sandbox
+      - name: 'Authenticate Sandbox'
+        run: |
+            echo "${{ env.SFDXAUTHURL }}" > ./authfile
+            sf org login sfdx-url -f authfile -a STX01
+
+      # deploy code without running test classes
+      - name: 'Deploy source code'
+        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --testlevel RunLocalTests --targetusername STX01
+
+  Git-Tag-Run:
+    needs: Code-Deploy-Run
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.create-tag == 'true' }}
+    steps:
+      - name: 'Checkout source code'
+        uses: actions/checkout@v3
+        with:
+          ref: commondev
+          fetch-depth: 0
+
+      - name: 'Get latest tag'
+        id: latesttag
+        run: echo "LATEST_TAG=$(git describe --tags --match "ST*" --abbrev=0 HEAD)" >> $GITHUB_OUTPUT
+
+      - name: 'Increment Tag'
+        id: newtag
+        run: |
+          LATEST_TAG=${{ steps.latesttag.outputs.LATEST_TAG }}
+          NUMBER=${LATEST_TAG#ST.}
+          NEW_NUMBER=$((NUMBER + 1))
+          NEW_TAG=ST.${NEW_NUMBER}
+          echo "NEW_TAG=$NEW_TAG" >> $GITHUB_OUTPUT
+
+      - name: 'Push new tag'
+        run: |
+          git tag ${{ steps.newtag.outputs.NEW_TAG }}
+          git push origin ${{ steps.newtag.outputs.NEW_TAG }}
