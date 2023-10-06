@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ClassType_Is_Mandatory_Based_On_Status</fullName>
+    <active>true</active>
+    <description>Class Type is Required if the Status is Not Equal to PURR.</description>
+    <errorConditionFormula>AND( RecordType.DeveloperName  = &quot;Residence&quot;, NOT(ISPICKVAL(Status__c,&quot;PURR&quot;)), ISBLANK(TEXT(ClassType__c)))</errorConditionFormula>
+    <errorDisplayField>ClassType__c</errorDisplayField>
+    <errorMessage>Complete this field.</errorMessage>
+</ValidationRule>
