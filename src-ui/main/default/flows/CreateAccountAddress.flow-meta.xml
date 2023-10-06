@@ -5,11 +5,15 @@
         <name>AccountRecordId</name>
         <dataType>String</dataType>
     </constants>
+    <constants>
+        <name>EmptyValueSet</name>
+        <dataType>String</dataType>
+    </constants>
     <decisions>
         <name>checkForNullValues</name>
         <label>checkForNullValues</label>
-        <locationX>95</locationX>
-        <locationY>291</locationY>
+        <locationX>100</locationX>
+        <locationY>288</locationY>
         <defaultConnector>
             <targetReference>Create_Address_Record</targetReference>
         </defaultConnector>
@@ -28,30 +32,37 @@
         </rules>
         <rules>
             <name>nullValueCheck</name>
-            <conditionLogic>and</conditionLogic>
+            <conditionLogic>or</conditionLogic>
             <conditions>
-                <leftValueReference>AddressRecordVar.City</leftValueReference>
+                <leftValueReference>AddressCityFormula</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>AddressRecordVar.PostalCode</leftValueReference>
+                <leftValueReference>AddressPostalCodeFormula</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>AddressRecordVar.Country</leftValueReference>
+                <leftValueReference>AddressCountryFormula</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>AddressRecordVar.State</leftValueReference>
+                <leftValueReference>AddressStateFormula</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>AddressStreetFormula</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
@@ -64,6 +75,31 @@
         </rules>
     </decisions>
     <environments>Default</environments>
+    <formulas>
+        <name>AddressCityFormula</name>
+        <dataType>String</dataType>
+        <expression>TRIM({!AddressRecordVar.City})</expression>
+    </formulas>
+    <formulas>
+        <name>AddressCountryFormula</name>
+        <dataType>String</dataType>
+        <expression>TRIM({!AddressRecordVar.Country})</expression>
+    </formulas>
+    <formulas>
+        <name>AddressPostalCodeFormula</name>
+        <dataType>String</dataType>
+        <expression>TRIM({!AddressRecordVar.PostalCode})</expression>
+    </formulas>
+    <formulas>
+        <name>AddressStateFormula</name>
+        <dataType>String</dataType>
+        <expression>TRIM({!AddressRecordVar.State})</expression>
+    </formulas>
+    <formulas>
+        <name>AddressStreetFormula</name>
+        <dataType>String</dataType>
+        <expression>TRIM({!AddressRecordVar.Street})</expression>
+    </formulas>
     <formulas>
         <name>ConcatStreetPostalCode</name>
         <dataType>String</dataType>
@@ -262,7 +298,7 @@
         <name>Create_Address</name>
         <label>Address</label>
         <locationX>454</locationX>
-        <locationY>284</locationY>
+        <locationY>283</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -276,8 +312,8 @@
                 <name>Create_Address_Section1_Column1</name>
                 <fieldType>Region</fieldType>
                 <fields>
-                    <name>AccountNameText1</name>
-                    <fieldText>&lt;p&gt;Residence:  {!AccountName}&lt;/p&gt;</fieldText>
+                    <name>NewAddress</name>
+                    <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;font-size: 16px;&quot;&gt;New Address&lt;/strong&gt;&lt;/p&gt;</fieldText>
                     <fieldType>DisplayText</fieldType>
                 </fields>
                 <inputParameters>
@@ -290,6 +326,11 @@
             </fields>
             <isRequired>false</isRequired>
             <regionContainerType>SectionWithoutHeader</regionContainerType>
+        </fields>
+        <fields>
+            <name>AccountNameText1</name>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;font-size: 14px;&quot;&gt;Address Validation&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
         </fields>
         <fields>
             <name>MandatoryFields</name>
@@ -350,6 +391,13 @@
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>Address</objectType>
+    </variables>
+    <variables>
+        <name>AddressStreet</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
     </variables>
     <variables>
         <name>bttn_group</name>
