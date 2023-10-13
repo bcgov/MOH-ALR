@@ -55,10 +55,18 @@ import { FlexCardMixin } from "omnistudio/flexCardMixin";
 
               registerEvents() {
                 
+            this.customEventName0 = interpolateWithRegex(`reload`,this._allMergeFields,this._regexPattern,"noparse");
+            this.customEvent[0] = this.handleEventAction.bind(this, data.events[0],0);
+
+            this.template.addEventListener(this.customEventName0,this.customEvent[0]);
+
+          
               }
 
               unregisterEvents(){
                 
+            this.template.removeEventListener(this.customEventName0,this.customEvent[0]);
+
               }
             
               renderedCallback() {
