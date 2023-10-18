@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
     <sharingCriteriaRules>
-        <fullName>ALR_Admin_Users_PG_Sharing_Rule</fullName>
+        <fullName>ALRAdminUsersPGSharingRule</fullName>
         <accessLevel>Read</accessLevel>
         <label>ALR Admin Users PG Sharing Rule</label>
         <sharedTo>
@@ -15,7 +15,7 @@
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
-        <fullName>ALR_Data_Analyst_Users_PG_Sharing_Rule</fullName>
+        <fullName>ALRDataAnalystUsersPGSharingRule</fullName>
         <accessLevel>Read</accessLevel>
         <label>ALR Data Analyst Users PG Sharing Rule</label>
         <sharedTo>
@@ -29,7 +29,21 @@
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
-        <fullName>ALR_Leadership_Users_PG_Sharing_Rule</fullName>
+        <fullName>ALRInvestigatorUsersPGSharingRule</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>ALR Investigator Users PG Sharing Rule</label>
+        <sharedTo>
+            <group>ALRInvestigatorUsersPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Regulatory Authorization Type</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>ALRLeadershipUsersPGSharingRule</fullName>
         <accessLevel>Read</accessLevel>
         <label>ALR Leadership Users PG Sharing Rule</label>
         <sharedTo>
@@ -43,25 +57,11 @@
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
-        <fullName>ALR_Registrar_Users_PG_Sharing_R</fullName>
+        <fullName>ALRRegistrarUsersPGSharingRule</fullName>
         <accessLevel>Read</accessLevel>
-        <label>ALR Registrar Users PG Sharing R</label>
+        <label>ALR Registrar Users PG Sharing Rule</label>
         <sharedTo>
             <group>ALRRegistrarUsersPG</group>
-        </sharedTo>
-        <criteriaItems>
-            <field>RecordTypeId</field>
-            <operation>equals</operation>
-            <value>Regulatory Authorization Type</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
-        <fullName>EHIS_Investigator_Users_Sharing_Rule</fullName>
-        <accessLevel>Read</accessLevel>
-        <label>EHIS Investigator Users Sharing Rule</label>
-        <sharedTo>
-            <group>ALRInvestigatorUsersPG</group>
         </sharedTo>
         <criteriaItems>
             <field>RecordTypeId</field>
