@@ -5,7 +5,7 @@
     <description>Only the ALR Admin and Data Analyst will be able to update WebsitePostConfirmed,  DatePosted, PostingRemovalDate fields (even after the case is closed). All other users can view these fields ALR-77</description>
     <errorConditionFormula>AND(
 	AND(
-		RecordType.Name &lt;&gt; &apos;Public Complaint&apos; ,
+		RecordType.Name &lt;&gt; &apos;PublicComplaintCase&apos; ,
 		NOT($Permission.EHISAdminUser) ,
 		NOT($Permission.EHISDataAnalystUser),
 		ISPICKVAL( Status , &apos;Closed&apos; )
