@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Restricting_fields_edit_for_Case</fullName>
+    <active>true</active>
+    <description>As per ALR-77, Only the ALR Admin and Data Analyst will be able to update WebsitePostConfirmed,  DatePosted, PostingRemovalDate fields (even after the case is closed). All other users can view these fields.</description>
+    <errorConditionFormula>AND(
+	AND(
+		$Profile.Name &lt;&gt; &apos;System Administrator&apos; ,
+		NOT($Permission.EHIS_ALR_Admin_User) ,
+		NOT( $Permission.EHISAnalyst ),
+		ISPICKVAL( Status , &apos;Closed&apos; )
+	), 
+	OR( 
+		ISCHANGED( PostingRemovalDate__c) ,
+		ISCHANGED( DatePosted__c ) ,
+		ISCHANGED( WebsitePostConfirmed__c )		
+	)
+)</errorConditionFormula>
+    <errorMessage>Closed cases can&apos;t be edited</errorMessage>
+</ValidationRule>
