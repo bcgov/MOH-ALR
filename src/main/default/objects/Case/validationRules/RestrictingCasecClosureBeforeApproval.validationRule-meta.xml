@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RestrictingCasecClosureBeforeApproval</fullName>
+    <active>true</active>
+    <description>Reportable Incident Cases cannot be closed before Approval</description>
+    <errorConditionFormula>AND(
+    RecordType.DeveloperName = &apos;ReportableIncident&apos;,
+    ISPICKVAL( Status , &apos;Closed&apos;),
+    IF(IsApprovalRequired__c = TRUE,
+    ISBLANK( ApprovedDate__c ), FALSE)
+)</errorConditionFormula>
+    <errorMessage>You are closing case that requires approval - please submit for approval before closing</errorMessage>
+</ValidationRule>
