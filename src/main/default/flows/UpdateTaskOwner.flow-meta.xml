@@ -23,7 +23,7 @@
             <stringValue>Administrative Tasks Queue</stringValue>
         </value>
     </constants>
-    <description>On creation of task with Subject as &quot;Unit Fee Invoice and Follow-up with Webservices&quot;, change task Owner to &quot;Administrative Tasks&quot; queue - ALR-204</description>
+    <description>On creation of task with Subject as &quot;Unit Fee Invoice and Follow-up with Webservices&quot;, change task Owner to &quot;Administrative Tasks&quot; queue - ALR-204, ALR-278</description>
     <environments>Default</environments>
     <interviewLabel>UpdateTaskOwner {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Update Task Owner</label>
@@ -82,7 +82,7 @@
         <connector>
             <targetReference>GetAdministrativeTasksQueueDetails</targetReference>
         </connector>
-        <filterLogic>and</filterLogic>
+        <filterLogic>(1 OR 4 OR 5 OR 6) AND 2 AND 3</filterLogic>
         <filters>
             <field>Subject</field>
             <operator>EqualTo</operator>
@@ -102,6 +102,27 @@
             <operator>EqualTo</operator>
             <value>
                 <stringValue>Normal</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Subject</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Email Registrant with Unsubstantiated Letter</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Subject</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Follow-up with Webservices to upload Web Posting</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Subject</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Email Registrant with Substantiated Letter and Web Posting</stringValue>
             </value>
         </filters>
         <object>Task</object>

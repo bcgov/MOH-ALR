@@ -23,11 +23,65 @@
         <reevaluateOnChange>false</reevaluateOnChange>
     </fieldUpdates>
     <fieldUpdates>
+        <fullName>ApprovalComplaintCaseStatusUpdate</fullName>
+        <description>Update Complaint Case Status to Approved once case is approved - ALR-278</description>
+        <field>Status</field>
+        <literalValue>Approved</literalValue>
+        <name>Approval Complaint Case Status Update</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>ChangePriorityToHigh</fullName>
+        <field>Priority</field>
+        <literalValue>High</literalValue>
+        <name>Changes the case priority to high.</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>ComplaintCaseApproveDateFieldUpdate</fullName>
+        <description>Update Approved Date of Compliant Case once Approved - ALR-278</description>
+        <field>ApprovedDate__c</field>
+        <formula>NOW()</formula>
+        <name>Complaint Case Approve Date Field Update</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>ComplaintCaseApprovedDateUpdate</fullName>
+        <description>Update Approved Date to today once Complaint case is approved - ALR-278</description>
+        <field>ApprovedDate__c</field>
+        <formula>TODAY()</formula>
+        <name>Complaint Case Approved Date Update</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
         <fullName>OnSubmitCaseStatusFieldUpdate</fullName>
         <description>Update Case Status to Pending Approval once case is submitted for approval - ALR-201</description>
         <field>Status</field>
         <literalValue>Pending Approval</literalValue>
         <name>On Submit Case Status Field Update</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>OnSubmitComplaintCaseFieldUpdate</fullName>
+        <description>Update Case Status to &quot;Pending Approval&quot; immediately after Submit for Approval is clicked - ALR-278</description>
+        <field>Status</field>
+        <literalValue>Pending Approval</literalValue>
+        <name>OnSubmitComplaintCaseFieldUpdate</name>
         <notifyAssignee>false</notifyAssignee>
         <operation>Literal</operation>
         <protected>false</protected>
@@ -44,4 +98,48 @@
         <protected>false</protected>
         <reevaluateOnChange>false</reevaluateOnChange>
     </fieldUpdates>
+    <fieldUpdates>
+        <fullName>RejectionComplaintCaseStatusUpdate</fullName>
+        <description>Update Case Status to Investigator Review once Complaint case is rejected in Step 1 or 2 - ALR-278</description>
+        <field>Status</field>
+        <literalValue>Investigator Review</literalValue>
+        <name>Rejection Complaint Case Status Update</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <tasks>
+        <fullName>EmailRegistrantwithSubstantiatedLetterandWebPosting</fullName>
+        <assignedToType>owner</assignedToType>
+        <description>ComplaintCaseApprovalTaskAction</description>
+        <dueDateOffset>7</dueDateOffset>
+        <notifyAssignee>false</notifyAssignee>
+        <priority>Normal</priority>
+        <protected>false</protected>
+        <status>Not Started</status>
+        <subject>Email Registrant with Substantiated Letter and Web Posting</subject>
+    </tasks>
+    <tasks>
+        <fullName>EmailRegistrantwithUnsubstantiatedLetter</fullName>
+        <assignedToType>owner</assignedToType>
+        <description>ComplainCaseApprovalTaskAction</description>
+        <dueDateOffset>7</dueDateOffset>
+        <notifyAssignee>false</notifyAssignee>
+        <priority>Normal</priority>
+        <protected>false</protected>
+        <status>Not Started</status>
+        <subject>Email Registrant with Unsubstantiated Letter</subject>
+    </tasks>
+    <tasks>
+        <fullName>FollowupwithWebservicestouploadWebPosting</fullName>
+        <assignedToType>owner</assignedToType>
+        <description>ComplaintCaseApprovalTaskAction</description>
+        <dueDateOffset>7</dueDateOffset>
+        <notifyAssignee>false</notifyAssignee>
+        <priority>Normal</priority>
+        <protected>false</protected>
+        <status>Not Started</status>
+        <subject>Follow-up with Webservices to upload Web Posting</subject>
+    </tasks>
 </Workflow>
