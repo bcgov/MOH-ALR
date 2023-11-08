@@ -39,7 +39,7 @@ public class ManageUnitsControllerTest {
         ManageUnitsController.getUnitBasedOnResidence(residence.Id);
         ManageUnitsController.updateUnits(data);
         }Catch(Exception e){
-            System.assertEquals('Script-thrown exception', e.getMessage());  
+            System.assertEquals('Insufficient permissions: secure query included inaccessible field', e.getMessage());  
         }
     }
 }
