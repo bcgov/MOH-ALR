@@ -20,6 +20,7 @@ public class ManageUnitsControllerTest {
           
         ManageUnitsController.getUnitBasedOnResidence(residence.Id);
         ManageUnitsController.updateUnits(data);
+        System.assertEquals(unitupdate.Quantity,1);  
     }
     
     @isTest
