@@ -2,16 +2,16 @@
 <ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>RestrictingFieldsEditForCaseRule</fullName>
     <active>true</active>
-    <description>Only the ALR Admin and Data Analyst will be able to update WebsitePostConfirmed,  DatePosted, PostingRemovalDate fields (even after the case is closed). All other users can view these fields ALR-77</description>
-    <errorConditionFormula>NOT ($Permission.EHISBypassValidationRuleCustomPermission) &amp;&amp;
+    <description>Only the ALR Admin and Data Analyst will be able to update WebsitePostConfirmed,  DatePosted, PostingRemovalDate fields (even after the case is closed). All other users can view these fields - ALR-77</description>
+    <errorConditionFormula>NOT($Permission.EHISBypassValidationRuleCustomPermission) &amp;&amp;
 IsClosed = TRUE &amp;&amp; PRIORVALUE(IsClosed) = TRUE
 &amp;&amp;
-(RecordType.DeveloperName = &apos;PublicComplaintCase&apos; || (RecordType.DeveloperName = &apos;ReportableIncident&apos; &amp;&amp; ISCHANGED( RecordTypeId))) 
+(RecordType.DeveloperName = &apos;PublicComplaintCase&apos; || (RecordType.DeveloperName = &apos;ReportableIncident&apos; &amp;&amp; ISCHANGED(RecordTypeId))) 
 &amp;&amp;
 NOT(
 	($Permission.EHISAdminUser || $Permission.EHISDataAnalystUser) &amp;&amp; 
 	(ISCHANGED(WebsitePostConfirmed__c) ||  ISCHANGED(DatePosted__c) ||   ISCHANGED(PostingRemovalDate__c)) &amp;&amp; 
-	NOT((ISCHANGED(Status)) || ISCHANGED( RecordTypeId ) || ISCHANGED(OwnerId))
+	NOT(ISCHANGED(Status) || ISCHANGED(RecordTypeId) || ISCHANGED(OwnerId))
 )</errorConditionFormula>
     <errorMessage>This case is Closed and cannot be edited</errorMessage>
 </ValidationRule>
