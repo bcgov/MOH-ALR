@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BlockChangeOwnerAccess</fullName>
+    <active>true</active>
+    <description>User having RemoveChangeOwnerAccess custom permission cannot change Account Ownership - ALR-234</description>
+    <errorConditionFormula>AND(
+     
+     RecordType.DeveloperName = &apos;Residence&apos;,
+     NOT( $Permission.EHISBypassValidationRuleCustomPermission ) ,
+     $Permission.RemoveChangeOwnerAccess ,
+     ISCHANGED(OwnerId) 
+
+)</errorConditionFormula>
+    <errorMessage>Cannot change Owner</errorMessage>
+</ValidationRule>
