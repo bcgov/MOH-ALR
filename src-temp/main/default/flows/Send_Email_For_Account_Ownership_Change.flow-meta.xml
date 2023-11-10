@@ -7,9 +7,6 @@
         <locationY>323</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
-        <connector>
-            <targetReference>Send_Email</targetReference>
-        </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>emailAddresses</name>
@@ -29,30 +26,19 @@
                 <elementReference>MailBody</elementReference>
             </value>
         </inputParameters>
-        <nameSegment>emailSimple</nameSegment>
-        <versionSegment>1</versionSegment>
-    </actionCalls>
-    <actionCalls>
-        <name>Send_Email</name>
-        <label>Send Email</label>
-        <locationX>176</locationX>
-        <locationY>431</locationY>
-        <actionName>Account.Email_Test</actionName>
-        <actionType>emailAlert</actionType>
-        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
-            <name>SObjectRowId</name>
+            <name>recipientId</name>
             <value>
                 <elementReference>$Record.Id</elementReference>
             </value>
         </inputParameters>
-        <nameSegment>Account.Email_Test</nameSegment>
+        <nameSegment>emailSimple</nameSegment>
         <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>59.0</apiVersion>
     <environments>Default</environments>
-    <interviewLabel>Send Email for Account Owner Change {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>Send Email for Account Owner Change</label>
+    <interviewLabel>Send Email For Account Ownership Change {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Send Email For Account Ownership Change</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
