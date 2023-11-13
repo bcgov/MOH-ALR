@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OmniDataTransform xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <assignmentRulesUsed>false</assignmentRulesUsed>
+    <deletedOnSuccess>false</deletedOnSuccess>
+    <errorIgnored>false</errorIgnored>
+    <expectedOutputJson>{
+  &quot;timeStamp&quot; : &quot;2022-06-28T13:21:33.874Z&quot;,
+  &quot;userProfile&quot; : &quot;System Administrator&quot;,
+  &quot;userTimeZoneName&quot; : &quot;America/New_York&quot;,
+  &quot;userTimeZone&quot; : &quot;-240&quot;,
+  &quot;userCurrencyCode&quot; : &quot;USD&quot;,
+  &quot;userName&quot; : &quot;jeremy.blankenship@gps.ido&quot;,
+  &quot;userId&quot; : &quot;0054S0000015CoyQAE&quot;,
+  &quot;PublicComplaintID&quot; : &quot;&quot;,
+  &quot;Case Details&quot; : {
+    &quot;NewCaseDetails&quot; : {
+      &quot;Account-Block&quot; : {
+        &quot;Account&quot; : &quot;Johnny Rushbrook&quot;,
+        &quot;Name&quot; : &quot;Johnny Rushbrook&quot;,
+        &quot;Id&quot; : &quot;0014S000008Wm8aQAC&quot;
+      },
+      &quot;Contact-Block&quot; : {
+        &quot;Contact&quot; : &quot;Johnny Rushbrook&quot;,
+        &quot;ContactName&quot; : &quot;Johnny Rushbrook&quot;,
+        &quot;ContactId&quot; : &quot;0034S000006uI3MQAU&quot;
+      }
+    }
+  }
+}</expectedOutputJson>
+    <fieldLevelSecurityEnabled>false</fieldLevelSecurityEnabled>
+    <inputType>JSON</inputType>
+    <name>GetPCDetailsForCasePrepopulation</name>
+    <nullInputsIncludedInOutput>false</nullInputsIncludedInOutput>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetPCDetailsForCasePrepopulationCustom3389</globalKey>
+        <inputFieldName>PCRec:WishtoRemainAnonymous__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetPCDetailsForCasePrepopulation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>WishToRemainAnonymous</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>PCCaseName</filterValue>
+        <globalKey>GetPCDetailsForCasePrepopulationCustom6202</globalKey>
+        <inputFieldName>DeveloperName</inputFieldName>
+        <inputObjectName>RecordType</inputObjectName>
+        <inputObjectQuerySequence>2.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetPCDetailsForCasePrepopulation</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>PCCaseRecType</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetPCDetailsForCasePrepopulationCustom5016</globalKey>
+        <inputFieldName>PCCaseRecType:Id</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetPCDetailsForCasePrepopulation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RecordTypeId</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetPCDetailsForCasePrepopulationCustom9446</globalKey>
+        <inputFieldName>PCRec:ComplaintOrigin__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetPCDetailsForCasePrepopulation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>CaseDetails:NewCaseDetails:Origin</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>PCId</filterValue>
+        <globalKey>GetPCDetailsForCasePrepopulationCustom0jIAs0000000RbJMAUItem0</globalKey>
+        <inputFieldName>Id</inputFieldName>
+        <inputObjectName>PublicComplaint</inputObjectName>
+        <inputObjectQuerySequence>1.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetPCDetailsForCasePrepopulation</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>PCRec</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetPCDetailsForCasePrepopulationCustom304</globalKey>
+        <inputFieldName>PCRec:IncidentDate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetPCDetailsForCasePrepopulation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>PCIncidentDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetPCDetailsForCasePrepopulationCustom8903</globalKey>
+        <inputFieldName>PCRec:FirstName</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetPCDetailsForCasePrepopulation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>PCFirstName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetPCDetailsForCasePrepopulationCustom1042</globalKey>
+        <inputFieldName>PCRec:LastName</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetPCDetailsForCasePrepopulation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>PCLastName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetPCDetailsForCasePrepopulationCustom6133</globalKey>
+        <inputFieldName>PCRec:AccountId</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetPCDetailsForCasePrepopulation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>PCAccountId</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetPCDetailsForCasePrepopulationCustom4605</globalKey>
+        <inputFieldName>PCRec:Subject</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetPCDetailsForCasePrepopulation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>PCSubject</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetPCDetailsForCasePrepopulationCustom1829</globalKey>
+        <inputFieldName>PCRec:Account.Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetPCDetailsForCasePrepopulation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>CaseDetails:NewCaseDetails:AccountName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <outputType>JSON</outputType>
+    <previewJsonData>{
+  &quot;ContextId&quot; : &quot;0fhAs00000001QjIAI&quot;,
+  &quot;PublicComplaintCase&quot; : &quot;PublicComplaintCase&quot;
+}</previewJsonData>
+    <processSuperBulk>false</processSuperBulk>
+    <responseCacheTtlMinutes>0.0</responseCacheTtlMinutes>
+    <rollbackOnError>false</rollbackOnError>
+    <sourceObject>json</sourceObject>
+    <sourceObjectDefault>false</sourceObjectDefault>
+    <synchronousProcessThreshold>0.0</synchronousProcessThreshold>
+    <type>Extract</type>
+    <uniqueName>GetPCDetailsForCasePrepopulation_1</uniqueName>
+    <versionNumber>1.0</versionNumber>
+    <xmlDeclarationRemoved>false</xmlDeclarationRemoved>
+</OmniDataTransform>
