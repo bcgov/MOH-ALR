@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>InspectionStartDateandEndDate</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+	AND(
+	 NOT($Permission.EHISBypassValidationRuleCustomPermission),
+	 RecordType.DeveloperName  = &apos;Inspection&apos;
+	),
+	OR(
+		   ISBLANK( PlannedVisitStartTime ) ,
+		   DATETIMEVALUE(PlannedVisitStartTime) &lt;  NOW() , 
+		   DATETIMEVALUE(PlannedVisitStartTime)   &gt;= 
+		   DATETIMEVALUE(PlannedVisitEndTime)
+	)
+)</errorConditionFormula>
+    <errorMessage>Planned Start Time cannot be in the past; or, Planned End Time cannot be before Planned Start Time</errorMessage>
+</ValidationRule>
