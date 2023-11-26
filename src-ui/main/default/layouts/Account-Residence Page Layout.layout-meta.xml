@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
-    <excludeButtons>DataDotComAccountInsights</excludeButtons>
-    <excludeButtons>DataDotComClean</excludeButtons>
+    <excludeButtons>DataDotComCompanyHierarchy</excludeButtons>
     <excludeButtons>DisableCustomerPortalAccount</excludeButtons>
     <excludeButtons>DisablePartnerPortalAccount</excludeButtons>
     <excludeButtons>IncludeOffline</excludeButtons>
@@ -28,12 +27,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>OwnerId</field>
-            </layoutItems>
-            <layoutItems>
-           <layoutItems>
-23dd8dc76c08548b4251293e6c71a1c63b9a3a50
-                <behavior>Edit</behavior>
-                <field>Delete__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -225,7 +218,7 @@
             <actionType>QuickAction</actionType>
             <sortOrder>5</sortOrder>
         </platformActionListItems>
-            </platformActionList>
+        </platformActionList>
     </platformActionList>
     <quickActionList>
         <quickActionListItems>
@@ -238,7 +231,14 @@
             <quickActionName>NewEvent</quickActionName>
         </quickActionListItems>
     </quickActionList>
-        <relatedLists>
+    <relatedLists>
+        <fields>Name</fields>
+        <fields>Status</fields>
+        <fields>PaymentDate__c</fields>
+        <fields>ReferenceNumber__c</fields>
+        <relatedList>RegulatoryTrxnFees</relatedList>
+    </relatedLists>
+    <relatedLists>
         <fields>CONTACT.FULL_NAME</fields>
         <fields>ACCCONRELATION.ROLES</fields>
         <fields>PrimaryContact__c</fields>
@@ -311,7 +311,6 @@
         <relatedList>Visits</relatedList>
     </relatedLists>
     <relatedLists>
-        <relatedLists>
         <relatedList>RelatedEntityHistoryList</relatedList>
     </relatedLists>
     <relatedLists>
