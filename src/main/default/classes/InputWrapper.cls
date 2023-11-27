@@ -16,9 +16,9 @@ public class InputWrapper {
 	}
 
 	
-	public static InputWrapper parse(String json) {
+	/*public static InputWrapper parse(String json) {
 		return (InputWrapper) System.JSON.deserialize(json, InputWrapper.class);
-	}
+	}*/
 
 
 }

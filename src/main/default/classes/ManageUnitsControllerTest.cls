@@ -4,6 +4,7 @@ public class ManageUnitsControllerTest {
     public static void makeData(){
         Account residence = TestDataFactory.createResidence('Residence','residence1',true);
         Asset unit1 = TestDataFactory.createUnit('1','Private',2,residence.Id,true);
+        
     }
      @isTest
     static void unitInsertTest(){
