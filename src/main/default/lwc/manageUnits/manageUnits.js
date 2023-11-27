@@ -97,7 +97,11 @@ export default class ManageUnits extends LightningElement {
     async handleSave(event) {
         const updatedFields = event.detail.draftValues;
         let isValidInput = true;
-        console.log('updatedFields--');
+        updatedFields.forEach(record => {
+            record.GenerateRenewalInvoice__c = this.refs.renewed.checked;
+            record.Amount__c = 'Unit Fee';
+        });
+
         console.log(JSON.stringify(event.detail.draftValues));
         try {
             // Pass edited fields to the updateUnits Apex controller
@@ -113,6 +117,7 @@ export default class ManageUnits extends LightningElement {
                 // Clear all draft values in the datatable
                 this.isLoading = true;
                 await this.fetchTableData();
+                this.refs.renewed.checked = false;
                 this.draftValues = [];
             } else {
                 this.showToastMessage("Error", 'Updated Quantity cannot be equal,null, negative or greater than the existing quantity.', "error");

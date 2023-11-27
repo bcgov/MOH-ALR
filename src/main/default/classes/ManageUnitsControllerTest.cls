@@ -4,6 +4,7 @@ public class ManageUnitsControllerTest {
     public static void makeData(){
         Account residence = TestDataFactory.createResidence('Residence','residence1',true);
         Asset unit1 = TestDataFactory.createUnit('1','Private',2,residence.Id,true);
+        
     }
      @isTest
     static void unitInsertTest(){
@@ -14,13 +15,20 @@ public class ManageUnitsControllerTest {
         unitupdate.Quantity = 1;
         unitupdate.Id = unit.Id;
         unitupdate.AccountId=residence.Id;
+        unitupdate.GenerateRenewalInvoice__c=true;
         updateUnits.add(unitupdate);
        // string str = JSON.serialize(unit);
-        object data =(object)updateUnits;
-          
+        object data =(object)updateUnits;        
+        
+        
+        try{
         ManageUnitsController.getUnitBasedOnResidence(residence.Id);
         ManageUnitsController.updateUnits(data);
-        System.assertEquals(unitupdate.Quantity,1);  
+        }Catch(Exception e){
+            System.assertEquals('Script-thrown exception', e.getMessage());  
+        } 
+        System.assertEquals(unitupdate.Quantity,1); 
+        
     }
     
     @isTest

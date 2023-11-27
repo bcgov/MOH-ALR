@@ -30,7 +30,9 @@
 			 <span><lightning-button variant="brand" label="Clear Search" title="Clear" onclick={handleClearSearch}></lightning-button></span>
 			</div>-->
 		  </div>
-		<div class="slds-p-top_xx-large"></div>
+		<div class="slds-p-top_large slds-p-bottom_large">
+			<lightning-input type="checkbox" lwc:ref='renewed' variant="standard" name="Renewed" label="Generate Renewal Invoice"></lightning-input>
+		</div>
 		<lightning-spinner alternative-text="Loading" size="Large" if:true={isLoading}></lightning-spinner>
 		<div style={datatableHeight}>
 			<lightning-datatable key-field="Id" data={recordList} columns={column} onsave={handleSave}

@@ -34,7 +34,7 @@ global class ManageUnitOmniService implements Callable {
 * Purpose:
 * Created By:Accenture
 * Created For:
-* ********************************************************************************************************/
+*********************************************************************************************************/
     public void mergeUnits(Map<String,Object> inputMap,Map<String,Object> outMap){
         Map<String,Decimal> totalQuantityByUnqStringMap = new Map<String,Decimal>();
         Map<String, List<Asset>> assetsByUniqueStringMap = new Map<String, List<Asset>>();
@@ -51,19 +51,20 @@ global class ManageUnitOmniService implements Callable {
           unitList.add(unitRec);         
         }  
         for(InputWrapper.AddUnitBlock record: unitList) {
-            String uniqueStr = record.Name+record.UnitCapacity+record.UnitType;            
+            Asset assetRecord = createAsset(record);
+            String uniqueStr = assetRecord.AccountId+assetRecord.Capacity__c+assetRecord.Type__c;            
             if(assetsByUniqueStringMap.containsKey(uniqueStr)){
-                Asset assetRecord = createAsset(record);
+              //  Asset assetRecord = createAsset(record);
                 assetsByUniqueStringMap.get(uniqueStr).add(assetRecord);
                 totalQuantityByUnqStringMap.put(uniqueStr,totalQuantityByUnqStringMap.get(uniqueStr) + record.NoOfUnits);
                 continue;
             }
-            Asset assetRecord = createAsset(record);
+           // Asset assetRecord = createAsset(record);
             assetsByUniqueStringMap.put(uniqueStr,new List<Asset>{assetRecord});
             totalQuantityByUnqStringMap.put(uniqueStr, record.NoOfUnits);
         }
         if(!assetsByUniqueStringMap.isEmpty()){
-            insertMergedAssets(assetsByUniqueStringMap,totalQuantityByUnqStringMap);
+            insertMergedAssets(assetsByUniqueStringMap,totalQuantityByUnqStringMap);            
         }
         
     }
@@ -83,11 +84,13 @@ global class ManageUnitOmniService implements Callable {
                     AccountId = mergedUnits[0].AccountId,
                     Capacity__c = mergedUnits[0].Capacity__c,
                     Type__c = mergedUnits[0].Type__c,
+                    Amount__c = mergedUnits[0].Amount__c,
+                    GenerateInvoice__c = mergedUnits[0].GenerateInvoice__c,
+                  //  Status = mergedUnits[0].Status,
                     Quantity = totalQuantityByUnqStringMap.get(uniqueStr)
                 );
                 insertAssetList.add(mergedAsset);
             } 
-            System.debug('insertAssetList---'+insertAssetList);
             if (!insertAssetList.isEmpty()) {
                 insert insertAssetList;
             }
@@ -108,7 +111,10 @@ global class ManageUnitOmniService implements Callable {
                 AccountId = record.AccountId,
                 Capacity__c = typeValueSet.contains(record.UnitType) ? '1' : record.UnitCapacity,
                 Type__c = record.UnitType,
+                Amount__c = record.AmountValue,
+                GenerateInvoice__c = record.GenerateInvoiceValue,
+              //  Status = record.GenerateInvoiceValue == true ? 'Pending Invoice' : 'Waived',
                 Quantity = record.NoOfUnits
             );
-    }
-}
+     }
+ }
