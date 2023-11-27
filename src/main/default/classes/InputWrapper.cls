@@ -9,8 +9,10 @@ public class InputWrapper {
 		public String UnitCapacity{get;set;}
 		public String UnitType{get;set;}
 		public String Name{get;set;}
-		public Object Status{get;set;}
+		public string Status{get;set;}
 		public String AccountId{get;set;}
+        public String AmountValue{get;set;}
+        public Boolean GenerateInvoiceValue{get;set;}
 	}
 
 	
