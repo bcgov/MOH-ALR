@@ -31,8 +31,8 @@ public class ManageUnitsController {
                 List<Asset> assetForCreateList = new List<Asset>();
         List<Asset> assetForValidateList = new List<Asset>();
         List<Asset> assetForUpdateList = (List<Asset>) JSON.deserialize(JSON.serialize(data),List<Asset>.class);
-        Map<ID, Asset> existingUnits = new Map<ID, Asset>([SELECT Id,Name, Quantity,AccountId,Capacity__c,Type__c FROM Asset where Id IN :assetForUpdateList]);
-                try {
+        Map<ID, Asset> existingUnits = new Map<ID, Asset>([SELECT Id,Name,GenerateRenewalInvoice__c, Quantity,AccountId,Capacity__c,Type__c FROM Asset where Id IN :assetForUpdateList]);
+        try {
             for(Asset unit : assetForUpdateList){
                 Asset newUnit = new Asset();
                 newunit.parentId = unit.Id;
@@ -59,7 +59,7 @@ public class ManageUnitsController {
                 
             }
             if(!assetForUpdateList.isEmpty() && Asset.SObjectType.getDescribe().isAccessible() && !assetForCreateList.isEmpty()){
-                update assetForUpdateList;                
+                update assetForUpdateList;
                 insert assetForCreateList;
             }
             Map<Id,Decimal> mapOfUnitRequest = new Map<Id,Decimal>();
