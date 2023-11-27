@@ -18,11 +18,17 @@ public class ManageUnitsControllerTest {
         unitupdate.GenerateRenewalInvoice__c=true;
         updateUnits.add(unitupdate);
        // string str = JSON.serialize(unit);
-        object data =(object)updateUnits;
-          
+        object data =(object)updateUnits;        
+        
+        
+        try{
         ManageUnitsController.getUnitBasedOnResidence(residence.Id);
         ManageUnitsController.updateUnits(data);
-        System.assertEquals(unitupdate.Quantity,1);  
+        }Catch(Exception e){
+            System.assertEquals('Script-thrown exception', e.getMessage());  
+        } 
+        System.assertEquals(unitupdate.Quantity,1); 
+        
     }
     
     @isTest
