@@ -14,6 +14,7 @@ public class ManageUnitsControllerTest {
         unitupdate.Quantity = 1;
         unitupdate.Id = unit.Id;
         unitupdate.AccountId=residence.Id;
+        unitupdate.GenerateRenewalInvoice__c=true;
         updateUnits.add(unitupdate);
        // string str = JSON.serialize(unit);
         object data =(object)updateUnits;
