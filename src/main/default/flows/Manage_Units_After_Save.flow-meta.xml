@@ -4,7 +4,7 @@
     <assignments>
         <name>AssignmentQuantity</name>
         <label>AssignmentQuantity</label>
-        <locationX>456</locationX>
+        <locationX>655</locationX>
         <locationY>1127</locationY>
         <assignmentItems>
             <assignToReference>TotalQuantity</assignToReference>
@@ -27,7 +27,7 @@
     <decisions>
         <name>CheckParent</name>
         <label>Decision: Check Parent</label>
-        <locationX>500</locationX>
+        <locationX>699</locationX>
         <locationY>695</locationY>
         <defaultConnector>
             <targetReference>UpdateUnit</targetReference>
@@ -50,13 +50,18 @@
         </rules>
     </decisions>
     <environments>Default</environments>
+    <formulas>
+        <name>Status</name>
+        <dataType>String</dataType>
+        <expression>IF ({!$Record.GenerateInvoice__c} == false,&apos;Waived&apos;,&apos;Pending Invoice&apos;)</expression>
+    </formulas>
     <interviewLabel>Manage Units After Save {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Manage Units After Save</label>
     <loops>
         <name>LoopQuantity</name>
         <label>LoopQuantity</label>
-        <locationX>360</locationX>
-        <locationY>961</locationY>
+        <locationX>567</locationX>
+        <locationY>1019</locationY>
         <collectionReference>GetChildRecordsToUpdateQuantity</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -88,8 +93,8 @@
     <recordCreates>
         <name>Create_Child_Unit</name>
         <label>Create Records : Create Child Unit</label>
-        <locationX>863</locationX>
-        <locationY>912</locationY>
+        <locationX>1242</locationX>
+        <locationY>692</locationY>
         <inputAssignments>
             <field>AccountId</field>
             <value>
@@ -100,6 +105,12 @@
             <field>Capacity__c</field>
             <value>
                 <elementReference>$Record.Capacity__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>GenerateInvoice__c</field>
+            <value>
+                <elementReference>$Record.GenerateInvoice__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -129,7 +140,7 @@
         <inputAssignments>
             <field>Status</field>
             <value>
-                <stringValue>Pending Invoice</stringValue>
+                <elementReference>Status</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -144,8 +155,8 @@
     <recordLookups>
         <name>GetChildRecordsToUpdateQuantity</name>
         <label>GetChildRecordsToUpdateQuantity</label>
-        <locationX>147</locationX>
-        <locationY>887</locationY>
+        <locationX>50</locationX>
+        <locationY>773</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>LoopQuantity</targetReference>
@@ -193,8 +204,8 @@
     <recordLookups>
         <name>GetRecordsGetParentUnit</name>
         <label>Get Records: Get Parent Unit</label>
-        <locationX>804</locationX>
-        <locationY>543</locationY>
+        <locationX>699</locationX>
+        <locationY>587</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>CheckParent</targetReference>
@@ -250,8 +261,8 @@
     <recordLookups>
         <name>getUnitRecordType</name>
         <label>getUnitRecordType</label>
-        <locationX>328</locationX>
-        <locationY>369</locationY>
+        <locationX>699</locationX>
+        <locationY>371</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>getUnitRequestRecordType</targetReference>
@@ -280,8 +291,8 @@
     <recordLookups>
         <name>getUnitRequestRecordType</name>
         <label>getUnitRequestRecordType</label>
-        <locationX>933</locationX>
-        <locationY>343</locationY>
+        <locationX>699</locationX>
+        <locationY>479</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>GetRecordsGetParentUnit</targetReference>
@@ -310,8 +321,8 @@
     <recordUpdates>
         <name>UpdateParentId</name>
         <label>UpdateParentId</label>
-        <locationX>367</locationX>
-        <locationY>803</locationY>
+        <locationX>406</locationX>
+        <locationY>692</locationY>
         <connector>
             <targetReference>GetChildRecordsToUpdateQuantity</targetReference>
         </connector>
@@ -336,7 +347,7 @@
         <inputAssignments>
             <field>Status</field>
             <value>
-                <stringValue>Pending Invoice</stringValue>
+                <elementReference>Status</elementReference>
             </value>
         </inputAssignments>
         <inputReference>$Record</inputReference>
@@ -344,8 +355,8 @@
     <recordUpdates>
         <name>UpdateParentQuantity</name>
         <label>UpdateParentQuantity</label>
-        <locationX>368</locationX>
-        <locationY>1320</locationY>
+        <locationX>567</locationX>
+        <locationY>1319</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -372,8 +383,8 @@
     <recordUpdates>
         <name>UpdateUnit</name>
         <label>UpdateUnit</label>
-        <locationX>632</locationX>
-        <locationY>803</locationY>
+        <locationX>1000</locationX>
+        <locationY>691</locationY>
         <connector>
             <targetReference>Create_Child_Unit</targetReference>
         </connector>
@@ -386,8 +397,8 @@
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <start>
-        <locationX>374</locationX>
-        <locationY>47</locationY>
+        <locationX>573</locationX>
+        <locationY>48</locationY>
         <connector>
             <targetReference>getUnitRecordType</targetReference>
         </connector>
