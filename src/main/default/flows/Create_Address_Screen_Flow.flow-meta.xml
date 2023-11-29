@@ -1,6 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>58.0</apiVersion>
+    <assignments>
+        <name>AssociatedAddressTobeUdated</name>
+        <label>AssociatedAddressTobeUdated</label>
+        <locationX>506</locationX>
+        <locationY>1214</locationY>
+        <assignmentItems>
+            <assignToReference>AssociatedAddressRecord</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Deactivate_Old_Associated_Addresses</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Deactivate_Old_Associated_Addresses</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>DeactivateEachAssociatedAddress</name>
+        <label>DeactivateEachAssociatedAddress</label>
+        <locationX>506</locationX>
+        <locationY>1106</locationY>
+        <assignmentItems>
+            <assignToReference>Deactivate_Old_Associated_Addresses.ActiveFrom</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Deactivate_Old_Associated_Addresses.CreatedDate</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Deactivate_Old_Associated_Addresses.ActiveTo</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>CurrentDate</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>AssociatedAddressTobeUdated</targetReference>
+        </connector>
+    </assignments>
     <constants>
         <name>AccountRecordId</name>
         <dataType>String</dataType>
@@ -9,11 +48,43 @@
         <name>EmptyValueSet</name>
         <dataType>String</dataType>
     </constants>
+    <constants>
+        <name>SuccessMsg</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Address is added to account successfully. Please close out this page and refresh to see the newly created address. </stringValue>
+        </value>
+    </constants>
+    <decisions>
+        <name>Check_Active_Associated_Address_Present</name>
+        <label>Check Active Associated Address Present</label>
+        <locationX>550</locationX>
+        <locationY>890</locationY>
+        <defaultConnector>
+            <targetReference>CreateAssociatedLocationRecord</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Active_Address_Present</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>GetAssociatedAddressRecords</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Deactivate_Old_Associated_Addresses</targetReference>
+            </connector>
+            <label>Active Address Present</label>
+        </rules>
+    </decisions>
     <decisions>
         <name>checkForNullValues</name>
         <label>checkForNullValues</label>
-        <locationX>100</locationX>
-        <locationY>288</locationY>
+        <locationX>176</locationX>
+        <locationY>350</locationY>
         <defaultConnector>
             <targetReference>Create_Address_Record</targetReference>
         </defaultConnector>
@@ -69,6 +140,7 @@
                 </rightValue>
             </conditions>
             <connector>
+                <isGoTo>true</isGoTo>
                 <targetReference>Create_Address</targetReference>
             </connector>
             <label>nullValueCheck</label>
@@ -105,8 +177,32 @@
         <dataType>String</dataType>
         <expression>{!AddressRecordVar.Street}+ &quot;-&quot;+ {!AddressRecordVar.PostalCode}</expression>
     </formulas>
-    <interviewLabel>Crea {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>Create Address Via Typeahead</label>
+    <formulas>
+        <name>CurrentDate</name>
+        <dataType>DateTime</dataType>
+        <expression>NOW()</expression>
+    </formulas>
+    <formulas>
+        <name>YesterdayDate</name>
+        <dataType>DateTime</dataType>
+        <expression>NOW()-1</expression>
+    </formulas>
+    <interviewLabel>Create Address Screen Flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Create Address Screen Flow</label>
+    <loops>
+        <name>Deactivate_Old_Associated_Addresses</name>
+        <label>Deactivate Old Associated Addresses</label>
+        <locationX>418</locationX>
+        <locationY>998</locationY>
+        <collectionReference>GetAssociatedAddressRecords</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>DeactivateEachAssociatedAddress</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>UpdateOldAssociatedLocations</targetReference>
+        </noMoreValuesConnector>
+    </loops>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -116,7 +212,7 @@
     <processMetadataValues>
         <name>CanvasMode</name>
         <value>
-            <stringValue>FREE_FORM_CANVAS</stringValue>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
         </value>
     </processMetadataValues>
     <processMetadataValues>
@@ -129,8 +225,8 @@
     <recordCreates>
         <name>Create_Address_Record</name>
         <label>Create Location Record</label>
-        <locationX>463</locationX>
-        <locationY>408</locationY>
+        <locationX>550</locationX>
+        <locationY>458</locationY>
         <assignRecordIdToReference>LocationRecordId</assignRecordIdToReference>
         <connector>
             <targetReference>Create_Address_Record1</targetReference>
@@ -152,8 +248,8 @@
     <recordCreates>
         <name>Create_Address_Record1</name>
         <label>Create Address Record</label>
-        <locationX>456</locationX>
-        <locationY>504</locationY>
+        <locationX>550</locationX>
+        <locationY>566</locationY>
         <assignRecordIdToReference>AddressRecordId</assignRecordIdToReference>
         <connector>
             <targetReference>UpdateLocationRecord</targetReference>
@@ -211,11 +307,17 @@
     <recordCreates>
         <name>CreateAssociatedLocationRecord</name>
         <label>CreateAssociatedLocationRecord</label>
-        <locationX>456</locationX>
-        <locationY>747</locationY>
+        <locationX>550</locationX>
+        <locationY>1598</locationY>
         <connector>
-            <targetReference>Address_is_Created</targetReference>
+            <targetReference>ShowMsg</targetReference>
         </connector>
+        <inputAssignments>
+            <field>ActiveFrom</field>
+            <value>
+                <elementReference>CurrentDate</elementReference>
+            </value>
+        </inputAssignments>
         <inputAssignments>
             <field>LocationId</field>
             <value>
@@ -240,8 +342,8 @@
     <recordLookups>
         <name>GetAccount</name>
         <label>GetAccount</label>
-        <locationX>457</locationX>
-        <locationY>169</locationY>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Create_Address</targetReference>
@@ -260,13 +362,41 @@
             <field>Name</field>
         </outputAssignments>
     </recordLookups>
+    <recordLookups>
+        <name>GetAssociatedAddressRecords</name>
+        <label>GetAssociatedAddressRecords</label>
+        <locationX>550</locationX>
+        <locationY>782</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_Active_Associated_Address_Present</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>ParentRecordId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>ActiveTo</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>AssociatedLocation</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <recordUpdates>
         <name>UpdateLocationRecord</name>
         <label>UpdateLocationRecord</label>
-        <locationX>456</locationX>
-        <locationY>613</locationY>
+        <locationX>550</locationX>
+        <locationY>674</locationY>
         <connector>
-            <targetReference>CreateAssociatedLocationRecord</targetReference>
+            <targetReference>GetAssociatedAddressRecords</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -284,27 +414,21 @@
         </inputAssignments>
         <object>Location</object>
     </recordUpdates>
-    <screens>
-        <name>Address_is_Created</name>
-        <label>Address is Created</label>
-        <locationX>452</locationX>
-        <locationY>898</locationY>
-        <allowBack>false</allowBack>
-        <allowFinish>true</allowFinish>
-        <allowPause>false</allowPause>
-        <fields>
-            <name>CompletionText</name>
-            <fieldText>&lt;p&gt;&lt;span style=&quot;color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot;&gt;Address is added to account successfully. Please click Finish to create new Address or to see the created address please close the flyout and refresh the page.&lt;/span&gt;&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
-        </fields>
-        <showFooter>true</showFooter>
-        <showHeader>false</showHeader>
-    </screens>
+    <recordUpdates>
+        <name>UpdateOldAssociatedLocations</name>
+        <label>UpdateOldAssociatedLocations</label>
+        <locationX>418</locationX>
+        <locationY>1406</locationY>
+        <connector>
+            <targetReference>CreateAssociatedLocationRecord</targetReference>
+        </connector>
+        <inputReference>AssociatedAddressRecord</inputReference>
+    </recordUpdates>
     <screens>
         <name>Create_Address</name>
         <label>Address</label>
-        <locationX>454</locationX>
-        <locationY>283</locationY>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -365,12 +489,30 @@
             <isRequired>false</isRequired>
             <objectFieldReference>AddressRecordVar.DrivingDirections</objectFieldReference>
         </fields>
+        <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>ShowMsg</name>
+        <label>ShowMsg</label>
+        <locationX>550</locationX>
+        <locationY>1706</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>msg</name>
+            <fieldText>&lt;p&gt;{!SuccessMsg}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <nextOrFinishButtonLabel>OK</nextOrFinishButtonLabel>
         <showFooter>true</showFooter>
         <showHeader>false</showHeader>
     </screens>
     <start>
-        <locationX>330</locationX>
-        <locationY>48</locationY>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
         <connector>
             <targetReference>GetAccount</targetReference>
         </connector>
@@ -404,6 +546,14 @@
         <isCollection>false</isCollection>
         <isInput>true</isInput>
         <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <name>AssociatedAddressRecord</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <objectType>AssociatedLocation</objectType>
     </variables>
     <variables>
         <name>bttn_group</name>
