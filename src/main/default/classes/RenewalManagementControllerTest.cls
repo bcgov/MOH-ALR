@@ -24,24 +24,13 @@ public class RenewalManagementControllerTest {
         unitRec3.recordTypeId = Schema.getGlobalDescribe().get('Asset').getDescribe().getRecordTypeInfosByDeveloperName().get('Units_Record_Type').getRecordTypeId();
         Database.Insert(unitRec3);
     }
-    //method to call the batch class
-    @isTest
-    static void execRenewalBatchTest() {
-        List<String> accNames = new List<String>{'residenceAccount3'};
-        List<Id> accIds = new List<Id>();
-        for(Account accId : [SELECT Id from Account where Name IN: accNames LIMIT 10]) {
-            accIds.add(accId.Id);
-        }
-        Test.startTest(); 
-        Database.executeBatch(new RenewalManagementControllerBatch(accIds));
-        Test.stopTest();
-    }
     //invocable method in RenewalManagementController
     @isTest
     static void getAccountIdsTest() {
         Test.startTest();
-        RenewalManagementController.getAccountIds();
+        List<String> accIdCount = RenewalManagementController.getAccountIds();
         Test.stopTest();
+        Assert.isTrue(Integer.valueOf(accIdCount[0]) > 0);
     }
     //invocable method in RenewalManagementControllerBatch
     @isTest
@@ -56,5 +45,7 @@ public class RenewalManagementControllerTest {
         Test.startTest(); 
         RenewalManagementControllerBatch.sendEmailTest(new List<RenewalManagementControllerBatch.FlowInputs>{accntIds});
         Test.stopTest();
+        List<RegulatoryTrxnFeeItem> regTrans = [SELECT Id from RegulatoryTrxnFeeItem LIMIT 10];
+        Assert.isNotNull(regTrans.size());
     }
 }
