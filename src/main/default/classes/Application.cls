@@ -13,7 +13,7 @@ public class Application {
            // Form_Question__c.SObjectType,
            // Form_Response__c.SObjectType,
            // Form_Question_Response__c.SObjectType,
-            HealthcareProvider.SObjectType,
+            //HealthcareProvider.SObjectType,
             Log__c.SObjectType,
             PermissionSetAssignment.SObjectType,
             User.SObjectType   
