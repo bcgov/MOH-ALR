@@ -10,6 +10,7 @@ public class RenewalManagementController {
     private Final Static Integer renewalYear = Date.Today().Year();
     private Final Static String feeType = 'Renewal Unit Fee';
     private Final Static String feeStatus = 'Due';
+    private Final Static Decimal defaultFee = 0;
     //method to return number of active accounts for renewal for current year
     @InvocableMethod
     public static List<String> getAccountIds() {
@@ -125,7 +126,10 @@ public class RenewalManagementController {
                 for(Asset assetRec : accRec.Assets) {
                 	//String amtVal = assetRec.Amount__c == 'Unit Fee' ? cap.UnitFee__c : cap.PartialUnitFee__c;
                 	Decimal amtVal = regAuthNameMap.get(accRec.ClassType__c).UnitFee__c;
-                    system.debug('fee amt '+amtVal);                    
+                    system.debug('fee amt '+amtVal);
+                    if(amtVal == NULL) {
+                        amtVal = defaultFee;
+			        }                   
                     RegulatoryTrxnFeeItem transFeeItemRec = createTransFeeItemRecord(transFeeItemRT, transFeeMap.get(accRec.Id).Id, assetRec.Id, assetRec.Type__c, amtVal, assetRec.Quantity, feeType);
                     transFeeItemList.add(transFeeItemRec);
                 }
