@@ -39,9 +39,15 @@ public class TestDataFactory {
     }
     //method to create regAuthType record - ALR-36
     @testVisible
-    public static RegulatoryAuthorizationType createRegAuth(String authName, Boolean isInsert) {
+    public static RegulatoryAuthorizationType createRegAuth(String authName, String authCategory, String authCode, Decimal lateFee, Decimal oneFee, Decimal partialFee, Decimal unitFee, Boolean isInsert) {
         RegulatoryAuthorizationType regAuthRec = new RegulatoryAuthorizationType(
-        Name = authName);
+        Name = authName,
+        RegulatoryAuthCategory = authCategory,
+        RegulatoryAuthorizationCode__c = authCode,
+        LateFee__c = lateFee,
+        OneTimeFee__c = oneFee,
+        PartialUnitFee__c = partialFee,
+        UnitFee__c = unitFee);
         if(isInsert) {
             Database.Insert(regAuthRec);
         }
