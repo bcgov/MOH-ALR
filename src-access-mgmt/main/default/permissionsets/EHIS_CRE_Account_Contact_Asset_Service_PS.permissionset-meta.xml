@@ -225,7 +225,17 @@
         <field>Contact.Title</field>
         <readable>true</readable>
     </fieldPermissions>
-        <hasActivationRequired>false</hasActivationRequired>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Service__c.Account__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Service__c.Comments__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <hasActivationRequired>false</hasActivationRequired>
     <label>EHIS CRE Account Contact Asset Service PS</label>
     <objectPermissions>
         <allowCreate>true</allowCreate>
@@ -254,7 +264,16 @@
         <object>Contact</object>
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
-        <recordTypeVisibilities>
+    <objectPermissions>
+        <allowCreate>true</allowCreate>
+        <allowDelete>false</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
+        <object>Service__c</object>
+        <viewAllRecords>false</viewAllRecords>
+    </objectPermissions>
+    <recordTypeVisibilities>
         <recordType>Account.Registrant</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
@@ -274,4 +293,12 @@
         <recordType>Contact.Contact</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
-    </PermissionSet>
+    <recordTypeVisibilities>
+        <recordType>Service__c.ResidenceServices</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <tabSettings>
+        <tab>Service__c</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+</PermissionSet>
