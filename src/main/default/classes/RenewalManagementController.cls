@@ -9,7 +9,7 @@ public class RenewalManagementController {
     //Static Constants
     private Final Static Integer renewalYear = Date.Today().Year();
     private Final Static String feeType = 'Renewal Unit Fee';
-    private Final Static String feeStatus = 'Paid';
+    private Final Static String feeStatus = 'Due';
     //method to return number of active accounts for renewal for current year
     @InvocableMethod
     public static List<String> getAccountIds() {
@@ -29,25 +29,32 @@ public class RenewalManagementController {
         activeAccCount.add(String.valueOf(countValue));
         return activeAccCount;
     }
+    //method to fetch existing reg auth type records
+    public static Map<String, RegulatoryAuthorizationType> getRegAuthRecs() {
+        Map<String, RegulatoryAuthorizationType> regAuthNameMap = new Map<String, RegulatoryAuthorizationType>();
+        try {
+            for(RegulatoryAuthorizationType regAuth : [SELECT Id, Name, RegulatoryAuthCategory, LateFee__c, 
+                                                       OneTimeFee__c, PartialUnitFee__c, UnitFee__c 
+                                                       FROM RegulatoryAuthorizationType LIMIT 100]) {
+                                                           regAuthNameMap.put(regAuth.Name,regAuth);
+                                                       }
+        }
+        catch(exception ex) {
+            system.debug('inside reg auth type '+ex.getMessage());
+        }
+        return regAuthNameMap;
+    }
     //method to create bla records for account (bulkified)
-    public static Map<Id, BusinessLicenseApplication> createBlaRecords(Map<Id, Account> accMap, Map<Id, String> blaStatusMap) {
+    public static Map<Id, BusinessLicenseApplication> createBlaRecords(Map<Id, Account> accMap, Map<Id, String> blaStatusMap, Map<String, RegulatoryAuthorizationType> regAuthNameMap) {
         List<BusinessLicenseApplication> blaRecCreateList = new List<BusinessLicenseApplication>();
         Map<Id, BusinessLicenseApplication> blaAccMap = new Map<Id, BusinessLicenseApplication>();
         try {
         //fetch recordtype Id
         system.debug('cda'+UserInfo.getUserId());
         String blaRecTypeId = Schema.getGlobalDescribe().get('BusinessLicenseApplication').getDescribe().getRecordTypeInfosByDeveloperName().get('Renewal').getRecordTypeId();
-        //fetch RegulatoryAuthorizationType Ids with Name and Category
-        Map<String ,Id> regAuthNameIdMap = new Map<String ,Id>();
-        Map<String, String> regAuthNameCategoryMap = new Map<String, String>();
-        for(RegulatoryAuthorizationType regAuth : [SELECT Id, Name, RegulatoryAuthCategory 
-                                                       FROM RegulatoryAuthorizationType LIMIT 100]) {
-                                                           regAuthNameIdMap.put(regAuth.Name, regAuth.Id);
-                                                           regAuthNameCategoryMap.put(regAuth.Name, regAuth.RegulatoryAuthCategory);
-                                                       }
-            //call BLA creation method for each account
-            for(Account accRec : accMap.values()) {
-            BusinessLicenseApplication blaRec = createBlaRecord(blaRecTypeId, accRec.Id, regAuthNameCategoryMap.get(accRec.ClassType__c), regAuthNameIdMap.get(accRec.ClassType__c), blaStatusMap.get(accRec.Id), DateTime.now(), renewalYear);
+        //call BLA creation method for each account
+        for(Account accRec : accMap.values()) {
+            BusinessLicenseApplication blaRec = createBlaRecord(blaRecTypeId, accRec.Id, regAuthNameMap.get(accRec.ClassType__c).RegulatoryAuthCategory, regAuthNameMap.get(accRec.ClassType__c).Id, blaStatusMap.get(accRec.Id), DateTime.now(), renewalYear);
             blaRecCreateList.add(blaRec);
             blaAccMap.put(accRec.Id, blaRec);
         }
@@ -62,7 +69,6 @@ public class RenewalManagementController {
         }
         return blaAccMap;
     }
-    
     //method to form a bla record with given parameters
     public static BusinessLicenseApplication createBlaRecord(Id recordTypeId, Id accId, String blaCategory, Id licenseTypeId, String blaStatus, DateTime appliedDate, Integer renewalYear) {
         BusinessLicenseApplication blaRec = new BusinessLicenseApplication(
@@ -109,14 +115,18 @@ public class RenewalManagementController {
     }
     
     //create transaction fee ITEM records
-    public static List<RegulatoryTrxnFeeItem> createTransFeeItemRecords(Map<Id, Account> renewalFeeAccMap, Map<Id, RegulatoryTrxnFee> transFeeMap) {
+    public static List<RegulatoryTrxnFeeItem> createTransFeeItemRecords(Map<Id, Account> renewalFeeAccMap, Map<Id, RegulatoryTrxnFee> transFeeMap, Map<String, RegulatoryAuthorizationType> regAuthNameMap) {
         Id transFeeItemRT;
         Map<Id, RegulatoryTrxnFeeItem> transFeeItemAccMap = new Map<Id, RegulatoryTrxnFeeItem>();
         List<RegulatoryTrxnFeeItem> transFeeItemList = new List<RegulatoryTrxnFeeItem>();
         try {
             for(Account accRec : renewalFeeAccMap.values()) {
+                //String cap = regAuthNameMap.get(accRec.ClassType__c);
                 for(Asset assetRec : accRec.Assets) {
-                    RegulatoryTrxnFeeItem transFeeItemRec = createTransFeeItemRecord(transFeeItemRT, transFeeMap.get(accRec.Id).Id, assetRec.Id, assetRec.Type__c, assetRec.Capacity__c, assetRec.Quantity);
+                	//String amtVal = assetRec.Amount__c == 'Unit Fee' ? cap.UnitFee__c : cap.PartialUnitFee__c;
+                	Decimal amtVal = regAuthNameMap.get(accRec.ClassType__c).UnitFee__c;
+                    system.debug('fee amt '+amtVal);                    
+                    RegulatoryTrxnFeeItem transFeeItemRec = createTransFeeItemRecord(transFeeItemRT, transFeeMap.get(accRec.Id).Id, assetRec.Id, assetRec.Type__c, amtVal, assetRec.Quantity, feeType);
                     transFeeItemList.add(transFeeItemRec);
                 }
             }
@@ -132,14 +142,15 @@ public class RenewalManagementController {
         return transFeeItemList;
     }
     //method to form a RegulatoryTrxnFeeItem record with given parameters
-     public static RegulatoryTrxnFeeItem createTransFeeItemRecord(Id recordTypeId, Id regTrxnFeeId, Id assetId, String assetType, String capValue, Decimal quantValue) {
+     public static RegulatoryTrxnFeeItem createTransFeeItemRecord(Id recordTypeId, Id regTrxnFeeId, Id assetId, String assetType, Decimal amtValue, Decimal quantValue, String feeType) {
          RegulatoryTrxnFeeItem transFeeItemRec = new RegulatoryTrxnFeeItem(
          RegulatoryTrxnFeeId = regTrxnFeeId,
          Unit__c = assetId,
          Name = assetType,
-         Amount__c = Integer.valueOf(capValue),
+         Amount__c = amtValue,
          Quantity__c = quantValue,
-         FeeAmount = Integer.valueOf(capValue) * quantValue);
+         FeeAmount = amtValue * quantValue,
+         FeeType__c = feeType);
          return transFeeItemRec;  
      }
 }
