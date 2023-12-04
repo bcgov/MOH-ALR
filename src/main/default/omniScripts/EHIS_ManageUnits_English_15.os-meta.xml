@@ -2,7 +2,7 @@
 <OmniScript xmlns="http://soap.sforce.com/2006/04/metadata">
     <description>This Omni script created for adding/Removing Residence Class units and capacity.</description>
     <elementTypeComponentMapping>{&quot;ElementTypeToHTMLTemplateList&quot;:[]}</elementTypeComponentMapping>
-    <isActive>true</isActive>
+    <isActive>false</isActive>
     <isIntegrationProcedure>false</isIntegrationProcedure>
     <isMetadataCacheDisabled>false</isMetadataCacheDisabled>
     <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
@@ -404,7 +404,7 @@
   &quot;helpText&quot; : &quot;&quot;,
   &quot;helpTextPos&quot; : &quot;&quot;,
   &quot;pattern&quot; : &quot;([1-9]|[1-9][0-9]|[1-9][0-9][0-9])&quot;,
-  &quot;ptrnErrText&quot; : &quot;Quantity cannot be null or negative.&quot;,
+  &quot;ptrnErrText&quot; : &quot;Quantity cannot be null, negative, contain decimals, or exceed 999.&quot;,
   &quot;placeholder&quot; : &quot;&quot;,
   &quot;mask&quot; : null,
   &quot;show&quot; : null,
@@ -560,7 +560,7 @@
             <name>Amount</name>
             <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
             <propertySetConfig>{
-  &quot;controlWidth&quot; : 6,
+  &quot;controlWidth&quot; : 4,
   &quot;label&quot; : &quot;Amount&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
@@ -603,7 +603,7 @@
   &quot;hide&quot; : false,
   &quot;disOnTplt&quot; : false
 }</propertySetConfig>
-            <sequenceNumber>6.0</sequenceNumber>
+            <sequenceNumber>7.0</sequenceNumber>
             <type>Select</type>
         </childElements>
         <childElements>
@@ -613,7 +613,7 @@
             <name>GenerateInvoice</name>
             <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
             <propertySetConfig>{
-  &quot;controlWidth&quot; : 6,
+  &quot;controlWidth&quot; : 2,
   &quot;label&quot; : &quot;Checkbox1&quot;,
   &quot;repeat&quot; : false,
   &quot;repeatClone&quot; : false,
@@ -671,7 +671,7 @@
     &quot;source&quot; : &quot;%ContextId%&quot;
   } ]
 }</propertySetConfig>
-            <sequenceNumber>7.0</sequenceNumber>
+            <sequenceNumber>8.0</sequenceNumber>
             <type>Custom Lightning Web Component</type>
         </childElements>
         <childElements>
@@ -770,6 +770,25 @@
   &quot;sanitize&quot; : false
 }</propertySetConfig>
             <sequenceNumber>2.0</sequenceNumber>
+            <type>Text Block</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>TextBlock3</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;TextBlock3&quot;,
+  &quot;text&quot; : &quot;&quot;,
+  &quot;show&quot; : null,
+  &quot;dataJSON&quot; : false,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;textKey&quot; : &quot;&quot;,
+  &quot;sanitize&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>6.0</sequenceNumber>
             <type>Text Block</type>
         </childElements>
         <childElements>
@@ -952,5 +971,5 @@
     <type>EHIS</type>
     <uniqueName>EHIS_ManageUnits_English_15</uniqueName>
     <versionNumber>15.0</versionNumber>
-    <webComponentKey>f30d0da1-9a8d-3748-fb17-e76d44ab1f67</webComponentKey>
+    <webComponentKey>fcf13096-4585-5152-3215-8ad1f08d7875</webComponentKey>
 </OmniScript>
