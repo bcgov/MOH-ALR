@@ -12,6 +12,7 @@ public class InputWrapper {
 		public string Status{get;set;}
 		public String AccountId{get;set;}
         public String AmountValue{get;set;}
+		public String Description{get;set;}
         public Boolean GenerateInvoiceValue{get;set;}
 	}
 

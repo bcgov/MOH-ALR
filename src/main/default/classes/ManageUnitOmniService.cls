@@ -4,7 +4,7 @@
 * Created By:Accenture
 * Created For:
 * ********************************************************************************************************/
-global class ManageUnitOmniService implements Callable {
+global class ManageUnitOmniService implements Callable { 
     public Object call(String action, Map<String,Object> args){
         Map<String,Object> output = (Map<String,Object>)args.get(BCMOH_Constants.IM_OUTPUT);
         Map<String,Object> options = (Map<String,Object>)args.get(BCMOH_Constants.IM_OPTIONS);
@@ -34,7 +34,7 @@ global class ManageUnitOmniService implements Callable {
 * Purpose:
 * Created By:Accenture
 * Created For:
-*********************************************************************************************************/
+* ********************************************************************************************************/
     public void mergeUnits(Map<String,Object> inputMap,Map<String,Object> outMap){
         Map<String,Decimal> totalQuantityByUnqStringMap = new Map<String,Decimal>();
         Map<String, List<Asset>> assetsByUniqueStringMap = new Map<String, List<Asset>>();
@@ -86,6 +86,7 @@ global class ManageUnitOmniService implements Callable {
                     Type__c = mergedUnits[0].Type__c,
                     Amount__c = mergedUnits[0].Amount__c,
                     GenerateInvoice__c = mergedUnits[0].GenerateInvoice__c,
+                    Description = mergedUnits[0].Description,
                   //  Status = mergedUnits[0].Status,
                     Quantity = totalQuantityByUnqStringMap.get(uniqueStr)
                 );
@@ -113,6 +114,7 @@ global class ManageUnitOmniService implements Callable {
                 Type__c = record.UnitType,
                 Amount__c = record.AmountValue,
                 GenerateInvoice__c = record.GenerateInvoiceValue,
+                Description = record.Description,
               //  Status = record.GenerateInvoiceValue == true ? 'Pending Invoice' : 'Waived',
                 Quantity = record.NoOfUnits
             );
