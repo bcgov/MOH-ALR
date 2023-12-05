@@ -10,7 +10,7 @@ public class RenewalManagementControllerBatch implements Database.Batchable<sObj
     private Final Static String renewalName = 'LicenseRenewalCriteria';
     private Final Static String blaRecType = 'Renewal';
     private Final Static String blaCancelledStatus = 'Cancelled';
-    private Final Static Integer renewalYear = Date.Today().Year();
+    private Final Static String renewalYear = BCMOH_Constants.renewalYear;
     private Final Static String blaRenewalStatus = 'Ready for Renewal';
     private Final Static String blaExcludedStatus = 'Excluded';
     Public static String parentAssetRT ='Units_Record_Type';
