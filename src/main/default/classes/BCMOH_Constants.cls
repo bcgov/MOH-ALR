@@ -7,7 +7,7 @@ public class BCMOH_Constants {
     public Final Static String renewalName = 'LicenseRenewalCriteria';
     public Final Static String blaRecType = 'Renewal';
     public Final Static String blaCancelledStatus = 'Cancelled';
-    public Final Static Integer renewalYear = Date.Today().Year();
+    public Final Static String renewalYear = String.valueOf(Date.Today().Year());
     public Final Static String blaCreatedStatus = 'Ready for Renewal';
     public Final Static String blaExcludedStatus = 'Excluded';
     public Final Static String feeType = 'Renewal Unit Fee';

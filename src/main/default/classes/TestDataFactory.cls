@@ -65,7 +65,7 @@ public class TestDataFactory {
             LicenseTypeId = regAuthId,
             Status = 'Ready for Renewal',
         	AppliedDate = DateTime.now(),
-        	RenewalYear__c = Date.today().year());
+        	RenewalYear__c = String.valueOf(Date.today().year()));
             if(isInsert) {
                 Database.Insert(blaRec);
             }
