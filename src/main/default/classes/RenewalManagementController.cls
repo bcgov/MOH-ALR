@@ -7,7 +7,6 @@
 **/
 public class RenewalManagementController {
     //Static Constants
-    private Final Static Integer renewalYear = Date.Today().Year();
     private Final Static String feeType = 'Renewal Unit Fee';
     private Final Static String feeStatus = 'Due';
     private Final Static Decimal defaultFee = 0;
@@ -55,7 +54,7 @@ public class RenewalManagementController {
         String blaRecTypeId = Schema.getGlobalDescribe().get('BusinessLicenseApplication').getDescribe().getRecordTypeInfosByDeveloperName().get('Renewal').getRecordTypeId();
         //call BLA creation method for each account
         for(Account accRec : accMap.values()) {
-            BusinessLicenseApplication blaRec = createBlaRecord(blaRecTypeId, accRec.Id, regAuthNameMap.get(accRec.ClassType__c).RegulatoryAuthCategory, regAuthNameMap.get(accRec.ClassType__c).Id, blaStatusMap.get(accRec.Id), DateTime.now(), renewalYear);
+            BusinessLicenseApplication blaRec = createBlaRecord(blaRecTypeId, accRec.Id, regAuthNameMap.get(accRec.ClassType__c).RegulatoryAuthCategory, regAuthNameMap.get(accRec.ClassType__c).Id, blaStatusMap.get(accRec.Id), DateTime.now(), BCMOH_Constants.renewalYear);
             blaRecCreateList.add(blaRec);
             blaAccMap.put(accRec.Id, blaRec);
         }
@@ -71,7 +70,7 @@ public class RenewalManagementController {
         return blaAccMap;
     }
     //method to form a bla record with given parameters
-    public static BusinessLicenseApplication createBlaRecord(Id recordTypeId, Id accId, String blaCategory, Id licenseTypeId, String blaStatus, DateTime appliedDate, Integer renewalYear) {
+    public static BusinessLicenseApplication createBlaRecord(Id recordTypeId, Id accId, String blaCategory, Id licenseTypeId, String blaStatus, DateTime appliedDate, String renewalYear) {
         BusinessLicenseApplication blaRec = new BusinessLicenseApplication(
             recordTypeId = recordTypeId,
             AccountId = accId,
@@ -134,7 +133,7 @@ public class RenewalManagementController {
                     transFeeItemList.add(transFeeItemRec);
                 }
             }
-            //Insert RegulatoryTrxnFee records
+            //Insert RegulatoryTrxnFeeItem records
             Database.SaveResult[] srList = Database.Insert(transFeeItemList);
             for(Database.SaveResult sr : srList) {
                 System.debug('inserted transFee Item data' + sr.getId()+' '+sr.isSuccess());
