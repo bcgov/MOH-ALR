@@ -4,8 +4,8 @@
     <assignments>
         <name>AssignmentQuantity</name>
         <label>AssignmentQuantity</label>
-        <locationX>655</locationX>
-        <locationY>1127</locationY>
+        <locationX>814</locationX>
+        <locationY>1242</locationY>
         <assignmentItems>
             <assignToReference>TotalQuantity</assignToReference>
             <operator>Add</operator>
@@ -25,10 +25,32 @@
         </value>
     </constants>
     <decisions>
+        <name>Check_Invoice_generated_is_checked</name>
+        <label>Check Invoice generated is checked.</label>
+        <locationX>970</locationX>
+        <locationY>1010</locationY>
+        <defaultConnector>
+            <targetReference>AssignmentQuantity</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Generate Invoice is not checked</defaultConnectorLabel>
+        <rules>
+            <name>Generate_Invoice_is_checked</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>LoopQuantity.GenerateInvoice__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>Generate Invoice is checked</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>CheckParent</name>
         <label>Decision: Check Parent</label>
-        <locationX>699</locationX>
-        <locationY>695</locationY>
+        <locationX>694</locationX>
+        <locationY>748</locationY>
         <defaultConnector>
             <targetReference>UpdateUnit</targetReference>
         </defaultConnector>
@@ -65,7 +87,7 @@
         <collectionReference>GetChildRecordsToUpdateQuantity</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>AssignmentQuantity</targetReference>
+            <targetReference>Check_Invoice_generated_is_checked</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
             <targetReference>UpdateParentQuantity</targetReference>
@@ -93,8 +115,8 @@
     <recordCreates>
         <name>Create_Child_Unit</name>
         <label>Create Records : Create Child Unit</label>
-        <locationX>1242</locationX>
-        <locationY>692</locationY>
+        <locationX>1179</locationX>
+        <locationY>525</locationY>
         <inputAssignments>
             <field>AccountId</field>
             <value>
@@ -155,8 +177,8 @@
     <recordLookups>
         <name>GetChildRecordsToUpdateQuantity</name>
         <label>GetChildRecordsToUpdateQuantity</label>
-        <locationX>50</locationX>
-        <locationY>773</locationY>
+        <locationX>257</locationX>
+        <locationY>675</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>LoopQuantity</targetReference>
@@ -321,8 +343,8 @@
     <recordUpdates>
         <name>UpdateParentId</name>
         <label>UpdateParentId</label>
-        <locationX>406</locationX>
-        <locationY>692</locationY>
+        <locationX>390</locationX>
+        <locationY>535</locationY>
         <connector>
             <targetReference>GetChildRecordsToUpdateQuantity</targetReference>
         </connector>
@@ -355,8 +377,8 @@
     <recordUpdates>
         <name>UpdateParentQuantity</name>
         <label>UpdateParentQuantity</label>
-        <locationX>567</locationX>
-        <locationY>1319</locationY>
+        <locationX>501</locationX>
+        <locationY>1358</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -383,11 +405,20 @@
     <recordUpdates>
         <name>UpdateUnit</name>
         <label>UpdateUnit</label>
-        <locationX>1000</locationX>
-        <locationY>691</locationY>
+        <locationX>936</locationX>
+        <locationY>524</locationY>
         <connector>
             <targetReference>Create_Child_Unit</targetReference>
         </connector>
+        <inputAssignments>
+            <field>Amount__c</field>
+        </inputAssignments>
+        <inputAssignments>
+            <field>GenerateInvoice__c</field>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputAssignments>
         <inputAssignments>
             <field>RecordTypeId</field>
             <value>
