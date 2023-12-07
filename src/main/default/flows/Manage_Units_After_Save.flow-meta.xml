@@ -2,6 +2,36 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>59.0</apiVersion>
     <assignments>
+        <name>Assign_Generate_Invoice</name>
+        <label>Assign Generate Invoice</label>
+        <locationX>938</locationX>
+        <locationY>296</locationY>
+        <assignmentItems>
+            <assignToReference>IsGenerateInvoice</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.GenerateInvoice__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>AmountValue</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Amount__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>quantityValue</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Quantity</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>getUnitRecordType</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>AssignmentQuantity</name>
         <label>AssignmentQuantity</label>
         <locationX>814</locationX>
@@ -73,9 +103,15 @@
     </decisions>
     <environments>Default</environments>
     <formulas>
+        <name>qtyValue</name>
+        <dataType>Number</dataType>
+        <expression>IF({!IsGenerateInvoice}==true, 0, {!$Record.Quantity})</expression>
+        <scale>0</scale>
+    </formulas>
+    <formulas>
         <name>Status</name>
         <dataType>String</dataType>
-        <expression>IF ({!$Record.GenerateInvoice__c} == false,&apos;Waived&apos;,&apos;Pending Invoice&apos;)</expression>
+        <expression>IF ({!IsGenerateInvoice} == true, &apos;Pending Invoice&apos;, &apos;Waived&apos;)</expression>
     </formulas>
     <interviewLabel>Manage Units After Save {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Manage Units After Save</label>
@@ -115,12 +151,18 @@
     <recordCreates>
         <name>Create_Child_Unit</name>
         <label>Create Records : Create Child Unit</label>
-        <locationX>1179</locationX>
-        <locationY>525</locationY>
+        <locationX>1276</locationX>
+        <locationY>664</locationY>
         <inputAssignments>
             <field>AccountId</field>
             <value>
                 <elementReference>$Record.AccountId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Amount__c</field>
+            <value>
+                <elementReference>AmountValue</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -132,7 +174,7 @@
         <inputAssignments>
             <field>GenerateInvoice__c</field>
             <value>
-                <elementReference>$Record.GenerateInvoice__c</elementReference>
+                <elementReference>IsGenerateInvoice</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -150,7 +192,7 @@
         <inputAssignments>
             <field>Quantity</field>
             <value>
-                <elementReference>$Record.Quantity</elementReference>
+                <elementReference>quantityValue</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -226,8 +268,8 @@
     <recordLookups>
         <name>GetRecordsGetParentUnit</name>
         <label>Get Records: Get Parent Unit</label>
-        <locationX>699</locationX>
-        <locationY>587</locationY>
+        <locationX>714</locationX>
+        <locationY>546</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>CheckParent</targetReference>
@@ -283,8 +325,8 @@
     <recordLookups>
         <name>getUnitRecordType</name>
         <label>getUnitRecordType</label>
-        <locationX>699</locationX>
-        <locationY>371</locationY>
+        <locationX>795</locationX>
+        <locationY>343</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>getUnitRequestRecordType</targetReference>
@@ -313,8 +355,8 @@
     <recordLookups>
         <name>getUnitRequestRecordType</name>
         <label>getUnitRequestRecordType</label>
-        <locationX>699</locationX>
-        <locationY>479</locationY>
+        <locationX>616</locationX>
+        <locationY>428</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>GetRecordsGetParentUnit</targetReference>
@@ -344,7 +386,7 @@
         <name>UpdateParentId</name>
         <label>UpdateParentId</label>
         <locationX>390</locationX>
-        <locationY>535</locationY>
+        <locationY>534</locationY>
         <connector>
             <targetReference>GetChildRecordsToUpdateQuantity</targetReference>
         </connector>
@@ -405,8 +447,8 @@
     <recordUpdates>
         <name>UpdateUnit</name>
         <label>UpdateUnit</label>
-        <locationX>936</locationX>
-        <locationY>524</locationY>
+        <locationX>1050</locationX>
+        <locationY>684</locationY>
         <connector>
             <targetReference>Create_Child_Unit</targetReference>
         </connector>
@@ -417,6 +459,12 @@
             <field>GenerateInvoice__c</field>
             <value>
                 <booleanValue>false</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Quantity</field>
+            <value>
+                <elementReference>qtyValue</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -431,7 +479,7 @@
         <locationX>573</locationX>
         <locationY>48</locationY>
         <connector>
-            <targetReference>getUnitRecordType</targetReference>
+            <targetReference>Assign_Generate_Invoice</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -453,6 +501,31 @@
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
+    <variables>
+        <name>AmountValue</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <name>IsGenerateInvoice</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+    <variables>
+        <name>quantityValue</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <scale>0</scale>
+    </variables>
     <variables>
         <name>TotalQuantity</name>
         <dataType>Number</dataType>
