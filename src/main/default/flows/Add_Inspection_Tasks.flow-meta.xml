@@ -274,7 +274,7 @@
             <label>Task Found</label>
         </rules>
     </decisions>
-    <description>Added Assessment Question Status while creating Inspection Assessment Indicator</description>
+    <description>Removing check for  Assessment Question</description>
     <environments>Default</environments>
     <interviewLabel>Add Inspection Tasks {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Add Inspection Tasks</label>
@@ -382,14 +382,6 @@
         <connector>
             <targetReference>setAssessmentQuestionList</targetReference>
         </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Name</field>
-            <operator>StartsWith</operator>
-            <value>
-                <stringValue>S</stringValue>
-            </value>
-        </filters>
         <getFirstRecordOnly>false</getFirstRecordOnly>
         <object>AssessmentIndicatorDefinition</object>
         <sortField>Name</sortField>
