@@ -34,8 +34,8 @@
     <assignments>
         <name>AssignmentQuantity</name>
         <label>AssignmentQuantity</label>
-        <locationX>814</locationX>
-        <locationY>1242</locationY>
+        <locationX>972</locationX>
+        <locationY>1048</locationY>
         <assignmentItems>
             <assignToReference>TotalQuantity</assignToReference>
             <operator>Add</operator>
@@ -54,28 +54,6 @@
             <stringValue>Unit Request</stringValue>
         </value>
     </constants>
-    <decisions>
-        <name>Check_Invoice_generated_is_checked</name>
-        <label>Check Invoice generated is checked.</label>
-        <locationX>970</locationX>
-        <locationY>1010</locationY>
-        <defaultConnector>
-            <targetReference>AssignmentQuantity</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Generate Invoice is not checked</defaultConnectorLabel>
-        <rules>
-            <name>Generate_Invoice_is_checked</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>LoopQuantity.GenerateInvoice__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <label>Generate Invoice is checked</label>
-        </rules>
-    </decisions>
     <decisions>
         <name>CheckParent</name>
         <label>Decision: Check Parent</label>
@@ -123,7 +101,7 @@
         <collectionReference>GetChildRecordsToUpdateQuantity</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>Check_Invoice_generated_is_checked</targetReference>
+            <targetReference>AssignmentQuantity</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
             <targetReference>UpdateParentQuantity</targetReference>
@@ -259,6 +237,13 @@
             <operator>EqualTo</operator>
             <value>
                 <elementReference>unitRequestRecordTypeId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Status</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Pending Invoice</stringValue>
             </value>
         </filters>
         <getFirstRecordOnly>false</getFirstRecordOnly>
@@ -483,14 +468,14 @@
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
-            <field>RecordTypeId</field>
+            <field>ParentId</field>
             <operator>IsNull</operator>
             <value>
                 <booleanValue>true</booleanValue>
             </value>
         </filters>
         <filters>
-            <field>ParentId</field>
+            <field>RecordTypeId</field>
             <operator>IsNull</operator>
             <value>
                 <booleanValue>true</booleanValue>
