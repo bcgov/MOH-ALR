@@ -37,7 +37,7 @@ public class AssetTriggerHandlerTest {
         Database.Insert(unitRec3);
         //asset child 3
         Asset unitRec4 = TestDataFactory.createUnit('1', 'Public', 3, residenceRec2.Id, false);
-        unitRec4.recordTypeId = parentAssetRTId;
+        unitRec4.recordTypeId = childAssetRTId;
         unitRec4.parentId = unitRec3.Id;
         Database.Insert(unitRec4);
         
@@ -61,6 +61,7 @@ public class AssetTriggerHandlerTest {
         assetRec2.GenerateInvoice__c = true;
         assetRec2.recordTypeId = childAssetRTId;
         assetRec2.ParentId = parentAssetRec.Id;
+        assetRec2.Status = BCMOH_Constants.pendingInvoiceStatus;
         assetList.add(assetRec);
         assetList.add(assetRec2);
         Database.Insert(assetList, false);

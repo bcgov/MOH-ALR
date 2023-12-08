@@ -12,5 +12,11 @@ public class BCMOH_Constants {
     public Final Static String blaExcludedStatus = 'Excluded';
     public Final Static String feeType = 'Renewal Unit Fee';
     public Final Static String feeStatus = 'Paid';
+    //ALR-40
+    public Final Static String transFeeRecTypeId = Schema.getGlobalDescribe().get('RegulatoryTrxnFee').getDescribe().getRecordTypeInfosByDeveloperName().get('TransactionFee').getRecordTypeId();
+    public Final Static String unitFeeType = 'Unit Fee';
+    public Final Static String dueFeeStatus = 'Due';
+    public Final Static String pendingInvoiceStatus = 'Pending Invoice';
+
 
 }
