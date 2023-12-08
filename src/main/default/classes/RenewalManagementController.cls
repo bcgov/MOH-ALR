@@ -84,12 +84,13 @@ public class RenewalManagementController {
     //create transaction fee records
     public static Map<Id, RegulatoryTrxnFee> createTransFeeRecords(Map<Id, Account> renewalFeeAccMap, Map<Id, BusinessLicenseApplication> blaRecCreateMap) {
         Map<Id, RegulatoryTrxnFee> transFeeAccMap = new Map<Id, RegulatoryTrxnFee>();
+        Date dueDate = NULL; // date.newInstance(Date.Today().Year(), 3, 31)
         try {
             //fetch recordtype
         	String transFeeRecTypeId = Schema.getGlobalDescribe().get('RegulatoryTrxnFee').getDescribe().getRecordTypeInfosByDeveloperName().get('TransactionFee').getRecordTypeId();
             //create RegulatoryTrxnFee records
             for(Account accRec : renewalFeeAccMap.values()) {
-                RegulatoryTrxnFee transFeeRec = createTransFeeRecord(transFeeRecTypeId, accRec.Id, blaRecCreateMap.get(accRec.Id).Id, feeType, feeStatus);
+                RegulatoryTrxnFee transFeeRec = createTransFeeRecord(transFeeRecTypeId, accRec.Id, blaRecCreateMap.get(accRec.Id).Id, feeType, feeStatus, dueDate);
                 transFeeAccMap.put(accRec.Id, transFeeRec);
             }
             //Insert RegulatoryTrxnFee records
@@ -104,13 +105,14 @@ public class RenewalManagementController {
         return transFeeAccMap;
     }
     //method to form a RegulatoryTrxnFee record with given parameters
-    public static RegulatoryTrxnFee createTransFeeRecord(Id recordTypeId, Id accId, Id blaId, String feeType, String feeStatus) {
+    public static RegulatoryTrxnFee createTransFeeRecord(Id recordTypeId, Id accId, Id blaId, String feeType, String feeStatus, Date dueDate) {
         RegulatoryTrxnFee transFeeRec = new RegulatoryTrxnFee(
             recordTypeId = recordTypeId,
             AccountId = accId,
             ParentRecordId = blaId,
             FeeType__c = feeType,
-            Status = feeStatus);
+            Status = feeStatus,
+        	DueDate = dueDate);
         return transFeeRec;
     }
     

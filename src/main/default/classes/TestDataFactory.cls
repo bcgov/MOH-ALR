@@ -71,4 +71,34 @@ public class TestDataFactory {
             }
         	return blaRec;
     }
+    //create reg trans rec - ALR-40
+    @testVisible
+    public static RegulatoryTrxnFee createTransFeeRecord(Id recordTypeId, Id accId, Id blaId, String feeType, String feeStatus, Boolean isInsert) {
+        RegulatoryTrxnFee transFeeRec = new RegulatoryTrxnFee(
+            recordTypeId = recordTypeId,
+            AccountId = accId,
+            ParentRecordId = blaId,
+            FeeType__c = feeType,
+            Status = feeStatus);
+        if(isInsert) {
+            Database.Insert(transFeeRec);
+        }
+        return transFeeRec;
+    }
+    //create reg trans fee item rec - ALR-40
+    @testVisible
+    public static RegulatoryTrxnFeeItem createTransFeeItemRecord(Id recordTypeId, Id regTrxnFeeId, Id assetId, String assetType, Decimal amtValue, Decimal quantValue, String feeType, Boolean isInsert) {
+         RegulatoryTrxnFeeItem transFeeItemRec = new RegulatoryTrxnFeeItem(
+         RegulatoryTrxnFeeId = regTrxnFeeId,
+         Unit__c = assetId,
+         Name = assetType,
+         Amount__c = amtValue,
+         Quantity__c = quantValue,
+         FeeAmount = amtValue * quantValue,
+         FeeType__c = feeType);
+         if(isInsert) {
+            Database.Insert(transFeeItemRec);
+         }
+         return transFeeItemRec;  
+     }
 }
