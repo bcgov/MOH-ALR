@@ -9,14 +9,17 @@ public class InputWrapper {
 		public String UnitCapacity{get;set;}
 		public String UnitType{get;set;}
 		public String Name{get;set;}
-		public Object Status{get;set;}
+		public string Status{get;set;}
 		public String AccountId{get;set;}
+        public String AmountValue{get;set;}
+		public String Description{get;set;}
+        public Boolean GenerateInvoiceValue{get;set;}
 	}
 
 	
-	public static InputWrapper parse(String json) {
+	/*public static InputWrapper parse(String json) {
 		return (InputWrapper) System.JSON.deserialize(json, InputWrapper.class);
-	}
+	}*/
 
 
 }

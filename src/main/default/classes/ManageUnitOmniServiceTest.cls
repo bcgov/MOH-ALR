@@ -1,3 +1,10 @@
+/**
+ * @description       : 
+ * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+ * @group             : 
+ * @last modified on  : 12-04-2023
+ * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+**/
 @isTest
 private class ManageUnitOmniServiceTest {
 /*********************************************************************************************************
@@ -17,6 +24,10 @@ private class ManageUnitOmniServiceTest {
         testRecord1.UnitCapacity = '3';
         testRecord1.UnitType = 'Independent Living';
         testRecord1.NoOfUnits = 5;
+        testRecord1.GenerateInvoiceValue = true;
+        testRecord1.AmountValue = 'Unit Fee';
+        testRecord1.Description = 'Unit Fee provided';
+        testRecord1.Status = 'Waived';
         
         InputWrapper.AddUnitBlock testRecord2 = new InputWrapper.AddUnitBlock();
         testRecord2.Name = 'TestUnit';

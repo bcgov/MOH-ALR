@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
-    <excludeButtons>DataDotComAccountInsights</excludeButtons>
-    <excludeButtons>DataDotComClean</excludeButtons>
+    <excludeButtons>DataDotComCompanyHierarchy</excludeButtons>
     <excludeButtons>DisableCustomerPortalAccount</excludeButtons>
     <excludeButtons>DisablePartnerPortalAccount</excludeButtons>
     <excludeButtons>IncludeOffline</excludeButtons>
@@ -29,7 +28,7 @@
                 <behavior>Edit</behavior>
                 <field>OwnerId</field>
             </layoutItems>
-            <layoutItems>
+<layoutItems>
                 <behavior>Edit</behavior>
                 <field>Delete__c</field>
             </layoutItems>
@@ -218,7 +217,7 @@
             <actionType>QuickAction</actionType>
             <sortOrder>4</sortOrder>
         </platformActionListItems>
-<platformActionListItems>
+        <platformActionListItems>
             <actionName>FeedItem.ContentNote</actionName>
             <actionType>QuickAction</actionType>
             <sortOrder>5</sortOrder>
@@ -236,6 +235,22 @@
         </quickActionListItems>
     </quickActionList>
     <relatedLists>
+        <fields>Location</fields>
+        <fields>ActiveFrom</fields>
+        <fields>ActiveTo</fields>
+        <relatedList>AssociatedLocations</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <excludeButtons>New</excludeButtons>
+        <fields>Name</fields>
+        <fields>TotalFeeAmount</fields>
+        <fields>Status</fields>
+        <fields>CreatedDate</fields>
+        <relatedList>RegulatoryTrxnFees</relatedList>
+        <sortField>CreatedDate</sortField>
+        <sortOrder>Desc</sortOrder>
+    </relatedLists>
+    <relatedLists>
         <fields>CONTACT.FULL_NAME</fields>
         <fields>ACCCONRELATION.ROLES</fields>
         <fields>PrimaryContact__c</fields>
@@ -243,13 +258,13 @@
         <fields>CONTACT.PHONE1</fields>
         <relatedList>RelatedAccountContactRelationList</relatedList>
     </relatedLists>
-<relatedLists>
+    <relatedLists>
         <fields>FULL_NAME</fields>
         <fields>CONTACT.TITLE</fields>
         <fields>CONTACT.EMAIL</fields>
         <fields>CONTACT.PHONE1</fields>
         <relatedList>RelatedContactList</relatedList>
-        </relatedLists>
+    </relatedLists>
     <relatedLists>
         <relatedList>RelatedAccountContactRoleList</relatedList>
     </relatedLists>
@@ -292,7 +307,41 @@
         <relatedList>BusinessLicenseApplications</relatedList>
     </relatedLists>
     <relatedLists>
+        <fields>Name</fields>
+        <fields>RegistrationCertificate__c</fields>
+        <fields>RegulatoryAuthorizationType</fields>
+        <fields>CreatedDate</fields>
+        <fields>PeriodEnd</fields>
+        <fields>Status</fields>
+        <relatedList>BusinessLicenses</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>Name</fields>
+        <fields>VisitType</fields>
+        <fields>Status</fields>
+        <fields>PlannedVisitStartTime</fields>
+        <relatedList>Visits</relatedList>
+    </relatedLists>
+    <relatedLists>
         <relatedList>RelatedEntityHistoryList</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>Name</fields>
+        <fields>CreatedDate</fields>
+        <fields>CreatedBy</fields>
+        <relatedList>InteractionSummaries</relatedList>
+        <sortField>CreatedDate</sortField>
+        <sortOrder>Desc</sortOrder>
+    </relatedLists>
+    <relatedLists>
+        <customButtons>Add_ALS_Services</customButtons>
+        <customButtons>Add_Hospitality_Services</customButtons>
+        <excludeButtons>MassChangeOwner</excludeButtons>
+        <excludeButtons>New</excludeButtons>
+        <fields>NAME</fields>
+        <fields>ProvidedBy__c</fields>
+        <fields>Comments__c</fields>
+        <relatedList>Service__c.Account__c</relatedList>
     </relatedLists>
     <relatedObjects>ParentId</relatedObjects>
     <showEmailCheckbox>false</showEmailCheckbox>
