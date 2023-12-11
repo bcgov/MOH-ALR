@@ -55,6 +55,28 @@
         </value>
     </constants>
     <decisions>
+        <name>Check_unit_request_exists</name>
+        <label>Check unit request exists</label>
+        <locationX>440</locationX>
+        <locationY>790</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Unit_requests_exists</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>GetChildRecordsToUpdateQuantity</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>LoopQuantity</targetReference>
+            </connector>
+            <label>Unit requests exists</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>CheckParent</name>
         <label>Decision: Check Parent</label>
         <locationX>694</locationX>
@@ -201,7 +223,7 @@
         <locationY>675</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>LoopQuantity</targetReference>
+            <targetReference>Check_unit_request_exists</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
