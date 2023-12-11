@@ -4,8 +4,8 @@
         <description>ALR-36</description>
         <name>getRenewalAccCount</name>
         <label>getRenewalAccCount</label>
-        <locationX>176</locationX>
-        <locationY>134</locationY>
+        <locationX>836</locationX>
+        <locationY>352</locationY>
         <actionName>RenewalManagementController</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -23,8 +23,8 @@
         <description>ALR-36</description>
         <name>RenewalManagementControllerBatch</name>
         <label>RenewalManagementControllerBatch</label>
-        <locationX>176</locationX>
-        <locationY>350</locationY>
+        <locationX>671</locationX>
+        <locationY>434</locationY>
         <actionName>RenewalManagementControllerBatch</actionName>
         <actionType>apex</actionType>
         <flowTransactionModel>Automatic</flowTransactionModel>
@@ -38,6 +38,32 @@
         <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>59.0</apiVersion>
+    <decisions>
+        <description>ALR-36</description>
+        <name>ALRAdminUserCheck</name>
+        <label>ALRAdminUserCheck</label>
+        <locationX>840</locationX>
+        <locationY>180</locationY>
+        <defaultConnector>
+            <targetReference>getRenewalAccCount</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>ALRAdminCheck</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Permission.EHISAdminUser</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>ErrorMessage</targetReference>
+            </connector>
+            <label>ALRAdminCheck</label>
+        </rules>
+    </decisions>
     <description>Screen Flow with a button which on click runs RenewalManagementControllerBatch - ALR-36</description>
     <environments>Default</environments>
     <formulas>
@@ -57,7 +83,7 @@
     <processMetadataValues>
         <name>CanvasMode</name>
         <value>
-            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
         </value>
     </processMetadataValues>
     <processMetadataValues>
@@ -68,11 +94,28 @@
     </processMetadataValues>
     <processType>Flow</processType>
     <screens>
+        <description>Other than ALR Admin User, this error message will show.</description>
+        <name>ErrorMessage</name>
+        <label>ErrorMessage</label>
+        <locationX>1056</locationX>
+        <locationY>219</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>DisplayErrorMessage</name>
+            <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;color: rgb(228, 13, 13);&quot;&gt;Only ALR Admin can initiate the renewal process&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
         <description>ALR-36</description>
         <name>renewalScreen1</name>
         <label>renewalScreen1</label>
-        <locationX>176</locationX>
-        <locationY>242</locationY>
+        <locationX>669</locationX>
+        <locationY>290</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -94,10 +137,10 @@
         <showHeader>false</showHeader>
     </screens>
     <start>
-        <locationX>50</locationX>
-        <locationY>0</locationY>
+        <locationX>543</locationX>
+        <locationY>48</locationY>
         <connector>
-            <targetReference>getRenewalAccCount</targetReference>
+            <targetReference>ALRAdminUserCheck</targetReference>
         </connector>
     </start>
     <status>Active</status>
