@@ -2,10 +2,39 @@
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
     <customPermissions>
         <enabled>true</enabled>
+        <name>BlockInspectionTaskCreation</name>
+    </customPermissions>
+    <customPermissions>
+        <enabled>true</enabled>
+        <name>ChangeOwner</name>
+    </customPermissions>
+    <customPermissions>
+        <enabled>true</enabled>
         <name>EHISCreatePublicComplaintCases</name>
     </customPermissions>
     <description>Permission set for Investigator persona</description>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Visit.InspectionMethod__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
     <hasActivationRequired>false</hasActivationRequired>
     <label>EHIS Investigator User PS</label>
     <license>Salesforce</license>
+    <tabSettings>
+        <tab>standard-InspectionType</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>standard-RegulatoryTrxnFee</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>standard-Visit</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <userPermissions>
+        <enabled>true</enabled>
+        <name>EditTask</name>
+    </userPermissions>
 </PermissionSet>
