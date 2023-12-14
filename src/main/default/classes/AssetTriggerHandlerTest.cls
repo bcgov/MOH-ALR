@@ -16,9 +16,9 @@ public class AssetTriggerHandlerTest {
         RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
         
         //account - insert scenario
-        Account residenceRec1 = TestDataFactory.createResidence('Residence', 'residenceAccount1',true);
+        Account residenceRec1 = TestDataFactory.createResidence('Residence', 'residenceAccount1', regAuth.Id, true);
         //bla
-        BusinessLicenseApplication blaRec = TestDataFactory.createRenewalBla(residenceRec1.ClassType__c, residenceRec1.Id, true); 
+        BusinessLicenseApplication blaRec = TestDataFactory.createRenewalBla(residenceRec1.LicenseType__c, residenceRec1.Id, true); 
         //asset parent
         Asset unitRec1 = TestDataFactory.createUnit('1', 'Private', 5, residenceRec1.Id, false);
         unitRec1.recordTypeId = parentAssetRTId;
@@ -27,9 +27,9 @@ public class AssetTriggerHandlerTest {
         Database.Insert(unitRec1);
         
         //account 2 - remove/update scenario
-        Account residenceRec2 = TestDataFactory.createResidence('Residence', 'residenceAccount2', true);
+        Account residenceRec2 = TestDataFactory.createResidence('Residence', 'residenceAccount2', regAuth.Id, true);
         //bla 2
-        BusinessLicenseApplication blaRec2 = TestDataFactory.createRenewalBla(residenceRec2.ClassType__c, residenceRec2.Id, true); 
+        BusinessLicenseApplication blaRec2 = TestDataFactory.createRenewalBla(residenceRec2.LicenseType__c, residenceRec2.Id, true); 
         //asset Parent 2      
         Asset unitRec3 = TestDataFactory.createUnit('1', 'Public', 3, residenceRec2.Id, false);
         unitRec3.recordTypeId = parentAssetRTId;
@@ -42,7 +42,7 @@ public class AssetTriggerHandlerTest {
         Database.Insert(unitRec4);
         
         //account 3
-        Account residenceRec3 = TestDataFactory.createResidence('Residence', 'residenceAccount3',true);
+        Account residenceRec3 = TestDataFactory.createResidence('Residence', 'residenceAccount3', regAuth.Id, true);
         Asset unitRec5 = TestDataFactory.createUnit('1', 'Private', 5, residenceRec3.Id, true);
     }
     //insert scenario

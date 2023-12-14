@@ -2,7 +2,10 @@
 public class ManageUnitsControllerTest {
      @testSetup
     public static void makeData(){
-        Account residence = TestDataFactory.createResidence('Residence','residence1',true);
+        //ALR-185 - added auth 
+        //RegulatoryAuthorizationType
+        RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
+        Account residence = TestDataFactory.createResidence('Residence','residence1', regAuth.Id, true);
         Asset unit1 = TestDataFactory.createUnit('1','Private',2,residence.Id,true);
         
     }

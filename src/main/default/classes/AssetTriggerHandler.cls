@@ -15,25 +15,10 @@ public without sharing class AssetTriggerHandler implements TriggerHandler {
     }
     //afterInsert
     public void afterInsert(List<Asset> newAsset, Map<Id, SObject> newAssetMap) {
-        //code to be removed starts
-        /* for(Asset assetRec : newAsset) {
-            //Asset oldRec = (Asset)oldAssetMap.get(assetRec.Id);
-            //system.debug('%% afterInsert old asset values '+oldRec.Id+' '+oldRec.GenerateInvoice__c+' '+oldRec.recordTypeId+' '+oldRec.Status+' '+oldRec.Quantity+' '+oldRec.ParentId+' '+oldRec.Name);
-            system.debug('%% afterInsert new asset values '+assetRec.Id+' '+assetRec.GenerateInvoice__c+' '+assetRec.recordTypeId+' '+assetRec.Status+' '+assetRec.Quantity+' '+assetRec.ParentId+' '+assetRec.Name);  
-        }*/
-         //code to be removed ends
-        AssetTriggerUtility.generateInvoices(newAsset, newAssetMap, null);//scenario not needed
+        AssetTriggerUtility.generateInvoices(newAsset, newAssetMap, null);
     }
     //afterUpdate
     public void afterUpdate(List<Asset> oldAssets, List<Asset> newAsset, Map<ID, SObject> oldAssetMap, Map<ID, SObject> newAssetMap) {
-        //code to be removed starts
-        /*for(Asset assetRec : newAsset) {
-            Asset oldRec = (Asset)oldAssetMap.get(assetRec.Id);
-            system.debug('%% afterUpdate old asset values '+oldRec.Id+' '+oldRec.GenerateInvoice__c+' '+oldRec.recordTypeId+' '+oldRec.Status+' '+oldRec.Quantity+' '+oldRec.ParentId+' '+oldRec.Name);
-            system.debug('%% afterUpdate new asset values '+assetRec.Id+' '+assetRec.GenerateInvoice__c+' '+assetRec.recordTypeId+' '+assetRec.Status+' '+assetRec.Quantity+' '+assetRec.ParentId+' '+assetRec.Name);  
-        }*/
-        //code to be removed ends
-        
         if(firstCall) {
             firstCall = false;
             AssetTriggerUtility.generateInvoices(newAsset, newAssetMap, oldAssetMap); 

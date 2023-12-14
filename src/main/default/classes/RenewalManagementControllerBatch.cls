@@ -43,7 +43,9 @@ public class RenewalManagementControllerBatch implements Database.Batchable<sObj
         String accRecType = renewalCriteriaRec.AccountRecordType__c;
         List<String> accStatuses = renewalCriteriaRec.AccountStatuses__c.split(';');
         //start query
-        String query = 'SELECT Id, Status__c, ClassType__c,'
+        String query = 'SELECT Id, Status__c, LicenseType__c,'
+            +' LicenseType__r.RegulatoryAuthCategory, LicenseType__r.UnitFee__c,'
+            +' LicenseType__r.OneTimeFee__c, LicenseType__r.PartialUnitFee__c, LicenseType__r.LateFee__c,'
             +' (SELECT Id FROM BusinessLicenseApplicationAccount WHERE RecordType.DeveloperName =: blaRecType'
             +' AND Status !=: blaCancelledStatus AND RenewalYear__c =: renewalYear),'
             +' (SELECT Id, Type__c, Quantity, Amount__c FROM Assets WHERE RecordType.DeveloperName =: parentAssetRT)'
@@ -75,14 +77,12 @@ public class RenewalManagementControllerBatch implements Database.Batchable<sObj
                     system.debug('blaStatusMap renewalAccMap renewalFeeAccMap'+blaStatusMap+' '+renewalAccMap+' '+renewalFeeAccMap);//delete later
                 }
         	}
-            //fetch existing reg auth type records
-            Map<String, RegulatoryAuthorizationType> regAuthNameMap = RenewalManagementController.getRegAuthRecs();
             //1) create BLA records in controlled class
-            Map<Id, BusinessLicenseApplication> blaRecCreateMap = RenewalManagementController.createBlaRecords(renewalAccMap, blaStatusMap, regAuthNameMap);
+            Map<Id, BusinessLicenseApplication> blaRecCreateMap = RenewalManagementController.createBlaRecords(renewalAccMap, blaStatusMap);
             //2) create Trans Fee Record
             Map<Id, RegulatoryTrxnFee> transFeeMap = RenewalManagementController.createTransFeeRecords(renewalFeeAccMap, blaRecCreateMap);
             //3) create Trans Fee Item rec
-            List<RegulatoryTrxnFeeItem> transFeeItemList = RenewalManagementController.createTransFeeItemRecords(renewalFeeAccMap, transFeeMap, regAuthNameMap);
+            List<RegulatoryTrxnFeeItem> transFeeItemList = RenewalManagementController.createTransFeeItemRecords(renewalFeeAccMap, transFeeMap);
         }
         catch(exception ex) {
             system.debug('Im caught in batch class'+ex.getMessage());//handle exceptions later

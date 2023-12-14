@@ -16,7 +16,11 @@ private class ManageUnitOmniServiceTest {
     @isTest
     static void testMergeUnits() {
         // Test data setup
-        Account residence = TestDataFactory.createResidence('Residence','residence1',true);
+        //ALR-185 - added auth 
+        //RegulatoryAuthorizationType
+        RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
+ 
+        Account residence = TestDataFactory.createResidence('Residence','residence1', regAuth.Id, true);
         
         InputWrapper.AddUnitBlock testRecord1 = new InputWrapper.AddUnitBlock();
         testRecord1.Name = 'TestUnit';

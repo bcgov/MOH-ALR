@@ -10,16 +10,16 @@ public class RenewalManagementControllerTest {
     @testSetup public static void setupData() {
         RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
         //account with asset and bla
-        Account residenceRec1 = TestDataFactory.createResidence('Residence', 'residenceAccount1',true);
+        Account residenceRec1 = TestDataFactory.createResidence('Residence', 'residenceAccount1', regAuth.Id, true);
         Asset unitRec1 = TestDataFactory.createUnit('1', 'Private', 2, residenceRec1.Id, true);
-        BusinessLicenseApplication blaRec = TestDataFactory.createRenewalBla(residenceRec1.ClassType__c, residenceRec1.Id, true); 
+        BusinessLicenseApplication blaRec = TestDataFactory.createRenewalBla(residenceRec1.LicenseType__c, residenceRec1.Id, true); 
         //account with parent asset
-        Account residenceRec2 = TestDataFactory.createResidence('Residence', 'residenceAccount2', true);
+        Account residenceRec2 = TestDataFactory.createResidence('Residence', 'residenceAccount2', regAuth.Id, true);
         Asset unitRec2 = TestDataFactory.createUnit('2', 'Public', 3, residenceRec2.Id, false);
         unitRec2.recordTypeId = Schema.getGlobalDescribe().get('Asset').getDescribe().getRecordTypeInfosByDeveloperName().get('Units_Record_Type').getRecordTypeId();
         Database.Insert(unitRec2);
         //account with parent asset
-        Account residenceRec3 = TestDataFactory.createResidence('Residence', 'residenceAccount3',true);
+        Account residenceRec3 = TestDataFactory.createResidence('Residence', 'residenceAccount3', regAuth.Id, true);
         Asset unitRec3 = TestDataFactory.createUnit('1', 'Private', 2, residenceRec3.Id, false);
         unitRec3.recordTypeId = Schema.getGlobalDescribe().get('Asset').getDescribe().getRecordTypeInfosByDeveloperName().get('Units_Record_Type').getRecordTypeId();
         unitRec3.Amount__c = 'Unit Fee';

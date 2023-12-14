@@ -17,6 +17,9 @@ public class BCMOH_Constants {
     public Final Static String unitFeeType = 'Unit Fee';
     public Final Static String dueFeeStatus = 'Due';
     public Final Static String pendingInvoiceStatus = 'Pending Invoice';
+    public Final Static Date feeDueDate = Date.Today().addDays(30);//ALR-185
+    public Final Static DateTime feeDueDateTime = DateTime.Now().addDays(30);//ALR-185
+    public Final Static String cancelledStatus = 'Canceled';//ALR-691
 
 
 }

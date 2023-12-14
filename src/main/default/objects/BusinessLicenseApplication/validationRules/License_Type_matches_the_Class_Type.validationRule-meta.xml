@@ -3,6 +3,6 @@
     <fullName>License_Type_matches_the_Class_Type</fullName>
     <active>true</active>
     <description>The system validates that the License Type matches the Class Type field within the Residence Account</description>
-    <errorConditionFormula>AND(LicenseType.Name  !=  TEXT(Account.ClassType__c),   RecordType.DeveloperName  = &quot;New_License_Application_Record_Type&quot;)</errorConditionFormula>
-    <errorMessage>License Type must match to Class Type.</errorMessage>
+    <errorConditionFormula>AND(LicenseType.Id!=  Account.LicenseType__r.Id,   RecordType.DeveloperName  = &quot;New_License_Application_Record_Type&quot;)</errorConditionFormula>
+    <errorMessage>License Type selected must match to License Type of the Residence.</errorMessage>
 </ValidationRule>
