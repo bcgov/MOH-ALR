@@ -16,8 +16,9 @@ public without sharing class AssetTriggerUtility {
         List<RegulatoryTrxnFeeItem> transFeeItemList = new List<RegulatoryTrxnFeeItem>();
         Map<Id, Id> childParentAssetMap = new Map<Id, Id>();
         Map<Id, String> parentAmountMap = new Map<Id, String>();
+        Map<Id, Asset> parentAssetMap = new Map<Id, Asset>();
         Asset oldRec = new Asset();
-        Date dueDate = NULL;
+        DateTime dueDate = BCMOH_Constants.feeDueDateTime;//ALR-185
         try {
             //system.debug('^^ new asset list '+lstAsset);
             //system.debug('^^ new asset map '+newAssetMap);
@@ -49,8 +50,14 @@ public without sharing class AssetTriggerUtility {
                 }
             }
             //fetch amount of the child's parent records
-            for(Asset assetParentRecs : [SELECT Id, Amount__c  FROM Asset WHERE Id IN: childParentAssetMap.values()]) {
-                parentAmountMap.put(assetParentRecs.Id, assetParentRecs.Amount__c);
+            for(Asset assetParentRecs : [SELECT Id, Amount__c, AccountId, Account.LicenseType__r.PartialUnitFee__c,
+                                         Account.LicenseType__r.OneTimeFee__c, Account.LicenseType__r.UnitFee__c,
+                                         Account.LicenseType__r.LateFee__c 
+                                         FROM Asset WHERE Id IN: childParentAssetMap.values()]) {
+                                             parentAmountMap.put(assetParentRecs.Id, assetParentRecs.Amount__c);
+                                             parentAssetMap.put(assetParentRecs.Id, assetParentRecs);
+                                             
+                                             
             }
             //fetch latest BLA record of the account as parent rec if fee rec
             for(BusinessLicenseApplication blaRec : [SELECT Id, AccountId, LicenseType.Name FROM BusinessLicenseApplication
@@ -61,8 +68,6 @@ public without sharing class AssetTriggerUtility {
                                                               blaAccMap.put(blaRec.AccountId, blaRec);
                                                           }
             }
-            //fetch reg trans type recs for fee amount
-            Map<String, RegulatoryAuthorizationType> regAuthNameMap = RenewalManagementController.getRegAuthRecs();
             //set data for RegulatoryTrxnFee records
             for(Id accId : invoiceAssetMap.keySet()) {
                     RegulatoryTrxnFee transFeeRec = RenewalManagementController.createTransFeeRecord(transFeeRecTypeId, accId, blaAccMap.get(accId).Id, unitFeeType, feeStatus, dueDate);
@@ -77,9 +82,8 @@ public without sharing class AssetTriggerUtility {
             //set data for RegulatoryTrxnFeeItem records
             for(Id accId : invoiceAssetMap.keySet()) {
                 for(Asset assetRec : invoiceAssetMap.get(accId)) {
-                    RegulatoryAuthorizationType regAuthRec =  regAuthNameMap.get(blaAccMap.get(assetRec.AccountId).LicenseType.Name);
-                     String amtString = assetRec.Amount__c == NULL ? parentAmountMap.get(assetRec.ParentId) : assetRec.Amount__c;
-                     Decimal amtVal = amtString == 'Unit Fee' ? regAuthRec.UnitFee__c : regAuthRec.PartialUnitFee__c;
+                     String amtString = assetRec.Amount__c == NULL ? parentAssetMap.get(assetRec.ParentId).Amount__c : assetRec.Amount__c;
+                     Decimal amtVal = amtString == 'Unit Fee' ? parentAssetMap.get(assetRec.ParentId).Account.LicenseType__r.UnitFee__c : parentAssetMap.get(assetRec.ParentId).Account.LicenseType__r.PartialUnitFee__c;
                         system.debug('^^ fee amt '+amtVal);
                         if(amtVal == NULL) {
                             amtVal = defaultFee;
@@ -112,6 +116,7 @@ public without sharing class AssetTriggerUtility {
             Map<Id, BusinessLicenseApplication> blaAccMap = new Map<Id, BusinessLicenseApplication>();
             Id transFeeItemRT;
             List<RegulatoryTrxnFeeItem> transFeeItemList = new List<RegulatoryTrxnFeeItem>();
+            DateTime dueDate = BCMOH_Constants.feeDueDateTime;//ALR-185
             
             //loop through updated assets and fetch parent recs with generate invoice true and quantity updated
             for(Asset assetRec : (List<Asset>)newAssetMap.values()) {
@@ -125,7 +130,9 @@ public without sharing class AssetTriggerUtility {
             }
             
             //fetch all parent records associated to the updated asset's account
-            for(Asset parentAssetRec : [SELECT Id, Quantity, Capacity__c, Amount__c, ParentId, Type__c, AccountId
+            for(Asset parentAssetRec : [SELECT Id, Quantity, Capacity__c, Amount__c, ParentId, Type__c, AccountId,
+                                        Account.LicenseType__r.PartialUnitFee__c, Account.LicenseType__r.OneTimeFee__c,
+                                        Account.LicenseType__r.UnitFee__c, Account.LicenseType__r.LateFee__c
                                         FROM Asset 
                                         WHERE AccountId IN: accIdSet AND
                                         recordTypeId =: unitsRecordTypeId ORDER BY AccountId]) {
@@ -136,10 +143,6 @@ public without sharing class AssetTriggerUtility {
                                             assetList.add(parentAssetRec);
                         					invoiceAssetMap.put(parentAssetRec.AccountId, assetList);
             }
-            
-            //fetch reg trans type recs for fee amount
-            Map<String, RegulatoryAuthorizationType> regAuthNameMap = RenewalManagementController.getRegAuthRecs();
-            
             //fetch latest BLA record of the account as parent rec if fee rec
             for(BusinessLicenseApplication blaRec : [SELECT Id, AccountId, LicenseType.Name FROM BusinessLicenseApplication
                                                       WHERE AccountId IN: invoiceAssetMap.keySet()
@@ -152,7 +155,7 @@ public without sharing class AssetTriggerUtility {
             
             //set data for RegulatoryTrxnFee records
             for(Id accId : invoiceAssetMap.keySet()) {
-                    RegulatoryTrxnFee transFeeRec = RenewalManagementController.createTransFeeRecord(transFeeRecTypeId, accId, blaAccMap.get(accId).Id, unitFeeType, feeStatus, date.newInstance(Date.Today().Year(), 3, 31));
+                    RegulatoryTrxnFee transFeeRec = RenewalManagementController.createTransFeeRecord(transFeeRecTypeId, accId, blaAccMap.get(accId).Id, unitFeeType, feeStatus, dueDate);
                     system.debug('^^ cds transFeeRec '+transFeeRec);
                     transFeeAccMap.put(accId, transFeeRec);
             }
@@ -165,8 +168,7 @@ public without sharing class AssetTriggerUtility {
             //set data for RegulatoryTrxnFeeItem records
             for(Id accId : invoiceAssetMap.keySet()) {
                 for(Asset assetRec : invoiceAssetMap.get(accId)) {
-                    RegulatoryAuthorizationType regAuthRec =  regAuthNameMap.get(blaAccMap.get(assetRec.AccountId).LicenseType.Name);
-                    Decimal amtVal = assetRec.Amount__c == 'Unit Fee' ? regAuthRec.UnitFee__c : regAuthRec.PartialUnitFee__c;
+                    Decimal amtVal = assetRec.Amount__c == 'Unit Fee' ? assetRec.Account.LicenseType__r.UnitFee__c : assetRec.Account.LicenseType__r.PartialUnitFee__c;
                         system.debug('^^ fee amt '+amtVal);
                         if(amtVal == NULL) {
                             amtVal = defaultFee;
