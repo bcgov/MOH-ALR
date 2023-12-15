@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MobileDigitsValidation</fullName>
+    <active>true</active>
+    <description>Enter a valid 10-digit phone number. - ALR 558</description>
+    <errorConditionFormula>AND(NOT($Permission.EHISBypassValidationRuleCustomPermission) , IF(NOT(ISBLANK( MobilePhone )),
+NOT(REGEX( MobilePhone , &quot;^[0-9]{10}$&quot;)) , False))</errorConditionFormula>
+    <errorDisplayField>MobilePhone</errorDisplayField>
+    <errorMessage>Phone number is invalid. Please enter a 10-digit phone number.</errorMessage>
+</ValidationRule>
