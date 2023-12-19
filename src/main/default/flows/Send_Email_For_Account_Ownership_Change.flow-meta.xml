@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <name>New_Send_Email</name>
-        <label>New Send Email</label>
-        <locationX>176</locationX>
-        <locationY>323</locationY>
+        <name>New_Send_Email_if_Production</name>
+        <label>New Send Email if Production</label>
+        <locationX>314</locationX>
+        <locationY>539</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -12,6 +12,65 @@
             <name>emailAddresses</name>
             <value>
                 <elementReference>$Record.Owner.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <stringValue>OrgWideEmailAddress</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <elementReference>Production</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Account has been assigned to you!</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>MailBody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <actionCalls>
+        <name>New_Send_Email_if_Sandbox</name>
+        <label>New Send Email if Sandbox</label>
+        <locationX>50</locationX>
+        <locationY>539</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Owner.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <stringValue>OrgWideEmailAddress</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <elementReference>Sandbox</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
@@ -36,7 +95,42 @@
         <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>59.0</apiVersion>
+    <decisions>
+        <name>CheckOrg</name>
+        <label>CheckOrg</label>
+        <locationX>182</locationX>
+        <locationY>431</locationY>
+        <defaultConnector>
+            <targetReference>New_Send_Email_if_Production</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>CheckOrganization</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>getOrganization.IsSandbox</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>New_Send_Email_if_Sandbox</targetReference>
+            </connector>
+            <label>CheckOrganization</label>
+        </rules>
+    </decisions>
     <environments>Default</environments>
+    <formulas>
+        <name>Production</name>
+        <dataType>String</dataType>
+        <expression>{!$Setup.Notification__c.ProductionSupportEmail__c}</expression>
+    </formulas>
+    <formulas>
+        <name>Sandbox</name>
+        <dataType>String</dataType>
+        <expression>{!$Setup.Notification__c.TestSupportEmail__c}</expression>
+    </formulas>
     <interviewLabel>Send Email For Account Ownership Change {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Send Email For Account Ownership Change</label>
     <processMetadataValues>
@@ -58,11 +152,25 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>to get org details</description>
+        <name>getOrganization</name>
+        <label>getOrganization</label>
+        <locationX>182</locationX>
+        <locationY>323</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>CheckOrg</targetReference>
+        </connector>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Organization</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <start>
-        <locationX>50</locationX>
+        <locationX>56</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>New_Send_Email</targetReference>
+            <targetReference>getOrganization</targetReference>
         </connector>
         <filterFormula>ISCHANGED({!$Record.OwnerId})</filterFormula>
         <object>Account</object>
