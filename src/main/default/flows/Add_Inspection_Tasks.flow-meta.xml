@@ -5,7 +5,7 @@
         <name>addNewlyCreatedTask</name>
         <label>addNewlyCreatedTaskToExistingTaskList</label>
         <locationX>290</locationX>
-        <locationY>1574</locationY>
+        <locationY>2174</locationY>
         <assignmentItems>
             <assignToReference>fullAssessmentTaskList</assignToReference>
             <operator>Add</operator>
@@ -28,7 +28,7 @@
         <name>addNewTaskToList</name>
         <label>addNewTaskToList</label>
         <locationX>794</locationX>
-        <locationY>1106</locationY>
+        <locationY>1706</locationY>
         <assignmentItems>
             <assignToReference>newAssessmentTaskList</assignToReference>
             <operator>Add</operator>
@@ -41,10 +41,26 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Assign_All_Questions_To_Selected</name>
+        <label>Assign All Questions To Selected</label>
+        <locationX>158</locationX>
+        <locationY>866</locationY>
+        <assignmentItems>
+            <assignToReference>selectedInspectionQuestions</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>AssessmentIndicatorDefinitionList</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>get_All_Assessment_Tasks_Questions</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Copy_1_of_addNewTaskToList</name>
         <label>addNewTaskToList</label>
         <locationX>138</locationX>
-        <locationY>998</locationY>
+        <locationY>1598</locationY>
         <assignmentItems>
             <assignToReference>newAssessmentTaskList</assignToReference>
             <operator>Add</operator>
@@ -60,7 +76,7 @@
         <name>createInspectionQuestionList</name>
         <label>createInspectionQuestionList</label>
         <locationX>906</locationX>
-        <locationY>2222</locationY>
+        <locationY>2822</locationY>
         <assignmentItems>
             <assignToReference>InspectionQuestionList</assignToReference>
             <operator>Add</operator>
@@ -70,6 +86,22 @@
         </assignmentItems>
         <connector>
             <targetReference>createInspectionQuestion</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Set_all_questions_to_Assessment_tasks</name>
+        <label>Set all questions to Assessment tasks</label>
+        <locationX>158</locationX>
+        <locationY>566</locationY>
+        <assignmentItems>
+            <assignToReference>selectedInspectionQuestions</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>AssessmentIndicatorDefinitionList</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_if_All_Tasks_Has_To_Be_Created</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -84,6 +116,13 @@
                 <elementReference>get_Assessment_Indicator_Definition</elementReference>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>totalAssessmentIndicatorCount</assignToReference>
+            <operator>AssignCount</operator>
+            <value>
+                <elementReference>get_Assessment_Indicator_Definition</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
             <targetReference>Assessment_Questions</targetReference>
         </connector>
@@ -92,7 +131,7 @@
         <name>setNewAssessmentTask</name>
         <label>setNewAssessmentTask</label>
         <locationX>794</locationX>
-        <locationY>998</locationY>
+        <locationY>1598</locationY>
         <assignmentItems>
             <assignToReference>newAssessmentTask.Name</assignToReference>
             <operator>Assign</operator>
@@ -122,7 +161,7 @@
         <name>setNewAssessmentTaskForEmptyList</name>
         <label>setNewAssessmentTask</label>
         <locationX>138</locationX>
-        <locationY>890</locationY>
+        <locationY>1490</locationY>
         <assignmentItems>
             <assignToReference>newAssessmentTask.Name</assignToReference>
             <operator>Assign</operator>
@@ -152,7 +191,7 @@
         <name>updateInspectionQuestion</name>
         <label>updateInspectionQuestion</label>
         <locationX>906</locationX>
-        <locationY>2114</locationY>
+        <locationY>2714</locationY>
         <assignmentItems>
             <assignToReference>InspectionQuestion.AssessmentIndDefinitionId</assignToReference>
             <operator>Assign</operator>
@@ -183,7 +222,7 @@
         <elementSubtype>FilterCollectionProcessor</elementSubtype>
         <label>filterQuestionsByCategory</label>
         <locationX>642</locationX>
-        <locationY>1790</locationY>
+        <locationY>2390</locationY>
         <assignNextValueToReference>currentItem_filterQuestionsByCategory_0</assignNextValueToReference>
         <collectionProcessorType>FilterCollectionProcessor</collectionProcessorType>
         <collectionReference>selectedInspectionQuestions</collectionReference>
@@ -200,10 +239,60 @@
         </connector>
     </collectionProcessors>
     <decisions>
+        <name>check_if_All_tasks_are_selected</name>
+        <label>check if All tasks are selected</label>
+        <locationX>290</locationX>
+        <locationY>458</locationY>
+        <defaultConnector>
+            <targetReference>Check_if_All_Tasks_Has_To_Be_Created</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>All_Tasks_Selected</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Add_All_Inspection_Tasks</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_all_questions_to_Assessment_tasks</targetReference>
+            </connector>
+            <label>All Tasks Selected</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_if_All_Tasks_Has_To_Be_Created</name>
+        <label>Check if All Tasks Has To Be Created</label>
+        <locationX>290</locationX>
+        <locationY>758</locationY>
+        <defaultConnector>
+            <targetReference>get_All_Assessment_Tasks_Questions</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>All_Tasks</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Add_All_Inspection_Tasks</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_All_Questions_To_Selected</targetReference>
+            </connector>
+            <label>All Tasks</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>CheckExistingAssessmentTask</name>
         <label>IsNewInspection</label>
         <locationX>290</locationX>
-        <locationY>674</locationY>
+        <locationY>1274</locationY>
         <defaultConnector>
             <targetReference>loopingCategoriesForExistingTask</targetReference>
         </defaultConnector>
@@ -228,7 +317,7 @@
         <name>Is_Inspection_Question_Added</name>
         <label>Is New Inspection Question</label>
         <locationX>818</locationX>
-        <locationY>2006</locationY>
+        <locationY>2606</locationY>
         <defaultConnector>
             <targetReference>updateInspectionQuestion</targetReference>
         </defaultConnector>
@@ -253,7 +342,7 @@
         <name>IsCategoryAddedForExistingTask</name>
         <label>Is Task Created</label>
         <locationX>706</locationX>
-        <locationY>890</locationY>
+        <locationY>1490</locationY>
         <defaultConnector>
             <targetReference>setNewAssessmentTask</targetReference>
         </defaultConnector>
@@ -274,7 +363,7 @@
             <label>Task Found</label>
         </rules>
     </decisions>
-    <description>Removing check for  Assessment Question</description>
+    <description>Added Fault Path</description>
     <environments>Default</environments>
     <interviewLabel>Add Inspection Tasks {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Add Inspection Tasks</label>
@@ -282,7 +371,7 @@
         <name>createInspectionQuestion</name>
         <label>createInspectionQuestion</label>
         <locationX>642</locationX>
-        <locationY>1898</locationY>
+        <locationY>2498</locationY>
         <collectionReference>filterQuestionsByCategory</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -296,7 +385,7 @@
         <name>LoopingAssessmentTask</name>
         <label>LoopingAssessmentTask</label>
         <locationX>290</locationX>
-        <locationY>1682</locationY>
+        <locationY>2282</locationY>
         <collectionReference>fullAssessmentTaskList</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -310,7 +399,7 @@
         <name>loopingCategories</name>
         <label>loopingCategories</label>
         <locationX>50</locationX>
-        <locationY>782</locationY>
+        <locationY>1382</locationY>
         <collectionReference>categoryList</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -324,7 +413,7 @@
         <name>loopingCategoriesForExistingTask</name>
         <label>loopingCategoriesForExistingTask</label>
         <locationX>530</locationX>
-        <locationY>782</locationY>
+        <locationY>1382</locationY>
         <collectionReference>categoryList</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -357,20 +446,26 @@
         <name>createInspectionQuestions</name>
         <label>createInspectionQuestions</label>
         <locationX>290</locationX>
-        <locationY>2582</locationY>
+        <locationY>3182</locationY>
         <connector>
             <targetReference>display_success_message</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>inspectionQuestionErrorMessageScreen</targetReference>
+        </faultConnector>
         <inputReference>InspectionQuestionList</inputReference>
     </recordCreates>
     <recordCreates>
         <name>createNewAssessmentTask</name>
         <label>createNewAssessmentTask</label>
         <locationX>290</locationX>
-        <locationY>1466</locationY>
+        <locationY>2066</locationY>
         <connector>
             <targetReference>addNewlyCreatedTask</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>AssessmenttaskCreationErrorMessage</targetReference>
+        </faultConnector>
         <inputReference>newAssessmentTaskList</inputReference>
     </recordCreates>
     <recordLookups>
@@ -382,6 +477,9 @@
         <connector>
             <targetReference>setAssessmentQuestionList</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>AssessmentIndicatorError</targetReference>
+        </faultConnector>
         <getFirstRecordOnly>false</getFirstRecordOnly>
         <object>AssessmentIndicatorDefinition</object>
         <sortField>Name</sortField>
@@ -393,12 +491,35 @@
         <label>Select Assessment Questions</label>
         <locationX>290</locationX>
         <locationY>350</locationY>
-        <allowBack>false</allowBack>
+        <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
+        <backButtonLabel>Add more Tasks</backButtonLabel>
         <connector>
-            <targetReference>get_All_Assessment_Tasks_Questions</targetReference>
+            <targetReference>check_if_All_tasks_are_selected</targetReference>
         </connector>
+        <fields>
+            <name>Add_All_Inspection_Tasks</name>
+            <dataType>Boolean</dataType>
+            <fieldText>Add All Inspection Tasks</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <fields>
+            <name>MessageOnSelectingAllTask</name>
+            <fieldText>&lt;p&gt;Selected {!totalAssessmentIndicatorCount} of {!totalAssessmentIndicatorCount} items.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>Add_All_Inspection_Tasks</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <booleanValue>true</booleanValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
         <fields>
             <name>inspectionQuestionsSample</name>
             <dataTypeMappings>
@@ -449,8 +570,50 @@
                 <assignToReference>selectedInspectionQuestions</assignToReference>
                 <name>selectedRows</name>
             </outputParameters>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>Add_All_Inspection_Tasks</leftValueReference>
+                    <operator>NotEqualTo</operator>
+                    <rightValue>
+                        <booleanValue>true</booleanValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
         </fields>
-        <nextOrFinishButtonLabel>Create Assessment Task</nextOrFinishButtonLabel>
+        <nextOrFinishButtonLabel>Add Assessment Task</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>AssessmentIndicatorError</name>
+        <label>AssessmentIndicatorError</label>
+        <locationX>1274</locationX>
+        <locationY>242</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>assessmentIndicatorErrorMessage</name>
+            <fieldText>&lt;p&gt;Not able to load Inspection Questions. Please try again later.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>AssessmenttaskCreationErrorMessage</name>
+        <label>AssessmenttaskCreationErrorMessage</label>
+        <locationX>1010</locationX>
+        <locationY>2174</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>assessmentTaskCreationError</name>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(68, 68, 68);&quot;&gt;Not able to create Assessment Tasks. Please try again later.&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
     </screens>
@@ -458,13 +621,29 @@
         <name>display_success_message</name>
         <label>display success message</label>
         <locationX>290</locationX>
-        <locationY>2690</locationY>
+        <locationY>3290</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
         <fields>
             <name>SucessMessage</name>
             <fieldText>&lt;p&gt;Assessment Task created&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>inspectionQuestionErrorMessageScreen</name>
+        <label>inspectionQuestionErrorMessageScreen</label>
+        <locationX>746</locationX>
+        <locationY>3290</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>inspectionQuestionCreationErrorMessage</name>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(68, 68, 68);&quot;&gt;Not able to create Inspection Questions. Please try again later.&lt;/span&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>
@@ -482,7 +661,7 @@
         <name>get_All_Assessment_Tasks_Questions</name>
         <label>get All Assessment Tasks &amp; Questions</label>
         <locationX>290</locationX>
-        <locationY>458</locationY>
+        <locationY>1058</locationY>
         <connector>
             <targetReference>GetCategoryListForSelectedQuestions</targetReference>
         </connector>
@@ -518,7 +697,7 @@
         <name>GetCategoryListForSelectedQuestions</name>
         <label>GetCategoryListForSelectedQuestions</label>
         <locationX>290</locationX>
-        <locationY>566</locationY>
+        <locationY>1166</locationY>
         <connector>
             <targetReference>CheckExistingAssessmentTask</targetReference>
         </connector>
@@ -672,5 +851,13 @@
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>AssessmentIndicatorDefinition</objectType>
+    </variables>
+    <variables>
+        <name>totalAssessmentIndicatorCount</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
     </variables>
 </Flow>
