@@ -49,7 +49,7 @@
             <targetReference>addCategory</targetReference>
         </connector>
     </assignments>
-    <description>Get All Assessment Task Details From Inspection - ALR-50 and ALR-163</description>
+    <description>added Fault Path</description>
     <environments>Default</environments>
     <interviewLabel>Get All Assessment Task Details From Inspection {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Get All Assessment Task Details From Inspection</label>
@@ -106,6 +106,9 @@
         <connector>
             <targetReference>loopAssessmentTaskList</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>relatedAssessmentTaskErrorMessageScreen</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>ParentId</field>
@@ -130,6 +133,9 @@
         <connector>
             <targetReference>loopInspectionQuestions</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>relatedInspectionQuestionsErrorMessage</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>AssessmentTaskId</field>
@@ -144,6 +150,38 @@
         <queriedFields>AssessmentTaskId</queriedFields>
         <queriedFields>AssessmentIndDefinitionId</queriedFields>
     </recordLookups>
+    <screens>
+        <name>relatedAssessmentTaskErrorMessageScreen</name>
+        <label>relatedAssessmentTaskErrorMessageScreen</label>
+        <locationX>704</locationX>
+        <locationY>242</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>relatedAssessmentTaskErrorMessage</name>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(68, 68, 68);&quot;&gt;Not able to load related Assessment Tasks. Please try again later.&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>relatedInspectionQuestionsErrorMessage</name>
+        <label>relatedInspectionQuestionsErrorMessage</label>
+        <locationX>440</locationX>
+        <locationY>758</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>relatedInspectionQuestionErrorMessage</name>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(68, 68, 68);&quot;&gt;Not able to load related Inspection Questions. Please try again later.&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
     <start>
         <locationX>50</locationX>
         <locationY>0</locationY>
