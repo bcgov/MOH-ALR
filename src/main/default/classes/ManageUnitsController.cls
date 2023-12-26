@@ -8,7 +8,7 @@
 public class ManageUnitsController {
     Public static String VALIDATE_QTY = 'Updated Quantity cannot be equal,null, negative or greater than the existing quantity.';
     public static final String UNITREQUEST_RECTYPEID_NAME = 'Unit_Request_Record_Type';
-    Public static String NEW_UNIT_NAME='Unit Request';
+    Public static String NEW_UNIT_NAME='UnitRequest';
     Public static String UNIT_FEE='Unit Fee';
     Public static String PENDING_INVOICE = 'Pending Invoice';
     Public static String UNITREQUEST_STATUS='Completed';
@@ -38,8 +38,8 @@ public class ManageUnitsController {
                 Asset newUnit = new Asset();
                 newunit.parentId = unit.Id;
                 newunit.Amount__c =UNIT_FEE;
-                newunit.RecordTypeId = UNITREQUESTRECTYPEID;
-                newunit.Name = NEW_UNIT_NAME;
+                newunit.RecordTypeId = UNITREQUESTRECTYPEID; 
+                newunit.Name = NEW_UNIT_NAME+'-'+existingUnits.get(unit.Id).Type__c+'-'+system.today().format();
                 newunit.GenerateRenewalInvoice__c = unit.GenerateRenewalInvoice__c;
                 newunit.AccountId = existingUnits.get(unit.Id).AccountId;
                 newunit.Capacity__c = existingUnits.get(unit.Id).Capacity__c;
