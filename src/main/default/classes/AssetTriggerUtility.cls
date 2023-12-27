@@ -19,8 +19,8 @@ public without sharing class AssetTriggerUtility {
         Map<Id, Asset> parentAssetMap = new Map<Id, Asset>();
         Asset oldRec = new Asset();
         DateTime dueDate = BCMOH_Constants.feeDueDateTime;//ALR-185
-        try {
-            //system.debug('^^ new asset list '+lstAsset);
+        try { 
+//system.debug('^^ new asset list '+lstAsset);
             //system.debug('^^ new asset map '+newAssetMap);
             //system.debug('^^ old asset map '+oldAssetMap);
                
@@ -70,9 +70,14 @@ public without sharing class AssetTriggerUtility {
             }
             //set data for RegulatoryTrxnFee records
             for(Id accId : invoiceAssetMap.keySet()) {
-                    RegulatoryTrxnFee transFeeRec = RenewalManagementController.createTransFeeRecord(transFeeRecTypeId, accId, blaAccMap.get(accId).Id, unitFeeType, feeStatus, dueDate);
-                    system.debug('^^ cds transFeeRec '+transFeeRec);
-                    transFeeAccMap.put(accId, transFeeRec);
+                //ALR-726 (1) - populate blaId as parentId of TrxnFee record if present, else passing NULL.
+                Id parentId = NULL;
+                if(!blaAccMap.isEmpty() && blaAccMap.get(accId) != NULL) {
+                    parentId = blaAccMap.get(accId).Id;
+                }
+                RegulatoryTrxnFee transFeeRec = RenewalManagementController.createTransFeeRecord(transFeeRecTypeId, accId, parentId, unitFeeType, feeStatus, dueDate);
+                system.debug('^^ cds transFeeRec '+transFeeRec);
+                transFeeAccMap.put(accId, transFeeRec);
             }
             //Insert RegulatoryTrxnFee records
             Database.SaveResult[] srList = Database.Insert(transFeeAccMap.values());
@@ -155,9 +160,14 @@ public without sharing class AssetTriggerUtility {
             
             //set data for RegulatoryTrxnFee records
             for(Id accId : invoiceAssetMap.keySet()) {
-                    RegulatoryTrxnFee transFeeRec = RenewalManagementController.createTransFeeRecord(transFeeRecTypeId, accId, blaAccMap.get(accId).Id, unitFeeType, feeStatus, dueDate);
-                    system.debug('^^ cds transFeeRec '+transFeeRec);
-                    transFeeAccMap.put(accId, transFeeRec);
+                //ALR-726 (1) - populate blaId as parentId of TrxnFee record if present, else passing NULL.
+                Id parentId = NULL;
+                if(!blaAccMap.isEmpty() && blaAccMap.get(accId) != NULL) {
+                    parentId = blaAccMap.get(accId).Id;
+                }
+                RegulatoryTrxnFee transFeeRec = RenewalManagementController.createTransFeeRecord(transFeeRecTypeId, accId, parentId, unitFeeType, feeStatus, dueDate);
+                system.debug('^^ cds transFeeRec '+transFeeRec);
+                transFeeAccMap.put(accId, transFeeRec);
             }
             
             //Insert RegulatoryTrxnFee records
@@ -168,7 +178,7 @@ public without sharing class AssetTriggerUtility {
             //set data for RegulatoryTrxnFeeItem records
             for(Id accId : invoiceAssetMap.keySet()) {
                 for(Asset assetRec : invoiceAssetMap.get(accId)) {
-                    Decimal amtVal = assetRec.Amount__c == 'Unit Fee' ? assetRec.Account.LicenseType__r.UnitFee__c : assetRec.Account.LicenseType__r.PartialUnitFee__c;
+                    Decimal amtVal = assetRec.Account.LicenseType__r.UnitFee__c;//ALR-726 (2) - for renewals, amount is always unit fee
                         system.debug('^^ fee amt '+amtVal);
                         if(amtVal == NULL) {
                             amtVal = defaultFee;
