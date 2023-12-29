@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>59.0</apiVersion>
+    <customErrors>
+        <name>Approver_Date_Required_Error</name>
+        <label>Approver Date Required Error</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <customErrorMessages>
+            <errorMessage>Case requires approval prior to close.</errorMessage>
+            <isFieldError>false</isFieldError>
+        </customErrorMessages>
+    </customErrors>
     <decisions>
         <description>Checking the Case Record Type</description>
         <name>Record_Type_Check</name>
@@ -32,19 +42,9 @@
                     <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
-            <customErrors>
-                <name>Custom Error</name>
-                <label>Custom Error</label>
-                <locationX>182</locationX>
-                <locationY>323</locationY>
-                <connector>
-                    <targetReference>Approver_Date_Required_Error</targetReference>
-                </connector>
-                <customErrorMessages>
-                    <errorMessage>Case requires approval prior to close.</errorMessage>
-                    <isFieldError>false</isFieldError>
-                </customErrorMessages>
-            </customErrors>
+            <connector>
+                <targetReference>Approver_Date_Required_Error</targetReference>
+            </connector>
             <label>Complaint Case Records</label>
         </rules>
     </decisions>
