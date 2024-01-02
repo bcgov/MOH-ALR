@@ -100,4 +100,76 @@ public class TestDataFactory {
          }
          return transFeeItemRec;  
      }
+    //method to create bl record - ALR-560
+    @testVisible
+    public static BusinessLicense createBlRecord(String regAuthId, Id accId, String certNo, String blName, Boolean isInsert) {
+      String blRecTypeId = Schema.getGlobalDescribe().get('BusinessLicense').getDescribe().getRecordTypeInfosByDeveloperName().get('License').getRecordTypeId();
+      BusinessLicense blRec = new BusinessLicense(
+          recordTypeId = blRecTypeId,
+          AccountId = accId,
+          RegulatoryAuthorizationTypeId = regAuthId,
+          Status = 'Active',
+          RegistrationCertificate__c = certNo,
+          Name = blName);
+        if(isInsert) {
+            Database.Insert(blRec);
+        }
+        return blRec;
+    }
+    
+    //method to create Contact Record - ALR-560
+    @testVisible
+    public static Contact createContactRecord(Id accId, String emailId, String fname, String lname, Boolean isInsert) {
+        String conRecTypeId = Schema.getGlobalDescribe().get('Contact').getDescribe().getRecordTypeInfosByDeveloperName().get('Contact').getRecordTypeId();
+		Contact contRec = new Contact(
+          RecordTypeId = conRecTypeId,
+          AccountId = accId,
+          email	 = emailId,
+          Firstname = fname,
+          LastName = lname);
+        if(isInsert) {
+            Database.Insert(contRec);
+        }
+        return contRec;
+    }
+    
+    //method to create AccountContactRelation record - ALR-560
+    @testVisible
+    public static AccountContactRelation createAccContRelRecord(Id accId, Id contactId, Boolean isPrimary, Boolean isActive, Boolean isInsert) {
+      AccountContactRelation acConRelRec = new AccountContactRelation(
+          AccountId = accId,
+          ContactId = contactId,
+          PrimaryContact__c = isPrimary,
+          IsActive = isActive);
+        if(isInsert) {
+            Database.Insert(acConRelRec);
+        }
+        return acConRelRec;
+    }
+    
+    //method to create content version and content doc link - ALR-560
+    @testVisible
+    public static ContentVersion createContentVer(String title, Id linkedId, Boolean isInsert) {
+        ContentVersion contentVersionRec = new ContentVersion(
+          Title = title,
+          PathOnClient = title,
+          VersionData = Blob.valueOf('Test Content'),//EncodingUtil.base64Decode(body) - if blob was passed
+          IsMajorVersion = true,
+     	  ContentLocation = 'S'// S = Stored in Salesforce
+     	);
+        if(isInsert) {
+            Database.Insert(contentVersionRec);
+        }
+        
+        ContentDocument documentRec = [SELECT Id, Title, LatestPublishedVersionId FROM ContentDocument LIMIT 1];
+        //create ContentDocumentLink record
+        ContentDocumentLink cdlRec = new ContentDocumentLink(
+        LinkedEntityId = linkedId,
+        ContentDocumentId = documentRec.Id,
+        shareType = 'V');
+        if(isInsert) {
+             Database.Insert(cdlRec);
+         }
+         return contentVersionRec;
+    }      
 }
