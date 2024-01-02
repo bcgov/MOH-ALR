@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RestrictingAssetNameEdit</fullName>
+    <active>true</active>
+    <description>Asset Name cannot be edited - ALR-688</description>
+    <errorConditionFormula>AND(
+    NOT( $Permission.EHISBypassValidationRuleCustomPermission ),
+    ISCHANGED( Name ),
+    NOT( ISNEW()),
+    PRIORVALUE(Name) &lt;&gt; Name
+)</errorConditionFormula>
+    <errorMessage>Asset Name field cannot be edited.</errorMessage>
+</ValidationRule>
