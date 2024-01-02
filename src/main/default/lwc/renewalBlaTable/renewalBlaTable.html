@@ -1,0 +1,22 @@
+<template>
+    <lightning-card>
+        <div class="slds-text-align_right">
+            <lightning-button variant="brand" label="Send Renewals" title="Send Renewals" 
+                onclick={handleSendRenewals}></lightning-button>
+        </div>
+                
+        <div style="height: 300px;">
+            <lightning-datatable
+                    key-field="Id"
+                    data={blaList}
+                    show-row-number-column
+                    hide-checkbox-column
+                    draft-values={draftValues}
+                    row-number-offset={rowOffset}
+                    columns={columns}
+                    onsave={handleSave}
+                    oncancel={handleCancel}>
+            </lightning-datatable>
+        </div>
+    </lightning-card>
+</template>
