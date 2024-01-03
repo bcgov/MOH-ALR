@@ -11,6 +11,7 @@ public with sharing class MassEmailController {
     Public Static Id templateId = NULL;
     Public Static String templateEntity = '';
     Public Static Map<Id, Id> targetWhatIdMap = new Map<Id, Id>();
+    Public Static Map<Id, Id> whatIdTargetMap = new Map<Id, Id>();
     Public Static String emailBody = '';
     Public Static String subjectValue = '';
     Public Static String emailBodyConst = '';
@@ -29,11 +30,12 @@ public with sharing class MassEmailController {
     Public Static Set<Id> blaIds = new Set<Id>();
     Public Static Map<Id, Id> contactBlaMap = new Map<Id, Id>();
     Public Static Map<Id, Id> blaContactMap = new Map<Id, Id>();
+    Public Static Map<Id, Integer> blaTotalAlUnitsMap = new Map<Id, Integer>();
     
     Public Static String errMessage = '';
     
     //method to to send email to records
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled
     public static void doSendRenewals() {
         Boolean isValidAcc;
         Map<String, List<String>> accDetails = new Map<String, List<String>>();
@@ -41,8 +43,8 @@ public with sharing class MassEmailController {
         Id orgWideAddrId = NULL;
         Map<Id, String> blaErrMap = new Map<Id, String>();
         Map<Id, Set<Id>> contactContentVerMap = new Map<Id, Set<Id>>();
-        //Set<Id> accIdSetTemp = new Set<Id>{'001As00000IGcv0IAD'};//temp delete bla
-        Set<Id> accIdSetTemp = new Set<Id>{'001As00000IMmIEIA1'};//temp delete xyz 
+        Set<Id> accIdSetTemp = new Set<Id>{'001As00000IGcv0IAD'};//temp delete bla
+        //Set<Id> accIdSetTemp = new Set<Id>{'001As00000IMmIEIA1'};//temp delete xyz 
         try {
             //fetch acc status and rec type from metadata
             accDetails = BCMOH_UtilityClass.getAccRenewals(BCMOH_Constants.renewalName);
@@ -58,7 +60,11 @@ public with sharing class MassEmailController {
                                          Status =: BCMOH_Constants.blaCreatedStatus 
                                          AND RenewalYear__c =: BCMOH_Constants.renewalYear LIMIT 1),
                                         (SELECT Id, RegistrationCertificate__c, Identifier 
-                                         FROM BusinessLicenses LIMIT 1)
+                                         FROM BusinessLicenses LIMIT 1),
+                                        (SELECT Id, Capacity__c, Quantity, Type__c 
+                                         FROM Assets
+										 WHERE RecordType.DeveloperName =: BCMOH_Constants.parentAssetRecType
+										 AND Type__c IN: BCMOH_Constants.allALUnitTypes)
                                         FROM Account 
                                         WHERE RecordType.DeveloperName =: accDetails.keyset() AND 
                                         Status__c IN: accDetails.values()[0] 
@@ -97,11 +103,12 @@ public with sharing class MassEmailController {
                                                //blMap.put(activeAccRec.AccountContactRelations[0].ContactId, activeAccRec.BusinessLicenses[0]);
                                                blMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, activeAccRec.BusinessLicenses[0]);
                                             }
+                                           
                                             //if account is valid then fetch the bla Ids associated with the account to fetch its files attached
                                             if(isValidAcc) {
                                                 system.debug('yui valid acc '+activeAccRec.Id);
                                                 //acc Map
-                                            	accMap.put(activeAccRec.AccountContactRelations[0].ContactId, activeAccRec);//not used anywhere yet
+                                            	accMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, activeAccRec);//not used anywhere yet
                                                 system.debug('yui acc map in loop '+accMap);
                                                 //bla maps
                                                 blaContactMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id,
@@ -110,9 +117,19 @@ public with sharing class MassEmailController {
                                                                  activeAccRec.BusinessLicenseApplicationAccount[0].Id);//contactId blaId map for email targetIds
                                                 system.debug('yui contactblamap acc '+contactBlaMap);
                                                 //acc contact map
-                                                accContactMap.put(activeAccRec.AccountContactRelations[0].ContactId, 
+                                               /* accContactMap.put(activeAccRec.AccountContactRelations[0].ContactId, 
+                                                                 activeAccRec.AccountContactRelations[0]);*/
+                                                //acc contact map with bla id
+                                                accContactMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, 
                                                                  activeAccRec.AccountContactRelations[0]);
                                             	//?if bla Id is comng from front end then this for loop is not needed?
+                                            	if(activeAccRec.Assets.size() != 0) {
+                                                	Integer unitCounter = 0;
+                                                	for(Asset parentAsset : activeAccRec.Assets) {
+                                                    	unitCounter = unitCounter + Integer.valueOf(parentAsset.Quantity);
+                                               		}
+                                               		blaTotalAlUnitsMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, unitCounter);
+                                           		}
                                                 for(BusinessLicenseApplication blaRec : 
                                                     activeAccRec.BusinessLicenseApplicationAccount) {
                                                     blaIds.add(blaRec.Id);//these are the linked entity Ids
@@ -121,13 +138,13 @@ public with sharing class MassEmailController {
                                              	}                     
                                             }
             }
-            system.debug('yui contactBlaMap after for '+contactBlaMap);
-             system.debug('yui acc map after for loop '+accMap.size()+' '+accMap);
+            system.debug('yui blaContactMap after for '+blaContactMap);
+            system.debug('yui acc map after for loop '+accMap.size()+' '+accMap);
             system.debug('yui blaIds after for '+blaIds);
             system.debug('yui blMap after for '+blMap);
             //if valid contacts are fetched
             //? if template id is not fetched then all bla record's error message needs to be updated ?
-            if(!contactBlaMap.isEmpty()) {
+            if(!blaContactMap.isEmpty()) {
                 //fetch template Id
                 templateIdEntityMap = fetchTemplateDetails(BCMOH_Constants.templatePurpose);//email template
                 system.debug('yui after calling fetch templ details '+templateEntity+' '+templateId);
@@ -143,10 +160,12 @@ public with sharing class MassEmailController {
                     system.debug('yui inside bla template entity'+targetWhatIdMap+' '+contactBlaMap);
                 } */
                 targetWhatIdMap = contactBlaMap;
+                whatIdTargetMap = blaContactMap;
                 
                 //send email with the target-content map and target-whatid map
                 if(!templateIdEntityMap.isEmpty() && orgWideAddrId != NULL) {// && !contactContentVerMap.isEmpty()) {
-                	sendEmailForRenewals(contactContentVerMap, targetWhatIdMap);
+                	//sendEmailForRenewals(contactContentVerMap, targetWhatIdMap);
+                	sendEmailForRenewals(contactContentVerMap, whatIdTargetMap);
                 }
             }
         }
@@ -156,39 +175,43 @@ public with sharing class MassEmailController {
     }
     
     //send email method
-    public static void sendEmailForRenewals(Map<Id, Set<Id>> contactContentVerMap, Map<Id, Id> targetWhatIdMap) {
+    public static void sendEmailForRenewals(Map<Id, Set<Id>> contactContentVerMap, Map<Id, Id> whatIdTargetMap) {
         List<Id> targetIds = new List<Id>();
         List<Id> attachIds = new List<Id>();
-        Id whatId = NULL;
+        Id contactId = NULL;
         BusinessLicense blRec = new BusinessLicense();
+        Integer totalALUnits = 0;
         List<Messaging.SingleEmailMessage> singleEmailMsgList = new List<Messaging.SingleEmailMessage>();
         try {
-            //? loop with targetWhatIdMap instead ?
-            for(Id contactId : targetWhatIdMap.KeySet()) {
-                system.debug('yui inside sendEmailForRenewals targwhatidmpa '+targetWhatIdMap);
-                whatId = targetWhatIdMap.isEmpty() ? NULL : targetWhatIdMap.get(contactId);
+            for(Id whatId : whatIdTargetMap.KeySet()) {
+                system.debug('yui inside sendEmailForRenewals whatIdTargetMap '+whatIdTargetMap);
+                contactId = whatIdTargetMap.isEmpty() ? NULL : whatIdTargetMap.get(whatId);
                 system.debug('yui inside sendEmailForRenewals whatid  '+whatId);
-                attachIds = new List<Id>(contactContentVerMap.get(contactId));
+                attachIds = new List<Id>(contactContentVerMap.get(contactId));//change this to bla map later
                 if(!accContactMap.isEmpty() && !blaMap.isEmpty() && !accMap.isEmpty() &&
-                   accContactMap.get(contactId) != NULL && blaMap.get(whatId) != NULL && accMap.get(contactId) != NULL) {
-                       blRec = !blMap.isEmpty() && blMap.get(whatId) != NULL ? blMap.get(whatId) : NULL;
-                       emailBody = replaceMergeFields(emailBodyConst, accContactMap.get(contactId), blaMap.get(whatId), 
-                                               accMap.get(contactId), blRec);
-                       subjectValue = replaceMergeFields(subjectValueConst, accContactMap.get(contactId), blaMap.get(whatId),
-                                                  accMap.get(contactId), blRec);
+                   accContactMap.get(whatId) != NULL && blaMap.get(whatId) != NULL && accMap.get(whatId) != NULL) {
+                       blRec = !blMap.isEmpty() && blMap.get(whatId) != NULL ? blMap.get(whatId) : NULL;//get BL record
+                       totalALUnits = !blaTotalAlUnitsMap.isEmpty() && blaTotalAlUnitsMap.get(whatId) != NULL ?
+                           			 blaTotalAlUnitsMap.get(whatId) : 0;//get Total AL Units value
+                       emailBody = replaceMergeFields(emailBodyConst, accContactMap.get(whatId), blaMap.get(whatId), 
+                                               accMap.get(whatId), blRec, String.valueOf(totalALUnits));
+                       subjectValue = replaceMergeFields(subjectValueConst, accContactMap.get(whatId), blaMap.get(whatId),
+                                                  accMap.get(whatId), blRec, String.valueOf(totalALUnits));
                        Messaging.SingleEmailMessage emailMsgRec = BCMOH_UtilityClass.setEmailParams(contactId, NULL, orgWideAddrId, attachIds, whatId, emailBody, subjectValue);
                 	   singleEmailMsgList.add(emailMsgRec);
+                       system.debug('yui emailmsg rec data set '+emailMsgRec);
                 }
                 else {
                     errMessage = 'data required for template is missing';
                 }
             }
-            system.debug('yui singleEmailMsgList before sending email '+singleEmailMsgList.size());//+' '+singleEmailMsgList);
+            system.debug('yui singleEmailMsgList before sending email '+singleEmailMsgList.size()+' '+singleEmailMsgList);
             //put this in another method - sending the email and receiving its response.
             //Messaging.reserveSingleEmailCapacity(singleEmailMsgList.size());
             if(singleEmailMsgList != NULL && singleEmailMsgList.size() > 0) {
                 Messaging.SendEmailResult[] emailResultList = Messaging.SendEmail(singleEmailMsgList, false);//send email inspite of failure
-                system.debug('yui email status '+emailResultList);
+                system.debug('yui email result '+emailResultList);
+                updateTargetRecsStatus(emailResultList, singleEmailMsgList, whatIdTargetMap);
             }
         }
         catch(Exception ex) {
@@ -197,9 +220,10 @@ public with sharing class MassEmailController {
     }
     
     //method to replace few merge fields in email template //need to make it re-usable
-    public static String replaceMergeFields(String templateData, AccountContactRelation accContactRec, BusinessLicenseApplication blaRec, Account accRec, BusinessLicense blRec) {//String emailBody, AccountContactRelation accContactRec, BusinessLicenseApplication blaRec, Id templateDetailsId) {
+    public static String replaceMergeFields(String templateData, AccountContactRelation accContactRec, 
+                                            BusinessLicenseApplication blaRec, Account accRec, 
+                                            BusinessLicense blRec, String totalALUnits) {
         String mergeFieldValue = '';
-        String mergeField = '{%%NextYear%%}';
         try {
             //system.debug('gggg '+templateData);
             system.debug('tmp data yyy'+accContactRec+' '+blaRec+' '+accRec+' '+blRec);
@@ -216,7 +240,13 @@ public with sharing class MassEmailController {
                     }
                 }
                 else if(templateMapping.EmailTemplate__c == templateDetailsId &&  templateMapping.ObjectName__c == 'BusinessLicenseApplication') {
-                    templateData = templateData.replace(templateMapping.MergeField__c, blaRec.get(templateMapping.FieldAPIName__c).toString());
+                    if(templateMapping.FieldAPIName__c == 'CreatedDate') {
+                        templateData = templateData.replace(templateMapping.MergeField__c,
+                                                            Date.valueOf(blaRec.get(templateMapping.FieldAPIName__c)).format());
+                    }
+                    else {
+                        templateData = templateData.replace(templateMapping.MergeField__c, blaRec.get(templateMapping.FieldAPIName__c).toString());
+                    }
                 }
                 else if(templateMapping.EmailTemplate__c == templateDetailsId && templateMapping.ObjectName__c == 'BusinessLicense' && blRec != NULL) {
                     if(blRec.get(templateMapping.FieldAPIName__c) != NULL) {
@@ -227,7 +257,10 @@ public with sharing class MassEmailController {
                     }
                 }
                 else if(templateMapping.EmailTemplate__c == templateDetailsId && templateMapping.MergeFieldFormula__c == 'nextYear') {
-                    templateData = templateData.replace(mergeField, BCMOH_Constants.nextYear);
+                    templateData = templateData.replace(templateMapping.MergeField__c, BCMOH_Constants.nextYear);
+                }
+                else if(templateMapping.EmailTemplate__c == templateDetailsId && templateMapping.MergeFieldFormula__c == 'totalALUnits') {
+                    templateData = templateData.replace(templateMapping.MergeField__c, totalALUnits);
                 }
             }
             //system.debug('cds'+templateData);
@@ -336,4 +369,45 @@ public with sharing class MassEmailController {
         }
         return contactContentVerMap;
     }
+    //update bla status
+     public static void updateTargetRecsStatus(Messaging.SendEmailResult[] emailResultList, 
+                                               List<Messaging.SingleEmailMessage> singleEmailMsgList, Map<Id, Id> whatIdTargetMap) {
+         Map<Id, String> targetIdErrorMap = new Map<Id, String>();
+         try {
+             for(Messaging.SendEmailResult eResRec : emailResultList) {
+                 if(eResRec.isSuccess()) {
+                     //Do something for success
+                 }  
+                 else {
+                     // Operation failed, so get all errors                
+                     for(Messaging.SendEmailError err : eResRec.getErrors()) {
+                         System.debug('^^ The stat code   err msg. '+err.getStatusCode() + ': ' + err.getMessage()); 
+                         System.debug('^^ fields that affected this error: ' + err.getFields());
+                         System.debug('^^ target id that affected this error: ' + err.getTargetObjectId());
+                         //Map<Id, String> blaErrorMap = new Map<Id, String>();
+                         targetIdErrorMap.put(err.getTargetObjectId(), err.getMessage());
+                     }
+                 }
+             }
+             //update bla records
+             for(BusinessLicenseApplication blaRec : blaMap.values()) {
+                 if(targetIdErrorMap.keyset().contains(whatIdTargetMap.get(blaRec.Id))) {//if error map contains this bla id
+                     blaRec.Status = 'Errored';
+                     String errMsg = targetIdErrorMap.get(whatIdTargetMap.get(blaRec.Id)).length() > 255 ?
+                         				targetIdErrorMap.get(whatIdTargetMap.get(blaRec.Id)).Substring(0,255) :
+                     					targetIdErrorMap.get(whatIdTargetMap.get(blaRec.Id));
+                     blaRec.RenewalError__c = errMsg;
+                 }
+                 else {
+                     blaRec.Status = 'Sent';
+                 }
+             }
+             if(!blaMap.isEmpty()) {//check permissions
+                 Database.Update(blaMap.values());                 
+             }
+         }
+         catch(exception ex) {
+             system.debug('caught in meth - '+ex.getMessage());
+         }
+     }
 }
