@@ -34,7 +34,7 @@ public class ComplaintCaseTriggerTest {
             NeedFeedbackOnResolution__c = 'No',
             ResidentAwareofComplaint__c = 'No'
         );
- 
+ 		//System.debug('RecordTypeId:'+RecordTypeId);
         // Verify the expected results
         //testCase = [SELECT Id, RecordTypeId, Complaint_Case_ID__c FROM Case WHERE Id = :testCase.Id LIMIT 1];
  
@@ -69,14 +69,14 @@ public class ComplaintCaseTriggerTest {
  
         // Verify the expected results for the second case
         testCase2 = [SELECT Id, RecordTypeId, AccountId, Complaint_Case_ID__c FROM Case WHERE Id = :testCase2.Id LIMIT 1];
- 
-        //System.assertEquals('ExpectedRecordTypeId', testCase2.RecordTypeId, 'Record Type not set correctly');
+ 		RecordType expectedRecordType = [SELECT Id FROM RecordType WHERE SObjectType = 'Case' AND DeveloperName = 'PublicComplaintCase' LIMIT 1];
+        System.assertEquals(expectedRecordType.Id, testCase2.RecordTypeId, 'Record Type not set correctly');
         //System.assertNotEquals(null, testCase2.Complaint_Case_ID__c, 'Complaint Case ID not generated');
  
         // Verify the expected results for the third case
         testCase3 = [SELECT Id, RecordTypeId, AccountId, Complaint_Case_ID__c FROM Case WHERE Id = :testCase3.Id LIMIT 1];
- 
-        //System.assertEquals('ExpectedRecordTypeId', testCase3.RecordTypeId, 'Record Type not set correctly');
+ 		RecordType expectedRecordType1 = [SELECT Id FROM RecordType WHERE SObjectType = 'Case' AND DeveloperName = 'PublicComplaintCase' LIMIT 1];
+        System.assertEquals(ExpectedRecordType1.Id, testCase3.RecordTypeId, 'Record Type not set correctly');
         //System.assertNotEquals(null, testCase3.Complaint_Case_ID__c, 'Complaint Case ID not generated');
         
         List<Case> caseList = new List<Case>();
@@ -85,5 +85,4 @@ public class ComplaintCaseTriggerTest {
 		caseList.add(testCase3);     
         ComplaintCaseTriggerHandler.handleBeforeInsert(caseList);
     }
- 
 }
