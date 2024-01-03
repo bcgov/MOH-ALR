@@ -20,6 +20,14 @@ public class BCMOH_Constants {
     public Final Static Date feeDueDate = Date.Today().addDays(30);//ALR-185
     public Final Static DateTime feeDueDateTime = DateTime.Now().addDays(30);//ALR-185
     public Final Static String cancelledStatus = 'Canceled';//ALR-691
+    //ALR-560
+    public Final Static String templatePurpose = 'Renewal';
+    //error handling
+    public Final Static String noPrimaryContact = 'No Primary Contact Record or No email Id on Primary Contact';
+    public Final Static String noOrgWideAddr = 'No valid org wide email address found';
+    public Final Static String nextYear = String.valueOf(Date.Today().Year() + 1);
+    public Final Static List<String> renewalTableStatus = new List<String>{blaCreatedStatus, blaExcludedStatus}; 
+    
 
 
 }
