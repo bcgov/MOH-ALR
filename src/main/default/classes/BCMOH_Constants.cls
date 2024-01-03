@@ -26,7 +26,13 @@ public class BCMOH_Constants {
     public Final Static String noPrimaryContact = 'No Primary Contact Record or No email Id on Primary Contact';
     public Final Static String noOrgWideAddr = 'No valid org wide email address found';
     public Final Static String nextYear = String.valueOf(Date.Today().Year() + 1);
-    public Final Static List<String> renewalTableStatus = new List<String>{blaCreatedStatus, blaExcludedStatus}; 
+    public Final Static List<String> renewalTableStatus = new List<String>{blaCreatedStatus, blaExcludedStatus};
+    public Final Static String parentAssetRecTypeId = Schema.getGlobalDescribe().get('Asset').getDescribe().getRecordTypeInfosByDeveloperName().get('Units_Record_Type').getRecordTypeId();
+    public Final Static String parentAssetRecType = 'Units_Record_Type';
+    public Final Static List<String> allALUnitTypes = new List<String>{'Private', 'Public', 'Per Diem'};
+        
+    public Final Static String unitName='Unit';
+
     
 
 
