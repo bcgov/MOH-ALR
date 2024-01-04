@@ -10,24 +10,27 @@ public class ComplaintCaseTriggerHandler {
     public static void handleBeforeInsert(List<Case> newCases) {
         Map<Id, List<Case>> casesByAccountId = new Map<Id, List<Case>>();
         Set<Id> accountIds = new Set<Id>();
+        Set<String> licenseTypeSet = new Set<String>();
+ 
         for (Case newCase : newCases) {
             if (newCase.AccountId != null) {
                 accountIds.add(newCase.AccountId);
+                licenseTypeSet.add(getLicenseTypeCode(newCase.AccountId));
             }
         }
  
         Map<String, Id> recordTypeDeveloperNameToIdMap = getRecordTypeDeveloperNameToIdMap('PublicComplaintCase');
-        Map<Id, String> accountLicenseTypeCodeMap = new Map<Id, String>();
-        // Fetch LicenseTypeCode for all accounts in one query
-        for (Account acc : [SELECT Id, LicenseType__r.RegulatoryAuthorizationCode__c FROM Account WHERE Id IN :accountIds]) {
-            accountLicenseTypeCodeMap.put(acc.Id, acc.LicenseType__r.RegulatoryAuthorizationCode__c);
-        }
+ 
+        // Query Record Types for 'PublicComplaintCase'
+        Map<String, Id> recordTypeMap = getRecordTypesMap('PublicComplaintCase');
+ 
         for (Case newCase : newCases) {
             if (newCase.AccountId != null) {
-                String recordTypeDeveloperName = 'PublicComplaintCase';
-                Id recordTypeId = recordTypeDeveloperNameToIdMap.get(recordTypeDeveloperName);
+                Id recordTypeId = recordTypeMap.get('PublicComplaintCase');
+ 
                 if (recordTypeId != null) {
                     newCase.RecordTypeId = recordTypeId;
+ 
                     if (!casesByAccountId.containsKey(newCase.AccountId)) {
                         casesByAccountId.put(newCase.AccountId, new List<Case>());
                     }
@@ -37,51 +40,86 @@ public class ComplaintCaseTriggerHandler {
         }
  
         for (Id accountId : casesByAccountId.keySet()) {
-            generateComplaintCaseIDs(casesByAccountId.get(accountId), accountLicenseTypeCodeMap.get(accountId));
+            generateComplaintCaseIDs(casesByAccountId.get(accountId), licenseTypeSet);
         }
     }
  
-        private static void generateComplaintCaseIDs(List<Case> cases, String licenseTypeCode) {
-        Map<Id, String> accountLicenseTypeCodeMap = new Map<Id, String>();
-        Integer numericSequenceNumber;
-        String yearPrefix = String.valueOf(System.today().year());
+    private static void generateComplaintCaseIDs(List<Case> cases, Set<String> licenseTypeSet) {
+        Map<String, String> licenseTypeCodeMap = getLicenseTypeCodeMap(cases);
+        Map<String, String> maxSequenceNumbers = getMaxSequenceNumbers(licenseTypeSet, System.today().year());
  
         for (Case newCase : cases) {
-            licenseTypeCode = getLicenseTypeCode(newCase.AccountId);
-            accountLicenseTypeCodeMap.put(newCase.AccountId, licenseTypeCode);
+            String licenseTypeCode = licenseTypeCodeMap.get(newCase.AccountId);
+            String sequenceNumber = maxSequenceNumbers.get(licenseTypeCode);
  
-            String sequenceNumber = getMaxSequenceNumber(licenseTypeCode, System.today().year());
-            System.debug('New Case: ' + newCase);
-            System.debug('Sequence Number: ' + sequenceNumber);
- 
-            if (sequenceNumber != '0') {
-                String numericPart = sequenceNumber.substring(8).replaceAll('[^0-9]', '');
-                numericSequenceNumber = numericPart.length() > 2 ? Integer.valueOf(numericPart.substring(numericPart.length() - 3)) : 0;
- 
-                String formattedSequenceNumber = String.valueOf(++numericSequenceNumber).leftPad(3, '0');
-                newCase.Complaint_Case_ID__c = 'C' + yearPrefix + '-' + licenseTypeCode + formattedSequenceNumber;
-                System.debug('New Case Complaint_Case_ID__c: ' + newCase.Complaint_Case_ID__c);
-            } else {
-                newCase.Complaint_Case_ID__c = 'C' + yearPrefix + '-' + licenseTypeCode + '001';
-                System.debug('New Case Complaint_Case_ID__c: ' + newCase.Complaint_Case_ID__c);
-            }
+            String formattedSequenceNumber = getFormattedSequenceNumber(sequenceNumber);
+            newCase.Complaint_Case_ID__c = 'C' + System.today().year() + '-' + licenseTypeCode + formattedSequenceNumber;
+            System.debug('New Case Complaint_Case_ID__c: ' + newCase.Complaint_Case_ID__c);
         }
+    }
+ 
+    private static Map<String, String> getLicenseTypeCodeMap(List<Case> cases) {
+        Map<String, String> licenseTypeCodeMap = new Map<String, String>();
+        Set<Id> accountIds = new Set<Id>();
+ 
+        for (Case newCase : cases) {
+            accountIds.add(newCase.AccountId);
+        }
+ 
+        for (Account acc : [SELECT Id, LicenseType__r.RegulatoryAuthorizationCode__c
+                            FROM Account
+                            WHERE Id IN :accountIds]) {
+            licenseTypeCodeMap.put(acc.Id, acc.LicenseType__r.RegulatoryAuthorizationCode__c);
+        }
+ 
+        return licenseTypeCodeMap;
+    }
+ 
+    private static Map<String, String> getMaxSequenceNumbers(Set<String> licenseTypes, Integer year) {
+        Map<String, String> maxSequenceNumbers = new Map<String, String>();
+ 
+        for (String licenseType : licenseTypes) {
+            maxSequenceNumbers.put(licenseType, getMaxSequenceNumber(licenseType, year));
+        }
+ 
+        return maxSequenceNumbers;
+    }
+ 
+    private static String getFormattedSequenceNumber(String sequenceNumber) {
+        Integer numericSequenceNumber = 0;
+ 
+        if (sequenceNumber != '0') {
+            String numericPart = sequenceNumber.substring(8).replaceAll('[^0-9]', '');
+            numericSequenceNumber = numericPart.length() > 2 ? Integer.valueOf(numericPart.substring(numericPart.length() - 3)) : 0;
+        }
+ 
+        return String.valueOf(++numericSequenceNumber).leftPad(3, '0');
+    }
+ 
+    private static Map<String, Id> getRecordTypesMap(String developerName) {
+        Map<String, Id> result = new Map<String, Id>();
+ 
+        for (RecordType rt : [SELECT Id, DeveloperName
+                                FROM RecordType
+                                WHERE SObjectType = 'Case'
+                                AND DeveloperName = :developerName]) {
+            result.put(rt.DeveloperName, rt.Id);
+        }
+ 
+        return result;
     }
  
     private static String getMaxSequenceNumber(String licenseType, Integer year) {
         String maxSequenceNumber = '0';
-        System.debug('License Type: ' + licenseType);
  
         try {
             AggregateResult maxResult = [
                 SELECT MAX(Complaint_Case_ID__c) maxSequence
                 FROM Case
                 WHERE Account.LicenseType__r.RegulatoryAuthorizationCode__c = :licenseType
-                AND CreatedDate >= :Date.newInstance(year, 1, 1)
-                AND CreatedDate < :Date.newInstance(year + 1, 1, 1)
+                    AND CreatedDate >= :Date.newInstance(year, 1, 1)
+                    AND CreatedDate < :Date.newInstance(year + 1, 1, 1)
             ];
- 
-            System.debug('Max Result: ' + maxResult);
  
             if (maxResult.get('maxSequence') != null) {
                 maxSequenceNumber = (String) maxResult.get('maxSequence');
