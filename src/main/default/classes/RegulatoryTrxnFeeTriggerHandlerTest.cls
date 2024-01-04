@@ -24,7 +24,7 @@ public class RegulatoryTrxnFeeTriggerHandlerTest {
         Asset unitRec1 = TestDataFactory.createUnit('1', 'Private', 0, residenceRec1.Id, false);
         unitRec1.recordTypeId = parentAssetRTId;
         unitRec1.GenerateInvoice__c = true;
-        unitRec1.Amount__c = 'Unit Fee';
+        unitRec1.Amount__c = 'Full Unit Fee';
         Database.Insert(unitRec1);
         //asset child
         Asset unitRec2 = TestDataFactory.createUnit('1', 'Private', 5, residenceRec1.Id, false);
@@ -67,4 +67,17 @@ public class RegulatoryTrxnFeeTriggerHandlerTest {
         Asset assetRec = [SELECT Id, Status FROM Asset WHERE Id =: regFeeRec.Unit__c LIMIT 1];
         Assert.isTrue(regFeeRec.Unit__r.Status == BCMOH_Constants.feeStatus);
     }
+    //update scenario to canceled
+    /*@isTest
+    static void updateCancelRegulatoryTrxnFeeHandlerTest() {
+        Test.startTest();
+        RegulatoryTrxnFee regTransFeeRec = [SELECT Id, Status FROM RegulatoryTrxnFee limit 1];
+        regTransFeeRec.Status = BCMOH_Constants.cancelledStatus;
+        Database.Update(regTransFeeRec);
+        Test.stopTest();
+        /*RegulatoryTrxnFeeItem regFeeRec = [SELECT Id, Unit__c FROM RegulatoryTrxnFeeItem
+                                           WHERE RegulatoryTrxnFeeId =: regTransFeeRec.Id LIMIT 1];
+        Asset assetRec = [SELECT Id, Status FROM Asset WHERE Id =: regFeeRec.Unit__c LIMIT 1];
+        Assert.isTrue(assetRec.Id != NULL);
+    }*/
 }
