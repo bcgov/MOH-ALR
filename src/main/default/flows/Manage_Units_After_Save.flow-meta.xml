@@ -5,7 +5,7 @@
         <name>Assign_Generate_Invoice</name>
         <label>Assign Generate Invoice</label>
         <locationX>380</locationX>
-        <locationY>539</locationY>
+        <locationY>323</locationY>
         <assignmentItems>
             <assignToReference>IsGenerateInvoice</assignToReference>
             <operator>Assign</operator>
@@ -35,7 +35,7 @@
         <name>AssignmentQuantity</name>
         <label>AssignmentQuantity</label>
         <locationX>138</locationX>
-        <locationY>1511</locationY>
+        <locationY>1403</locationY>
         <assignmentItems>
             <assignToReference>TotalQuantity</assignToReference>
             <operator>Add</operator>
@@ -48,10 +48,10 @@
         </connector>
     </assignments>
     <assignments>
-        <name>Getting_Type_Field_Value</name>
-        <label>Getting Type Field Value</label>
+        <name>Getting_Picklist_Value</name>
+        <label>Getting Picklist Value</label>
         <locationX>380</locationX>
-        <locationY>323</locationY>
+        <locationY>755</locationY>
         <assignmentItems>
             <assignToReference>PicklistValue</assignToReference>
             <operator>Assign</operator>
@@ -60,7 +60,7 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Update_Unit_Name</targetReference>
+            <targetReference>CheckParent</targetReference>
         </connector>
     </assignments>
     <constants>
@@ -74,7 +74,7 @@
         <name>Check_unit_request_exists</name>
         <label>Check unit request exists</label>
         <locationX>182</locationX>
-        <locationY>1295</locationY>
+        <locationY>1187</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Unit_requests_exists</name>
@@ -96,7 +96,7 @@
         <name>CheckParent</name>
         <label>Decision: Check Parent</label>
         <locationX>380</locationX>
-        <locationY>971</locationY>
+        <locationY>863</locationY>
         <defaultConnector>
             <targetReference>UpdateUnit</targetReference>
         </defaultConnector>
@@ -117,7 +117,7 @@
             <label>Decision Outcome: Parent Found</label>
         </rules>
     </decisions>
-    <description>50</description>
+    <description></description>
     <environments>Default</environments>
     <formulas>
         <name>qtyValue</name>
@@ -135,18 +135,13 @@
         <dataType>String</dataType>
         <expression>&quot;UnitRequest-&quot;+{!PicklistValue}+&quot;-&quot;+TEXT(DATEVALUE({!$Record.CreatedDate}))</expression>
     </formulas>
-    <formulas>
-        <name>UnitsNameFormat</name>
-        <dataType>String</dataType>
-        <expression>&quot;Unit-&quot;+{!PicklistValue}+&quot;-&quot;+TEXT(DATEVALUE({!$Record.CreatedDate}))</expression>
-    </formulas>
     <interviewLabel>Manage Units After Save {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Manage Units After Save</label>
     <loops>
         <name>LoopQuantity</name>
         <label>LoopQuantity</label>
         <locationX>50</locationX>
-        <locationY>1403</locationY>
+        <locationY>1295</locationY>
         <collectionReference>GetChildRecordsToUpdateQuantity</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -179,7 +174,7 @@
         <name>Create_Child_Unit</name>
         <label>Create Records : Create Child Unit</label>
         <locationX>578</locationX>
-        <locationY>1187</locationY>
+        <locationY>1079</locationY>
         <inputAssignments>
             <field>AccountId</field>
             <value>
@@ -244,7 +239,7 @@
         <name>GetChildRecordsToUpdateQuantity</name>
         <label>GetChildRecordsToUpdateQuantity</label>
         <locationX>182</locationX>
-        <locationY>1187</locationY>
+        <locationY>1079</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Check_unit_request_exists</targetReference>
@@ -300,10 +295,10 @@
         <name>GetRecordsGetParentUnit</name>
         <label>Get Records: Get Parent Unit</label>
         <locationX>380</locationX>
-        <locationY>863</locationY>
+        <locationY>647</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>CheckParent</targetReference>
+            <targetReference>Getting_Picklist_Value</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -357,7 +352,7 @@
         <name>getUnitRecordType</name>
         <label>getUnitRecordType</label>
         <locationX>380</locationX>
-        <locationY>647</locationY>
+        <locationY>431</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>getUnitRequestRecordType</targetReference>
@@ -387,7 +382,7 @@
         <name>getUnitRequestRecordType</name>
         <label>getUnitRequestRecordType</label>
         <locationX>380</locationX>
-        <locationY>755</locationY>
+        <locationY>539</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>GetRecordsGetParentUnit</targetReference>
@@ -414,34 +409,10 @@
         </outputAssignments>
     </recordLookups>
     <recordUpdates>
-        <name>Update_Unit_Name</name>
-        <label>Update Unit Name</label>
-        <locationX>380</locationX>
-        <locationY>431</locationY>
-        <connector>
-            <targetReference>Assign_Generate_Invoice</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Name</field>
-            <operator>EqualTo</operator>
-            <value>
-                <stringValue>Units</stringValue>
-            </value>
-        </filters>
-        <inputAssignments>
-            <field>Name</field>
-            <value>
-                <elementReference>UnitsNameFormat</elementReference>
-            </value>
-        </inputAssignments>
-        <inputReference>$Record</inputReference>
-    </recordUpdates>
-    <recordUpdates>
         <name>UpdateParentId</name>
         <label>UpdateParentId</label>
         <locationX>182</locationX>
-        <locationY>1079</locationY>
+        <locationY>971</locationY>
         <connector>
             <targetReference>GetChildRecordsToUpdateQuantity</targetReference>
         </connector>
@@ -475,7 +446,7 @@
         <name>UpdateParentQuantity</name>
         <label>UpdateParentQuantity</label>
         <locationX>50</locationX>
-        <locationY>1703</locationY>
+        <locationY>1595</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -503,7 +474,7 @@
         <name>UpdateUnit</name>
         <label>UpdateUnit</label>
         <locationX>578</locationX>
-        <locationY>1079</locationY>
+        <locationY>971</locationY>
         <connector>
             <targetReference>Create_Child_Unit</targetReference>
         </connector>
@@ -534,7 +505,7 @@
         <locationX>254</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Getting_Type_Field_Value</targetReference>
+            <targetReference>Assign_Generate_Invoice</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>

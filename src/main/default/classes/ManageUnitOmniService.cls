@@ -80,7 +80,8 @@ global class ManageUnitOmniService implements Callable {
             for (String uniqueStr : assetsByUniqueStringMap.keySet()) {
                 List<Asset> mergedUnits = assetsByUniqueStringMap.get(uniqueStr);            
                 Asset mergedAsset = new Asset(
-                    Name = mergedUnits[0].Name, 
+                    //Name = mergedUnits[0].Name,
+                    Name = BCMOH_Constants.unitName+'-'+mergedUnits[0].Type__c+'-'+system.today().format(),
                     AccountId = mergedUnits[0].AccountId,
                     Capacity__c = mergedUnits[0].Capacity__c,
                     Type__c = mergedUnits[0].Type__c,
