@@ -31,5 +31,9 @@ public class ComplaintCaseTriggerTest {
         Test.startTest();
          ComplaintCaseTriggerHandler.handleBeforeInsert(caseList);
         Test.stopTest();    
+		System.assertEquals('Test Case', caseList[0].subject, 'Assertion for Test Case');
+        System.assertEquals('Test Case1', caseList[1].subject, 'Assertion for Test Case1');
+        System.assertEquals('Test Case2', caseList[2].subject, 'Assertion for Test Case2');
+
     }
 }
