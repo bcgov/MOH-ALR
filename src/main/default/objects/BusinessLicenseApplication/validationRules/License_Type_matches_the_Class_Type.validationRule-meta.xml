@@ -2,7 +2,15 @@
 <ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>License_Type_matches_the_Class_Type</fullName>
     <active>true</active>
-    <description>The system validates that the License Type matches the Class Type field within the Residence Account</description>
-    <errorConditionFormula>AND(LicenseType.Id!=  Account.LicenseType__r.Id,   RecordType.DeveloperName  = &quot;New_License_Application_Record_Type&quot;)</errorConditionFormula>
-    <errorMessage>License Type must match the License Type of Residence.</errorMessage>
+    <description>The system validates that the License Type matches the Class Type field within the Residence Account and Account cannot be edited after creation of record.</description>
+    <errorConditionFormula>AND(NOT($Permission.EHISBypassValidationRuleCustomPermission),
+OR(LicenseType.Id!=  Account.LicenseType__r.Id,
+ISCHANGED( AccountId )
+),
+ OR(
+RecordType.DeveloperName  = &quot;New_License_Application_Record_Type&quot;,
+RecordType.DeveloperName  = &quot;Renewal&quot;)
+    )</errorConditionFormula>
+    <errorMessage>License Type must match the License Type of Residence.
+Account cannot be edited after creation.</errorMessage>
 </ValidationRule>
