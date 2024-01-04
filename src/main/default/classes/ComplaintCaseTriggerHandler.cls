@@ -17,6 +17,11 @@ public class ComplaintCaseTriggerHandler {
         }
  
         Map<String, Id> recordTypeDeveloperNameToIdMap = getRecordTypeDeveloperNameToIdMap('PublicComplaintCase');
+        Map<Id, String> accountLicenseTypeCodeMap = new Map<Id, String>();
+        // Fetch LicenseTypeCode for all accounts in one query
+        for (Account acc : [SELECT Id, LicenseType__r.RegulatoryAuthorizationCode__c FROM Account WHERE Id IN :accountIds]) {
+            accountLicenseTypeCodeMap.put(acc.Id, acc.LicenseType__r.RegulatoryAuthorizationCode__c);
+        }
         for (Case newCase : newCases) {
             if (newCase.AccountId != null) {
                 String recordTypeDeveloperName = 'PublicComplaintCase';
@@ -32,17 +37,17 @@ public class ComplaintCaseTriggerHandler {
         }
  
         for (Id accountId : casesByAccountId.keySet()) {
-            generateComplaintCaseIDs(casesByAccountId.get(accountId));
+            generateComplaintCaseIDs(casesByAccountId.get(accountId), accountLicenseTypeCodeMap.get(accountId));
         }
     }
  
-    private static void generateComplaintCaseIDs(List<Case> cases) {
+        private static void generateComplaintCaseIDs(List<Case> cases, String licenseTypeCode) {
         Map<Id, String> accountLicenseTypeCodeMap = new Map<Id, String>();
         Integer numericSequenceNumber;
         String yearPrefix = String.valueOf(System.today().year());
  
         for (Case newCase : cases) {
-            String licenseTypeCode = getLicenseTypeCode(newCase.AccountId);
+            licenseTypeCode = getLicenseTypeCode(newCase.AccountId);
             accountLicenseTypeCodeMap.put(newCase.AccountId, licenseTypeCode);
  
             String sequenceNumber = getMaxSequenceNumber(licenseTypeCode, System.today().year());
