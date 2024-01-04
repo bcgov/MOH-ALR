@@ -27,6 +27,13 @@
                 <elementReference>$Record.Quantity</elementReference>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Decription</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Description</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
             <targetReference>getUnitRecordType</targetReference>
         </connector>
@@ -117,7 +124,7 @@
             <label>Decision Outcome: Parent Found</label>
         </rules>
     </decisions>
-    <description></description>
+    <description>48---duplicate</description>
     <environments>Default</environments>
     <formulas>
         <name>qtyValue</name>
@@ -188,6 +195,12 @@
             <field>Capacity__c</field>
             <value>
                 <elementReference>$Record.Capacity__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <elementReference>Decription</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -482,6 +495,9 @@
             <field>Amount__c</field>
         </inputAssignments>
         <inputAssignments>
+            <field>Description</field>
+        </inputAssignments>
+        <inputAssignments>
             <field>GenerateInvoice__c</field>
             <value>
                 <booleanValue>false</booleanValue>
@@ -529,6 +545,13 @@
     <status>Active</status>
     <variables>
         <name>AmountValue</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <name>Decription</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
