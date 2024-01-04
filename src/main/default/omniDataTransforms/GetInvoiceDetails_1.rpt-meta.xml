@@ -28,151 +28,6 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>GetInvoiceDetailsCustom7</globalKey>
-        <inputFieldName>IndLivingSum</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Independent Living:IndLivingSum</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <defaultValue>[]</defaultValue>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetInvoiceDetailsCustom4032</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldFormat>List&lt;Map&gt;</outputFieldFormat>
-        <outputFieldName>Public</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>&apos;Active&apos;</filterValue>
-        <globalKey>GetInvoiceDetailsCustom8664</globalKey>
-        <inputFieldName>Status</inputFieldName>
-        <inputObjectName>BusinessLicense</inputObjectName>
-        <inputObjectQuerySequence>6.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Certificate</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| | &quot;SELECT/\/\/Quantity__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Public&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
-        <formulaExpression>SUM(QUERY(&quot;SELECT Quantity__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Public&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
-        <formulaResultPath>PublicQuantitySumValue</formulaResultPath>
-        <formulaSequence>9.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom8744</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>ResidenceAccount:Id</filterValue>
-        <globalKey>GetInvoiceDetailsCustom3635</globalKey>
-        <inputFieldName>ParentRecordId</inputFieldName>
-        <inputObjectName>AssociatedLocation</inputObjectName>
-        <inputObjectQuerySequence>8.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>AssociatedLoc</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| TODAY</formulaConverted>
-        <formulaExpression>TODAY()</formulaExpression>
-        <formulaResultPath>InvoiceCreatedDate</formulaResultPath>
-        <formulaSequence>5.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom3732</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>Id</filterValue>
-        <globalKey>GetInvoiceDetails027713159672694054</globalKey>
-        <inputFieldName>Id</inputFieldName>
-        <inputObjectName>RegulatoryTrxnFee</inputObjectName>
-        <inputObjectQuerySequence>2.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Invoice</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>ResidenceAccount:Id</filterValue>
-        <globalKey>GetInvoiceDetails8594186951357317</globalKey>
-        <inputFieldName>AccountId</inputFieldName>
-        <inputObjectName>Asset</inputObjectName>
-        <inputObjectQuerySequence>4.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Unit</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetInvoiceDetailsCustom7664</globalKey>
-        <inputFieldName>RegistrantAccount:BillingState</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>RegistrantState</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
         <filterOperator>=</filterOperator>
         <filterValue>Invoice:AccountId</filterValue>
         <globalKey>GetInvoiceDetails6668847367587001</globalKey>
@@ -183,6 +38,37 @@
         <name>GetInvoiceDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
         <outputFieldName>ResidenceAccount</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetInvoiceDetailsCustom7</globalKey>
+        <inputFieldName>IndLivingSum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Currency</outputFieldFormat>
+        <outputFieldName>Independent Living:IndLivingSum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>LIMIT</filterOperator>
+        <filterValue>1</filterValue>
+        <globalKey>GetInvoiceDetailsCustom408</globalKey>
+        <inputObjectName>Address</inputObjectName>
+        <inputObjectQuerySequence>10.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Address</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -205,17 +91,35 @@
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
-        <disabled>false</disabled>
+        <disabled>true</disabled>
         <filterGroup>0.0</filterGroup>
-        <filterOperator>LIMIT</filterOperator>
-        <filterValue>1</filterValue>
-        <globalKey>GetInvoiceDetailsCustom408</globalKey>
-        <inputObjectName>Address</inputObjectName>
-        <inputObjectQuerySequence>10.0</inputObjectQuerySequence>
+        <formulaConverted>| var:InvoiceItem:Amount__c &quot;Unit/\/\/Fee&quot; == 12.50 | var:InvoiceItem:Amount__c &quot;Partial/\/\/Unit/\/\/Fee&quot; == 6.25 0 IF IF</formulaConverted>
+        <formulaExpression>IF(%InvoiceItem:Amount__c%==&quot;Unit Fee&quot;,12.50,IF(%InvoiceItem:Amount__c%==&quot;Partial Unit Fee&quot;,6.25,0))</formulaExpression>
+        <formulaResultPath>InvoiceItem:Price</formulaResultPath>
+        <formulaSequence>1.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom4573</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetInvoiceDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Address</outputFieldName>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>ResidenceAccount:ParentId</filterValue>
+        <globalKey>GetInvoiceDetails39150307029397524</globalKey>
+        <inputFieldName>Id</inputFieldName>
+        <inputObjectName>Account</inputObjectName>
+        <inputObjectQuerySequence>5.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>RegistrantAccount</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -236,13 +140,47 @@
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:PerDiemFeeSumValue 0 &lt;&gt; var:PerDiemFeeSumValue &apos;&apos; IF</formulaConverted>
+        <formulaExpression>IF(PerDiemFeeSumValue&lt;&gt;0,PerDiemFeeSumValue,&apos;&apos;)</formulaExpression>
+        <formulaResultPath>PerDiemFeeSum</formulaResultPath>
+        <formulaSequence>29.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom2847</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
         <disabled>true</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:InvoiceItem:Amount__c &quot;Unit/\/\/Fee&quot; == 12.50 | var:InvoiceItem:Amount__c &quot;Partial/\/\/Unit/\/\/Fee&quot; == 6.25 0 IF IF</formulaConverted>
-        <formulaExpression>IF(%InvoiceItem:Amount__c%==&quot;Unit Fee&quot;,12.50,IF(%InvoiceItem:Amount__c%==&quot;Partial Unit Fee&quot;,6.25,0))</formulaExpression>
-        <formulaResultPath>InvoiceItem:Price</formulaResultPath>
-        <formulaSequence>1.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom4573</globalKey>
+        <formulaConverted>| var:LicensedSumValue 0 &lt;&gt; var:LicensedSumValue &apos;&apos; IF</formulaConverted>
+        <formulaExpression>IF(LicensedSumValue&lt;&gt;0,LicensedSumValue,&apos;&apos;)</formulaExpression>
+        <formulaResultPath>LicensedSum</formulaResultPath>
+        <formulaSequence>21.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom1154</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:IndLivingFeeSumValue 0 &lt;&gt; var:IndLivingFeeSumValue &apos;&apos; IF</formulaConverted>
+        <formulaExpression>IF(IndLivingFeeSumValue&lt;&gt;0,IndLivingFeeSumValue,&apos;&apos;)</formulaExpression>
+        <formulaResultPath>IndLivingFeeSum</formulaResultPath>
+        <formulaSequence>24.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom4804</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetInvoiceDetails</name>
@@ -269,30 +207,16 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:LicensedSumValue 0 &lt;&gt; var:LicensedSumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(LicensedSumValue&lt;&gt;0,LicensedSumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>LicensedSum</formulaResultPath>
-        <formulaSequence>23.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom1154</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <filterOperator>=</filterOperator>
+        <filterValue>ResidenceAccount:Id</filterValue>
+        <globalKey>GetInvoiceDetailsCustom3635</globalKey>
+        <inputFieldName>ParentRecordId</inputFieldName>
+        <inputObjectName>AssociatedLocation</inputObjectName>
+        <inputObjectQuerySequence>8.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetInvoiceDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>true</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetInvoiceDetails6659703181460741</globalKey>
-        <inputFieldName>InvoiceItem:Quantity__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>InvoiceItem:Quantity</outputFieldName>
+        <outputFieldName>AssociatedLoc</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -314,6 +238,84 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <globalKey>GetInvoiceDetailsCustom8808</globalKey>
+        <inputFieldName>PrivateFeeSum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Currency</outputFieldFormat>
+        <outputFieldName>Private:PrivateFeeSum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>true</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetInvoiceDetails6659703181460741</globalKey>
+        <inputFieldName>InvoiceItem:Quantity__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>InvoiceItem:Quantity</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:Address:Street &quot;/\/\/&quot; var:Address:City &quot;/\/\/&quot; var:Address:State &quot;/\/\/&quot; var:Address:PostalCode &quot;/\/\/&quot; var:Address:Country CONCAT</formulaConverted>
+        <formulaExpression>CONCAT(%Address:Street%, &quot; &quot;,%Address:City%, &quot; &quot;,%Address:State%, &quot; &quot;,%Address:PostalCode%, &quot; &quot;,%Address:Country%)</formulaExpression>
+        <formulaResultPath>ResidenceAddress</formulaResultPath>
+        <formulaSequence>3.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom9711</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <defaultValue>[]</defaultValue>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetInvoiceDetailsCustom4032</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>List&lt;Map&gt;</outputFieldFormat>
+        <outputFieldName>Public</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| | &quot;SELECT/\/\/Quantity__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Licensed&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
+        <formulaExpression>SUM(QUERY(&quot;SELECT Quantity__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Licensed&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
+        <formulaResultPath>LicensedQuantitySumValue</formulaResultPath>
+        <formulaSequence>13.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom1674</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <globalKey>GetInvoiceDetailsCustom3812</globalKey>
         <inputFieldName>IndLivingQuantitySum</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
@@ -321,6 +323,37 @@
         <name>GetInvoiceDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
         <outputFieldName>Independent Living:IndLivingQuantitySum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| | &quot;SELECT/\/\/Quantity__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Independent/\/\/Living&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
+        <formulaExpression>SUM(QUERY(&quot;SELECT Quantity__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Independent Living&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
+        <formulaResultPath>IndLivingQuantitySumValue</formulaResultPath>
+        <formulaSequence>18.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom8657</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetInvoiceDetails38369960178735996</globalKey>
+        <inputFieldName>RegistrantAccount:Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegistrantName</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -342,13 +375,16 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>GetInvoiceDetails38369960178735996</globalKey>
-        <inputFieldName>RegistrantAccount:Name</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <filterOperator>&lt;&gt;</filterOperator>
+        <filterValue>&apos;0&apos;</filterValue>
+        <globalKey>GetInvoiceDetailsCustom4564</globalKey>
+        <inputFieldName>Quantity__c</inputFieldName>
+        <inputObjectName>RegulatoryTrxnFeeItem</inputObjectName>
+        <inputObjectQuerySequence>7.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetInvoiceDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>RegistrantName</outputFieldName>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>InvoiceItem</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -385,6 +421,69 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <globalKey>GetInvoiceDetailsCustom6343</globalKey>
+        <inputFieldName>PublicSum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Currency</outputFieldFormat>
+        <outputFieldName>Public:PublicSum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetInvoiceDetailsCustom9641</globalKey>
+        <inputFieldName>PublicQuantitySum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Public:PublicQuantitySum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| &quot;SELECT/\/\/Amount__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Private&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/Limit/\/\/1/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY</formulaConverted>
+        <formulaExpression>QUERY(&quot;SELECT Amount__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Private&apos; AND Quantity__c!=0 Limit 1 &quot;, InvoiceItem:RegulatoryTrxnFeeId)</formulaExpression>
+        <formulaResultPath>PrivateSum</formulaResultPath>
+        <formulaSequence>11.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom8530</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>true</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:PrivateSumValue 0 &lt;&gt; var:PrivateSumValue &apos;&apos; IF</formulaConverted>
+        <formulaExpression>IF(PrivateSumValue&lt;&gt;0,PrivateSumValue,&apos;&apos;)</formulaExpression>
+        <formulaResultPath>PrivateSum</formulaResultPath>
+        <formulaSequence>30.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom1870</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <globalKey>GetInvoiceDetails9425017636329558</globalKey>
         <inputFieldName>ResidenceAccount:Name</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
@@ -399,17 +498,42 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| | &quot;SELECT/\/\/Amount__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Private&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
-        <formulaExpression>SUM(QUERY(&quot;SELECT Amount__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Private&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
-        <formulaResultPath>PrivateSumValue</formulaResultPath>
-        <formulaSequence>13.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom8530</globalKey>
+        <globalKey>GetInvoiceDetails061065134177697544</globalKey>
+        <inputFieldName>Invoice:Name</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>InvoiceId</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetInvoiceDetailsCustom4334</globalKey>
+        <inputFieldName>RegistrantAccount:BillingStreet</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegistrantStreet</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetInvoiceDetailsCustom5854</globalKey>
+        <inputFieldName>RegistrantAccount:BillingCity</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegistrantCity</outputFieldName>
+        <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
@@ -433,14 +557,49 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>GetInvoiceDetailsCustom4334</globalKey>
-        <inputFieldName>RegistrantAccount:BillingStreet</inputFieldName>
+        <formulaConverted>| TODAY</formulaConverted>
+        <formulaExpression>TODAY()</formulaExpression>
+        <formulaResultPath>InvoiceCreatedDate</formulaResultPath>
+        <formulaSequence>5.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom3732</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetInvoiceDetailsCustom2897</globalKey>
+        <inputFieldName>LicensedSum</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetInvoiceDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>RegistrantStreet</outputFieldName>
+        <outputFieldFormat>Currency</outputFieldFormat>
+        <outputFieldName>Licensed:LicensedSum</outputFieldName>
         <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:IndLivingQuantitySumValue 0 &lt;&gt; var:IndLivingQuantitySumValue &apos;&apos; IF</formulaConverted>
+        <formulaExpression>IF(IndLivingQuantitySumValue&lt;&gt;0,IndLivingQuantitySumValue,&apos;&apos;)</formulaExpression>
+        <formulaResultPath>IndLivingQuantitySum</formulaResultPath>
+        <formulaSequence>25.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom6959</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
@@ -454,517 +613,6 @@
         <name>GetInvoiceDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
         <outputFieldName>InvoiceItem:Id</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetInvoiceDetailsCustom2897</globalKey>
-        <inputFieldName>LicensedSum</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Licensed:LicensedSum</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <defaultValue>[]</defaultValue>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetInvoiceDetailsCustom1283</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldFormat>List&lt;Map&gt;</outputFieldFormat>
-        <outputFieldName>Licensed</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:PublicFeeSumValue 0 &lt;&gt; var:PublicFeeSumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(PublicFeeSumValue&lt;&gt;0,PublicFeeSumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>PublicFeeSum</formulaResultPath>
-        <formulaSequence>35.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom9628</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetInvoiceDetailsCustom7456</globalKey>
-        <inputFieldName>PublicFeeSum</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Public:PublicFeeSum</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:PerDiemQuantitySumValue 0 &lt;&gt; var:PerDiemQuantitySumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(PerDiemQuantitySumValue&lt;&gt;0,PerDiemQuantitySumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>PerDiemQuantitySum</formulaResultPath>
-        <formulaSequence>30.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom3931</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:LicensedQuantitySumValue 0 &lt;&gt; var:LicensedQuantitySumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(LicensedQuantitySumValue&lt;&gt;0,LicensedQuantitySumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>LicensedQuantitySum</formulaResultPath>
-        <formulaSequence>24.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom7883</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:LicensedFeeSumValue 0 &lt;&gt; var:LicensedFeeSumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(LicensedFeeSumValue&lt;&gt;0,LicensedFeeSumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>LicensedFeeSum</formulaResultPath>
-        <formulaSequence>25.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom6555</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>Location:Id</filterValue>
-        <globalKey>GetInvoiceDetailsCustom9023</globalKey>
-        <inputFieldName>ParentId</inputFieldName>
-        <inputObjectName>Address</inputObjectName>
-        <inputObjectQuerySequence>10.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Address</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| | &quot;SELECT/\/\/Amount__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Per/\/\/Diem&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
-        <formulaExpression>SUM(QUERY(&quot;SELECT Amount__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Per Diem&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
-        <formulaResultPath>PerDiemSumValue</formulaResultPath>
-        <formulaSequence>19.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom8911</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <defaultValue>[]</defaultValue>
-        <disabled>true</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetInvoiceDetailsCustom5081</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldFormat>List&lt;Map&gt;</outputFieldFormat>
-        <outputFieldName>InvoiceItem</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| | &quot;SELECT/\/\/Amount__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Licensed&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
-        <formulaExpression>SUM(QUERY(&quot;SELECT Amount__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Licensed&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
-        <formulaResultPath>LicensedSumValue</formulaResultPath>
-        <formulaSequence>14.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom7520</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| | &quot;SELECT/\/\/FeeAmount/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Public&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
-        <formulaExpression>SUM(QUERY(&quot;SELECT FeeAmount FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Public&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
-        <formulaResultPath>PublicFeeSumValue</formulaResultPath>
-        <formulaSequence>10.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom5457</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>LIMIT</filterOperator>
-        <filterValue>1</filterValue>
-        <globalKey>GetInvoiceDetailsCustom7698</globalKey>
-        <inputObjectName>BusinessLicense</inputObjectName>
-        <inputObjectQuerySequence>6.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Certificate</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetInvoiceDetailsCustom9366</globalKey>
-        <inputFieldName>InvoiceCreatedDate</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>InvoiceCreatedDate</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>true</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetInvoiceDetailsCustom2692</globalKey>
-        <inputFieldName>InvoiceItem:Amount__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldFormat>Currency</outputFieldFormat>
-        <outputFieldName>InvoiceItem:Amount</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>true</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:InvoiceItem:Amount__c &quot;Unit/\/\/Fee&quot; == var:InvoiceItem:Quantity 12.50 * | var:InvoiceItem:Amount__c &quot;Partial/\/\/Unit/\/\/Fee&quot; == var:InvoiceItem:Quantity 6.25 * 0 IF IF</formulaConverted>
-        <formulaExpression>IF(%InvoiceItem:Amount__c%==&quot;Unit Fee&quot;,%InvoiceItem:Quantity% * 12.50,IF(%InvoiceItem:Amount__c%==&quot;Partial Unit Fee&quot;,%InvoiceItem:Quantity% * 6.25,0))</formulaExpression>
-        <formulaResultPath>InvoiceItem:Fees</formulaResultPath>
-        <formulaSequence>4.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom4721</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:PublicQuantitySumValue 0 &lt;&gt; var:PublicQuantitySumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(PublicQuantitySumValue&lt;&gt;0,PublicQuantitySumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>PublicQuantitySum</formulaResultPath>
-        <formulaSequence>36.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom4220</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetInvoiceDetailsCustom6792</globalKey>
-        <inputFieldName>Invoice:PaymentDate__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldFormat>Date(MM/dd/yyyy)</outputFieldFormat>
-        <outputFieldName>InvoicePaymentDate</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>true</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:IFPublicSum SUM</formulaConverted>
-        <formulaExpression>SUM(IFPublicSum)</formulaExpression>
-        <formulaResultPath>Sum Public</formulaResultPath>
-        <formulaSequence>8.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom8272</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:PerDiemFeeSumValue 0 &lt;&gt; var:PerDiemFeeSumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(PerDiemFeeSumValue&lt;&gt;0,PerDiemFeeSumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>PerDiemFeeSum</formulaResultPath>
-        <formulaSequence>31.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom2847</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>ResidenceAccount:ParentId</filterValue>
-        <globalKey>GetInvoiceDetails39150307029397524</globalKey>
-        <inputFieldName>Id</inputFieldName>
-        <inputObjectName>Account</inputObjectName>
-        <inputObjectQuerySequence>5.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>RegistrantAccount</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:IndLivingFeeSumValue 0 &lt;&gt; var:IndLivingFeeSumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(IndLivingFeeSumValue&lt;&gt;0,IndLivingFeeSumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>IndLivingFeeSum</formulaResultPath>
-        <formulaSequence>26.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom4804</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:Address:Street &quot;/\/\/&quot; var:Address:City &quot;/\/\/&quot; var:Address:State &quot;/\/\/&quot; var:Address:PostalCode &quot;/\/\/&quot; var:Address:Country CONCAT</formulaConverted>
-        <formulaExpression>CONCAT(%Address:Street%, &quot; &quot;,%Address:City%, &quot; &quot;,%Address:State%, &quot; &quot;,%Address:PostalCode%, &quot; &quot;,%Address:Country%)</formulaExpression>
-        <formulaResultPath>ResidenceAddress</formulaResultPath>
-        <formulaSequence>3.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom9711</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetInvoiceDetailsCustom8808</globalKey>
-        <inputFieldName>PrivateFeeSum</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Private:PrivateFeeSum</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| | &quot;SELECT/\/\/Amount__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Independent/\/\/Living&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
-        <formulaExpression>SUM(QUERY(&quot;SELECT Amount__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Independent Living&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
-        <formulaResultPath>IndLivingSumValue</formulaResultPath>
-        <formulaSequence>20.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom8657</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| | &quot;SELECT/\/\/Quantity__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Licensed&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
-        <formulaExpression>SUM(QUERY(&quot;SELECT Quantity__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Licensed&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
-        <formulaResultPath>LicensedQuantitySumValue</formulaResultPath>
-        <formulaSequence>15.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom1674</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>&lt;&gt;</filterOperator>
-        <filterValue>&apos;0&apos;</filterValue>
-        <globalKey>GetInvoiceDetailsCustom4564</globalKey>
-        <inputFieldName>Quantity__c</inputFieldName>
-        <inputObjectName>RegulatoryTrxnFeeItem</inputObjectName>
-        <inputObjectQuerySequence>7.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>InvoiceItem</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetInvoiceDetailsCustom9641</globalKey>
-        <inputFieldName>PublicQuantitySum</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Public:PublicQuantitySum</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetInvoiceDetailsCustom6343</globalKey>
-        <inputFieldName>PublicSum</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Public:PublicSum</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetInvoiceDetails061065134177697544</globalKey>
-        <inputFieldName>Invoice:Name</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>InvoiceId</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:PrivateSumValue 0 &lt;&gt; var:PrivateSumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(PrivateSumValue&lt;&gt;0,PrivateSumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>PrivateSum</formulaResultPath>
-        <formulaSequence>32.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom1870</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetInvoiceDetailsCustom5854</globalKey>
-        <inputFieldName>RegistrantAccount:BillingCity</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>RegistrantCity</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -987,19 +635,48 @@
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
+        <defaultValue>[]</defaultValue>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:IndLivingQuantitySumValue 0 &lt;&gt; var:IndLivingQuantitySumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(IndLivingQuantitySumValue&lt;&gt;0,IndLivingQuantitySumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>IndLivingQuantitySum</formulaResultPath>
-        <formulaSequence>27.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom6959</globalKey>
+        <globalKey>GetInvoiceDetailsCustom1283</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>List&lt;Map&gt;</outputFieldFormat>
+        <outputFieldName>Licensed</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetInvoiceDetailsCustom9173</globalKey>
+        <inputFieldName>PrivateQuantitySum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Private:PrivateQuantitySum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>&apos;Active&apos;</filterValue>
+        <globalKey>GetInvoiceDetailsCustom8664</globalKey>
+        <inputFieldName>Status</inputFieldName>
+        <inputObjectName>BusinessLicense</inputObjectName>
+        <inputObjectQuerySequence>6.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
+        <outputFieldName>Certificate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
@@ -1023,14 +700,64 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>GetInvoiceDetailsCustom9173</globalKey>
-        <inputFieldName>PrivateQuantitySum</inputFieldName>
+        <globalKey>GetInvoiceDetailsCustom7456</globalKey>
+        <inputFieldName>PublicFeeSum</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetInvoiceDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Private:PrivateQuantitySum</outputFieldName>
+        <outputFieldFormat>Currency</outputFieldFormat>
+        <outputFieldName>Public:PublicFeeSum</outputFieldName>
         <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| | &quot;SELECT/\/\/FeeAmount/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Independent/\/\/Living&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
+        <formulaExpression>SUM(QUERY(&quot;SELECT FeeAmount FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Independent Living&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
+        <formulaResultPath>IndLivingFeeSumValue</formulaResultPath>
+        <formulaSequence>20.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom9763</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetInvoiceDetailsCustom6812</globalKey>
+        <inputFieldName>OtherFeeSum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Currency</outputFieldFormat>
+        <outputFieldName>Other:OtherFeeSum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:PublicFeeSumValue 0 &lt;&gt; var:PublicFeeSumValue &apos;&apos; IF</formulaConverted>
+        <formulaExpression>IF(PublicFeeSumValue&lt;&gt;0,PublicFeeSumValue,&apos;&apos;)</formulaExpression>
+        <formulaResultPath>PublicFeeSum</formulaResultPath>
+        <formulaSequence>33.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom9628</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
@@ -1043,6 +770,7 @@
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetInvoiceDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Currency</outputFieldFormat>
         <outputFieldName>Per Diem:PerDiemFeeSum</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
@@ -1051,11 +779,28 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| | &quot;SELECT/\/\/FeeAmount/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Independent/\/\/Living&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
-        <formulaExpression>SUM(QUERY(&quot;SELECT FeeAmount FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Independent Living&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
-        <formulaResultPath>IndLivingFeeSumValue</formulaResultPath>
+        <formulaConverted>| var:LicensedQuantitySumValue 0 &lt;&gt; var:LicensedQuantitySumValue &apos;&apos; IF</formulaConverted>
+        <formulaExpression>IF(LicensedQuantitySumValue&lt;&gt;0,LicensedQuantitySumValue,&apos;&apos;)</formulaExpression>
+        <formulaResultPath>LicensedQuantitySum</formulaResultPath>
         <formulaSequence>22.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom9763</globalKey>
+        <globalKey>GetInvoiceDetailsCustom7883</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>true</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:PerDiemSumValue 0 &lt;&gt; var:PerDiemSumValue &apos;&apos; IF</formulaConverted>
+        <formulaExpression>IF(PerDiemSumValue&lt;&gt;0,PerDiemSumValue,&apos;&apos;)</formulaExpression>
+        <formulaResultPath>PerDiemSum</formulaResultPath>
+        <formulaSequence>28.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom3931</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetInvoiceDetails</name>
@@ -1074,20 +819,71 @@
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetInvoiceDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldFormat>List&lt;String&gt;</outputFieldFormat>
+        <outputFieldFormat>List&lt;Map&gt;</outputFieldFormat>
         <outputFieldName>Independent Living</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
-        <disabled>true</disabled>
+        <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:InvoiceItem:Name &apos;Public&apos; == var:InvoiceItem:Name &apos;Private&apos; == || var:InvoiceItem:Amount__c var:NULL IF</formulaConverted>
-        <formulaExpression>IF(InvoiceItem:Name==&apos;Public&apos;||InvoiceItem:Name==&apos;Private&apos;,InvoiceItem:Amount__c,NULL)</formulaExpression>
-        <formulaResultPath>IFPublicSum</formulaResultPath>
-        <formulaSequence>7.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom9474</globalKey>
+        <filterOperator>=</filterOperator>
+        <filterValue>Location:Id</filterValue>
+        <globalKey>GetInvoiceDetailsCustom9023</globalKey>
+        <inputFieldName>ParentId</inputFieldName>
+        <inputObjectName>Address</inputObjectName>
+        <inputObjectQuerySequence>10.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Address</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>Id</filterValue>
+        <globalKey>GetInvoiceDetails027713159672694054</globalKey>
+        <inputFieldName>Id</inputFieldName>
+        <inputObjectName>RegulatoryTrxnFee</inputObjectName>
+        <inputObjectQuerySequence>2.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Invoice</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| &quot;SELECT/\/\/Amount__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Other&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/Limit/\/\/1&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY</formulaConverted>
+        <formulaExpression>QUERY(&quot;SELECT Amount__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Other&apos; AND Quantity__c!=0 Limit 1&quot;, InvoiceItem:RegulatoryTrxnFeeId)</formulaExpression>
+        <formulaResultPath>OtherSum</formulaResultPath>
+        <formulaSequence>36.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom1476</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:LicensedFeeSumValue 0 &lt;&gt; var:LicensedFeeSumValue &apos;&apos; IF</formulaConverted>
+        <formulaExpression>IF(LicensedFeeSumValue&lt;&gt;0,LicensedFeeSumValue,&apos;&apos;)</formulaExpression>
+        <formulaResultPath>LicensedFeeSum</formulaResultPath>
+        <formulaSequence>23.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom6555</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetInvoiceDetails</name>
@@ -1112,6 +908,55 @@
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
+        <defaultValue>[]</defaultValue>
+        <disabled>true</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetInvoiceDetailsCustom5081</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>List&lt;Map&gt;</outputFieldFormat>
+        <outputFieldName>InvoiceItem</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:RegistrantAccount:BillingStreet &quot;/\/\/&quot; var:RegistrantAccount:BillingCity &quot;/\/\/&quot; var:RegistrantAccount:BillingState &quot;/\/\/&quot; var:ResidenceAccount:BillingPostalCode &quot;/\/\/&quot; var:RegistrantAccount:BillingCountry CONCAT</formulaConverted>
+        <formulaExpression>CONCAT(%RegistrantAccount:BillingStreet%, &quot; &quot;,%RegistrantAccount:BillingCity%, &quot; &quot;,%RegistrantAccount:BillingState%, &quot; &quot;,%ResidenceAccount:BillingPostalCode%, &quot; &quot;,%RegistrantAccount:BillingCountry%)</formulaExpression>
+        <formulaResultPath>RegistrantBillingAddress</formulaResultPath>
+        <formulaSequence>2.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom6215</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| &quot;SELECT/\/\/Amount__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Per/\/\/Diem&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/Limit/\/\/1/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY</formulaConverted>
+        <formulaExpression>QUERY(&quot;SELECT Amount__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Per Diem&apos; AND Quantity__c!=0 Limit 1 &quot; , InvoiceItem:RegulatoryTrxnFeeId)</formulaExpression>
+        <formulaResultPath>PerDiemSum</formulaResultPath>
+        <formulaSequence>17.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom8911</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <filterOperator>LIMIT</filterOperator>
@@ -1130,11 +975,45 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:RegistrantAccount:BillingStreet &quot;/\/\/&quot; var:RegistrantAccount:BillingCity &quot;/\/\/&quot; var:RegistrantAccount:BillingState &quot;/\/\/&quot; var:ResidenceAccount:BillingPostalCode &quot;/\/\/&quot; var:RegistrantAccount:BillingCountry CONCAT</formulaConverted>
-        <formulaExpression>CONCAT(%RegistrantAccount:BillingStreet%, &quot; &quot;,%RegistrantAccount:BillingCity%, &quot; &quot;,%RegistrantAccount:BillingState%, &quot; &quot;,%ResidenceAccount:BillingPostalCode%, &quot; &quot;,%RegistrantAccount:BillingCountry%)</formulaExpression>
-        <formulaResultPath>RegistrantBillingAddress</formulaResultPath>
-        <formulaSequence>2.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom6215</globalKey>
+        <formulaConverted>| | &quot;SELECT/\/\/Quantity__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Public&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
+        <formulaExpression>SUM(QUERY(&quot;SELECT Quantity__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Public&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
+        <formulaResultPath>PublicQuantitySumValue</formulaResultPath>
+        <formulaSequence>7.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom8744</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| &quot;SELECT/\/\/Amount__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Public&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/Limit/\/\/1&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY</formulaConverted>
+        <formulaExpression>QUERY(&quot;SELECT Amount__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Public&apos; AND Quantity__c!=0 Limit 1&quot;, InvoiceItem:RegulatoryTrxnFeeId)</formulaExpression>
+        <formulaResultPath>PublicSum</formulaResultPath>
+        <formulaSequence>6.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom6108</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| &quot;SELECT/\/\/Amount__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Licensed&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/Limit/\/\/1&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY</formulaConverted>
+        <formulaExpression>QUERY(&quot;SELECT Amount__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Licensed&apos; AND Quantity__c!=0 Limit 1&quot;, InvoiceItem:RegulatoryTrxnFeeId)</formulaExpression>
+        <formulaResultPath>LicensedSum</formulaResultPath>
+        <formulaSequence>12.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom7520</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetInvoiceDetails</name>
@@ -1161,11 +1040,42 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| | &quot;SELECT/\/\/Amount__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Public&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
-        <formulaExpression>SUM(QUERY(&quot;SELECT Amount__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Public&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
-        <formulaResultPath>PublicSumValue</formulaResultPath>
-        <formulaSequence>6.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom6108</globalKey>
+        <filterOperator>LIMIT</filterOperator>
+        <filterValue>1</filterValue>
+        <globalKey>GetInvoiceDetailsCustom7698</globalKey>
+        <inputObjectName>BusinessLicense</inputObjectName>
+        <inputObjectQuerySequence>6.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Certificate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetInvoiceDetailsCustom7557</globalKey>
+        <inputFieldName>PrivateSum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Currency</outputFieldFormat>
+        <outputFieldName>Private:PrivateSum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| | &quot;SELECT/\/\/FeeAmount/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Public&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
+        <formulaExpression>SUM(QUERY(&quot;SELECT FeeAmount FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Public&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
+        <formulaResultPath>PublicFeeSumValue</formulaResultPath>
+        <formulaSequence>8.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom5457</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetInvoiceDetails</name>
@@ -1184,39 +1094,24 @@
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetInvoiceDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Currency</outputFieldFormat>
         <outputFieldName>Independent Living:IndLivingFeeSum</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
-        <disabled>false</disabled>
+        <disabled>true</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>GetInvoiceDetailsCustom7557</globalKey>
-        <inputFieldName>PrivateSum</inputFieldName>
+        <globalKey>GetInvoiceDetailsCustom2692</globalKey>
+        <inputFieldName>InvoiceItem:Amount__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetInvoiceDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Private:PrivateSum</outputFieldName>
+        <outputFieldFormat>Currency</outputFieldFormat>
+        <outputFieldName>InvoiceItem:Amount</outputFieldName>
         <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| | &quot;SELECT/\/\/Quantity__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Independent/\/\/Living&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
-        <formulaExpression>SUM(QUERY(&quot;SELECT Quantity__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Independent Living&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
-        <formulaResultPath>IndLivingQuantitySumValue</formulaResultPath>
-        <formulaSequence>21.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom5916</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
@@ -1238,6 +1133,88 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <globalKey>GetInvoiceDetailsCustom9366</globalKey>
+        <inputFieldName>InvoiceCreatedDate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>InvoiceCreatedDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| &quot;SELECT/\/\/Amount__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Independent/\/\/Living&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/Limit/\/\/1&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY</formulaConverted>
+        <formulaExpression>QUERY(&quot;SELECT Amount__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Independent Living&apos; AND Quantity__c!=0 Limit 1&quot;, InvoiceItem:RegulatoryTrxnFeeId)</formulaExpression>
+        <formulaResultPath>IndLivingSum</formulaResultPath>
+        <formulaSequence>19.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom5916</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:PublicQuantitySumValue 0 &lt;&gt; var:PublicQuantitySumValue &apos;&apos; IF</formulaConverted>
+        <formulaExpression>IF(PublicQuantitySumValue&lt;&gt;0,PublicQuantitySumValue,&apos;&apos;)</formulaExpression>
+        <formulaResultPath>PublicQuantitySum</formulaResultPath>
+        <formulaSequence>34.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom4220</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| | &quot;SELECT/\/\/FeeAmount/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Licensed&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
+        <formulaExpression>SUM(QUERY(&quot;SELECT FeeAmount FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Licensed&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
+        <formulaResultPath>LicensedFeeSumValue</formulaResultPath>
+        <formulaSequence>14.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom6176</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>true</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:InvoiceItem:Amount__c &quot;Unit/\/\/Fee&quot; == var:InvoiceItem:Quantity 12.50 * | var:InvoiceItem:Amount__c &quot;Partial/\/\/Unit/\/\/Fee&quot; == var:InvoiceItem:Quantity 6.25 * 0 IF IF</formulaConverted>
+        <formulaExpression>IF(%InvoiceItem:Amount__c%==&quot;Unit Fee&quot;,%InvoiceItem:Quantity% * 12.50,IF(%InvoiceItem:Amount__c%==&quot;Partial Unit Fee&quot;,%InvoiceItem:Quantity% * 6.25,0))</formulaExpression>
+        <formulaResultPath>InvoiceItem:Fees</formulaResultPath>
+        <formulaSequence>4.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom4721</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <globalKey>GetInvoiceDetailsCustom128</globalKey>
         <inputFieldName>Invoice:CreatedDate</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
@@ -1253,17 +1230,15 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| | &quot;SELECT/\/\/FeeAmount/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Licensed&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
-        <formulaExpression>SUM(QUERY(&quot;SELECT FeeAmount FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Licensed&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
-        <formulaResultPath>LicensedFeeSumValue</formulaResultPath>
-        <formulaSequence>16.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom6176</globalKey>
+        <globalKey>GetInvoiceDetailsCustom6792</globalKey>
+        <inputFieldName>Invoice:PaymentDate__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Date(MM/dd/yyyy)</outputFieldFormat>
+        <outputFieldName>InvoicePaymentDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
@@ -1273,7 +1248,7 @@
         <formulaConverted>| | &quot;SELECT/\/\/FeeAmount/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Private&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
         <formulaExpression>SUM(QUERY(&quot;SELECT FeeAmount FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Private&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
         <formulaResultPath>PrivateFeeSumValue</formulaResultPath>
-        <formulaSequence>11.0</formulaSequence>
+        <formulaSequence>9.0</formulaSequence>
         <globalKey>GetInvoiceDetailsCustom5433</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
@@ -1287,13 +1262,16 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>GetInvoiceDetailsCustom2611</globalKey>
-        <inputFieldName>Certificate:RegistrationCertificate__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <filterOperator>=</filterOperator>
+        <filterValue>ResidenceAccount:Id</filterValue>
+        <globalKey>GetInvoiceDetails8594186951357317</globalKey>
+        <inputFieldName>AccountId</inputFieldName>
+        <inputObjectName>Asset</inputObjectName>
+        <inputObjectQuerySequence>4.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetInvoiceDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>CertificateId</outputFieldName>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Unit</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -1315,17 +1293,15 @@
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
-        <defaultValue>0.00</defaultValue>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>GetInvoiceDetails8991076268436329</globalKey>
-        <inputFieldName>Invoice:TotalFeeAmount</inputFieldName>
+        <globalKey>GetInvoiceDetailsCustom2611</globalKey>
+        <inputFieldName>Certificate:RegistrationCertificate__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetInvoiceDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldFormat>Double</outputFieldFormat>
-        <outputFieldName>TotalFeeAmount</outputFieldName>
+        <outputFieldName>CertificateId</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -1346,12 +1322,45 @@
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
+        <defaultValue>0.00</defaultValue>
         <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetInvoiceDetails8991076268436329</globalKey>
+        <inputFieldName>Invoice:TotalFeeAmount</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Currency</outputFieldFormat>
+        <outputFieldName>TotalFeeAmount</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:PrivateQuantitySumValue 0 &lt;&gt; var:PrivateQuantitySumValue &apos;&apos; IF</formulaConverted>
+        <formulaExpression>IF(PrivateQuantitySumValue&lt;&gt;0,PrivateQuantitySumValue,&apos;&apos;)</formulaExpression>
+        <formulaResultPath>PrivateQuantitySum</formulaResultPath>
+        <formulaSequence>31.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom4312</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>true</disabled>
         <filterGroup>0.0</filterGroup>
         <formulaConverted>| var:PublicSumValue 0 &lt;&gt; var:PublicSumValue &apos;&apos; IF</formulaConverted>
         <formulaExpression>IF(PublicSumValue&lt;&gt;0,PublicSumValue,&apos;&apos;)</formulaExpression>
         <formulaResultPath>PublicSum</formulaResultPath>
-        <formulaSequence>37.0</formulaSequence>
+        <formulaSequence>35.0</formulaSequence>
         <globalKey>GetInvoiceDetailsCustom2025</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
@@ -1363,13 +1372,13 @@
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
-        <disabled>false</disabled>
+        <disabled>true</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:PrivateQuantitySumValue 0 &lt;&gt; var:PrivateQuantitySumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(PrivateQuantitySumValue&lt;&gt;0,PrivateQuantitySumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>PrivateQuantitySum</formulaResultPath>
-        <formulaSequence>33.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom4312</globalKey>
+        <formulaConverted>| var:IndLivingSumValue 0 &lt;&gt; var:IndLivingSumValue &apos;&apos; IF</formulaConverted>
+        <formulaExpression>IF(IndLivingSumValue&lt;&gt;0,IndLivingSumValue,&apos;&apos;)</formulaExpression>
+        <formulaResultPath>IndLivingSum</formulaResultPath>
+        <formulaSequence>26.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom5983</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetInvoiceDetails</name>
@@ -1385,7 +1394,7 @@
         <formulaConverted>| | &quot;SELECT/\/\/FeeAmount/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Per/\/\/Diem&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
         <formulaExpression>SUM(QUERY(&quot;SELECT FeeAmount FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Per Diem&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
         <formulaResultPath>PerDiemFeeSumValue</formulaResultPath>
-        <formulaSequence>17.0</formulaSequence>
+        <formulaSequence>15.0</formulaSequence>
         <globalKey>GetInvoiceDetailsCustom1816</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
@@ -1399,17 +1408,28 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:IndLivingSumValue 0 &lt;&gt; var:IndLivingSumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(IndLivingSumValue&lt;&gt;0,IndLivingSumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>IndLivingSum</formulaResultPath>
-        <formulaSequence>28.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom5983</globalKey>
+        <globalKey>GetInvoiceDetailsCustom7664</globalKey>
+        <inputFieldName>RegistrantAccount:BillingState</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegistrantState</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetInvoiceDetailsCustom3643</globalKey>
+        <inputFieldName>OtherQuantitySum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Other:OtherQuantitySum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
@@ -1425,23 +1445,6 @@
         <outputFieldFormat>List&lt;Map&gt;</outputFieldFormat>
         <outputFieldName>Units</outputFieldName>
         <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| | &quot;SELECT/\/\/Quantity__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Private&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
-        <formulaExpression>SUM(QUERY(&quot;SELECT Quantity__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Private&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
-        <formulaResultPath>PrivateQuantitySumValue</formulaResultPath>
-        <formulaSequence>12.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom1117</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetInvoiceDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
@@ -1463,11 +1466,11 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:PrivateFeeSumValue 0 &lt;&gt; var:PrivateFeeSumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(PrivateFeeSumValue&lt;&gt;0,PrivateFeeSumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>PrivateFeeSum</formulaResultPath>
-        <formulaSequence>34.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom1861</globalKey>
+        <formulaConverted>| | &quot;SELECT/\/\/Quantity__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Private&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
+        <formulaExpression>SUM(QUERY(&quot;SELECT Quantity__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Private&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
+        <formulaResultPath>PrivateQuantitySumValue</formulaResultPath>
+        <formulaSequence>10.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom1117</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetInvoiceDetails</name>
@@ -1497,11 +1500,28 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| | &quot;SELECT/\/\/Quantity__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Per/\/\/Diem&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
-        <formulaExpression>SUM(QUERY(&quot;SELECT Quantity__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Per Diem&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
-        <formulaResultPath>PerDiemQuantitySumValue</formulaResultPath>
-        <formulaSequence>18.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom9043</globalKey>
+        <formulaConverted>| | &quot;SELECT/\/\/Quantity__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Other&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
+        <formulaExpression>SUM(QUERY(&quot;SELECT Quantity__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Other&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
+        <formulaResultPath>OtherQuantitySumValue</formulaResultPath>
+        <formulaSequence>37.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom943</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:PrivateFeeSumValue 0 &lt;&gt; var:PrivateFeeSumValue &apos;&apos; IF</formulaConverted>
+        <formulaExpression>IF(PrivateFeeSumValue&lt;&gt;0,PrivateFeeSumValue,&apos;&apos;)</formulaExpression>
+        <formulaResultPath>PrivateFeeSum</formulaResultPath>
+        <formulaSequence>32.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom1861</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetInvoiceDetails</name>
@@ -1520,6 +1540,7 @@
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetInvoiceDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Currency</outputFieldFormat>
         <outputFieldName>Per Diem:PerDiemSum</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
@@ -1528,11 +1549,11 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:PerDiemSumValue 0 &lt;&gt; var:PerDiemSumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(PerDiemSumValue&lt;&gt;0,PerDiemSumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>PerDiemSum</formulaResultPath>
-        <formulaSequence>29.0</formulaSequence>
-        <globalKey>GetInvoiceDetailsCustom9034</globalKey>
+        <formulaConverted>| | &quot;SELECT/\/\/Quantity__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Per/\/\/Diem&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
+        <formulaExpression>SUM(QUERY(&quot;SELECT Quantity__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Per Diem&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
+        <formulaResultPath>PerDiemQuantitySumValue</formulaResultPath>
+        <formulaSequence>16.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom9043</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetInvoiceDetails</name>
@@ -1562,14 +1583,17 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>GetInvoiceDetailsCustom8607</globalKey>
-        <inputFieldName>LicensedFeeSum</inputFieldName>
+        <formulaConverted>| var:PerDiemQuantitySumValue 0 &lt;&gt; var:PerDiemQuantitySumValue &apos;&apos; IF</formulaConverted>
+        <formulaExpression>IF(PerDiemQuantitySumValue&lt;&gt;0,PerDiemQuantitySumValue,&apos;&apos;)</formulaExpression>
+        <formulaResultPath>PerDiemQuantitySum</formulaResultPath>
+        <formulaSequence>27.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom9034</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetInvoiceDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Licensed:LicensedFeeSum</outputFieldName>
-        <outputObjectName>json</outputObjectName>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
@@ -1590,9 +1614,105 @@
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetInvoiceDetailsCustom8607</globalKey>
+        <inputFieldName>LicensedFeeSum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Currency</outputFieldFormat>
+        <outputFieldName>Licensed:LicensedFeeSum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetInvoiceDetailsCustom8686</globalKey>
+        <inputFieldName>OtherSum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Currency</outputFieldFormat>
+        <outputFieldName>Other:OtherSum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| | &quot;SELECT/\/\/FeeAmount/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Public&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
+        <formulaExpression>SUM(QUERY(&quot;SELECT FeeAmount FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Public&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
+        <formulaResultPath>OtherFeeSumValue</formulaResultPath>
+        <formulaSequence>38.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom4422</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:OtherFeeSumValue 0 &lt;&gt; var:OtherFeeSumValue &apos;&apos; IF</formulaConverted>
+        <formulaExpression>IF(OtherFeeSumValue&lt;&gt;0,OtherFeeSumValue,&apos;&apos;)</formulaExpression>
+        <formulaResultPath>OtherFeeSum</formulaResultPath>
+        <formulaSequence>39.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom4488</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <defaultValue>[]</defaultValue>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetInvoiceDetailsCustom1265</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>List&lt;Map&gt;</outputFieldFormat>
+        <outputFieldName>Other</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:OtherQuantitySumValue 0 &lt;&gt; var:OtherQuantitySumValue &apos;&apos; IF</formulaConverted>
+        <formulaExpression>IF(OtherQuantitySumValue&lt;&gt;0,OtherQuantitySumValue,&apos;&apos;)</formulaExpression>
+        <formulaResultPath>OtherQuantitySum</formulaResultPath>
+        <formulaSequence>40.0</formulaSequence>
+        <globalKey>GetInvoiceDetailsCustom4758</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
     <outputType>JSON</outputType>
     <previewJsonData>{
-  &quot;Id&quot; : &quot;0kxAs0000000CxFIAU&quot;
+  &quot;Id&quot; : &quot;0kxAs0000000BWXIA2&quot;
 }</previewJsonData>
     <processSuperBulk>false</processSuperBulk>
     <responseCacheTtlMinutes>0.0</responseCacheTtlMinutes>
