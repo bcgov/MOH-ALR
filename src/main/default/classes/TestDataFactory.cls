@@ -6,7 +6,7 @@ public class TestDataFactory {
         
         Account Registrant = new Account();
         Registrant.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('Registrant').getRecordTypeId();
-        Registrant.Name = Name +' '+'Registrant';        
+        Registrant.Name = Name +' '+'Registrant';	        
         if(dmlOption){
             insert Registrant;
         }
@@ -171,5 +171,25 @@ public class TestDataFactory {
              Database.Insert(cdlRec);
          }
          return contentVersionRec;
-    }      
+    } 
+    
+    
+    @testVisible
+    public static Case createComplaintCase(Id accountId, String subject, String description, Boolean wishToRemainAnonymous, Boolean needFeedbackOnResolution, Boolean residentAwareOfComplaint, Boolean dmlOption) {
+        Case complaintCase = new Case(
+            AccountId = accountId,
+            Subject = subject,
+            Description = description,
+            WishtoRemainAnonymous__c = wishToRemainAnonymous ? 'Yes' : 'No',
+            NeedFeedbackOnResolution__c = needFeedbackOnResolution ? 'Yes' : 'No',
+            ResidentAwareofComplaint__c = residentAwareOfComplaint ? 'Yes' : 'No'
+            
+        );
+ 
+        if (dmlOption) {
+            insert complaintCase;
+        }
+ 
+        return complaintCase;
+    }
 }
