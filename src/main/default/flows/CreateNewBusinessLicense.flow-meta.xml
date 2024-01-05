@@ -315,11 +315,12 @@
             <label>Invoice Pending</label>
         </rules>
     </decisions>
+    <description>Changes for ALR 752</description>
     <environments>Default</environments>
     <formulas>
         <name>endDate</name>
         <dataType>Date</dataType>
-        <expression>IF(TODAY()&lt; DATE(YEAR(TODAY()),3,31),  DATE(YEAR(TODAY()),3,31),  DATE(YEAR(TODAY())+1,3,31))</expression>
+        <expression>DATE(YEAR({!$Flow.CurrentDate}),3,31)</expression>
     </formulas>
     <formulas>
         <name>firstRegistrationNumber</name>
@@ -334,12 +335,22 @@
     <formulas>
         <name>incrementRegistrationNumberLastDigits</name>
         <dataType>String</dataType>
-        <expression>IF(LEN({!latestLicenseCertificateNumber})&gt;0, Text(VALUE(RIGHT({!latestLicenseCertificateNumber}, 5))+1), &apos;00000&apos;)</expression>
+        <expression>IF(LEN({!latestLicenseCertificateNumber})&gt;0, Text(VALUE(RIGHT({!latestLicenseCertificateNumber}, 5))+1), &apos;00001&apos;)</expression>
     </formulas>
     <formulas>
         <name>licenseNameFormula</name>
         <dataType>String</dataType>
         <expression>{!licenseApplication.Account.Name} +&apos;-&apos; +{!LicenseTypeCode}+&apos;-&apos;+TEXT(TODAY())</expression>
+    </formulas>
+    <formulas>
+        <name>renewalEndDate</name>
+        <dataType>Date</dataType>
+        <expression>IF({!$Flow.CurrentDate}&lt; {!endDate}, {!endDate},  DATE(YEAR({!$Flow.CurrentDate})+1,3,31))</expression>
+    </formulas>
+    <formulas>
+        <name>renewalEndDateTime</name>
+        <dataType>DateTime</dataType>
+        <expression>DATETIMEVALUE({!renewalEndDate})</expression>
     </formulas>
     <interviewLabel>CreateNewBusinessLicense {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Create New Business License</label>
@@ -389,13 +400,13 @@
         <inputAssignments>
             <field>PeriodEnd</field>
             <value>
-                <elementReference>endDate</elementReference>
+                <elementReference>renewalEndDateTime</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>PeriodStart</field>
             <value>
-                <elementReference>$Flow.CurrentDate</elementReference>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
