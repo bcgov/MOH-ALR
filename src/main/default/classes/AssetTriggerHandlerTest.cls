@@ -23,7 +23,7 @@ public class AssetTriggerHandlerTest {
         Asset unitRec1 = TestDataFactory.createUnit('1', 'Private', 5, residenceRec1.Id, false);
         unitRec1.recordTypeId = parentAssetRTId;
         unitRec1.GenerateInvoice__c = true;
-        unitRec1.Amount__c = 'Unit Fee';
+        unitRec1.Amount__c = 'Full Unit Fee';
         Database.Insert(unitRec1);
         
         //account 2 - remove/update scenario

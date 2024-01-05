@@ -22,7 +22,7 @@ public class RenewalManagementControllerTest {
         Account residenceRec3 = TestDataFactory.createResidence('Residence', 'residenceAccount3', regAuth.Id, true);
         Asset unitRec3 = TestDataFactory.createUnit('1', 'Private', 2, residenceRec3.Id, false);
         unitRec3.recordTypeId = Schema.getGlobalDescribe().get('Asset').getDescribe().getRecordTypeInfosByDeveloperName().get('Units_Record_Type').getRecordTypeId();
-        unitRec3.Amount__c = 'Unit Fee';
+        unitRec3.Amount__c = 'Full Unit Fee';
         Database.Insert(unitRec3);
     }
     //invocable method in RenewalManagementController
