@@ -4,10 +4,12 @@
     <active>true</active>
     <description>Asset Name cannot be edited - ALR-688</description>
     <errorConditionFormula>AND(
-    NOT( $Permission.EHISBypassValidationRuleCustomPermission ),
-    ISCHANGED( Name ),
-    NOT( ISNEW()),
-    PRIORVALUE(Name) &lt;&gt; Name
+NOT( $Permission.EHISBypassValidationRuleCustomPermission ),
+ISCHANGED( Name ),
+NOT( ISNEW()),
+OR(AND(PRIORVALUE(Name) &lt;&gt; Name, Name &lt;&gt; &apos;Unit-&apos;+ TEXT(Type__c)+&apos;-&apos;+  TEXT( DATEVALUE(CreatedDate)),  ISNULL(Parent.Id)= true),
+AND(PRIORVALUE(Name) &lt;&gt; Name, Name &lt;&gt; &apos;UnitRequest-&apos;+ TEXT(Type__c)+&apos;-&apos;+  TEXT( DATEVALUE(CreatedDate)),   ISNULL(Parent.Id)= false)
+)
 )</errorConditionFormula>
     <errorMessage>Asset Name field cannot be edited.</errorMessage>
 </ValidationRule>
