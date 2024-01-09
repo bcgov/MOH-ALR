@@ -80,9 +80,9 @@ public class RenewalManagementControllerTest {
         Assert.isTrue(Integer.valueOf(accIdCount[0]) > 0);
     }
     //invocable method in RenewalManagementControllerBatch
-    @isTest
+    /*@isTest
     static void getsendEmailTestTest() {
-      /*  List<String> accNames = new List<String>{'residenceAccount3'};
+        List<String> accNames = new List<String>{'residenceAccount3'};
         List<Id> accIds = new List<Id>();
         for(Account accId : [SELECT Id from Account where Name IN: accNames LIMIT 10]) {
             accIds.add(accId.Id);
@@ -93,8 +93,8 @@ public class RenewalManagementControllerTest {
         RenewalManagementControllerBatch.sendEmailTest(new List<RenewalManagementControllerBatch.FlowInputs>{accntIds});
         Test.stopTest();
         List<RegulatoryTrxnFeeItem> regTrans = [SELECT Id from RegulatoryTrxnFeeItem LIMIT 10];
-        Assert.isNotNull(regTrans.size());*/
-    }
+        Assert.isNotNull(regTrans.size());
+    }*/
     //testing for serversidedocgen
     @isTest
     static void getsendEmailTestTest1() {
