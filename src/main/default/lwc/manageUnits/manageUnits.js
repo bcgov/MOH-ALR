@@ -9,6 +9,7 @@ import ASSET_OBJECT from "@salesforce/schema/Asset";
 import { NavigationMixin } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { CloseActionScreenEvent } from 'lightning/actions'; 
+import { refreshApex } from '@salesforce/apex';
 const columns = [
 {
     label: 'Type',
@@ -43,7 +44,7 @@ const columns = [
 }
 ];
 export default class ManageUnits extends NavigationMixin(LightningElement) {
-
+ 
 @api recordId;
 draftValues = [];
 datatableHeight;
@@ -56,7 +57,8 @@ capacity;
 type;
 @track objectInfo;
 @track recordTypeId;
-
+@track isReloadFromHandleSave = false;
+ 
 @wire(getObjectInfo, { objectApiName: ASSET_OBJECT })
 wiredObjectInfo({ error, data }) {
     if (error) {
@@ -66,20 +68,39 @@ wiredObjectInfo({ error, data }) {
         this.recordTypeId = Object.keys(rtis).find(rti => rtis[rti].name === 'Units Record Type');
     }
 };
-
+ 
 @wire(getPicklistValues, { recordTypeId: "$recordTypeId", fieldApiName: TYPE_FIELD })
 typeOptions;
 @wire(getPicklistValues, { recordTypeId: "$recordTypeId", fieldApiName: CAPACITY_FIELD })
 capacityOptions;
-
+ 
 connectedCallback() {
-
-    if (this.recordId) {
-        this.isLoading = true;
-        this.fetchTableData();
-
+        if (this.recordId) {
+            this.isLoading = true;
+            this.fetchTableData();
+            const localStorageFlag = localStorage.getItem('isReloadFromHandleSave');
+            // Check if it's a normal page load or from handleSave
+            if (localStorageFlag) {
+                // If it's from handleSave, navigate to Account page
+                this[NavigationMixin.Navigate]({
+                    type: 'standard__recordPage',
+                    attributes: {
+                        recordId: this.recordId,
+                        objectApiName: 'Account',
+                        actionName: 'view'
+                    },
+                });
+                
+                // Reset the flag for subsequent page loads
+                 localStorage.removeItem('isReloadFromHandleSave');
+            } else {
+                // If it's a normal page load, fetch the table data
+                this.fetchTableData();
+            }
+            
+                
+        }
     }
-}
 disconnectedCallback(){
 this[NavigationMixin.Navigate]({
         type: 'standard__recordPage',
@@ -91,7 +112,7 @@ this[NavigationMixin.Navigate]({
     });
    //  window.location.reload();
 }
-
+ 
 fetchTableData() {
     getUnitBasedOnResidence({ recordId: this.recordId }).then(result => {
         this.recordList = JSON.parse(result);
@@ -105,7 +126,7 @@ fetchTableData() {
         this.showToastMessage("Error", error.body.message, "error");
     });
 }
-
+ 
 async handleSave(event) {
     const updatedFields = event.detail.draftValues;
     let isValidInput = true;
@@ -115,7 +136,7 @@ async handleSave(event) {
         record.GenerateRenewalInvoice__c = this.refs.renewed.checked;
         record.Amount__c = 'Full Unit Fee';
     });
-
+ 
     console.log(JSON.stringify(event.detail.draftValues));
     try {
         // Pass edited fields to the updateUnits Apex controller
@@ -133,13 +154,15 @@ async handleSave(event) {
             await this.fetchTableData();
             this.refs.renewed.checked = false;
             this.draftValues = [];
+             localStorage.setItem('isReloadFromHandleSave', 'true');
         this.dispatchEvent(new CloseActionScreenEvent());              
           window.location.reload();  
+		await refreshApex(this.wiredRecordResult);
         } else {
             this.showToastMessage("Error", 'Updated Quantity cannot be equal,null, negative or greater than the existing quantity.', "error");
         }
-        
-    } catch (error) {
+      
+    } catch (error) {a
         let message = error.body.message.includes('FIELD_CUSTOM_VALIDATION_EXCEPTION') ?
             error.body.message.split('EXCEPTION, ')[1].split(': [')[0] : error.body.message;
         this.showToastMessage('Error', message, 'error');
@@ -159,7 +182,7 @@ handleClearSearch() {
     this.capacity = '';
     this.type = '';
     this.fetchTableData();
-
+ 
 }
 handleSearch() {
     let filteredList;
@@ -181,9 +204,9 @@ handleSearch() {
     }
     this.isLoading = false;
     this.recordList = filteredList;
-
+ 
 }
-
+ 
 /**START HERE-->Show toast to display the messages*/
 showToastMessage(title, eventMessage, variant) {
     const event = new ShowToastEvent({
