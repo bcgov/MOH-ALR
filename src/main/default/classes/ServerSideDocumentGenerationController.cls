@@ -38,9 +38,12 @@ public with sharing class ServerSideDocumentGenerationController {
             docTempContentMap = BCMOH_UtilityClass.getDocTempContentMap(templateNames);
             //Note : blaMap - Map of Account Id vs bla Record
             //for each bla record createDocumentGenerationProcess for each template name
+            Id contentVersionId;
+            if(Test.isRunningTest()) {
+            	contentVersionId = [SELECT Id FROM ContentVersion LIMIT 1].Id;
+            }
             for(Id accId : blaMap.keySet()) {
                 for(String tempName : templateNames) {
-                    Id contentVersionId;
                     String contentDocumentTitle;
                     if(tempName == 'RenewalApplicationForm') {
                         contentDocumentTitle = 'Registration Renewal Application Form';
@@ -49,8 +52,6 @@ public with sharing class ServerSideDocumentGenerationController {
                         contentDocumentTitle = 'Renewal Invoice';
                     }
                     if(Test.isRunningTest()) {
-                        contentVersionId = [SELECT Id FROM ContentVersion LIMIT 1].Id;
-                        //contentDocumentTitle = 'TestDoc';
                         createDocumentGenerationProcessRequest(accId, contentVersionId, contentDocumentTitle);
                     }
                     else if(docTempContentMap.get(tempName) != NULL) {
