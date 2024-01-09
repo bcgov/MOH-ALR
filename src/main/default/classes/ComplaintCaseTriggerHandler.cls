@@ -11,9 +11,10 @@ public class ComplaintCaseTriggerHandler {
         Map<Id, List<Case>> casesByAccountId = new Map<Id, List<Case>>();
         Set<Id> accountIds = new Set<Id>();
         Set<String> licenseTypeSet = new Set<String>();
- 
+ 		String pubCompCaseTypeId = Schema.getGlobalDescribe().get('Case').getDescribe().getRecordTypeInfosByDeveloperName().get('PublicComplaintCase').getRecordTypeId();//ALR-762
+
         for (Case newCase : newCases) {
-            if (newCase.AccountId != null) {
+            if (newCase.AccountId != null && newCase.RecordTypeId == pubCompCaseTypeId) {//ALR-762 - added recordtypeId check
                 accountIds.add(newCase.AccountId);
                 licenseTypeSet.add(getLicenseTypeCode(newCase.AccountId));
             }
@@ -25,7 +26,7 @@ public class ComplaintCaseTriggerHandler {
         Map<String, Id> recordTypeMap = getRecordTypesMap('PublicComplaintCase');
  
         for (Case newCase : newCases) {
-            if (newCase.AccountId != null) {
+            if (newCase.AccountId != null && newCase.RecordTypeId == pubCompCaseTypeId) {//ALR-762 - added recordtypeId check
                 Id recordTypeId = recordTypeMap.get('PublicComplaintCase');
  
                 if (recordTypeId != null) {

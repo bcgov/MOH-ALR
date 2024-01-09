@@ -176,20 +176,20 @@ public class TestDataFactory {
     
     @testVisible
     public static Case createComplaintCase(Id accountId, String subject, String description, Boolean wishToRemainAnonymous, Boolean needFeedbackOnResolution, Boolean residentAwareOfComplaint, Boolean dmlOption) {
+        //ALR-762 - added recordtypeid
+        String pubCompCaseTypeId = Schema.getGlobalDescribe().get('Case').getDescribe().getRecordTypeInfosByDeveloperName().get('PublicComplaintCase').getRecordTypeId();//ALR-762
         Case complaintCase = new Case(
+            RecordTypeId = pubCompCaseTypeId,
             AccountId = accountId,
             Subject = subject,
             Description = description,
             WishtoRemainAnonymous__c = wishToRemainAnonymous ? 'Yes' : 'No',
             NeedFeedbackOnResolution__c = needFeedbackOnResolution ? 'Yes' : 'No',
             ResidentAwareofComplaint__c = residentAwareOfComplaint ? 'Yes' : 'No'
-            
         );
- 
         if (dmlOption) {
             insert complaintCase;
         }
- 
         return complaintCase;
     }
 }
