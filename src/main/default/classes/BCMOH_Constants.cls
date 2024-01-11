@@ -23,17 +23,26 @@ public class BCMOH_Constants {
     //ALR-560
     public Final Static String templatePurpose = 'Renewal';
     //error handling
-    public Final Static String noPrimaryContact = 'No Primary Contact Record or No email Id on Primary Contact';
+    public Final Static String noPrimaryContact = 'No primary contact record or no email id on primary contact';
     public Final Static String noOrgWideAddr = 'No valid org wide email address found';
+    public Final Static String noBLRec = 'No business license record found';
+    public Final Static String mappingDataMissing = 'Data required for template merge field mapping is missing';
+    public Final Static String templateNameMissing = 'No email template found for ';
+    public Final Static String activePurposeTemplateMissing = 'No active email template name configured for ';
+    //document error
+    public Final Static String documentNotFound = 'Document not found for specified template name';
     public Final Static String nextYear = String.valueOf(Date.Today().Year() + 1);
     public Final Static List<String> renewalTableStatus = new List<String>{blaCreatedStatus, blaExcludedStatus};
     public Final Static String parentAssetRecTypeId = Schema.getGlobalDescribe().get('Asset').getDescribe().getRecordTypeInfosByDeveloperName().get('Units_Record_Type').getRecordTypeId();
     public Final Static String parentAssetRecType = 'Units_Record_Type';
     public Final Static List<String> allALUnitTypes = new List<String>{'Private', 'Public', 'Per Diem'};
-        
     public Final Static String unitName='Unit';
-
+    public Final Static String errorBlaStatus = 'Errored';
+    public Final Static String sentBlaStatus = 'Sent';
+    //document request text mapping fields
+    public Final Static String templateContentVersionId = 'templateContentVersionId';
+    public Final Static String docTitle = 'title';
+    public Final Static String keepIntermediate = 'keepIntermediate';
     
-
-
+    
 }

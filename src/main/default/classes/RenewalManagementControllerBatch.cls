@@ -42,16 +42,23 @@ public class RenewalManagementControllerBatch implements Database.Batchable<sObj
         RenewalProcessCriteria__mdt renewalCriteriaRec = RenewalProcessCriteria__mdt.getInstance(renewalName);
         String accRecType = renewalCriteriaRec.AccountRecordType__c;
         List<String> accStatuses = renewalCriteriaRec.AccountStatuses__c.split(';');
+        Id tempAccId = '001As00000IGYmbIAH';
         //start query
         String query = 'SELECT Id, Status__c, LicenseType__c,'
             +' LicenseType__r.RegulatoryAuthCategory, LicenseType__r.UnitFee__c,'
             +' LicenseType__r.OneTimeFee__c, LicenseType__r.PartialUnitFee__c, LicenseType__r.LateFee__c,'
+            +' Name, RegId__c, LicenseType__r.Name, Phone, Fax, ParentId, Parent.Name, Parent.Phone, Parent.BillingAddress,'//ALR-560
+            +' (SELECT Id, Location.VisitorAddress.Address FROM AssociatedLocations LIMIT 1),'//ALR-560
+            +' (SELECT RegistrationCertificate__c FROM BusinessLicenses LIMIT 1),'//ALR-560
+            +' (SELECT Contact.Name, Contact.Phone, Contact.Email, Contact.MobilePhone, Roles FROM AccountContactRelations'//ALR-560
+            +'  WHERE PrimaryContact__c = TRUE AND IsActive = TRUE LIMIT 1),'//ALR-560
             +' (SELECT Id FROM BusinessLicenseApplicationAccount WHERE RecordType.DeveloperName =: blaRecType'
-            +' AND Status !=: blaCancelledStatus AND RenewalYear__c =: renewalYear),'
+            +'  AND Status !=: blaCancelledStatus AND RenewalYear__c =: renewalYear),'
             +' (SELECT Id, Type__c, Quantity, Amount__c FROM Assets WHERE RecordType.DeveloperName =: parentAssetRT)'
             +' FROM Account'
             +' WHERE recordType.DeveloperName =: accRecType'
             +' AND Status__c IN: accStatuses';
+            //+' AND Id =: tempAccId';
         return Database.getQueryLocator(query);
     }
     //execute method
@@ -83,6 +90,10 @@ public class RenewalManagementControllerBatch implements Database.Batchable<sObj
             Map<Id, RegulatoryTrxnFee> transFeeMap = RenewalManagementController.createTransFeeRecords(renewalFeeAccMap, blaRecCreateMap);
             //3) create Trans Fee Item rec
             List<RegulatoryTrxnFeeItem> transFeeItemList = RenewalManagementController.createTransFeeItemRecords(renewalFeeAccMap, transFeeMap);
+            //4) attach documents to bla records
+            system.debug('%% before calling doc'+blaRecCreateMap+' ');
+            system.debug('%% before calling doc'+' '+renewalAccList);
+            ServerSideDocumentGenerationController.startDocGenProcess(renewalAccList, blaRecCreateMap, transFeeMap, transFeeItemList);//?documents to be attached for ready for renewal and excluded?
         }
         catch(exception ex) {
             system.debug('Im caught in batch class'+ex.getMessage());//handle exceptions later

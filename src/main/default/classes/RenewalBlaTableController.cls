@@ -10,15 +10,21 @@ public class RenewalBlaTableController {
     public static List<BusinessLicenseApplication> getBlaRecs() {
         Map<Id, BusinessLicenseApplication> blaMap = new Map<Id, BusinessLicenseApplication>();
         List<BusinessLicenseApplication> blaList = new List<BusinessLicenseApplication>();
+        system.debug('cs0 entered');
         try {
+            //fetch account statuses
+            Map<String, List<String>> accDetails = BCMOH_UtilityClass.getAccRenewals(BCMOH_Constants.renewalName);
             for(BusinessLicenseApplication blaRec : [SELECT Id, Name, ApplicationType, RenewalYear__c, 
                                                      Account.Id, Account.Name, Account.ParentId, Account.Parent.Name, 
                                                      Account.HealthAuthority__c, LicenseTypeId, LicenseType.Name,
                                                      Account.Status__c, Status, ExclusionReason__c
                                                      FROM BusinessLicenseApplication 
-                                                     WHERE// RecordType.DeveloperName =: BCMOH_Constants.blaRecType AND
+                                                     WHERE 
+                                                     //RecordType.DeveloperName =: BCMOH_Constants.blaRecType AND
                                                      Status IN: BCMOH_Constants.renewalTableStatus 
-                                                     AND RenewalYear__c =: BCMOH_Constants.renewalYear LIMIT 50000]) {
+                                                     AND RenewalYear__c =: BCMOH_Constants.renewalYear 
+                                                     AND Account.Status__c IN: accDetails.values()[0] 
+                                                     Order By CreatedDate LIMIT 50000]) {
                                                          blaMap.put(blaRec.Id, blaRec);
                                                          blaList.add(blaRec);
                                                      }
@@ -38,9 +44,9 @@ public class RenewalBlaTableController {
                 (List<BusinessLicenseApplication>)JSON.deserialize(JSON.serialize(data), 
                                                                    List<BusinessLicenseApplication>.class);
             system.debug('dxbha 1'+blaUpdateList);
-            if(!blaUpdateList.isEmpty() && BusinessLicenseApplication.SObjectType.getDescribe().isAccessible()) {
+            if(!blaUpdateList.isEmpty() && BusinessLicenseApplication.SObjectType.getDescribe().isUpdateable()) {
                 system.debug('dxbha 2'+blaUpdateList);
-                Database.Update(blaUpdateList);
+                Database.Update(blaUpdateList, false);
             }
         }
         catch(exception e) {
