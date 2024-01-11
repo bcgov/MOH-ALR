@@ -5,19 +5,36 @@
 * @StoryNo           : ALR-509
 **/
 
-
 @isTest
 public class ComplaintCaseTriggerTest {
-@testSetup
- 
-    public static void makeData(){
+    
+	@testSetup
+    public static void makeData() {
         RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
         Account residence = TestDataFactory.createResidence('Residence','residence1', regAuth.Id, true);
-		Case testCase = TestDataFactory.createComplaintCase(residence.Id,'Test Case','Testing the trigger',false,false,false,true);
-		Case testCase1 = TestDataFactory.createComplaintCase(residence.Id,'Test Case1','Testing the trigger',false,false,false,true);
-		Case testCase2 = TestDataFactory.createComplaintCase(residence.Id,'Test Case2','Testing the trigger',false,false,false,true);
+		
     }
-	@isTest
+    //ALR-762
+    @isTest
+    static void testComplaintCaseTrigger() {
+        List<Case> caseList = new List<Case>();
+        Test.startTest();
+        Account residence =[Select Id from account WHERE Name = 'residence1' limit 1];
+        Case complaintCase = TestDataFactory.createComplaintCase(residence.Id,'Test Case','Testing the trigger',false,false,false,false);
+        caseList.add(complaintCase);
+        insert complaintCase;
+        Test.stopTest();
+        Case caseRec = [SELECT Id, Complaint_Case_ID__c FROM Case LIMIT 1];
+        Assert.isNotNull(caseRec.Complaint_Case_ID__c);
+    }
+}
+
+/*Case testCase = TestDataFactory.createComplaintCase(residence.Id,'Test Case','Testing the trigger',false,false,false,true);
+		Case testCase1 = TestDataFactory.createComplaintCase(residence.Id,'Test Case1','Testing the trigger',false,false,false,true);
+		Case testCase2 = TestDataFactory.createComplaintCase(residence.Id,'Test Case2','Testing the trigger',false,false,false,true);*/
+
+
+	/*@isTest
     static void testComplaintCaseTrigger() {
          List<Case> caseList = new List<Case>();
 		 Account residence =[Select Id from account limit 1];        
@@ -35,5 +52,4 @@ public class ComplaintCaseTriggerTest {
         System.assertEquals('Test Case1', caseList[1].subject, 'Assertion for Test Case1');
         System.assertEquals('Test Case2', caseList[2].subject, 'Assertion for Test Case2');
 
-    }
-}
+    }*/

@@ -320,7 +320,7 @@
     <formulas>
         <name>endDate</name>
         <dataType>Date</dataType>
-        <expression>DATE(YEAR({!$Flow.CurrentDate}),3,31)</expression>
+        <expression>DATE(YEAR({!$Flow.CurrentDate}),03,31)</expression>
     </formulas>
     <formulas>
         <name>firstRegistrationNumber</name>
@@ -350,7 +350,7 @@
     <formulas>
         <name>renewalEndDateTime</name>
         <dataType>DateTime</dataType>
-        <expression>DATETIMEVALUE({!renewalEndDate})</expression>
+        <expression>IF({!$Flow.CurrentDate}&lt; {!endDate}, DATETIMEVALUE(Text({!endDate})&amp;&quot; &quot;&amp; &quot;23:00:00&quot;) , DATETIMEVALUE(Text(YEAR({!$Flow.CurrentDate})+1)&amp;&quot;/03/31 &quot;&amp; &quot;23:00:00&quot;) )</expression>
     </formulas>
     <interviewLabel>CreateNewBusinessLicense {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Create New Business License</label>

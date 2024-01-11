@@ -126,11 +126,51 @@ public class BCMOH_UtilityClass {
         //emailMsg.HtmlBody(emailBody);
         return emailMsg;
     }
+    
+    //method to fetch DocumentTemplateContentDoc map given template name
+    public static Map<String, DocumentTemplateContentDoc> getDocTempContentMap(List<String> templateNames) {
+       Map<String, DocumentTemplateContentDoc> templateNameDocMap = new Map<String, DocumentTemplateContentDoc>();
+        for(DocumentTemplateContentDoc docTempRec : [SELECT DocumentTemplate.Name, ContentDocument.Title, LatestContentVersionId
+                                                     FROM DocumentTemplateContentDoc
+                                                     WHERE DocumentTemplate.Name IN: templateNames 
+                                                     LIMIT 5000]) {
+                                                       templateNameDocMap.put(docTempRec.DocumentTemplate.Name, docTempRec);
+                                                     }
+        return templateNameDocMap;
+    }
+    
+    //Method to convert a Map to a JSON string
+    public static String mapToJson(Map<String, Object> inputMap) {
+        String jsonString = JSON.serialize(inputMap);
+        return jsonString;
+    }
+    
+    //Method to get substring of document title without file extension
+    public static String getSubstringWithoutExtension(String documentTitle) {
+        //get last occurrence of '.'
+        Integer lastDotIndex = documentTitle.lastIndexOf('.');
+        //If found, get the substring before the last '.'
+        if(lastDotIndex != -1) {
+            documentTitle = documentTitle.substringBeforeLast('.');
+        }
+        return documentTitle;
+    }
+    
+    //create document record
+    public static DocumentGenerationProcess getSubstringWithoutExtension(String type, String requestText, String referenceId, String tokenData, String docGenType) {
+        DocumentGenerationProcess docGenRec = new DocumentGenerationProcess(
+            Type = type,
+            RequestText = requestText,
+            ReferenceObject = referenceId,
+            TokenData = tokenData,
+            DocGenApiVersionType = docGenType);
+        return docGenRec;
+    }
         
     //wrapper class to pass content doc details
     public class ContentDocWrapper {
         public Map<Id, Set<Id>> entityContentIdsMap;// {get;set;}
         public Map<Id, Id> contentDocVerMap;// {get;set;}
-    }
+    }  
     
 }
