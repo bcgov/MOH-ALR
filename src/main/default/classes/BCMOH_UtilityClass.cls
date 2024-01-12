@@ -6,6 +6,7 @@
 * @StoryNo           : ALR-560
 **/
 public class BCMOH_UtilityClass {
+    Public Static String className = 'BCMOH_UtilityClass';
     //method to fetch renewal details from metadata
     public static Map<String, List<String>> getAccRenewals(String renewalName) {
         Map<String, List<String>> accDetails = new Map<String, List<String>>();
@@ -134,6 +135,8 @@ public class BCMOH_UtilityClass {
                                                      FROM DocumentTemplateContentDoc
                                                      WHERE DocumentTemplate.Name IN: templateNames 
                                                      LIMIT 5000]) {
+                                                       system.debug('## csd LatestContentVersionId '+docTempRec.LatestContentVersionId);
+                                                         system.debug('## csd docTempRec.DocumentTemplate.Name '+docTempRec.DocumentTemplate.Name);
                                                        templateNameDocMap.put(docTempRec.DocumentTemplate.Name, docTempRec);
                                                      }
         return templateNameDocMap;
@@ -157,7 +160,7 @@ public class BCMOH_UtilityClass {
     }
     
     //create document record
-    public static DocumentGenerationProcess getSubstringWithoutExtension(String type, String requestText, String referenceId, String tokenData, String docGenType) {
+    public static DocumentGenerationProcess getDocGenProcRec(String type, String requestText, String referenceId, String tokenData, String docGenType) {
         DocumentGenerationProcess docGenRec = new DocumentGenerationProcess(
             Type = type,
             RequestText = requestText,
@@ -166,6 +169,45 @@ public class BCMOH_UtilityClass {
             DocGenApiVersionType = docGenType);
         return docGenRec;
     }
+    
+    //ALR-775 - get map of document name and title for given purpose
+    public static Map<String, String> getDocNameTitle(String docGenPurpose) {
+        Map<String, String> docNameWithTitleMap = new Map<String, String>();
+        try {
+            if(docGenPurpose.equals(BCMOH_Constants.templatePurpose)) {
+                docNameWithTitleMap.put('RenewalApplicationForm', 'Renewal Application Form');
+                docNameWithTitleMap.put('RenewalInvoiceTemplate', 'Renewal Invoice '+BCMOH_Constants.invoiceIdMerge);
+            }
+        }
+        catch(Exception ex) {
+            LogService.logAndPublish(className, 'getTemplateNameWithTitleMap', '', ex);
+        }
+        return docNameWithTitleMap;
+    }
+    
+    //ALR-560 - common util class
+    //update all bla records - DML
+	public static List<BusinessLicenseApplication> updateBlaStatus(Map<Id, String> blaIdDetailsMap, String blaStatus) {
+       List<BusinessLicenseApplication> blaUpdateList = new List<BusinessLicenseApplication>();
+       try {           
+           //loop through bla update map
+           for(Id blaId : blaIdDetailsMap.keySet()) {
+               //truncate the message if length more than 255 chars
+               String renewalMsg = blaIdDetailsMap.get(blaId);
+               renewalMsg = renewalMsg.length() > 255 ? renewalMsg.Substring(0,255) : renewalMsg;
+               BusinessLicenseApplication blaRec = new BusinessLicenseApplication(
+               Id = blaId,
+               Status = blaStatus,
+               RenewalError__c = renewalMsg);
+               blaUpdateList.add(blaRec);
+           }
+       }
+       catch(exception ex) {
+           system.debug('caught in updateBlaStatus - '+ex.getMessage());
+           LogService.logAndPublish(className, 'updateBlaStatus', '', ex);
+       }
+        return blaUpdateList;
+	}
         
     //wrapper class to pass content doc details
     public class ContentDocWrapper {
