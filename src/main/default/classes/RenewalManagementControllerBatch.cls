@@ -14,6 +14,7 @@ public class RenewalManagementControllerBatch implements Database.Batchable<sObj
     private Final Static String blaRenewalStatus = 'Ready for Renewal';
     private Final Static String blaExcludedStatus = 'Excluded';
     Public static String parentAssetRT ='Units_Record_Type';
+    public Final Static List<String> allALUnitTypes = BCMOH_Constants.allALUnitTypes;
     //flow attribute
     public List<Id> CONLIST = new List<Id>();
     
@@ -54,7 +55,7 @@ public class RenewalManagementControllerBatch implements Database.Batchable<sObj
             +'  WHERE PrimaryContact__c = TRUE AND IsActive = TRUE LIMIT 1),'//ALR-560
             +' (SELECT Id FROM BusinessLicenseApplicationAccount WHERE RecordType.DeveloperName =: blaRecType'
             +'  AND Status !=: blaCancelledStatus AND RenewalYear__c =: renewalYear),'
-            +' (SELECT Id, Type__c, Quantity, Amount__c FROM Assets WHERE RecordType.DeveloperName =: parentAssetRT)'
+            +' (SELECT Id, Type__c, Quantity, Amount__c FROM Assets WHERE RecordType.DeveloperName =: parentAssetRT AND Type__c IN: allALUnitTypes)'//ALR-769 - added type check
             +' FROM Account'
             +' WHERE recordType.DeveloperName =: accRecType'
             +' AND Status__c IN: accStatuses';

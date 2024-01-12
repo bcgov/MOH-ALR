@@ -8,21 +8,10 @@
 public class RenewalManagementControllerTest {
     //test data setup
     @testSetup public static void setupData() {
-        String uniqueUserName = 'standarduser' + DateTime.now().getTime() + '@testorg.com';
-        // This code runs as the system user
-        Profile profRec = [SELECT Id FROM Profile WHERE Name = 'EHIS Standard User'];
-        User u = new User(Alias = 'standt', Email='standarduser@testorg.com',
-        EmailEncodingKey='UTF-8', LastName='Testing', LanguageLocaleKey='en_US',
-        LocaleSidKey='en_US', ProfileId = profRec.Id,
-        TimeZoneSidKey='America/Los_Angeles',
-         UserName=uniqueUserName);
-
-        //System.runAs(u) {
         
         RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
         //account with asset and bla
         Account residenceRec1 = TestDataFactory.createResidence('Residence', 'residenceAccount1', regAuth.Id, true);
-        //System.runAs(u) {
         BusinessLicenseApplication blaRec = TestDataFactory.createRenewalBla(residenceRec1.LicenseType__c, residenceRec1.Id, true);        
         Asset unitRec1 = TestDataFactory.createUnit('1', 'Private', 2, residenceRec1.Id, true);
         system.debug('csvcsdsdc'+unitRec1+' '+unitRec1.AccountId);

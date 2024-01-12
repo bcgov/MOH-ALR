@@ -5,333 +5,386 @@
 * @StoryNo           : ALR-560
 **/
 public with sharing class ServerSideDocumentGenerationController {
-    
-   //public attributes
-   Public Static Map<String, DocumentTemplateContentDoc> docTempContentMap = new Map<String, DocumentTemplateContentDoc>();
-   Public Static List<String> templateNames = new List<String>{'RenewalApplicationForm','RenewalInvoiceTemplate'};//add to metadata later
-   //Public Static List<String> templateNames = new List<String>{'RenewalInvoiceTemplate'};
+    //unwanted attributes
    Public Static Map<String, String> tempNameStatusMsgMap = new Map<String, String>();//success or error details for each template
-   Public Static Map<String, Object> documentMappingData = new Map<String, Object>();
-   Public Static Map<String, Object> documentMappingData1 = new Map<String, Object>();
+   Public Static Map<Id, Account> parentAccMap = new Map<Id, Account>();
+   //public attributes
+   Public Static String className = 'ServerSideDocumentGenerationController';
+   Public Static Map<String, String> docNameWithTitleMap = new Map<String, String>();//doc name with title
+   Public Static Map<String, DocumentTemplateContentDoc> docTempContentMap = new Map<String, DocumentTemplateContentDoc>();
+   Public Static Map<String, Object> documentMappingData = new Map<String, Object>();//to stringify req text for doc gen process
+   Public Static Map<String, Object> documentMappingData1 = new Map<String, Object>();//to stringify token data for doc gen process
    Public Static Map<Id, BusinessLicenseApplication> blaMap = new Map<Id, BusinessLicenseApplication>();
    Public Static Map<Id, Account> accMap = new Map<Id, Account>();
-   Public Static Map<Id, Account> parentAccMap = new Map<Id, Account>();
    Public Static Map<Id, RegulatoryTrxnFee> transFeeMap1 = new Map<Id, RegulatoryTrxnFee>();
    Public Static Map<Id, RegulatoryTrxnFeeItem> transFeeItemMap1 = new Map<Id, RegulatoryTrxnFeeItem>();
+   Public Static List<DocumentGenerationProcess> docGenList = new List<DocumentGenerationProcess>();//for DML Docs
+   //Error handling
+   Public Static Map<Id, String> blaErrMap = new Map<Id, String>();//Update status to error with errmsg
+   Public Static Boolean reqdDataPresent = true;
+   Public Static List<BusinessLicenseApplication> blaErrUpdateList = new List<BusinessLicenseApplication>();
+   //used when test running
+   Public Static Id contentVersionId1 = NULL;
     
    //method to fetch contentversion Id
    Public static void startDocGenProcess(List<Account> accData, Map<Id, BusinessLicenseApplication> blaMap1,
                                          Map<Id, RegulatoryTrxnFee> transFeeMap, List<RegulatoryTrxnFeeItem> transFeeItemList) {
         try {
             system.debug('%% ^^ c4ds'+accData);
+            system.debug('%% ^^ c4ds blaMap1 '+blaMap1);
             system.debug('%% ^^ c4ds transFeeMap '+transFeeMap);
             system.debug('%% ^^ c4ds transFeeItemList '+transFeeItemList);
             //attribute assignment
-            blaMap = blaMap1;//bla
+            blaMap = blaMap1;//Note : blaMap - Map of Account Id vs bla Record
             accMap = new Map<Id, Account>(accData);//acc
             transFeeMap1 = transFeeMap;//fee
             transFeeItemMap1 = new Map<Id, RegulatoryTrxnFeeItem>(transFeeItemList);//fee item
-            system.debug('%% ^^ c4ds transFeeItemMap '+transFeeItemMap1);
             //***************************************************************************************
-            
-            //fetch content version Id and document title
-            docTempContentMap = BCMOH_UtilityClass.getDocTempContentMap(templateNames);
-            //Note : blaMap - Map of Account Id vs bla Record
-            //for each bla record createDocumentGenerationProcess for each template name
-            Id contentVersionId;
-            if(Test.isRunningTest()) {
-            	contentVersionId = [SELECT Id FROM ContentVersion LIMIT 1].Id;
+            //fetch required data of reg trans fee
+            Map<Id, RegulatoryTrxnFee> transFeeMap2 = new Map<Id, RegulatoryTrxnFee>(transFeeMap.values());//to fetch ids of reg trans recs
+            for(RegulatoryTrxnFee regFeeRec : [SELECT Id, Name, TotalFeeAmount, recordTypeId, AccountId, ParentRecordId, FeeType__c,
+                                                Status, DueDate FROM RegulatoryTrxnFee WHERE Id IN: transFeeMap2.keyset() LIMIT 50000]) {
+                transFeeMap1.put(regFeeRec.AccountId, regFeeRec);
             }
+            system.debug('%% ^^ c4ds transFeeMap1 after query '+transFeeMap1);
+            
+            //fetch document name and title for given purpose
+            docNameWithTitleMap = BCMOH_UtilityClass.getDocNameTitle(BCMOH_Constants.templatePurpose);
+            system.debug('## csd docNameWithTitleMap '+docNameWithTitleMap);
+            //fetch content version Id for given doc names
+            docTempContentMap = BCMOH_UtilityClass.getDocTempContentMap(new List<String>(docNameWithTitleMap.keySet()));
+            system.debug('## csd docTempContentMap '+docTempContentMap);
+            //fetch content version id when test running
+            if(Test.isRunningTest()) {
+                contentVersionId1 = [SELECT Id FROM ContentVersion LIMIT 1].Id;
+            }
+            //for each bla record generate createDocumentGenerationProcess for each template name in docNameWithTitleMap
             for(Id accId : blaMap.keySet()) {
-                for(String tempName : templateNames) {
-                    String contentDocumentTitle;
-                    if(tempName == 'RenewalApplicationForm') {
-                        contentDocumentTitle = 'Registration Renewal Application Form';
-                    }
-                    else if(tempName == 'RenewalInvoiceTemplate') {
-                        contentDocumentTitle = 'Renewal Invoice';
-                    }
-                    if(Test.isRunningTest()) {
-                        createDocumentGenerationProcessRequest(accId, contentVersionId, contentDocumentTitle);
-                    }
-                    else if(docTempContentMap.get(tempName) != NULL) {
-                        contentVersionId = docTempContentMap.get(tempName).LatestContentVersionId;
-                        //contentDocumentTitle = docTempContentMap.get(tempName).ContentDocument.Title;
-                        //createDocumentGenerationProcessRequest(accId, docTempContentMap.get(tempName));
-                    	createDocumentGenerationProcessRequest(accId, contentVersionId, contentDocumentTitle);
-                    	system.debug('%%vfd vfds'+accId+' '+tempName);
-                    }
-                    else {
-                        system.debug('%% cdsa 1 ');
-                        tempNameStatusMsgMap.put(tempName, BCMOH_Constants.documentNotFound);//error handling when document not found
-                        system.debug('%% cdsa'+tempNameStatusMsgMap);
+                for(String tempName : docNameWithTitleMap.keyset()) {
+                    if(reqdDataPresent) {
+                        DocumentGenerationProcess docGenRec = createDocumentGenerationProcessRequest(accId, tempName);
+                        system.debug('cdsjk cscd docGenRec '+docGenRec);
+                        if(docGenRec != NULL) {
+                            docGenList.add(docGenRec);
+                        }
                     }
                 }
+                //if no templates fetched for renewals
+                if(docNameWithTitleMap.isEmpty()) {
+                    system.debug('sv css'+BCMOH_Constants.documentNotFetched);
+                    reqdDataPresent = false;
+                    blaErrMap.put(blaMap.get(accId).Id, BCMOH_Constants.documentNotFetched);
+                }
             }
+            //DML - insert docgenproc records
+            if(!docGenList.isEmpty()) {//TO DO: check if alr admin can insert doc gen obj records and add access check
+                system.debug('##entered doc gen insert'+docGenList);
+                Database.Insert(docGenList, false);
+            }
+            //DML - bla status err msg
+            if(!blaErrMap.isEmpty()) {
+                system.debug('##blaErrMap'+blaErrMap);
+                blaErrUpdateList = BCMOH_UtilityClass.updateBlaStatus(blaErrMap, BCMOH_Constants.errorBlaStatus);
+                if(!blaErrUpdateList.isEmpty() && BusinessLicenseApplication.sObjectType.getDescribe().isUpdateable()) {
+                 	Database.Update(blaErrUpdateList, false);//add error logs for failed records               
+           		}
+           }
+           system.debug('cdsfinal '+blaErrMap);
         }
         catch(exception ex) {
-            
+            LogService.logAndPublish(className, 'startDocGenProcess', '', ex);
         }
     }
     
     //method to set params for document generation
-    //private static void createDocumentGenerationProcessRequest(Id accId, DocumentTemplateContentDoc docTempRec) {
-    private static void createDocumentGenerationProcessRequest(Id accId, Id contentVersionId, String contentDocumentTitle) {
+    private static DocumentGenerationProcess createDocumentGenerationProcessRequest(Id accId, String tempName) {
         String type = 'GenerateAndConvert';//get from metadata
-        Id referenceId = blaMap.get(accId).Id;//'0f0As000000065RIAQ';//0f0As00000000ZVIAY
         String docGenType = 'Advanced';
-        List<DocumentGenerationProcess> docGenList = new List<DocumentGenerationProcess>();
+        DocumentGenerationProcess docGenRec = new DocumentGenerationProcess();
+        String tokenData = '';
         try {
+             Id referenceId = blaMap.get(accId).Id;//null check not needed coz acc id comes from bla map//'0f0As000000065RIAQ';//0f0As00000000ZVIAY
             //prepare requestText
-            //String requestText = prepareRequestText(docTempRec);
-            String requestText = prepareRequestText(contentVersionId, contentDocumentTitle);
+            String requestText = prepareRequestText(accId, tempName);
             //prepare TokenData
-            String tokenData = prepareTokenData(accId);
-            //generate document data
-            DocumentGenerationProcess docGenRec = BCMOH_UtilityClass.getSubstringWithoutExtension(type, requestText, referenceId, tokenData, docGenType);
-            docGenList.add(docGenRec);
-            //DML - insert docs
-            Database.Insert(docGenList, false);
+            if(requestText != NULL) {
+                tokenData = prepareTokenData(accId);
+                //generate document data
+                if(referenceId != NULL && tokenData != NULL) {
+                    docGenRec = BCMOH_UtilityClass.getDocGenProcRec(type, requestText, referenceId, tokenData, docGenType);
+                }
+            }
         }
         catch(exception ex) {
-            
+            LogService.logAndPublish(className, 'createDocumentGenerationProcessRequest', '', ex);
         }
+        return docGenRec;
     }
-    //add null checks and error handling
-    //private static String prepareRequestText(DocumentTemplateContentDoc docTempRec) {
-    public static String prepareRequestText(Id contentVersionId, String contentDocumentTitle) {
+    //request text for doc gen process
+    public static String prepareRequestText(Id accId, String tempName) {
         String requestText = '';
+        String contentDocumentTitle = '';
+        Id contentVersionId = NULL;
         try {
-            //documentMappingData.put(BCMOH_Constants.templateContentVersionId, docTempRec.LatestContentVersionId);
-            documentMappingData.put(BCMOH_Constants.templateContentVersionId, contentVersionId);
-            //removing file extension if present
-            //String docTitle = BCMOH_UtilityClass.getSubstringWithoutExtension(docTempRec.ContentDocument.Title);
-            String docTitle = BCMOH_UtilityClass.getSubstringWithoutExtension(contentDocumentTitle);
-            documentMappingData.put(BCMOH_Constants.docTitle, docTitle);
-            documentMappingData.put(BCMOH_Constants.keepIntermediate, false);
-            //Convert the Map to a JSON string
-            requestText = BCMOH_UtilityClass.mapToJson(documentMappingData);
-            system.debug('%%cscdsv requestText '+requestText);
+            //1) Get doc title
+            contentDocumentTitle = docNameWithTitleMap.get(tempName);//null check not needed as attribute is passed from for looping of map
+            system.debug('*** cdsa contentDocumentTitle '+contentDocumentTitle);
+            system.debug('*** cdsa transFeeMap1.get(accId) '+transFeeMap1.get(accId));
+            //if title contains "InvoiceId" merge field append to doc title, else add bla to error map
+            if(contentDocumentTitle.contains(BCMOH_Constants.invoiceIdMerge) && transFeeMap1.get(accId) == NULL) {
+                system.debug('*** cdsa contains but no fee map '+contentDocumentTitle);
+                blaErrMap.put(blaMap.get(accId).Id, BCMOH_Constants.docDataNotFetched+': '+BCMOH_Constants.regulatoryTransactionFee);
+                return NULL;//go to next iteration
+            }
+            else if(contentDocumentTitle.contains(BCMOH_Constants.invoiceIdMerge) && transFeeMap1.get(accId) != NULL) {
+                system.debug('*** cdsa contains and fee present '+contentDocumentTitle);
+                contentDocumentTitle = contentDocumentTitle.replace(BCMOH_Constants.invoiceIdMerge, transFeeMap1.get(accId).Name);
+                system.debug('*** cdsa after replace '+contentDocumentTitle);
+            }
+            
+            //2) Get content version id
+            if(Test.isRunningTest()) {
+                contentVersionId = contentVersionId1;
+            }
+            else if(docTempContentMap.get(tempName) != NULL && docTempContentMap.get(tempName).LatestContentVersionId != NULL) {
+                system.debug('%%docTempContentMap.get(tempName) '+docTempContentMap.get(tempName));
+                contentVersionId = docTempContentMap.get(tempName).LatestContentVersionId;
+            }
+            else {
+                blaErrMap.put(blaMap.get(accId).Id, BCMOH_Constants.docDataNotFetched+': '+BCMOH_Constants.LatestContentVersionId);
+                system.debug('%%docTempContentMap. blaErrMap '+blaErrMap);
+                return NULL;
+            }
+            //3) set map to prepare request text json
+            if(contentVersionId != NULL && contentDocumentTitle != NULL) {
+                documentMappingData.put(BCMOH_Constants.templateContentVersionId, contentVersionId);
+                documentMappingData.put(BCMOH_Constants.docTitle, contentDocumentTitle);
+                documentMappingData.put(BCMOH_Constants.keepIntermediate, false);
+                //Convert the Map to a JSON string
+                requestText = BCMOH_UtilityClass.mapToJson(documentMappingData);
+                system.debug('%%cscdsv requestText '+requestText);
+            }
         }
         catch(exception ex) {
-            
+            LogService.logAndPublish(className, 'prepareRequestText', '', ex);
         }
         return requestText;
     }
+    
     //prepareTokenData
-    private static String prepareTokenData(Id accId) {
+    public static String prepareTokenData(Id accId) {
         String tokenData = '';
         try {
             system.debug('%% cscs'+accMap.get(accId));
-            //object data
-            Account accRec = accMap.get(accId);
-            String address = '';
-            if(Test.isRunningTest()) {
-                system.debug('%% inside if'+accMap.get(accId));
-                address = 'address';
-            }
-            else {
-                
-            //AccountContactRelation acRel = accRec.AccountContactRelations[0];
-            //BusinessLicense blRec = accRec.BusinessLicenses[0];
-            system.debug('88 cs'+accMap.get(accId).BusinessLicenses);
-            system.debug('88 cs csd '+accMap.get(accId).BusinessLicenses[0]);
-                //AssociatedLocation asLoc = accRec.AssociatedLocations[0];
-            	//Address a = asLoc.Location.VisitorAddress.Address;
-            	//address = a.Street+', '+ a.City+', '+ a.State+', '+a.PostalCode+', '+ a.Country;
-            }
-            system.debug('%% accRec.AccountContactRelations'+accRec.AccountContactRelations[0]);
-            AccountContactRelation acRel = accRec.AccountContactRelations[0];
-            BusinessLicense blRec = accRec.BusinessLicenses[0];
-            AssociatedLocation asLoc = accRec.AssociatedLocations[0];
-            Address a = asLoc.Location.VisitorAddress.Address;
-            if(a != NULL) {
-            	address = a.Street+', '+ a.City+', '+ a.State+', '+a.PostalCode+', '+ a.Country;
-            }
-            system.debug('%% accRec.ParentId'+accRec.ParentId);
-            system.debug('%% accRec.Parent.BillingAddress'+accRec.Parent.BillingAddress);
-            Address addrParent = accRec.Parent.BillingAddress;
-            String addressParent;
-            if(addrParent != NULL) {
-                
-            	addressParent = addrParent.Street+', '+ addrParent.City+', '+ addrParent.State+', '+addrParent.PostalCode+', '+ addrParent.Country;
-            }
-            system.debug('%% address cds'+address);
-            //u need to group tran fee items based on Name
-            //PublicQuantitySum - Quantity__c++ then add all quantities in items - PublicQuantitySum
-            //PublicSum- Amount__c++ - 
-            //PublicFeeSum - FeeAmount++
-            system.debug('&&cws'+accId+' '+transFeeMap1);
-            RegulatoryTrxnFee feeRec = transFeeMap1.get(accId);
-            system.debug('^^ feeRec'+feeRec);
-            Decimal publicSum = 0;
-            Decimal publicQuantitySum = 0;
-            Decimal publicFeeSum = 0;
-            
-            Decimal privateQuantitySum = 0;
-            Decimal privateSum = 0;
-            Decimal privateFeeSum = 0;
-            
-            Decimal licensedQuantitySum = 0;
-            Decimal licensedSum = 0;
-            Decimal licensedFeeSum = 0;
-            
-            Decimal perDiemQuantitySum = 0;
-            Decimal perDiemSum = 0;
-            Decimal perDiemFeeSum = 0;
-            
-            Decimal indLivingQuantitySum = 0;
-            Decimal indLivingSum = 0;
-            Decimal indLivingFeeSum = 0;
-            
-            Decimal otherQuantitySum = 0;
-            Decimal otherSum = 0;
-            Decimal otherFeeSum = 0;
-                      
-            for(RegulatoryTrxnFeeItem transRec : transFeeItemMap1.values()) {
-                system.debug('** entered cs'+transRec);
-                if(transRec.Name == 'Public') {
-                    system.debug('cs'+transRec.Amount__c+' '+transRec.Quantity__c+' '+transRec.FeeAmount);
-                    publicSum = publicSum + transRec.Amount__c;
-                    publicQuantitySum = publicQuantitySum + transRec.Quantity__c;
-                    publicFeeSum +=  transRec.FeeAmount;
-                }
-                else if(transRec.Name == 'Private') {
-                    system.debug('cs'+transRec.Amount__c+' '+transRec.Quantity__c+' '+transRec.FeeAmount);
-                    privateSum += transRec.Amount__c;
-                    privateQuantitySum += transRec.Quantity__c;
-                    privateFeeSum += transRec.FeeAmount;                    
-                }
-                else if(transRec.Name == 'Per Diem') {
-                    perDiemSum += transRec.Amount__c;
-                    perDiemQuantitySum += transRec.Quantity__c;
-                    perDiemFeeSum += transRec.FeeAmount;                    
-                }
-                else if(transRec.Name == 'Independent Living') {
-                    indLivingSum += transRec.Amount__c;
-                    indLivingQuantitySum += transRec.Quantity__c;
-                    indLivingFeeSum += transRec.FeeAmount;
-                }
-                else if(transRec.Name == 'Licensed') {
-                    licensedSum += transRec.Amount__c;
-                    licensedQuantitySum += transRec.Quantity__c;
-                    licensedFeeSum += transRec.FeeAmount;
-                }
-                else if(transRec.Name == 'Other') {
-                    otherSum += transRec.Amount__c;
-                    otherQuantitySum += transRec.Quantity__c;
-                    otherFeeSum += transRec.FeeAmount;
-                }
-            }
-            system.debug('^^ tTTsc'+publicSum+' '+publicQuantitySum+' '+publicFeeSum+' '+feeRec);
-            
-            
+            //a) Account data
+            Account accRec = accMap.get(accId);//null check not needed as blaMap acc comes from accmap
             documentMappingData1.put('ResidenceName', accRec.Name);
-            documentMappingData1.put('CertificateId', blRec.RegistrationCertificate__c);
-            documentMappingData1.put('Residence ID', accRec.RegId__c);
-            documentMappingData1.put('LicenseType', accRec.LicenseType__r.Name);
-            documentMappingData1.put('ResidenceAddress', address);
+            documentMappingData1.put('ResID', accRec.RegId__c);
+            documentMappingData1.put('LicenseType', accRec.LicenseType__r.Name);//TO DO: add if for null check?
             documentMappingData1.put('ResidencePhoneNumber', accRec.Phone);
             documentMappingData1.put('ResidenceFax', accRec.Fax);
-            documentMappingData1.put('RegistrantName', accRec.Parent.Name);
-            documentMappingData1.put('RegistrantBillingAddress', addressParent);
-            documentMappingData1.put('RegistrantPhone', accRec.Parent.Phone);
-            documentMappingData1.put('Name', acRel.Contact.Name);
-            documentMappingData1.put('ContactPhone', acRel.Contact.Phone);
-            documentMappingData1.put('ContactEmail', acRel.Contact.Email);
-            documentMappingData1.put('PrimaryRole', acRel.Roles);
-            documentMappingData1.put('ContactCell', acRel.Contact.MobilePhone);
-            //testing888888888888888 ends
             
-            //INVOICE STARTS
-            documentMappingData1.put('InvoiceId', 'FEE-00');
-            documentMappingData1.put('InvoiceCreatedDate', Date.Today());
-            //RegistrantName - already done
-            documentMappingData1.put('RegistrantAddress', addressParent);
-            //ResidenceName - already done
-            //ResidenceAddress - already done
-            documentMappingData1.put('PublicQuantitySum', publicQuantitySum);
-            documentMappingData1.put('PublicSum', publicSum);
-            documentMappingData1.put('PublicFeeSum', publicFeeSum);
+            //b) Account's Parent Data    
+            system.debug('%% accRec.ParentId'+accRec.ParentId);
+            if(accRec.ParentId != NULL) {
+                documentMappingData1.put('RegistrantName', accRec.Parent.Name);          
+                documentMappingData1.put('RegistrantPhone', accRec.Parent.Phone);
+                
+                //c) Account's Parent Address
+                if(accRec.Parent.BillingAddress != NULL) {
+                    system.debug('%% accRec.Parent.BillingAddress'+accRec.Parent.BillingAddress);//TO DO: is billing address mandatory?
+                    Address addrParent = accRec.Parent.BillingAddress;
+                    String addressParent = addrParent.Street+', '+ addrParent.City+', '+ addrParent.State+', '+addrParent.PostalCode+', '+ addrParent.Country;
+                    if(addressParent.contains('null,')) {
+                        system.debug('csda addressParent '+addressParent);
+                        addressParent = addressParent.replace('null,','');
+                    }
+                    system.debug('csda 3 addressParent '+addressParent);
+                    documentMappingData1.put('RegistrantAddress', addressParent);
+                    documentMappingData1.put('RegistrantBillingAddress', addressParent);
+                }
+                else {
+                    system.debug(' cs accRec.Parent.BillingAddress '+reqdDataPresent+' '+accRec.Parent.BillingAddress);
+                    reqdDataPresent = false;
+                    blaErrMap.put(blaMap.get(accId).Id, BCMOH_Constants.docDataNotFetched+': '+BCMOH_Constants.accountParentAddr);
+                    return NULL;
+                }
+            }
+            else {
+                system.debug(' cs AssociatedLocations'+reqdDataPresent+' '+accRec.AssociatedLocations);
+                reqdDataPresent = false;
+                blaErrMap.put(blaMap.get(accId).Id, BCMOH_Constants.docDataNotFetched+': '+BCMOH_Constants.accountParent);
+                return NULL;
+            }
+           
+            //d) Account's Address data
+            if(reqdDataPresent && accRec.AssociatedLocations != NULL &&
+               accRec.AssociatedLocations[0].Location.VisitorAddress.Address != NULL) {
+                AssociatedLocation asLoc = accRec.AssociatedLocations[0];//TO DO: reduce to single line
+                Address accAddress = asLoc.Location.VisitorAddress.Address;
+                String accAddr = accAddress.Street+', '+ accAddress.City+', '+ accAddress.State+', '+accAddress.PostalCode+', '+ accAddress.Country;
+                system.debug('%% acc address cds'+accAddr);
+                if(accAddr.contains('null,')) {
+                    system.debug('csda addressParent '+accAddr);
+                    accAddr = accAddr.replace('null,','');
+                }
+                documentMappingData1.put('ResidenceAddress', accAddr);
+            }
+            else {
+                system.debug('accountAddr cs'+reqdDataPresent+' '+accRec.AssociatedLocations);
+                reqdDataPresent = false;
+                blaErrMap.put(blaMap.get(accId).Id, BCMOH_Constants.docDataNotFetched+': '+BCMOH_Constants.accountAddr);
+                return NULL;
+            }
             
-            documentMappingData1.put('PrivateQuantitySum', privateQuantitySum);
-            documentMappingData1.put('PrivateSum', privateSum);
-            documentMappingData1.put('PrivateFeeSum', privateFeeSum);
+            //e) BL related data
+            if(reqdDataPresent && accRec.BusinessLicenses != NULL && accRec.BusinessLicenses[0].RegistrationCertificate__c != NULL) {
+                system.debug(' &&&&& bl thr cds'+reqdDataPresent+' '+accRec.BusinessLicenses[0]);
+                BusinessLicense blRec = accRec.BusinessLicenses[0];
+                documentMappingData1.put('CertificateId', blRec.RegistrationCertificate__c);
+            } 
+            else {
+                system.debug(' &&&&& cds bl not there'+reqdDataPresent+' '+accRec.BusinessLicenses[0]);
+                reqdDataPresent = false;
+                blaErrMap.put(blaMap.get(accId).Id, BCMOH_Constants.docDataNotFetched+': '+BCMOH_Constants.blCertId);
+                return NULL;
+            }
             
-            documentMappingData1.put('PerDiemQuantitySum', perDiemQuantitySum);
-            documentMappingData1.put('PerDiemSum', perDiemSum);
-            documentMappingData1.put('PerDiemFeeSum', perDiemFeeSum);
+            //f) Contact related data
+            system.debug('%% accRec.AccountContactRelations'+accRec.AccountContactRelations[0]);
+            if(reqdDataPresent && accRec.AccountContactRelations != NULL) {
+                system.debug(' AccountContactRelations thr cds'+reqdDataPresent+' '+accRec.AccountContactRelations[0]);
+                AccountContactRelation acRel = accRec.AccountContactRelations[0];
+                documentMappingData1.put('Name', acRel.Contact.Name);
+                documentMappingData1.put('ContactPhone', acRel.Contact.Phone);
+                documentMappingData1.put('ContactEmail', acRel.Contact.Email);
+                documentMappingData1.put('PrimaryRole', acRel.Roles);
+                documentMappingData1.put('ContactCell', acRel.Contact.MobilePhone);
+            }
+            else {
+                system.debug(' AccountContactRelations not there cds'+reqdDataPresent+' '+accRec.AccountContactRelations[0]);
+                reqdDataPresent = false;
+                blaErrMap.put(blaMap.get(accId).Id, BCMOH_Constants.docDataNotFetched+': '+BCMOH_Constants.relatedContacts);
+                return NULL;
+            }
             
-            documentMappingData1.put('IndLivingQuantitySum', indLivingSum);
-            documentMappingData1.put('IndLivingSum', indLivingSum);
-            documentMappingData1.put('IndLivingFeeSum', indLivingFeeSum);
+            //h) Fee related data
+            system.debug('%% entered fee map transFeeMap1.get(accId)'+reqdDataPresent+' '+transFeeMap1.get(accId));
+            if(reqdDataPresent && transFeeMap1.get(accId) != NULL) {
+                system.debug('%% entered fee map'+transFeeMap1);
+                reqdDataPresent = fetchFeeRelatedInformation(accId);
+                system.debug('%% entered fee map'+reqdDataPresent);
+            }
+            else {
+                system.debug('%% entered fee map transFeeMap1.get(accId)'+transFeeMap1.get(accId));
+                reqdDataPresent = false;
+                blaErrMap.put(blaMap.get(accId).Id, BCMOH_Constants.docDataNotFetched+': '+BCMOH_Constants.regulatoryTransactionFee);
+                return NULL;
+            }
             
-            documentMappingData1.put('LicensedQuantitySum', licensedQuantitySum);
-            documentMappingData1.put('LicensedSum', licensedSum);
-            documentMappingData1.put('LicensedFeeSum', licensedFeeSum);
-            
-            documentMappingData1.put('OtherQuantitySum', otherQuantitySum);
-            documentMappingData1.put('OtherSum', otherSum);
-            documentMappingData1.put('OtherFeeSum', otherFeeSum);
-            
-            documentMappingData1.put('TotalFeeAmount', feeRec.Id);
-            //end of invoice
+            //g) Formula fields mapping
+            if(reqdDataPresent) {
+            	documentMappingData1.put('InvoiceCreatedDate', Date.Today());//INVOICE template
+            }
             
             //Convert the Map to a JSON string
-            tokenData = BCMOH_UtilityClass.mapToJson(documentMappingData1);
+            if(reqdDataPresent) {
+                tokenData = BCMOH_UtilityClass.mapToJson(documentMappingData1);
+            }
+            else {
+                tokenData = NULL;
+            }
             system.debug('%%cscdsv tokenData '+tokenData);
         }
         catch(exception ex) {
             system.debug('uuuuu '+ex.getMessage());
-            
+            LogService.logAndPublish(className, 'prepareTokenData', '', ex);
         }
         return tokenData;
     }
-} 
     
+    //fetchFeeRelatedInformation;
+    private static Boolean fetchFeeRelatedInformation(Id accId) {
+        Boolean hasFeeItem = false;
+        Decimal publicSum = 0;
+        Decimal publicQuantitySum = 0;
+        Decimal publicFeeSum = 0;
         
-    
-/*  //start query
-            String query = 'SELECT Name, Status__c, LicenseType__c,'
-            +' LicenseType__r.RegulatoryAuthCategory, LicenseType__r.UnitFee__c,'
-            +' LicenseType__r.OneTimeFee__c, LicenseType__r.PartialUnitFee__c, LicenseType__r.LateFee__c,'
-            +' (SELECT Id FROM BusinessLicenseApplicationAccount WHERE RecordType.DeveloperName =: blaRecType'
-            +' AND Status !=: blaCancelledStatus AND RenewalYear__c =: renewalYear),'
-            +' (SELECT Id, Type__c, Quantity, Amount__c FROM Assets WHERE RecordType.DeveloperName =: parentAssetRT)'
-            +' FROM Account'
-            +' WHERE recordType.DeveloperName =: accRecType'
-            +' AND Status__c IN: accStatuses';
-        return Database.getQueryLocator(query);
-
-
-select id, LicenseType__r.Name, Phone, Fax, parent.Name, parent.phone, 
-(SELECT Id, Location.VisitorAddress.Address from AssociatedLocations), 
-(SELECT RegistrationCertificate__c FROM BusinessLicenses LIMIT 1), 
-(SELECT Contact.Name, Contact.Phone, Contact.Email, Contact.MobilePhone, Roles 
-FROM AccountContactRelations WHERE PrimaryContact__c = TRUE AND IsActive = TRUE LIMIT 1)
-from Account where id = '001As00000IMmIEIA1'*/
-    
-    
-    /*
-     * Registration Renewal Application Form
-     * {{ResidenceName}}
-     * {{CertificateId}}
-     * resId TBD
-     * {{LicenseType}}
-     * {{ResidenceAddress}}
-     * {{ResidencePhoneNumber}}
-     * {{ResidenceFax}}
-     * {{RegistrantName}}
-     * {{RegistrantBillingAddress}}
-     * {{RegistrantPhone}}
-     * {{Name}} - - i think contact name
-     * {{ContactPhone}}
-     * {{ContactEmail}}
-     * {{PrimaryRole}}
-     * {{ContactCell}}
-    //
-    //
-    //
-    //
-            //String tokenData = '{\"Name\":\"Test POC\",\"CertificateId\":\"15955\"}';
-    */
+        Decimal privateQuantitySum = 0;
+        Decimal privateSum = 0;
+        Decimal privateFeeSum = 0;
+        
+        Decimal perDiemQuantitySum = 0;
+        Decimal perDiemSum = 0;
+        Decimal perDiemFeeSum = 0;
+        try {
+            //Fee data
+            system.debug('&&cws'+accId+' '+transFeeMap1);
+            RegulatoryTrxnFee feeRec = transFeeMap1.get(accId);
+            //fee mapping
+            documentMappingData1.put('InvoiceId', feeRec.Name);//ALR-775
+            documentMappingData1.put('TotalFeeAmount', feeRec.TotalFeeAmount);//ALR-775
+            system.debug('^^ feeRec'+feeRec);
+            
+            //fee item mapping
+            for(RegulatoryTrxnFeeItem transRec : transFeeItemMap1.values()) {
+                if(transRec.RegulatoryTrxnFeeId == feeRec.Id && transRec.Quantity__c != 0) {
+                    if(transRec.Name == 'Public') {
+                        system.debug('cs'+transRec.Amount__c+' '+transRec.Quantity__c+' '+transRec.FeeAmount);
+                        hasFeeItem = true;
+                        documentMappingData1.put(BCMOH_Constants.unitsPublic, BCMOH_Constants.unitsPublic);
+                        publicSum = transRec.Amount__c;
+                        publicQuantitySum += transRec.Quantity__c;
+                        publicFeeSum +=  transRec.FeeAmount;
+                    }
+                    else if(transRec.Name == 'Private') {
+                        system.debug('cs'+transRec.Amount__c+' '+transRec.Quantity__c+' '+transRec.FeeAmount);
+                        hasFeeItem = true;
+                        documentMappingData1.put(BCMOH_Constants.unitsPrivate, BCMOH_Constants.unitsPrivate);
+                        privateSum = transRec.Amount__c;
+                        privateQuantitySum += transRec.Quantity__c;
+                        privateFeeSum += transRec.FeeAmount;                    
+                    }
+                    else if(transRec.Name == 'Per Diem') {
+                        system.debug('sdscd has per diem'+transRec);
+                        hasFeeItem = true;
+                        documentMappingData1.put(BCMOH_Constants.unitsPerDiem, BCMOH_Constants.unitsPerDiem);
+                        perDiemSum = transRec.Amount__c;
+                        perDiemQuantitySum += transRec.Quantity__c;
+                        perDiemFeeSum += transRec.FeeAmount;                 
+                    }
+                }
+            }
+            
+            //add values to mapping if present
+            if(!hasFeeItem) {
+                reqdDataPresent = false;
+                blaErrMap.put(blaMap.get(accId).Id, BCMOH_Constants.docDataNotFetched+': '+BCMOH_Constants.regulatoryTransactionFeeItem);
+                return NULL;
+            }
+            else {
+                if(documentMappingData1.keySet().contains(BCMOH_Constants.unitsPublic)) {
+                    documentMappingData1.put('PublicQuantitySum', publicQuantitySum);
+                    documentMappingData1.put('PublicSum', publicSum);
+                    documentMappingData1.put('PublicFeeSum', publicFeeSum);
+                }
+                if(documentMappingData1.keySet().contains(BCMOH_Constants.unitsPrivate)) {
+                    documentMappingData1.put('PrivateQuantitySum', privateQuantitySum);
+                    documentMappingData1.put('PrivateSum', privateSum);
+                    documentMappingData1.put('PrivateFeeSum', privateFeeSum);
+                }
+                if(documentMappingData1.keySet().contains(BCMOH_Constants.unitsPerDiem)) {
+                    system.debug('A contais perdiem'+documentMappingData1);
+                    documentMappingData1.put('PerDiemQuantitySum', perDiemQuantitySum);
+                    documentMappingData1.put('PerDiemSum', perDiemSum);
+                    documentMappingData1.put('PerDiemFeeSum', perDiemFeeSum);
+                }
+            }
+        }
+        catch(exception ex) {
+            system.debug('uuuuu '+ex.getMessage());
+            LogService.logAndPublish(className, 'fetchFeeRelatedInformation', '', ex);
+        }
+        return reqdDataPresent;
+    }
+}

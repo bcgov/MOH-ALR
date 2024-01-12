@@ -17,6 +17,7 @@ public class BCMOH_Constants {
     public Final Static String unitFeeType = 'Unit Fee';
     public Final Static String dueFeeStatus = 'Due';
     public Final Static String pendingInvoiceStatus = 'Pending Invoice';
+    public Final Static String waivedStatus = 'Waived';
     public Final Static Date feeDueDate = Date.Today().addDays(30);//ALR-185
     public Final Static DateTime feeDueDateTime = DateTime.Now().addDays(30);//ALR-185
     public Final Static String cancelledStatus = 'Canceled';//ALR-691
@@ -34,15 +35,40 @@ public class BCMOH_Constants {
     public Final Static String nextYear = String.valueOf(Date.Today().Year() + 1);
     public Final Static List<String> renewalTableStatus = new List<String>{blaCreatedStatus, blaExcludedStatus};
     public Final Static String parentAssetRecTypeId = Schema.getGlobalDescribe().get('Asset').getDescribe().getRecordTypeInfosByDeveloperName().get('Units_Record_Type').getRecordTypeId();
+    public Final Static String unitRequestRecTypeId = Schema.getGlobalDescribe().get('Asset').getDescribe().getRecordTypeInfosByDeveloperName().get('Unit_Request_Record_Type').getRecordTypeId();
     public Final Static String parentAssetRecType = 'Units_Record_Type';
     public Final Static List<String> allALUnitTypes = new List<String>{'Private', 'Public', 'Per Diem'};
     public Final Static String unitName='Unit';
+    public Final Static String unitRequestName='UnitRequest';
     public Final Static String errorBlaStatus = 'Errored';
     public Final Static String sentBlaStatus = 'Sent';
     //document request text mapping fields
     public Final Static String templateContentVersionId = 'templateContentVersionId';
     public Final Static String docTitle = 'title';
     public Final Static String keepIntermediate = 'keepIntermediate';
+    public Final Static String fullUnitFee = 'Full Unit Fee';//ALR-726
+    //ALR-775
+    public Final Static String renewalApplicationFormTitle = 'Renewal Application Form';
+    public Final Static String renewalInvoiceTitle = 'Renewal Invoice';
+    public Final Static String renewalInvoiceTemplate = 'RenewalInvoiceTemplate';
+    public Final Static String invoiceIdMerge = '{%%InvoiceId%%}';
+    public Final Static String documentNotFetched = 'Documents not fetched for Renewals';
+    public Final Static String docDataNotFetched = 'Data required for document generation missing';
+    public Final Static String regulatoryTransactionFee = 'Regulatory Transaction Fee';
+    public Final Static String LatestContentVersionId = 'LatestContentVersionId';
+    public Final Static String accountParent = 'Parent Account';
+    public Final Static String accountParentAddr = 'Parent Account Billing Address';
+    public Final Static String accountAddr = 'Account Address';
+    public Final Static String relatedContacts = 'Related Contacts';
+    public Final Static String regulatoryTransactionFeeItem = 'Regulatory Transaction Fee Item';
+    public Final Static String unitsPublic = 'Units- Public';
+    public Final Static String unitsPrivate = 'Units- Private';
+    public Final Static String unitsPerDiem = 'Units- Per Diem';
+    public Final Static String blCertId = 'Business License Certificate Id';
     
+    
+    public Final Static String MANAGEUNITCLASSNAME = 'ManageUnitOmniService';
+        public Final Static String INSERTMERGERASSETMETHODNAME = 'insertMergedAssets';
+    public Final Static String UPDATEPARENTONCHILDASSETMETHODNAME = 'updateParentOnChildAssets';
     
 }
