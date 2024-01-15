@@ -22,7 +22,7 @@ public with sharing class FetchAndGenerateCSV
         List<Account> accounts = [SELECT Id, RegId__c, Name, HealthAuthority__c, Phone, Extension__c, Fax, Website, Status__c,
                                    (SELECT ContactId, PrimaryContact__c, Contact.Name FROM AccountContactRelations WHERE PrimaryContact__c = true LIMIT 1),
                                    (SELECT RegistrationCertificate__c FROM BusinessLicenses WHERE Status = 'Active' LIMIT 1),
-                                   (SELECT ServiceName__c FROM Services__r WHERE ServiceName__c IN ('Meal Services', 'Housekeeping', 'Laundry', 'Social and Recreational Opps', 'S24-Hour Emergency Response System') LIMIT 50),
+                                   (SELECT ServiceName__c FROM Services__r WHERE ServiceName__c IN ('Meal Services', 'Housekeeping', 'Laundry', 'Social and Recreational Opps', '24-Hour Emergency Response System','Assistance with daily living activities','Assistance with managing medication','Assistance managing therapeutic diets','Safekeeping of money/personal property','Psychosocial support','Assistance with behaviour management') LIMIT 50),
                                    Account.LicenseType__r.RegulatoryAuthorizationCode__c,
                                    (SELECT Quantity, Type__c FROM Assets WHERE Type__c IN ('Public', 'Private', 'Per Diem') AND ParentId = NULL AND Quantity > 0.00)
                                    FROM Account
@@ -49,12 +49,12 @@ public with sharing class FetchAndGenerateCSV
             }
             
             RegNo = getRegistrationCertificates(acc.BusinessLicenses);
-            
+                        
             HospSvc_Meal = getServiceFlag(acc.Services__r, 'Meal Services');
             HospSvc_HouseKeep = getServiceFlag(acc.Services__r, 'Housekeeping'); 
             HospSvc_Laundry = getServiceFlag(acc.Services__r, 'Laundry');                       
             HospSvc_SocialRec = getServiceFlag(acc.Services__r, 'Social and Recreational Opps'); 
-            HospSvc_24HResp = getServiceFlag(acc.Services__r, 'S24-Hour Emergency Response System');  
+            HospSvc_24HResp = getServiceFlag(acc.Services__r, '24-Hour Emergency Response System');  
             ADLS = getServiceFlag(acc.Services__r, 'Assistance with daily living activities');                       
             Meds = getServiceFlag(acc.Services__r, 'Assistance with managing medication'); 
             Diets = getServiceFlag(acc.Services__r, 'Assistance managing therapeutic diets');  
@@ -68,18 +68,18 @@ public with sharing class FetchAndGenerateCSV
             Number_of_AL_Units = Public_Units + Private_Units + Per_Diem_Units;
 
             // Append fetched data to the CSV content
-            csvContent += ResID + ',' + Residence + ',' + HACode + ',' + Res_Phone + ',' + Res_Phone_Ext + ',' + Res_Fax + ',' + Website + ',' + 
+            csvContent += ResID + ',' + Residence + ',' + HACode + ',' + Res_Phone + ',' + Res_Phone_Ext + ',' + Res_Fax + ',' + Website + ',' +
             Registrant_Contact + ',' +
             RegNo + ',' + 
             RegStatus + ',' + 
             HospSvc_Meal + ',' + HospSvc_HouseKeep + ',' + HospSvc_Laundry + ',' + HospSvc_SocialRec + ',' + HospSvc_24HResp + ',' + 
             ResCatCode + ',' + 
             Public_Units + ',' + Private_Units + ',' + Per_Diem_Units + ',' + Number_of_AL_Units + ',' + 
-            ADLS + ',' + Meds + ',' + Diets + ',' + Safekeeping + ',' + Psychosocial + ',' + Behaviour+ '\n';        
-        }        
+            ADLS + ',' + Meds + ',' + Diets + ',' + Safekeeping + ',' + Psychosocial + ',' + Behaviour+ '\n';
+                    }        
         return csvContent;
     }
-    
+        
     // Helper method to get the registration certificates
     private static String getRegistrationCertificates(List<BusinessLicense> licenses) 
     {
