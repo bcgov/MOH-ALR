@@ -196,6 +196,35 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
+                    <name>cacheAge</name>
+                    <value>1440</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Non Compliant Issues</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>reportName</name>
+                    <value>Non_Compliant_Issues_Report</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>showRefreshButton</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:reportChart</componentName>
+                <identifier>flexipage_reportChart</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!$Permission.CustomPermission.EHISInvestigator}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>true</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
                     <name>enableInlineEdit</name>
                     <value>false</value>
                 </componentInstanceProperties>
@@ -306,7 +335,73 @@
                 <visibilityRule>
                     <criteria>
                         <leftValue>{!$Permission.CustomPermission.EHISInvestigator}</leftValue>
-                       <operator>EQUAL</operator>
+                        <operator>EQUAL</operator>
+                        <rightValue>true</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>enableInlineEdit</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>entityName</name>
+                    <value>BusinessLicenseApplication</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>filterName</name>
+                    <value>Outstanding_Renewals</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>hideActionBar</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>hideSearchBar</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>pageSize</name>
+                    <value>3</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:filterListCard</componentName>
+                <identifier>flexipage_filterListCard10</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!$Permission.CustomPermission.EHISAdminHomepage}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>true</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>cacheAge</name>
+                    <value>1440</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Outstanding Renewal</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>reportName</name>
+                    <value>Outstanding_Renewal_Report</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>showRefreshButton</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:reportChart</componentName>
+                <identifier>flexipage_reportChart2</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!$Permission.CustomPermission.EHISAdminHomepage}</leftValue>
+                        <operator>EQUAL</operator>
                         <rightValue>true</rightValue>
                     </criteria>
                 </visibilityRule>
@@ -316,6 +411,13 @@
             <componentInstance>
                 <componentName>generateCSV</componentName>
                 <identifier>c_generateCSV</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!$Permission.CustomPermission.EHISAdminHomepage}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>true</rightValue>
+                    </criteria>
+                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <mode>Replace</mode>
