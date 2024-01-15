@@ -77,10 +77,15 @@ private class ManageUnitOmniServiceTest {
         Test.startTest();
         Object result = unitService.call('mergeUnits', inputMap);
         Object result1 = unitService1.call('mergeUnits', inputMap1);
-        Test.stopTest();
+        //Test.stopTest();
         
         System.assertEquals(true, result, 'Expected result to be true');
-        
+        //Test.startTest();
+        RegulatoryTrxnFee regTransFeeRec = [SELECT Id, Status FROM RegulatoryTrxnFee limit 1];
+        system.debug('ghh'+regTransFeeRec);
+        regTransFeeRec.Status = BCMOH_Constants.feeStatus;
+        Database.Update(regTransFeeRec);
+        Test.stopTest();
         // Assertions on the inserted assets
        // List<Asset> insertedAssets = [SELECT Id, Name, AccountId, Capacity__c, Type__c, Quantity FROM Asset WHERE AccountId =:residence.Id];
        // System.assertEquals(2, insertedAssets.size(), 'Expected 2 Asset records to be inserted');
