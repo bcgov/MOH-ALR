@@ -205,14 +205,14 @@ public with sharing class ServerSideDocumentGenerationController {
                     documentMappingData1.put('RegistrantBillingAddress', addressParent);
                 }
                 else {
-                    system.debug(' cs accRec.Parent.BillingAddress '+reqdDataPresent+' '+accRec.Parent.BillingAddress);
+                    system.debug(' cs accRec.Parent.BillingAddress '+reqdDataPresent);
                     reqdDataPresent = false;
                     blaErrMap.put(blaMap.get(accId).Id, BCMOH_Constants.docDataNotFetched+': '+BCMOH_Constants.accountParentAddr);
                     return NULL;
                 }
             }
             else {
-                system.debug(' cs no acc data'+reqdDataPresent+' '+accRec.ParentId);
+                system.debug(' cs no acc data'+reqdDataPresent);
                 reqdDataPresent = false;
                 blaErrMap.put(blaMap.get(accId).Id, BCMOH_Constants.docDataNotFetched+': '+BCMOH_Constants.accountParent);
                 return NULL;
@@ -233,7 +233,7 @@ public with sharing class ServerSideDocumentGenerationController {
                     documentMappingData1.put('ResidenceAddress', accAddr);
             }
             else {
-                system.debug('accountAddr cs'+reqdDataPresent+' '+accRec.AssociatedLocations);
+                system.debug('accountAddr cs'+reqdDataPresent);
                 reqdDataPresent = false;
                 blaErrMap.put(blaMap.get(accId).Id, BCMOH_Constants.docDataNotFetched+': '+BCMOH_Constants.accountAddr);
                 return NULL;
@@ -247,7 +247,7 @@ public with sharing class ServerSideDocumentGenerationController {
                 documentMappingData1.put('CertificateId', blRec.RegistrationCertificate__c);
             } 
             else {
-                system.debug(' &&&&& cds bl not there'+reqdDataPresent+' '+accRec.BusinessLicenses[0]);
+                system.debug(' &&&&& cds bl not there'+reqdDataPresent);
                 reqdDataPresent = false;
                 blaErrMap.put(blaMap.get(accId).Id, BCMOH_Constants.docDataNotFetched+': '+BCMOH_Constants.blCertId);
                 return NULL;
@@ -265,21 +265,21 @@ public with sharing class ServerSideDocumentGenerationController {
                 documentMappingData1.put('ContactCell', acRel.Contact.MobilePhone);
             }
             else {
-                system.debug(' AccountContactRelations not there cds'+reqdDataPresent+' '+accRec.AccountContactRelations[0]);
+                system.debug(' AccountContactRelations not there cds'+reqdDataPresent);
                 reqdDataPresent = false;
                 blaErrMap.put(blaMap.get(accId).Id, BCMOH_Constants.docDataNotFetched+': '+BCMOH_Constants.relatedContacts);
                 return NULL;
             }
             
             //h) Fee related data
-            system.debug('%% entered fee map transFeeMap1.get(accId)'+reqdDataPresent+' '+transFeeMap1.get(accId));
             if(reqdDataPresent && transFeeMap1.get(accId) != NULL) {
+                system.debug('%% entered fee map transFeeMap1.get(accId)'+reqdDataPresent+' '+transFeeMap1.get(accId));
                 system.debug('%% entered fee map'+transFeeMap1);
                 reqdDataPresent = fetchFeeRelatedInformation(accId);
                 system.debug('%% entered fee map'+reqdDataPresent);
             }
             else {
-                system.debug('%% entered fee map transFeeMap1.get(accId)'+transFeeMap1.get(accId));
+                system.debug('%% entered else trans fee map');
                 reqdDataPresent = false;
                 blaErrMap.put(blaMap.get(accId).Id, BCMOH_Constants.docDataNotFetched+': '+BCMOH_Constants.regulatoryTransactionFee);
                 return NULL;
