@@ -116,8 +116,7 @@ this[NavigationMixin.Navigate]({
 fetchTableData() {
     getUnitBasedOnResidence({ recordId: this.recordId }).then(result => {
         this.recordList = JSON.parse(result);
-        this.initialRecords = this.recordList;
-        console.log('this.recordList::' + this.recordList);
+        this.initialRecords = this.recordList;        
         this.isLoading = false;
         this.noRecord = this.recordList.length === 0 ? true : false;
         this.datatableHeight = this.noRecord ? 'height:50px;' : 'height:420px;';
@@ -128,13 +127,13 @@ fetchTableData() {
 }
  
 async handleSave(event) {
+    debugger;
     const updatedFields = event.detail.draftValues;
-    let isValidInput = true;
-    console.log('updatedFields--');
-    console.log('RENEWEDDD::' + this.refs.renewed.checked);
+    let isValidInput = true;    
     updatedFields.forEach(record => {
         record.GenerateRenewalInvoice__c = this.refs.renewed.checked;
         record.Amount__c = 'Full Unit Fee';
+        record.AccountId = this.recordId;//ALR-726
     });
  
     console.log(JSON.stringify(event.detail.draftValues));
@@ -187,8 +186,6 @@ handleClearSearch() {
 handleSearch() {
     let filteredList;
     let records = this.initialRecords;
-    console.log('type--' + this.type);
-    console.log('capacity--' + this.capacity);
     if (this.type && this.capacity) {
         this.isLoading = true;
         filteredList = records.filter(item => item.Type__c === this.type && item.Capacity__c === this.capacity);

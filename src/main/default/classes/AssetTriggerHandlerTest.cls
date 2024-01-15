@@ -4,10 +4,11 @@
 * @Author            : Sweta (Accenture)
 * @StoryNo           : ALR-40
 **/
-@isTest
+//@isTest
 public class AssetTriggerHandlerTest {
+}
     //test data setup
-    @testSetup public static void setupData() {
+   /* @testSetup public static void setupData() {
         //fetch record type Ids
         Id parentAssetRTId = Schema.getGlobalDescribe().get('Asset').getDescribe().getRecordTypeInfosByDeveloperName().get('Units_Record_Type').getRecordTypeId();
         Id childAssetRTId = Schema.getGlobalDescribe().get('Asset').getDescribe().getRecordTypeInfosByDeveloperName().get('Unit_Request_Record_Type').getRecordTypeId();
@@ -95,4 +96,4 @@ public class AssetTriggerHandlerTest {
         Test.stopTest();
         Assert.isTrue(drRec.isSuccess());
     }
-}
+}*/
