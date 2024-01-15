@@ -15,14 +15,14 @@ public without sharing class AssetTriggerHandler implements TriggerHandler {
     }
     //afterInsert
     public void afterInsert(List<Asset> newAsset, Map<Id, SObject> newAssetMap) {
-        AssetTriggerUtility.generateInvoices(newAsset, newAssetMap, null);
+        //AssetTriggerUtility.generateInvoices(newAsset, newAssetMap, null);
     }
     //afterUpdate
     public void afterUpdate(List<Asset> oldAssets, List<Asset> newAsset, Map<ID, SObject> oldAssetMap, Map<ID, SObject> newAssetMap) {
         if(firstCall) {
             firstCall = false;
-            AssetTriggerUtility.generateInvoices(newAsset, newAssetMap, oldAssetMap); 
-        	AssetTriggerUtility.generateRenewalInvoices(newAsset, oldAssetMap, newAssetMap);
+            //AssetTriggerUtility.generateInvoices(newAsset, newAssetMap, oldAssetMap); 
+        	//AssetTriggerUtility.generateRenewalInvoices(newAsset, oldAssetMap, newAssetMap);
         }
     }
     //afterDelete

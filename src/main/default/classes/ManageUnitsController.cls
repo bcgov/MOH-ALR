@@ -19,7 +19,7 @@ public class ManageUnitsController {
         String assetListString = '[]';
         List<Asset> assetList = new List<Asset>();
         try{
-            assetList = [SELECT Id, Capacity__c, Type__c, Quantity FROM Asset WHERE AccountId = : recordId AND ParentId =: NULL WITH SECURITY_ENFORCED];
+            assetList = [SELECT Id, RecordTypeId, Capacity__c, Type__c, Quantity FROM Asset WHERE AccountId = : recordId AND ParentId =: NULL WITH SECURITY_ENFORCED];
             assetListString =  JSON.serialize(assetList);
         }catch(AuraHandledException e)
         {
@@ -85,6 +85,8 @@ public class ManageUnitsController {
                 if(!assetForValidateList.isEmpty() && Asset.SObjectType.getDescribe().isAccessible()){
                     update assetForValidateList;
                 }
+                system.debug('---csdcs'+assetForUpdateList);
+                GenerateInvoiceController.generateRenewalInvoices(assetForUpdateList);
             }
             return 'Success';
         }

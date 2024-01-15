@@ -1,18 +1,20 @@
 /*********************************************************************************************************
-* Method Name:
-* Purpose:
+* Class Name: ManageUnitOmniService
+* Purpose:Manage units coming from ManageUnitOmniscript
 * Created By:Accenture
 * Created For:
 * ********************************************************************************************************/
 global class ManageUnitOmniService implements Callable { 
+    public Set<Id> accountIdSet = new Set<Id>();
+    public String unitRecordtypeId = BCMOH_Constants.parentAssetRecTypeId;
     public Object call(String action, Map<String,Object> args){
         Map<String,Object> output = (Map<String,Object>)args.get(BCMOH_Constants.IM_OUTPUT);
         Map<String,Object> options = (Map<String,Object>)args.get(BCMOH_Constants.IM_OPTIONS);
         return invokeMethod(action,args,output,options);
     } 
-/*********************************************************************************************************
-* Method Name:
-* Purpose:
+    /*********************************************************************************************************
+* Method Name:invokeMethod
+* Purpose: Invokable method from from Omniscript
 * Created By:Accenture
 * Created For:
 * ********************************************************************************************************/
@@ -29,80 +31,98 @@ global class ManageUnitOmniService implements Callable {
         }    
         return result;
     }
-/*********************************************************************************************************
-* Method Name:
-* Purpose:
+    /*********************************************************************************************************
+* Method Name:mergeUnits
+* Purpose: Merge common units comming from Omniscript
 * Created By:Accenture
 * Created For:
 * ********************************************************************************************************/
     public void mergeUnits(Map<String,Object> inputMap,Map<String,Object> outMap){
         Map<String,Decimal> totalQuantityByUnqStringMap = new Map<String,Decimal>();
         Map<String, List<Asset>> assetsByUniqueStringMap = new Map<String, List<Asset>>();
-        List<InputWrapper.AddUnitBlock> unitList = new List<InputWrapper.AddUnitBlock>();
+        Map<String, Asset> assetsByUniqueParentStringMap = new Map<String,Asset>();
+        List<InputWrapper.AddUnitBlock> unitList = new List<InputWrapper.AddUnitBlock>();        
         String jsonInput = Json.serialize(inputMap.get(BCMOH_Constants.IM_INPUT));
         Map<String,Object> jsonParsed =(Map<String,Object> ) JSON.deserializeUntyped(jsonInput);
         Object AddUnitBlock = jsonParsed.get(BCMOH_Constants.IM_ADDUNITBLOCK);
         If(AddUnitBlock instanceof List<Object>){
-          InputWrapper unitWrapper = (InputWrapper) System.JSON.deserialize(jsonInput, InputWrapper.class);
-          unitList.addAll(unitWrapper.AddUnitBlock);
+            InputWrapper unitWrapper = (InputWrapper) System.JSON.deserialize(jsonInput, InputWrapper.class);
+            unitList.addAll(unitWrapper.AddUnitBlock);
         } else{
-          object unit = (object)jsonParsed.get(BCMOH_Constants.IM_ADDUNITBLOCK);          
-          InputWrapper.AddUnitBlock unitRec = (InputWrapper.AddUnitBlock) System.JSON.deserialize(Json.serialize(unit), InputWrapper.AddUnitBlock   .class);
-          unitList.add(unitRec);         
+            object unit = (object)jsonParsed.get(BCMOH_Constants.IM_ADDUNITBLOCK);          
+            InputWrapper.AddUnitBlock unitRec = (InputWrapper.AddUnitBlock) System.JSON.deserialize(Json.serialize(unit), InputWrapper.AddUnitBlock   .class);
+            unitList.add(unitRec);         
         }  
         for(InputWrapper.AddUnitBlock record: unitList) {
-            Asset assetRecord = createAsset(record);
+            Asset assetRecord = createAsset(record);            
+            accountIdSet.add(assetRecord.AccountId);
             String uniqueStr = assetRecord.AccountId+assetRecord.Capacity__c+assetRecord.Type__c;            
-            if(assetsByUniqueStringMap.containsKey(uniqueStr)){
-              //  Asset assetRecord = createAsset(record);
+            if(assetsByUniqueStringMap.containsKey(uniqueStr)){                
                 assetsByUniqueStringMap.get(uniqueStr).add(assetRecord);
                 totalQuantityByUnqStringMap.put(uniqueStr,totalQuantityByUnqStringMap.get(uniqueStr) + record.NoOfUnits);
                 continue;
-            }
-           // Asset assetRecord = createAsset(record);
+            }            
             assetsByUniqueStringMap.put(uniqueStr,new List<Asset>{assetRecord});
             totalQuantityByUnqStringMap.put(uniqueStr, record.NoOfUnits);
         }
+        for (Asset existingunit : [SELECT Id, Name, GenerateRenewalInvoice__c, Quantity, AccountId, Capacity__c, Type__c, ParentId FROM Asset WHERE AccountId IN :accountIdSet AND ParentId =:NULL AND recordtypeId =:BCMOH_Constants.parentAssetRecTypeId]) {
+            String uniqueParentStr = existingunit.AccountId+existingunit.Capacity__c+existingunit.Type__c;            
+            if(!assetsByUniqueParentStringMap.containsKey(uniqueParentStr)){
+                assetsByUniqueParentStringMap.put(uniqueParentStr,existingunit);          
+                // continue;
+            }           
+            
+        }
         if(!assetsByUniqueStringMap.isEmpty()){
-            insertMergedAssets(assetsByUniqueStringMap,totalQuantityByUnqStringMap);            
+            insertMergedAssets(assetsByUniqueStringMap,totalQuantityByUnqStringMap,assetsByUniqueParentStringMap);            
         }
         
     }
-/*********************************************************************************************************
-* Method Name:
-* Purpose:
+    /*********************************************************************************************************
+* Method Name:insertMergedAssets
+* Purpose:Inserting merged Units,Updating Parent,creating parent if Parent does not exists.
 * Created By:Accenture
 * Created For:
 * ********************************************************************************************************/
-    private void insertMergedAssets(Map<String, List<Asset>> assetsByUniqueStringMap,Map<String,Decimal> totalQuantityByUnqStringMap) {
+    private void insertMergedAssets(Map<String, List<Asset>> assetsByUniqueStringMap,Map<String,Decimal> totalQuantityByUnqStringMap,Map<String, Asset> assetsByUniqueParentStringMap) {
         List<Asset> insertAssetList = new List<Asset>();
+        List<Asset> updateParentAssetList = new List<Asset>();             
         try{
             for (String uniqueStr : assetsByUniqueStringMap.keySet()) {
-                List<Asset> mergedUnits = assetsByUniqueStringMap.get(uniqueStr);            
-                Asset mergedAsset = new Asset(
-                    //Name = mergedUnits[0].Name,
-                    Name = BCMOH_Constants.unitName+'-'+mergedUnits[0].Type__c+'-'+system.today().format(),
-                    AccountId = mergedUnits[0].AccountId,
-                    Capacity__c = mergedUnits[0].Capacity__c,
-                    Type__c = mergedUnits[0].Type__c,
-                    Amount__c = mergedUnits[0].Amount__c,
-                    GenerateInvoice__c = mergedUnits[0].GenerateInvoice__c,
-                    Description = mergedUnits[0].Description,
-                  //  Status = mergedUnits[0].Status,
-                    Quantity = totalQuantityByUnqStringMap.get(uniqueStr)
-                );
+                List<Asset> mergedUnits = assetsByUniqueStringMap.get(uniqueStr);                            
+                Asset mergedAsset = createMergedAsset(mergedUnits[0]);
+                mergedAsset.Quantity = totalQuantityByUnqStringMap.get(uniqueStr); 
+                //Find parent record for child
+                if(assetsByUniqueParentStringMap.containsKey(uniqueStr)){ //- make merged unit as child and update parent unit
+                    Asset parentUnit = assetsByUniqueParentStringMap.get(uniqueStr);
+                    parentUnit.Quantity = mergedAsset.GenerateInvoice__c == true ? parentUnit.Quantity : parentUnit.Quantity + mergedAsset.Quantity;                    
+                    mergedAsset.parentId = parentUnit.Id;                    
+                    insertAssetList.add(parentUnit);                   
+                }else{//Parent not found-Create parent unit and update merged record as child.
+                    Asset parentUnitAsset =new Asset(
+                        Name = BCMOH_Constants.unitName+'-'+mergedUnits[0].Type__c+'-'+system.today().format(),
+                        AccountId = mergedUnits[0].AccountId,
+                        Capacity__c = mergedUnits[0].Capacity__c,
+                        Type__c = mergedUnits[0].Type__c,
+                        RecordTypeId = BCMOH_Constants.parentAssetRecTypeId,
+                        Quantity = mergedAsset.GenerateInvoice__c == true ? 0 : mergedAsset.Quantity                                
+                    );
+                    insertAssetList.add(parentUnitAsset);
+                    mergedAsset.parentId = parentUnitAsset.Id;               
+                }
                 insertAssetList.add(mergedAsset);
             } 
-            if (!insertAssetList.isEmpty()) {
-                insert insertAssetList;
-            }
-        }catch(Exception exp){
-            system.debug('something went wrong::'+exp);
+            if (!insertAssetList.isEmpty()) {              
+                Database.UpsertResult[] insertedAssetsSR = Database.Upsert(insertAssetList,false);
+                updateParentOnChildAssets(insertedAssetsSR);                
+            }            
+        }catch(exception ex){
+            LogService.logAndPublish(BCMOH_Constants.MANAGEUNITCLASSNAME, BCMOH_Constants.INSERTMERGERASSETMETHODNAME, '', ex);
         }
     }
-/*********************************************************************************************************
-* Method Name:
-* Purpose:
+    /*********************************************************************************************************
+* Method Name:createAsset
+* Purpose:Reusable create Asset method
 * Created By:Accenture
 * Created For:
 * ********************************************************************************************************/ 
@@ -114,10 +134,78 @@ global class ManageUnitOmniService implements Callable {
                 Capacity__c = typeValueSet.contains(record.UnitType) ? '1' : record.UnitCapacity,
                 Type__c = record.UnitType,
                 Amount__c = record.AmountValue,
-                GenerateInvoice__c = record.GenerateInvoiceValue,
+                GenerateInvoice__c = typeValueSet.contains(record.UnitType) ? false : record.GenerateInvoiceValue,
                 Description = record.Description,
-              //  Status = record.GenerateInvoiceValue == true ? 'Pending Invoice' : 'Waived',
+                //  Status = record.GenerateInvoiceValue == true ? 'Pending Invoice' : 'Waived',
                 Quantity = record.NoOfUnits
             );
-     }
- }
+    }
+    
+    /*********************************************************************************************************
+* Method Name:createMergedAsset
+* Purpose:Reusable create MergedAsset method
+* Created By:Accenture
+* Created For:
+* ********************************************************************************************************/ 
+    private Asset createMergedAsset(Asset mergedUnit){        
+        return new Asset(                    
+            Name = BCMOH_Constants.unitRequestName+'-'+mergedUnit.Type__c+'-'+system.today().format(),
+            AccountId = mergedUnit.AccountId,
+            Capacity__c = mergedUnit.Capacity__c,
+            Type__c = mergedUnit.Type__c,
+            Amount__c = mergedUnit.Amount__c,
+            GenerateInvoice__c = mergedUnit.GenerateInvoice__c,
+            Description = mergedUnit.Description,                  
+            Status = mergedUnit.GenerateInvoice__c == true ? BCMOH_Constants.pendingInvoiceStatus : BCMOH_Constants.waivedStatus,
+            RecordTypeId = BCMOH_Constants.unitRequestRecTypeId            
+        );
+    }
+    
+    
+    /*********************************************************************************************************
+* Method Name:updateParentOnChildAssets
+* Purpose: Update parent Id on newly created unit request
+* Created By:Accenture
+* Created For:
+* ********************************************************************************************************/
+    private void updateParentOnChildAssets(Database.UpsertResult[] insertedAssetsSR){
+        Map<String, Asset> insertedParentMap = new Map<String, Asset>();
+        Map<String, Asset> insertedChildMap = new Map<String, Asset>();
+        List<Asset> updateParentonChildAssetList = new List<Asset>();  
+        Set<Id> insertedAssetIdSet = new Set<Id>();
+        for(Database.UpsertResult sr : insertedAssetsSR) {
+            If(sr.isSuccess()){                
+                insertedAssetIdSet.add(sr.getId()); 
+            }                                      
+        }
+        List<Asset> insertedAssetList = [SELECT Id, Amount__c, Status, Name, Description, GenerateRenewalInvoice__c,GenerateInvoice__c, Quantity, AccountId, Capacity__c, Type__c, ParentId ,RecordTypeId FROM Asset WHERE Id IN : insertedAssetIdSet];
+        for (Asset insertedAsset : insertedAssetList){
+            String unitstr = insertedAsset.AccountId+insertedAsset.Capacity__c+insertedAsset.Type__c;
+            if(!insertedParentMap.containsKey(unitstr) && insertedAsset.RecordTypeId == BCMOH_Constants.parentAssetRecTypeId ){
+                insertedParentMap.put(unitstr,insertedAsset);          
+                continue;
+            }  
+        } 
+        for (Asset insertedChildAsset : insertedAssetList){
+            String unitstr = insertedChildAsset.AccountId+insertedChildAsset.Capacity__c+insertedChildAsset.Type__c;
+            if(insertedParentMap.containsKey(unitstr) && insertedChildAsset.RecordTypeId == BCMOH_Constants.unitRequestRecTypeId && insertedChildAsset.ParentId == NULL){
+                insertedChildAsset.ParentId = insertedParentMap.get(unitstr).Id;
+                updateParentonChildAssetList.Add(insertedChildAsset);
+            }  
+        }
+        
+        try{
+            if(!updateParentonChildAssetList.isEmpty()){
+                update updateParentonChildAssetList;
+            }
+        system.debug('cdscdscd'+insertedAssetList);   
+        GenerateInvoiceController.generateInvoices(insertedAssetList);
+        system.debug('cdscdscd updateParentonChildAssetList '+updateParentonChildAssetList);
+        //GenerateInvoiceController.generateInvoices(updateParentonChildAssetList);
+        }Catch(exception ex){
+            LogService.logAndPublish(BCMOH_Constants.MANAGEUNITCLASSNAME, BCMOH_Constants.UPDATEPARENTONCHILDASSETMETHODNAME, '', ex);
+        }
+    }
+    
+    
+}
