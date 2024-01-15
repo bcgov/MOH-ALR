@@ -27,7 +27,7 @@ public class BCMOH_Constants {
     public Final Static String noPrimaryContact = 'No primary contact record or no email id on primary contact';
     public Final Static String noOrgWideAddr = 'No valid org wide email address found';
     public Final Static String noBLRec = 'No business license record found';
-    public Final Static String mappingDataMissing = 'Data required for template merge field mapping is missing';
+    public Final Static String mappingDataMissing = System.Label.TemplateFieldDataMissing;//'Data required for template merge field mapping is missing';
     public Final Static String templateNameMissing = 'No email template found for ';
     public Final Static String activePurposeTemplateMissing = 'No active email template name configured for ';
     //document error
@@ -53,7 +53,7 @@ public class BCMOH_Constants {
     public Final Static String renewalInvoiceTemplate = 'RenewalInvoiceTemplate';
     public Final Static String invoiceIdMerge = '{%%InvoiceId%%}';
     public Final Static String documentNotFetched = 'Documents not fetched for Renewals';
-    public Final Static String docDataNotFetched = 'Data required for document generation missing';
+    public Final Static String docDataNotFetched = System.Label.DocumentFieldDataMissing;//'Data required for document generation missing';
     public Final Static String regulatoryTransactionFee = 'Regulatory Transaction Fee';
     public Final Static String LatestContentVersionId = 'LatestContentVersionId';
     public Final Static String accountParent = 'Parent Account';
@@ -65,6 +65,9 @@ public class BCMOH_Constants {
     public Final Static String unitsPrivate = 'Units- Private';
     public Final Static String unitsPerDiem = 'Units- Per Diem';
     public Final Static String blCertId = 'Business License Certificate Id';
+    public Final Static String emailSentToId = System.Label.EmailSentToId;
+    public Final Static String emailSentTo = System.Label.EmailSentTo;
+    public Final Static String sentTime = System.Label.SentTime;
     
     
     public Final Static String MANAGEUNITCLASSNAME = 'ManageUnitOmniService';

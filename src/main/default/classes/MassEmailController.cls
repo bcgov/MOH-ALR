@@ -11,23 +11,21 @@ public with sharing class MassEmailController {
     Public Static String templateEntity = '';
     Public Static Map<Id, Id> targetWhatIdMap = new Map<Id, Id>();
     Public Static Map<Id, Id> whatIdTargetMap = new Map<Id, Id>();
-    Public Static String emailBody = '';
-    Public Static String subjectValue = '';
-    Public Static String emailBodyConst = '';
-    Public Static String subjectValueConst = '';
+    
     
     Public Static Id orgWideAddrId = NULL;
     Public Static String templateDevName = '';
     Public Static Map<Id, String> templateDetailsMap = new Map<Id, String>();
     Public Static String templateDetailName = '';
     
-    
-    
-    
     //verified attributes all below are needed - remove comment later.
     Public Static String className = 'MassEmailController';
     
     Public Static Id templateDetailsId = NULL;
+    Public Static String emailBody = '';
+    Public Static String subjectValue = '';
+    Public Static String emailBodyConst = '';
+    Public Static String subjectValueConst = '';
     
     Public Static Map<Id, BusinessLicenseApplication> blaMap = new Map<Id, BusinessLicenseApplication>();
     Public Static Map<Id, Id> blaContactMap = new Map<Id, Id>();
@@ -403,8 +401,8 @@ public with sharing class MassEmailController {
                  }
                  else {
                      //if targetIdErrorMap does not contain what id, then its successful
-                     String sentDetails = 'Email sent to Id: '+accContactMap.get(msgRec.whatId).Contact.Email+
-						'. Email sent to: '+accContactMap.get(msgRec.whatId).Contact.Name+'. Sent Time: '+datetime.now().format();//add to const
+                     String sentDetails = BCMOH_Constants.emailSentToId+' '+accContactMap.get(msgRec.whatId).Contact.Email+
+						'. '+BCMOH_Constants.emailSentTo+' '+accContactMap.get(msgRec.whatId).Contact.Name+'. '+BCMOH_Constants.sentTime+' '+datetime.now().format();//add to const
                      blaSuccessMap.put(msgRec.whatId, sentDetails);
                  }
              }
@@ -435,10 +433,6 @@ public with sharing class MassEmailController {
                Id = blaId,
                Status = BCMOH_Constants.sentBlaStatus,
                RenewalError__c = blaSuccessMap.get(blaId));
-              /* //if Renewalerror already present on bla rec, update to blank
-               if(blaSuccessMap.get(blaId)) {
-                   blaRec.RenewalError__c = '';
-               }*/
                blaUpdateList.add(blaRec);
            }
            if(!blaUpdateList.isEmpty() && BusinessLicenseApplication.sObjectType.getDescribe().isUpdateable()) {

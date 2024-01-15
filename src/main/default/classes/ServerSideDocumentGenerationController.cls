@@ -1,6 +1,7 @@
 /**
 * @Name              : ServerSideDocumentGenerationController
-* @Description       : Generates Documents and attach to record
+* @Description       : class to generate documents and attach to record
+					 : referenced in RenewalManagementControllerBatch, TestClassCoverage - RenewalManagementControllerTest
 * @Author            : Sweta (Accenture)
 * @StoryNo           : ALR-560
 **/
@@ -86,8 +87,8 @@ public with sharing class ServerSideDocumentGenerationController {
                 system.debug('##blaErrMap'+blaErrMap);
                 blaErrUpdateList = BCMOH_UtilityClass.updateBlaStatus(blaErrMap, BCMOH_Constants.errorBlaStatus);
                 if(!blaErrUpdateList.isEmpty() && BusinessLicenseApplication.sObjectType.getDescribe().isUpdateable()) {
-                 	Database.Update(blaErrUpdateList, false);//add error logs for failed records               
-           		}
+                    Database.Update(blaErrUpdateList, false);//add error logs for failed records               
+                }
            }
            system.debug('cdsfinal '+blaErrMap);
         }
@@ -211,24 +212,25 @@ public with sharing class ServerSideDocumentGenerationController {
                 }
             }
             else {
-                system.debug(' cs AssociatedLocations'+reqdDataPresent+' '+accRec.AssociatedLocations);
+                system.debug(' cs no acc data'+reqdDataPresent+' '+accRec.ParentId);
                 reqdDataPresent = false;
                 blaErrMap.put(blaMap.get(accId).Id, BCMOH_Constants.docDataNotFetched+': '+BCMOH_Constants.accountParent);
                 return NULL;
             }
            
             //d) Account's Address data
-            if(reqdDataPresent && accRec.AssociatedLocations != NULL &&
-               accRec.AssociatedLocations[0].Location.VisitorAddress.Address != NULL) {
-                AssociatedLocation asLoc = accRec.AssociatedLocations[0];//TO DO: reduce to single line
-                Address accAddress = asLoc.Location.VisitorAddress.Address;
-                String accAddr = accAddress.Street+', '+ accAddress.City+', '+ accAddress.State+', '+accAddress.PostalCode+', '+ accAddress.Country;
-                system.debug('%% acc address cds'+accAddr);
-                if(accAddr.contains('null,')) {
-                    system.debug('csda addressParent '+accAddr);
-                    accAddr = accAddr.replace('null,','');
-                }
-                documentMappingData1.put('ResidenceAddress', accAddr);
+            if(reqdDataPresent && accRec.AssociatedLocations != NULL && accRec.AssociatedLocations.size() > 0 
+               && accRec.AssociatedLocations[0].Location.VisitorAddress.Address != NULL) {
+                system.debug('%% acc address cds'+accRec.AssociatedLocations);
+                    AssociatedLocation asLoc = accRec.AssociatedLocations[0];//TO DO: reduce to single line
+                    Address accAddress = asLoc.Location.VisitorAddress.Address;
+                    String accAddr = accAddress.Street+', '+ accAddress.City+', '+ accAddress.State+', '+accAddress.PostalCode+', '+ accAddress.Country;
+                    system.debug('%% acc address cds'+accAddr);
+                    if(accAddr.contains('null,')) {
+                        system.debug('csda addressParent '+accAddr);
+                        accAddr = accAddr.replace('null,','');
+                    }
+                    documentMappingData1.put('ResidenceAddress', accAddr);
             }
             else {
                 system.debug('accountAddr cs'+reqdDataPresent+' '+accRec.AssociatedLocations);
@@ -238,7 +240,8 @@ public with sharing class ServerSideDocumentGenerationController {
             }
             
             //e) BL related data
-            if(reqdDataPresent && accRec.BusinessLicenses != NULL && accRec.BusinessLicenses[0].RegistrationCertificate__c != NULL) {
+            if(reqdDataPresent && accRec.BusinessLicenses != NULL && accRec.BusinessLicenses.size() > 0 &&
+               accRec.BusinessLicenses[0].RegistrationCertificate__c != NULL) {
                 system.debug(' &&&&& bl thr cds'+reqdDataPresent+' '+accRec.BusinessLicenses[0]);
                 BusinessLicense blRec = accRec.BusinessLicenses[0];
                 documentMappingData1.put('CertificateId', blRec.RegistrationCertificate__c);
@@ -251,8 +254,8 @@ public with sharing class ServerSideDocumentGenerationController {
             }
             
             //f) Contact related data
-            system.debug('%% accRec.AccountContactRelations'+accRec.AccountContactRelations[0]);
-            if(reqdDataPresent && accRec.AccountContactRelations != NULL) {
+            if(reqdDataPresent && accRec.AccountContactRelations != NULL && accRec.AccountContactRelations.size() > 0) {
+            	system.debug('%% accRec.AccountContactRelations'+accRec.AccountContactRelations);
                 system.debug(' AccountContactRelations thr cds'+reqdDataPresent+' '+accRec.AccountContactRelations[0]);
                 AccountContactRelation acRel = accRec.AccountContactRelations[0];
                 documentMappingData1.put('Name', acRel.Contact.Name);
@@ -284,7 +287,7 @@ public with sharing class ServerSideDocumentGenerationController {
             
             //g) Formula fields mapping
             if(reqdDataPresent) {
-            	documentMappingData1.put('InvoiceCreatedDate', Date.Today());//INVOICE template
+                documentMappingData1.put('InvoiceCreatedDate', Date.Today());//INVOICE template
             }
             
             //Convert the Map to a JSON string
@@ -323,7 +326,7 @@ public with sharing class ServerSideDocumentGenerationController {
             RegulatoryTrxnFee feeRec = transFeeMap1.get(accId);
             //fee mapping
             documentMappingData1.put('InvoiceId', feeRec.Name);//ALR-775
-            documentMappingData1.put('TotalFeeAmount', feeRec.TotalFeeAmount);//ALR-775
+            documentMappingData1.put('TotalFeeAmount', '$'+feeRec.TotalFeeAmount);//ALR-775
             system.debug('^^ feeRec'+feeRec);
             
             //fee item mapping
@@ -365,19 +368,19 @@ public with sharing class ServerSideDocumentGenerationController {
             else {
                 if(documentMappingData1.keySet().contains(BCMOH_Constants.unitsPublic)) {
                     documentMappingData1.put('PublicQuantitySum', publicQuantitySum);
-                    documentMappingData1.put('PublicSum', publicSum);
-                    documentMappingData1.put('PublicFeeSum', publicFeeSum);
+                    documentMappingData1.put('PublicSum', '$'+publicSum);
+                    documentMappingData1.put('PublicFeeSum', '$'+publicFeeSum);
                 }
                 if(documentMappingData1.keySet().contains(BCMOH_Constants.unitsPrivate)) {
                     documentMappingData1.put('PrivateQuantitySum', privateQuantitySum);
-                    documentMappingData1.put('PrivateSum', privateSum);
-                    documentMappingData1.put('PrivateFeeSum', privateFeeSum);
+                    documentMappingData1.put('PrivateSum', '$'+privateSum);
+                    documentMappingData1.put('PrivateFeeSum', '$'+privateFeeSum);
                 }
                 if(documentMappingData1.keySet().contains(BCMOH_Constants.unitsPerDiem)) {
                     system.debug('A contais perdiem'+documentMappingData1);
                     documentMappingData1.put('PerDiemQuantitySum', perDiemQuantitySum);
-                    documentMappingData1.put('PerDiemSum', perDiemSum);
-                    documentMappingData1.put('PerDiemFeeSum', perDiemFeeSum);
+                    documentMappingData1.put('PerDiemSum', '$'+perDiemSum);
+                    documentMappingData1.put('PerDiemFeeSum', '$'+perDiemFeeSum);
                 }
             }
         }
