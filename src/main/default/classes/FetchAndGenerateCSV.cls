@@ -1,8 +1,8 @@
 public with sharing class FetchAndGenerateCSV 
 {
-    static String csvHeader = 'ResID,Residence,HACode,Res_Phone,Res_Phone_Ext,Res_Fax,Website,Registrant_Contact,RegNo,RegStatus,HospSvc_Meal,HospSvc_HouseKeep,HospSvc_Laundry,HospSvc_SocialRec,HospSvc_24HResp,ResCatCode,Public_Units,Private_Units,Per_Diem_Units,Number_of_AL_Units,ADLS,Meds,Diets,Safekeeping,Psychosocial,Behaviour,Res_Building_Floor,\n';
+    static String csvHeader = 'ResID,Residence,HACode,Res_Address,Res_City,Res_PostalCode,Res_Phone,Res_Phone_Ext,Res_Fax,Website,Appl_LegalName,Registrant_Contact,RegNo,RegStatus,HospSvc_Meal,HospSvc_HouseKeep,HospSvc_Laundry,HospSvc_SocialRec,HospSvc_24HResp,ResCatCode,Public_Units,Private_Units,Per_Diem_Units,Number_of_AL_Units,ADLS,Meds,Diets,Safekeeping,Psychosocial,Behaviour,Res_Building_Floor,\n';
     static String csvContent = '';
-    static String ResID= '', Residence= '', HACode= '', Res_Phone= '', Res_Phone_Ext= '', Res_Fax= '', Website= '', Registrant_Contact= '', RegNo= '', RegStatus= '', HospSvc_Meal= '', HospSvc_HouseKeep= '', HospSvc_Laundry= '', HospSvc_SocialRec= '', HospSvc_24HResp= '', ResCatCode= '', ADLS= '', Meds= '', Diets= '', Safekeeping= '', Psychosocial= '', Behaviour= '';
+    static String ResID= '', Residence= '', HACode= '', Res_Address= '',Res_City= '',Res_PostalCode= '', Res_Phone= '', Res_Phone_Ext= '', Res_Fax= '', Website= '', Appl_LegalName= '', Registrant_Contact= '', RegNo= '', RegStatus= '', HospSvc_Meal= '', HospSvc_HouseKeep= '', HospSvc_Laundry= '', HospSvc_SocialRec= '', HospSvc_24HResp= '', ResCatCode= '', ADLS= '', Meds= '', Diets= '', Safekeeping= '', Psychosocial= '', Behaviour= '';
     static Integer Public_Units = 0, Private_Units = 0, Per_Diem_Units = 0, Number_of_AL_Units = 0;
     static List<String> resFilterStatuses = new List<String> {'Registered Active', 'Registered Active with Conditions', 'Registered Active Progressive Enforcement'};
     static Map<String, String> healthAuthorityMap = new Map<String, String>
@@ -19,15 +19,16 @@ public with sharing class FetchAndGenerateCSV
     public static String generateCSV() 
     {
         csvContent = csvHeader;  
-        List<Account> accounts = [SELECT Id, RegId__c, Name, HealthAuthority__c, Phone, Extension__c, Fax, Website, Status__c,
+        List<Account> accounts = [SELECT Id, RegId__c, Name, HealthAuthority__c, Phone, Extension__c, Fax, Website, Status__c, Parent.Name,
                                    (SELECT ContactId, PrimaryContact__c, Contact.Name FROM AccountContactRelations WHERE PrimaryContact__c = true LIMIT 1),
                                    (SELECT RegistrationCertificate__c FROM BusinessLicenses WHERE Status = 'Active' LIMIT 1),
-                                   (SELECT ServiceName__c FROM Services__r WHERE ServiceName__c IN ('Meal Services', 'Housekeeping', 'Laundry', 'Social and Recreational Opps', 'S24-Hour Emergency Response System') LIMIT 50),
+                                   (SELECT ServiceName__c FROM Services__r WHERE ServiceName__c IN ('Meal Services', 'Housekeeping', 'Laundry', 'Social and Recreational Opps', '24-Hour Emergency Response System','Assistance with daily living activities','Assistance with managing medication','Assistance managing therapeutic diets','Safekeeping of money/personal property','Psychosocial support','Assistance with behaviour management') LIMIT 50),
+                                   (SELECT Id, Location.VisitorAddress.Address FROM AssociatedLocations where ActiveTo = NULL LIMIT 1),
                                    Account.LicenseType__r.RegulatoryAuthorizationCode__c,
                                    (SELECT Quantity, Type__c FROM Assets WHERE Type__c IN ('Public', 'Private', 'Per Diem') AND ParentId = NULL AND Quantity > 0.00)
                                    FROM Account
                                    WHERE Status__c IN :resFilterStatuses
-                                    LIMIT 10000];
+                                   LIMIT 10000];
         
         for(Account acc : accounts) 
         {
@@ -45,16 +46,23 @@ public with sharing class FetchAndGenerateCSV
             Contact primaryContact = getPrimaryContact(acc);
             if (primaryContact != null) 
             {
-                Registrant_Contact = primaryContact.Name;
+                Registrant_Contact = String.valueOf(primaryContact.Name).replaceAll(',','');
             }
             
             RegNo = getRegistrationCertificates(acc.BusinessLicenses);
+            Appl_LegalName = (acc.Parent.Name != null) ? acc.Parent.Name : '';
+            
+            List<String> Adrs = new List<String>();
+            Adrs = Adrs(acc);
+            Res_Address = Adrs[0];
+            Res_City = Adrs[1];
+            Res_PostalCode = Adrs[2];
             
             HospSvc_Meal = getServiceFlag(acc.Services__r, 'Meal Services');
             HospSvc_HouseKeep = getServiceFlag(acc.Services__r, 'Housekeeping'); 
             HospSvc_Laundry = getServiceFlag(acc.Services__r, 'Laundry');                       
             HospSvc_SocialRec = getServiceFlag(acc.Services__r, 'Social and Recreational Opps'); 
-            HospSvc_24HResp = getServiceFlag(acc.Services__r, 'S24-Hour Emergency Response System');  
+            HospSvc_24HResp = getServiceFlag(acc.Services__r, '24-Hour Emergency Response System');  
             ADLS = getServiceFlag(acc.Services__r, 'Assistance with daily living activities');                       
             Meds = getServiceFlag(acc.Services__r, 'Assistance with managing medication'); 
             Diets = getServiceFlag(acc.Services__r, 'Assistance managing therapeutic diets');  
@@ -68,14 +76,14 @@ public with sharing class FetchAndGenerateCSV
             Number_of_AL_Units = Public_Units + Private_Units + Per_Diem_Units;
 
             // Append fetched data to the CSV content
-            csvContent += ResID + ',' + Residence + ',' + HACode + ',' + Res_Phone + ',' + Res_Phone_Ext + ',' + Res_Fax + ',' + Website + ',' + 
+            csvContent += ResID + ',' + Residence + ',' + HACode + ',' + Res_Address + ',' + Res_City + ',' + Res_PostalCode + ',' + Res_Phone + ',' + Res_Phone_Ext + ',' + Res_Fax + ',' + Website + ',' +  Appl_LegalName + ',' +
             Registrant_Contact + ',' +
             RegNo + ',' + 
             RegStatus + ',' + 
             HospSvc_Meal + ',' + HospSvc_HouseKeep + ',' + HospSvc_Laundry + ',' + HospSvc_SocialRec + ',' + HospSvc_24HResp + ',' + 
             ResCatCode + ',' + 
             Public_Units + ',' + Private_Units + ',' + Per_Diem_Units + ',' + Number_of_AL_Units + ',' + 
-            ADLS + ',' + Meds + ',' + Diets + ',' + Safekeeping + ',' + Psychosocial + ',' + Behaviour+ '\n';        
+            ADLS + ',' + Meds + ',' + Diets + ',' + Safekeeping + ',' + Psychosocial + ',' + Behaviour+ '\n';
         }        
         return csvContent;
     }
@@ -88,7 +96,7 @@ public with sharing class FetchAndGenerateCSV
         {
             if(license.RegistrationCertificate__c != null) 
             {
-                certificates += license.RegistrationCertificate__c + ';'; // Separating certificates by a delimiter
+                certificates += license.RegistrationCertificate__c; // Separating certificates by a delimiter
             }
         }
         return certificates;
@@ -121,7 +129,7 @@ public with sharing class FetchAndGenerateCSV
         return quantity.intValue(); // Convert Decimal to Integer using intValue() method
     }
 
-        // Helper method to retrieve primary contacts from AccountContactRelation
+    // Helper method to retrieve primary contacts from AccountContactRelation
     private static Contact getPrimaryContact(Account acc) 
     {
         Contact primaryContact = null;
@@ -141,5 +149,32 @@ public with sharing class FetchAndGenerateCSV
         }
         return primaryContact;
     }
-
+    
+    //Helper method to retrieve Address and handle NullPointerException
+    private static List<String> Adrs(Account acc){
+         try{
+            List<String> adr = new List<String>();
+            System.Address accAddress = acc.AssociatedLocations[0].Location.VisitorAddress.Address;
+            Res_Address = String.valueOf(accAddress.Street).replaceAll(',','');
+            Res_City = accAddress.City;
+            Res_PostalCode = accAddress.PostalCode;
+            adr.add(Res_Address);
+            adr.add(Res_City);
+            adr.add(Res_PostalCode);
+            
+            return adr;
+         }
+         catch(exception ex){
+             
+             List<String> adr = new List<String>();
+             Res_Address = '';
+             Res_City = '';
+             Res_PostalCode = '';
+             adr.add(Res_Address);
+             adr.add(Res_City);
+             adr.add(Res_PostalCode);
+             //LogService.logAndPublish('FetchAndGenerateCSV', 'generateCSV', acc.Id, ex);
+             return adr;
+         }
+    }
 }
