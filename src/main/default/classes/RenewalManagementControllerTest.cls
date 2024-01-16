@@ -120,7 +120,7 @@ public class RenewalManagementControllerTest {
         system.debug('cscds AssociatedLocation '+asLoc);
         
         //account 2
-        Account residenceRec2 = TestDataFactory.createResidence('Residence', 'testingAccount2', regAuth.Id, true);
+        Account residenceRec2 = TestDataFactory.createResidence('Residence', 'Account2', regAuth.Id, true);
         
         
     }
