@@ -5,8 +5,9 @@
 * @Author            : Sweta (Accenture)
 * @StoryNo           : ALR-36
 **/
-public class RenewalManagementController {
+public with sharing class RenewalManagementController {
     //Static Constants
+    Public Static String className = 'RenewalManagementController';
     private Final Static String feeType = 'Renewal Unit Fee';
     private Final Static String feeStatus = 'Due';
     private Final Static Decimal defaultFee = 0;
@@ -15,18 +16,24 @@ public class RenewalManagementController {
     public static List<String> getAccountIds() {
         List<String> activeAccCount = new List<String>();
         Integer countValue = 0;
-        RenewalProcessCriteria__mdt renewalCriteriaRec = RenewalProcessCriteria__mdt.getInstance(BCMOH_Constants.renewalName);
-        String accRecType = renewalCriteriaRec.AccountRecordType__c;
-        List<String> accStatuses = renewalCriteriaRec.AccountStatuses__c.split(';');
-        for(Account accRec : [SELECT Id, (SELECT Id FROM BusinessLicenseApplicationAccount WHERE RecordType.DeveloperName =: BCMOH_Constants.blaRecType
-                                          AND Status !=: BCMOH_Constants.blaCancelledStatus AND RenewalYear__c =: BCMOH_Constants.renewalYear)
-                              FROM Account WHERE recordType.DeveloperName =: accRecType
-                              AND Status__c IN: accStatuses]) {
-                                  if(accRec.BusinessLicenseApplicationAccount.size() == 0) {
-                                      countValue++;
+        try {
+            RenewalProcessCriteria__mdt renewalCriteriaRec = RenewalProcessCriteria__mdt.getInstance(BCMOH_Constants.renewalName);
+            String accRecType = renewalCriteriaRec.AccountRecordType__c;
+            List<String> accStatuses = renewalCriteriaRec.AccountStatuses__c.split(';');
+            for(Account accRec : [SELECT Id, (SELECT Id FROM BusinessLicenseApplicationAccount WHERE RecordType.DeveloperName =: BCMOH_Constants.blaRecType
+                                              AND Status !=: BCMOH_Constants.blaCancelledStatus AND RenewalYear__c =: BCMOH_Constants.renewalYear)
+                                  FROM Account WHERE recordType.DeveloperName =: accRecType
+                                  AND Status__c IN: accStatuses]) {
+                                      if(accRec.BusinessLicenseApplicationAccount.size() == 0) {
+                                          countValue++;
+                                      }
                                   }
-                              }
-        activeAccCount.add(String.valueOf(countValue));
+            activeAccCount.add(String.valueOf(countValue));
+        }
+        catch(exception ex) {
+            system.debug('Im caught in getAccountIds'+ex.getMessage());
+            LogService.logAndPublish(className, 'getAccountIds', '', ex);
+        }
         return activeAccCount;
     }
     //method to create bla records for account (bulkified)
@@ -39,18 +46,27 @@ public class RenewalManagementController {
         String blaRecTypeId = Schema.getGlobalDescribe().get('BusinessLicenseApplication').getDescribe().getRecordTypeInfosByDeveloperName().get('Renewal').getRecordTypeId();
         //call BLA creation method for each account
         for(Account accRec : accMap.values()) {
-            BusinessLicenseApplication blaRec = createBlaRecord(blaRecTypeId, accRec.Id, accRec.LicenseType__r.RegulatoryAuthCategory, accRec.LicenseType__c, blaStatusMap.get(accRec.Id), DateTime.now(), BCMOH_Constants.renewalYear);
+            String regAuthCat = NULL;
+            String licenseType = NULL;
+            if(accRec.LicenseType__c != NULL) {
+                licenseType = accRec.LicenseType__c;
+                if(accRec.LicenseType__r.RegulatoryAuthCategory != NULL) {
+                	regAuthCat = accRec.LicenseType__r.RegulatoryAuthCategory;
+            	}
+            }
+            BusinessLicenseApplication blaRec = createBlaRecord(blaRecTypeId, accRec.Id, regAuthCat, licenseType, blaStatusMap.get(accRec.Id), DateTime.now(), BCMOH_Constants.renewalYear);
             blaRecCreateList.add(blaRec);
             blaAccMap.put(accRec.Id, blaRec);
         }
         //Insert BLA records
-        Database.SaveResult[] srList = Database.Insert(blaAccMap.values());//feth from map later
+        Database.SaveResult[] srList = Database.Insert(blaAccMap.values(), false);//feth from map later
             for(Database.SaveResult sr : srList) {
                 System.debug('inserted bla data' + sr.getId()+' '+sr.isSuccess());
             }
         }
         catch(exception ex) {
             system.debug('Im caught'+ex.getMessage());
+            LogService.logAndPublish(className, 'createBlaRecords', '', ex);
         }
         return blaAccMap;
     }
@@ -79,22 +95,23 @@ public class RenewalManagementController {
                 transFeeAccMap.put(accRec.Id, transFeeRec);
             }
             //Insert RegulatoryTrxnFee records
-            Database.SaveResult[] srList = Database.Insert(transFeeAccMap.values());
+            Database.SaveResult[] srList = Database.Insert(transFeeAccMap.values(), false);
             for(Database.SaveResult sr : srList) {
                 System.debug('inserted transFee data' + sr.getId()+' '+sr.isSuccess());
             }
         }
         catch(exception ex) {
             system.debug('Im caught in transFee'+ex.getMessage());
+            LogService.logAndPublish(className, 'createTransFeeRecords', '', ex);
         }
         return transFeeAccMap;
     }
     //method to form a RegulatoryTrxnFee record with given parameters
-    public static RegulatoryTrxnFee createTransFeeRecord(Id recordTypeId, Id accId, Id blaId, String feeType, String feeStatus, DateTime dueDate) {
+    public static RegulatoryTrxnFee createTransFeeRecord(Id recordTypeId, Id accId, Id parentId, String feeType, String feeStatus, DateTime dueDate) {
         RegulatoryTrxnFee transFeeRec = new RegulatoryTrxnFee(
             recordTypeId = recordTypeId,
             AccountId = accId,
-            ParentRecordId = blaId,
+            ParentRecordId = parentId,
             FeeType__c = feeType,
             Status = feeStatus,
             DueDate = dueDate);
@@ -109,23 +126,27 @@ public class RenewalManagementController {
         try {
             for(Account accRec : renewalFeeAccMap.values()) {
                 for(Asset assetRec : accRec.Assets) {
-                    Decimal amtVal = accRec.LicenseType__r.UnitFee__c;
+                    Decimal amtVal = defaultFee;
+                    if(accRec.LicenseType__c != NULL && accRec.LicenseType__r.UnitFee__c != NULL) {
+                       amtVal = accRec.LicenseType__r.UnitFee__c;
+                    }
                     system.debug('fee amt '+amtVal);
-                    if(amtVal == NULL) {
+                    /*if(amtVal == NULL) {
                         amtVal = defaultFee;
-                    }                   
+                    }*/                   
                     RegulatoryTrxnFeeItem transFeeItemRec = createTransFeeItemRecord(transFeeItemRT, transFeeMap.get(accRec.Id).Id, assetRec.Id, assetRec.Type__c, amtVal, assetRec.Quantity, feeType);
                     transFeeItemList.add(transFeeItemRec);
                 }
             }
             //Insert RegulatoryTrxnFeeItem records
-            Database.SaveResult[] srList = Database.Insert(transFeeItemList);
+            Database.SaveResult[] srList = Database.Insert(transFeeItemList, false);
             for(Database.SaveResult sr : srList) {
                 System.debug('inserted transFee Item data' + sr.getId()+' '+sr.isSuccess());
             }
         }
         catch(exception ex) {
             system.debug('Im caught in trans fee item '+ex.getMessage());
+            LogService.logAndPublish(className, 'createTransFeeItemRecords', '', ex);
         }
         return transFeeItemList;
     }

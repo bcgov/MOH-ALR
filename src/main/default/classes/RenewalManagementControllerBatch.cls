@@ -5,8 +5,9 @@
 * @Author            : Sweta (Accenture)
 * @StoryNo           : ALR-36
 **/
-public class RenewalManagementControllerBatch implements Database.Batchable<sObject> {
+public with sharing class RenewalManagementControllerBatch implements Database.Batchable<sObject> {
     //Static Constants
+    Public Static String className = 'RenewalManagementControllerBatch';
     private Final Static String renewalName = 'LicenseRenewalCriteria';
     private Final Static String blaRecType = 'Renewal';
     private Final Static String blaCancelledStatus = 'Cancelled';
@@ -14,6 +15,7 @@ public class RenewalManagementControllerBatch implements Database.Batchable<sObj
     private Final Static String blaRenewalStatus = 'Ready for Renewal';
     private Final Static String blaExcludedStatus = 'Excluded';
     Public static String parentAssetRT ='Units_Record_Type';
+    public Final Static List<String> allALUnitTypes = BCMOH_Constants.allALUnitTypes;
     //flow attribute
     public List<Id> CONLIST = new List<Id>();
     
@@ -54,7 +56,7 @@ public class RenewalManagementControllerBatch implements Database.Batchable<sObj
             +'  WHERE PrimaryContact__c = TRUE AND IsActive = TRUE LIMIT 1),'//ALR-560
             +' (SELECT Id FROM BusinessLicenseApplicationAccount WHERE RecordType.DeveloperName =: blaRecType'
             +'  AND Status !=: blaCancelledStatus AND RenewalYear__c =: renewalYear),'
-            +' (SELECT Id, Type__c, Quantity, Amount__c FROM Assets WHERE RecordType.DeveloperName =: parentAssetRT)'
+            +' (SELECT Id, Type__c, Quantity, Amount__c FROM Assets WHERE RecordType.DeveloperName =: parentAssetRT AND Type__c IN: allALUnitTypes)'//ALR-769 - added type check
             +' FROM Account'
             +' WHERE recordType.DeveloperName =: accRecType'
             +' AND Status__c IN: accStatuses';
@@ -74,11 +76,13 @@ public class RenewalManagementControllerBatch implements Database.Batchable<sObj
                 //check if bla already exists for the current year to avoid duplicates
                 if(accRec.BusinessLicenseApplicationAccount.size() == 0) {
                     system.debug('bla '+accRec.BusinessLicenseApplicationAccount);
-                    //create BLA with status as excluded and dont create child records if id not present in includedAccIds
+                    //**As per ALR-560 and ALR-796 - No more applicable --> create BLA with status as excluded and dont create child records if id not present in includedAccIds
+                    //As per ALR-560 and ALR-796 - create BLA with status as excluded and create child records 
                     blaStatusMap.put(accRec.Id, includedAccIds.contains(accRec.Id) ? blaRenewalStatus : blaExcludedStatus);
                     renewalAccMap.put(accRec.Id, accRec);
-                    //if assets are not present dont create Fee records (change logic to remove nesting if later)
-                    if(includedAccIds.contains(accRec.Id) && (accRec.Assets.size() > 0)) {
+                    //**As per ALR-560 and ALR-796 - No more applicable -->if assets are not present dont create Fee records (change logic to remove nesting if later)
+                    //ALR-560 & ALR-796 - Excluded Ids will also have Fee records generated if assets are present.
+                    if(accRec.Assets.size() > 0) {//removed - includedAccIds.contains(accRec.Id) && 
                         renewalFeeAccMap.put(accRec.Id, accRec);
                     }
                     system.debug('blaStatusMap renewalAccMap renewalFeeAccMap'+blaStatusMap+' '+renewalAccMap+' '+renewalFeeAccMap);//delete later
@@ -97,6 +101,7 @@ public class RenewalManagementControllerBatch implements Database.Batchable<sObj
         }
         catch(exception ex) {
             system.debug('Im caught in batch class'+ex.getMessage());//handle exceptions later
+            LogService.logAndPublish(className, 'execute', '', ex);
         }
     }
     //finish method
