@@ -61,18 +61,21 @@ public with sharing class ServerSideDocumentGenerationController {
             }
             //for each bla record generate createDocumentGenerationProcess for each template name in docNameWithTitleMap
             for(Id accId : blaMap.keySet()) {
+                reqdDataPresent = true;
+                documentMappingData.clear();
+   				documentMappingData1.clear();
                 for(String tempName : docNameWithTitleMap.keyset()) {
                     if(reqdDataPresent) {
                         DocumentGenerationProcess docGenRec = createDocumentGenerationProcessRequest(accId, tempName);
-                        system.debug('cdsjk cscd docGenRec '+docGenRec);
-                        if(docGenRec != NULL) {
+                        if(docGenRec.TokenData != NULL) {
+                            system.debug('*** docgenrec present tempname accId '+tempName+' '+accId+' '+docGenRec);
                             docGenList.add(docGenRec);
                         }
                     }
                 }
                 //if no templates fetched for renewals
                 if(docNameWithTitleMap.isEmpty()) {
-                    system.debug('sv css'+BCMOH_Constants.documentNotFetched);
+                    system.debug('*** document NotFetched '+BCMOH_Constants.documentNotFetched);
                     reqdDataPresent = false;
                     blaErrMap.put(blaMap.get(accId).Id, BCMOH_Constants.documentNotFetched);
                 }
@@ -93,6 +96,7 @@ public with sharing class ServerSideDocumentGenerationController {
            system.debug('cdsfinal '+blaErrMap);
         }
         catch(exception ex) {
+            system.debug('uuuu catch of startDocGenProcess '+ex.getMessage());
             LogService.logAndPublish(className, 'startDocGenProcess', '', ex);
         }
     }
@@ -273,10 +277,10 @@ public with sharing class ServerSideDocumentGenerationController {
             
             //h) Fee related data
             if(reqdDataPresent && transFeeMap1.get(accId) != NULL) {
-                system.debug('%% entered fee map transFeeMap1.get(accId)'+reqdDataPresent+' '+transFeeMap1.get(accId));
-                system.debug('%% entered fee map'+transFeeMap1);
+                system.debug('*** entered has  reqdDataPresent transFeeMap1.get(accId)'+reqdDataPresent+' '+transFeeMap1.get(accId));
+                system.debug('*** transFeeMap1 value '+transFeeMap1);
                 reqdDataPresent = fetchFeeRelatedInformation(accId);
-                system.debug('%% entered fee map'+reqdDataPresent);
+                system.debug('*** after fee item reqdDataPresent '+reqdDataPresent);
             }
             else {
                 system.debug('%% entered else trans fee map');
@@ -293,14 +297,15 @@ public with sharing class ServerSideDocumentGenerationController {
             //Convert the Map to a JSON string
             if(reqdDataPresent) {
                 tokenData = BCMOH_UtilityClass.mapToJson(documentMappingData1);
+                system.debug('*** tokenData after serialise '+tokenData);
             }
             else {
                 tokenData = NULL;
             }
-            system.debug('%%cscdsv tokenData '+tokenData);
+            system.debug('*** tokenData final prepareTokenData '+tokenData);
         }
         catch(exception ex) {
-            system.debug('uuuuu '+ex.getMessage());
+            system.debug('prepareTokenData catch uuuuu '+ex.getMessage());
             LogService.logAndPublish(className, 'prepareTokenData', '', ex);
         }
         return tokenData;
@@ -322,18 +327,22 @@ public with sharing class ServerSideDocumentGenerationController {
         Decimal perDiemFeeSum = 0;
         try {
             //Fee data
-            system.debug('&&cws'+accId+' '+transFeeMap1);
+            system.debug('*** accId transFeeMap1 '+accId+' '+transFeeMap1);
             RegulatoryTrxnFee feeRec = transFeeMap1.get(accId);
+            system.debug('*** feeRec Name, TotalFeeAmount '+feeRec.Name+' '+feeRec.TotalFeeAmount);
             //fee mapping
             documentMappingData1.put('InvoiceId', feeRec.Name);//ALR-775
-            documentMappingData1.put('TotalFeeAmount', '$'+feeRec.TotalFeeAmount);//ALR-775
-            system.debug('^^ feeRec'+feeRec);
+            documentMappingData1.put('TotalFeeAmount', '$'+feeRec.TotalFeeAmount);//ALR-775            
             
             //fee item mapping
             for(RegulatoryTrxnFeeItem transRec : transFeeItemMap1.values()) {
-                if(transRec.RegulatoryTrxnFeeId == feeRec.Id && transRec.Quantity__c != 0) {
+                system.debug('*** feeitem rec '+transRec);
+                //if fee item is private/public/per diem and quantity of fee item is > 0, only then add to document mapping
+                if(transRec.RegulatoryTrxnFeeId == feeRec.Id && BCMOH_Constants.allALUnitTypes.contains(transRec.Name) &&
+                   transRec.Quantity__c != NULL && transRec.Quantity__c > 0) {
+                    system.debug('*** entered if transItemRec  '+transRec);
                     if(transRec.Name == 'Public') {
-                        system.debug('cs'+transRec.Amount__c+' '+transRec.Quantity__c+' '+transRec.FeeAmount);
+                        system.debug('*** entered public amt qua feeamt'+transRec.Amount__c+' '+transRec.Quantity__c+' '+transRec.FeeAmount);
                         hasFeeItem = true;
                         documentMappingData1.put(BCMOH_Constants.unitsPublic, BCMOH_Constants.unitsPublic);
                         publicSum = transRec.Amount__c;
@@ -341,7 +350,7 @@ public with sharing class ServerSideDocumentGenerationController {
                         publicFeeSum +=  transRec.FeeAmount;
                     }
                     else if(transRec.Name == 'Private') {
-                        system.debug('cs'+transRec.Amount__c+' '+transRec.Quantity__c+' '+transRec.FeeAmount);
+                        system.debug('*** entered private amt qua feeamt'+transRec.Amount__c+' '+transRec.Quantity__c+' '+transRec.FeeAmount);
                         hasFeeItem = true;
                         documentMappingData1.put(BCMOH_Constants.unitsPrivate, BCMOH_Constants.unitsPrivate);
                         privateSum = transRec.Amount__c;
@@ -349,7 +358,7 @@ public with sharing class ServerSideDocumentGenerationController {
                         privateFeeSum += transRec.FeeAmount;                    
                     }
                     else if(transRec.Name == 'Per Diem') {
-                        system.debug('sdscd has per diem'+transRec);
+                        system.debug('*** entered per diem amt qua feeamt'+transRec.Amount__c+' '+transRec.Quantity__c+' '+transRec.FeeAmount);
                         hasFeeItem = true;
                         documentMappingData1.put(BCMOH_Constants.unitsPerDiem, BCMOH_Constants.unitsPerDiem);
                         perDiemSum = transRec.Amount__c;
@@ -359,13 +368,16 @@ public with sharing class ServerSideDocumentGenerationController {
                 }
             }
             
-            //add values to mapping if present
+            //if no valid fee items add to error map
             if(!hasFeeItem) {
+                system.debug('*** entered has no feeitem  '+hasFeeItem);
                 reqdDataPresent = false;
                 blaErrMap.put(blaMap.get(accId).Id, BCMOH_Constants.docDataNotFetched+': '+BCMOH_Constants.regulatoryTransactionFeeItem);
-                return NULL;
+                system.debug('***  blaErrMap, reqdDataPresent '+blaErrMap+' '+reqdDataPresent);
             }
             else {
+                //add fee item mapping
+                system.debug('*** entered else of has feeitem  '+hasFeeItem);
                 if(documentMappingData1.keySet().contains(BCMOH_Constants.unitsPublic)) {
                     documentMappingData1.put('PublicQuantitySum', publicQuantitySum);
                     documentMappingData1.put('PublicSum', '$'+publicSum);
@@ -385,7 +397,7 @@ public with sharing class ServerSideDocumentGenerationController {
             }
         }
         catch(exception ex) {
-            system.debug('uuuuu '+ex.getMessage());
+            system.debug('fetchFeeRelatedInformation catch uuuuu '+ex.getMessage());
             LogService.logAndPublish(className, 'fetchFeeRelatedInformation', '', ex);
         }
         return reqdDataPresent;

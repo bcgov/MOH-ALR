@@ -8,14 +8,18 @@
 public class MassEmailControllerTest {
     //test data setup
     @testSetup public static void setupData() {
+        Id parentAssetRTId = Schema.getGlobalDescribe().get('Asset').getDescribe().getRecordTypeInfosByDeveloperName().get('Units_Record_Type').getRecordTypeId();
         RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
         //account with asset and bla
         Account residenceRec1 = TestDataFactory.createResidence('Residence', 'residenceAccount1', regAuth.Id, true);
-        Account residenceRec2 = TestDataFactory.createResidence('Residence', 'residenceAccount2', regAuth.Id, true);
+        Account residenceRec2 = TestDataFactory.createResidence('Residence', 'Account2', regAuth.Id, true);
         Contact contactRec = TestDataFactory.createContactRecord(residenceRec2.Id, 'test@xyz.com', 'fname1', 'lname1', true);
 		AccountContactRelation acConRelRec = TestDataFactory.createAccContRelRecord(residenceRec1.Id, contactRec.Id , true, true, true);
 
         Asset unitRec1 = TestDataFactory.createUnit('1', 'Private', 2, residenceRec1.Id, true);
+        unitRec1.recordTypeId = parentAssetRTId;
+        //unit1.GenerateInvoice__c = true;
+        update unitRec1;
         BusinessLicenseApplication blaRec = TestDataFactory.createRenewalBla(residenceRec1.LicenseType__c, residenceRec1.Id, true);
         BusinessLicense blRec = TestDataFactory.createBlRecord(regAuth.Id, residenceRec1.Id, '58659', 'BL RECORD 1', true);
         ContentVersion contentVersionRec = TestDataFactory.createContentVer('title value 1', blaRec.Id, true);

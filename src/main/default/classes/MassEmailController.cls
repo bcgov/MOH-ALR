@@ -1,7 +1,7 @@
 /**
 * @Name              : MassEmailController
 * @Description       : Controller class to send mass email
-                       referenced in ....
+                       Test class MassEmailControllerTest
 * @Author            : Sweta (Accenture)
 * @StoryNo           : ALR-560
 **/
@@ -167,7 +167,7 @@ public with sharing class MassEmailController {
     
     //send email method
     public static void sendEmailForRenewals(Map<Id, Set<Id>> blaContentVerMap, Map<Id, Id> whatIdTargetMap) {
-        List<Id> attachIds = new List<Id>();
+        //List<Id> attachIds = new List<Id>();
         Id contactId = NULL;
         BusinessLicense blRec = new BusinessLicense();
         Integer totalALUnits = 0;
@@ -180,7 +180,8 @@ public with sharing class MassEmailController {
                 contactId = whatIdTargetMap.isEmpty() ? NULL : whatIdTargetMap.get(whatId);
                 system.debug('yui inside sendEmailForRenewals whatid  '+whatId);
                 //fetch attachments for email attached to WhatId (Bla Id)
-                attachIds = new List<Id>(blaContentVerMap.get(whatId));
+                List<Id> attachIds = new List<Id>(blaContentVerMap.get(whatId));
+                system.debug('--attachIds '+attachIds);
                 if(!blaMap.isEmpty() && !accMap.isEmpty() &&
                    blaMap.get(whatId) != NULL && accMap.get(whatId) != NULL) {
                        blRec = !blMap.isEmpty() && blMap.get(whatId) != NULL ? blMap.get(whatId) : NULL;//get BL record
@@ -358,9 +359,9 @@ public with sharing class MassEmailController {
             system.debug('yui fetchAttachmentDetailsmeth wrappper resp '+ContentDocWrapperRec);
             //fetch content versions per Bla record
             if(ContentDocWrapperRec != NULL) {
-                Set<Id> contentVerIdSet = new Set<Id>();
                 for(Id blaId : ContentDocWrapperRec.entityContentIdsMap.KeySet()) {//for each bla rec Id
                     for(Id docId : ContentDocWrapperRec.entityContentIdsMap.get(blaId)) {//for each of its content document id
+                        Set<Id> contentVerIdSet = new Set<Id>();
                         if(blaContentVerMap.containsKey(blaId)) {//if map contains the bla id
                             contentVerIdSet = blaContentVerMap.get(blaId);//fetch its content versions
                         }

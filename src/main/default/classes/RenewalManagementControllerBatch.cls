@@ -36,14 +36,17 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
             	conlist.addAll(req.conId);
             }
         }
-        Id jobId = Database.executeBatch(new RenewalManagementControllerBatch(conlist));
+        //RenewalManagementControllerBatch clsName = new RenewalManagementControllerBatch(conlist);
+        Id jobId = Database.executeBatch(new RenewalManagementControllerBatch(conlist), 400);
+        //Id jobId = Database.executeBatch(clsName, 100);
     }
     //start method
     public Database.QueryLocator start(Database.BatchableContext BC) {
-        //fetching metadata
+        //fetch acc status and record type from custom metadata
         RenewalProcessCriteria__mdt renewalCriteriaRec = RenewalProcessCriteria__mdt.getInstance(renewalName);
         String accRecType = renewalCriteriaRec.AccountRecordType__c;
         List<String> accStatuses = renewalCriteriaRec.AccountStatuses__c.split(';');
+        //Map<String, List<String>> accDetails = BCMOH_UtilityClass.getAccRenewals(BCMOH_Constants.renewalName);
         Id tempAccId = '001As00000IGYmbIAH';
         //start query
         String query = 'SELECT Id, Status__c, LicenseType__c,'
@@ -58,7 +61,7 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
             +'  AND Status !=: blaCancelledStatus AND RenewalYear__c =: renewalYear),'
             +' (SELECT Id, Type__c, Quantity, Amount__c FROM Assets WHERE RecordType.DeveloperName =: parentAssetRT AND Type__c IN: allALUnitTypes)'//ALR-769 - added type check
             +' FROM Account'
-            +' WHERE recordType.DeveloperName =: accRecType'
+            +' WHERE recordType.DeveloperName =: accRecType AND LicenseType__c != NULL'
             +' AND Status__c IN: accStatuses';
             //+' AND Id =: tempAccId';
         return Database.getQueryLocator(query);
@@ -69,23 +72,26 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
         Map<Id, Account> renewalAccMap = new Map<Id, Account>();
         Map<Id, Account> renewalFeeAccMap = new Map<Id, Account>();
         List<Id> includedAccIds = CONLIST;
-        system.debug('CONLIST includedAccIds '+' '+CONLIST+' '+includedAccIds);//delete later   
-        system.debug('renewalAccList '+renewalAccList.size()+' '+renewalAccList);//delete later
+        system.debug('*** CONLIST includedAccIds '+' '+CONLIST+' '+includedAccIds);//delete later   
+        system.debug('*** renewalAcc size List '+renewalAccList.size()+' '+renewalAccList);//delete later
         try {
             for(Account accRec : renewalAccList) {
-                //check if bla already exists for the current year to avoid duplicates
+                //check if non cancelled renewalbla already exists for the current year to avoid duplicates
                 if(accRec.BusinessLicenseApplicationAccount.size() == 0) {
-                    system.debug('bla '+accRec.BusinessLicenseApplicationAccount);
+                    system.debug('*** expect null - bla on acc '+accRec.BusinessLicenseApplicationAccount);
                     //**As per ALR-560 and ALR-796 - No more applicable --> create BLA with status as excluded and dont create child records if id not present in includedAccIds
                     //As per ALR-560 and ALR-796 - create BLA with status as excluded and create child records 
                     blaStatusMap.put(accRec.Id, includedAccIds.contains(accRec.Id) ? blaRenewalStatus : blaExcludedStatus);
                     renewalAccMap.put(accRec.Id, accRec);
                     //**As per ALR-560 and ALR-796 - No more applicable -->if assets are not present dont create Fee records (change logic to remove nesting if later)
                     //ALR-560 & ALR-796 - Excluded Ids will also have Fee records generated if assets are present.
-                    if(accRec.Assets.size() > 0) {//removed - includedAccIds.contains(accRec.Id) && 
+                    if(accRec.Assets != NULL && accRec.Assets.size() > 0) {//removed - includedAccIds.contains(accRec.Id) && 
                         renewalFeeAccMap.put(accRec.Id, accRec);
                     }
-                    system.debug('blaStatusMap renewalAccMap renewalFeeAccMap'+blaStatusMap+' '+renewalAccMap+' '+renewalFeeAccMap);//delete later
+                    /*else if(accRec.Assets == NULL) {--TO DO:
+                        blaStatusMap.put(accRec.Id, 'Errored');
+                    }*/
+                    system.debug('*** blaStatusMap renewalAccMap renewalFeeAccMap'+blaStatusMap+' '+renewalAccMap+' '+renewalFeeAccMap);//delete later
                 }
         	}
             //1) create BLA records in controlled class

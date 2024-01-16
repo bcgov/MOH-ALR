@@ -11,27 +11,29 @@ public with sharing class RenewalManagementController {
     private Final Static String feeType = 'Renewal Unit Fee';
     private Final Static String feeStatus = 'Due';
     private Final Static Decimal defaultFee = 0;
-    //method to return number of active accounts for renewal for current year
+    //method to return number of active accounts ready for renewal for current year
     @InvocableMethod
     public static List<String> getAccountIds() {
         List<String> activeAccCount = new List<String>();
         Integer countValue = 0;
         try {
-            RenewalProcessCriteria__mdt renewalCriteriaRec = RenewalProcessCriteria__mdt.getInstance(BCMOH_Constants.renewalName);
-            String accRecType = renewalCriteriaRec.AccountRecordType__c;
-            List<String> accStatuses = renewalCriteriaRec.AccountStatuses__c.split(';');
-            for(Account accRec : [SELECT Id, (SELECT Id FROM BusinessLicenseApplicationAccount WHERE RecordType.DeveloperName =: BCMOH_Constants.blaRecType
+            //fetch acc status and record type from custom metadata
+            Map<String, List<String>> accDetails = BCMOH_UtilityClass.getAccRenewals(BCMOH_Constants.renewalName);
+            //get count of active residences with license type populated and no renewal bla records with non cancelled status for current year
+            for(Account accRec : [SELECT Id, (SELECT Id FROM BusinessLicenseApplicationAccount 
+                                              WHERE RecordType.DeveloperName =: BCMOH_Constants.blaRecType
                                               AND Status !=: BCMOH_Constants.blaCancelledStatus AND RenewalYear__c =: BCMOH_Constants.renewalYear)
-                                  FROM Account WHERE recordType.DeveloperName =: accRecType
-                                  AND Status__c IN: accStatuses]) {
+                                  FROM Account WHERE recordType.DeveloperName =: accDetails.keyset() AND LicenseType__c != NULL
+                                  AND Status__c IN: accDetails.values()[0]]) {
                                       if(accRec.BusinessLicenseApplicationAccount.size() == 0) {
                                           countValue++;
                                       }
                                   }
             activeAccCount.add(String.valueOf(countValue));
+            system.debug('*** activeAccCount '+activeAccCount);
         }
         catch(exception ex) {
-            system.debug('Im caught in getAccountIds'+ex.getMessage());
+            system.debug('*** Im caught in getAccountIds'+ex.getMessage());
             LogService.logAndPublish(className, 'getAccountIds', '', ex);
         }
         return activeAccCount;
@@ -41,9 +43,6 @@ public with sharing class RenewalManagementController {
         List<BusinessLicenseApplication> blaRecCreateList = new List<BusinessLicenseApplication>();
         Map<Id, BusinessLicenseApplication> blaAccMap = new Map<Id, BusinessLicenseApplication>();
         try {
-        //fetch recordtype Id
-        system.debug('cda'+UserInfo.getUserId());
-        String blaRecTypeId = Schema.getGlobalDescribe().get('BusinessLicenseApplication').getDescribe().getRecordTypeInfosByDeveloperName().get('Renewal').getRecordTypeId();
         //call BLA creation method for each account
         for(Account accRec : accMap.values()) {
             String regAuthCat = NULL;
@@ -54,7 +53,7 @@ public with sharing class RenewalManagementController {
                 	regAuthCat = accRec.LicenseType__r.RegulatoryAuthCategory;
             	}
             }
-            BusinessLicenseApplication blaRec = createBlaRecord(blaRecTypeId, accRec.Id, regAuthCat, licenseType, blaStatusMap.get(accRec.Id), DateTime.now(), BCMOH_Constants.renewalYear);
+            BusinessLicenseApplication blaRec = createBlaRecord(BCMOH_Constants.renewalBlaRecTypeId, accRec.Id, regAuthCat, licenseType, blaStatusMap.get(accRec.Id), DateTime.now(), BCMOH_Constants.renewalYear);
             blaRecCreateList.add(blaRec);
             blaAccMap.put(accRec.Id, blaRec);
         }
