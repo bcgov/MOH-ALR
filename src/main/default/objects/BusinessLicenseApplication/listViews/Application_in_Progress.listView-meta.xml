@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Application_in_Progress</fullName>
+    <columns>Name</columns>
+    <columns>Account</columns>
+    <columns>AppliedDate</columns>
+    <columns>LicenseType</columns>
+    <columns>Status</columns>
+    <columns>CreatedDate</columns>
+    <filterScope>Mine</filterScope>
+    <filters>
+        <field>Status</field>
+        <operation>notEqual</operation>
+        <value>Approved,Closed</value>
+    </filters>
+    <filters>
+        <field>RecordType</field>
+        <operation>equals</operation>
+        <value>BusinessLicenseApplication.New_License_Application_Record_Type</value>
+    </filters>
+    <label>Application in Progress</label>
+</ListView>
