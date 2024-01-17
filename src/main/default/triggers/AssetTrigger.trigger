@@ -6,7 +6,7 @@ trigger AssetTrigger on Asset (before insert, before update, after insert, after
     //}
    //  fflib_SObjectDomain.triggerHandler(Accounts.class);.
   // handler.AssetTriggerHandler();
-  system.debug('99==');
+  /*system.debug('99==');
     TriggerHandler handler = new AssetTriggerHandler();
      //TriggerHandler handler = new AccountTriggerHandler(Trigger.isExecuting, Trigger.size);
         switch on Trigger.operationType {
@@ -31,5 +31,5 @@ trigger AssetTrigger on Asset (before insert, before update, after insert, after
             when AFTER_UNDELETE {
                  handler.afterUndelete(Trigger.new, Trigger.newMap);
             }
-        }
+        }*/
 }
