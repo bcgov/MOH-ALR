@@ -65,8 +65,8 @@ public with sharing class MassEmailController {
                                          WHERE RecordType.DeveloperName =: BCMOH_Constants.blaRecType AND 
                                          Status =: BCMOH_Constants.blaCreatedStatus 
                                          AND RenewalYear__c =: BCMOH_Constants.renewalYear LIMIT 1),
-                                        (SELECT Id, RegistrationCertificate__c, Identifier 
-                                         FROM BusinessLicenses LIMIT 1),
+                                        (SELECT Id, RegistrationCertificate__c 
+                                         FROM AccountBusinessLicenses__r WHERE IsActive = TRUE LIMIT 1),
                                         (SELECT Id, Capacity__c, Quantity, Type__c 
                                          FROM Assets
 										 WHERE RecordType.DeveloperName =: BCMOH_Constants.parentAssetRecType
@@ -93,12 +93,12 @@ public with sharing class MassEmailController {
                                                 continue;//skips following code and fetches next account in loop
                                             }
                                             //fetch business license record 
-                                            if(activeAccRec.BusinessLicenses.size() == 0) { 
+                                            if(activeAccRec.AccountBusinessLicenses__r.size() == 0) { 
                                                 //blaErrMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, BCMOH_Constants.noBLRec);
                                                 system.debug('yui No BL for this Account');
                                             }
                                            	else if(isValidAcc) {
-                                               blMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, activeAccRec.BusinessLicenses[0]);
+                                               blMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, activeAccRec.AccountBusinessLicenses__r[0]);
                                             }
                                            
                                             //if account is valid then fetch the bla Ids associated with the account to fetch its files attached

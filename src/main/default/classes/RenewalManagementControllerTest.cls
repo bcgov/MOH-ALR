@@ -127,7 +127,7 @@ public class RenewalManagementControllerTest {
     //RenewalManagementControllerBatch coverage
      @isTest
     static void getsendEmailTestTest1() {
-        List<BusinessLicense> blRec = [SELECT Id, Account.Name from BusinessLicense];
+        //List<BusinessLicense> blRec = [SELECT Id, Account.Name from BusinessLicense];
         List<Asset> assetRec = [SELECT Id, Account.Name from Asset];
         AccountContactRelation acRec = [SELECT Id, ContactId, AccountId, isActive, PrimaryContact__c from AccountContactRelation LIMIT 1];
         

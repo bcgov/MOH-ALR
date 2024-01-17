@@ -106,7 +106,7 @@ public class TestDataFactory {
       String blRecTypeId = Schema.getGlobalDescribe().get('BusinessLicense').getDescribe().getRecordTypeInfosByDeveloperName().get('License').getRecordTypeId();
       BusinessLicense blRec = new BusinessLicense(
           recordTypeId = blRecTypeId,
-          AccountId = accId,
+          Account__c = accId,
           RegulatoryAuthorizationTypeId = regAuthId,
           Status = 'Active',
           RegistrationCertificate__c = certNo,

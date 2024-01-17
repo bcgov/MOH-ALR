@@ -244,10 +244,10 @@ public with sharing class ServerSideDocumentGenerationController {
             }
             
             //e) BL related data
-            if(reqdDataPresent && accRec.BusinessLicenses != NULL && accRec.BusinessLicenses.size() > 0 &&
-               accRec.BusinessLicenses[0].RegistrationCertificate__c != NULL) {
-                system.debug(' &&&&& bl thr cds'+reqdDataPresent+' '+accRec.BusinessLicenses[0]);
-                BusinessLicense blRec = accRec.BusinessLicenses[0];
+            if(reqdDataPresent && accRec.AccountBusinessLicenses__r != NULL && accRec.AccountBusinessLicenses__r.size() > 0 &&
+               accRec.AccountBusinessLicenses__r[0].RegistrationCertificate__c != NULL) {
+                system.debug(' &&&&& bl thr cds'+reqdDataPresent+' '+accRec.AccountBusinessLicenses__r[0]);
+                BusinessLicense blRec = accRec.AccountBusinessLicenses__r[0];
                 documentMappingData1.put('CertificateId', blRec.RegistrationCertificate__c);
             } 
             else {

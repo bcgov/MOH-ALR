@@ -315,7 +315,7 @@
             <label>Invoice Pending</label>
         </rules>
     </decisions>
-    <description>Changes for ALR 752</description>
+    <description>Changes for ALR 810. added new field Account for residence &amp; org is associated with Registrant</description>
     <environments>Default</environments>
     <formulas>
         <name>endDate</name>
@@ -387,6 +387,12 @@
         </faultConnector>
         <inputAssignments>
             <field>AccountId</field>
+            <value>
+                <elementReference>licenseApplication.Account.ParentId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Account__c</field>
             <value>
                 <elementReference>licenseApplication.AccountId</elementReference>
             </value>
@@ -495,7 +501,7 @@
         </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
-            <field>AccountId</field>
+            <field>Account__c</field>
             <operator>EqualTo</operator>
             <value>
                 <elementReference>licenseApplication.AccountId</elementReference>
