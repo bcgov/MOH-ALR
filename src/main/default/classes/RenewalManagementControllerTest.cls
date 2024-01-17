@@ -91,7 +91,7 @@ public class RenewalManagementControllerTest {
         acRec.isActive = true;
         update acRec;
         //AccountContactRelation acConRelRec = TestDataFactory.createAccContRelRecord(residenceRec1.Id, contactRec.Id , true, true, true);
-        BusinessLicense blRec = TestDataFactory.createBlRecord(regAuth.Id, residenceRec1.Id, '58659', 'BL RECORD 1', true);
+        BusinessLicense blRec = TestDataFactory.createBlRecord(regAuth.Id, residenceRec1.Id, residenceRec1.ParentId, '58659', 'BL RECORD 1', true);
         
         //Location
         Schema.Location locRec = new Schema.Location(

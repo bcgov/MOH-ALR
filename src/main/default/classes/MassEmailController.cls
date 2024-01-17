@@ -66,7 +66,7 @@ public with sharing class MassEmailController {
                                          Status =: BCMOH_Constants.blaCreatedStatus 
                                          AND RenewalYear__c =: BCMOH_Constants.renewalYear LIMIT 1),
                                         (SELECT Id, RegistrationCertificate__c 
-                                         FROM AccountBusinessLicenses__r WHERE IsActive = TRUE LIMIT 1),
+                                         FROM AccountBusinessLicenses__r WHERE Status =: BCMOH_Constants.activeStatusBl LIMIT 1),
                                         (SELECT Id, Capacity__c, Quantity, Type__c 
                                          FROM Assets
 										 WHERE RecordType.DeveloperName =: BCMOH_Constants.parentAssetRecType

@@ -4,9 +4,14 @@ public class TestDataFactory {
     @testVisible
     static Account createResidence(String recordTypeName, String Name, String licenseId,  Boolean dmlOption){
         
-        Account Registrant = new Account();
-        Registrant.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('Registrant').getRecordTypeId();
-        Registrant.Name = Name +' '+'Registrant';	        
+        Account Registrant = new Account(
+            RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('Registrant').getRecordTypeId(),
+            Name = Name +' '+'Registrant',
+            BillingCity = 'TT',
+            BillingCountry = 'YY',
+            BillingPostalCode = '225522',
+            BillingState = 'TT',
+            BillingStreet = 'YT');
         if(dmlOption){
             insert Registrant;
         }
@@ -17,7 +22,7 @@ public class TestDataFactory {
         //residence.ClassType__c = 'Mental Helath';
         residence.LicenseType__c = licenseId;//ALR-185
         Residence.ParentId =Registrant.Id;
-        Residence.Status__c = 'Registered Active';//ALR-36 - added status
+        Residence.Status__c = 'Registered Active with Conditions';//'Registered Active';//ALR-36 - added status
         if(dmlOption){
             insert Residence;
         }
@@ -102,13 +107,15 @@ public class TestDataFactory {
      }
     //method to create bl record - ALR-560
     @testVisible
-    public static BusinessLicense createBlRecord(String regAuthId, Id accId, String certNo, String blName, Boolean isInsert) {
+    public static BusinessLicense createBlRecord(String regAuthId, Id accId, Id orgId, String certNo, String blName, Boolean isInsert) {
       String blRecTypeId = Schema.getGlobalDescribe().get('BusinessLicense').getDescribe().getRecordTypeInfosByDeveloperName().get('License').getRecordTypeId();
       BusinessLicense blRec = new BusinessLicense(
           recordTypeId = blRecTypeId,
           Account__c = accId,
+          AccountId = orgId,
           RegulatoryAuthorizationTypeId = regAuthId,
           Status = 'Active',
+          IsActive = TRUE,
           RegistrationCertificate__c = certNo,
           Name = blName);
         if(isInsert) {

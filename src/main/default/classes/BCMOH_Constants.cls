@@ -69,7 +69,7 @@ public class BCMOH_Constants {
     public Final Static String emailSentTo = System.Label.EmailSentTo;
     public Final Static String sentTime = System.Label.SentTime;
     public Final Static String renewalBlaRecTypeId = Schema.getGlobalDescribe().get('BusinessLicenseApplication').getDescribe().getRecordTypeInfosByDeveloperName().get('Renewal').getRecordTypeId();
-    
+    public Final Static String activeStatusBl = 'Active';
     public Final Static String MANAGEUNITCLASSNAME = 'ManageUnitOmniService';
     public Final Static String INSERTMERGERASSETMETHODNAME = 'insertMergedAssets';
     public Final Static String UPDATEPARENTONCHILDASSETMETHODNAME = 'updateParentOnChildAssets';

@@ -21,7 +21,8 @@ public class MassEmailControllerTest {
         //unit1.GenerateInvoice__c = true;
         update unitRec1;
         BusinessLicenseApplication blaRec = TestDataFactory.createRenewalBla(residenceRec1.LicenseType__c, residenceRec1.Id, true);
-        BusinessLicense blRec = TestDataFactory.createBlRecord(regAuth.Id, residenceRec1.Id, '58659', 'BL RECORD 1', true);
+        BusinessLicense blRec = TestDataFactory.createBlRecord(regAuth.Id, residenceRec1.Id, residenceRec1.ParentId, '58659', 'BL RECORD 1', true);
+        
         ContentVersion contentVersionRec = TestDataFactory.createContentVer('title value 1', blaRec.Id, true);
         //ContentVersion contentVersionRec1 = TestDataFactory.createContentVer('title value 2', blaRec.Id, true);
 
