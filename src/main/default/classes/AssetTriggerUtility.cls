@@ -5,7 +5,8 @@
 * @StoryNo           : ALR-40
 **/
 public without sharing class AssetTriggerUtility {
-    private Final Static Decimal defaultFee = 0;
+}
+    /*private Final Static Decimal defaultFee = 0;
     //ALR-40 - generateInvoices
     public static void generateInvoices(List<Asset> lstAsset, Map<Id, SObject> newAssetMap, Map<Id, SObject> oldAssetMap) {
         Map<Id, List<Asset>> invoiceAssetMap = new Map<Id, List<Asset>>();
@@ -20,10 +21,6 @@ public without sharing class AssetTriggerUtility {
         Asset oldRec = new Asset();
         DateTime dueDate = BCMOH_Constants.feeDueDateTime;//ALR-185
         try { 
-//system.debug('^^ new asset list '+lstAsset);
-            //system.debug('^^ new asset map '+newAssetMap);
-            //system.debug('^^ old asset map '+oldAssetMap);
-               
             String unitsRecordTypeId = Schema.getGlobalDescribe().get('Asset').getDescribe().getRecordTypeInfosByDeveloperName().get('Units_Record_Type').getRecordTypeId();
             String unitReqRecordTypeId = Schema.getGlobalDescribe().get('Asset').getDescribe().getRecordTypeInfosByDeveloperName().get('Unit_Request_Record_Type').getRecordTypeId();
             String transFeeRecTypeId = Schema.getGlobalDescribe().get('RegulatoryTrxnFee').getDescribe().getRecordTypeInfosByDeveloperName().get('TransactionFee').getRecordTypeId();
@@ -32,9 +29,9 @@ public without sharing class AssetTriggerUtility {
                 if(Trigger.isUpdate) {
                 	oldRec = (Asset)oldAssetMap.get(assetRec.Id);
                 }
-                system.debug('^^ in for new rec '+assetRec);
-                system.debug('%% old asset values '+oldRec.GenerateInvoice__c+' '+oldRec.recordTypeId+' '+oldRec.Status+' '+oldRec.Quantity+' '+oldRec.ParentId);
-                system.debug('%% new asset values '+assetRec.GenerateInvoice__c+' '+assetRec.recordTypeId+' '+assetRec.Status+' '+assetRec.Quantity+' '+oldRec.ParentId);
+                system.debug('^^ in for new rec '+assetRec+' '+Trigger.isInsert+' '+Trigger.isUpdate);
+                system.debug('%% old asset values '+oldRec.Type__c+' '+oldRec.AccountId+' '+oldRec.GenerateInvoice__c+' '+oldRec.recordTypeId+' '+oldRec.Status+' '+oldRec.Quantity+' '+oldRec.ParentId);
+                system.debug('%% new asset values '+Trigger.isInsert+' '+assetRec.Type__c+' '+assetRec.AccountId+' '+assetRec.GenerateInvoice__c+' '+assetRec.recordTypeId+' '+assetRec.Status+' '+assetRec.Quantity+' '+assetRec.ParentId);
                 if(assetRec.GenerateInvoice__c == true && assetRec.ParentId != NULL &&
                    assetRec.recordTypeId == unitReqRecordTypeId && 
                    assetRec.Status == BCMOH_Constants.pendingInvoiceStatus && 
@@ -49,6 +46,8 @@ public without sharing class AssetTriggerUtility {
                     childParentAssetMap.put(assetRec.Id, assetRec.ParentId);
                 }
             }
+            system.debug('fvsdvfds invoiceAssetMap'+invoiceAssetMap);
+            system.debug('fvsdvfds childParentAssetMap'+childParentAssetMap);
             //fetch amount of the child's parent records
             for(Asset assetParentRecs : [SELECT Id, Amount__c, AccountId, Account.LicenseType__r.PartialUnitFee__c,
                                          Account.LicenseType__r.OneTimeFee__c, Account.LicenseType__r.UnitFee__c,
@@ -56,7 +55,6 @@ public without sharing class AssetTriggerUtility {
                                          FROM Asset WHERE Id IN: childParentAssetMap.values()]) {
                                              parentAmountMap.put(assetParentRecs.Id, assetParentRecs.Amount__c);
                                              parentAssetMap.put(assetParentRecs.Id, assetParentRecs);
-                                             
                                              
             }
             //fetch latest BLA record of the account as parent rec if fee rec
@@ -88,7 +86,7 @@ public without sharing class AssetTriggerUtility {
             for(Id accId : invoiceAssetMap.keySet()) {
                 for(Asset assetRec : invoiceAssetMap.get(accId)) {
                      String amtString = assetRec.Amount__c == NULL ? parentAssetMap.get(assetRec.ParentId).Amount__c : assetRec.Amount__c;
-                     Decimal amtVal = amtString == 'Unit Fee' ? parentAssetMap.get(assetRec.ParentId).Account.LicenseType__r.UnitFee__c : parentAssetMap.get(assetRec.ParentId).Account.LicenseType__r.PartialUnitFee__c;
+                     Decimal amtVal = amtString == BCMOH_Constants.fullUnitFee ? parentAssetMap.get(assetRec.ParentId).Account.LicenseType__r.UnitFee__c : parentAssetMap.get(assetRec.ParentId).Account.LicenseType__r.PartialUnitFee__c;
                         system.debug('^^ fee amt '+amtVal);
                         if(amtVal == NULL) {
                             amtVal = defaultFee;
@@ -109,7 +107,7 @@ public without sharing class AssetTriggerUtility {
     }
     /*********************************************************************************************/
     //triggered after update
-    public static void generateRenewalInvoices(List<Asset> assetListNew, Map<Id, SObject> oldAssetMap, Map<Id, SObject> newAssetMap) {
+   /* public static void generateRenewalInvoices(List<Asset> assetListNew, Map<Id, SObject> oldAssetMap, Map<Id, SObject> newAssetMap) {
         Set<Id> accIdSet = new Set<Id>();
         Map<Id, RegulatoryTrxnFee> transFeeAccMap = new Map<Id, RegulatoryTrxnFee>();
         String unitFeeType = 'Renewal Unit Fee';
@@ -197,4 +195,4 @@ public without sharing class AssetTriggerUtility {
             system.debug('^^ Im caught in generateRenewalInvoices '+ex.getMessage());
         }
     }
-}
+}*/

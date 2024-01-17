@@ -1,6 +1,7 @@
-public without sharing class AssetTriggerHandler implements TriggerHandler {
+public without sharing class AssetTriggerHandler {
+}
     //attributes
-    private boolean triggerIsExecuting;
+    /*private boolean triggerIsExecuting;
     private integer triggerSize;
     Public static Boolean firstCall = true;//recursive check
     public AssetTriggerHandler helper;
@@ -31,7 +32,7 @@ public without sharing class AssetTriggerHandler implements TriggerHandler {
     //afterUndelete
     public void afterUndelete(List<Asset> newAssets, Map<ID, SObject> newAssetMap) {
     }
-}
+}*/
  /*public AssetTriggerHandler helper;
    public AssetTriggerHandler(boolean triggerIsExecuting, integer triggerSize) {
         this.triggerIsExecuting = triggerIsExecuting;

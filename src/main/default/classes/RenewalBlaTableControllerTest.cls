@@ -85,8 +85,8 @@ public class RenewalBlaTableControllerTest {
         acRec.PrimaryContact__c = true;
         acRec.isActive = true;
         update acRec;
-		//AccountContactRelation acConRelRec = TestDataFactory.createAccContRelRecord(residenceRec1.Id, contactRec.Id , true, true, true);
-        BusinessLicense blRec = TestDataFactory.createBlRecord(regAuth.Id, residenceRec1.Id, '58659', 'BL RECORD 1', true);
+        //AccountContactRelation acConRelRec = TestDataFactory.createAccContRelRecord(residenceRec1.Id, contactRec.Id , true, true, true);
+        BusinessLicense blRec = TestDataFactory.createBlRecord(regAuth.Id, residenceRec1.Id, residenceRec1.ParentId, '58659', 'BL RECORD 1', true);
         
         //Location
         Schema.Location locRec = new Schema.Location(
@@ -105,20 +105,20 @@ public class RenewalBlaTableControllerTest {
         );
         Insert addressRec;
         system.debug('cscds addressRec '+addressRec);
-        Schema.AssociatedLocation asLoc = new Schema.AssociatedLocation(
+                Schema.AssociatedLocation asLoc = new Schema.AssociatedLocation(
         ParentRecordId = residenceRec1.Id,
         LocationId = locRec.Id);
         Insert asLoc;
         system.debug('cscds AssociatedLocation '+asLoc);
         
         //account 2
-        Account residenceRec2 = TestDataFactory.createResidence('Residence', 'residenceAccount2', regAuth.Id, true);
+        Account residenceRec2 = TestDataFactory.createResidence('Residence', 'testingAccount2', regAuth.Id, true);
         
         
     }
      @isTest
     static void getsendEmailTestTest1() {
-        List<BusinessLicense> blRec = [SELECT Id, Account.Name from BusinessLicense];
+        //List<BusinessLicense> blRec = [SELECT Id, Account.Name from BusinessLicense];
         List<Asset> assetRec = [SELECT Id, Account.Name from Asset];
         AccountContactRelation acRec = [SELECT Id, ContactId, AccountId, isActive, PrimaryContact__c from AccountContactRelation LIMIT 1];
         

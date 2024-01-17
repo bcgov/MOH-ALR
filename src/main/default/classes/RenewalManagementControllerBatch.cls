@@ -16,6 +16,7 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
     private Final Static String blaExcludedStatus = 'Excluded';
     Public static String parentAssetRT ='Units_Record_Type';
     public Final Static List<String> allALUnitTypes = BCMOH_Constants.allALUnitTypes;
+    public Final Static String activeStatusBl = BCMOH_Constants.activeStatusBl;
     //flow attribute
     public List<Id> CONLIST = new List<Id>();
     
@@ -54,7 +55,7 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
             +' LicenseType__r.OneTimeFee__c, LicenseType__r.PartialUnitFee__c, LicenseType__r.LateFee__c,'
             +' Name, RegId__c, LicenseType__r.Name, Phone, Fax, ParentId, Parent.Name, Parent.Phone, Parent.BillingAddress,'//ALR-560
             +' (SELECT Id, Location.VisitorAddress.Address FROM AssociatedLocations LIMIT 1),'//ALR-560
-            +' (SELECT RegistrationCertificate__c FROM BusinessLicenses LIMIT 1),'//ALR-560
+            +' (SELECT RegistrationCertificate__c FROM AccountBusinessLicenses__r WHERE Status =: activeStatusBl LIMIT 1),'//ALR-560
             +' (SELECT Contact.Name, Contact.Phone, Contact.Email, Contact.MobilePhone, Roles FROM AccountContactRelations'//ALR-560
             +'  WHERE PrimaryContact__c = TRUE AND IsActive = TRUE LIMIT 1),'//ALR-560
             +' (SELECT Id FROM BusinessLicenseApplicationAccount WHERE RecordType.DeveloperName =: blaRecType'
