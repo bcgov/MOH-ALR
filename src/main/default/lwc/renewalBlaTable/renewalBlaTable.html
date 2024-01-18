@@ -1,11 +1,23 @@
+<!--
+* @Name              : RenewalBlaTable
+* @Description       : LWC for displaying BLA records data table. 
+                       Controller class: RenewalBlaTableController and MassEmailController
+* @Author            : Sweta (Accenture)
+* @StoryNo           : ALR-560
+-->
 <template>
     <lightning-card>
+        <!--Spinner Comp -->
+        <template if:false={hasLoaded} class="slds-is-relative">
+            <lightning-spinner size="medium" alternative-text="Loading"></lightning-spinner>
+        </template>
+        <!-- button which on click sends email and updates BLA status-->
         <div class="slds-text-align_right">
             <lightning-button variant="brand" label="Send Renewals" title="Send Renewals" 
                 onclick={handleSendRenewals}></lightning-button>
         </div>
-                
-        <div style="height: 300px;">
+        <!-- lightning data table of bla records with inline edit for status and exclusion reason -->        
+        <div style="height: 400px;">
             <lightning-datatable
                     key-field="Id"
                     data={blaList}
@@ -14,8 +26,7 @@
                     draft-values={draftValues}
                     row-number-offset={rowOffset}
                     columns={columns}
-                    onsave={handleSave}
-                    oncancel={handleCancel}>
+                    onsave={handleSave}>
             </lightning-datatable>
         </div>
     </lightning-card>
