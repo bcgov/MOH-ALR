@@ -100,7 +100,7 @@ global class ManageUnitOmniService implements Callable {
                     insertAssetList.add(parentUnit);                   
                 }else{//Parent not found-Create parent unit and update merged record as child.
                     Asset parentUnitAsset =new Asset(
-                        Name = BCMOH_Constants.unitName+'-'+mergedUnits[0].Type__c+'-'+system.today().format(),
+                        Name = BCMOH_Constants.unitName+'-'+mergedUnits[0].Type__c,
                         AccountId = mergedUnits[0].AccountId,
                         Capacity__c = mergedUnits[0].Capacity__c,
                         Type__c = mergedUnits[0].Type__c,
