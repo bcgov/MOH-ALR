@@ -1,4 +1,4 @@
-public without sharing class GenerateInvoiceController {
+public with sharing class GenerateInvoiceController {
     
     private Final Static Decimal defaultFee = 0;
     //ALR-40 - generateInvoices
@@ -31,7 +31,7 @@ public without sharing class GenerateInvoiceController {
                 }
                 
             }
-            system.debug('fvsdvfds invoiceAssetMap'+invoiceAssetMap);
+system.debug('fvsdvfds invoiceAssetMap'+invoiceAssetMap);
             system.debug('fvsdvfds childParentAssetMap'+childParentAssetMap);
             //fetch amount of the child's parent records
             for(Asset assetParentRecs : [SELECT Id, Amount__c, AccountId, Account.LicenseType__r.PartialUnitFee__c,
@@ -117,7 +117,8 @@ public without sharing class GenerateInvoiceController {
                                         Account.LicenseType__r.UnitFee__c, Account.LicenseType__r.LateFee__c
                                         FROM Asset 
                                         WHERE AccountId IN: accIdSet AND Type__c IN: BCMOH_Constants.allALUnitTypes AND
-                                        recordTypeId =: BCMOH_Constants.parentAssetRecTypeId ORDER BY AccountId]) {
+                                        recordTypeId =: BCMOH_Constants.parentAssetRecTypeId AND Quantity > 0
+                                        ORDER BY AccountId]) {//ALR-726 - added quantity greater than 0
                                             List<Asset> assetList = new List<Asset>();
                                             if(invoiceAssetMap.containsKey(parentAssetRec.AccountId)) {
                                                 assetList = invoiceAssetMap.get(parentAssetRec.AccountId);
@@ -142,7 +143,7 @@ public without sharing class GenerateInvoiceController {
                 if(!blaAccMap.isEmpty() && blaAccMap.get(accId) != NULL) {
                     parentId = blaAccMap.get(accId).Id;
                 }
-                RegulatoryTrxnFee transFeeRec = RenewalManagementController.createTransFeeRecord(BCMOH_Constants.transFeeRecTypeId, accId, parentId, BCMOH_Constants.unitFeeType, BCMOH_Constants.dueFeeStatus, dueDate);
+                RegulatoryTrxnFee transFeeRec = RenewalManagementController.createTransFeeRecord(BCMOH_Constants.transFeeRecTypeId, accId, parentId, BCMOH_Constants.feeType, BCMOH_Constants.dueFeeStatus, dueDate);//ALR-829 - updated fee type (Renewal Unit Fee)
                 system.debug('^^ cds transFeeRec '+transFeeRec);
                 transFeeAccMap.put(accId, transFeeRec);
             }
@@ -160,7 +161,7 @@ public without sharing class GenerateInvoiceController {
                         if(amtVal == NULL) {
                             amtVal = defaultFee;
                         }   
-                    RegulatoryTrxnFeeItem transFeeItemRec = RenewalManagementController.createTransFeeItemRecord(transFeeItemRT, transFeeAccMap.get(assetRec.AccountId).Id, assetRec.Id, assetRec.Type__c, amtVal, assetRec.Quantity, BCMOH_Constants.unitFeeType);
+                    RegulatoryTrxnFeeItem transFeeItemRec = RenewalManagementController.createTransFeeItemRecord(transFeeItemRT, transFeeAccMap.get(assetRec.AccountId).Id, assetRec.Id, assetRec.Type__c, amtVal, assetRec.Quantity, BCMOH_Constants.feeType);//ALR-829 - updated fee type (Renewal Unit Fee)
                     transFeeItemList.add(transFeeItemRec);
                 }
             }

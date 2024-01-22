@@ -60,7 +60,8 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
             +'  WHERE PrimaryContact__c = TRUE AND IsActive = TRUE LIMIT 1),'//ALR-560
             +' (SELECT Id FROM BusinessLicenseApplicationAccount WHERE RecordType.DeveloperName =: blaRecType'
             +'  AND Status !=: blaCancelledStatus AND RenewalYear__c =: renewalYear),'
-            +' (SELECT Id, Type__c, Quantity, Amount__c FROM Assets WHERE RecordType.DeveloperName =: parentAssetRT AND Type__c IN: allALUnitTypes)'//ALR-769 - added type check
+            +' (SELECT Id, Type__c, Quantity, Amount__c FROM Assets WHERE RecordType.DeveloperName =: parentAssetRT'
+            +' AND Type__c IN: allALUnitTypes AND Quantity > 0)'//ALR-769 - added type check, ALR-726 - quantity to be greater than 0
             +' FROM Account'
             +' WHERE recordType.DeveloperName =: accRecType AND LicenseType__c != NULL'
             +' AND Status__c IN: accStatuses';
