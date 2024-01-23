@@ -3,6 +3,8 @@ import getBlaMap from '@salesforce/apex/RenewalBlaTableController.getBlaRecs';
 import sendRenewals from "@salesforce/apex/MassEmailController.doSendRenewals";
 import updateBlaRecs from "@salesforce/apex/RenewalBlaTableController.updateBlaRecs";
 import { refreshApex } from "@salesforce/apex";
+import { loadStyle } from 'lightning/platformResourceLoader';
+import cssrenewalBlaTable from '@salesforce/resourceUrl/cssrenewalBlaTable';
 
 const tableColumns = [
 {label: 'Application Id', fieldName: 'appId', type: 'url',
@@ -18,7 +20,7 @@ typeAttributes: {label: { fieldName: 'Name' }, target: '_parent'}},
 {label: 'Residence Status', fieldName: 'AccountStatus', type: 'text'},
 {label: 'Application Status', fieldName: 'Status', type: 'text', editable: true},
 {label: 'Exclusion Reason', fieldName: 'ExclusionReason__c', type: 'text', editable: true
- , cellAttributes: { alignment: 'left' }}
+ , cellAttributes: { alignment: 'left'}}
 ];
 
 export default class RenewalBlaTable extends LightningElement {
@@ -30,6 +32,19 @@ export default class RenewalBlaTable extends LightningElement {
     @track hasLoaded = false;//spinner attribute
     //wired property
     _wiredResult;
+
+    renderedCallback() {
+        
+        Promise.all([
+            loadStyle( this, cssrenewalBlaTable )
+            ]).then(() => {
+                console.log( 'Files loaded' );
+            })
+            .catch(error => {
+                console.log( error.body.message );
+        });
+
+    }
 
     //wire method to fetch bla records
     @wire(getBlaMap)
