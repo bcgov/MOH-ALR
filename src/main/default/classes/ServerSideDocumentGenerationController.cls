@@ -381,17 +381,20 @@ public with sharing class ServerSideDocumentGenerationController {
                 if(documentMappingData1.keySet().contains(BCMOH_Constants.unitsPublic)) {
                     documentMappingData1.put('PublicQuantitySum', publicQuantitySum);
                     documentMappingData1.put('PublicSum', '$'+publicSum);
+                    publicFeeSum = publicFeeSum.setscale(2);//ALR-805 - setting decimal points to 2
                     documentMappingData1.put('PublicFeeSum', '$'+publicFeeSum);
                 }
                 if(documentMappingData1.keySet().contains(BCMOH_Constants.unitsPrivate)) {
                     documentMappingData1.put('PrivateQuantitySum', privateQuantitySum);
                     documentMappingData1.put('PrivateSum', '$'+privateSum);
+                    privateFeeSum = privateFeeSum.setscale(2);//ALR-805 - setting decimal points to 2
                     documentMappingData1.put('PrivateFeeSum', '$'+privateFeeSum);
                 }
                 if(documentMappingData1.keySet().contains(BCMOH_Constants.unitsPerDiem)) {
                     system.debug('A contais perdiem'+documentMappingData1);
                     documentMappingData1.put('PerDiemQuantitySum', perDiemQuantitySum);
                     documentMappingData1.put('PerDiemSum', '$'+perDiemSum);
+                    perDiemFeeSum = perDiemFeeSum.setscale(2);//ALR-805 - setting decimal points to 2
                     documentMappingData1.put('PerDiemFeeSum', '$'+perDiemFeeSum);
                 }
             }
