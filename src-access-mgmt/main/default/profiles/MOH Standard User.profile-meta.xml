@@ -147,6 +147,11 @@
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
+        <editable>false</editable>
+        <field>Account.Delete__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>Account.Description</field>
         <readable>true</readable>
@@ -1868,7 +1873,22 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>RegulatoryTrxnFee.Account__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>RegulatoryTrxnFee.FeeType__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>RegulatoryTrxnFee.InvoiceTemplateName__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>RegulatoryTrxnFee.InvoiceTemplate__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -1986,6 +2006,80 @@
         <field>Visit.InspectionMethod__c</field>
         <readable>false</readable>
     </fieldPermissions>
+    <layoutAssignments>
+        <layout>Account-Registrant Page Layout</layout>
+        <recordType>Account.Registrant</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Account-Residence Page Layout</layout>
+        <recordType>Account.Residence</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ActionPlan-New Action Plan Layout</layout>
+        <recordType>ActionPlan.ActionPlan</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Address-Address Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Asset-Asset Layout</layout>
+        <recordType>Asset.Unit_Request_Record_Type</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Asset-Units Page Layout</layout>
+        <recordType>Asset.Units_Record_Type</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>BusinessLicense-Business License Layout</layout>
+        <recordType>BusinessLicense.License</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>BusinessLicenseApplication-Business License Application Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>BusinessLicenseApplication-Business License Application Layout</layout>
+        <recordType>BusinessLicenseApplication.New_License_Application_Record_Type</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>BusinessLicenseApplication-Business License Application Layout</layout>
+        <recordType>BusinessLicenseApplication.Renewal</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Case-Public Complaint Page Layout</layout>
+        <recordType>Case.PublicComplaintCase</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Case-Reportable Incident Page Layout</layout>
+        <recordType>Case.ReportableIncident</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>DocumentChecklistItem-Document Checklist Page Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>DocumentChecklistItem-Document Checklist Page Layout</layout>
+        <recordType>DocumentChecklistItem.Document_Checklist_Item_Record_Type</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>InspectionType-Inspection Type Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>PublicComplaint-Public Complaint Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>PublicComplaint-Public Complaint Layout</layout>
+        <recordType>PublicComplaint.Public_Complaint</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RegulatoryCode-Regulatory Code Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RegulatoryTrxnFee-Regulatory Transaction Fee Layout</layout>
+        <recordType>RegulatoryTrxnFee.TransactionFee</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Task-Standard Task Layout</layout>
+        <recordType>Task.Task</recordType>
+    </layoutAssignments>
     <objectPermissions>
         <allowCreate>false</allowCreate>
         <allowDelete>false</allowDelete>
@@ -1993,6 +2087,15 @@
         <allowRead>true</allowRead>
         <modifyAllRecords>false</modifyAllRecords>
         <object>Account</object>
+        <viewAllRecords>false</viewAllRecords>
+    </objectPermissions>
+    <objectPermissions>
+        <allowCreate>false</allowCreate>
+        <allowDelete>false</allowDelete>
+        <allowEdit>false</allowEdit>
+        <allowRead>false</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
+        <object>Asset</object>
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
     <objectPermissions>
@@ -2011,6 +2114,15 @@
         <allowRead>true</allowRead>
         <modifyAllRecords>false</modifyAllRecords>
         <object>Location</object>
+        <viewAllRecords>false</viewAllRecords>
+    </objectPermissions>
+    <objectPermissions>
+        <allowCreate>false</allowCreate>
+        <allowDelete>false</allowDelete>
+        <allowEdit>false</allowEdit>
+        <allowRead>false</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
+        <object>Visit</object>
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
     <recordTypeVisibilities>
@@ -2194,6 +2306,10 @@
         <tab>standard-RegulatoryTrxnFeeItem</tab>
         <visibility>DefaultOn</visibility>
     </tabVisibilities>
+    <tabVisibilities>
+        <tab>standard-Visit</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
     <userLicense>Salesforce</userLicense>
     <userPermissions>
         <enabled>true</enabled>
@@ -2227,7 +2343,7 @@
         <enabled>true</enabled>
         <name>ContentWorkspaces</name>
     </userPermissions>
-    <userPermissions>
+<userPermissions>
         <enabled>false</enabled>
         <name>ConvertLeads</name>
     </userPermissions>
@@ -2279,7 +2395,7 @@
         <enabled>true</enabled>
         <name>ExportReport</name>
     </userPermissions>
-    <userPermissions>
+<userPermissions>
         <enabled>false</enabled>
         <name>ImportPersonal</name>
     </userPermissions>
@@ -2347,7 +2463,7 @@
         <enabled>true</enabled>
         <name>ViewRoles</name>
     </userPermissions>
-    <userPermissions>
+<userPermissions>
         <enabled>false</enabled>
         <name>ViewSetup</name>
     </userPermissions>
