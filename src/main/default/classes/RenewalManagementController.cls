@@ -47,13 +47,18 @@ public with sharing class RenewalManagementController {
         for(Account accRec : accMap.values()) {
             String regAuthCat = NULL;
             String licenseType = NULL;
+            String relPrimaryContactId = NULL;//ALR-854
             if(accRec.LicenseType__c != NULL) {
                 licenseType = accRec.LicenseType__c;
                 if(accRec.LicenseType__r.RegulatoryAuthCategory != NULL) {
                 	regAuthCat = accRec.LicenseType__r.RegulatoryAuthCategory;
             	}
             }
-            BusinessLicenseApplication blaRec = createBlaRecord(BCMOH_Constants.renewalBlaRecTypeId, accRec.Id, regAuthCat, licenseType, blaStatusMap.get(accRec.Id), DateTime.now(), BCMOH_Constants.renewalYear);
+            //ALR-854 - account's related contact which is active and primary
+            if(accRec.AccountContactRelations != NULL && accRec.AccountContactRelations.size() > 0) {
+                relPrimaryContactId = accRec.AccountContactRelations[0].ContactId;
+            }//ALR-854 ends
+            BusinessLicenseApplication blaRec = createBlaRecord(BCMOH_Constants.renewalBlaRecTypeId, accRec.Id, regAuthCat, licenseType, blaStatusMap.get(accRec.Id), DateTime.now(), BCMOH_Constants.renewalYear, relPrimaryContactId);//ALR-854 - added relPrimaryContactId 
             blaRecCreateList.add(blaRec);
             blaAccMap.put(accRec.Id, blaRec);
         }
@@ -70,7 +75,7 @@ public with sharing class RenewalManagementController {
         return blaAccMap;
     }
     //method to form a bla record with given parameters
-    public static BusinessLicenseApplication createBlaRecord(Id recordTypeId, Id accId, String blaCategory, Id licenseTypeId, String blaStatus, DateTime appliedDate, String renewalYear) {
+    public static BusinessLicenseApplication createBlaRecord(Id recordTypeId, Id accId, String blaCategory, Id licenseTypeId, String blaStatus, DateTime appliedDate, String renewalYear, Id contactId) {//ALR-854 - added contactId
         BusinessLicenseApplication blaRec = new BusinessLicenseApplication(
             recordTypeId = recordTypeId,
             AccountId = accId,
@@ -78,7 +83,8 @@ public with sharing class RenewalManagementController {
             LicenseTypeId = licenseTypeId,
             Status = blaStatus,
             AppliedDate = appliedDate,
-            RenewalYear__c = renewalYear);
+            RenewalYear__c = renewalYear,
+        	PrimaryOwnerId = contactId);//ALR-854 - added PrimaryOwnerId
         return blaRec;
     }
     //create transaction fee records
