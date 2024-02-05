@@ -118,16 +118,17 @@ public class BCMOH_UtilityClass {
     }
     
     //method to set Email parameters
-    public static Messaging.SingleEmailMessage setEmailParams(Id targetId, Id templateId, Id orgWideAddressId, List<Id> attachmentIds, Id whatId, String emailBody, String subjectValue) {
+    public static Messaging.SingleEmailMessage setEmailParams(Id targetId, Id templateId, Id orgWideAddressId, List<Id> attachmentIds, Id whatId, String emailBody, String subjectValue, String emailHtmlBody) {//ALR-827 - added param htmlbody
         Messaging.SingleEmailMessage emailMsg = new Messaging.SingleEmailMessage();
         emailMsg.setTargetObjectId(targetId);
+        //emailMsg.setTargetObjectId('003s00000DiKRmIAN');
         //emailMsg.setTemplateId(templateId);
         emailMsg.setEntityAttachments(attachmentIds);
         emailMsg.setOrgWideEmailAddressId(orgWideAddressId);
         emailMsg.setSubject(subjectValue);
         emailMsg.setWhatId(whatId);//?null check needed?
         emailMsg.setplainTextBody(emailBody);
-        //emailMsg.HtmlBody(emailBody);
+        emailMsg.setHtmlBody(emailHtmlBody);//ALR-827 - added html body
         return emailMsg;
     }
     
