@@ -26,6 +26,10 @@ public with sharing class MassEmailController {
     Public Static String subjectValue = '';
     Public Static String emailBodyConst = '';
     Public Static String subjectValueConst = '';
+    //ALR-827 - for html body
+    Public Static String emailHtmlBodyConst = '';
+    Public Static String emailHtmlBody = '';
+    //ALR-827 ends
     
     Public Static Map<Id, BusinessLicenseApplication> blaMap = new Map<Id, BusinessLicenseApplication>();
     Public Static Map<Id, Id> blaContactMap = new Map<Id, Id>();
@@ -189,10 +193,13 @@ public with sharing class MassEmailController {
                            			 blaTotalAlUnitsMap.get(whatId) : 0;//get Total AL Units value
                        emailBody = replaceMergeFields(emailBodyConst, accContactMap.get(whatId), blaMap.get(whatId), 
                                                accMap.get(whatId), blRec, String.valueOf(totalALUnits));
-                       //if replaceMergeFields mthod returned null, err in replacing merge fields in template
-                       if(emailBody == NULL) {
+                       //ALR-827 - adding html value to email
+                       emailHtmlBody = replaceMergeFields(emailHtmlBodyConst, accContactMap.get(whatId), blaMap.get(whatId), 
+                                               accMap.get(whatId), blRec, String.valueOf(totalALUnits));
+                       //ALR-827 - if replaceMergeFields mthod returned null, err in replacing merge fields in template
+                       if(emailBody == NULL || emailHtmlBody == NULL) {
                            continue;//go to next record
-                       }
+                       }//ALR-827 ends
                        subjectValue = replaceMergeFields(subjectValueConst, accContactMap.get(whatId), blaMap.get(whatId),
                                                   accMap.get(whatId), blRec, String.valueOf(totalALUnits));
                        if(subjectValue == NULL) {
@@ -201,7 +208,7 @@ public with sharing class MassEmailController {
                        //if not err occured, blaErrMap will not contain whatId
                        if(!blaErrMap.containsKey(whatId)) {
                            //set params for email record
-                           Messaging.SingleEmailMessage emailMsgRec = BCMOH_UtilityClass.setEmailParams(contactId, NULL, orgWideAddrId, attachIds, whatId, emailBody, subjectValue);
+                           Messaging.SingleEmailMessage emailMsgRec = BCMOH_UtilityClass.setEmailParams(contactId, NULL, orgWideAddrId, attachIds, whatId, emailBody, subjectValue, emailHtmlBody);//ALR-827 - added emailHtmlBody
                            singleEmailMsgList.add(emailMsgRec);
                            system.debug('yui emailmsg rec data set '+emailMsgRec);
                        }
@@ -303,6 +310,8 @@ public with sharing class MassEmailController {
                     subjectValueConst = emailTempRec.Subject;
                     emailBody = emailTempRec.Body;
                     emailBodyConst = emailTempRec.Body;
+                    emailHtmlBody = emailTempRec.HtmlValue;//ALR-827 - for html body
+                    emailHtmlBodyConst = emailTempRec.HtmlValue;//ALR-827 - for html body
                     system.debug('yui fetched email templateEntity  '+templateEntity+' '+templateId);
                 }
                 else {
