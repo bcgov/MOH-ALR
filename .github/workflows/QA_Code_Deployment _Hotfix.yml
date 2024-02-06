@@ -1,5 +1,5 @@
 # Unique name for this workflow
-name: STX Code Deployment
+name: QA Code Deployment Hotfix
 
 # Definition when the workflow should run
 on:
@@ -15,7 +15,7 @@ on:
 jobs:
   Code-Deploy-Run:
     runs-on: ubuntu-latest
-    environment: STX01
+    environment: HOTFIXQA
     env:
         SFDXAUTHURL: ${{ secrets.SFDXAUTHURL }}
     steps:
@@ -31,18 +31,18 @@ jobs:
       - name: 'Checkout source code'
         uses: actions/checkout@v4
         with:
-          ref: dev
+          ref: hotfixdev
           fetch-depth: 0
 
       # Authenticate sandbox
       - name: 'Authenticate Sandbox'
         run: |
             echo "${{ env.SFDXAUTHURL }}" > ./authfile
-            sf org login sfdx-url -f authfile -a STX01
+            sf org login sfdx-url -f authfile -a HOTFIXQA
 
       # deploy code without running test classes
       - name: 'Deploy source code'
-        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --testlevel RunLocalTests --targetusername STX01
+        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --testlevel RunLocalTests --targetusername HOTFIXQA
 
   Git-Tag-Run:
     needs: Code-Deploy-Run
@@ -52,12 +52,12 @@ jobs:
       - name: 'Checkout source code'
         uses: actions/checkout@v4
         with:
-          ref: dev
+          ref: hotfixdev
           fetch-depth: 0
 
       - name: 'Get latest tag'
         id: latesttag
-        run: echo "LATEST_TAG=$(git describe --tags --match "ST*" --abbrev=0 HEAD)" >> $GITHUB_OUTPUT
+        run: echo "LATEST_TAG=$(git describe --tags --match "HOTFIXQA*" --abbrev=0 HEAD)" >> $GITHUB_OUTPUT
 
       - name: 'Increment Tag'
         id: newtag
