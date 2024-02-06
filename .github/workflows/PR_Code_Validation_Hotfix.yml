@@ -1,14 +1,14 @@
-name: PR Code Validation
+name: PR Code Validation Hotfix
 on:
   workflow_dispatch:
   pull_request:
     branches:
-      - dev
+      - hotfixdev
     paths:
       - 'src/main/default/**'
       - 'src-access-mgmt/main/default/**'
       - 'src-ui/main/default/**'            
-      - '.github/workflows/PR_Code_Validation.yml'
+      - '.github/workflows/PR_Code_Validation_Hotfix.yml'
       - '!sfdx-project.json'
 jobs:
   Code-Validation-Run:
@@ -79,12 +79,12 @@ jobs:
       #  id: lint_tests
       #  run: sfdx scanner:run --engine eslint-lwc --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH }}"
 
-      # Authenticate CI01 sandbox
-      - name: 'Authenticate CI01 Sandbox'
+      # Authenticate HOTFIXCI sandbox
+      - name: 'Authenticate HOTFIXCI Sandbox'
         run: |
-            echo "${{ secrets.CI01_SFDXAUTHURL }}" > ./authfile
-            sf org login sfdx-url -f authfile -a CI01
+            echo "${{ secrets.HOTFIXCI_SFDXAUTHURL }}" > ./authfile
+            sf org login sfdx-url -f authfile -a HOTFIXCI
 
       - name: Validate Code
         id: run_code_validation
-        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --checkonly --testlevel RunLocalTests --targetusername CI01
+        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --checkonly --testlevel RunLocalTests --targetusername HOTFIXCI
