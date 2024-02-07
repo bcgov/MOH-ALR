@@ -65,7 +65,7 @@ jobs:
           LATEST_TAG=${{ steps.latesttag.outputs.LATEST_TAG }}
           NUMBER=${LATEST_TAG#HOTFIXQA.}
           NEW_NUMBER=$((NUMBER + 1))
-          NEW_TAG=ST.${NEW_NUMBER}
+          NEW_TAG=HOTFIXQA.${NEW_NUMBER}
           echo "NEW_TAG=$NEW_TAG" >> $GITHUB_OUTPUT
 
       - name: 'Push new tag'
