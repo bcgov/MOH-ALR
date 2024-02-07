@@ -73,5 +73,6 @@ public class BCMOH_Constants {
     public Final Static String MANAGEUNITCLASSNAME = 'ManageUnitOmniService';
     public Final Static String INSERTMERGERASSETMETHODNAME = 'insertMergedAssets';
     public Final Static String UPDATEPARENTONCHILDASSETMETHODNAME = 'updateParentOnChildAssets';
-    
+    //ALR-820
+    public Final Static List<String> renewalTableUpdateStatus = new List<String>{'Excluded', 'Cancelled'};
 }

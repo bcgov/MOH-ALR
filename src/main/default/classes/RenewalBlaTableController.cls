@@ -38,15 +38,23 @@ public with sharing class RenewalBlaTableController {
     }
     //update bla records from lwc
     @AuraEnabled
-    public static void updateBlaRecs(Object data) {
+    public static Boolean updateBlaRecs(Object data) {
+        List<BusinessLicenseApplication> blaUpdateList = new List<BusinessLicenseApplication>(); 
+        Boolean hasUpdated = false;
         try {
-            List<BusinessLicenseApplication> blaUpdateList = 
+            List<BusinessLicenseApplication> blaList = 
                 (List<BusinessLicenseApplication>)JSON.deserialize(JSON.serialize(data), 
                                                                    List<BusinessLicenseApplication>.class);
-            system.debug('dxbha 1'+blaUpdateList);
+            //ALR-820 - if status is updated to Cancelled or Excluded only then update the records
+            for(BusinessLicenseApplication blaRec : blaList) {
+                if(BCMOH_Constants.renewalTableUpdateStatus.contains(blaRec.Status)) {
+                    blaUpdateList.add(blaRec);
+                }
+            }
             if(!blaUpdateList.isEmpty() && BusinessLicenseApplication.SObjectType.getDescribe().isUpdateable()) {
                 system.debug('dxbha 2'+blaUpdateList);
                 Database.Update(blaUpdateList, false);
+                hasUpdated = true;
             }
         }
         catch(exception ex) {
@@ -58,5 +66,6 @@ public with sharing class RenewalBlaTableController {
                 throw new AuraHandledException(ex.getMessage());
             }
         }
+        return hasUpdated;
     }
 }

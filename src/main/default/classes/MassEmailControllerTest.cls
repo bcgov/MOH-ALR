@@ -50,6 +50,7 @@ public class MassEmailControllerTest {
     static void updateBlaRecsTest() {
         List<BusinessLicenseApplication> blaRecs = [SELECT Id, Status, ExclusionReason__c FROM BusinessLicenseApplication];
         blaRecs[0].ExclusionReason__c = 'testing';
+        blaRecs[0].Status = 'Cancelled';//ALR-820
         Object data = blaRecs;
         Test.startTest();
         RenewalBlaTableController.updateBlaRecs(data);
