@@ -44,7 +44,8 @@ const columns = [
 }
 ];
 export default class ManageUnits extends NavigationMixin(LightningElement) {
- 
+    
+
 @api recordId;
 draftValues = [];
 datatableHeight;
@@ -58,7 +59,7 @@ type;
 @track objectInfo;
 @track recordTypeId;
 @track isReloadFromHandleSave = false;
- 
+
 @wire(getObjectInfo, { objectApiName: ASSET_OBJECT })
 wiredObjectInfo({ error, data }) {
     if (error) {
@@ -125,7 +126,6 @@ fetchTableData() {
         this.showToastMessage("Error", error.body.message, "error");
     });
 }
- 
 async handleSave(event) {
     debugger;
     const updatedFields = event.detail.draftValues;
@@ -134,18 +134,17 @@ async handleSave(event) {
         record.GenerateRenewalInvoice__c = this.refs.renewed.checked;
         record.Amount__c = 'Full Unit Fee';
         record.AccountId = this.recordId;//ALR-726
+        const newQuantity = record.Quantity; // New value
+        const oldQuantity = this.initialRecords.find(item => item.Id === record.Id).Quantity; // Old value
+
+        if (newQuantity === '' || newQuantity< 0 || newQuantity >= oldQuantity ) {
+            isValidInput = false;
+            return;
+        } 
     });
  
-    console.log(JSON.stringify(event.detail.draftValues));
-    try {
-        // Pass edited fields to the updateUnits Apex controller
-        updatedFields.forEach((element) => {
-            if (element.Quantity === '') {
-                isValidInput = false;
-                return;
-            }
-        });
-        if (isValidInput) {
+    if (isValidInput) {
+        try{
             await updateUnits({ data: updatedFields });
             this.showToastMessage("Success", 'Unit(s) has been successfully updated.', "success");
             // Clear all draft values in the datatable
@@ -153,20 +152,22 @@ async handleSave(event) {
             await this.fetchTableData();
             this.refs.renewed.checked = false;
             this.draftValues = [];
-             localStorage.setItem('isReloadFromHandleSave', 'true');
-        this.dispatchEvent(new CloseActionScreenEvent());              
-          window.location.reload();  
-		await refreshApex(this.wiredRecordResult);
-        } else {
-            this.showToastMessage("Error", 'Updated Quantity cannot be equal,null, negative or greater than the existing quantity.', "error");
-        }
+            localStorage.setItem('isReloadFromHandleSave', 'true');
+            this.dispatchEvent(new CloseActionScreenEvent());              
+            window.location.reload();  
+		    await refreshApex(this.wiredRecordResult);
+        } 
       
-    } catch (error) {a
-        let message = error.body.message.includes('FIELD_CUSTOM_VALIDATION_EXCEPTION') ?
-            error.body.message.split('EXCEPTION, ')[1].split(': [')[0] : error.body.message;
-        this.showToastMessage('Error', message, 'error');
-    };
-}
+        catch (error) {a
+            let message = error.body.message.includes('FIELD_CUSTOM_VALIDATION_EXCEPTION') ?
+                error.body.message.split('EXCEPTION, ')[1].split(': [')[0] : error.body.message;
+            this.showToastMessage('Error', message, 'error');
+        }
+    }
+    else {
+        this.showToastMessage("Error", 'Updated Quantity cannot be equal, null, negative or greater than the existing quantity.', "error");
+    }   
+};
 handleTypeChange(event) {
     this.type = event.target.value;
 }
