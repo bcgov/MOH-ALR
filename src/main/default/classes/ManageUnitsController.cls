@@ -6,7 +6,7 @@
 * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
 **/
 public class ManageUnitsController {
-    Public static String VALIDATE_QTY = 'Updated Quantity cannot be equal,null, negative or greater than the existing quantity.';
+    Public static String VALIDATE_QTY = 'Updated Quantity cannot be equal, null, negative or greater than the existing quantity.';
     public static final String UNITREQUEST_RECTYPEID_NAME = 'Unit_Request_Record_Type';
     Public static String NEW_UNIT_NAME='UnitRequest';
     Public static String UNIT_FEE='Full Unit Fee';
@@ -49,7 +49,7 @@ public class ManageUnitsController {
                 newunit.Type__c = existingUnits.get(unit.Id).Type__c;
                 newunit.Status = UNITREQUEST_STATUS;
                 system.debug('unit.Quantity'+unit.Quantity);
-                if(unit.Quantity >= existingUnits.get(unit.Id).Quantity || unit.Quantity < 0 || unit.Quantity == null)
+				                if(unit.Quantity >= existingUnits.get(unit.Id).Quantity || unit.Quantity < 0 || unit.Quantity == null)
                 {
                     throw new MyException(VALIDATE_QTY);
                 }else{
