@@ -17,7 +17,7 @@ on:
 jobs:
   Code-Deploy-Run:
     runs-on: ubuntu-latest
-    environment: CI01
+    environment: CI
     env:
       SFDXAUTHURL: ${{ secrets.SFDXAUTHURL }}
     steps:
@@ -37,8 +37,8 @@ jobs:
       - name: 'Authenticate Sandbox'
         run: |
             echo "${{ env.SFDXAUTHURL }}" > ./authfile
-            sf org login sfdx-url -f authfile -a CI01
+            sf org login sfdx-url -f authfile -a CI
 
       # deploy code without running test classes
       - name: 'Deploy source code'
-        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --targetusername CI01
+        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --targetusername CI

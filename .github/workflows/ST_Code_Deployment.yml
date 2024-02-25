@@ -1,5 +1,5 @@
 # Unique name for this workflow
-name: STX Code Deployment
+name: ST Code Deployment
 
 # Definition when the workflow should run
 on:
@@ -15,7 +15,7 @@ on:
 jobs:
   Code-Deploy-Run:
     runs-on: ubuntu-latest
-    environment: STX01
+    environment: ST
     env:
         SFDXAUTHURL: ${{ secrets.SFDXAUTHURL }}
     steps:
@@ -38,11 +38,11 @@ jobs:
       - name: 'Authenticate Sandbox'
         run: |
             echo "${{ env.SFDXAUTHURL }}" > ./authfile
-            sf org login sfdx-url -f authfile -a STX01
+            sf org login sfdx-url -f authfile -a ST
 
       # deploy code without running test classes
       - name: 'Deploy source code'
-        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --testlevel RunLocalTests --targetusername STX01
+        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --testlevel RunLocalTests --targetusername ST
 
   Git-Tag-Run:
     needs: Code-Deploy-Run
