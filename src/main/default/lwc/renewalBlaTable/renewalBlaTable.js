@@ -86,10 +86,23 @@ export default class RenewalBlaTable extends LightningElement {
                 this.hasLoaded = false;
                 const saveDraftValues = event.detail.draftValues;
                 // Pass edited fields to the Apex controller
-                await updateBlaRecs({ data: saveDraftValues });
-                //refresh the table with updated data
-                await this.refreshData();
-                this.draftValues = [];
+                await updateBlaRecs({ data: saveDraftValues })
+                .then(result => {
+                    if(result) {
+                       //refresh the table with updated data
+                       this.refreshData();
+                    }
+                    else {
+                        //if no update manually refresh data table data
+                        var tempBlaList = this.blaList;
+                        this.blaList = [];
+                        this.blaList = tempBlaList;
+                        this.hasLoaded = true;
+                    }
+                     this.draftValues = [];
+                })
+                .catch(error =>  {
+                });
             }
         } catch (error) {
             let message = error.body.message.includes('FIELD_CUSTOM_VALIDATION_EXCEPTION') ?
