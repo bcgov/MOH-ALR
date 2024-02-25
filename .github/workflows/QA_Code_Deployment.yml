@@ -6,10 +6,10 @@ on:
   ## Deploy manually
   workflow_dispatch:
     inputs:
-      QA01:
+      QA:
         type: boolean
         default: true
-        description: Deploy in QA01
+        description: Deploy in QA
 
       DEMO:
         type: boolean
@@ -23,10 +23,10 @@ on:
 
 # Jobs to be executed
 jobs:
-  Code-Deploy-Run-QA01:
+  Code-Deploy-Run-QA:
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.QA01 == 'true' }}
-    environment: QA01
+    if: ${{ github.event.inputs.QA == 'true' }}
+    environment: QA
     env:
         SFDXAUTHURL: ${{ secrets.SFDXAUTHURL }}
     steps:
@@ -41,19 +41,16 @@ jobs:
       # Checkout the source code
       - name: 'Checkout source code'
         uses: actions/checkout@v4
-        with:
-          ref: dev
-          fetch-depth: 0
 
       # Authenticate sandbox
       - name: 'Authenticate Sandbox'
         run: |
             echo "${{ env.SFDXAUTHURL }}" > ./authfile
-            sf org login sfdx-url -f authfile -a QA01
+            sf org login sfdx-url -f authfile -a QA
 
       # deploy code without running test classes
       - name: 'Deploy source code'
-        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --testlevel RunLocalTests --targetusername QA01
+        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --testlevel RunLocalTests --targetusername QA
 
   Code-Deploy-Run-DEMO:
     runs-on: ubuntu-latest
@@ -73,9 +70,6 @@ jobs:
       # Checkout the source code
       - name: 'Checkout source code'
         uses: actions/checkout@v4
-        with:
-          ref: dev
-          fetch-depth: 0
 
       # Authenticate sandbox
       - name: 'Authenticate Sandbox'
@@ -88,7 +82,7 @@ jobs:
         run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --testlevel RunLocalTests --targetusername DEMO
 
   Git-Tag-Run:
-    needs: Code-Deploy-Run-QA01
+    needs: Code-Deploy-Run-QA
     runs-on: ubuntu-latest
     if: ${{ github.event.inputs.create-tag == 'true' }}
     steps:
