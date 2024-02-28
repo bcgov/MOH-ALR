@@ -48,7 +48,7 @@
     <description>Approval Process for Investigators to submit Reportable Incident Cases for approval - ALR-201</description>
     <enableMobileDeviceAccess>false</enableMobileDeviceAccess>
     <entryCriteria>
-        <booleanFilter>1 AND 2</booleanFilter>
+        <booleanFilter>1 AND 2 AND 3</booleanFilter>
         <criteriaItems>
             <field>Case.IsApprovalRequired__c</field>
             <operation>equals</operation>
@@ -58,6 +58,10 @@
             <field>Case.Status</field>
             <operation>equals</operation>
             <value>Investigator Review,Under Inspection</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Case.ApprovedDate__c</field>
+            <operation>equals</operation>
         </criteriaItems>
     </entryCriteria>
     <finalApprovalActions>
