@@ -28,6 +28,38 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem39</globalKey>
+        <inputFieldName>InvoiceItem:Amount__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetApplicationFeeDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Currency</outputFieldFormat>
+        <outputFieldName>InvoiceItem:Amount</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>ResidenceAccount:Id</filterValue>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem5</globalKey>
+        <inputFieldName>Account__c</inputFieldName>
+        <inputObjectName>BusinessLicense</inputObjectName>
+        <inputObjectQuerySequence>6.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetApplicationFeeDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Certificate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <filterOperator>LIMIT</filterOperator>
         <filterValue>1</filterValue>
         <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem20</globalKey>
@@ -37,6 +69,21 @@
         <name>GetApplicationFeeDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
         <outputFieldName>Certificate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem24</globalKey>
+        <inputFieldName>InvoiceItem:Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetApplicationFeeDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>String</outputFieldFormat>
+        <outputFieldName>InvoiceItem:Name</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -59,16 +106,13 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>&quot;$Vlocity.NULL&quot;</filterValue>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem21</globalKey>
-        <inputFieldName>ParentId</inputFieldName>
-        <inputObjectName>Asset</inputObjectName>
-        <inputObjectQuerySequence>4.0</inputObjectQuerySequence>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem27</globalKey>
+        <inputFieldName>InvoiceItem:Type__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetApplicationFeeDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Unit</outputFieldName>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>InvoiceItem:Type</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -76,30 +120,110 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:Address:Street &quot;/\/\/&quot; var:Address:City &quot;/\/\/&quot; var:Address:State &quot;/\/\/&quot; var:Address:PostalCode &quot;/\/\/&quot; var:Address:Country CONCAT</formulaConverted>
-        <formulaExpression>CONCAT(%Address:Street%, &quot; &quot;,%Address:City%, &quot; &quot;,%Address:State%, &quot; &quot;,%Address:PostalCode%, &quot; &quot;,%Address:Country%)</formulaExpression>
-        <formulaResultPath>ResidenceAddress</formulaResultPath>
-        <formulaSequence>3.0</formulaSequence>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem12</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <filterOperator>=</filterOperator>
+        <filterValue>&apos;Residence&apos;</filterValue>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem3</globalKey>
+        <inputFieldName>Name</inputFieldName>
+        <inputObjectName>RecordType</inputObjectName>
+        <inputObjectQuerySequence>1.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetApplicationFeeDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
+        <outputFieldName>Rec</outputFieldName>
+        <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem44</globalKey>
-        <inputFieldName>RegistrantAccount:BillingCity</inputFieldName>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem42</globalKey>
+        <inputFieldName>RegistrantAccount:BillingState</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetApplicationFeeDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>RegistrantCity</outputFieldName>
+        <outputFieldName>RegistrantState</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>ResidenceAccount:ParentId</filterValue>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem4</globalKey>
+        <inputFieldName>Id</inputFieldName>
+        <inputObjectName>Account</inputObjectName>
+        <inputObjectQuerySequence>5.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetApplicationFeeDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>RegistrantAccount</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <defaultValue>YYYY-MM-DD</defaultValue>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetApplicationFeeDetailsCustom802</globalKey>
+        <inputFieldName>InvoiceCreatedDate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetApplicationFeeDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>InvoiceCreatedDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>Invoice:AccountId</filterValue>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem2</globalKey>
+        <inputFieldName>Id</inputFieldName>
+        <inputObjectName>Account</inputObjectName>
+        <inputObjectQuerySequence>3.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetApplicationFeeDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>ResidenceAccount</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>Invoice:Id</filterValue>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem14</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeId</inputFieldName>
+        <inputObjectName>RegulatoryTrxnFeeItem</inputObjectName>
+        <inputObjectQuerySequence>7.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetApplicationFeeDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>InvoiceItem</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem43</globalKey>
+        <inputFieldName>RegistrantAccount:BillingStreet</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetApplicationFeeDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegistrantStreet</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -109,7 +233,24 @@
         <filterGroup>0.0</filterGroup>
         <filterOperator>LIMIT</filterOperator>
         <filterValue>1</filterValue>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem15</globalKey>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem17</globalKey>
+        <inputObjectName>Address</inputObjectName>
+        <inputObjectQuerySequence>10.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetApplicationFeeDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Address</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>&quot;$Vlocity.NULL&quot;</filterValue>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem9</globalKey>
+        <inputFieldName>ActiveTo</inputFieldName>
         <inputObjectName>AssociatedLocation</inputObjectName>
         <inputObjectQuerySequence>8.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
@@ -117,72 +258,6 @@
         <outputCreationSequence>0.0</outputCreationSequence>
         <outputFieldName>AssociatedLoc</outputFieldName>
         <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>true</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:InvoiceItem:Amount__c &quot;Unit/\/\/Fee&quot; == 12.50 | var:InvoiceItem:Amount__c &quot;Partial/\/\/Unit/\/\/Fee&quot; == 6.25 0 IF IF</formulaConverted>
-        <formulaExpression>IF(%InvoiceItem:Amount__c%==&quot;Unit Fee&quot;,12.50,IF(%InvoiceItem:Amount__c%==&quot;Partial Unit Fee&quot;,6.25,0))</formulaExpression>
-        <formulaResultPath>InvoiceItem:Price</formulaResultPath>
-        <formulaSequence>1.0</formulaSequence>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem6</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetApplicationFeeDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem41</globalKey>
-        <inputFieldName>InvoiceItem:Price</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetApplicationFeeDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldFormat>Currency</outputFieldFormat>
-        <outputFieldName>InvoiceItem:Price</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>true</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:InvoiceItem:Amount__c &quot;Unit/\/\/Fee&quot; == var:InvoiceItem:Quantity 12.50 * | var:InvoiceItem:Amount__c &quot;Partial/\/\/Unit/\/\/Fee&quot; == var:InvoiceItem:Quantity 6.25 * 0 IF IF</formulaConverted>
-        <formulaExpression>IF(%InvoiceItem:Amount__c%==&quot;Unit Fee&quot;,%InvoiceItem:Quantity% * 12.50,IF(%InvoiceItem:Amount__c%==&quot;Partial Unit Fee&quot;,%InvoiceItem:Quantity% * 6.25,0))</formulaExpression>
-        <formulaResultPath>InvoiceItem:Fees</formulaResultPath>
-        <formulaSequence>4.0</formulaSequence>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem13</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetApplicationFeeDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:RegistrantAccount:BillingStreet &quot;/\/\/&quot; var:RegistrantAccount:BillingCity &quot;/\/\/&quot; var:RegistrantAccount:BillingState &quot;/\/\/&quot; var:ResidenceAccount:BillingPostalCode &quot;/\/\/&quot; var:RegistrantAccount:BillingCountry CONCAT</formulaConverted>
-        <formulaExpression>CONCAT(%RegistrantAccount:BillingStreet%, &quot; &quot;,%RegistrantAccount:BillingCity%, &quot; &quot;,%RegistrantAccount:BillingState%, &quot; &quot;,%ResidenceAccount:BillingPostalCode%, &quot; &quot;,%RegistrantAccount:BillingCountry%)</formulaExpression>
-        <formulaResultPath>RegistrantBillingAddress</formulaResultPath>
-        <formulaSequence>2.0</formulaSequence>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem7</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetApplicationFeeDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
@@ -251,12 +326,137 @@
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
+        <disabled>true</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:InvoiceItem:Amount__c &quot;Unit/\/\/Fee&quot; == 12.50 | var:InvoiceItem:Amount__c &quot;Partial/\/\/Unit/\/\/Fee&quot; == 6.25 0 IF IF</formulaConverted>
+        <formulaExpression>IF(%InvoiceItem:Amount__c%==&quot;Unit Fee&quot;,12.50,IF(%InvoiceItem:Amount__c%==&quot;Partial Unit Fee&quot;,6.25,0))</formulaExpression>
+        <formulaResultPath>InvoiceItem:Price</formulaResultPath>
+        <formulaSequence>1.0</formulaSequence>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem6</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetApplicationFeeDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem28</globalKey>
+        <inputFieldName>InvoiceItem:Quantity__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetApplicationFeeDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>InvoiceItem:Quantity</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem41</globalKey>
+        <inputFieldName>InvoiceItem:Price</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetApplicationFeeDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Currency</outputFieldFormat>
+        <outputFieldName>InvoiceItem:Price</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem29</globalKey>
+        <inputFieldName>RegistrantAccount:Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetApplicationFeeDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegistrantName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>true</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:InvoiceItem:Amount__c &quot;Unit/\/\/Fee&quot; == var:InvoiceItem:Quantity 12.50 * | var:InvoiceItem:Amount__c &quot;Partial/\/\/Unit/\/\/Fee&quot; == var:InvoiceItem:Quantity 6.25 * 0 IF IF</formulaConverted>
+        <formulaExpression>IF(%InvoiceItem:Amount__c%==&quot;Unit Fee&quot;,%InvoiceItem:Quantity% * 12.50,IF(%InvoiceItem:Amount__c%==&quot;Partial Unit Fee&quot;,%InvoiceItem:Quantity% * 6.25,0))</formulaExpression>
+        <formulaResultPath>InvoiceItem:Fees</formulaResultPath>
+        <formulaSequence>4.0</formulaSequence>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem13</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetApplicationFeeDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem32</globalKey>
+        <inputFieldName>ResidenceAddress</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetApplicationFeeDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>ResidenceAddress</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:RegistrantAccount:BillingStreet &quot;/\/\/&quot; var:RegistrantAccount:BillingCity &quot;/\/\/&quot; var:RegistrantAccount:BillingState &quot;/\/\/&quot; var:ResidenceAccount:BillingPostalCode &quot;/\/\/&quot; var:RegistrantAccount:BillingCountry CONCAT</formulaConverted>
+        <formulaExpression>CONCAT(%RegistrantAccount:BillingStreet%, &quot; &quot;,%RegistrantAccount:BillingCity%, &quot; &quot;,%RegistrantAccount:BillingState%, &quot; &quot;,%ResidenceAccount:BillingPostalCode%, &quot; &quot;,%RegistrantAccount:BillingCountry%)</formulaExpression>
+        <formulaResultPath>RegistrantBillingAddress</formulaResultPath>
+        <formulaSequence>2.0</formulaSequence>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem7</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetApplicationFeeDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <filterOperator>=</filterOperator>
-        <filterValue>Invoice:Id</filterValue>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem14</globalKey>
-        <inputFieldName>RegulatoryTrxnFeeId</inputFieldName>
+        <filterValue>&quot;$Vlocity.NULL&quot;</filterValue>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem21</globalKey>
+        <inputFieldName>ParentId</inputFieldName>
+        <inputObjectName>Asset</inputObjectName>
+        <inputObjectQuerySequence>4.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetApplicationFeeDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Unit</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>&gt;</filterOperator>
+        <filterValue>&apos;1&apos;</filterValue>
+        <globalKey>GetApplicationFeeDetailsCustom3163</globalKey>
+        <inputFieldName>FeeAmount</inputFieldName>
         <inputObjectName>RegulatoryTrxnFeeItem</inputObjectName>
         <inputObjectQuerySequence>7.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
@@ -270,13 +470,58 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem43</globalKey>
-        <inputFieldName>RegistrantAccount:BillingStreet</inputFieldName>
+        <formulaConverted>| var:Address:Street &quot;/\/\/&quot; var:Address:City &quot;/\/\/&quot; var:Address:State &quot;/\/\/&quot; var:Address:PostalCode &quot;/\/\/&quot; var:Address:Country CONCAT</formulaConverted>
+        <formulaExpression>CONCAT(%Address:Street%, &quot; &quot;,%Address:City%, &quot; &quot;,%Address:State%, &quot; &quot;,%Address:PostalCode%, &quot; &quot;,%Address:Country%)</formulaExpression>
+        <formulaResultPath>ResidenceAddress</formulaResultPath>
+        <formulaSequence>3.0</formulaSequence>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem12</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetApplicationFeeDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem25</globalKey>
+        <inputFieldName>InvoiceItem:Id</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetApplicationFeeDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>RegistrantStreet</outputFieldName>
+        <outputFieldName>InvoiceItem:Id</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem44</globalKey>
+        <inputFieldName>RegistrantAccount:BillingCity</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetApplicationFeeDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegistrantCity</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem30</globalKey>
+        <inputFieldName>RegistrantBillingAddress</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetApplicationFeeDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegistrantAddress</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -286,30 +531,28 @@
         <filterGroup>0.0</filterGroup>
         <filterOperator>LIMIT</filterOperator>
         <filterValue>1</filterValue>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem17</globalKey>
-        <inputObjectName>Address</inputObjectName>
-        <inputObjectQuerySequence>10.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetApplicationFeeDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Address</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>&quot;$Vlocity.NULL&quot;</filterValue>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem9</globalKey>
-        <inputFieldName>ActiveTo</inputFieldName>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem15</globalKey>
         <inputObjectName>AssociatedLocation</inputObjectName>
         <inputObjectQuerySequence>8.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetApplicationFeeDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
         <outputFieldName>AssociatedLoc</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <defaultValue>[]</defaultValue>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem26</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetApplicationFeeDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>List&lt;Map&gt;</outputFieldFormat>
+        <outputFieldName>InvoiceItem</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -383,63 +626,6 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem36</globalKey>
-        <inputFieldName>InvoiceCreatedDate</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetApplicationFeeDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>InvoiceCreatedDate</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem31</globalKey>
-        <inputFieldName>ResidenceAccount:Name</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetApplicationFeeDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>ResidenceName</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem34</globalKey>
-        <inputFieldName>Invoice:Name</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetApplicationFeeDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>InvoiceId</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem38</globalKey>
-        <inputFieldName>Invoice:PaymentDate__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetApplicationFeeDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldFormat>Date(MM/dd/yyyy)</outputFieldFormat>
-        <outputFieldName>InvoicePaymentDate</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
         <filterOperator>=</filterOperator>
         <filterValue>ResidenceAccount:Id</filterValue>
         <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem0</globalKey>
@@ -504,31 +690,13 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>Invoice:AccountId</filterValue>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem2</globalKey>
-        <inputFieldName>Id</inputFieldName>
-        <inputObjectName>Account</inputObjectName>
-        <inputObjectQuerySequence>3.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetApplicationFeeDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>ResidenceAccount</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem37</globalKey>
-        <inputFieldName>Invoice:CreatedDate</inputFieldName>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem31</globalKey>
+        <inputFieldName>ResidenceAccount:Name</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetApplicationFeeDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldFormat>Date(MM/dd/yyyy)</outputFieldFormat>
-        <outputFieldName>InvoiceCreatedDate</outputFieldName>
+        <outputFieldName>ResidenceName</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -536,217 +704,35 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>&apos;Residence&apos;</filterValue>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem3</globalKey>
-        <inputFieldName>Name</inputFieldName>
-        <inputObjectName>RecordType</inputObjectName>
-        <inputObjectQuerySequence>1.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetApplicationFeeDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Rec</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem42</globalKey>
-        <inputFieldName>RegistrantAccount:BillingState</inputFieldName>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem34</globalKey>
+        <inputFieldName>Invoice:Name</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetApplicationFeeDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>RegistrantState</outputFieldName>
+        <outputFieldName>InvoiceId</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
+        <defaultValue>YYYY-MM-DD</defaultValue>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>ResidenceAccount:ParentId</filterValue>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem4</globalKey>
-        <inputFieldName>Id</inputFieldName>
-        <inputObjectName>Account</inputObjectName>
-        <inputObjectQuerySequence>5.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetApplicationFeeDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>RegistrantAccount</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem39</globalKey>
-        <inputFieldName>InvoiceItem:Amount__c</inputFieldName>
+        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem38</globalKey>
+        <inputFieldName>Invoice:PaymentDate__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetApplicationFeeDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldFormat>Currency</outputFieldFormat>
-        <outputFieldName>InvoiceItem:Amount</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>ResidenceAccount:Id</filterValue>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem5</globalKey>
-        <inputFieldName>Account__c</inputFieldName>
-        <inputObjectName>BusinessLicense</inputObjectName>
-        <inputObjectQuerySequence>6.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetApplicationFeeDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Certificate</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem24</globalKey>
-        <inputFieldName>InvoiceItem:Name</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetApplicationFeeDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldFormat>String</outputFieldFormat>
-        <outputFieldName>InvoiceItem:Name</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem27</globalKey>
-        <inputFieldName>InvoiceItem:Type__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetApplicationFeeDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>InvoiceItem:Type</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>&gt;</filterOperator>
-        <filterValue>&apos;1&apos;</filterValue>
-        <globalKey>GetApplicationFeeDetailsCustom3163</globalKey>
-        <inputFieldName>FeeAmount</inputFieldName>
-        <inputObjectName>RegulatoryTrxnFeeItem</inputObjectName>
-        <inputObjectQuerySequence>7.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetApplicationFeeDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>InvoiceItem</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem25</globalKey>
-        <inputFieldName>InvoiceItem:Id</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetApplicationFeeDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>InvoiceItem:Id</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem30</globalKey>
-        <inputFieldName>RegistrantBillingAddress</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetApplicationFeeDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>RegistrantAddress</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <defaultValue>[]</defaultValue>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem26</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetApplicationFeeDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldFormat>List&lt;Map&gt;</outputFieldFormat>
-        <outputFieldName>InvoiceItem</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem28</globalKey>
-        <inputFieldName>InvoiceItem:Quantity__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetApplicationFeeDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>InvoiceItem:Quantity</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem29</globalKey>
-        <inputFieldName>RegistrantAccount:Name</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetApplicationFeeDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>RegistrantName</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetApplicationFeeDetailsCustom0jIAs0000000YuXMAUItem32</globalKey>
-        <inputFieldName>ResidenceAddress</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetApplicationFeeDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>ResidenceAddress</outputFieldName>
+        <outputFieldName>InvoicePaymentDate</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <outputType>JSON</outputType>
     <previewJsonData>{
-  &quot;Id&quot; : &quot;0kxG100000000knIAA&quot;
+  &quot;Id&quot; : &quot;0kxAu00000000HlIAI&quot;
 }</previewJsonData>
     <processSuperBulk>false</processSuperBulk>
     <responseCacheTtlMinutes>0.0</responseCacheTtlMinutes>
