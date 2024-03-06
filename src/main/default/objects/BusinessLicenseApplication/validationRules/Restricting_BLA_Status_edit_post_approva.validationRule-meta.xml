@@ -3,19 +3,22 @@
     <fullName>Restricting_BLA_Status_edit_post_approva</fullName>
     <active>true</active>
     <description>Restricting users not to change statuses manually from pending approval to approved or vice-versa</description>
-    <errorConditionFormula>(( ISPICKVAL( PRIORVALUE(Status), &quot;Submitted&quot; ) || 
-ISPICKVAL( PRIORVALUE(Status), &quot;Initial Review&quot; ) || 
-ISPICKVAL( PRIORVALUE(Status), &quot;Investigator Review&quot; )) &amp;&amp;
-ISPICKVAL(Status, &quot;Pending Approval&quot;)) ||
- 
-(( ISPICKVAL( PRIORVALUE(Status), &quot;Submitted&quot; ) ||
-ISPICKVAL( PRIORVALUE(Status), &quot;Initial Review&quot; ) ||
-ISPICKVAL( PRIORVALUE(Status), &quot;Investigator Review&quot; ) ||
-ISPICKVAL( PRIORVALUE(Status), &quot;Pending Approval&quot; )) &amp;&amp;
-ISPICKVAL(Status, &quot;Approved&quot;))  || 
-
-(NOT (ISBLANK( ApprovedDate )) &amp;&amp; 
-ISPICKVAL( PRIORVALUE(Status), &quot;Approved&quot; ) &amp;&amp;  
-ISPICKVAL(Status, &quot;Pending Approval&quot;))</errorConditionFormula>
+    <errorConditionFormula>AND(RecordType.DeveloperName = &quot;New_License_Application_Record_Type&quot;,
+    ISPICKVAL(Status, &quot;Pending Approval&quot;),
+    NOT(
+        OR(
+            ISPICKVAL(PRIORVALUE(Status), &quot;Pending Approval&quot;)
+            
+        )
+    )
+) ||
+AND(RecordType.DeveloperName = &quot;New_License_Application_Record_Type&quot;,
+    ISPICKVAL(Status, &quot;Approved&quot;),
+    NOT(
+        OR(
+            ISPICKVAL(PRIORVALUE(Status), &quot;Approved&quot;)
+        )
+    )
+)</errorConditionFormula>
     <errorMessage>Status cannot be changed. Use another Status.</errorMessage>
 </ValidationRule>
