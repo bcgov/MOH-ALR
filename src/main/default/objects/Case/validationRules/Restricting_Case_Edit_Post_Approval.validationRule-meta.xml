@@ -3,21 +3,21 @@
     <fullName>Restricting_Case_Edit_Post_Approval</fullName>
     <active>true</active>
     <description>Restricting users not to change statuses manually from pending approval to approved or vice-versa</description>
-    <errorConditionFormula>((RecordType.DeveloperName = &apos;PublicComplaintCase&apos;) || (RecordType.DeveloperName = &apos;ReportableIncident&apos; )) &amp;&amp;
-
-(( ISPICKVAL( PRIORVALUE(Status), &quot;Needs Review&quot; ) || 
-ISPICKVAL( PRIORVALUE(Status), &quot;Investigator Review&quot; ) || 
-ISPICKVAL( PRIORVALUE(Status), &quot;Under Inspection&quot; )) &amp;&amp;
-ISPICKVAL(Status, &quot;Pending Approval&quot;)) ||
- 
-(( ISPICKVAL( PRIORVALUE(Status), &quot;Needs Review&quot; ) || 
-ISPICKVAL( PRIORVALUE(Status), &quot;Investigator Review&quot; ) || 
-ISPICKVAL( PRIORVALUE(Status), &quot;Under Inspection&quot; ) ||
-ISPICKVAL( PRIORVALUE(Status), &quot;Pending Approval&quot; )) &amp;&amp;
-ISPICKVAL(Status, &quot;Approved&quot;))  || 
-
-(NOT (ISBLANK(  ApprovedDate__c  )) &amp;&amp; 
-ISPICKVAL( PRIORVALUE(Status), &quot;Approved&quot; ) &amp;&amp;  
-ISPICKVAL(Status, &quot;Pending Approval&quot;))</errorConditionFormula>
+    <errorConditionFormula>AND(
+    ISPICKVAL(Status, &quot;Pending Approval&quot;),
+    NOT(ISPICKVAL(PRIORVALUE(Status), &quot;Pending Approval&quot;)),
+    OR(
+        RecordType.DeveloperName = &apos;PublicComplaintCase&apos;,
+        RecordType.DeveloperName = &apos;ReportableIncident&apos;
+    )
+) ||
+AND(
+    ISPICKVAL(Status, &quot;Approved&quot;),
+    NOT(ISPICKVAL(PRIORVALUE(Status), &quot;Approved&quot;)),
+    OR(
+        RecordType.DeveloperName = &apos;PublicComplaintCase&apos;,
+        RecordType.DeveloperName = &apos;ReportableIncident&apos;
+    )
+)</errorConditionFormula>
     <errorMessage>Status cannot be changed. Use another Status.</errorMessage>
 </ValidationRule>
