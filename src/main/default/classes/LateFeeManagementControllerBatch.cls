@@ -106,6 +106,8 @@ public with sharing class LateFeeManagementControllerBatch implements Database.B
             
             List<RegulatoryTrxnFeeItem> transFeeItemList = RenewalManagementController.createLateFeeTransFeeItemRecords(lateFeeBLAMap, transFeeMap);
 
+            system.debug('%% before calling doc'+lateFeeBLAMap+' ');
+            system.debug('%% before calling doc'+' '+lateFeeAccMap);
             ServerSideDocumentGenerationController.startDocGenProcessLateFee(lateFeeAccMap, lateFeeBLAMap, transFeeMap, transFeeItemList);//?documents to be attached for ready for renewal and excluded?
         }
         catch(exception ex) {
