@@ -84,6 +84,7 @@ public class BCMOH_Constants {
     public Final Static List<String> renewalTableUpdateStatus = new List<String>{'Excluded', 'Cancelled'};
     // ALR-996
     public Final Static List<String> FeeTypeStatuses = new List<String>{'Late Fee', 'Renewal Unit Fee'};
-	public Final Static List<String> LateFeeStatuses = new List<String>{'', 'Ready to Send'};    
+	public Final Static List<String> LateFeeStatuses = new List<String>{'', 'Ready to Send'};  
+    public final Static String EXCEPMESSAGE='This is exception for testing and code coverage';
         
 }
