@@ -12,6 +12,12 @@ public class BCMOH_Constants {
     public Final Static String blaExcludedStatus = 'Excluded';
     public Final Static String feeType = 'Renewal Unit Fee';
     public Final Static String feeStatus = 'Paid';
+    //ALR-1000
+    public Final Static String blaLateFeeStatus = 'Ready to Send';
+    public Final Static String lateFeeTitle = 'Late Fee Invoice';
+    public Final Static String lateFeeTemplate = 'LateFeeTemplate';
+    public Final Static String templatePurposeDetails = 'LateFee';
+    public Final Static String AccStatus = 'Registered Active Pending Renewal';
     //ALR-40
     public Final Static String transFeeRecTypeId = Schema.getGlobalDescribe().get('RegulatoryTrxnFee').getDescribe().getRecordTypeInfosByDeveloperName().get('TransactionFee').getRecordTypeId();
     public Final Static String unitFeeType = 'Unit Fee';
@@ -37,7 +43,7 @@ public class BCMOH_Constants {
     public Final Static String parentAssetRecTypeId = Schema.getGlobalDescribe().get('Asset').getDescribe().getRecordTypeInfosByDeveloperName().get('Units_Record_Type').getRecordTypeId();
     public Final Static String unitRequestRecTypeId = Schema.getGlobalDescribe().get('Asset').getDescribe().getRecordTypeInfosByDeveloperName().get('Unit_Request_Record_Type').getRecordTypeId();
     public Final Static String parentAssetRecType = 'Units_Record_Type';
-    public Final Static List<String> allALUnitTypes = new List<String>{'Private', 'Public', 'Per Diem'};
+    public Final Static List<String> allALUnitTypes = new List<String>{'Private', 'Public', 'Per Diem', 'Late Fee'};//ALR-997
     public Final Static String unitName='Unit';
     public Final Static String unitRequestName='UnitRequest';
     public Final Static String errorBlaStatus = 'Errored';
@@ -73,6 +79,7 @@ public class BCMOH_Constants {
     public Final Static String MANAGEUNITCLASSNAME = 'ManageUnitOmniService';
     public Final Static String INSERTMERGERASSETMETHODNAME = 'insertMergedAssets';
     public Final Static String UPDATEPARENTONCHILDASSETMETHODNAME = 'updateParentOnChildAssets';
+    public Final Static String lateFee = 'Late Fee'; // ALR-997
     //ALR-820
     public Final Static List<String> renewalTableUpdateStatus = new List<String>{'Excluded', 'Cancelled'};
     // ALR-996
