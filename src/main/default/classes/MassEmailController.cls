@@ -67,7 +67,7 @@ public with sharing class MassEmailController {
                                         (SELECT Id, Account.Name, RenewalYear__c, CreatedDate 
                                          FROM BusinessLicenseApplicationAccount 
                                          WHERE RecordType.DeveloperName =: BCMOH_Constants.blaRecType AND 
-                                         Status =: BCMOH_Constants.blaCreatedStatus 
+                                         Status =: BCMOH_Constants.blaCreatedStatus
                                          AND RenewalYear__c =: BCMOH_Constants.renewalYear LIMIT 1),
                                         (SELECT Id, RegistrationCertificate__c 
                                          FROM AccountBusinessLicenses__r WHERE Status =: BCMOH_Constants.activeStatusBl LIMIT 1),
@@ -85,7 +85,7 @@ public with sharing class MassEmailController {
                                             
                                             //when valid renewal bla record is not available
                                             if(activeAccRec.BusinessLicenseApplicationAccount.size() == 0) {
-                                                system.debug('yui No Renewal BLAs for this Account');
+                                                system.debug('yui No Renewal Latefee for this Account');
                                                 isValidAcc = false;
                                                 continue;//skips following code and fetches next account in loop
                                             }
@@ -99,7 +99,7 @@ public with sharing class MassEmailController {
                                             //fetch business license record 
                                             if(activeAccRec.AccountBusinessLicenses__r.size() == 0) { 
                                                 //blaErrMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, BCMOH_Constants.noBLRec);
-                                                system.debug('yui No BL for this Account');
+                                                system.debug('yui No Latefee for this Account');
                                             }
                                            	else if(isValidAcc) {
                                                blMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, activeAccRec.AccountBusinessLicenses__r[0]);
@@ -161,7 +161,7 @@ public with sharing class MassEmailController {
                 }
             }
             //finally update bla records based on the err and success maps
-            updateBlaStatus();
+             updateBlaStatus();
         }
         catch(exception ex) {
             system.debug('yui im caught'+ex.getMessage());
@@ -169,6 +169,7 @@ public with sharing class MassEmailController {
         }
     }
     
+   
     //send email method
     public static void sendEmailForRenewals(Map<Id, Set<Id>> blaContentVerMap, Map<Id, Id> whatIdTargetMap) {
         //List<Id> attachIds = new List<Id>();
@@ -333,8 +334,9 @@ public with sharing class MassEmailController {
             LogService.logAndPublish(className, 'fetchTemplateDetails', '', ex);
         }
         return templateDetails;
+        
     }
-    
+ 
     //get org wide email address based on custom setting
     public static Id getOrgWideId() {
         OrgWideEmailAddress orgWideAddr = new OrgWideEmailAddress();
@@ -454,4 +456,6 @@ public with sharing class MassEmailController {
            LogService.logAndPublish(className, 'updateBlaStatus', '', ex);
        }
 	}
+    
+   
 }
