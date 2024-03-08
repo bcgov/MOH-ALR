@@ -69,7 +69,6 @@ public with sharing class LateFeeManagementControllerBatch implements Database.B
             +' WHERE recordType.DeveloperName =: accRecType AND LicenseType__c != NULL'
             +' AND Status__c IN: accStatuses';
             
-        System.debug('query@123' +query);
         return Database.getQueryLocator(query);
     }
     public void execute(Database.BatchableContext BC, List<Account> latefeeaccList){
