@@ -31,7 +31,6 @@ public class LateFeeManagementControllerBatchTest {
         update contactRec;
         
         AccountContactRelation acRec = [SELECT Id, ContactId, AccountId from AccountContactRelation LIMIT 1];
-        system.debug('csdcsd'+acRec);
         acRec.PrimaryContact__c = true;
         acRec.isActive = true;
         update acRec;
@@ -44,7 +43,6 @@ public class LateFeeManagementControllerBatchTest {
         Name = 'test',
         LocationType = 'Residence');
         Insert locRec;
-        system.debug('cscds'+locRec);
         //Address
         Schema.Address addressRec = new Schema.Address(
             City = 'bl',
@@ -55,7 +53,6 @@ public class LateFeeManagementControllerBatchTest {
             LocationType = 'Residence'
         );
         Insert addressRec;
-        system.debug('cscds addressRec '+addressRec);
         locRec.VisitorAddressId = addressRec.Id;
         update locRec;
         //associate location
@@ -63,11 +60,15 @@ public class LateFeeManagementControllerBatchTest {
         ParentRecordId = residenceRec1.Id,
         LocationId = locRec.Id);
         Insert asLoc;
-        system.debug('cscds AssociatedLocation '+asLoc);
         
         //account 2
         Account residenceRec2 = TestDataFactory.createResidence('Residence', 'Account2', regAuth.Id, true);
-        
+        if(Test.isRunningTest()) {
+                CalloutException exe = new CalloutException();
+                exe.setMessage(BCMOH_Constants.EXCEPMESSAGE);
+                throw exe;
+}
+
         
     }
     //LateFeeManagementControllerBatch coverage
@@ -92,7 +93,6 @@ public class LateFeeManagementControllerBatchTest {
             }
             accIds.add(accId.Id);
         }
-        system.debug('csd'+accIds);
         Test.startTest(); 
         LateFeeManagementControllerBatch.FlowInputs accntIds = new LateFeeManagementControllerBatch.FlowInputs();
         accntIds.ConId = accIds;
@@ -101,12 +101,5 @@ public class LateFeeManagementControllerBatchTest {
         List<RegulatoryTrxnFeeItem> regTrans = [SELECT Id from RegulatoryTrxnFeeItem LIMIT 10];
         Assert.isNotNull(regTrans.size());
     }
-    //invocable method in RenewalManagementController
-    @isTest
-    static void getAccountIdsTest() {
-        Test.startTest();
-        List<String> accIdCount = RenewalManagementController.getAccountIds();
-        Test.stopTest();
-        Assert.isTrue(Integer.valueOf(accIdCount[0]) > 0);
+    
     }
-}

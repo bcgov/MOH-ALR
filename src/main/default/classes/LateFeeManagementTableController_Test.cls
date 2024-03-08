@@ -22,56 +22,48 @@ public class LateFeeManagementTableController_Test {
         unitRec1.recordTypeId = parentAssetRTId;
         unitRec1.Amount__c = 'Full Unit Fee';
         Database.Insert(unitRec1);
-        system.debug('cs'+unitRec1);
         
         //asset child
         Asset unitRec2 = TestDataFactory.createUnit('1', 'Private', 3, residenceRec1.Id, false);
         unitRec2.recordTypeId = childAssetRTId;
         unitRec2.parentId = unitRec1.Id;
         Database.Insert(unitRec2);
-        system.debug('cs d '+unitRec2);
         
         //asset parent Public
         Asset unitRec3 = TestDataFactory.createUnit('1', 'Public', 5, residenceRec1.Id, false);
         unitRec3.recordTypeId = parentAssetRTId;
         unitRec3.Amount__c = 'Full Unit Fee';
         Database.Insert(unitRec3);
-        system.debug('cs'+unitRec3);
         
         //asset child Public
         Asset unitRec4 = TestDataFactory.createUnit('1', 'Public', 3, residenceRec1.Id, false);
         unitRec4.recordTypeId = childAssetRTId;
         unitRec4.parentId = unitRec3.Id;
         Database.Insert(unitRec4);
-        system.debug('cs d '+unitRec4);
         
         //asset parent Per Diem
         Asset unitRec5 = TestDataFactory.createUnit('1', 'Per Diem', 5, residenceRec1.Id, false);
         unitRec5.recordTypeId = parentAssetRTId;
         unitRec5.Amount__c = 'Full Unit Fee';
         Database.Insert(unitRec5);
-        system.debug('cs'+unitRec5);
         
         //asset child Public
         Asset unitRec6 = TestDataFactory.createUnit('1', 'Per Diem', 3, residenceRec1.Id, false);
         unitRec6.recordTypeId = childAssetRTId;
         unitRec6.parentId = unitRec5.Id;
         Database.Insert(unitRec6);
-        system.debug('cs d '+unitRec6);
         
         //asset parent Per Diem
         Asset unitRec7 = TestDataFactory.createUnit('1', 'Independent Living', 5, residenceRec1.Id, false);
         unitRec7.recordTypeId = parentAssetRTId;
         unitRec7.Amount__c = 'Full Unit Fee';
         Database.Insert(unitRec7);
-        system.debug('cs'+unitRec7);
         
         //asset child Public
         Asset unitRec8 = TestDataFactory.createUnit('1', 'Independent Living', 3, residenceRec1.Id, false);
         unitRec8.recordTypeId = childAssetRTId;
         unitRec8.parentId = unitRec7.Id;
         Database.Insert(unitRec8);
-        system.debug('cs d '+unitRec8);
         
         ContentVersion contentVersionRec = TestDataFactory.createContentVer('title value 1', residenceRec1.Id, true);
         Contact contactRec = TestDataFactory.createContactRecord(residenceRec1.Id, 'test@xyz.com', 'fname1', 'lname1', true);
@@ -80,7 +72,6 @@ public class LateFeeManagementTableController_Test {
         update contactRec;
         
         AccountContactRelation acRec = [SELECT Id, ContactId, AccountId from AccountContactRelation LIMIT 1];
-        system.debug('csdcsd'+acRec);
         acRec.PrimaryContact__c = true;
         acRec.isActive = true;
         update acRec;
@@ -92,7 +83,6 @@ public class LateFeeManagementTableController_Test {
         Name = 'test',
         LocationType = 'Residence');
         Insert locRec;
-        system.debug('cscds'+locRec);
         //Address
         Schema.Address addressRec = new Schema.Address(
             City = 'bl',
@@ -103,7 +93,6 @@ public class LateFeeManagementTableController_Test {
             LocationType = 'Residence'
         );
         Insert addressRec;
-        system.debug('cscds addressRec '+addressRec);
         locRec.VisitorAddressId = addressRec.Id;
         update locRec;
         //associate location
@@ -111,7 +100,6 @@ public class LateFeeManagementTableController_Test {
         ParentRecordId = residenceRec1.Id,
         LocationId = locRec.Id);
         Insert asLoc;
-        system.debug('cscds AssociatedLocation '+asLoc);
         
         //account 2
         Account residenceRec2 = TestDataFactory.createResidence('Residence', 'testingAccount2', regAuth.Id, true);
