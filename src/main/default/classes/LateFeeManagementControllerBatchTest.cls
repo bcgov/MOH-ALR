@@ -64,16 +64,7 @@ public class LateFeeManagementControllerBatchTest {
         LocationId = locRec.Id);
         Insert asLoc;
         system.debug('cscds AssociatedLocation '+asLoc);
-        
-        //account 2
-        Account residenceRec2 = TestDataFactory.createResidence('Residence', 'Account2', regAuth.Id, true);
-        if(Test.isRunningTest()) {
-                CalloutException exe = new CalloutException();
-                exe.setMessage(BCMOH_Constants.EXCEPMESSAGE);
-                throw exe;
-}
 
-        
     }
     //LateFeeManagementControllerBatch coverage
      @isTest
