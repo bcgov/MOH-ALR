@@ -67,7 +67,131 @@ public with sharing class MassEmailController {
                                         (SELECT Id, Account.Name, RenewalYear__c, CreatedDate 
                                          FROM BusinessLicenseApplicationAccount 
                                          WHERE RecordType.DeveloperName =: BCMOH_Constants.blaRecType AND 
-                                         Status =: BCMOH_Constants.blaCreatedStatus 
+                                         Status =: BCMOH_Constants.blaCreatedStatus
+                                         AND RenewalYear__c =: BCMOH_Constants.renewalYear LIMIT 1),
+                                        (SELECT Id, RegistrationCertificate__c 
+                                         FROM AccountBusinessLicenses__r WHERE Status =: BCMOH_Constants.activeStatusBl LIMIT 1),
+                                        (SELECT Id, Capacity__c, Quantity, Type__c 
+                                         FROM Assets
+										 WHERE RecordType.DeveloperName =: BCMOH_Constants.parentAssetRecType
+										 AND Type__c IN: BCMOH_Constants.allALUnitTypes)
+                                        FROM Account 
+                                        WHERE RecordType.DeveloperName =: accDetails.keyset() AND 
+                                        Status__c IN: accDetails.values()[0] 
+                                        //AND Id IN: accIdSetTemp
+                                       ]) {
+                                            system.debug('yui activeAccRec Id '+activeAccRec.Id);
+                                            isValidAcc = true;//setting account as valid initially
+                                            
+                                            //when valid renewal bla record is not available
+                                            if(activeAccRec.BusinessLicenseApplicationAccount.size() == 0) {
+                                                system.debug('yui No Renewal Latefee for this Account');
+                                                isValidAcc = false;
+                                                continue;//skips following code and fetches next account in loop
+                                            }
+                                            //when primary contact(email's targetObjectId)/its email is not available
+                                            if(isValidAcc && activeAccRec.AccountContactRelations.size() == 0) {
+                                                system.debug('yui '+BCMOH_Constants.noPrimaryContact);
+                                                isValidAcc = false;
+                                                blaErrMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, BCMOH_Constants.noPrimaryContact);
+                                                continue;//skips following code and fetches next account in loop
+                                            }
+                                            //fetch business license record 
+                                            if(activeAccRec.AccountBusinessLicenses__r.size() == 0) { 
+                                                //blaErrMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, BCMOH_Constants.noBLRec);
+                                                system.debug('yui No Latefee for this Account');
+                                            }
+                                           	else if(isValidAcc) {
+                                               blMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, activeAccRec.AccountBusinessLicenses__r[0]);
+                                            }
+                                           
+                                            //if account is valid then fetch the bla Ids associated with the account to fetch its files attached
+                                            if(isValidAcc) {
+                                                system.debug('yui valid acc '+activeAccRec.Id);
+                                                //acc Map
+                                            	accMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, activeAccRec);
+                                                system.debug('yui acc map in loop '+accMap);
+                                                
+                                                //acc contact map with bla id
+                                                accContactMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, 
+                                                                 activeAccRec.AccountContactRelations[0]);
+                                                
+                                                //calculate total AL units if assets are present
+                                            	if(activeAccRec.Assets.size() != 0) {
+                                                	Integer unitCounter = 0;
+                                                	for(Asset parentAsset : activeAccRec.Assets) {
+                                                    	unitCounter = unitCounter + Integer.valueOf(parentAsset.Quantity);
+                                               		}
+                                               		blaTotalAlUnitsMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, unitCounter);
+                                           		}
+                                                //bla map and blaId-contactId map for email targetIds
+                                                for(BusinessLicenseApplication blaRec : 
+                                                    activeAccRec.BusinessLicenseApplicationAccount) {
+                                                	blaMap.put(blaRec.Id, blaRec);
+                                                    blaContactMap.put(blaRec.Id, activeAccRec.AccountContactRelations[0].ContactId);
+                                             	}
+                                            }
+            }
+            system.debug('yui accContactMap after for '+accContactMap);
+            system.debug('yui acc map after for '+accMap.size()+' '+accMap);
+            system.debug('yui blaIds after for '+blMap.keyset());
+            system.debug('yui blMap after for '+blMap);
+            //if valid blas are fetched
+            if(!blaMap.isEmpty()) {
+                //fetch template Id
+                templateIdEntityMap = fetchTemplateDetails(BCMOH_Constants.templatePurpose);//email template
+                system.debug('yui after calling fetch templ details '+templateEntity+' '+templateId);
+                //fetch org wide address id
+                orgWideAddrId = getOrgWideId();//email from address
+                system.debug('yui if main values inside '+orgWideAddrId+' '+templateIdEntityMap);
+                //if template or org wide id is not fetched, update error on valid bla records
+                if(!sendEmailValid) {
+                    for(Id blaId : blaMap.keySet()) {
+                        blaErrMap.put(blaId, errMessage);//err msg is set in child methods
+                    }
+                }
+                else {
+                    //fetch email attachments associated to BLA records
+                    blaContentVerMap = fetchAttachmentDetails(blaMap.keySet());
+                    system.debug('yui blaContentVerMap inside MAIN if '+blaContentVerMap);
+                    //set whatId Target Map for send email method
+                    whatIdTargetMap = blaContactMap;
+                    //send email by passing the whatId-content map and whatid-target map
+                    sendEmailForRenewals(blaContentVerMap, whatIdTargetMap);
+                }
+            }
+            //finally update bla records based on the err and success maps
+             updateBlaStatus();
+        }
+        catch(exception ex) {
+            system.debug('yui im caught'+ex.getMessage());
+            LogService.logAndPublish(className, 'doSendRenewals', '', ex);
+        }
+    }
+    
+    //method to to send email to records-ALR-1000
+    @AuraEnabled
+    public static void doSendLateFee() {
+        Boolean isValidAcc;
+        Map<String, List<String>> accDetails = new Map<String, List<String>>();
+        Map<Id, String> templateIdEntityMap = new Map<Id, String>();
+        Id orgWideAddrId = NULL;
+        Map<Id, Set<Id>> contactContentVerMap = new Map<Id, Set<Id>>();
+        Set<Id> accIdSetTemp = new Set<Id>{'001As00000IGcv0IAD','001As00000IMmIEIA1','001As00000HVRtTIAX'};//temp delete acc
+        //Set<Id> accIdSetTemp = new Set<Id>{'001As00000IMmIEIA1'};//temp delete xyz 
+        try {
+            //fetch acc status and rec type from metadata
+            accDetails = BCMOH_UtilityClass.getAccRenewals(BCMOH_Constants.renewalName);
+            //fetch account, bla details
+            //need to make query dynamic?
+            for(Account activeAccRec : [SELECT Id, Status__c, Name, 
+                                        (SELECT Id, ContactId, Contact.Name, Contact.Email, PrimaryContact__c
+                                         FROM AccountContactRelations 
+                                         WHERE PrimaryContact__c = TRUE AND IsActive = TRUE AND Contact.Email != NULL LIMIT 1),
+                                        (SELECT Id, Account.Name, RenewalYear__c, CreatedDate 
+                                         FROM BusinessLicenseApplicationAccount 
+                                         WHERE RecordType.DeveloperName =: BCMOH_Constants.blaRecType AND 
+                                         Late_Fee_Status__c =: BCMOH_Constants.blaLateFeeStatus 
                                          AND RenewalYear__c =: BCMOH_Constants.renewalYear LIMIT 1),
                                         (SELECT Id, RegistrationCertificate__c 
                                          FROM AccountBusinessLicenses__r WHERE Status =: BCMOH_Constants.activeStatusBl LIMIT 1),
@@ -139,7 +263,7 @@ public with sharing class MassEmailController {
             //if valid blas are fetched
             if(!blaMap.isEmpty()) {
                 //fetch template Id
-                templateIdEntityMap = fetchTemplateDetails(BCMOH_Constants.templatePurpose);//email template
+                templateIdEntityMap = fetchTemplate(BCMOH_Constants.templatePurposeDetails);//email template
                 system.debug('yui after calling fetch templ details '+templateEntity+' '+templateId);
                 //fetch org wide address id
                 orgWideAddrId = getOrgWideId();//email from address
@@ -151,6 +275,7 @@ public with sharing class MassEmailController {
                     }
                 }
                 else {
+                    system.debug('blaMap Value: '+blaMap);
                     //fetch email attachments associated to BLA records
                     blaContentVerMap = fetchAttachmentDetails(blaMap.keySet());
                     system.debug('yui blaContentVerMap inside MAIN if '+blaContentVerMap);
@@ -161,13 +286,15 @@ public with sharing class MassEmailController {
                 }
             }
             //finally update bla records based on the err and success maps
-            updateBlaStatus();
+            //BCMOH_UtilityClass.updateBlaLateFeeStatus(blaErrMap,'Sent');
+            updateLateFeeBlaStatus();
         }
         catch(exception ex) {
             system.debug('yui im caught'+ex.getMessage());
-            LogService.logAndPublish(className, 'doSendRenewals', '', ex);
+            LogService.logAndPublish(className, 'doSendLateFee', '', ex);
         }
     }
+    
     
     //send email method
     public static void sendEmailForRenewals(Map<Id, Set<Id>> blaContentVerMap, Map<Id, Id> whatIdTargetMap) {
@@ -335,6 +462,52 @@ public with sharing class MassEmailController {
         return templateDetails;
     }
     
+//fetch templateId needed to send the email-ALR-1000
+    public static Map<Id, String> fetchTemplate(String purpose) {
+        Map<Id, String> templateDetails = new Map<Id, String>();
+        EmailTemplate emailTempRec = new EmailTemplate();
+        try {
+            //fetch email template name from metadata
+            templateDetailsMap = BCMOH_UtilityClass.getEmailtemplateName(purpose);
+            templateDetailName = templateDetailsMap.values()[0];
+            templateDetailsId = new List<Id>(templateDetailsMap.keyset())[0];
+            if(!templateDetailsMap.isEmpty()) {
+                //fetch template details from email template
+                emailTempRec = BCMOH_UtilityClass.getEmailTemplate(templateDetailName);
+                if(emailTempRec != NULL) {
+                    system.debug('yui fetched email template '+emailTempRec.Id);
+                    templateDetails.put(emailTempRec.Id, emailTempRec.RelatedEntityType);
+                    templateEntity = emailTempRec.RelatedEntityType;
+                    templateId = emailTempRec.Id;
+                    subjectValue = emailTempRec.Subject;
+                    subjectValueConst = emailTempRec.Subject;
+                    emailBody = emailTempRec.Body;
+                    emailBodyConst = emailTempRec.Body;
+                    emailHtmlBody = emailTempRec.HtmlValue;//ALR-827 - for html body
+                    emailHtmlBodyConst = emailTempRec.HtmlValue;//ALR-827 - for html body
+                    system.debug('yui fetched email templateEntity  '+templateEntity+' '+templateId);
+                }
+                else {
+                    //set error when email template was not fetched
+                	errMessage = templateId == NULL ? BCMOH_Constants.templateNameMissing+templateDetailName : '';
+                	system.debug(errMessage);//add in error handling
+                    sendEmailValid = false;
+                }
+            }
+            else {
+                //set error when valid email template config is not available
+                errMessage = BCMOH_Constants.activePurposeTemplateMissing+purpose+' purpose';
+                system.debug(errMessage);//add in error handling
+                sendEmailValid = false;
+            }
+        }
+        catch(Exception ex) {
+            system.debug('use exception handling fetchTemplateId is'+ex.getMessage());
+            LogService.logAndPublish(className, 'fetchTemplate', '', ex);
+        }
+        return templateDetails;
+    }    
+    
     //get org wide email address based on custom setting
     public static Id getOrgWideId() {
         OrgWideEmailAddress orgWideAddr = new OrgWideEmailAddress();
@@ -452,6 +625,51 @@ public with sharing class MassEmailController {
        catch(exception ex) {
            system.debug('caught in updateBlaStatus - '+ex.getMessage());
            LogService.logAndPublish(className, 'updateBlaStatus', '', ex);
+       }
+	}
+    
+    //update all latefee bla records - DML-ALR-1000
+	public static void updateLateFeeBlaStatus() {
+        //List<BusinessLicenseApplication> statusBla = new List<BusinessLicenseApplication>();
+        List<Account> accToUpdate = new List<Account>();
+       try {
+           //loop through bla error map
+           for(Id blaId : blaErrMap.keySet()) {
+               //truncate the err message if length more than 255 chars
+               String errMsg = blaErrMap.get(blaId).length() > 255 ? blaErrMap.get(blaId).Substring(0,255) : blaErrMap.get(blaId);
+               BusinessLicenseApplication blaRec = new BusinessLicenseApplication(
+               Id = blaId,
+               Late_Fee_Status__c = BCMOH_Constants.errorBlaStatus,
+               RenewalError__c = errMsg);
+               blaUpdateList.add(blaRec);
+           }
+           //loop through bla success map
+           
+           for(Id blaId : blaSuccessMap.keySet()) {
+               system.debug('$$$ cds inside '+blaSuccessMap.keyset());
+               //statusBla=[Select Account.status__c from BusinessLicenseApplication where id=:blaId];
+               //statusBla[0]=BCMOH_Constants.AccStatus;
+               String statusBla=[Select AccountId from BusinessLicenseApplication where id=:blaId][0].AccountId;
+               accToUpdate=[Select Status__c from Account where id=:statusBla];
+               accToUpdate[0].Status__c=BCMOH_Constants.AccStatus;
+               BusinessLicenseApplication blaRec = new BusinessLicenseApplication(
+               Id = blaId,
+               Late_Fee_Status__c = BCMOH_Constants.sentBlaStatus,
+               RenewalError__c = blaSuccessMap.get(blaId));
+               blaUpdateList.add(blaRec);
+             
+              
+           }
+           if(!blaUpdateList.isEmpty() && BusinessLicenseApplication.sObjectType.getDescribe().isUpdateable()) {
+                 Database.Update(blaUpdateList, false);//add error logs for failed records 
+                 Database.Update(accToUpdate, false);
+           }
+          
+           
+       }
+       catch(exception ex) {
+           system.debug('caught in updateLateFeeBlaStatus - '+ex.getMessage());
+           LogService.logAndPublish(className, 'updateLateFeeBlaStatus', '', ex);
        }
 	}
 }
