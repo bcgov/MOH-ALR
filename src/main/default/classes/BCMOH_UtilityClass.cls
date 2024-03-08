@@ -189,6 +189,21 @@ public class BCMOH_UtilityClass {
         return docNameWithTitleMap;
     }
     
+    //start of ALR-997
+    public static Map<String, String> getDocNameTitleLateFee(String docGenPurpose) {
+        Map<String, String> docNameWithTitleMap = new Map<String, String>();
+        try {
+            if(docGenPurpose.equals(BCMOH_Constants.templatePurposeDetails)){
+                docNameWithTitleMap.put('LateFee_Template', 'Late Fee Invoice '+BCMOH_Constants.invoiceIdMerge);//ALR-1000
+            }
+        }
+        catch(Exception ex) {
+            LogService.logAndPublish(className, 'getTemplateNameWithTitleMap', '', ex);
+        }
+        return docNameWithTitleMap;
+    }
+    //end of ALR-997
+    
     //ALR-560 - common util class
     //update all bla records - DML
 	public static List<BusinessLicenseApplication> updateBlaStatus(Map<Id, String> blaIdDetailsMap, String blaStatus) {

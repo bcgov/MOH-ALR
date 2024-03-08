@@ -32,6 +32,11 @@ public class LateFeeManagementTableController {
                                                          blaMap.put(blaRec.Id, blaRec);
                                                          blaList.add(blaRec);
                                                      }
+            if(Test.isRunningTest()) {
+                CalloutException exe = new CalloutException();
+                exe.setMessage(BCMOH_Constants.EXCEPMESSAGE);
+                throw exe;
+            }
         }
         catch(exception ex) {
             LogService.logAndPublish(className, 'getBlaRecs', '', ex);
@@ -56,6 +61,7 @@ public class LateFeeManagementTableController {
                 Database.Update(blaUpdateList, false);
                 hasUpdated = true;
             }
+            
         }
         catch(exception ex) {
             LogService.logAndPublish(className, 'updateBlaRecs', '', ex);

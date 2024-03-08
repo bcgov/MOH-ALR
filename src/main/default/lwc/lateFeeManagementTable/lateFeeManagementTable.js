@@ -59,7 +59,7 @@ export default class LateFeeManagementTable extends LightningElement {
                 if(bla.Name){
                     bla.appId = '/'+bla.Id;
                     bla.RenewalDetails =bla.RenewalError__c;
-                   // bla.LateFeeStatus = bla.Late_Fee_Status__c;
+// bla.LateFeeStatus = bla.Late_Fee_Status__c;
                 }
                 if(bla.Account.Id){
                     bla.AccName = bla.Account.Name;
@@ -67,8 +67,8 @@ export default class LateFeeManagementTable extends LightningElement {
                     bla.ParentName = bla.Account.Parent.Name;
                     bla.ParentId = '/'+bla.Account.ParentId;
                     bla.HealthAuthorityName = bla.Account.HealthAuthority__c;
-                    bla.AccountStatus = bla.Account.Status__c;
-                    
+                    bla.AccountStatus = bla.Account.Status__c;    
+
                     
                 }
                 if(bla.LicenseTypeId){
@@ -94,15 +94,15 @@ export default class LateFeeManagementTable extends LightningElement {
             if(event.detail.draftValues){
                 this.hasLoaded = false;
                 const saveDraftValues = event.detail.draftValues;
-                // Pass edited fields to Apex Controller
+// Pass edited fields to Apex Controller
                 await updateLateFeeRecords( { data: saveDraftValues})
                 .then(result => {
                     if(result){
-                        // refresh the table with updated data
+// refresh the table with updated data
                         this.refreshData(); 
                         }
                     else {
-                         // if no update done manual refresh data table
+// if no update done manual refresh data table
                         var tempBlaList = this.blaList;
                         this.blaList = [];
                         this.blaList = tempBlaList;
@@ -127,12 +127,12 @@ export default class LateFeeManagementTable extends LightningElement {
     refreshData(){
         return refreshApex(this._wiredResult);
     }
-
+     
     // To send renewals on click
     /* async handleSendLateFees(){
         
         try{
-            this.hasLoaded = false;
+                        this.hasLoaded = false;
             await sendLateFeeRenewals();
             await this.refreshData();
         }catch(error){
@@ -143,15 +143,15 @@ export default class LateFeeManagementTable extends LightningElement {
     }*/
     // To Generate Late Fee renewals on click
     handleGenerateLateFees(event){
-            //Once set to true the flow will run
+//Once set to true the flow will run
             this.renderFlow = true;
     }
 
     handleStatusChange(event){
       if (event.detail.status === 'FINISHED_SCREEN') {
-          // make sure that you refresh your component to show latest data
+// make sure that you refresh your component to show latest data
             refreshApex(this._wiredResult);
-          // this fires a success toast after the execution of the flow
+// this fires a success toast after the execution of the flow
           //  this.fireSuccessToast(); 
 
           //Hide the Flow again
