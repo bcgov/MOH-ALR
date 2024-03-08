@@ -338,7 +338,8 @@ public with sharing class MassEmailController {
                            Messaging.SingleEmailMessage emailMsgRec = BCMOH_UtilityClass.setEmailParams(contactId, NULL, orgWideAddrId, attachIds, whatId, emailBody, subjectValue, emailHtmlBody);//ALR-827 - added emailHtmlBody
                            singleEmailMsgList.add(emailMsgRec);
                            system.debug('yui emailmsg rec data set '+emailMsgRec);
-                         }
+                           
+                       }
                 }
                 else {
                     blaErrMap.put(whatId, BCMOH_Constants.mappingDataMissing);//required data missing account and bla records-corner scenario
@@ -648,8 +649,6 @@ public with sharing class MassEmailController {
            
            for(Id blaId : blaSuccessMap.keySet()) {
                system.debug('$$$ cds inside '+blaSuccessMap.keyset());
-               //statusBla=[Select Account.status__c from BusinessLicenseApplication where id=:blaId];
-               //statusBla[0]=BCMOH_Constants.AccStatus;
                String statusBla=[Select AccountId from BusinessLicenseApplication where id=:blaId][0].AccountId;
                accToUpdate=[Select Status__c from Account where id=:statusBla];
                accToUpdate[0].Status__c=BCMOH_Constants.AccStatus;
