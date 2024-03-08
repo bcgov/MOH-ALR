@@ -1,6 +1,6 @@
 import { LightningElement, track, wire } from 'lwc';
 import getLateFeeMap from '@salesforce/apex/LateFeeManagementTableController.getLateFeeRecs';
-import sendLateFeeRenewals from '@salesforce/apex/MassEmailController.doSendLateFee';
+//import sendLateFeeRenewals from '@salesforce/apex/MassEmailController.doSendLateFee';
 import updateLateFeeRecords from "@salesforce/apex/LateFeeManagementTableController.updateLateFeeRecs";
 import { refreshApex } from '@salesforce/apex';
 import { loadStyle } from 'lightning/platformResourceLoader';
@@ -129,7 +129,7 @@ export default class LateFeeManagementTable extends LightningElement {
     }
 
     // To send renewals on click
-     async handleSendLateFees(){
+    /* async handleSendLateFees(){
         
         try{
             this.hasLoaded = false;
@@ -140,7 +140,7 @@ export default class LateFeeManagementTable extends LightningElement {
                 error.body.message.split('EXCEPTION, ')[1].split(': [')[0] : error.body.message;
         }
 
-    }
+    }*/
     // To Generate Late Fee renewals on click
     handleGenerateLateFees(event){
             //Once set to true the flow will run
