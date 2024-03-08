@@ -75,6 +75,7 @@ public with sharing class LateFeeManagementControllerBatch implements Database.B
     public void execute(Database.BatchableContext BC, List<Account> latefeeaccList){
         Map<Id, Account> lateFeeAccMap = new Map<Id, Account>();
         List<RegulatoryTrxnFee> regTxnList = new List<RegulatoryTrxnFee>();
+        List<BusinessLicenseApplication> blaList = new List<BusinessLicenseApplication>();
         Map<Id, BusinessLicenseApplication> lateFeeBLAMap = new Map<Id, BusinessLicenseApplication>();
 
         try {
@@ -89,7 +90,7 @@ public with sharing class LateFeeManagementControllerBatch implements Database.B
                     } else {
                         BLArec.Late_Fee_Status__c = blaLateFeeStatus;
                     }
-                    update BLArec;
+                    blaList.add(BLArec);
                     
                     if(accrec != NULL) {
                         lateFeeAccMap.put(accrec.Id, accrec);
@@ -100,6 +101,7 @@ public with sharing class LateFeeManagementControllerBatch implements Database.B
                     }
                 } 
         	}
+            Update blaList;
             
             Map<Id, RegulatoryTrxnFee> transFeeMap = RenewalManagementController.createLateFeeTransFeeRecords(lateFeeAccMap, lateFeeBLAMap);
             
