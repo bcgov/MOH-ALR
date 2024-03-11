@@ -30,13 +30,50 @@ public class BCMOH_UtilityClass {
                     templateDetailsMap.put(emailTemplateRec.Id, emailTemplateRec.EmailTemplateDeveloperName__c);
                     break;
                 }
+                                
             }
+                
         }
         catch(Exception ex) {
             system.debug('use exception handling'+ex.getMessage());
         }
         return templateDetailsMap;
     }
+    
+    
+    //method to fetch active email template developer name based on purpose from metadata-ALR-1000
+      public static Map<Id, String> getEmailtemplatebyName(String templatePurposeDetails) {
+        Map<Id, String> templateDetailsMap = new Map<Id, String>();
+        try {
+            for(EmailTemplateDetails__mdt emailTemplateRec : EmailTemplateDetails__mdt.getAll().values()) {
+                 if(emailTemplateRec.IsActive__c && emailTemplateRec.Purpose__c == templatePurposeDetails) {
+                    templateDetailsMap.put(emailTemplateRec.Id, emailTemplateRec.EmailTemplateDeveloperName__c);
+                    break;
+                }
+              }
+        }
+        catch(Exception ex) {
+            system.debug('use exception handling'+ex.getMessage());
+        }
+        return templateDetailsMap;
+    }
+    
+    //method to fetch active email template developer name based on purpose from metadata-ALR-1000
+      /*public static Map<Id, String> getLateFeeEmailtemplateName(String templatePurpose) {
+        Map<Id, String> templateDetailsMap = new Map<Id, String>();
+        try {
+            for(EmailTemplateDetails__mdt emailTemplateRec : EmailTemplateDetails__mdt.getAll().values()) {
+                if(emailTemplateRec.IsActive__c && emailTemplateRec.Purpose__c == templatePurpose) {
+                    templateDetailsMap.put(emailTemplateRec.Id, emailTemplateRec.EmailTemplateDeveloperName__c);
+                    break;
+                }
+            }
+        }
+        catch(Exception ex) {
+            system.debug('use exception handling'+ex.getMessage());
+        }
+        return templateDetailsMap;
+    }*/
     
     //method to fetch email template based on developer name provided
     public static EmailTemplate getEmailTemplate(String templateDevName) {
@@ -130,7 +167,9 @@ public class BCMOH_UtilityClass {
         emailMsg.setplainTextBody(emailBody);
         emailMsg.setHtmlBody(emailHtmlBody);//ALR-827 - added html body
         return emailMsg;
+        
     }
+    
     
     //method to fetch DocumentTemplateContentDoc map given template name
     public static Map<String, DocumentTemplateContentDoc> getDocTempContentMap(List<String> templateNames) {
@@ -227,7 +266,8 @@ public class BCMOH_UtilityClass {
        }
         return blaUpdateList;
 	}
-        
+    
+             
     //wrapper class to pass content doc details
     public class ContentDocWrapper {
         public Map<Id, Set<Id>> entityContentIdsMap;// {get;set;}
