@@ -34,6 +34,7 @@ export default class LateFeeManagementTable extends LightningElement {
     @track blaList;
     draftValues = [];
     @track hasLoaded = false; //Spinner Attribute
+    @track renderFlow = false;
     
     //Wired Property
     _wiredResult;
