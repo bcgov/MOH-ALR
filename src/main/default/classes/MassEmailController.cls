@@ -80,7 +80,7 @@ public with sharing class MassEmailController {
                                             Status__c IN: accDetails.values()[0] 
                                             //AND Id IN: accIdSetTemp
                                            ]) {
-                                               isValidAcc = true;//setting account as valid initially
+                                                                                              isValidAcc = true;//setting account as valid initially
                                                
                                                //when valid renewal bla record is not available
                                                if(activeAccRec.BusinessLicenseApplicationAccount.size() == 0) {
@@ -106,7 +106,7 @@ public with sharing class MassEmailController {
                                                
                                                //if account is valid then fetch the bla Ids associated with the account to fetch its files attached
                                                if(isValidAcc) {
-                                                   //acc Map
+                                                                                                      //acc Map
                                                    accMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, activeAccRec);
                                                    
                                                    //acc contact map with bla id
@@ -221,7 +221,7 @@ public with sharing class MassEmailController {
                                                
                                                //if account is valid then fetch the bla Ids associated with the account to fetch its files attached
                                                if(isValidAcc) {
-                                                   //acc Map
+                                                                                                      //acc Map
                                                    accMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, activeAccRec);
                                                    
                                                    //acc contact map with bla id
@@ -541,7 +541,7 @@ public with sharing class MassEmailController {
                                                   if(!eResRec.isSuccess()) {
                                                       //Operation failed, get all errors                
                                                       for(Messaging.SendEmailError err : eResRec.getErrors()) {
-                                                         targetIdErrorMap.put(err.getTargetObjectId(), err.getMessage());
+                                                                                                                    targetIdErrorMap.put(err.getTargetObjectId(), err.getMessage());
                                                       }
                                                   }
                                               }
