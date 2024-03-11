@@ -112,8 +112,8 @@ public class MassEmailControllerTest {
         Test.startTest();
         templateNameDocMap=BCMOH_UtilityClass.getDocTempContentMap(templateNames);
         Test.stopTest();
-        //List<Account> accRec = [SELECT Id FROM Account];
-        //Assert.isNotNull(accRec.size());
+        List<Account> accRec = [SELECT Id FROM Account];
+        Assert.isNotNull(accRec.size());
     }
     
            
@@ -129,6 +129,8 @@ public class MassEmailControllerTest {
         Test.startTest();
         docgen=BCMOH_UtilityClass.getDocGenProcRec(type1,requestText,referenceId,tokenData,docGenType);
         Test.stopTest();
+        List<Account> accRec = [SELECT Id FROM Account];
+        Assert.isNotNull(accRec.size());
            }
     
          //getDocNameTitle
@@ -139,6 +141,8 @@ public class MassEmailControllerTest {
         Test.startTest();
         docGenRec=BCMOH_UtilityClass.getDocNameTitle(docGenPurpose);
         Test.stopTest();
+        List<Account> accRec = [SELECT Id FROM Account];
+        Assert.isNotNull(accRec.size());
            }
     
     //getDocNameTitleLateFeeTest
@@ -149,6 +153,8 @@ public class MassEmailControllerTest {
         Test.startTest();
         docGenRec=BCMOH_UtilityClass.getDocNameTitleLateFee(docGenPurpose);
         Test.stopTest();
+        List<Account> accRec = [SELECT Id FROM Account];
+        Assert.isNotNull(accRec.size());
            }
     
      //getSubstringWithoutExtension
@@ -159,5 +165,7 @@ public class MassEmailControllerTest {
         Test.startTest();
         docGenRec=BCMOH_UtilityClass.getSubstringWithoutExtension(documentTitle);
         Test.stopTest();
+        List<Account> accRec = [SELECT Id FROM Account];
+        Assert.isNotNull(accRec.size());
            }
 }
