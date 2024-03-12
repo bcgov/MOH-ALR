@@ -54,6 +54,7 @@ public with sharing class LateFeeManagementControllerBatch implements Database.B
             +' LicenseType__r.OneTimeFee__c, LicenseType__r.PartialUnitFee__c, LicenseType__r.LateFee__c,'
             +' Name, RegId__c, LicenseType__r.Name, Phone, Fax, ParentId, Parent.Name, Parent.Phone, Parent.BillingAddress,'//ALR-560
             +' (SELECT Id, Name, RecordTypeId,'
+            +' LicenseTypeId, LicenseType.LateFee__c,'
             +' RenewalError__c, RenewalYear__c, ExclusionReason__c,'
             +' CreatedDate, ApplicationType, ApplicantId, ApplicationCategory,'
             +' Status, Late_Fee_Status__c, AccountId, Category, BusinessLicenseApplication.Account.Id'
