@@ -67,9 +67,9 @@ public class BCMOH_Constants {
     public Final Static String accountAddr = 'Account Address';
     public Final Static String relatedContacts = 'Related Contacts';
     public Final Static String regulatoryTransactionFeeItem = 'Regulatory Transaction Fee Item';
-    public Final Static String unitsPublic = 'Units- Public';
-    public Final Static String unitsPrivate = 'Units- Private';
-    public Final Static String unitsPerDiem = 'Units- Per Diem';
+    public Final Static String unitsPublic = 'Units-Public';
+    public Final Static String unitsPrivate = 'Units-Private';
+    public Final Static String unitsPerDiem = 'Units-Per Diem';
     public Final Static String blCertId = 'Business License Certificate Id';
     public Final Static String emailSentToId = System.Label.EmailSentToId;
     public Final Static String emailSentTo = System.Label.EmailSentTo;
