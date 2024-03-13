@@ -267,6 +267,30 @@ public class BCMOH_UtilityClass {
         return blaUpdateList;
 	}
     
+    //update all bla late fee status
+	public static List<BusinessLicenseApplication> updateBlaLateFeeStatus(Map<Id, String> blaIdDetailsMap, String blalatefeeStatus) {
+       List<BusinessLicenseApplication> blaUpdateList = new List<BusinessLicenseApplication>();
+       try {     
+           BusinessLicenseApplication BLAquery = [SELECT Id, RenewalError__c FROM BusinessLicenseApplication WHERE Id =:blaIdDetailsMap.keySet() LIMIT 1];
+           //loop through bla update map
+           for(Id blaId : blaIdDetailsMap.keySet()) {
+               //truncate the message if length more than 255 chars
+               String renewalMsg = blaIdDetailsMap.get(blaId);
+               renewalMsg = BLAquery.RenewalError__c != NULL ? BLAquery.RenewalError__c + ' ; ' + renewalMsg : renewalMsg;
+               BusinessLicenseApplication blaRec = new BusinessLicenseApplication(
+               Id = blaId,
+               Late_Fee_Status__c = blalatefeeStatus,
+               RenewalError__c = renewalMsg);
+               blaUpdateList.add(blaRec);
+           }
+       }
+       catch(exception ex) {
+           system.debug('caught in updateBlaLateFeeStatus - '+ex.getMessage());
+           LogService.logAndPublish(className, 'updateBlaLateFeeStatus', '', ex);
+       }
+        return blaUpdateList;
+	}
+    
              
     //wrapper class to pass content doc details
     public class ContentDocWrapper {
