@@ -139,8 +139,6 @@ public with sharing class ServerSideDocumentGenerationController {
         try {
             //1) Get doc title
             contentDocumentTitle = docNameWithTitleMap.get(tempName);//null check not needed as attribute is passed from for looping of map
-            system.debug('*** cdsa contentDocumentTitle '+contentDocumentTitle);
-system.debug('*** cdsa transFeeMap1.get(accId) '+transFeeMap1.get(accId));
             //if title contains "InvoiceId" merge field append to doc title, else add bla to error map
             if(contentDocumentTitle.contains(BCMOH_Constants.invoiceIdMerge) && transFeeMap1.get(accId) == NULL) {
                 system.debug('*** cdsa contains but no fee map '+contentDocumentTitle);
@@ -150,20 +148,17 @@ system.debug('*** cdsa transFeeMap1.get(accId) '+transFeeMap1.get(accId));
             else if(contentDocumentTitle.contains(BCMOH_Constants.invoiceIdMerge) && transFeeMap1.get(accId) != NULL) {
                 system.debug('*** cdsa contains and fee present '+contentDocumentTitle);
                 contentDocumentTitle = contentDocumentTitle.replace(BCMOH_Constants.invoiceIdMerge, transFeeMap1.get(accId).Name);
-                                system.debug('*** cdsa after replace '+contentDocumentTitle);
-                        }
+            }
             
             //2) Get content version id
             if(Test.isRunningTest()) {
                 contentVersionId = contentVersionId1;
             }
             else if(docTempContentMap.get(tempName) != NULL && docTempContentMap.get(tempName).LatestContentVersionId != NULL) {
-                system.debug('%%docTempContentMap.get(tempName) '+docTempContentMap.get(tempName));
                 contentVersionId = docTempContentMap.get(tempName).LatestContentVersionId;
             }
             else {
                 blaErrMap.put(blaMap.get(accId).Id, BCMOH_Constants.docDataNotFetched+': '+BCMOH_Constants.LatestContentVersionId);
-                system.debug('%%docTempContentMap. blaErrMap '+blaErrMap);
                 return NULL;
             }
             //3) set map to prepare request text json
@@ -173,7 +168,6 @@ system.debug('*** cdsa transFeeMap1.get(accId) '+transFeeMap1.get(accId));
                 documentMappingData.put(BCMOH_Constants.keepIntermediate, false);
                 //Convert the Map to a JSON string
                 requestText = BCMOH_UtilityClass.mapToJson(documentMappingData);
-                system.debug('%%cscdsv requestText '+requestText);
             }
         }
         catch(exception ex) {
