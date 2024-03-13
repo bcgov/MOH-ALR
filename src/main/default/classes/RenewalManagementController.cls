@@ -214,7 +214,11 @@ public with sharing class RenewalManagementController {
         List<RegulatoryTrxnFeeItem> transFeeItemList = new List<RegulatoryTrxnFeeItem>();
         try {
             for(BusinessLicenseApplication BLARec : lateFeeBLAMap.values()) {
-                    RegulatoryTrxnFeeItem transFeeItemRec = createLateFeeTransFeeItemRecord(transFeeItemRT, transFeeMap.get(BLARec.Id).Id, lateFeeType);
+                Decimal amtVal = defaultFee;
+                    if(BLARec.LicenseTypeId != NULL && BLARec.LicenseType.LateFee__c != NULL) {
+                       amtVal = BLARec.LicenseType.LateFee__c;
+                    }
+                    RegulatoryTrxnFeeItem transFeeItemRec = createLateFeeTransFeeItemRecord(transFeeItemRT, transFeeMap.get(BLARec.Id).Id, amtVal, 1, lateFeeType);
                     transFeeItemList.add(transFeeItemRec);
             }
 
@@ -231,13 +235,13 @@ public with sharing class RenewalManagementController {
         return transFeeItemList;
     }
     //method to form a RegulatoryTrxnFeeItem record with given parameters for Late Fee
-     public static RegulatoryTrxnFeeItem createLateFeeTransFeeItemRecord(Id recordTypeId, Id regTrxnFeeId, String lateFeeType) {
+     public static RegulatoryTrxnFeeItem createLateFeeTransFeeItemRecord(Id recordTypeId, Id regTrxnFeeId, Decimal amtValue, Decimal quantValue, String lateFeeType) {
          RegulatoryTrxnFeeItem transFeeItemRec = new RegulatoryTrxnFeeItem(
          RegulatoryTrxnFeeId = regTrxnFeeId,
          Name = 'Late Fee',
-         Amount__c = 250,
-         Quantity__c = 1,
-         FeeAmount = 250,
+         Amount__c = amtValue,
+         Quantity__c = quantValue,
+         FeeAmount = amtValue * quantValue,
          FeeType__c = lateFeeType);
          return transFeeItemRec;  
      }
