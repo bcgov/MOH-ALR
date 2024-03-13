@@ -140,7 +140,7 @@ public with sharing class ServerSideDocumentGenerationController {
             //1) Get doc title
             contentDocumentTitle = docNameWithTitleMap.get(tempName);//null check not needed as attribute is passed from for looping of map
             system.debug('*** cdsa contentDocumentTitle '+contentDocumentTitle);
-            system.debug('*** cdsa transFeeMap1.get(accId) '+transFeeMap1.get(accId));
+system.debug('*** cdsa transFeeMap1.get(accId) '+transFeeMap1.get(accId));
             //if title contains "InvoiceId" merge field append to doc title, else add bla to error map
             if(contentDocumentTitle.contains(BCMOH_Constants.invoiceIdMerge) && transFeeMap1.get(accId) == NULL) {
                 system.debug('*** cdsa contains but no fee map '+contentDocumentTitle);
@@ -149,13 +149,13 @@ public with sharing class ServerSideDocumentGenerationController {
             }
             else if(contentDocumentTitle.contains(BCMOH_Constants.invoiceIdMerge) && transFeeMap1.get(accId) != NULL) {
                 system.debug('*** cdsa contains and fee present '+contentDocumentTitle);
-                                contentDocumentTitle = contentDocumentTitle.replace(BCMOH_Constants.invoiceIdMerge, transFeeMap1.get(accId).Name);
+                contentDocumentTitle = contentDocumentTitle.replace(BCMOH_Constants.invoiceIdMerge, transFeeMap1.get(accId).Name);
                                 system.debug('*** cdsa after replace '+contentDocumentTitle);
                         }
             
             //2) Get content version id
-                        if(Test.isRunningTest()) {
-                                contentVersionId = contentVersionId1;
+            if(Test.isRunningTest()) {
+                contentVersionId = contentVersionId1;
             }
             else if(docTempContentMap.get(tempName) != NULL && docTempContentMap.get(tempName).LatestContentVersionId != NULL) {
                 system.debug('%%docTempContentMap.get(tempName) '+docTempContentMap.get(tempName));
@@ -469,7 +469,7 @@ public with sharing class ServerSideDocumentGenerationController {
 
         if (!blaErrMap.isEmpty()) {
             system.debug('##blaErrMap'+blaErrMap);
-            blaErrUpdateList = BCMOH_UtilityClass.updateBlaStatus(blaErrMap, BCMOH_Constants.errorBlaStatus);
+            blaErrUpdateList = BCMOH_UtilityClass.updateBlaLateFeeStatus(blaErrMap, BCMOH_Constants.errorBlaStatus);
             if (!blaErrUpdateList.isEmpty() && BusinessLicenseApplication.sObjectType.getDescribe().isUpdateable()) {
                 Database.Update(blaErrUpdateList, false);
             }
