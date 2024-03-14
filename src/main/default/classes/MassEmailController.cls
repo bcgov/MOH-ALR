@@ -80,17 +80,15 @@ public with sharing class MassEmailController {
                                             Status__c IN: accDetails.values()[0] 
                                             //AND Id IN: accIdSetTemp
                                            ]) {
-                                                                                              isValidAcc = true;//setting account as valid initially
+                                               isValidAcc = true;//setting account as valid initially
                                                
                                                //when valid renewal bla record is not available
                                                if(activeAccRec.BusinessLicenseApplicationAccount.size() == 0) {
-                                                   system.debug('yui No Renewal Latefee for this Account');
                                                    isValidAcc = false;
                                                    continue;//skips following code and fetches next account in loop
                                                }
                                                //when primary contact(email's targetObjectId)/its email is not available
                                                if(isValidAcc && activeAccRec.AccountContactRelations.size() == 0) {
-                                                   system.debug('yui '+BCMOH_Constants.noPrimaryContact);
                                                    isValidAcc = false;
                                                    blaErrMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, BCMOH_Constants.noPrimaryContact);
                                                    continue;//skips following code and fetches next account in loop
@@ -98,15 +96,14 @@ public with sharing class MassEmailController {
                                                //fetch business license record 
                                                if(activeAccRec.AccountBusinessLicenses__r.size() == 0) { 
                                                    //blaErrMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, BCMOH_Constants.noBLRec);
-                                                   system.debug('yui No Latefee for this Account');
-                                               }
+                                                }
                                                else if(isValidAcc) {
                                                    blMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, activeAccRec.AccountBusinessLicenses__r[0]);
                                                }
                                                
                                                //if account is valid then fetch the bla Ids associated with the account to fetch its files attached
                                                if(isValidAcc) {
-                                                                                                      //acc Map
+                                                   //acc Map
                                                    accMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, activeAccRec);
                                                    
                                                    //acc contact map with bla id
@@ -194,34 +191,30 @@ public with sharing class MassEmailController {
                                             Status__c IN: accDetails.values()[0] 
                                             //AND Id IN: accIdSetTemp
                                            ]) {
-                                               system.debug('yui activeAccRec Id '+activeAccRec.Id);
                                                isValidAcc = true;//setting account as valid initially
                                                
                                                //when valid renewal bla record is not available
                                                if(activeAccRec.BusinessLicenseApplicationAccount.size() == 0) {
-                                                   system.debug('yui No Renewal BLAs for this Account');
                                                    isValidAcc = false;
                                                    continue;//skips following code and fetches next account in loop
                                                }
                                                //when primary contact(email's targetObjectId)/its email is not available
                                                if(isValidAcc && activeAccRec.AccountContactRelations.size() == 0) {
-                                                   system.debug('yui '+BCMOH_Constants.noPrimaryContact);
-                                                   isValidAcc = false;
+                                                  isValidAcc = false;
                                                    blaErrMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, BCMOH_Constants.noPrimaryContact);
                                                    continue;//skips following code and fetches next account in loop
                                                }
                                                //fetch business license record 
                                                if(activeAccRec.AccountBusinessLicenses__r.size() == 0) { 
                                                    //blaErrMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, BCMOH_Constants.noBLRec);
-                                                   system.debug('yui No BL for this Account');
-                                               }
+                                                }
                                                else if(isValidAcc) {
                                                    blMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, activeAccRec.AccountBusinessLicenses__r[0]);
                                                }
                                                
                                                //if account is valid then fetch the bla Ids associated with the account to fetch its files attached
                                                if(isValidAcc) {
-                                                                                                      //acc Map
+                                                  //acc Map
                                                    accMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, activeAccRec);
                                                    
                                                    //acc contact map with bla id
@@ -541,10 +534,10 @@ public with sharing class MassEmailController {
                                                   if(!eResRec.isSuccess()) {
                                                       //Operation failed, get all errors                
                                                       for(Messaging.SendEmailError err : eResRec.getErrors()) {
-                                                                                                                    targetIdErrorMap.put(err.getTargetObjectId(), err.getMessage());
-                                                      }
-                                                  }
-                                              }
+                                                          targetIdErrorMap.put(err.getTargetObjectId(), err.getMessage());
+                                                    }
+                                                }
+                                            }
                                               //loop through all SingleEmailMessage recs that were valid to send email and capture status for each whatId
                                               for(Messaging.SingleEmailMessage msgRec : singleEmailMsgList) {
                                                   //if emailResultList contains error for the specified target(contact), update bla(whatid) with error
@@ -611,14 +604,18 @@ public with sharing class MassEmailController {
         //List<BusinessLicenseApplication> statusBla = new List<BusinessLicenseApplication>();
         List<Account> accToUpdate = new List<Account>();
         try {
+            BusinessLicenseApplication BLAquery = [SELECT Id, RenewalError__c FROM BusinessLicenseApplication WHERE Id =:blaErrMap.keySet() LIMIT 1];
+               
             //loop through bla error map
             for(Id blaId : blaErrMap.keySet()) {
                 //truncate the err message if length more than 255 chars
                 String errMsg = blaErrMap.get(blaId).length() > 255 ? blaErrMap.get(blaId).Substring(0,255) : blaErrMap.get(blaId);
+                String lateFeeMsg = blaErrMap.get(blaId);
+                lateFeeMsg = BLAquery.RenewalError__c != NULL ? BLAquery.RenewalError__c + ' ; ' + errMsg : errMsg;
                 BusinessLicenseApplication blaRec = new BusinessLicenseApplication(
                     Id = blaId,
                     Late_Fee_Status__c = BCMOH_Constants.errorBlaStatus,
-                    RenewalError__c = errMsg);
+                    RenewalError__c = lateFeeMsg);
                 blaUpdateList.add(blaRec);
             }
             //loop through bla success map
