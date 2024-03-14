@@ -100,22 +100,18 @@ public class BCMOH_UtilityClass {
                                                   WHERE LinkedEntityId IN: linkedIds]) {
                                                       //all doc Ids
                                                       allDocIds.add(contentDoc.ContentDocument.Id);
-                                                      system.debug('yui getContentDocMap meth allDocIds '+allDocIds);
                                                       //map of linkedId with its associated doc ids
                                                       Set<Id> docIdSet = new Set<Id>();
                                                       if(entityContentIdsMap1.containsKey(contentDoc.LinkedEntityId)) {
-                                                          system.debug('yui inside if contans wrapper rec '+entityContentIdsMap1);
                                                           docIdSet = entityContentIdsMap1.get(contentDoc.LinkedEntityId);
                                                       }
                                                       docIdSet.add(contentDoc.ContentDocument.Id);
                                                       entityContentIdsMap1.put(contentDoc.LinkedEntityId, docIdSet);
             }
-            system.debug('cdws'+entityContentIdsMap1);
             ContentDocWrapperRecord.entityContentIdsMap = entityContentIdsMap1;
             //fetch content version vs content doc map
             for(ContentVersion contentVerRec : [SELECT Id, ContentDocument.Id, ContentSize FROM ContentVersion
                                                 WHERE ContentDocument.Id IN: allDocIds]) {
-                                                    system.debug('yui inside for content version wrap '+contentDocVerMap1);
                                                     contentDocVerMap1.put(contentVerRec.ContentDocument.Id, contentVerRec.Id);
                                                 }
             ContentDocWrapperRecord.contentDocVerMap = contentDocVerMap1;
@@ -134,18 +130,15 @@ public class BCMOH_UtilityClass {
         try {
             if(Test.isRunningTest()) {
             	orgWideAddr = [SELECT Id from OrgWideEmailAddress LIMIT 1];
-                system.debug('fsd'+orgWideAddr);
             }
             else {
                 //stores email addresses in custom setting
                 Notification__c notifDefault = Notification__c.getOrgDefaults();
-                system.debug('csd Notification__c '+notifDefault);
                 //fetch org type
                 Boolean isSandbox = String.isEmpty(DomainParser.parse(DomainCreator.getOrgMyDomainHostname()).getSandboxName()) ? false : true;
                 //based on org type, fetch respective email as fromAddress
                 fromAddress = isSandbox ? notifDefault.TestSupportEmail__c : notifDefault.ProductionSupportEmail__c;
                 orgWideAddr = [SELECT Id from OrgWideEmailAddress WHERE Address =: fromAddress LIMIT 1];
-                system.debug('csd orgWideAddr '+orgWideAddr);
             }
         }
         catch(Exception ex) {
@@ -178,10 +171,8 @@ public class BCMOH_UtilityClass {
                                                      FROM DocumentTemplateContentDoc
                                                      WHERE DocumentTemplate.Name IN: templateNames 
                                                      LIMIT 5000]) {
-                                                       system.debug('## csd LatestContentVersionId '+docTempRec.LatestContentVersionId);
-                                                         system.debug('## csd docTempRec.DocumentTemplate.Name '+docTempRec.DocumentTemplate.Name);
                                                        templateNameDocMap.put(docTempRec.DocumentTemplate.Name, docTempRec);
-                                                     }
+                                                    }
         return templateNameDocMap;
     }
     

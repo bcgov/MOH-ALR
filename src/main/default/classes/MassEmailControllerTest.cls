@@ -103,6 +103,20 @@ public class MassEmailControllerTest {
         List<Account> accRec = [SELECT Id FROM Account];
         Assert.isNotNull(accRec.size());
     }
+    
+    //updateBlaLateFeeStatusTest
+     @isTest
+    static void updateBlaLateFeeStatusTest() {
+        String blaStatus = '' ;
+        Id BlaId=[SELECT Id FROM BusinessLicenseApplication][0].Id;
+        Map<Id,String> blaIdDetailsMap = new Map<Id,String>{BlaId =>''} ; 
+        List<BusinessLicenseApplication> BlaList=new List<BusinessLicenseApplication>();
+        Test.startTest();
+        BlaList=BCMOH_UtilityClass.updateBlaLateFeeStatus(blaIdDetailsMap,blaStatus);
+        Test.stopTest();
+        List<Account> accRec = [SELECT Id FROM Account];
+        Assert.isNotNull(accRec.size());
+    }
       
       //getDocTempContentMap
      @isTest
