@@ -604,18 +604,18 @@ public with sharing class MassEmailController {
         //List<BusinessLicenseApplication> statusBla = new List<BusinessLicenseApplication>();
         List<Account> accToUpdate = new List<Account>();
         try {
-            BusinessLicenseApplication BLAquery = [SELECT Id, RenewalError__c FROM BusinessLicenseApplication WHERE Id =:blaErrMap.keySet() LIMIT 1];
                
             //loop through bla error map
             for(Id blaId : blaErrMap.keySet()) {
+                BusinessLicenseApplication BLAquery = [SELECT Id, RenewalError__c FROM BusinessLicenseApplication WHERE Id =:blaId LIMIT 1];
                 //truncate the err message if length more than 255 chars
-                String errMsg = blaErrMap.get(blaId).length() > 255 ? blaErrMap.get(blaId).Substring(0,255) : blaErrMap.get(blaId);
-                String lateFeeMsg = blaErrMap.get(blaId);
-                lateFeeMsg = BLAquery.RenewalError__c != NULL ? BLAquery.RenewalError__c + ' ; ' + errMsg : errMsg;
+                String lateFeeMsg = blaErrMap.get(blaId).length() > 255 ? blaErrMap.get(blaId).Substring(0,255) : blaErrMap.get(blaId);
+                String errMsg = blaErrMap.get(blaId);
+                errMsg = BLAquery.RenewalError__c != NULL ? BLAquery.RenewalError__c + ' ; ' + lateFeeMsg : lateFeeMsg;
                 BusinessLicenseApplication blaRec = new BusinessLicenseApplication(
                     Id = blaId,
                     Late_Fee_Status__c = BCMOH_Constants.errorBlaStatus,
-                    RenewalError__c = lateFeeMsg);
+                    RenewalError__c = errMsg);
                 blaUpdateList.add(blaRec);
             }
             //loop through bla success map
