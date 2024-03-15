@@ -279,38 +279,57 @@ Done by : Komal Gupta
 					
                     if(transRec.Name == 'Public') {
                         hasFeeItem = true;
-						if(count ==1){
+						if(count == 1){
 							documentMappingData1.put('Unit1', BCMOH_Constants.unitsPublic);
 							Sum1 = transRec.Amount__c;
 							QuantitySum1 += transRec.Quantity__c;
 							FeeSum1 +=  transRec.FeeAmount;
+						}
+						else if (count == 2){
+							documentMappingData1.put('Unit2', BCMOH_Constants.unitsPublic);
+							Sum2 = transRec.Amount__c;
+							QuantitySum2 += transRec.Quantity__c;
+							FeeSum2 +=  transRec.FeeAmount; 
 						}						
+                        else{
+							documentMappingData1.put('Unit3', BCMOH_Constants.unitsPublic);
+							Sum3 = transRec.Amount__c;
+							QuantitySum3 += transRec.Quantity__c;
+							FeeSum3 +=  transRec.FeeAmount; 
+						}					
                              
                     }
                     else if(transRec.Name == 'Private') {
                         hasFeeItem = true;
-						if(count ==1 ){
+						if(count == 1){
 							documentMappingData1.put('Unit1', BCMOH_Constants.unitsPrivate);
 							Sum1 = transRec.Amount__c;
 							QuantitySum1 += transRec.Quantity__c;
 							FeeSum1 +=  transRec.FeeAmount;
 						}
-						else{
+						else if (count == 2){
 							documentMappingData1.put('Unit2', BCMOH_Constants.unitsPrivate);
 							Sum2 = transRec.Amount__c;
 							QuantitySum2 += transRec.Quantity__c;
 							FeeSum2 +=  transRec.FeeAmount; 
 						}						
+                        else{
+							documentMappingData1.put('Unit3', BCMOH_Constants.unitsPrivate);
+							Sum3 = transRec.Amount__c;
+							QuantitySum3 += transRec.Quantity__c;
+							FeeSum3 +=  transRec.FeeAmount; 
+						}
+                        						
                     }
                     else if(transRec.Name == 'Per Diem') {
                         hasFeeItem = true;
-						if(count ==1 ){
+						if(count == 1){
 							documentMappingData1.put('Unit1', BCMOH_Constants.unitsPerDiem);
 							Sum1 = transRec.Amount__c;
 							QuantitySum1 += transRec.Quantity__c;
 							FeeSum1 +=  transRec.FeeAmount;
 						}
-						else if (count ==2 ){
+						else if (count == 2){
 							documentMappingData1.put('Unit2', BCMOH_Constants.unitsPerDiem);
 							Sum2 = transRec.Amount__c;
 							QuantitySum2 += transRec.Quantity__c;
