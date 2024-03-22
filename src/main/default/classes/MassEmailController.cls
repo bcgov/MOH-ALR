@@ -626,17 +626,20 @@ public with sharing class MassEmailController {
             //loop through bla success map
             
             for (Id blaId : blaSuccessMap.keySet()) {
+                BLAquery=blaErrQuery(blaId);
                 Id statusBla = getAccountId(blaId);
                 accToUpdate=updateAccountStatus(statusBla);
                 accToUpdate[0].Status__c=BCMOH_Constants.AccStatus;
-                //String errMsg = blaErrMap.get(blaId);
-                //errMsg = BLAquery.RenewalError__c != NULL ? BLAquery.RenewalError__c + ' ; ' + blaSuccessMap.get(blaId) : blaSuccessMap.get(blaId);
                 
+                String lateFeeMsg = blaSuccessMap.get(blaId).length() > 255 ? blaSuccessMap.get(blaId).Substring(0,255) : blaSuccessMap.get(blaId);
+                String succMsg = blaSuccessMap.get(blaId);
+                succMsg = BLAquery[0].RenewalError__c != NULL ? BLAquery[0].RenewalError__c + ' ; ' + lateFeeMsg : lateFeeMsg;
+               
+
                 BusinessLicenseApplication blaRec = new BusinessLicenseApplication(
                     Id = blaId,
                     Late_Fee_Status__c = BCMOH_Constants.sentBlaStatus,
-                     RenewalError__c = blaSuccessMap.get(blaId)
-                );
+                    RenewalError__c = succMsg);
                 blaUpdateList.add(blaRec);
             }
             
