@@ -5,7 +5,8 @@
     <description>User having RemoveChangeOwnerAccess custom permission cannot change Account Ownership - ALR-234</description>
     <errorConditionFormula>AND(
      
-     RecordType.DeveloperName = &apos;Residence&apos;,
+     (RecordType.DeveloperName = &apos;Residence&apos; ||
+      RecordType.DeveloperName = &apos;Registrant&apos;),
      NOT( $Permission.EHISBypassValidationRuleCustomPermission ) ,
      $Permission.RemoveChangeOwnerAccess ,
      ISCHANGED(OwnerId) 
