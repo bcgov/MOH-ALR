@@ -392,8 +392,8 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:Account.Condition__c var:NULL != var:Account.Condition__c &quot;No/\/\/conditions/\/\/indicated&quot; IF</formulaConverted>
-        <formulaExpression>IF(Account.Condition__c!=NULL,Account.Condition__c,&quot;No conditions indicated&quot;)</formulaExpression>
+        <formulaConverted>| var:Account:Conditions__c var:NULL == &quot;No/\/\/conditions/\/\/indicated&quot; var:Account:Conditions__c IF</formulaConverted>
+        <formulaExpression>IF(Account:Conditions__c==NULL,&quot;No conditions indicated&quot;,Account:Conditions__c)</formulaExpression>
         <formulaResultPath>Condition</formulaResultPath>
         <formulaSequence>19.0</formulaSequence>
         <globalKey>InspectionReportCustom5724</globalKey>
