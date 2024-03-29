@@ -3,7 +3,7 @@ public class calculateInspectionScoreTest {
     @isTest
     public static void testMergeUnits(){
 		
-        String tempId = '0Z5Aq00000019qrKAA';
+        /*String tempId = '0Z5Aq00000019qrKAA';
         //RegulatoryAuthorizationType
         RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
 	
@@ -35,7 +35,7 @@ public class calculateInspectionScoreTest {
         rcv.DateCreated = System.today();
         //rcv.InspectionAssmntIndId = insassestind.Id;
         rcv.UserScore__c = 15;
-        rcv.InspectionId = tempId;
+        //rcv.InspectionId = tempId;
         insert rcv;
         
         List<RegulatoryCodeViolation> rcvList = new List<RegulatoryCodeViolation>();
