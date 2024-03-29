@@ -332,6 +332,19 @@
           &quot;rules&quot; : [ {
             &quot;field&quot; : &quot;templateName&quot;,
             &quot;condition&quot; : &quot;=&quot;,
+            &quot;data&quot; : &quot;InspectionReport&quot;
+          }, {
+            &quot;field&quot; : &quot;Status&quot;,
+            &quot;condition&quot; : &quot;&lt;&gt;&quot;,
+            &quot;data&quot; : &quot;Completed&quot;
+          } ]
+        }
+      }, {
+        &quot;group&quot; : {
+          &quot;operator&quot; : &quot;AND&quot;,
+          &quot;rules&quot; : [ {
+            &quot;field&quot; : &quot;templateName&quot;,
+            &quot;condition&quot; : &quot;=&quot;,
             &quot;data&quot; : null
           } ]
         }
@@ -505,84 +518,8 @@ document-title  -- Overrides the Default Document Name/Title of your document</d
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>12.0</sequenceNumber>
-        <type>Step</type>
-    </omniProcessElements>
-    <omniProcessElements>
-        <isActive>true</isActive>
-        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-        <level>0.0</level>
-        <name>GenerateDocument</name>
-        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-        <propertySetConfig>{
-  &quot;controlWidth&quot; : 12,
-  &quot;label&quot; : &quot;Generate Document&quot;,
-  &quot;integrationProcedureKey&quot; : &quot;DocumentServiceGateway_DocGeneration&quot;,
-  &quot;useContinuation&quot; : false,
-  &quot;remoteOptions&quot; : {
-    &quot;preTransformBundle&quot; : &quot;&quot;,
-    &quot;postTransformBundle&quot; : &quot;&quot;,
-    &quot;useFuture&quot; : false,
-    &quot;chainable&quot; : false
-  },
-  &quot;remoteTimeout&quot; : 30000,
-  &quot;preTransformBundle&quot; : &quot;&quot;,
-  &quot;postTransformBundle&quot; : &quot;&quot;,
-  &quot;sendJSONPath&quot; : &quot;&quot;,
-  &quot;sendJSONNode&quot; : &quot;&quot;,
-  &quot;responseJSONPath&quot; : &quot;&quot;,
-  &quot;responseJSONNode&quot; : &quot;&quot;,
-  &quot;extraPayload&quot; : {
-    &quot;contextId&quot; : &quot;%ObjectId%&quot;,
-    &quot;outputFileFormat&quot; : &quot;word&quot;,
-    &quot;title&quot; : &quot;%title%&quot;,
-    &quot;templateId&quot; : &quot;%templateId%&quot;,
-    &quot;objectId&quot; : &quot;%ObjectId%&quot;
-  },
-  &quot;inProgressMessage&quot; : &quot;In Progress&quot;,
-  &quot;postMessage&quot; : &quot;Done&quot;,
-  &quot;failureNextLabel&quot; : &quot;Continue&quot;,
-  &quot;failureAbortLabel&quot; : &quot;Abort&quot;,
-  &quot;failureGoBackLabel&quot; : &quot;Go Back&quot;,
-  &quot;failureAbortMessage&quot; : &quot;Are you sure?&quot;,
-  &quot;validationRequired&quot; : &quot;Step&quot;,
-  &quot;redirectPageName&quot; : &quot;&quot;,
-  &quot;redirectTemplateUrl&quot; : &quot;vlcAcknowledge.html&quot;,
-  &quot;redirectNextLabel&quot; : &quot;Next&quot;,
-  &quot;redirectNextWidth&quot; : 3,
-  &quot;redirectPreviousLabel&quot; : &quot;Previous&quot;,
-  &quot;redirectPreviousWidth&quot; : 3,
-  &quot;showPersistentComponent&quot; : [ true, false ],
-  &quot;show&quot; : {
-    &quot;group&quot; : {
-      &quot;operator&quot; : &quot;AND&quot;,
-      &quot;rules&quot; : [ {
-        &quot;data&quot; : &quot;InspectionReport&quot;,
-        &quot;condition&quot; : &quot;=&quot;,
-        &quot;field&quot; : &quot;templateName&quot;
-      } ]
-    }
-  },
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;wpm&quot; : false,
-  &quot;ssm&quot; : false,
-  &quot;message&quot; : { },
-  &quot;pubsub&quot; : false,
-  &quot;svgSprite&quot; : &quot;&quot;,
-  &quot;svgIcon&quot; : &quot;&quot;,
-  &quot;errorMessage&quot; : {
-    &quot;custom&quot; : [ ],
-    &quot;default&quot; : &quot;Something went wrong please contact your System Administrator...&quot;
-  },
-  &quot;enableDefaultAbort&quot; : false,
-  &quot;enableActionMessage&quot; : false,
-  &quot;businessCategory&quot; : &quot;&quot;,
-  &quot;businessEvent&quot; : &quot;&quot;,
-  &quot;toastComplete&quot; : false,
-  &quot;sendOnlyExtraPayload&quot; : true
-}</propertySetConfig>
         <sequenceNumber>11.0</sequenceNumber>
-        <type>Integration Procedure Action</type>
+        <type>Step</type>
     </omniProcessElements>
     <omniProcessElements>
         <childElements>
@@ -1291,7 +1228,7 @@ document-title  -- Overrides the Default Document Name/Title of your document</d
   &quot;message&quot; : { },
   &quot;pubsub&quot; : false
 }</propertySetConfig>
-        <sequenceNumber>13.0</sequenceNumber>
+        <sequenceNumber>12.0</sequenceNumber>
         <type>Set Values</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -1322,6 +1259,10 @@ document-title  -- Overrides the Default Document Name/Title of your document</d
         &quot;data&quot; : &quot;InspectionReport&quot;,
         &quot;condition&quot; : &quot;=&quot;,
         &quot;field&quot; : &quot;templateName&quot;
+      }, {
+        &quot;field&quot; : &quot;Status&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;data&quot; : &quot;Completed&quot;
       } ]
     }
   },
@@ -1408,5 +1349,5 @@ document-title  -- Overrides the Default Document Name/Title of your document</d
     <type>DocumentGeneration</type>
     <uniqueName>DocumentGeneration_DocumentGeneration_English_1</uniqueName>
     <versionNumber>1.0</versionNumber>
-    <webComponentKey>32971fbf-efa2-2d9f-bf4d-c159767ea2cf</webComponentKey>
+    <webComponentKey>326b3a51-8cd8-e8c1-dcfb-b62d85620089</webComponentKey>
 </OmniScript>
