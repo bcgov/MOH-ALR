@@ -1,0 +1,28 @@
+<!--
+  @description       : created to show RegulatoryCodeViolations in the Omniscript : RiskAssessment
+  @author            : Komal Gupta
+  @user story        : ALR-861
+-->
+<template>
+    <lightning-card>
+       <template if:false={hasLoaded} class="slds-is-relative">
+        <lightning-spinner size="medium" alternative-text="Loading"></lightning-spinner>
+        </template>
+       <div style="height:400px;" class="table-wrapper">
+           <template if:true={showBlock}>
+               <c-l-w-c-custom-datatable-type
+                   key-field="Id"
+                   data={questions}
+                   show-row-number-column
+                   hide-checkbox-column
+                   draft-values={draftValues}
+                   onvalueselect={handleSelection}
+                   row-number-offset={rowOffset}
+                   columns={columns}
+                   oncellchange={handleCellChange}
+                   suppress-bottom-bar = "true">
+               </c-l-w-c-custom-datatable-type>
+           </template>
+       </div>    
+    </lightning-card>
+   </template>
