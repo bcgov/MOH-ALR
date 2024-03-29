@@ -7,6 +7,7 @@
 **/
 global with sharing class calculateInspectionScore implements Callable {
     Public String className = 'calculateInspectionScore';
+    //Public List<RegulatoryCodeViolation> rcvList;
     public class CategoryScore {
         
         public String categoryKey { get; set; }
@@ -32,6 +33,7 @@ global with sharing class calculateInspectionScore implements Callable {
         }
         return result;
     }
+
     public static Map<String, Object> getInspectionScores(Map<String,Object> inputMap, Map<String, Object> outMap){
 
         String jsonInput = Json.serialize(inputMap.get('input'));
@@ -52,17 +54,25 @@ global with sharing class calculateInspectionScore implements Callable {
             Decimal score;
             Decimal totalScore = 0;
             // Loop through each Regulatory Code Violation
+            Map<Id, Id> insMap = new Map<Id, Id>();
+            Map<Id, Id> assessmentMap = new Map<Id, Id>();
+            for(RegulatoryCodeViolation rcv : rcvList){
+                insMap.put(rcv.Id ,rcv.InspectionAssmntIndId);
+            }
+            List<InspectionAssessmentInd> inspectionAssmtInd = [SELECT AssessmentIndDefinitionId
+                                                                  FROM InspectionAssessmentInd
+                                                                  WHERE Id =: insMap.values()];
+            for(InspectionAssessmentInd insAssemInd : inspectionAssmtInd){
+                assessmentMap.put(insAssemInd.Id, insAssemInd.AssessmentIndDefinitionId);
+            }
+            
+            List<AssessmentIndicatorDefinition> assmtIndDef = [SELECT Name, Category__c 
+                                                                 FROM AssessmentIndicatorDefinition
+                                                                 WHERE Id =: assessmentMap.values()];
+            
+            
             for (RegulatoryCodeViolation rcv : rcvList) {
-                // Fetch Inspection Assessment Indicator record
-                InspectionAssessmentInd inspectionAssmtInd = [SELECT AssessmentIndDefinitionId
-                                                              FROM InspectionAssessmentInd
-                                                              WHERE Id = :rcv.InspectionAssmntIndId];
-                
-                // Fetch Assessment Indicator Definition record
-                AssessmentIndicatorDefinition assmtIndDef = [SELECT Name, Category__c 
-                                                             FROM AssessmentIndicatorDefinition
-                                                             WHERE Id = :inspectionAssmtInd.AssessmentIndDefinitionId];
-                
+
                 // Fetch Scope, Severity, and Score from Regulatory Code Violation
                 
                 if(rcv.UserScore__c != NULL){
@@ -71,12 +81,13 @@ global with sharing class calculateInspectionScore implements Callable {
                 else{
                     score = 0;
                 }
-                
+            }
                 // Create a key for the top3ScoresMap based on InspectionAssessmentInd and Category
-                String categoryKey = assmtIndDef.Category__c;
                 
                 // Initialize the list if not already present in the map
-                if (!top3ScoresMap.containsKey(categoryKey)) {
+                for(AssessmentIndicatorDefinition asmtDef : assmtIndDef){
+               string categoryKey = asmtDef.Category__c;
+                    if (!top3ScoresMap.containsKey(categoryKey)) {
                     top3ScoresMap.put(categoryKey, new List<Decimal>());
                 }
                 
@@ -85,17 +96,20 @@ global with sharing class calculateInspectionScore implements Callable {
                 
                 // Keep only the top 3 scores
                 scoresList = top3ScoresMap.get(categoryKey);
+                
                 scoresList.sort();
                 if (scoresList.size() > 3) {
                     scoresList.remove(0);
                 }
             }
+                
+            
             // Initialize a map to store the total scores for each category
             Map<String, Decimal> categoryScoreMap = new Map<String, Decimal>();
             // Loop through the top3ScoresMap and calculate the total for each category
-            for (String categoryKey : top3ScoresMap.keySet()) {
-                if(top3ScoresMap.get(categoryKey) != NULL){
-                    top3Scores = top3ScoresMap.get(categoryKey);
+            for (String categoryKey1 : top3ScoresMap.keySet()) {
+                if(top3ScoresMap.get(categoryKey1) != NULL){
+                    top3Scores = top3ScoresMap.get(categoryKey1);
                 }                
                 for (Decimal score1 : top3Scores) {
                     totalScore = totalScore + score1;
@@ -107,7 +121,7 @@ global with sharing class calculateInspectionScore implements Callable {
             outMap.put('RiskMatrix', totalScore);
             
         } catch (Exception e) {
-            System.debug('An error occurred: ' + e);
+            System.debug('An error occurred: ' + e.getLineNumber());
         }
         
         return outMap;
@@ -117,6 +131,6 @@ global with sharing class calculateInspectionScore implements Callable {
         return [SELECT Id, Scope__c, Severity__c, Description, InspectionAssmntIndId, UserScore__c,
                 RegulatoryCode.Name, InspectionAssmntInd.AssessmentIndDefinition.Name, InspectionAssmntInd.AssessmentIndDefinition.Category__c
                                                      FROM RegulatoryCodeViolation
-                                                     WHERE InspectionId =:recordId];
+                                                     WHERE InspectionId =:recordId AND Inspection.VisitType.Name = 'Compliance Monitoring Inspection'];
     }
 }
