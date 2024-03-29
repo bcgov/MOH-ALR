@@ -15,17 +15,24 @@
                                     <rightValue>true</rightValue>
                                 </criteria>
                             </visibilityRule>
-                        </valueListItems>
-                                                <valueListItems>
+                         </valueListItems>
+                        <valueListItems>
                             <value>CustomButton.Visit.Inspection_Worksheet</value>
                         </valueListItems>
                         <valueListItems>
                             <value>CustomButton.Visit.InspectionReport</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!Record.Status}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Completed</rightValue>
+                                </criteria>
+                            </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>ChangeOwnerOne</value>
                         </valueListItems>
-                                            </valueList>
+                    </valueList>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>collapsed</name>
@@ -106,7 +113,7 @@
                 <identifier>RecordInspectionMethod_cField</identifier>
             </fieldInstance>
         </itemInstances>
-                <itemInstances>
+        <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
