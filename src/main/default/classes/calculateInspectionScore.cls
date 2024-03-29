@@ -8,11 +8,6 @@
 global with sharing class calculateInspectionScore implements Callable {
     Public String className = 'calculateInspectionScore';
     //Public List<RegulatoryCodeViolation> rcvList;
-    public class CategoryScore {
-        
-        public String categoryKey { get; set; }
-        public Decimal totalScore { get; set; }
-    }
     
     public Object call(String action, Map<String,Object> args){
         Map<String,Object> output = (Map<String,Object>)args.get(BCMOH_Constants.IM_OUTPUT);
