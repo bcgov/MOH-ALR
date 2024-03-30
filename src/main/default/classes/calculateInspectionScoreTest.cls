@@ -9,6 +9,11 @@ public class calculateInspectionScoreTest {
 	
         Account residenceRec1 = TestDataFactory.createResidence('Residence', 'residenceAccount1', regAuth.Id, true);
         
+        //insert inspection Type
+        InspectionType insType = new InspectionType();
+        insType.Name = 'Compliance Monitoring Inspection';
+        insert insType;
+
         //insert AssessmentTask
         AssessmentTask task = new AssessmentTask();
         task.Name = 'Test Task Name';
@@ -56,15 +61,17 @@ public class calculateInspectionScoreTest {
         
         List<InspectionAssessmentInd> insassessList = new List<InspectionAssessmentInd>();
         
+        Map<String, Id> mapId = new Map<String, Id>();
+        mapId.put('InspectionId', tempId);
 
         calculateInspectionScore calculation = new calculateInspectionScore();
-        Map<String, Object> inputMap = new Map<String, Object>{'input' => rcvList};
+        Map<String, Object> inputMap = new Map<String, Object>{'input' => mapId};
         Map<String, Object> inputMap1 = new Map<String, Object>();
         Test.startTest();
         Object result = calculation.call('getInspectionScores', inputMap);
         Object result1 = calculation.call('getInspectionScores', inputMap1);
         
-        System.assertEquals(false, result, 'Expected result to be true');
+        System.assertEquals(true, result, 'Expected result to be true');
         Test.stopTest();
     }
     @isTest static void getAccounts_Method(){
