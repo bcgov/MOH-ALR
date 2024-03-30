@@ -3,7 +3,6 @@ public class calculateInspectionScoreTest {
     @isTest
     public static void testMergeUnits(){
 		
-        Id tempId = '0Z5Aq00000019qrKAA';
         //RegulatoryAuthorizationType
         RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
 	
@@ -13,6 +12,16 @@ public class calculateInspectionScoreTest {
         InspectionType insType = new InspectionType();
         insType.Name = 'Compliance Monitoring Inspection';
         insert insType;
+        
+        //insert Location
+        Schema.Location loc = new Schema.Location();
+        loc.Name = 'U.S. 101N';
+		loc.Longitude = 28.635308;
+		loc.Latitude = 28.635308;
+		insert loc;
+        
+        //insert inspection
+        Visit inspect = TestDataFactory.createinspection(residenceRec1.Id, insType.Id, loc.Id, 'Unannounced on Site Inspection', true);
 
         //insert AssessmentTask
         AssessmentTask task = new AssessmentTask();
@@ -43,7 +52,7 @@ public class calculateInspectionScoreTest {
         rcv.DateCreated = System.today();
         rcv.InspectionAssmntIndId = insassestind.Id;
         rcv.UserScore__c = 15;
-        rcv.InspectionId = tempId;
+        rcv.InspectionId = inspect.Id;
         insert rcv;
         
         RegulatoryCodeViolation rcv1 = new RegulatoryCodeViolation();
@@ -52,7 +61,7 @@ public class calculateInspectionScoreTest {
         rcv1.DateCreated = System.today();
         rcv1.InspectionAssmntIndId = insassestind.Id;
         rcv1.UserScore__c = 15;
-        rcv1.InspectionId = tempId;
+        rcv1.InspectionId = inspect.Id;
         insert rcv1;
         
         List<RegulatoryCodeViolation> rcvList = new List<RegulatoryCodeViolation>();
@@ -62,7 +71,7 @@ public class calculateInspectionScoreTest {
         List<InspectionAssessmentInd> insassessList = new List<InspectionAssessmentInd>();
         
         Map<String, Id> mapId = new Map<String, Id>();
-        mapId.put('InspectionId', tempId);
+        mapId.put('InspectionId', inspect.Id);
 
         calculateInspectionScore calculation = new calculateInspectionScore();
         Map<String, Object> inputMap = new Map<String, Object>{'input' => mapId};
