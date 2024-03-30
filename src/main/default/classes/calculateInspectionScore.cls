@@ -128,4 +128,5 @@ global with sharing class calculateInspectionScore implements Callable {
                                                      FROM RegulatoryCodeViolation
                                                      WHERE InspectionId =:recordId AND Inspection.VisitType.Name = 'Compliance Monitoring Inspection'];
     }
+    
 }
