@@ -12,7 +12,7 @@ public class calculateInspectionScoreTest {
         InspectionType insType = new InspectionType();
         insType.Name = 'Compliance Monitoring Inspection';
         insert insType;
-        
+                
         //insert Location
         Schema.Location loc = new Schema.Location();
         loc.Name = 'U.S. 101N';
@@ -20,9 +20,18 @@ public class calculateInspectionScoreTest {
 		loc.Latitude = 28.635308;
 		insert loc;
         
+        Visit inspect = new Visit();
+        inspect.AccountId = residenceRec1.Id;
+        inspect.VisitTypeId = insType.Id;
+        inspect.InspectionMethod__c = 'Unannounced on Site Inspection';
+        inspect.PlannedVisitStartTime = System.today();
+        inspect.PlaceId = loc.Id;
+        //insert inspection;
+        
+        Database.update(inspect, false);
         
         //insert inspection
-        Visit inspect = TestDataFactory.createinspection(residenceRec1.Id, insType.Id, loc.Id, 'Unannounced on Site Inspection', true);
+        //Visit inspect = TestDataFactory.createinspection(residenceRec1.Id, insType.Id, loc.Id, 'Unannounced on Site Inspection', true);
 
         //insert AssessmentTask
         AssessmentTask task = new AssessmentTask();
