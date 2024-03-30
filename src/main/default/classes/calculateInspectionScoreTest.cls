@@ -19,7 +19,7 @@ public class calculateInspectionScoreTest {
 		loc.Longitude = 28.635308;
 		loc.Latitude = 28.635308;
 		insert loc;
-                
+        
         
         //insert inspection
         Visit inspect = TestDataFactory.createinspection(residenceRec1.Id, insType.Id, loc.Id, 'Unannounced on Site Inspection', true);
@@ -84,7 +84,7 @@ public class calculateInspectionScoreTest {
         System.assertEquals(true, result, 'Expected result to be true');
         Test.stopTest();
     }
-    @isTest static void getAccounts_Method(){
+    public static void getAccounts_Method(){
 
         Test.startTest();
 
