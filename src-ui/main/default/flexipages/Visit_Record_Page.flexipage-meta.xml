@@ -15,7 +15,23 @@
                                     <rightValue>true</rightValue>
                                 </criteria>
                             </visibilityRule>
-                         </valueListItems>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>CustomButton.Visit.Start_Risk_Assessment</value>
+                            <visibilityRule>
+                                <booleanFilter>1 AND 2</booleanFilter>
+                                <criteria>
+                                    <leftValue>{!Record.VisitType.Name}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Compliance Monitoring Inspection</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!$Permission.CustomPermission.EHISInvestigator}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>true</rightValue>
+                                </criteria>
+                            </visibilityRule>
+                        </valueListItems>
                         <valueListItems>
                             <value>CustomButton.Visit.Inspection_Worksheet</value>
                         </valueListItems>
