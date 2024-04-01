@@ -358,7 +358,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>13.0</sequenceNumber>
+        <sequenceNumber>11.0</sequenceNumber>
         <type>Step</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -414,7 +414,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>8.0</sequenceNumber>
+        <sequenceNumber>7.0</sequenceNumber>
         <type>Matrix Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -427,10 +427,10 @@
   &quot;controlWidth&quot; : 12,
   &quot;label&quot; : &quot;DecisionMatrixToGetRiskScore&quot;,
   &quot;matrix Input Parameters&quot; : [ {
-    &quot;name&quot; : &quot;Questions:Scope&quot;,
+    &quot;name&quot; : &quot;UpdateData:Scope__c&quot;,
     &quot;value&quot; : &quot;Scope&quot;
   }, {
-    &quot;name&quot; : &quot;Questions:Severity&quot;,
+    &quot;name&quot; : &quot;UpdateData:Severity__c&quot;,
     &quot;value&quot; : &quot;Severity&quot;
   } ],
   &quot;remoteOptions&quot; : {
@@ -473,7 +473,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>4.0</sequenceNumber>
+        <sequenceNumber>3.0</sequenceNumber>
         <type>Matrix Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -529,7 +529,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>12.0</sequenceNumber>
+        <sequenceNumber>10.0</sequenceNumber>
         <type>Matrix Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -576,8 +576,54 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>9.0</sequenceNumber>
+        <sequenceNumber>8.0</sequenceNumber>
         <type>DataRaptor Extract Action</type>
+    </omniProcessElements>
+    <omniProcessElements>
+        <isActive>true</isActive>
+        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+        <level>0.0</level>
+        <name>DRCreateRCVRecord</name>
+        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+        <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;DRCreateRCVRecord&quot;,
+  &quot;bundle&quot; : &quot;DRToCreateRCVRecords&quot;,
+  &quot;remoteTimeout&quot; : 30000,
+  &quot;postTransformBundle&quot; : &quot;&quot;,
+  &quot;sendJSONPath&quot; : &quot;&quot;,
+  &quot;sendJSONNode&quot; : &quot;&quot;,
+  &quot;inProgressMessage&quot; : &quot;In Progress&quot;,
+  &quot;postMessage&quot; : &quot;Done&quot;,
+  &quot;failureNextLabel&quot; : &quot;Continue&quot;,
+  &quot;failureAbortLabel&quot; : &quot;Abort&quot;,
+  &quot;failureGoBackLabel&quot; : &quot;Go Back&quot;,
+  &quot;failureAbortMessage&quot; : &quot;Are you sure?&quot;,
+  &quot;validationRequired&quot; : &quot;Submit&quot;,
+  &quot;redirectPageName&quot; : &quot;&quot;,
+  &quot;redirectTemplateUrl&quot; : &quot;vlcAcknowledge.html&quot;,
+  &quot;redirectNextLabel&quot; : &quot;Next&quot;,
+  &quot;redirectNextWidth&quot; : 3,
+  &quot;redirectPreviousLabel&quot; : &quot;Previous&quot;,
+  &quot;redirectPreviousWidth&quot; : 3,
+  &quot;showPersistentComponent&quot; : [ true, false ],
+  &quot;show&quot; : null,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;wpm&quot; : false,
+  &quot;ssm&quot; : false,
+  &quot;message&quot; : { },
+  &quot;pubsub&quot; : false,
+  &quot;errorMessage&quot; : {
+    &quot;custom&quot; : [ ],
+    &quot;default&quot; : null
+  },
+  &quot;enableDefaultAbort&quot; : false,
+  &quot;enableActionMessage&quot; : false,
+  &quot;businessCategory&quot; : &quot;&quot;,
+  &quot;businessEvent&quot; : &quot;&quot;
+}</propertySetConfig>
+        <sequenceNumber>14.0</sequenceNumber>
+        <type>DataRaptor Post Action</type>
     </omniProcessElements>
     <omniProcessElements>
         <isActive>true</isActive>
@@ -683,52 +729,6 @@
         <isActive>true</isActive>
         <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
         <level>0.0</level>
-        <name>DRToCreateRecords</name>
-        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-        <propertySetConfig>{
-  &quot;controlWidth&quot; : 12,
-  &quot;label&quot; : &quot;DRToCreateRecords&quot;,
-  &quot;bundle&quot; : &quot;DRCreateInspectionRelatedRecords&quot;,
-  &quot;remoteTimeout&quot; : 30000,
-  &quot;postTransformBundle&quot; : &quot;&quot;,
-  &quot;sendJSONPath&quot; : &quot;&quot;,
-  &quot;sendJSONNode&quot; : &quot;&quot;,
-  &quot;inProgressMessage&quot; : &quot;In Progress&quot;,
-  &quot;postMessage&quot; : &quot;Done&quot;,
-  &quot;failureNextLabel&quot; : &quot;Continue&quot;,
-  &quot;failureAbortLabel&quot; : &quot;Abort&quot;,
-  &quot;failureGoBackLabel&quot; : &quot;Go Back&quot;,
-  &quot;failureAbortMessage&quot; : &quot;Are you sure?&quot;,
-  &quot;validationRequired&quot; : &quot;Submit&quot;,
-  &quot;redirectPageName&quot; : &quot;&quot;,
-  &quot;redirectTemplateUrl&quot; : &quot;vlcAcknowledge.html&quot;,
-  &quot;redirectNextLabel&quot; : &quot;Next&quot;,
-  &quot;redirectNextWidth&quot; : 3,
-  &quot;redirectPreviousLabel&quot; : &quot;Previous&quot;,
-  &quot;redirectPreviousWidth&quot; : 3,
-  &quot;showPersistentComponent&quot; : [ true, false ],
-  &quot;show&quot; : null,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;wpm&quot; : false,
-  &quot;ssm&quot; : false,
-  &quot;message&quot; : { },
-  &quot;pubsub&quot; : false,
-  &quot;errorMessage&quot; : {
-    &quot;custom&quot; : [ ],
-    &quot;default&quot; : null
-  },
-  &quot;enableDefaultAbort&quot; : false,
-  &quot;enableActionMessage&quot; : false,
-  &quot;businessCategory&quot; : &quot;&quot;,
-  &quot;businessEvent&quot; : &quot;&quot;
-}</propertySetConfig>
-        <sequenceNumber>15.0</sequenceNumber>
-        <type>DataRaptor Post Action</type>
-    </omniProcessElements>
-    <omniProcessElements>
-        <isActive>true</isActive>
-        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-        <level>0.0</level>
         <name>DRToUpdateScoreValues</name>
         <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
         <propertySetConfig>{
@@ -768,7 +768,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>14.0</sequenceNumber>
+        <sequenceNumber>12.0</sequenceNumber>
         <type>DataRaptor Post Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -814,7 +814,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>6.0</sequenceNumber>
+        <sequenceNumber>5.0</sequenceNumber>
         <type>DataRaptor Post Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -1079,7 +1079,7 @@
   &quot;label&quot; : &quot;Formula2&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;expression&quot; : &quot;COUNT(%UpdateData%) = COUNT(%Questions1%)&quot;,
+  &quot;expression&quot; : &quot;COUNT(%UpdateData:Scope__c%) = COUNT(%Questions1%)&quot;,
   &quot;hide&quot; : true,
   &quot;show&quot; : null,
   &quot;mask&quot; : null,
@@ -1090,6 +1090,30 @@
   &quot;disOnTplt&quot; : false
 }</propertySetConfig>
             <sequenceNumber>7.0</sequenceNumber>
+            <type>Formula</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>Formula3</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;Formula3&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;expression&quot; : &quot;COUNT(%UpdateData:Severity__c%) = COUNT(%Questions1%)&quot;,
+  &quot;hide&quot; : true,
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : &quot;Boolean&quot;,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>8.0</sequenceNumber>
             <type>Formula</type>
         </childElements>
         <childElements>
@@ -1607,6 +1631,10 @@
         &quot;data&quot; : &quot;true&quot;,
         &quot;condition&quot; : &quot;=&quot;,
         &quot;field&quot; : &quot;Formula2&quot;
+      }, {
+        &quot;field&quot; : &quot;Formula3&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;data&quot; : &quot;true&quot;
       } ]
     }
   },
@@ -1726,6 +1754,65 @@
         <isActive>true</isActive>
         <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
         <level>0.0</level>
+        <name>IPCreatingAssessmentRecords</name>
+        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+        <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;IPCreatingAssessmentRecords&quot;,
+  &quot;integrationProcedureKey&quot; : &quot;Create_Records&quot;,
+  &quot;useContinuation&quot; : false,
+  &quot;remoteOptions&quot; : {
+    &quot;preTransformBundle&quot; : &quot;&quot;,
+    &quot;postTransformBundle&quot; : &quot;&quot;,
+    &quot;useFuture&quot; : false,
+    &quot;chainable&quot; : false
+  },
+  &quot;remoteTimeout&quot; : 30000,
+  &quot;preTransformBundle&quot; : &quot;&quot;,
+  &quot;postTransformBundle&quot; : &quot;&quot;,
+  &quot;sendJSONPath&quot; : &quot;&quot;,
+  &quot;sendJSONNode&quot; : &quot;&quot;,
+  &quot;responseJSONPath&quot; : &quot;&quot;,
+  &quot;responseJSONNode&quot; : &quot;&quot;,
+  &quot;extraPayload&quot; : { },
+  &quot;inProgressMessage&quot; : &quot;In Progress&quot;,
+  &quot;postMessage&quot; : &quot;Done&quot;,
+  &quot;failureNextLabel&quot; : &quot;Continue&quot;,
+  &quot;failureAbortLabel&quot; : &quot;Abort&quot;,
+  &quot;failureGoBackLabel&quot; : &quot;Go Back&quot;,
+  &quot;failureAbortMessage&quot; : &quot;Are you sure?&quot;,
+  &quot;validationRequired&quot; : &quot;Step&quot;,
+  &quot;redirectPageName&quot; : &quot;&quot;,
+  &quot;redirectTemplateUrl&quot; : &quot;vlcAcknowledge.html&quot;,
+  &quot;redirectNextLabel&quot; : &quot;Next&quot;,
+  &quot;redirectNextWidth&quot; : 3,
+  &quot;redirectPreviousLabel&quot; : &quot;Previous&quot;,
+  &quot;redirectPreviousWidth&quot; : 3,
+  &quot;showPersistentComponent&quot; : [ true, false ],
+  &quot;show&quot; : null,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;wpm&quot; : false,
+  &quot;ssm&quot; : false,
+  &quot;message&quot; : { },
+  &quot;pubsub&quot; : false,
+  &quot;svgSprite&quot; : &quot;&quot;,
+  &quot;svgIcon&quot; : &quot;&quot;,
+  &quot;errorMessage&quot; : {
+    &quot;custom&quot; : [ ],
+    &quot;default&quot; : null
+  },
+  &quot;enableDefaultAbort&quot; : false,
+  &quot;enableActionMessage&quot; : false,
+  &quot;businessCategory&quot; : &quot;&quot;,
+  &quot;businessEvent&quot; : &quot;&quot;
+}</propertySetConfig>
+        <sequenceNumber>13.0</sequenceNumber>
+        <type>Integration Procedure Action</type>
+    </omniProcessElements>
+    <omniProcessElements>
+        <isActive>true</isActive>
+        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+        <level>0.0</level>
         <name>IPMergingList</name>
         <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
         <propertySetConfig>{
@@ -1778,7 +1865,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>5.0</sequenceNumber>
+        <sequenceNumber>4.0</sequenceNumber>
         <type>Integration Procedure Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -1812,7 +1899,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>17.0</sequenceNumber>
+        <sequenceNumber>16.0</sequenceNumber>
         <type>Navigate Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -1851,7 +1938,7 @@
   &quot;label&quot; : &quot;Formula1&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;expression&quot; : &quot;COUNT(%UpdatedJSONScore%) = COUNT(%CATAssessment%)&quot;,
+  &quot;expression&quot; : &quot;COUNT(%UpdatedJSONScore:Value%) = COUNT(%CATAssessment%)&quot;,
   &quot;hide&quot; : true,
   &quot;show&quot; : null,
   &quot;mask&quot; : null,
@@ -1993,7 +2080,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>10.0</sequenceNumber>
+        <sequenceNumber>9.0</sequenceNumber>
         <type>Step</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -2054,65 +2141,8 @@
   &quot;businessEvent&quot; : &quot;&quot;,
   &quot;sendOnlyExtraPayload&quot; : true
 }</propertySetConfig>
-        <sequenceNumber>7.0</sequenceNumber>
+        <sequenceNumber>6.0</sequenceNumber>
         <type>Remote Action</type>
-    </omniProcessElements>
-    <omniProcessElements>
-        <isActive>false</isActive>
-        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-        <level>0.0</level>
-        <name>SetErrors1</name>
-        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-        <propertySetConfig>{
-  &quot;controlWidth&quot; : 12,
-  &quot;label&quot; : &quot;SetErrors1&quot;,
-  &quot;validationRequired&quot; : &quot;Step&quot;,
-  &quot;elementErrorMap&quot; : {
-    &quot;InspectionStep&quot; : &quot;ErrorMessage Print&quot;
-  },
-  &quot;showPersistentComponent&quot; : [ true, false ],
-  &quot;show&quot; : {
-    &quot;group&quot; : {
-      &quot;operator&quot; : &quot;AND&quot;,
-      &quot;rules&quot; : [ {
-        &quot;data&quot; : null,
-        &quot;condition&quot; : &quot;=&quot;,
-        &quot;field&quot; : &quot;Questions:Scope&quot;
-      } ]
-    }
-  },
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;wpm&quot; : false,
-  &quot;ssm&quot; : false,
-  &quot;message&quot; : { },
-  &quot;pubsub&quot; : false
-}</propertySetConfig>
-        <sequenceNumber>3.0</sequenceNumber>
-        <type>Set Errors</type>
-    </omniProcessElements>
-    <omniProcessElements>
-        <isActive>false</isActive>
-        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-        <level>0.0</level>
-        <name>setValuesToShowonNextPage</name>
-        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-        <propertySetConfig>{
-  &quot;controlWidth&quot; : 12,
-  &quot;label&quot; : &quot;setValuesToShowonNextPage&quot;,
-  &quot;elementValueMap&quot; : {
-    &quot;CalculatedScore&quot; : &quot;=SUM(%Step1:Value%)&quot;,
-    &quot;AssignedScore&quot; : &quot;%matrixResult:AssignedScore%&quot;
-  },
-  &quot;showPersistentComponent&quot; : [ true, false ],
-  &quot;show&quot; : null,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;wpm&quot; : false,
-  &quot;ssm&quot; : false,
-  &quot;message&quot; : { },
-  &quot;pubsub&quot; : false
-}</propertySetConfig>
-        <sequenceNumber>11.0</sequenceNumber>
-        <type>Set Values</type>
     </omniProcessElements>
     <omniProcessElements>
         <childElements>
@@ -2183,7 +2213,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>16.0</sequenceNumber>
+        <sequenceNumber>15.0</sequenceNumber>
         <type>Step</type>
     </omniProcessElements>
     <omniProcessType>OmniScript</omniProcessType>
@@ -2192,5 +2222,5 @@
     <type>Risk</type>
     <uniqueName>Risk_Assessment_English_1</uniqueName>
     <versionNumber>1.0</versionNumber>
-    <webComponentKey>0f6666ab-a6fe-bf2b-611c-c881a56040ec</webComponentKey>
+    <webComponentKey>eeb1c647-bc96-e0ad-3bdc-6a2178675b61</webComponentKey>
 </OmniScript>
