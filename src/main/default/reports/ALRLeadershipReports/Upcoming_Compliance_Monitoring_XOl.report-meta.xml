@@ -32,6 +32,15 @@
     <columns>
         <field>Visit$Name</field>
     </columns>
+    <filter>
+        <criteriaItems>
+            <column>Visit$VisitType</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>Compliance Monitoring Inspection</value>
+        </criteriaItems>
+    </filter>
     <format>Matrix</format>
     <groupingsAcross>
         <dateGranularity>Day</dateGranularity>
@@ -54,7 +63,7 @@
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>true</showSubTotals>
     <timeFrameFilter>
-        <dateColumn>Visit$ActualVisitEndTime</dateColumn>
-        <interval>INTERVAL_CUSTOM</interval>
+        <dateColumn>Visit$PlannedVisitStartTime</dateColumn>
+        <interval>INTERVAL_CURNEXTQ</interval>
     </timeFrameFilter>
 </Report>
