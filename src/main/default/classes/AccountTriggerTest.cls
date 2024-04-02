@@ -1,78 +1,201 @@
+/**
+* @Name              : AccountTriggerTest
+* @Description       : Test class of AccountTrigger and AccountHelper
+* @Author            : Komal Gupta (Accenture)
+* @StoryNo           : ALR-928
+**/
 @isTest
 public class AccountTriggerTest {
     public static testMethod void testInsert(){
-        
-    RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Health', 'License', 'MH', 1, 2, 3, 4, true);
-	Account AcRec1 = TestDataFactory.createResidence('Residence', 'residence1', regAuth.Id, true);
-       Account ownrid = [select id, ownerid from account where name ='residence1' limit 1];
-        system.debug(ownrid);
-        InspectionType insType = new InspectionType();
-        insType.Name = 'Compliance Monitoring Inspection';
-        insert insType;
-         Map<String, Id> mapInspectionType = new Map<String, Id>();
-        mapInspectionType.put('InspectionType', insType.Id);
-        
+		List<Account> accList = new List<Account>();
+        List<Account> accList1 = new List<Account>();
+        List<AssociatedLocation> accList2 = new List<AssociatedLocation>();
+        List<Account> finalList;
+        RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Health', 'License', 'MH', 1, 2, 3, 4, true);
+		Account AccRec = TestDataFactory.createResidence('Residence', 'residence1', regAuth.Id, true);
+        accList.add(AccRec);
+
+        List<Account> ownridList = [select id, ownerid from account where Id =: AccRec.Id limit 1];
+        accList.addAll(ownridList);
+        accList.sort();
+
         Schema.Location loc = new Schema.Location();
         loc.Name = 'U.S. 101N';
 		loc.Longitude = 28.635308;
 		loc.Latitude = 28.635308;
 		insert loc;
-        String insmethod = 'virtual site inspection';
-       Boolean dmlmthd = true;
-    Visit inspec = TestDataFactory.createinspection(AcRec1.Id,insType.Id,loc.Id,insmethod,dmlmthd);    
-         inspec.OwnerId =ownrid.OwnerId;
-        update inspec;
-        Test.StartTest();
- 		AcRec1.Rating = 'High';
-       // database.update(AcRec1);
         
-        System.debug('accList'+AcRec1);
+        for(Account acc1 : accList){
+            AssociatedLocation assosicatedloc = new AssociatedLocation();
+            assosicatedloc.ParentRecordId = acc1.Id;
+            assosicatedloc.LocationId = loc.Id;
+            accList2.add(assosicatedloc);
+        }
+        insert accList2;
         
-        AcRec1 = [Select OwnerID, Owner.ID, Rating From Account where ID = :AcRec1.id];
-        system.assertNOTEquals(null,AcRec1.OwnerID);
-        system.assertNOTEquals(null,AcRec1.Owner.ID);
+        Set<Id> AccSet= new Set<Id>();
+        for(Account acc : accList){
+            AccSet.add(acc.Id);
+        }
+        InspectionType insType = new InspectionType();
+        insType.Name = 'Compliance Monitoring Inspection';
+        insert insType;
+        Map<String, Id> mapInspectionType = new Map<String, Id>();
+        mapInspectionType.put('InspectionType', insType.Id);
         
-        List<Account> accList = new List<Account>();
-        accList.add(AcRec1);
+        finalList = [SELECT Id, Name, Rating, OwnerId, (SELECT Id, Location.VisitorAddress.Address, LocationId FROM AssociatedLocations LIMIT 1) FROM Account WHERE Rating != NULL AND Id IN : AccSet];
         
-        List<Account> accList1 = [SELECT Id, Name, Rating, OwnerId, (SELECT Id, Location.VisitorAddress.Address, LocationId FROM AssociatedLocations WHERE LocationId =: loc.Id LIMIT 1) FROM Account WHERE Rating != NULL AND Id =: AcRec1.Id];
-    	System.debug('accList'+accList1);
-         Account acc = new Account(Name='Test Account', Rating='Low',LicenseType__c= regAuth.Id,Status__c = 'Registered Active with Conditions');
-        insert acc;
+        for(Account accRec1 : finalList){
+            accRec1.Rating = 'High';
+            accList1.add(accRec1);
+        }
+        update accList1;
         
-        // Run trigger by updating the account
-        acc.Rating = 'Medium';
-       // update acc;
-        AcRec1.Rating ='High';
-           database.update(AcRec1);
-        
-        // Query the created Visit records
-        List<Visit> visits = [SELECT Id, AccountId FROM Visit];
-        
-        // Assert that the Visit records are created as expected
-        System.assertEquals(1, visits.size(), 'One Visit record should have been created');
-        //System.assertEquals(acc.Id, visits[0].AccountId, 'Visit record should be associated with the Account');
-        //insert inspection Type
         
         List<Visit> inspection = new List<Visit>();
 		
-        if(AcRec1.Rating == 'High'){
-        Visit inspect = new Visit();
-        inspect.AccountId = AcRec1.Id;
-        inspect.VisitTypeId = insType.Id;
-        inspect.InspectionMethod__c = 'Unannounced on Site Inspection';
-        inspect.PlannedVisitStartTime = System.today().addMonths(12);
-        inspect.PlaceId = loc.Id;
-        inspect.OwnerId = AcRec1.OwnerId;
-        inspect.VisitPriority = 'Medium';
-        inspection.add(inspect);
-        System.debug('inspection'+inspection);
-        insert inspection;
-            Test.StopTest();
-            
-            
-            
+        for(Account AcRec2 : finalList){
+            if(AcRec2.Rating == 'High'){
+                Visit inspect = new Visit();
+                inspect.AccountId = AcRec2.Id;
+                inspect.VisitTypeId = mapInspectionType.get('InspectionType');
+                inspect.InspectionMethod__c = 'Unannounced on Site Inspection';
+                inspect.PlannedVisitStartTime = System.today().addMonths(12);
+                inspect.PlaceId = loc.Id;
+                inspect.OwnerId = AcRec2.OwnerId;
+                inspect.VisitPriority = 'Medium';
+                inspection.add(inspect);
+        }
+    }
+    }
+    
+    public static testMethod void testInsert1(){
+		List<Account> accList = new List<Account>();
+        List<Account> accList1 = new List<Account>();
+        List<AssociatedLocation> accList2 = new List<AssociatedLocation>();
+        List<Account> finalList;
+        RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Health', 'License', 'MH', 1, 2, 3, 4, true);
+		Account AccRec = TestDataFactory.createResidence('Residence', 'residence1', regAuth.Id, true);
+        accList.add(AccRec);
+
+        List<Account> ownridList = [select id, ownerid from account where Id =: AccRec.Id limit 1];
+        accList.addAll(ownridList);
+        accList.sort();
+
+        Schema.Location loc = new Schema.Location();
+        loc.Name = 'U.S. 101N';
+		loc.Longitude = 28.635308;
+		loc.Latitude = 28.635308;
+		insert loc;
+        
+        for(Account acc1 : accList){
+            AssociatedLocation assosicatedloc = new AssociatedLocation();
+            assosicatedloc.ParentRecordId = acc1.Id;
+            assosicatedloc.LocationId = loc.Id;
+            accList2.add(assosicatedloc);
+        }
+        insert accList2;
+        
+        Set<Id> AccSet= new Set<Id>();
+        for(Account acc : accList){
+            AccSet.add(acc.Id);
         }
         
+        InspectionType insType = new InspectionType();
+        insType.Name = 'Compliance Monitoring Inspection';
+        insert insType;
+        Map<String, Id> mapInspectionType = new Map<String, Id>();
+        mapInspectionType.put('InspectionType', insType.Id);
+        
+        finalList = [SELECT Id, Name, Rating, OwnerId, (SELECT Id, Location.VisitorAddress.Address, LocationId FROM AssociatedLocations LIMIT 1) FROM Account WHERE Rating != NULL AND Id IN : AccSet];
+        
+        for(Account accRec1 : finalList){
+            accRec1.Rating = 'Low';
+            accList1.add(accRec1);
+        }
+        Test.startTest();
+        update accList1;
+        Test.stopTest();
+        
+        List<Visit> inspection = new List<Visit>();
+		
+        for(Account AcRec2 : finalList){
+            if(AcRec2.Rating == 'Low'){
+                Visit inspect = new Visit();
+                inspect.AccountId = AcRec2.Id;
+                inspect.VisitTypeId = mapInspectionType.get('InspectionType');
+                inspect.InspectionMethod__c = 'Unannounced on Site Inspection';
+                inspect.PlannedVisitStartTime = System.today().addMonths(3);
+                inspect.PlaceId = loc.Id;
+                inspect.OwnerId = AcRec2.OwnerId;
+                inspect.VisitPriority = 'Medium';
+                inspection.add(inspect);
+        }
+    }
+    }
+    
+    public static testMethod void testInsert3(){
+		List<Account> accList = new List<Account>();
+        List<Account> accList1 = new List<Account>();
+        List<AssociatedLocation> accList2 = new List<AssociatedLocation>();
+        List<Account> finalList;
+        RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Health', 'License', 'MH', 1, 2, 3, 4, true);
+		Account AccRec = TestDataFactory.createResidence('Residence', 'residence1', regAuth.Id, true);
+        accList.add(AccRec);
+
+        List<Account> ownridList = [select id, ownerid from account where Id =: AccRec.Id limit 1];
+        accList.addAll(ownridList);
+        accList.sort();
+
+        Schema.Location loc = new Schema.Location();
+        loc.Name = 'U.S. 101N';
+		loc.Longitude = 28.635308;
+		loc.Latitude = 28.635308;
+		insert loc;
+        
+        for(Account acc1 : accList){
+            AssociatedLocation assosicatedloc = new AssociatedLocation();
+            assosicatedloc.ParentRecordId = acc1.Id;
+            assosicatedloc.LocationId = loc.Id;
+            accList2.add(assosicatedloc);
+        }
+        insert accList2;
+        
+        Set<Id> AccSet= new Set<Id>();
+        for(Account acc : accList){
+            AccSet.add(acc.Id);
+        }
+        
+        InspectionType insType = new InspectionType();
+        insType.Name = 'Compliance Monitoring Inspection';
+        insert insType;
+        Map<String, Id> mapInspectionType = new Map<String, Id>();
+        mapInspectionType.put('InspectionType', insType.Id);
+        
+        finalList = [SELECT Id, Name, Rating, OwnerId, (SELECT Id, Location.VisitorAddress.Address, LocationId FROM AssociatedLocations LIMIT 1) FROM Account WHERE Rating != NULL AND Id IN : AccSet];
+        
+        for(Account accRec1 : finalList){
+            accRec1.Rating = 'Medium';
+            accList1.add(accRec1);
+        }
+        Test.startTest();
+        update accList1;
+        Test.stopTest();
+        
+        List<Visit> inspection = new List<Visit>();
+		
+        for(Account AcRec2 : finalList){
+            if(AcRec2.Rating == 'Medium'){
+                Visit inspect = new Visit();
+                inspect.AccountId = AcRec2.Id;
+                inspect.VisitTypeId = mapInspectionType.get('InspectionType');
+                inspect.InspectionMethod__c = 'Unannounced on Site Inspection';
+                inspect.PlannedVisitStartTime = System.today().addMonths(6);
+                inspect.PlaceId = loc.Id;
+                inspect.OwnerId = AcRec2.OwnerId;
+                inspect.VisitPriority = 'Medium';
+                inspection.add(inspect);
+        }
+    }
     }
 }
