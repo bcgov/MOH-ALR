@@ -126,5 +126,4 @@ public class LateFeeManagementControllerBatchTest {
         List<RegulatoryTrxnFeeItem> regTrans = [SELECT Id from RegulatoryTrxnFeeItem LIMIT 10];
         Assert.isNotNull(regTrans.size());
     }
-    
     }

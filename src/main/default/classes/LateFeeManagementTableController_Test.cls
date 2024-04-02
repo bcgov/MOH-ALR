@@ -208,5 +208,4 @@ public class LateFeeManagementTableController_Test {
         assert.areEqual(false, hasUpdated, 'Expected update to be successful');
        
     }
-    
 }
