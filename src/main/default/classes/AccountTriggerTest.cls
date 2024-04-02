@@ -49,9 +49,11 @@ public class AccountTriggerTest {
             accRec1.Rating = 'High';
             accList1.add(accRec1);
         }
+        Test.startTest();
         update accList1;
-        
-        
+        Test.stopTest();
+        system.assertEquals('High', accList1[0].Rating);
+
         List<Visit> inspection = new List<Visit>();
 		
         for(Account AcRec2 : finalList){
@@ -116,6 +118,7 @@ public class AccountTriggerTest {
         Test.startTest();
         update accList1;
         Test.stopTest();
+        system.assertEquals('High', accList1[0].Rating);
         
         List<Visit> inspection = new List<Visit>();
 		
@@ -181,6 +184,7 @@ public class AccountTriggerTest {
         Test.startTest();
         update accList1;
         Test.stopTest();
+        system.assertEquals('High', accList1[0].Rating);
         
         List<Visit> inspection = new List<Visit>();
 		
