@@ -55,5 +55,4 @@ public class AccountHelper {
         insert inspectList;
         }
         }
-
 }
