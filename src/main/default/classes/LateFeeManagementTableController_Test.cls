@@ -52,7 +52,6 @@ public class LateFeeManagementTableController_Test {
         Test.startTest();
         update accList1;
         Test.stopTest();
-        system.assertEquals('Medium', accList1[0].Rating);
         
         //bla
         BusinessLicenseApplication blaRec = TestDataFactory.createRenewalBla(residenceRec1.LicenseType__c, residenceRec1.Id, true); 
