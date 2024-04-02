@@ -209,7 +209,6 @@ public class AccountTriggerTest {
                 inspect.VisitPriority = 'Medium';
                 inspection.add(inspect);
         }
-        
     }
     }
 }

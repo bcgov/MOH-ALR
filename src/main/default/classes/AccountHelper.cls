@@ -9,10 +9,11 @@ public class AccountHelper {
         List<Visit> inspectList = new List<Visit>();
         Map<String, Id> mapInspectionType = new Map<String, Id>();
         Map<String, Id> mapAccount = new Map<String, Id>();
-        InspectionType insType = [SELECT Id, Name FROM InspectionType WHERE Name = 'Compliance Monitoring Inspection' LIMIT 1];
-        mapInspectionType.put('InspectionType', insType.Id);
 
         List<Account> accList1 = [SELECT Id, Name, Rating, OwnerId, (SELECT Id, Location.VisitorAddress.Address, LocationId FROM AssociatedLocations LIMIT 1) FROM Account WHERE Rating != NULL AND Id =: accList];
+        InspectionType insType = [SELECT Id, Name FROM InspectionType WHERE Name = 'Compliance Monitoring Inspection' LIMIT 1];
+        mapInspectionType.put('InspectionType', insType.Id);
+        
         for(Account accObj : accList1){
             if(accObj.Rating != NULL){
                 if(accObj.Rating == 'Low'){
