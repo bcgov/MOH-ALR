@@ -23,6 +23,7 @@ public with sharing class LateFeeManagementControllerBatch implements Database.B
     private Final Static String renewalName = 'LicenseRenewalCriteria';
     private Final Static String RegTxnFeeStatus = 'Due';
     public Final Static String activeStatusBl = BCMOH_Constants.activeStatusBl;
+    public Final Static String FeeTypeStatuses = 'Renewal Unit Fee';
     
     public List<Id> CONLIST = new List<Id>();
     
@@ -60,12 +61,11 @@ public with sharing class LateFeeManagementControllerBatch implements Database.B
             +' Status, Late_Fee_Status__c, AccountId, Category, BusinessLicenseApplication.Account.Id'
             +' FROM BusinessLicenseApplicationAccount WHERE RecordType.DeveloperName =: blaRecType'
             +' AND RenewalYear__c =: renewalYear AND Status =: blaRenewalStatus'
-            +' AND Late_Fee_Status__c = NULL),'
+            +' AND Late_Fee_Status__c = NULL AND Id IN(Select ParentRecordId FROM RegulatoryTrxnFee WHERE Status =:RegTxnFeeStatus AND FeeType__c =:FeeTypeStatuses)),'
             +' (SELECT Id, Location.VisitorAddress.Address FROM AssociatedLocations LIMIT 1),'
             +' (SELECT RegistrationCertificate__c FROM AccountBusinessLicenses__r WHERE Status =: activeStatusBl LIMIT 1),'
             +' (SELECT ContactId, Contact.Name, Contact.Phone, Contact.Email, Contact.MobilePhone, Roles FROM AccountContactRelations'//ALR-560
-            +'  WHERE PrimaryContact__c = TRUE AND IsActive = TRUE LIMIT 1),'
-            +' (SELECT Id, Status, Name FROM RegulatoryTrxnFees where Status =: RegTxnFeeStatus LIMIT 1)'
+            +'  WHERE PrimaryContact__c = TRUE AND IsActive = TRUE LIMIT 1)'
             +' FROM Account'
             +' WHERE recordType.DeveloperName =: accRecType AND LicenseType__c != NULL'
             +' AND Status__c IN: accStatuses';

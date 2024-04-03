@@ -6,15 +6,53 @@ public class LateFeeManagementTableController_Test {
         Id parentAssetRTId = Schema.getGlobalDescribe().get('Asset').getDescribe().getRecordTypeInfosByDeveloperName().get('Units_Record_Type').getRecordTypeId();
         Id childAssetRTId = Schema.getGlobalDescribe().get('Asset').getDescribe().getRecordTypeInfosByDeveloperName().get('Unit_Request_Record_Type').getRecordTypeId();
         
-        //RegulatoryAuthorizationType
-        RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
+        List<Account> accList = new List<Account>();
+        List<Account> accList1 = new List<Account>();
+        List<AssociatedLocation> accList2 = new List<AssociatedLocation>();
+        List<Account> finalList;
+        RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Health', 'License', 'MH', 1, 2, 3, 4, true);
+		Account residenceRec1 = TestDataFactory.createResidence('Residence', 'residence1', regAuth.Id, true);
+        accList.add(residenceRec1);
+
+        List<Account> ownridList = [select id, ownerid from account where Id =: residenceRec1.Id limit 1];
+        accList.addAll(ownridList);
+        accList.sort();
+
+        Schema.Location loc = new Schema.Location();
+        loc.Name = 'U.S. 101N';
+		loc.Longitude = 28.635308;
+		loc.Latitude = 28.635308;
+		insert loc;
         
-        //account - insert scenario
-        Account residenceRec1 = TestDataFactory.createResidence('Residence', 'residenceAccount1', regAuth.Id, true);
-        //registrant billing address
-        Account parentRec = new Account(Id = residenceRec1.ParentId,
-                                        BillingStreet = 'csd');
-        update parentRec;
+        for(Account acc1 : accList){
+            AssociatedLocation assosicatedloc = new AssociatedLocation();
+            assosicatedloc.ParentRecordId = acc1.Id;
+            assosicatedloc.LocationId = loc.Id;
+            accList2.add(assosicatedloc);
+        }
+        insert accList2;
+        
+        Set<Id> AccSet= new Set<Id>();
+        for(Account acc : accList){
+            AccSet.add(acc.Id);
+        }
+        
+        InspectionType insType = new InspectionType();
+        insType.Name = 'Compliance Monitoring Inspection';
+        insert insType;
+        Map<String, Id> mapInspectionType = new Map<String, Id>();
+        mapInspectionType.put('InspectionType', insType.Id);
+        
+        finalList = [SELECT Id, Name, Rating, OwnerId, (SELECT Id, Location.VisitorAddress.Address, LocationId FROM AssociatedLocations LIMIT 1) FROM Account WHERE Rating != NULL AND Id IN : AccSet];
+        
+        for(Account accRec1 : finalList){
+            accRec1.Rating = 'Medium';
+            accList1.add(accRec1);
+        }
+        Test.startTest();
+        update accList1;
+        Test.stopTest();
+        
         //bla
         BusinessLicenseApplication blaRec = TestDataFactory.createRenewalBla(residenceRec1.LicenseType__c, residenceRec1.Id, true); 
         //asset parent

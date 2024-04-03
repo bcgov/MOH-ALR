@@ -173,14 +173,15 @@ public with sharing class RenewalManagementController {
     //create transaction fee records for Late Fee
     public static Map<Id, RegulatoryTrxnFee> createLateFeeTransFeeRecords(Map<Id, Account> lateFeeAccMap, Map<Id, BusinessLicenseApplication> lateFeeBLAMap) {
         Map<Id, RegulatoryTrxnFee> transFeeAccMap = new Map<Id, RegulatoryTrxnFee>();
+        
         DateTime dueDate = BCMOH_Constants.feeDueDateTime;//ALR-185
         try {
             //fetch recordtype
             String transFeeRecTypeId = Schema.getGlobalDescribe().get('RegulatoryTrxnFee').getDescribe().getRecordTypeInfosByDeveloperName().get('TransactionFee').getRecordTypeId();
             //create RegulatoryTrxnFee records
             for(BusinessLicenseApplication BLARec : lateFeeBLAMap.values()) {
-                RegulatoryTrxnFee transFeeRec = createLateFeeTransFeeRecord(transFeeRecTypeId, BLARec.AccountId, BLARec.Id, lateFeeType, feeStatus, dueDate);
-                transFeeAccMap.put(BLARec.Id, transFeeRec);
+                    RegulatoryTrxnFee transFeeRec = createLateFeeTransFeeRecord(transFeeRecTypeId, BLARec.AccountId, BLARec.Id, lateFeeType, feeStatus, dueDate);
+                	transFeeAccMap.put(BLARec.Id, transFeeRec);
             }
             
             //Insert RegulatoryTrxnFee records
