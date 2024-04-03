@@ -19,16 +19,10 @@
                         <valueListItems>
                             <value>CustomButton.Visit.Start_Risk_Assessment</value>
                             <visibilityRule>
-                                <booleanFilter>1 AND 2</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.VisitType.Name}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>Compliance Monitoring Inspection</rightValue>
-                                </criteria>
-                                <criteria>
-                                    <leftValue>{!$Permission.CustomPermission.EHISInvestigator}</leftValue>
-                                    <operator>EQUAL</operator>
-                                    <rightValue>true</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
@@ -48,7 +42,7 @@
                         <valueListItems>
                             <value>ChangeOwnerOne</value>
                         </valueListItems>
-                    </valueList>
+                                            </valueList>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>collapsed</name>
@@ -127,6 +121,16 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.InspectionMethod__c</fieldItem>
                 <identifier>RecordInspectionMethod_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ProjectedStartTime__c</fieldItem>
+                <identifier>RecordProjectedStartTime_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
