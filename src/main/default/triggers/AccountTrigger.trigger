@@ -9,5 +9,6 @@ trigger AccountTrigger on Account (after update, before insert, before update, a
         when AFTER_UPDATE {
                  AccountHelper.createInspection(Trigger.New);
             }
+        
     }
     }

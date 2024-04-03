@@ -43,7 +43,7 @@ public class AccountTriggerTest {
         Map<String, Id> mapInspectionType = new Map<String, Id>();
         mapInspectionType.put('InspectionType', insType.Id);
         
-        finalList = [SELECT Id, Name, Rating, OwnerId, (SELECT Id, Location.VisitorAddress.Address, LocationId FROM AssociatedLocations LIMIT 1) FROM Account WHERE Rating != NULL AND Id IN : AccSet];
+        finalList = [SELECT Id, Name, Rating, OwnerId, (SELECT Id, Location.VisitorAddress.Address, LocationId FROM AssociatedLocations LIMIT 1) FROM Account WHERE  Id IN : AccSet];
         
         for(Account accRec1 : finalList){
             accRec1.Rating = 'High';
@@ -72,6 +72,7 @@ public class AccountTriggerTest {
                 inspection.add(inspect);
         }
     }
+        Database.update(inspection, false);
     }
     
     public static testMethod void testInsert1(){
@@ -112,7 +113,7 @@ public class AccountTriggerTest {
         Map<String, Id> mapInspectionType = new Map<String, Id>();
         mapInspectionType.put('InspectionType', insType.Id);
         
-        finalList = [SELECT Id, Name, Rating, OwnerId, (SELECT Id, Location.VisitorAddress.Address, LocationId FROM AssociatedLocations LIMIT 1) FROM Account WHERE Rating != NULL AND Id IN : AccSet];
+        finalList = [SELECT Id, Name, Rating, OwnerId, (SELECT Id, Location.VisitorAddress.Address, LocationId FROM AssociatedLocations LIMIT 1) FROM Account WHERE  Id IN : AccSet];
         
         for(Account accRec1 : finalList){
             accRec1.Rating = 'Low';
@@ -141,6 +142,7 @@ public class AccountTriggerTest {
                 inspection.add(inspect);
         }
     }
+        Database.update(inspection, false);
     }
     
     public static testMethod void testInsert3(){
@@ -181,7 +183,7 @@ public class AccountTriggerTest {
         Map<String, Id> mapInspectionType = new Map<String, Id>();
         mapInspectionType.put('InspectionType', insType.Id);
         
-        finalList = [SELECT Id, Name, Rating, OwnerId, (SELECT Id, Location.VisitorAddress.Address, LocationId FROM AssociatedLocations LIMIT 1) FROM Account WHERE Rating != NULL AND Id IN : AccSet];
+        finalList = [SELECT Id, Name, Rating, OwnerId, (SELECT Id, Location.VisitorAddress.Address, LocationId FROM AssociatedLocations LIMIT 1) FROM Account WHERE  Id IN : AccSet];
         
         for(Account accRec1 : finalList){
             accRec1.Rating = 'Medium';
@@ -210,5 +212,6 @@ public class AccountTriggerTest {
                 inspection.add(inspect);
         }
     }
+        Database.update(inspection, false);
     }
 }
