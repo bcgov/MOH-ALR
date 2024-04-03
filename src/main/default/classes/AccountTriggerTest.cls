@@ -72,7 +72,6 @@ public class AccountTriggerTest {
                 inspection.add(inspect);
         }
     }
-        Database.update(inspection, false);
     }
     
     public static testMethod void testInsert1(){
@@ -142,7 +141,6 @@ public class AccountTriggerTest {
                 inspection.add(inspect);
         }
     }
-        Database.update(inspection, false);
     }
     
     public static testMethod void testInsert3(){
@@ -212,6 +210,5 @@ public class AccountTriggerTest {
                 inspection.add(inspect);
         }
     }
-        Database.update(inspection, false);
     }
 }
