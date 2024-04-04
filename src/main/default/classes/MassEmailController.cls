@@ -38,6 +38,8 @@ public with sharing class MassEmailController {
     Public Static Map<Id, BusinessLicense> blMap = new Map<Id, BusinessLicense>();
     Public Static Map<Id, Integer> blaTotalAlUnitsMap = new Map<Id, Integer>();
     Public Static Map<Id, Set<Id>> blaContentVerMap = new Map<Id, Set<Id>>();
+    private Final Static String RegTxnFeeStatus = 'Due';
+    public Final Static String FeeTypeStatuses = 'Renewal Unit Fee';
     
     Public Static String errMessage = '';//common err message for all records
     Public Static Boolean sendEmailValid = true;//false if template or org wide address is not found
@@ -169,7 +171,7 @@ public with sharing class MassEmailController {
             try {
                 //fetch acc status and rec type from metadata
                 accDetails = BCMOH_UtilityClass.getAccRenewals(BCMOH_Constants.renewalName);
-                //fetch account, bla details
+                                //fetch account, bla details
                 //need to make query dynamic?
                 for(Account activeAccRec : [SELECT Id, Status__c, Name, 
                                             (SELECT Id, ContactId, Contact.Name, Contact.Email, PrimaryContact__c
@@ -179,7 +181,7 @@ public with sharing class MassEmailController {
                                              FROM BusinessLicenseApplicationAccount 
                                              WHERE RecordType.DeveloperName =: BCMOH_Constants.blaRecType AND 
                                              Late_Fee_Status__c =: BCMOH_Constants.blaLateFeeStatus 
-                                             AND RenewalYear__c =: BCMOH_Constants.renewalYear LIMIT 1),
+                                             AND RenewalYear__c =: BCMOH_Constants.renewalYear AND Id IN(Select ParentRecordId FROM RegulatoryTrxnFee WHERE Status =:RegTxnFeeStatus AND FeeType__c =:FeeTypeStatuses) LIMIT 1),
                                             (SELECT Id, RegistrationCertificate__c 
                                              FROM AccountBusinessLicenses__r WHERE Status =: BCMOH_Constants.activeStatusBl LIMIT 1),
                                             (SELECT Id, Capacity__c, Quantity, Type__c 
@@ -406,7 +408,7 @@ public with sharing class MassEmailController {
                     emailBodyConst = emailTempRec.Body;
                     emailHtmlBody = emailTempRec.HtmlValue;//ALR-827 - for html body
                     emailHtmlBodyConst = emailTempRec.HtmlValue;//ALR-827 - for html body
-                }
+                                    }
                 else {
                     //set error when email template was not fetched
                     errMessage = templateId == NULL ? BCMOH_Constants.templateNameMissing+templateDetailName : '';
@@ -451,7 +453,7 @@ public with sharing class MassEmailController {
                     emailBodyConst = emailTempRec.Body;
                     emailHtmlBody = emailTempRec.HtmlValue;//ALR-827 - for html body
                     emailHtmlBodyConst = emailTempRec.HtmlValue;//ALR-827 - for html body
-                }
+                                    }
                 else {
                     //set error when email template was not fetched
                     errMessage = templateId == NULL ? BCMOH_Constants.templateNameMissing+templateDetailName : '';
@@ -481,7 +483,7 @@ public with sharing class MassEmailController {
                 orgWideAddr = BCMOH_UtilityClass.getOrgWideEmailAddress();
                 if(orgWideAddr != NULL) {
                     orgWideAddrId = orgWideAddr.Id;
-                }
+                                    }
                 else {
                     //set error when valid org wide email address is not available
                     errMessage = BCMOH_Constants.noOrgWideAddr;
@@ -514,7 +516,7 @@ public with sharing class MassEmailController {
                         contentVerIdSet.add(ContentDocWrapperRec.contentDocVerMap.get(docId));//add current version also to the list
                         //map's key value pair holds the whatId vs attachment ids per email
                         blaContentVerMap.put(blaId, contentVerIdSet);//set blaId-ContentVersionId map
-                    }
+                                            }
                 }
             }
         }
@@ -549,7 +551,7 @@ public with sharing class MassEmailController {
                                                       String sentDetails = BCMOH_Constants.emailSentToId+' '+accContactMap.get(msgRec.whatId).Contact.Email+
                                                           '. '+BCMOH_Constants.emailSentTo+' '+accContactMap.get(msgRec.whatId).Contact.Name+'. '+BCMOH_Constants.sentTime+' '+datetime.now().format();//add to const
                                                       blaSuccessMap.put(msgRec.whatId, sentDetails);
-                                                  }
+                                                                                                        }
                                               }
                                           }
                                           catch(exception ex) {
@@ -612,7 +614,7 @@ public with sharing class MassEmailController {
                
             //loop through bla error map
             for(Id blaId : blaErrMap.keySet()) {
-                BLAquery=blaErrQuery(blaId);
+                                BLAquery=blaErrQuery(blaId);
                 //truncate the err message if length more than 255 chars
                 String lateFeeMsg = blaErrMap.get(blaId).length() > 255 ? blaErrMap.get(blaId).Substring(0,255) : blaErrMap.get(blaId);
                 String errMsg = blaErrMap.get(blaId);
@@ -635,7 +637,7 @@ public with sharing class MassEmailController {
                 String succMsg = blaSuccessMap.get(blaId);
                 succMsg = BLAquery[0].RenewalError__c != NULL ? BLAquery[0].RenewalError__c + ' ; ' + lateFeeMsg : lateFeeMsg;
                
-
+                 
                 BusinessLicenseApplication blaRec = new BusinessLicenseApplication(
                     Id = blaId,
                     Late_Fee_Status__c = BCMOH_Constants.sentBlaStatus,
@@ -644,9 +646,9 @@ public with sharing class MassEmailController {
             }
             
             if(!blaUpdateList.isEmpty() && BusinessLicenseApplication.sObjectType.getDescribe().isUpdateable()) {
-                Database.Update(blaUpdateList, false);//add error logs for failed records 
+                                Database.Update(blaUpdateList, false);//add error logs for failed records 
                 Database.Update(accToUpdate, false);
-            }
+                            }
             
             
         }
