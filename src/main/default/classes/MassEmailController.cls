@@ -181,7 +181,7 @@ public with sharing class MassEmailController {
                                              FROM BusinessLicenseApplicationAccount 
                                              WHERE RecordType.DeveloperName =: BCMOH_Constants.blaRecType AND 
                                              Late_Fee_Status__c =: BCMOH_Constants.blaLateFeeStatus 
-                                             AND RenewalYear__c =: BCMOH_Constants.renewalYear AND Id IN(Select ParentRecordId FROM RegulatoryTrxnFee WHERE Status =:RegTxnFeeStatus AND FeeType__c =:FeeTypeStatuses) LIMIT 1),
+                                             AND RenewalYear__c =: BCMOH_Constants.renewalYear LIMIT 1),
                                             (SELECT Id, RegistrationCertificate__c 
                                              FROM AccountBusinessLicenses__r WHERE Status =: BCMOH_Constants.activeStatusBl LIMIT 1),
                                             (SELECT Id, Capacity__c, Quantity, Type__c 
