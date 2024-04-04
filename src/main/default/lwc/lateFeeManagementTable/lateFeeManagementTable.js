@@ -18,7 +18,7 @@ const tableColumns = [
         typeAttributes: {label : {fieldName: 'ParentName' }, target: '_parent'}},
     {label: 'Health Authority', fieldName: 'HealthAuthorityName', type: 'text'},
     {label: 'Residence Status', fieldName: 'AccountStatus', type: 'text'},
-    {label: 'Applcation Status', fieldName: 'Status', type: 'text'},
+    {label: 'Application Status', fieldName: 'Status', type: 'text'},
     {label: 'Renewal Details', fieldName: 'RenewalDetails', type: 'text' },
     {label: 'Late Fee Status', fieldName: 'Late_Fee_Status__c', type: 'text', editable: true},
     {label: 'Exclusion Reason', fieldName: 'ExclusionReason__c', type: 'text', editable: true,
@@ -121,7 +121,7 @@ export default class LateFeeManagementTable extends LightningElement {
     }
     handleStatusChange(event){
       if (event.detail.status === 'FINISHED_SCREEN') {
-            refreshApex(this._wiredResult);
+                        refreshApex(this._wiredResult);
             this.renderFlow = false;
             }
       else{
