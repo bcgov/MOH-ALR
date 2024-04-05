@@ -4,12 +4,9 @@
     <active>true</active>
     <description>This Validation rule is created as part of User story ALR-983
 Only the ALR Admin and Data Analyst will be able to update WebsitePostConfirmed, DatePosted, PostingRemovalDate fields . All other users can view these fields</description>
-    <errorConditionFormula>NOT($Permission.EHISBypassValidationRuleCustomPermission)
+    <errorConditionFormula>RecordType.DeveloperName = &apos;Inspection&apos; 
 &amp;&amp;
-RecordType.DeveloperName = &apos;Inspection&apos; 
- &amp;&amp; 
 ($Permission.EHISAdminUser || $Permission.EHISDataAnalystUser)
-
 &amp;&amp;
 NOT(
 	($Permission.EHISAdminUser || $Permission.EHISDataAnalystUser) &amp;&amp; 
