@@ -5,10 +5,11 @@
 * @StoryNo           : ALR-928
 **/
 trigger AccountTrigger on Account (after update, before insert, before update, after insert, before delete, after delete, after undelete) {
-    switch on Trigger.operationType {
-        when AFTER_UPDATE {
-                 AccountHelper.createInspection(Trigger.New);
-            }
-        
+    for(Account acc : Trigger.New){
+        if(Trigger.isAfter && Trigger.isUpdate){
+            if(acc.Rating != NULL){
+            AccountHelper.createInspection(Trigger.New);
+        }
+        }
     }
     }
