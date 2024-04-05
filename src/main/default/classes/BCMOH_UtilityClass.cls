@@ -233,7 +233,8 @@ public class BCMOH_UtilityClass {
         return docNameWithTitleMap;
     }
     //end of ALR-997
-    
+
+      
     //ALR-560 - common util class
     //update all bla records - DML
 	public static List<BusinessLicenseApplication> updateBlaStatus(Map<Id, String> blaIdDetailsMap, String blaStatus) {
@@ -247,8 +248,8 @@ public class BCMOH_UtilityClass {
                BusinessLicenseApplication blaRec = new BusinessLicenseApplication(
                Id = blaId,
                Status = blaStatus,
-               RenewalError__c = renewalMsg);
-               blaUpdateList.add(blaRec);
+               RenewalDetail__c = renewalMsg);
+                blaUpdateList.add(blaRec);
            }
        }
        catch(exception ex) {
@@ -262,16 +263,17 @@ public class BCMOH_UtilityClass {
 	public static List<BusinessLicenseApplication> updateBlaLateFeeStatus(Map<Id, String> blaIdDetailsMap, String blalatefeeStatus) {
        List<BusinessLicenseApplication> blaUpdateList = new List<BusinessLicenseApplication>();
        try {     
-           BusinessLicenseApplication BLAquery = [SELECT Id, RenewalError__c FROM BusinessLicenseApplication WHERE Id =:blaIdDetailsMap.keySet() LIMIT 1];
+            BusinessLicenseApplication BLAquery = [SELECT Id, RenewalDetail__c FROM BusinessLicenseApplication WHERE Id =:blaIdDetailsMap.keySet() LIMIT 1];
+            
            //loop through bla update map
            for(Id blaId : blaIdDetailsMap.keySet()) {
                //truncate the message if length more than 255 chars
                String renewalMsg = blaIdDetailsMap.get(blaId);
-               renewalMsg = BLAquery.RenewalError__c != NULL ? BLAquery.RenewalError__c + ' ; ' + renewalMsg : renewalMsg;
+               renewalMsg = BLAquery.RenewalDetail__c != NULL ? BLAquery.RenewalDetail__c + ' ; ' + renewalMsg : renewalMsg;
                BusinessLicenseApplication blaRec = new BusinessLicenseApplication(
                Id = blaId,
                Late_Fee_Status__c = blalatefeeStatus,
-               RenewalError__c = renewalMsg);
+               RenewalDetail__c = renewalMsg);
                blaUpdateList.add(blaRec);
            }
        }

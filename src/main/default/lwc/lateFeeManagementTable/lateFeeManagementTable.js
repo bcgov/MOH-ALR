@@ -19,7 +19,8 @@ const tableColumns = [
     {label: 'Health Authority', fieldName: 'HealthAuthorityName', type: 'text'},
     {label: 'Residence Status', fieldName: 'AccountStatus', type: 'text'},
     {label: 'Application Status', fieldName: 'Status', type: 'text'},
-    {label: 'Renewal Details', fieldName: 'RenewalDetails', type: 'text' },
+    {label: 'Renewal Detail', fieldName: 'RenewalDetail', type: 'text' },
+    //{label: 'Renewal Details', fieldName: 'RenewalDetails', type: 'text' },
     {label: 'Late Fee Status', fieldName: 'Late_Fee_Status__c', type: 'text', editable: true},
     {label: 'Exclusion Reason', fieldName: 'ExclusionReason__c', type: 'text', editable: true,
         cellAttributes: {alignment :'left'}}
@@ -50,7 +51,7 @@ export default class LateFeeManagementTable extends LightningElement {
             blaParsedData.forEach(bla => {
                 if(bla.Name){
                     bla.appId = '/'+bla.Id;
-                    bla.RenewalDetails =bla.RenewalError__c;
+                    bla.RenewalDetail =bla.RenewalDetail__c;
                 }
                 if(bla.Account.Id){
                     bla.AccName = bla.Account.Name;
@@ -119,9 +120,10 @@ export default class LateFeeManagementTable extends LightningElement {
     handleGenerateLateFees(event){
             this.renderFlow = true;
     }
-    handleStatusChange(event){
+    async handleStatusChange(event){
       if (event.detail.status === 'FINISHED_SCREEN') {
-                        refreshApex(this._wiredResult);
+            await this.refreshData();
+            refreshApex(this._wiredResult);
             this.renderFlow = false;
             }
       else{

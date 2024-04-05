@@ -16,7 +16,7 @@ public class LateFeeManagementTableController {
             for(BusinessLicenseApplication blaRec : [SELECT Id, Name, ApplicationType, RenewalYear__c, 
                                                      Account.Id, Account.Name, Account.ParentId, Account.Parent.Name, 
                                                      Account.HealthAuthority__c, LicenseTypeId, LicenseType.Name,
-                                                     Account.Status__c, Status,RenewalError__c,Late_Fee_Status__c,ExclusionReason__c
+                                                     Account.Status__c, Status,	RenewalDetail__c,Late_Fee_Status__c,ExclusionReason__c
                                                      FROM BusinessLicenseApplication 
                                                      WHERE RecordType.DeveloperName =: BCMOH_Constants.blaRecType 
 													 AND Status =: BCMOH_Constants.sentBlaStatus 
