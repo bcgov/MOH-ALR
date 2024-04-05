@@ -6,7 +6,7 @@
                 <componentInstanceProperties>
                     <name>actionNames</name>
                     <valueList>
-                        <valueListItems>
+                                                <valueListItems>
                             <value>Visit.Add_Inspection_Task</value>
                             <visibilityRule>
                                 <criteria>
@@ -19,10 +19,21 @@
                         <valueListItems>
                             <value>CustomButton.Visit.Start_Risk_Assessment</value>
                             <visibilityRule>
+                                <booleanFilter>1 AND 2 AND 3</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.VisitType.Name}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>Compliance Monitoring Inspection</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!$Permission.CustomPermission.EHISInvestigator}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>true</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.CalculatedScore__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>0</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
@@ -41,8 +52,8 @@
                         </valueListItems>
                         <valueListItems>
                             <value>ChangeOwnerOne</value>
-                        </valueListItems>
-                                            </valueList>
+                                                </valueListItems>
+                    </valueList>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>collapsed</name>
