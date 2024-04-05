@@ -7,7 +7,7 @@
                 <componentName>runtime_approval_process:pendingApprovalCard</componentName>
                 <identifier>runtime_approval_process_pendingApprovalCard</identifier>
                 <visibilityRule>
-                    <booleanFilter>1 OR 2</booleanFilter>
+                    <booleanFilter>1 OR 2 OR 3</booleanFilter>
                     <criteria>
                         <leftValue>{!$Permission.CustomPermission.EHISAdminHomepage}</leftValue>
                         <operator>EQUAL</operator>
@@ -15,6 +15,11 @@
                     </criteria>
                     <criteria>
                         <leftValue>{!$Permission.CustomPermission.EHISLeadership}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>true</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!$Permission.CustomPermission.EHISRegistrarUser}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>true</rightValue>
                     </criteria>
@@ -328,8 +333,14 @@
                 <componentName>desktopDashboards:embeddedDashboard</componentName>
                 <identifier>desktopDashboards_embeddedDashboard</identifier>
                 <visibilityRule>
+                    <booleanFilter>1 OR 2</booleanFilter>
                     <criteria>
                         <leftValue>{!$Permission.CustomPermission.EHISLeadership}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>true</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!$Permission.CustomPermission.EHISRegistrarUser}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>true</rightValue>
                     </criteria>
