@@ -171,7 +171,7 @@ public with sharing class MassEmailController {
             try {
                 //fetch acc status and rec type from metadata
                 accDetails = BCMOH_UtilityClass.getAccRenewals(BCMOH_Constants.renewalName);
-                                //fetch account, bla details
+                //fetch account, bla details
                 //need to make query dynamic?
                 for(Account activeAccRec : [SELECT Id, Status__c, Name, 
                                             (SELECT Id, ContactId, Contact.Name, Contact.Email, PrimaryContact__c
@@ -194,7 +194,6 @@ public with sharing class MassEmailController {
                                             //AND Id IN: accIdSetTemp
                                            ]) {
                                                isValidAcc = true;//setting account as valid initially
-                                               
                                                //when valid renewal bla record is not available
                                                if(activeAccRec.BusinessLicenseApplicationAccount.size() == 0) {
                                                    isValidAcc = false;
@@ -262,7 +261,6 @@ public with sharing class MassEmailController {
                     }
                 }
                 //finally update bla records based on the err and success maps
-                //BCMOH_UtilityClass.updateBlaLateFeeStatus(blaErrMap,'Sent');
                 updateLateFeeBlaStatus();
             }
         catch(exception ex) {
@@ -408,7 +406,7 @@ public with sharing class MassEmailController {
                     emailBodyConst = emailTempRec.Body;
                     emailHtmlBody = emailTempRec.HtmlValue;//ALR-827 - for html body
                     emailHtmlBodyConst = emailTempRec.HtmlValue;//ALR-827 - for html body
-                                    }
+                }
                 else {
                     //set error when email template was not fetched
                     errMessage = templateId == NULL ? BCMOH_Constants.templateNameMissing+templateDetailName : '';
@@ -453,7 +451,7 @@ public with sharing class MassEmailController {
                     emailBodyConst = emailTempRec.Body;
                     emailHtmlBody = emailTempRec.HtmlValue;//ALR-827 - for html body
                     emailHtmlBodyConst = emailTempRec.HtmlValue;//ALR-827 - for html body
-                                    }
+                }
                 else {
                     //set error when email template was not fetched
                     errMessage = templateId == NULL ? BCMOH_Constants.templateNameMissing+templateDetailName : '';
@@ -483,7 +481,7 @@ public with sharing class MassEmailController {
                 orgWideAddr = BCMOH_UtilityClass.getOrgWideEmailAddress();
                 if(orgWideAddr != NULL) {
                     orgWideAddrId = orgWideAddr.Id;
-                                    }
+                }
                 else {
                     //set error when valid org wide email address is not available
                     errMessage = BCMOH_Constants.noOrgWideAddr;
@@ -516,7 +514,7 @@ public with sharing class MassEmailController {
                         contentVerIdSet.add(ContentDocWrapperRec.contentDocVerMap.get(docId));//add current version also to the list
                         //map's key value pair holds the whatId vs attachment ids per email
                         blaContentVerMap.put(blaId, contentVerIdSet);//set blaId-ContentVersionId map
-                                            }
+                    }
                 }
             }
         }
@@ -551,7 +549,7 @@ public with sharing class MassEmailController {
                                                       String sentDetails = BCMOH_Constants.emailSentToId+' '+accContactMap.get(msgRec.whatId).Contact.Email+
                                                           '. '+BCMOH_Constants.emailSentTo+' '+accContactMap.get(msgRec.whatId).Contact.Name+'. '+BCMOH_Constants.sentTime+' '+datetime.now().format();//add to const
                                                       blaSuccessMap.put(msgRec.whatId, sentDetails);
-                                                                                                        }
+                                                    }
                                               }
                                           }
                                           catch(exception ex) {
@@ -570,16 +568,16 @@ public with sharing class MassEmailController {
                 BusinessLicenseApplication blaRec = new BusinessLicenseApplication(
                     Id = blaId,
                     Status = BCMOH_Constants.errorBlaStatus,
-                    RenewalError__c = errMsg);
-                blaUpdateList.add(blaRec);
+                    RenewalDetail__c = errMsg);
+                    blaUpdateList.add(blaRec);
             }
             //loop through bla success map
             for(Id blaId : blaSuccessMap.keySet()) {
                 BusinessLicenseApplication blaRec = new BusinessLicenseApplication(
                     Id = blaId,
                     Status = BCMOH_Constants.sentBlaStatus,
-                    RenewalError__c = blaSuccessMap.get(blaId));
-                blaUpdateList.add(blaRec);
+                    RenewalDetail__c = blaSuccessMap.get(blaId));
+                    blaUpdateList.add(blaRec);
             }
             if(!blaUpdateList.isEmpty() && BusinessLicenseApplication.sObjectType.getDescribe().isUpdateable()) {
                 Database.Update(blaUpdateList, false);//add error logs for failed records               
@@ -601,7 +599,7 @@ public with sharing class MassEmailController {
     }
 
     public Static List<BusinessLicenseApplication> blaErrQuery(Id blaId) {
-        return [SELECT RenewalError__c FROM BusinessLicenseApplication WHERE Id =:blaId LIMIT 1];
+        return [SELECT RenewalDetail__c FROM BusinessLicenseApplication WHERE Id =:blaId LIMIT 1];
     }
     
     
@@ -614,16 +612,16 @@ public with sharing class MassEmailController {
                
             //loop through bla error map
             for(Id blaId : blaErrMap.keySet()) {
-                                BLAquery=blaErrQuery(blaId);
+                BLAquery=blaErrQuery(blaId);
                 //truncate the err message if length more than 255 chars
                 String lateFeeMsg = blaErrMap.get(blaId).length() > 255 ? blaErrMap.get(blaId).Substring(0,255) : blaErrMap.get(blaId);
                 String errMsg = blaErrMap.get(blaId);
-                errMsg = BLAquery[0].RenewalError__c != NULL ? BLAquery[0].RenewalError__c + ' ; ' + lateFeeMsg : lateFeeMsg;
+                errMsg = BLAquery[0].RenewalDetail__c != NULL ? BLAquery[0].RenewalDetail__c + ' ; ' + lateFeeMsg : lateFeeMsg;
                 BusinessLicenseApplication blaRec = new BusinessLicenseApplication(
                     Id = blaId,
                     Late_Fee_Status__c = BCMOH_Constants.errorBlaStatus,
-                    RenewalError__c = errMsg);
-                blaUpdateList.add(blaRec);
+                    RenewalDetail__c = errMsg);
+                    blaUpdateList.add(blaRec);
             }
             //loop through bla success map
             
@@ -634,21 +632,31 @@ public with sharing class MassEmailController {
                 accToUpdate[0].Status__c=BCMOH_Constants.AccStatus;
                 
                 String lateFeeMsg = blaSuccessMap.get(blaId).length() > 255 ? blaSuccessMap.get(blaId).Substring(0,255) : blaSuccessMap.get(blaId);
-                String succMsg = blaSuccessMap.get(blaId);
-                succMsg = BLAquery[0].RenewalError__c != NULL ? BLAquery[0].RenewalError__c + ' ; ' + lateFeeMsg : lateFeeMsg;
-               
-                 
+                String succMsg;
+                if(String.isEmpty(BLAquery[0].RenewalDetail__c)){
+                    succMsg = lateFeeMsg;
+                }
+                              
+                else
+                {
+                   succMsg = BLAquery[0].RenewalDetail__c + ' ; ' + LatefeeMsg;
+                }
+                  blaSuccessMap.put(blaid,succMsg);
                 BusinessLicenseApplication blaRec = new BusinessLicenseApplication(
                     Id = blaId,
+                     
                     Late_Fee_Status__c = BCMOH_Constants.sentBlaStatus,
-                    RenewalError__c = succMsg);
+                    
+                    RenewalDetail__c = blaSuccessMap.get(blaId));
+                
                 blaUpdateList.add(blaRec);
+                
             }
             
             if(!blaUpdateList.isEmpty() && BusinessLicenseApplication.sObjectType.getDescribe().isUpdateable()) {
-                                Database.Update(blaUpdateList, false);//add error logs for failed records 
+                Database.Update(blaUpdateList, false);//add error logs for failed records 
                 Database.Update(accToUpdate, false);
-                            }
+            }
             
             
         }
