@@ -28,8 +28,7 @@ public with sharing class RenewalBlaTableController {
                                                          blaMap.put(blaRec.Id, blaRec);
                                                          blaList.add(blaRec);
                                                      }
-            system.debug('qblaaa size '+blaMap.values().size()+' '+blaList);
-        }
+                    }
         catch(exception ex) {
             LogService.logAndPublish(className, 'getBlaRecs', '', ex);
             system.debug('qblaaa im caught getBlaRecs'+ex.getMessage());
@@ -47,12 +46,11 @@ public with sharing class RenewalBlaTableController {
                                                                    List<BusinessLicenseApplication>.class);
             //ALR-820 - if status is updated to Cancelled or Excluded only then update the records
             for(BusinessLicenseApplication blaRec : blaList) {
-                if(BCMOH_Constants.renewalTableUpdateStatus.contains(blaRec.Status)) {
-                    blaUpdateList.add(blaRec);
-                }
+                        if(BCMOH_Constants.renewalTableUpdateStatus.contains(blaRec.Status) || blaRec.ExclusionReason__c != NULL){
+                        blaUpdateList.add(blaRec); 
+            }                
             }
             if(!blaUpdateList.isEmpty() && BusinessLicenseApplication.SObjectType.getDescribe().isUpdateable()) {
-                system.debug('dxbha 2'+blaUpdateList);
                 Database.Update(blaUpdateList, false);
                 hasUpdated = true;
             }
