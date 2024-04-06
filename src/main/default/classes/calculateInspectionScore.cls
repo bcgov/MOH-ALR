@@ -39,7 +39,7 @@ global with sharing class calculateInspectionScore implements Callable {
         
         try {
             // Fetch all Regulatory Code Violations for the given Inspection record
-            List<RegulatoryCodeViolation> rcvList = [SELECT Id, InspectionId, Scope__c, Severity__c, InspectionAssmntIndId, UserScore__c
+            List<RegulatoryCodeViolation> rcvList = [SELECT Id, InspectionId, Scope__c, Severity__c, InspectionAssmntIndId, UserScore__c, InspectionAssmntInd.AssessmentIndDefinition.Category__c
                                                      FROM RegulatoryCodeViolation WHERE InspectionId =: inspectionId];
             
             // Initialize a map to store top Regulatory Code Violation scores category-wise
@@ -47,6 +47,7 @@ global with sharing class calculateInspectionScore implements Callable {
             List<Decimal> scoresList = new List<Decimal>();
             List<Decimal> top3Scores = new List<Decimal>();
             Decimal score;
+            string categoryKey;
             Decimal totalScore = 0;
             // Loop through each Regulatory Code Violation
             Map<Id, Id> insMap = new Map<Id, Id>();
@@ -54,51 +55,28 @@ global with sharing class calculateInspectionScore implements Callable {
             for(RegulatoryCodeViolation rcv : rcvList){
                 insMap.put(rcv.Id ,rcv.InspectionAssmntIndId);
             }
-            List<InspectionAssessmentInd> inspectionAssmtInd = [SELECT AssessmentIndDefinitionId
-                                                                  FROM InspectionAssessmentInd
-                                                                  WHERE Id =: insMap.values()];
-            for(InspectionAssessmentInd insAssemInd : inspectionAssmtInd){
-                assessmentMap.put(insAssemInd.Id, insAssemInd.AssessmentIndDefinitionId);
-            }
-            
-            List<AssessmentIndicatorDefinition> assmtIndDef = [SELECT Name, Category__c 
-                                                                 FROM AssessmentIndicatorDefinition
-                                                                 WHERE Id =: assessmentMap.values()];
-            
             
             for (RegulatoryCodeViolation rcv : rcvList) {
-
-                // Fetch Scope, Severity, and Score from Regulatory Code Violation
-                
-                if(rcv.UserScore__c != NULL){
+				if(rcv.UserScore__c != NULL){
                     score = rcv.UserScore__c;
-                }
-                else{
+                    categoryKey = rcv.InspectionAssmntInd.AssessmentIndDefinition.Category__c;
+                } else {
                     score = 0;
                 }
-            }
-                // Create a key for the top3ScoresMap based on InspectionAssessmentInd and Category
-                
-                // Initialize the list if not already present in the map
-                for(AssessmentIndicatorDefinition asmtDef : assmtIndDef){
-               string categoryKey = asmtDef.Category__c;
-                    if (!top3ScoresMap.containsKey(categoryKey)) {
-                    top3ScoresMap.put(categoryKey, new List<Decimal>());
+                if (!top3ScoresMap.containsKey(categoryKey)) {
+                	top3ScoresMap.put(categoryKey, new List<Decimal>());
                 }
-                
                 // Add the User Score to the list
                 top3ScoresMap.get(categoryKey).add(score);
-                
                 // Keep only the top 3 scores
                 scoresList = top3ScoresMap.get(categoryKey);
                 
                 scoresList.sort();
+
                 if (scoresList.size() > 3) {
                     scoresList.remove(0);
                 }
             }
-                
-            
             // Initialize a map to store the total scores for each category
             Map<String, Decimal> categoryScoreMap = new Map<String, Decimal>();
             // Loop through the top3ScoresMap and calculate the total for each category
