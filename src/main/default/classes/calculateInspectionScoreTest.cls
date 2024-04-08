@@ -12,14 +12,16 @@ public class calculateInspectionScoreTest {
         InspectionType insType = new InspectionType();
         insType.Name = 'Compliance Monitoring Inspection';
         insert insType;
-                
+        
+
+        
         //insert Location
         Schema.Location loc = new Schema.Location();
         loc.Name = 'U.S. 101N';
 		loc.Longitude = 28.635308;
 		loc.Latitude = 28.635308;
 		insert loc;
-        
+                
         Visit inspect = new Visit();
         inspect.AccountId = residenceRec1.Id;
         inspect.VisitTypeId = insType.Id;
@@ -58,7 +60,7 @@ public class calculateInspectionScoreTest {
         //insert RegulatoryCodeViolation
         RegulatoryCodeViolation rcv = new RegulatoryCodeViolation();
         rcv.Scope__c = 'Widespread';
-        rcv.Severity__c = 'Minimal Harm';
+        //rcv.Severity__c = 'Minimal Harm';
         rcv.DateCreated = System.today();
         rcv.InspectionAssmntIndId = insassestind.Id;
         rcv.UserScore__c = 15;
@@ -67,7 +69,7 @@ public class calculateInspectionScoreTest {
         
         RegulatoryCodeViolation rcv1 = new RegulatoryCodeViolation();
         rcv1.Scope__c = 'Widespread';
-        rcv1.Severity__c = 'Minimal Harm';
+        //rcv1.Severity__c = 'Minimal Harm';
         rcv1.DateCreated = System.today();
         rcv1.InspectionAssmntIndId = insassestind.Id;
         rcv1.UserScore__c = 15;
