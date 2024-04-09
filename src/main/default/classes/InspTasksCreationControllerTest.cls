@@ -48,8 +48,8 @@ public class InspTasksCreationControllerTest {
         Insert insp;
         Visit inspec = [Select id from Visit where AccountId =:acc.id Limit 1];
         
-        ActionPlanTemplate apt1 = New ActionPlanTemplate(ActionPlanType='',TargetEntityType='Visit',Name='SN Application Inspection',UniqueName='SN_Application_Inspection_ffafb54c_e85a_11ee_9032_cbd0374f6064' );
-        ActionPlanTemplate apt2 = New ActionPlanTemplate(ActionPlanType='',TargetEntityType='Visit',Name='MH Application Inspection',UniqueName='MH_Application_Inspection_42a1e36e_e84f_11ee_8eb2_2993cc7f45f7' );
+        ActionPlanTemplate apt1 = New ActionPlanTemplate(ActionPlanType='',Name='SN Application Inspection',UniqueName='SN_Application_Inspection_ffafb54c_e85a_11ee_9032_cbd0374f6064' );
+        ActionPlanTemplate apt2 = New ActionPlanTemplate(ActionPlanType='',Name='MH Application Inspection',UniqueName='MH_Application_Inspection_42a1e36e_e84f_11ee_8eb2_2993cc7f45f7' );
         insert new List<ActionPlanTemplate>{apt1,apt2};
             List<ActionPlanTemplate> apt = [Select id,ActionPlanType,Status from ActionPlanTemplate Limit 3];
         
@@ -57,12 +57,12 @@ public class InspTasksCreationControllerTest {
         ActionPlanTemplateVersion  aptv2 = new ActionPlanTemplateVersion (Status='Final',Name='MH Application Inspection',ActionPlanTemplateId=apt[1].id); 
         insert new List<ActionPlanTemplateVersion>{aptv1,aptv2};  
             List<ActionPlanTemplateVersion> aptv =[Select id from ActionPlanTemplateVersion  Limit 3];
-        system.debug('aptv'+aptv);
+       
         ActionPlanTemplateItem apti1 = new ActionPlanTemplateItem (Name ='Test1',ActionPlanTemplateVersionId = aptv[0].id,ItemEntityType ='AssessmentTask', UniqueName='X2_Application_Fee_01d0e828_b560_11ee_a19c_358c7fbe009f');
         ActionPlanTemplateItem apti2 = new ActionPlanTemplateItem (Name ='Test2',ActionPlanTemplateVersionId = aptv[1].Id,ItemEntityType ='AssessmentTask', UniqueName='X6_References_cc8ad63f_b561_11ee_a19c_55f955ca2de8' );
         insert new List<ActionPlanTemplateItem>{apti1,apti2};
             List <ActionPlanTemplateItem> apti = [Select Id from ActionPlanTemplateItem Limit 3 ];
-        system.debug('apti'+apti);
+        
         List<InspTasksCreationController.FlowInputs> flowInputs = new List<InspTasksCreationController.FlowInputs>();
         InspTasksCreationController.FlowInputs input = new InspTasksCreationController.FlowInputs();
         input.ATIId = new List<String>{apti[0].id, apti[1].id};
