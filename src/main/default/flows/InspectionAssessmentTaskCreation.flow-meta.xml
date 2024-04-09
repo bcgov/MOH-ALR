@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <name>APTItemIds</name>
-        <label>APTItemIds</label>
+        <name>AssessmentTaskController</name>
+        <label>AssessmentTaskController</label>
         <locationX>50</locationX>
         <locationY>1595</locationY>
-        <actionName>InspectionTaskRecordsCreationController</actionName>
+        <actionName>InspTasksCreationController</actionName>
         <actionType>apex</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
@@ -20,7 +20,7 @@
                 <elementReference>GetVisitRecord.Id</elementReference>
             </value>
         </inputParameters>
-        <nameSegment>InspectionTaskRecordsCreationController</nameSegment>
+        <nameSegment>InspTasksCreationController</nameSegment>
         <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
@@ -190,7 +190,7 @@
             <label>Action Plan Template Found</label>
         </rules>
     </decisions>
-    <description>ALR-1230</description>
+    <description>ALR-1230 V2</description>
     <environments>Default</environments>
     <interviewLabel>InspectionAssessmentTaskCreation {!$Flow.CurrentDateTime}</interviewLabel>
     <label>InspectionAssessmentTaskCreation</label>
@@ -205,7 +205,7 @@
             <targetReference>ActionPlanItemIds</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
-            <targetReference>APTItemIds</targetReference>
+            <targetReference>AssessmentTaskController</targetReference>
         </noMoreValuesConnector>
     </loops>
     <processMetadataValues>
