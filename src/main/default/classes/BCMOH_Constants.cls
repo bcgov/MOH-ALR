@@ -2,6 +2,7 @@ public class BCMOH_Constants {
      public static final String IM_INPUT = 'input';
      public static final String IM_OUTPUT = 'output';
      public static final String IM_OPTIONS = 'options';
+     public static final String IM_Inspection = 'InspectionId';
     public static final String IM_ADDUNITBLOCK = 'AddUnitBlock';
     //ALR-36 - renewals
     public Final Static String renewalName = 'LicenseRenewalCriteria';
@@ -18,6 +19,7 @@ public class BCMOH_Constants {
     public Final Static String lateFeeTemplate = 'LateFeeTemplate';
     public Final Static String templatePurposeDetails = 'LateFee';
     public Final Static String AccStatus = 'Registered Active Pending Renewal';
+
     //ALR-40
     public Final Static String transFeeRecTypeId = Schema.getGlobalDescribe().get('RegulatoryTrxnFee').getDescribe().getRecordTypeInfosByDeveloperName().get('TransactionFee').getRecordTypeId();
     public Final Static String unitFeeType = 'Unit Fee';
@@ -80,11 +82,12 @@ public class BCMOH_Constants {
     public Final Static String INSERTMERGERASSETMETHODNAME = 'insertMergedAssets';
     public Final Static String UPDATEPARENTONCHILDASSETMETHODNAME = 'updateParentOnChildAssets';
     public Final Static String lateFee = 'Late Fee'; // ALR-997
-    //ALR-820
+        //ALR-820
     public Final Static List<String> renewalTableUpdateStatus = new List<String>{'Excluded', 'Cancelled'};
     // ALR-996
     public Final Static List<String> FeeTypeStatuses = new List<String>{'Late Fee', 'Renewal Unit Fee'};
 	public Final Static List<String> LateFeeStatuses = new List<String>{'', 'Ready to Send'};  
-    public final Static String EXCEPMESSAGE='This is exception for testing and code coverage';
-        
+    public final Static String EXCEPMESSAGE = 'This is exception for testing and code coverage';
+    public final Static String ItemEntityName = 'AssessmentTask.AssessmentTaskDefinitionId';
+	public final Static String TaskType = 'InspectionChecklist';
 }
