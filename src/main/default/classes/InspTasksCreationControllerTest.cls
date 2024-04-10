@@ -47,18 +47,18 @@ public class InspTasksCreationControllerTest {
         Insert insp;
         Visit inspec = [Select id from Visit where AccountId =:acc.id Limit 1];
         
-        ActionPlanTemplate apt1 = New ActionPlanTemplate(ActionPlanType='',Name='SN Application Inspection',UniqueName='SN_Application_Inspection_ffafb54c_e85a_11ee_9032_cbd0374f6064' );
+        ActionPlanTemplate apt1 = New ActionPlanTemplate(ActionPlanType='Retail', TargetEntityType = 'Visit', Name='SN Application Inspection1', UniqueName='SN_Application_Inspection1_ffafb54c_e85a_11ee_9032_cbd0374f6064');
         insert apt1;
-        ActionPlanTemplate apt2 = New ActionPlanTemplate(ActionPlanType='',Name='MH Application Inspection',UniqueName='MH_Application_Inspection_42a1e36e_e84f_11ee_8eb2_2993cc7f45f7' );
+        ActionPlanTemplate apt2 = New ActionPlanTemplate(ActionPlanType='Retail', TargetEntityType = 'Visit', Name='MH Application Inspection1',UniqueName='MH_Application_Inspection1_42a1e36e_e84f_11ee_8eb2_2993cc7f45f7');
         insert apt2;
         List<ActionPlanTemplate> actiontemp = new List<ActionPlanTemplate>();
         actiontemp.add(apt1);
         actiontemp.add(apt2);
             List<ActionPlanTemplate> apt = [Select id,ActionPlanType,Status from ActionPlanTemplate WHERE Id =: apt1.Id LIMIT 3];
         
-        ActionPlanTemplateVersion  aptv1 = new ActionPlanTemplateVersion (Status='Final',Name='SN Application Inspection',ActionPlanTemplateId=apt1.id);
+        ActionPlanTemplateVersion  aptv1 = new ActionPlanTemplateVersion (Name='SN Application Inspection1',ActionPlanTemplateId=apt1.id);
         insert aptv1;
-        ActionPlanTemplateVersion  aptv2 = new ActionPlanTemplateVersion (Status='Final',Name='MH Application Inspection',ActionPlanTemplateId=apt2.id); 
+        ActionPlanTemplateVersion  aptv2 = new ActionPlanTemplateVersion (Name='MH Application Inspection1',ActionPlanTemplateId=apt2.id); 
         insert aptv2;
         List<ActionPlanTemplateVersion> actiontempversion = new List<ActionPlanTemplateVersion>();
         actiontempversion.add(aptv1);
@@ -66,9 +66,9 @@ public class InspTasksCreationControllerTest {
         
         List<ActionPlanTemplateVersion> aptv =[Select id from ActionPlanTemplateVersion WHERE Id =: aptv1.Id Limit 3];
        
-        ActionPlanTemplateItem apti1 = new ActionPlanTemplateItem (Name ='Test1',ActionPlanTemplateVersionId = aptv1.id,ItemEntityType ='AssessmentTask', UniqueName='X2_Application_Fee_01d0e828_b560_11ee_a19c_358c7fbe009f');
+        ActionPlanTemplateItem apti1 = new ActionPlanTemplateItem (Name ='Test1',ActionPlanTemplateVersionId = aptv1.id,ItemEntityType ='AssessmentTask', UniqueName='X2_Application_Fee1_01d0e828_b560_11ee_a19c_358c7fbe009f');
         insert apti1;
-        ActionPlanTemplateItem apti2 = new ActionPlanTemplateItem (Name ='Test2',ActionPlanTemplateVersionId = aptv2.Id,ItemEntityType ='AssessmentTask', UniqueName='X6_References_cc8ad63f_b561_11ee_a19c_55f955ca2de8' );
+        ActionPlanTemplateItem apti2 = new ActionPlanTemplateItem (Name ='Test2',ActionPlanTemplateVersionId = aptv2.Id,ItemEntityType ='AssessmentTask', UniqueName='X6_References1_cc8ad63f_b561_11ee_a19c_55f955ca2de8' );
         insert apti2;
         List<ActionPlanTemplateItem> actiontempitem = new List<ActionPlanTemplateItem>();
         actiontempitem.add(apti1);
