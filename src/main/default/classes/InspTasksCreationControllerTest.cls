@@ -1,4 +1,4 @@
-@isTest
+@IsTest(SeeAllData=true)
 public class InspTasksCreationControllerTest {
     public static testMethod void testInsert(){
         List<Account> accList = new List<Account>();
@@ -31,7 +31,7 @@ public class InspTasksCreationControllerTest {
             AccSet.add(acc3.Id);
         }
         InspectionType insType = new InspectionType();
-        insType.Name = 'Compliance Monitoring Inspection';
+        insType.Name = 'Compliance Monitoring Inspection1';
         insert insType;
         Map<String, Id> mapInspectionType = new Map<String, Id>();
         mapInspectionType.put('InspectionType', insType.Id);
@@ -46,19 +46,21 @@ public class InspTasksCreationControllerTest {
         insp.VisitTypeId =insType.Id;
         Insert insp;
         Visit inspec = [Select id from Visit where AccountId =:acc.id Limit 1];
-        
+        system.debug('inspec'+inspec);
+    /*    
         ActionPlanTemplate apt1 = New ActionPlanTemplate(ActionPlanType='Retail', TargetEntityType = 'Visit', Name='SN Application Inspection1', UniqueName='SN_Application_Inspection1_ffafb54c_e85a_11ee_9032_cbd0374f6064');
         insert apt1;
         ActionPlanTemplate apt2 = New ActionPlanTemplate(ActionPlanType='Retail', TargetEntityType = 'Visit', Name='MH Application Inspection1',UniqueName='MH_Application_Inspection1_42a1e36e_e84f_11ee_8eb2_2993cc7f45f7');
         insert apt2;
         List<ActionPlanTemplate> actiontemp = new List<ActionPlanTemplate>();
         actiontemp.add(apt1);
-        actiontemp.add(apt2);
-            List<ActionPlanTemplate> apt = [Select id,ActionPlanType,Status from ActionPlanTemplate WHERE Id =: apt1.Id LIMIT 3];
-        
-        ActionPlanTemplateVersion  aptv1 = new ActionPlanTemplateVersion (Name='SN Application Inspection1',ActionPlanTemplateId=apt1.id);
+        actiontemp.add(apt2); */
+        String likeValue = '%Application%Inspection%';
+            List<ActionPlanTemplate> apt = [Select id,ActionPlanType,Status from ActionPlanTemplate WHERE Name Like :likevalue LIMIT 3];
+        System.debug('apt'+apt);
+        ActionPlanTemplateVersion  aptv1 = new ActionPlanTemplateVersion (Name='SN Application Inspection1',ActionPlanTemplateId=apt[0].id);
         insert aptv1;
-        ActionPlanTemplateVersion  aptv2 = new ActionPlanTemplateVersion (Name='MH Application Inspection1',ActionPlanTemplateId=apt2.id); 
+        ActionPlanTemplateVersion  aptv2 = new ActionPlanTemplateVersion (Name='MH Application Inspection1',ActionPlanTemplateId=apt[1].id); 
         insert aptv2;
         List<ActionPlanTemplateVersion> actiontempversion = new List<ActionPlanTemplateVersion>();
         actiontempversion.add(aptv1);
