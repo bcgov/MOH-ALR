@@ -90,5 +90,4 @@ public class BCMOH_Constants {
     public final Static String EXCEPMESSAGE = 'This is exception for testing and code coverage';
     public final Static String ItemEntityName = 'AssessmentTask.AssessmentTaskDefinitionId';
 	public final Static String TaskType = 'InspectionChecklist';
-    public final Static String AssessmentTskName = 'Employees/Staff';
 }

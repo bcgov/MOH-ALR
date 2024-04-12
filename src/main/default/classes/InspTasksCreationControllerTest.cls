@@ -1,3 +1,9 @@
+/**
+* @Name              : InspTasksCreationControllerTest
+* @Description       : Test class for Controller class for Inspection Assessment Indicator Creation
+* @Author            : Anilkumar (Accenture)
+* @StoryNo           : ALR-1230
+**/
 @IsTest(SeeAllData=true)
 public class InspTasksCreationControllerTest {
     public static testMethod void testInsert(){
@@ -46,11 +52,9 @@ public class InspTasksCreationControllerTest {
         insp.VisitTypeId =insType.Id;
         Insert insp;
         Visit inspec = [Select id from Visit where AccountId =:acc.id Limit 1];
-        system.debug('inspec'+inspec);
 
         String likeValue = '%Application%Inspection%';
             List<ActionPlanTemplate> apt = [Select id,ActionPlanType,Status from ActionPlanTemplate WHERE Name Like :likevalue and Status ='Final' LIMIT 3];
-        System.debug('apt'+apt);
 
         List<ActionPlanTemplateVersion> aptv =[Select id from ActionPlanTemplateVersion WHERE ActionPlanTemplateId =: apt[0].Id Limit 3];
 
@@ -74,7 +78,7 @@ public class InspTasksCreationControllerTest {
 
         List<AssessmentTask> ATstoInsert = new List<AssessmentTask>();
         AssessmentTask  newAssessmentTask = new AssessmentTask();
-        newAssessmentTask.Name = BCMOH_Constants.AssessmentTskName;
+        newAssessmentTask.Name = atds[0].Category__c;
         newAssessmentTask.AssessmentTaskDefinitionId = atds[0].Id;
         newAssessmentTask.ParentId = insp.Id;
         newAssessmentTask.TaskType = BCMOH_Constants.TaskType;
