@@ -82,7 +82,7 @@ public class BCMOH_Constants {
     public Final Static String INSERTMERGERASSETMETHODNAME = 'insertMergedAssets';
     public Final Static String UPDATEPARENTONCHILDASSETMETHODNAME = 'updateParentOnChildAssets';
     public Final Static String lateFee = 'Late Fee'; // ALR-997
-        //ALR-820
+    //ALR-820
     public Final Static List<String> renewalTableUpdateStatus = new List<String>{'Excluded', 'Cancelled'};
     // ALR-996
     public Final Static List<String> FeeTypeStatuses = new List<String>{'Late Fee', 'Renewal Unit Fee'};
@@ -90,4 +90,5 @@ public class BCMOH_Constants {
     public final Static String EXCEPMESSAGE = 'This is exception for testing and code coverage';
     public final Static String ItemEntityName = 'AssessmentTask.AssessmentTaskDefinitionId';
 	public final Static String TaskType = 'InspectionChecklist';
+    public final Static String AssessmentTskName = 'Employees/Staff';
 }
