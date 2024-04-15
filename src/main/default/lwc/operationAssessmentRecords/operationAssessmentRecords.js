@@ -26,7 +26,7 @@ const columns = [
         context: { fieldName: 'Id' }
         }
     },
-    { label: 'Comments', fieldName: 'comments', type: 'text', editable: true }
+    { label: 'Comments*', fieldName: 'comments', type: 'text', editable: true }
 ];
 
 export default class operationAssessmentRecords extends OmniscriptBaseMixin(NavigationMixin(LightningElement)) {
