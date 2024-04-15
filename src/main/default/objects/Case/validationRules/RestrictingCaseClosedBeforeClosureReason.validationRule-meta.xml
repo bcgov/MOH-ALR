@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RestrictingCaseClosedBeforeClosureReason</fullName>
+    <active>true</active>
+    <description>Reportable Incident &amp; Complaint Cases cannot be closed without Closure Reason</description>
+    <errorConditionFormula>AND(
+  NOT($Permission.EHISBypassValidationRuleCustomPermission),
+  ISPICKVAL(Status, &apos;Closed&apos;),
+  ISPICKVAL(ClosureReason__c, &apos;&apos;),
+  OR(
+    RecordType.DeveloperName = &apos;ReportableIncident&apos;,
+    RecordType.DeveloperName = &apos;PublicComplaintCase&apos;
+  )
+)</errorConditionFormula>
+    <errorMessage>Provide Closure Reason before closing this record</errorMessage>
+</ValidationRule>
