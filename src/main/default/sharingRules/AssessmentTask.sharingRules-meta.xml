@@ -1,10 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
-    <sharingOwnerRules>
-        <fullName>AssessmentTaskSharingRuleALRAllUsersPG</fullName>
+    <sharingCriteriaRules>
+        <fullName>AssessmentTaskSharingRuleALRMMHAUser</fullName>
         <accessLevel>Read</accessLevel>
-        <description>Read access given to Assessment Task Object to All Users as part of ALR-50</description>
-        <label>Assessment Task Sharing Rule-ALR All Users PG</label>
+        <label>Assessment Task SharingRule ALR MMHA User</label>
+        <sharedTo>
+            <group>ALR_MMHA_Users_PG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>notEqual</operation>
+            <value></value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingOwnerRules>
+        <fullName>ALR_Sharing_for_Owner</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>ALR Sharing for Owner</label>
         <sharedTo>
             <group>ALRAllUsersPG</group>
         </sharedTo>
