@@ -8,13 +8,11 @@
             <axisBinding>y</axisBinding>
             <column>RowCount</column>
         </chartSummaries>
-        <chartType>VerticalColumnStacked</chartType>
+        <chartType>VerticalColumn</chartType>
         <enableHoverLabels>false</enableHoverLabels>
         <expandOthers>true</expandOthers>
-        <groupingColumn>Visit$Account.Rating</groupingColumn>
-        <legendPosition>Right</legendPosition>
+        <groupingColumn>RegulatoryCodeViolation$CreatedDate</groupingColumn>
         <location>CHART_BOTTOM</location>
-        <secondaryGroupingColumn>Visit$Account.HealthAuthority__c</secondaryGroupingColumn>
         <showAxisLabels>true</showAxisLabels>
         <showPercentage>false</showPercentage>
         <showTotal>false</showTotal>
@@ -27,64 +25,60 @@
         <titleSize>18</titleSize>
     </chart>
     <columns>
-        <field>Visit.AssessmentTasks$Name</field>
+        <field>RegulatoryCodeViolation$Inspection.Account</field>
     </columns>
     <columns>
-        <field>Visit$Id</field>
+        <field>RegulatoryCodeViolation$Inspection</field>
     </columns>
     <columns>
-        <field>Visit$Account</field>
+        <field>RegulatoryCodeViolation$InspectionAssmntInd.AssessmentTask</field>
     </columns>
     <columns>
-        <field>Visit$Account.LicenseType__c</field>
+        <field>RegulatoryCodeViolation$Status</field>
     </columns>
     <columns>
-        <field>Visit$VisitType</field>
+        <field>RegulatoryCodeViolation$RegulatoryCode</field>
     </columns>
     <columns>
-        <field>Visit$InspectionMethod__c</field>
+        <field>RegulatoryCodeViolation$Name</field>
     </columns>
     <columns>
-        <field>Visit$PlannedVisitStartTime</field>
+        <field>RegulatoryCodeViolation$DateCreated</field>
     </columns>
     <columns>
-        <field>Visit$Status</field>
+        <field>RegulatoryCodeViolation$DateResolved</field>
     </columns>
     <columns>
-        <field>Visit$Visitor</field>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>RegulatoryCodeViolation$DaysOpen</field>
     </columns>
-    <filter>
-        <criteriaItems>
-            <column>Visit$VisitType</column>
-            <columnToColumn>false</columnToColumn>
-            <isUnlocked>true</isUnlocked>
-            <operator>equals</operator>
-            <value>Compliance Monitoring Inspection</value>
-        </criteriaItems>
-    </filter>
-    <format>Matrix</format>
-    <groupingsAcross>
-        <dateGranularity>Day</dateGranularity>
-        <field>Visit$Account.Rating</field>
-        <sortOrder>Asc</sortOrder>
-    </groupingsAcross>
+    <columns>
+        <field>RegulatoryCodeViolation$CorrectiveActionDescription</field>
+    </columns>
+    <columns>
+        <field>RegulatoryCodeViolation$Inspection.VisitPriority</field>
+    </columns>
+    <columns>
+        <field>RegulatoryCodeViolation$Priority</field>
+    </columns>
+    <format>Summary</format>
     <groupingsDown>
-        <dateGranularity>Day</dateGranularity>
-        <field>Visit$Account.HealthAuthority__c</field>
+        <dateGranularity>Month</dateGranularity>
+        <field>RegulatoryCodeViolation$CreatedDate</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
-    <name>Rate of Operator Compliance</name>
+    <name>MMHA Non-Compliant Issues Report</name>
     <params>
         <name>co</name>
         <value>1</value>
     </params>
-    <reportType>Inspection_Report_Type__c</reportType>
+    <reportType>Violations_with_Visits__c</reportType>
     <scope>organization</scope>
     <showDetails>true</showDetails>
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>true</showSubTotals>
     <timeFrameFilter>
-        <dateColumn>Visit$PlannedVisitStartTime</dateColumn>
+        <dateColumn>RegulatoryCodeViolation$CreatedDate</dateColumn>
         <interval>INTERVAL_CUSTOM</interval>
     </timeFrameFilter>
 </Report>
