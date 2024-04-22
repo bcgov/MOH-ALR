@@ -447,7 +447,7 @@ public with sharing class ServerSideDocumentGenerationController {
         }
              }
         catch(exception ex) {
-            LogService.logAndPublish(className, 'startDocGenProcess', '', ex);
+            LogService.logAndPublish(className, 'startDocGenProcessLateFee', '', ex);
         }
     }
 
