@@ -6,7 +6,7 @@
 ***********************************************************************************************/
 trigger RegulatoryTrxnFeeTrigger on RegulatoryTrxnFee (before insert, before update, after insert, after update, before delete, after delete, after undelete) {
      TriggerHandler handler = new RegulatoryTrxnFeeTriggerHandler();
-     ALR_Trigger_Setting__mdt triggerSettingObj = ALR_Trigger_Setting__mdt.getInstance('AccountTrigger');
+     ALR_Trigger_Setting__mdt triggerSettingObj = ALR_Trigger_Setting__mdt.getInstance('RegulatoryTrxnFeeTrigger');
      switch on Trigger.operationType {
          when BEFORE_INSERT {
              if(triggerSettingObj.Is_Run_on_Before_Insert__c){

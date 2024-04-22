@@ -1,8 +1,9 @@
 /**********************************************************************************************
 * @Author:Accenture_ALR Dev Team   
 * @Date:       
-* @Description: The purpose of this Class is to is to create Inspection Records
-* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
+* @Description: The purpose of this Class is to create Inspection Records
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
+                           ALR-928             Komal 
 ***********************************************************************************************/
 public with sharing class AccountHelper {
     static String className = 'AccountHelper';
