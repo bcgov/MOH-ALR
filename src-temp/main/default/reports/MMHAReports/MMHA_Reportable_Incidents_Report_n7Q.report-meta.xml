@@ -8,17 +8,17 @@
             <axisBinding>y</axisBinding>
             <column>RowCount</column>
         </chartSummaries>
-        <chartType>VerticalColumnStacked</chartType>
+        <chartType>VerticalColumnGrouped</chartType>
         <enableHoverLabels>false</enableHoverLabels>
         <expandOthers>true</expandOthers>
-        <groupingColumn>Visit$Account.Rating</groupingColumn>
+        <groupingColumn>Account.HealthAuthority__c</groupingColumn>
         <legendPosition>Right</legendPosition>
         <location>CHART_BOTTOM</location>
-        <secondaryGroupingColumn>Visit$Account.HealthAuthority__c</secondaryGroupingColumn>
+        <secondaryGroupingColumn>Case.TypeOfIncident__c</secondaryGroupingColumn>
         <showAxisLabels>true</showAxisLabels>
         <showPercentage>false</showPercentage>
         <showTotal>false</showTotal>
-        <showValues>false</showValues>
+        <showValues>true</showValues>
         <size>Medium</size>
         <summaryAxisRange>Auto</summaryAxisRange>
         <textColor>#000000</textColor>
@@ -27,64 +27,71 @@
         <titleSize>18</titleSize>
     </chart>
     <columns>
-        <field>Visit.AssessmentTasks$Name</field>
+        <field>ACCOUNT.NAME</field>
     </columns>
     <columns>
-        <field>Visit$Id</field>
+        <field>CASE_NUMBER</field>
     </columns>
     <columns>
-        <field>Visit$Account</field>
+        <field>STATUS</field>
     </columns>
     <columns>
-        <field>Visit$Account.LicenseType__c</field>
+        <field>ORIGIN</field>
     </columns>
     <columns>
-        <field>Visit$VisitType</field>
+        <field>Case.PlaceOfIncident__c</field>
     </columns>
     <columns>
-        <field>Visit$InspectionMethod__c</field>
-    </columns>
-    <columns>
-        <field>Visit$PlannedVisitStartTime</field>
-    </columns>
-    <columns>
-        <field>Visit$Status</field>
-    </columns>
-    <columns>
-        <field>Visit$Visitor</field>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>AGE</field>
     </columns>
     <filter>
         <criteriaItems>
-            <column>Visit$VisitType</column>
+            <column>RECORDTYPE</column>
             <columnToColumn>false</columnToColumn>
             <isUnlocked>true</isUnlocked>
             <operator>equals</operator>
-            <value>Compliance Monitoring Inspection</value>
+            <value>Case.ReportableIncident</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Case.TypeOfIncident__c</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>Attempted Suicide,Death,Emotional Abuse,Financial Abuse,Medication Error,Neglect,Overdose,Physical Abuse,Police Call,Service Delivery Problem,Sexual Abuse</value>
         </criteriaItems>
     </filter>
     <format>Matrix</format>
     <groupingsAcross>
-        <dateGranularity>Day</dateGranularity>
-        <field>Visit$Account.Rating</field>
+        <field>Case.IncidentDate__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsAcross>
     <groupingsDown>
         <dateGranularity>Day</dateGranularity>
-        <field>Visit$Account.HealthAuthority__c</field>
+        <field>Account.HealthAuthority__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
-    <name>Rate of Operator Compliance</name>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Case.TypeOfIncident__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>MMHA - Reportable Incidents Report</name>
+    <params>
+        <name>units</name>
+        <value>h</value>
+    </params>
     <params>
         <name>co</name>
         <value>1</value>
     </params>
-    <reportType>Inspection_Report_Type__c</reportType>
+    <reportType>CaseList</reportType>
     <scope>organization</scope>
     <showDetails>true</showDetails>
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>true</showSubTotals>
     <timeFrameFilter>
-        <dateColumn>Visit$PlannedVisitStartTime</dateColumn>
+        <dateColumn>CREATED_DATEONLY</dateColumn>
         <interval>INTERVAL_CUSTOM</interval>
     </timeFrameFilter>
 </Report>

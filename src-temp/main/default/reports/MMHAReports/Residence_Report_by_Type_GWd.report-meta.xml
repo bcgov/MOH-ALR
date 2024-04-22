@@ -11,10 +11,10 @@
         <chartType>VerticalColumnStacked</chartType>
         <enableHoverLabels>false</enableHoverLabels>
         <expandOthers>true</expandOthers>
-        <groupingColumn>Visit$Account.Rating</groupingColumn>
+        <groupingColumn>Visit$Account.HealthAuthority__c</groupingColumn>
         <legendPosition>Right</legendPosition>
         <location>CHART_BOTTOM</location>
-        <secondaryGroupingColumn>Visit$Account.HealthAuthority__c</secondaryGroupingColumn>
+        <secondaryGroupingColumn>Visit$Account.Status__c</secondaryGroupingColumn>
         <showAxisLabels>true</showAxisLabels>
         <showPercentage>false</showPercentage>
         <showTotal>false</showTotal>
@@ -23,49 +23,36 @@
         <summaryAxisRange>Auto</summaryAxisRange>
         <textColor>#000000</textColor>
         <textSize>12</textSize>
+        <title>Residence Report by HA</title>
         <titleColor>#000000</titleColor>
         <titleSize>18</titleSize>
     </chart>
     <columns>
-        <field>Visit.AssessmentTasks$Name</field>
-    </columns>
-    <columns>
-        <field>Visit$Id</field>
-    </columns>
-    <columns>
         <field>Visit$Account</field>
     </columns>
     <columns>
-        <field>Visit$Account.LicenseType__c</field>
-    </columns>
-    <columns>
-        <field>Visit$VisitType</field>
-    </columns>
-    <columns>
-        <field>Visit$InspectionMethod__c</field>
-    </columns>
-    <columns>
-        <field>Visit$PlannedVisitStartTime</field>
-    </columns>
-    <columns>
-        <field>Visit$Status</field>
-    </columns>
-    <columns>
-        <field>Visit$Visitor</field>
+        <field>Visit$Account.Parent</field>
     </columns>
     <filter>
         <criteriaItems>
-            <column>Visit$VisitType</column>
+            <column>Visit$Account.Status__c</column>
             <columnToColumn>false</columnToColumn>
             <isUnlocked>true</isUnlocked>
             <operator>equals</operator>
-            <value>Compliance Monitoring Inspection</value>
+            <value>CURR In Compliance,CURR Not in Compliance,CURR SIU Referral,Deregistered Location Change,Deregistered Owner Change,Deregistered Withdrawn,Registered Active,Registered Active Progressive Enforcement,Registered Active with Conditions</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Visit$Account.RecordType</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>Account.Residence</value>
         </criteriaItems>
     </filter>
     <format>Matrix</format>
     <groupingsAcross>
         <dateGranularity>Day</dateGranularity>
-        <field>Visit$Account.Rating</field>
+        <field>Visit$Account.Status__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsAcross>
     <groupingsDown>
@@ -73,7 +60,7 @@
         <field>Visit$Account.HealthAuthority__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
-    <name>Rate of Operator Compliance</name>
+    <name>Residence Report by Type</name>
     <params>
         <name>co</name>
         <value>1</value>
@@ -84,7 +71,7 @@
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>true</showSubTotals>
     <timeFrameFilter>
-        <dateColumn>Visit$PlannedVisitStartTime</dateColumn>
+        <dateColumn>Visit$CreatedDate</dateColumn>
         <interval>INTERVAL_CUSTOM</interval>
     </timeFrameFilter>
 </Report>
