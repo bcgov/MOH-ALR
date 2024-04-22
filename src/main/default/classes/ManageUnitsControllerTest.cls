@@ -1,3 +1,10 @@
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this Class is for 
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
+                11-8-23                        ChangeMeIn@UserSettingsUnder.SFDoc         
+***********************************************************************************************/
 @isTest
 public class ManageUnitsControllerTest {
     
@@ -18,8 +25,8 @@ public class ManageUnitsControllerTest {
      @isTest
     static void unitInsertTest(){
         List<Asset> updateUnits = new List<Asset>();
-        Account residence =[Select Id from account limit 1];        
-        Asset unit = [Select id,Quantity,AccountId from Asset limit 1]; 
+        Account residence =[SELECT Id FROM account limit 1];        
+        Asset unit = [SELECT id,Quantity,AccountId FROM Asset limit 1]; 
         Asset unitupdate = new Asset();
         unitupdate.Quantity = 1;
         unitupdate.Id = unit.Id;
@@ -34,17 +41,17 @@ public class ManageUnitsControllerTest {
         ManageUnitsController.getUnitBasedOnResidence(residence.Id);
         ManageUnitsController.updateUnits(data);
         }Catch(Exception e){
-            System.assertEquals('Script-thrown exception', e.getMessage());  
+            Assert.areEqual('Script-thrown exception', e.getMessage());  
         } 
-        System.assertEquals(unitupdate.Quantity,1); 
+        Assert.areEqual(unitupdate.Quantity,1); 
         
     }
     
     @isTest
     static void unitInsertExpTest(){
         List<Asset> updateUnits = new List<Asset>();
-        Account residence =[Select Id from account limit 1];        
-        Asset unit = [Select id,Quantity,AccountId from Asset limit 1]; 
+        Account residence =[SELECT Id FROM account limit 1];        
+        Asset unit = [SELECT id,Quantity,AccountId FROM Asset limit 1]; 
         Asset unitupdate = new Asset();
         unitupdate.Quantity = 1;
         unitupdate.Id = unitupdate.Id;
@@ -56,7 +63,7 @@ public class ManageUnitsControllerTest {
         ManageUnitsController.getUnitBasedOnResidence(residence.Id);
         ManageUnitsController.updateUnits(data);
         }Catch(Exception e){
-            System.assertEquals('Script-thrown exception', e.getMessage());  
+            Assert.areEqual('Script-thrown exception', e.getMessage());  
         }
     }
 }

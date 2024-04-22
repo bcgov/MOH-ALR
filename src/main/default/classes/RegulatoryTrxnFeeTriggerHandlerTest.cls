@@ -1,9 +1,10 @@
-/**
-* @Name              : RegulatoryTrxnFeeTriggerHandlerTest
-* @Description       : Test class for RegulatoryTrxnFeeUtility and RegulatoryTrxnFeeTriggerHandler
-* @Author            : Sweta (Accenture)
-* @StoryNo           : ALR-40
-**/
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this class is 
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
+                           ALR-40              Sweta
+***********************************************************************************************/
 //@isTest
 public class RegulatoryTrxnFeeTriggerHandlerTest {
 }

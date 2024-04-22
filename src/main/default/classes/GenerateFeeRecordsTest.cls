@@ -1,10 +1,10 @@
-/**
-* @Name              : GenerateFeeRecordsTest
-* @Description       : Test class for GenerateFeeRecords
-* @Author            : Siddharth (Accenture)
-* @StoryNo           : ALR-660
-**/
-
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this Class is to 
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
+                              ALR-660           Siddharth
+***********************************************************************************************/
 @isTest
 public class GenerateFeeRecordsTest {
     @isTest
