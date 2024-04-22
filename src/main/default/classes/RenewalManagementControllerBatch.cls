@@ -1,25 +1,33 @@
-/**
-* @Name              : RenewalManagementControllerBatch
-* @Description       : batch class to create renewal records and related fee records based on criteria
-					   called from flow - GenerateRenewalsForAccounts
-* @Author            : Sweta (Accenture)
-* @StoryNo           : ALR-36
-**/
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this batch class to create renewal records and related fee records based on criteria
+					   called FROM flow - GenerateRenewalsForAccounts
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
+                           ALR-36             Sweta
+***********************************************************************************************/
 public with sharing class RenewalManagementControllerBatch implements Database.Batchable<sObject> {
-    //Static Constants
-    Public Static String className = 'RenewalManagementControllerBatch';
-    private Final Static String renewalName = 'LicenseRenewalCriteria';
-    private Final Static String blaRecType = 'Renewal';
-    private Final Static String blaCancelledStatus = 'Cancelled';
-    private Final Static String renewalYear = BCMOH_Constants.renewalYear;
-    private Final Static String blaRenewalStatus = 'Ready for Renewal';
-    private Final Static String blaExcludedStatus = 'Excluded';
-    Public static String parentAssetRT ='Units_Record_Type';
-    public Final Static List<String> allALUnitTypes = BCMOH_Constants.allALUnitTypes;
-    public Final Static String activeStatusBl = BCMOH_Constants.activeStatusBl;
+    //static Constants
+    public static String className = 'RenewalManagementControllerBatch';
+    private Final static String renewalName = 'LicenseRenewalCriteria';
+    private Final static String blaRecType = 'Renewal';
+    private Final static String blaCancelledStatus = 'Cancelled';
+    private Final static String renewalYear = BCMOH_Constants.renewalYear;
+    private Final static String blaRenewalStatus = 'Ready for Renewal';
+    private Final static String blaExcludedStatus = 'Excluded';
+    public static String parentAssetRT ='Units_Record_Type';
+    public Final static List<String> allALUnitTypes = BCMOH_Constants.allALUnitTypes;
+    public Final static String activeStatusBl = BCMOH_Constants.activeStatusBl;
     //flow attribute
     public List<Id> CONLIST = new List<Id>();
     
+/**
+* @Author: Accenture_ALR Dev Team
+* @date: 
+* @description: The purpose of this method is to
+* @return:  
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
     //constructor
     public RenewalManagementControllerBatch(List<Id> conlist) {
         this.CONLIST = conlist;//assigns flow list to static const
@@ -28,6 +36,14 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
     public class FlowInputs {
         @InvocableVariable public List<Id> ConId;
     }
+
+/**
+* @Author: Accenture_ALR Dev Team
+* @date: 
+* @description: The purpose of this method is to
+* @return:  
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
     //fetching flow inputs into attribute and run batch 
     @invocablemethod
     public static void sendEmailTest(List<FlowInputs> requests) {
@@ -39,16 +55,22 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
         }
         //RenewalManagementControllerBatch clsName = new RenewalManagementControllerBatch(conlist);
         Id jobId = Database.executeBatch(new RenewalManagementControllerBatch(conlist), 400);
-        //Id jobId = Database.executeBatch(clsName, 100);
     }
+
+/**
+* @Author: Accenture_ALR Dev Team
+* @date: 
+* @description: The purpose of this method is to
+* @return:  
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
     //start method
     public Database.QueryLocator start(Database.BatchableContext BC) {
-        //fetch acc status and record type from custom metadata
+        //fetch acc status and record type FROM custom metadata
         RenewalProcessCriteria__mdt renewalCriteriaRec = RenewalProcessCriteria__mdt.getInstance(renewalName);
         String accRecType = renewalCriteriaRec.AccountRecordType__c;
         List<String> accStatuses = renewalCriteriaRec.AccountStatuses__c.split(';');
         //Map<String, List<String>> accDetails = BCMOH_UtilityClass.getAccRenewals(BCMOH_Constants.renewalName);
-        Id tempAccId = '001As00000IGYmbIAH';
         //start query
         String query = 'SELECT Id, Status__c, LicenseType__c,'
             +' LicenseType__r.RegulatoryAuthCategory, LicenseType__r.UnitFee__c,'
@@ -65,22 +87,26 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
             +' FROM Account'
             +' WHERE recordType.DeveloperName =: accRecType AND LicenseType__c != NULL'
             +' AND Status__c IN: accStatuses';
-            //+' AND Id =: tempAccId';
         return Database.getQueryLocator(query);
     }
+
+/**
+* @Author: Accenture_ALR Dev Team
+* @date: 
+* @description: The purpose of this method is to
+* @return:  
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
     //execute method
     public void execute(Database.BatchableContext BC, List<Account> renewalAccList) {
         Map<Id, String> blaStatusMap = new Map<Id, String>();
         Map<Id, Account> renewalAccMap = new Map<Id, Account>();
         Map<Id, Account> renewalFeeAccMap = new Map<Id, Account>();
         List<Id> includedAccIds = CONLIST;
-        system.debug('*** CONLIST includedAccIds '+' '+CONLIST+' '+includedAccIds);//delete later   
-        system.debug('*** renewalAcc size List '+renewalAccList.size()+' '+renewalAccList);//delete later
         try {
             for(Account accRec : renewalAccList) {
                 //check if non cancelled renewalbla already exists for the current year to avoid duplicates
                 if(accRec.BusinessLicenseApplicationAccount.size() == 0) {
-                    system.debug('*** expect null - bla on acc '+accRec.BusinessLicenseApplicationAccount);
                     //**As per ALR-560 and ALR-796 - No more applicable --> create BLA with status as excluded and dont create child records if id not present in includedAccIds
                     //As per ALR-560 and ALR-796 - create BLA with status as excluded and create child records 
                     blaStatusMap.put(accRec.Id, includedAccIds.contains(accRec.Id) ? blaRenewalStatus : blaExcludedStatus);
@@ -90,10 +116,6 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
                     if(accRec.Assets != NULL && accRec.Assets.size() > 0) {//removed - includedAccIds.contains(accRec.Id) && 
                         renewalFeeAccMap.put(accRec.Id, accRec);
                     }
-                    /*else if(accRec.Assets == NULL) {--TO DO:
-                        blaStatusMap.put(accRec.Id, 'Errored');
-                    }*/
-                    system.debug('*** blaStatusMap renewalAccMap renewalFeeAccMap'+blaStatusMap+' '+renewalAccMap+' '+renewalFeeAccMap);//delete later
                 }
         	}
             //1) create BLA records in controlled class
@@ -103,15 +125,20 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
             //3) create Trans Fee Item rec
             List<RegulatoryTrxnFeeItem> transFeeItemList = RenewalManagementController.createTransFeeItemRecords(renewalFeeAccMap, transFeeMap);
             //4) attach documents to bla records
-            system.debug('%% before calling doc'+blaRecCreateMap+' ');
-            system.debug('%% before calling doc'+' '+renewalAccList);
             ServerSideDocumentGenerationController.startDocGenProcess(renewalAccList, blaRecCreateMap, transFeeMap, transFeeItemList);//?documents to be attached for ready for renewal and excluded?
         }
         catch(exception ex) {
-            system.debug('Im caught in batch class'+ex.getMessage());//handle exceptions later
             LogService.logAndPublish(className, 'execute', '', ex);
         }
     }
+
+/**
+* @Author: Accenture_ALR Dev Team
+* @date: 
+* @description: The purpose of this method is to
+* @return:  
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
     //finish method
     public void finish(Database.BatchableContext BC) {
     }

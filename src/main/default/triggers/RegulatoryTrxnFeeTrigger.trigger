@@ -1,3 +1,9 @@
+/**********************************************************************************************
+* @Author:Accenture_ALR Team   
+* @Date:    
+* @Description: The purpose of this Trigger is to trigger on particular events for RegulatoryTrxnFee
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
+***********************************************************************************************/
 trigger RegulatoryTrxnFeeTrigger on RegulatoryTrxnFee (before insert, before update, after insert, after update, before delete, after delete, after undelete) {
     TriggerHandler handler = new RegulatoryTrxnFeeTriggerHandler();
         switch on Trigger.operationType {

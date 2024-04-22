@@ -1,4 +1,10 @@
-public interface TriggerHandler {
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this class 
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
+***********************************************************************************************/
+public with sharing interface TriggerHandler {
 	void beforeInsert(List<SObject> newRecords);
     void beforeUpdate(List<SObject> oldRecords, List<SObject> newRecords, Map<ID, SObject> oldRecordMap, Map<ID, SObject> newRecordMap);
     void beforeDelete(List<SObject> oldRecords, Map<ID, SObject> oldRecordMap);

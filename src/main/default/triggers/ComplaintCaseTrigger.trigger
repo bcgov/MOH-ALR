@@ -1,6 +1,11 @@
+/**********************************************************************************************
+* @Author:Accenture_ALR Team   
+* @Date:    
+* @Description: The purpose of this Trigger is to trigger on particular events for Case
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
+***********************************************************************************************/
 trigger ComplaintCaseTrigger on Case (before insert) {
     if (Trigger.isBefore && Trigger.isInsert) {
-        System.debug('Inside Trigger');
         ComplaintCaseTriggerHandler.handleBeforeInsert(Trigger.new);
     }
 }

@@ -1,3 +1,9 @@
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this Class is for 
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]               
+***********************************************************************************************/
 @isTest
 private class FetchAndGenerateCSVTest {
 
@@ -60,8 +66,8 @@ private class FetchAndGenerateCSVTest {
         System.debug('Generated CSV: ' + generatedCSV);
 
         // Add your assertions here based on the expected CSV content or any specific criteria
-        System.assertEquals(true, generatedCSV.contains(Registrant.Name), 'CSV should contain Registrant name');
-        System.assertEquals(true, generatedCSV.contains(Residence.Name), 'CSV should contain Residence name');
+        Assert.areEqual(true, generatedCSV.contains(Registrant.Name), 'CSV should contain Registrant name');
+        Assert.areEqual(true, generatedCSV.contains(Residence.Name), 'CSV should contain Residence name');
         Test.stopTest();
 
     }

@@ -1,7 +1,10 @@
-/**
- * Created by vivin on 2022-01-11.
- */
-
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this Controller class is for LateFeeManagementTable LWC
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
+                                               Vivin             
+***********************************************************************************************/
 public without sharing class LogEvents extends fflib_SObjectDomain{
     private static fflib_ISObjectUnitOfWork uow;
 
