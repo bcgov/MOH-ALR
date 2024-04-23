@@ -621,8 +621,8 @@
     <assignments>
         <name>AssignmentforStatusDecision</name>
         <label>AssignmentforStatusDecision</label>
-        <locationX>1326</locationX>
-        <locationY>2378</locationY>
+        <locationX>1854</locationX>
+        <locationY>2486</locationY>
         <assignmentItems>
             <assignToReference>ALServiceStatus</assignToReference>
             <operator>Assign</operator>
@@ -652,14 +652,14 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Copy_2_of_ALSActiveError</targetReference>
+            <targetReference>ALSActiveErrorDecision</targetReference>
         </connector>
     </assignments>
     <assignments>
         <name>Assignmentforstatusdecisioncheck</name>
         <label>Assignmentforstatusdecisioncheck</label>
         <locationX>534</locationX>
-        <locationY>2678</locationY>
+        <locationY>2786</locationY>
         <assignmentItems>
             <assignToReference>ALServiceStatus</assignToReference>
             <operator>Assign</operator>
@@ -696,7 +696,7 @@
         <name>CountAddAssignment</name>
         <label>CountAddAssignment</label>
         <locationX>622</locationX>
-        <locationY>2486</locationY>
+        <locationY>2594</locationY>
         <assignmentItems>
             <assignToReference>ALSCount</assignToReference>
             <operator>Add</operator>
@@ -847,10 +847,42 @@
         </value>
     </constants>
     <decisions>
+        <name>ALSActiveErrorDecision</name>
+        <label>ALSActiveErrorDecision</label>
+        <locationX>1854</locationX>
+        <locationY>2594</locationY>
+        <defaultConnector>
+            <targetReference>ErrorActiveMessageScreen</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>ALSActiveError1</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_through_each_Service.ServiceType__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Assisted Living Service</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>statusCollectionVariable</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Active</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Service</targetReference>
+            </connector>
+            <label>ALSActiveError1</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>ALSActiveErrorMessageDecision</name>
         <label>ALSActiveError</label>
         <locationX>534</locationX>
-        <locationY>2786</locationY>
+        <locationY>2894</locationY>
         <defaultConnector>
             <targetReference>ErrorActiveMessage</targetReference>
         </defaultConnector>
@@ -888,10 +920,10 @@
     <decisions>
         <name>Check_service_exists</name>
         <label>Check service exists</label>
-        <locationX>930</locationX>
+        <locationX>1458</locationX>
         <locationY>2270</locationY>
         <defaultConnector>
-            <targetReference>AssignmentforStatusDecision</targetReference>
+            <targetReference>CheckforALSHLSCreate</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Service does not exists</defaultConnectorLabel>
         <rules>
@@ -905,7 +937,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>LoopForCount</targetReference>
+                <targetReference>CheckforALSHLS</targetReference>
             </connector>
             <label>Service exist</label>
         </rules>
@@ -936,16 +968,16 @@
         </rules>
     </decisions>
     <decisions>
-        <name>Copy_2_of_ALSActiveError</name>
-        <label>Copy 2 of ALSActiveError</label>
-        <locationX>1326</locationX>
-        <locationY>2486</locationY>
+        <name>CheckforALSHLS</name>
+        <label>CheckforALSHLS</label>
+        <locationX>798</locationX>
+        <locationY>2378</locationY>
         <defaultConnector>
-            <targetReference>ErrorActiveMessageScreen</targetReference>
+            <targetReference>Update_Existing_Service_HLS</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
-            <name>ALSActiveError1</name>
+            <name>CheckforALSHLSCheck</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>Loop_through_each_Service.ServiceType__c</leftValueReference>
@@ -954,17 +986,35 @@
                     <stringValue>Assisted Living Service</stringValue>
                 </rightValue>
             </conditions>
+            <connector>
+                <targetReference>LoopForCount</targetReference>
+            </connector>
+            <label>CheckforALSHLS</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>CheckforALSHLSCreate</name>
+        <label>CheckforALSHLSCreate</label>
+        <locationX>2118</locationX>
+        <locationY>2378</locationY>
+        <defaultConnector>
+            <targetReference>HLS_Create_Service</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>CheckforALSHLSCreation</name>
+            <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>statusCollectionVariable</leftValueReference>
-                <operator>Contains</operator>
+                <leftValueReference>Loop_through_each_Service.ServiceType__c</leftValueReference>
+                <operator>EqualTo</operator>
                 <rightValue>
-                    <stringValue>Active</stringValue>
+                    <stringValue>Assisted Living Service</stringValue>
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Create_Service</targetReference>
+                <targetReference>AssignmentforStatusDecision</targetReference>
             </connector>
-            <label>ALSActiveError1</label>
+            <label>CheckforALSHLSCreation</label>
         </rules>
     </decisions>
     <description>ALR-33 , updated UI and made comments not reqd - ALR-664, updated UI as part of ALR-722</description>
@@ -1045,7 +1095,7 @@
         <name>LoopForCount</name>
         <label>LoopForCount</label>
         <locationX>534</locationX>
-        <locationY>2378</locationY>
+        <locationY>2486</locationY>
         <collectionReference>Get_Existing_Service_Records</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -1077,8 +1127,8 @@
     <recordCreates>
         <name>Create_Service</name>
         <label>Create Service</label>
-        <locationX>1062</locationX>
-        <locationY>2594</locationY>
+        <locationX>1590</locationX>
+        <locationY>2702</locationY>
         <connector>
             <targetReference>Loop_through_each_Service</targetReference>
         </connector>
@@ -1137,6 +1187,63 @@
         <object>Service__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
+    <recordCreates>
+        <name>HLS_Create_Service</name>
+        <label>HLS Create Service</label>
+        <locationX>2382</locationX>
+        <locationY>2486</locationY>
+        <connector>
+            <targetReference>Loop_through_each_Service</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Error_Screen</targetReference>
+        </faultConnector>
+        <inputAssignments>
+            <field>Account__c</field>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Comments__c</field>
+            <value>
+                <elementReference>Loop_through_each_Service.Comments__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>Loop_through_each_Service.Name</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ProvidedBy__c</field>
+            <value>
+                <elementReference>Loop_through_each_Service.ProvidedBy__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <elementReference>ServiceRecordTypeId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ServiceName__c</field>
+            <value>
+                <elementReference>Loop_through_each_Service.ServiceName__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ServiceType__c</field>
+            <value>
+                <elementReference>Loop_through_each_Service.ServiceType__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Service__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
     <recordLookups>
         <name>Get_Account</name>
         <label>Get Account</label>
@@ -1161,7 +1268,7 @@
     <recordLookups>
         <name>Get_Existing_Service_Records</name>
         <label>Get Existing Service Records</label>
-        <locationX>930</locationX>
+        <locationX>1458</locationX>
         <locationY>2162</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -1572,7 +1679,7 @@
         <name>Update_Existing_Service</name>
         <label>Update Existing Service</label>
         <locationX>270</locationX>
-        <locationY>2894</locationY>
+        <locationY>3002</locationY>
         <connector>
             <targetReference>Loop_through_each_Service</targetReference>
         </connector>
@@ -1614,6 +1721,47 @@
         </inputAssignments>
         <object>Service__c</object>
     </recordUpdates>
+    <recordUpdates>
+        <name>Update_Existing_Service_HLS</name>
+        <label>Update Existing Service HLS</label>
+        <locationX>1062</locationX>
+        <locationY>2486</locationY>
+        <connector>
+            <targetReference>Loop_through_each_Service</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Error_Screen</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Account__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>ServiceName__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Loop_through_each_Service.ServiceName__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Comments__c</field>
+            <value>
+                <elementReference>Loop_through_each_Service.Comments__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ProvidedBy__c</field>
+            <value>
+                <elementReference>Loop_through_each_Service.ProvidedBy__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Service__c</object>
+    </recordUpdates>
     <screens>
         <name>ALS_Service_Screen</name>
         <label>ALS Service Screen</label>
@@ -1630,288 +1778,6 @@
             <fieldType>RegionContainer</fieldType>
             <fields>
                 <name>ALS_Service_Screen_Section1_Column1</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>ALSD2</name>
-                    <fieldType>DisplayText</fieldType>
-                </fields>
-                <fields>
-                    <name>ALS2</name>
-                    <fieldText>&lt;p&gt;{!AssistancewithdailylivingactivitiesChoice}&lt;/p&gt;</fieldText>
-                    <fieldType>DisplayText</fieldType>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>3</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <fields>
-                <name>ALS_Service_Screen_Section1_Column2</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Provided_By2</name>
-                    <choiceReferences>ProvidedByValue</choiceReferences>
-                    <dataType>String</dataType>
-                    <defaultValue>
-                        <elementReference>ServiceNameAssistancewithDailyLivingActivities.ProvidedBy__c</elementReference>
-                    </defaultValue>
-                    <fieldText>Provided By</fieldText>
-                    <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>3</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <fields>
-                <name>ALS_Service_Screen_Section1_Column3</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Comments2</name>
-                    <dataType>String</dataType>
-                    <defaultValue>
-                        <elementReference>ServiceNameAssistancewithDailyLivingActivities.Comments__c</elementReference>
-                    </defaultValue>
-                    <fieldText>Comments</fieldText>
-                    <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>3</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <fields>
-                <name>ALS_Service_Screen_Section1_Column4</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Status1</name>
-                    <choiceReferences>Status</choiceReferences>
-                    <dataType>String</dataType>
-                    <defaultValue>
-                        <elementReference>ServiceNameAssistancewithDailyLivingActivities.Status__c</elementReference>
-                    </defaultValue>
-                    <fieldText>Status</fieldText>
-                    <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>3</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <isRequired>false</isRequired>
-            <regionContainerType>SectionWithoutHeader</regionContainerType>
-        </fields>
-        <fields>
-            <name>ALS_Service_Screen_Section2</name>
-            <fieldType>RegionContainer</fieldType>
-            <fields>
-                <name>ALS_Service_Screen_Section2_Column1</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>ALSD3</name>
-                    <fieldType>DisplayText</fieldType>
-                </fields>
-                <fields>
-                    <name>ALS3</name>
-                    <fieldText>&lt;p&gt;{!AssistancewithmanagingmedicationChoice}&lt;/p&gt;</fieldText>
-                    <fieldType>DisplayText</fieldType>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>3</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <fields>
-                <name>ALS_Service_Screen_Section2_Column2</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Provided_By83</name>
-                    <choiceReferences>ProvidedByValue</choiceReferences>
-                    <dataType>String</dataType>
-                    <defaultValue>
-                        <elementReference>ServiceNameAssistancewithManagingMedication.ProvidedBy__c</elementReference>
-                    </defaultValue>
-                    <fieldText>Provided By</fieldText>
-                    <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>3</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <fields>
-                <name>ALS_Service_Screen_Section2_Column3</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Comments3</name>
-                    <dataType>String</dataType>
-                    <defaultValue>
-                        <elementReference>ServiceNameAssistancewithManagingMedication.Comments__c</elementReference>
-                    </defaultValue>
-                    <fieldText>Comments</fieldText>
-                    <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>3</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <fields>
-                <name>ALS_Service_Screen_Section2_Column4</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Status2</name>
-                    <choiceReferences>Status</choiceReferences>
-                    <dataType>String</dataType>
-                    <defaultValue>
-                        <elementReference>ServiceNameAssistancewithManagingMedication.Status__c</elementReference>
-                    </defaultValue>
-                    <fieldText>Status</fieldText>
-                    <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>3</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <isRequired>false</isRequired>
-            <regionContainerType>SectionWithoutHeader</regionContainerType>
-        </fields>
-        <fields>
-            <name>ALS_Service_Screen_Section3</name>
-            <fieldType>RegionContainer</fieldType>
-            <fields>
-                <name>ALS_Service_Screen_Section3_Column1</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>ALSD4</name>
-                    <fieldType>DisplayText</fieldType>
-                </fields>
-                <fields>
-                    <name>ALS4</name>
-                    <fieldText>&lt;p&gt;{!SafekeepingofmoneypersonalpropertyChoice}&lt;/p&gt;</fieldText>
-                    <fieldType>DisplayText</fieldType>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>3</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <fields>
-                <name>ALS_Service_Screen_Section3_Column2</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Provided_By4</name>
-                    <choiceReferences>ProvidedByValue</choiceReferences>
-                    <dataType>String</dataType>
-                    <defaultValue>
-                        <elementReference>ServiceNameSafekeepingofMoneyPersonalProperty.ProvidedBy__c</elementReference>
-                    </defaultValue>
-                    <fieldText>Provided By</fieldText>
-                    <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>3</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <fields>
-                <name>ALS_Service_Screen_Section3_Column3</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Comments4</name>
-                    <dataType>String</dataType>
-                    <defaultValue>
-                        <elementReference>ServiceNameSafekeepingofMoneyPersonalProperty.Comments__c</elementReference>
-                    </defaultValue>
-                    <fieldText>Comments</fieldText>
-                    <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>3</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <fields>
-                <name>ALS_Service_Screen_Section3_Column4</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Status3</name>
-                    <choiceReferences>Status</choiceReferences>
-                    <dataType>String</dataType>
-                    <defaultValue>
-                        <elementReference>ServiceNameSafekeepingofMoneyPersonalProperty.Status__c</elementReference>
-                    </defaultValue>
-                    <fieldText>Status</fieldText>
-                    <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>3</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <isRequired>false</isRequired>
-            <regionContainerType>SectionWithoutHeader</regionContainerType>
-        </fields>
-        <fields>
-            <name>ALS_Service_Screen_Section4</name>
-            <fieldType>RegionContainer</fieldType>
-            <fields>
-                <name>ALS_Service_Screen_Section4_Column1</name>
                 <fieldType>Region</fieldType>
                 <fields>
                     <name>ALSD5</name>
@@ -1931,7 +1797,7 @@
                 <isRequired>false</isRequired>
             </fields>
             <fields>
-                <name>ALS_Service_Screen_Section4_Column2</name>
+                <name>ALS_Service_Screen_Section1_Column2</name>
                 <fieldType>Region</fieldType>
                 <fields>
                     <name>Provided_By5</name>
@@ -1954,7 +1820,7 @@
                 <isRequired>false</isRequired>
             </fields>
             <fields>
-                <name>ALS_Service_Screen_Section4_Column3</name>
+                <name>ALS_Service_Screen_Section1_Column3</name>
                 <fieldType>Region</fieldType>
                 <fields>
                     <name>Comments5</name>
@@ -1976,7 +1842,7 @@
                 <isRequired>false</isRequired>
             </fields>
             <fields>
-                <name>ALS_Service_Screen_Section4_Column4</name>
+                <name>ALS_Service_Screen_Section1_Column4</name>
                 <fieldType>Region</fieldType>
                 <fields>
                     <name>Status4</name>
@@ -2002,10 +1868,104 @@
             <regionContainerType>SectionWithoutHeader</regionContainerType>
         </fields>
         <fields>
-            <name>ALS_Service_Screen_Section5</name>
+            <name>ALS_Service_Screen_Section2</name>
             <fieldType>RegionContainer</fieldType>
             <fields>
-                <name>ALS_Service_Screen_Section5_Column1</name>
+                <name>ALS_Service_Screen_Section2_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>ALSD2</name>
+                    <fieldType>DisplayText</fieldType>
+                </fields>
+                <fields>
+                    <name>ALS2</name>
+                    <fieldText>&lt;p&gt;{!AssistancewithdailylivingactivitiesChoice}&lt;/p&gt;</fieldText>
+                    <fieldType>DisplayText</fieldType>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>3</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>ALS_Service_Screen_Section2_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Provided_By2</name>
+                    <choiceReferences>ProvidedByValue</choiceReferences>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <elementReference>ServiceNameAssistancewithDailyLivingActivities.ProvidedBy__c</elementReference>
+                    </defaultValue>
+                    <fieldText>Provided By</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>3</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>ALS_Service_Screen_Section2_Column3</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Comments2</name>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <elementReference>ServiceNameAssistancewithDailyLivingActivities.Comments__c</elementReference>
+                    </defaultValue>
+                    <fieldText>Comments</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>3</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>ALS_Service_Screen_Section2_Column4</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Status1</name>
+                    <choiceReferences>Status</choiceReferences>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <elementReference>ServiceNameAssistancewithDailyLivingActivities.Status__c</elementReference>
+                    </defaultValue>
+                    <fieldText>Status</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>3</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithoutHeader</regionContainerType>
+        </fields>
+        <fields>
+            <name>ALS_Service_Screen_Section3</name>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>ALS_Service_Screen_Section3_Column1</name>
                 <fieldType>Region</fieldType>
                 <fields>
                     <name>ALDS6</name>
@@ -2025,7 +1985,7 @@
                 <isRequired>false</isRequired>
             </fields>
             <fields>
-                <name>ALS_Service_Screen_Section5_Column2</name>
+                <name>ALS_Service_Screen_Section3_Column2</name>
                 <fieldType>Region</fieldType>
                 <fields>
                     <name>Provided_By6</name>
@@ -2048,7 +2008,7 @@
                 <isRequired>false</isRequired>
             </fields>
             <fields>
-                <name>ALS_Service_Screen_Section5_Column3</name>
+                <name>ALS_Service_Screen_Section3_Column3</name>
                 <fieldType>Region</fieldType>
                 <fields>
                     <name>Comments6</name>
@@ -2070,7 +2030,7 @@
                 <isRequired>false</isRequired>
             </fields>
             <fields>
-                <name>ALS_Service_Screen_Section5_Column4</name>
+                <name>ALS_Service_Screen_Section3_Column4</name>
                 <fieldType>Region</fieldType>
                 <fields>
                     <name>Status5</name>
@@ -2078,6 +2038,194 @@
                     <dataType>String</dataType>
                     <defaultValue>
                         <elementReference>ServiceNameAssistancewithBehaviourManagement.Status__c</elementReference>
+                    </defaultValue>
+                    <fieldText>Status</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>3</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithoutHeader</regionContainerType>
+        </fields>
+        <fields>
+            <name>ALS_Service_Screen_Section4</name>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>ALS_Service_Screen_Section4_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>ALSD3</name>
+                    <fieldType>DisplayText</fieldType>
+                </fields>
+                <fields>
+                    <name>ALS3</name>
+                    <fieldText>&lt;p&gt;{!AssistancewithmanagingmedicationChoice}&lt;/p&gt;</fieldText>
+                    <fieldType>DisplayText</fieldType>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>3</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>ALS_Service_Screen_Section4_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Provided_By83</name>
+                    <choiceReferences>ProvidedByValue</choiceReferences>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <elementReference>ServiceNameAssistancewithManagingMedication.ProvidedBy__c</elementReference>
+                    </defaultValue>
+                    <fieldText>Provided By</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>3</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>ALS_Service_Screen_Section4_Column3</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Comments3</name>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <elementReference>ServiceNameAssistancewithManagingMedication.Comments__c</elementReference>
+                    </defaultValue>
+                    <fieldText>Comments</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>3</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>ALS_Service_Screen_Section4_Column4</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Status2</name>
+                    <choiceReferences>Status</choiceReferences>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <elementReference>ServiceNameAssistancewithManagingMedication.Status__c</elementReference>
+                    </defaultValue>
+                    <fieldText>Status</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>3</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithoutHeader</regionContainerType>
+        </fields>
+        <fields>
+            <name>ALS_Service_Screen_Section5</name>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>ALS_Service_Screen_Section5_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>ALSD4</name>
+                    <fieldType>DisplayText</fieldType>
+                </fields>
+                <fields>
+                    <name>ALS4</name>
+                    <fieldText>&lt;p&gt;{!SafekeepingofmoneypersonalpropertyChoice}&lt;/p&gt;</fieldText>
+                    <fieldType>DisplayText</fieldType>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>3</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>ALS_Service_Screen_Section5_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Provided_By4</name>
+                    <choiceReferences>ProvidedByValue</choiceReferences>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <elementReference>ServiceNameSafekeepingofMoneyPersonalProperty.ProvidedBy__c</elementReference>
+                    </defaultValue>
+                    <fieldText>Provided By</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>3</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>ALS_Service_Screen_Section5_Column3</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Comments4</name>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <elementReference>ServiceNameSafekeepingofMoneyPersonalProperty.Comments__c</elementReference>
+                    </defaultValue>
+                    <fieldText>Comments</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>3</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>ALS_Service_Screen_Section5_Column4</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Status3</name>
+                    <choiceReferences>Status</choiceReferences>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <elementReference>ServiceNameSafekeepingofMoneyPersonalProperty.Status__c</elementReference>
                     </defaultValue>
                     <fieldText>Status</fieldText>
                     <fieldType>DropdownBox</fieldType>
@@ -2214,7 +2362,7 @@
         <name>Error_Screen</name>
         <label>Error Screen</label>
         <locationX>534</locationX>
-        <locationY>3002</locationY>
+        <locationY>3110</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -2231,7 +2379,7 @@
         <name>ErrorActiveMessage</name>
         <label>ErrorActiveMessage</label>
         <locationX>798</locationX>
-        <locationY>2894</locationY>
+        <locationY>3002</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -2247,11 +2395,14 @@
     <screens>
         <name>ErrorActiveMessageScreen</name>
         <label>ErrorActiveMessageScreen</label>
-        <locationX>1590</locationX>
-        <locationY>2594</locationY>
+        <locationX>2118</locationX>
+        <locationY>2702</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Loop_through_each_Service</targetReference>
+        </connector>
         <fields>
             <name>Copy_1_of_ErrorActive</name>
             <fieldText>&lt;p&gt;&lt;strong style=&quot;color: rgb(211, 51, 27); font-family: -apple-system, BlinkMacSystemFont, &amp;quot;Segoe UI&amp;quot;, Roboto, Oxygen, Ubuntu, &amp;quot;Fira Sans&amp;quot;, &amp;quot;Droid Sans&amp;quot;, &amp;quot;Helvetica Neue&amp;quot;, sans-serif; font-size: 18px; background-color: rgba(9, 30, 66, 0.06);&quot;&gt;&lt;em&gt;At least one AL Service must be active.﻿&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;</fieldText>
@@ -2640,7 +2791,7 @@
         <name>Success_Screen</name>
         <label>Success Screen</label>
         <locationX>182</locationX>
-        <locationY>3494</locationY>
+        <locationY>3686</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
