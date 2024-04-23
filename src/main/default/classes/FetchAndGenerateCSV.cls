@@ -27,7 +27,7 @@ public class FetchAndGenerateCSV {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */    
     @AuraEnabled(cacheable=true)
@@ -102,7 +102,7 @@ public class FetchAndGenerateCSV {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     // Helper method to get the registration certificates
@@ -120,7 +120,7 @@ public class FetchAndGenerateCSV {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     // Helper method to get the service flag
@@ -137,7 +137,7 @@ public class FetchAndGenerateCSV {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  Integer
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     // Helper method to get the asset quantity based on type
@@ -155,7 +155,7 @@ public class FetchAndGenerateCSV {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  Contact
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     // Helper method to retrieve primary contacts FROM AccountContactRelation
@@ -181,7 +181,7 @@ public class FetchAndGenerateCSV {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  List of String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //Helper method to retrieve Address and handle NullPointerException

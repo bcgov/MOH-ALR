@@ -3,7 +3,7 @@
 * @Date:       
 * @Description: The purpose of this Test class for MassEmailController and BCMOH_UtilityClass and RenewalBlaTableController
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
-                          ALR -560             Sweta        
+                          ALR -560             Sweta          Renewal verification and renewal mass email
 ***********************************************************************************************/
 @isTest
 public class MassEmailControllerTest {

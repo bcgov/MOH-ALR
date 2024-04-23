@@ -3,7 +3,8 @@
 * @Date:       
 * @Description: The purpose of this Class is to 
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
-                           ALR - 509           Sri Teja
+                           ALR - 509           Sri Teja       Public complaints/Cases additional changes
+                           ALR-762             ACN-ALR        Error Thrown on creation of Reportable Incident Case 
 ***********************************************************************************************/
 @isTest
 public class ComplaintCaseTriggerTest {

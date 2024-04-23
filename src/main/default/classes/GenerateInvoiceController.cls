@@ -2,7 +2,9 @@
 * @Author:Accenture_ALR Dev Team   
 * @Date:       
 * @Description: The purpose of this Class is for 
-* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]               
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
+                           ALR-185             ACN-ALR        Generating Transaction Fee        
+                           ALR-762             ACN-ALR        Error Thrown on creation of Reportable Incident Case     
 ***********************************************************************************************/
 public with sharing class GenerateInvoiceController {
     public static String className = 'GenerateInvoiceController';
@@ -12,7 +14,7 @@ public with sharing class GenerateInvoiceController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //ALR-40 - generateInvoices
@@ -25,15 +27,12 @@ public with sharing class GenerateInvoiceController {
         Map<Id, Id> childParentAssetMap = new Map<Id, Id>();
         Map<Id, String> parentAmountMap = new Map<Id, String>();
         Map<Id, Asset> parentAssetMap = new Map<Id, Asset>();
-        Asset oldRec = new Asset();
         DateTime dueDate = BCMOH_Constants.feeDueDateTime;//ALR-185
         try { 
             for(Asset assetRec : lstAsset) {
-                system.debug('%% asset values '+assetRec.Type__c+' '+assetRec.AccountId+' '+assetRec.GenerateInvoice__c+' '+assetRec.recordTypeId+' '+assetRec.Status+' '+assetRec.Quantity+' '+assetRec.ParentId);
                 if(assetRec.GenerateInvoice__c == true && assetRec.ParentId != NULL &&
                    assetRec.recordTypeId == BCMOH_Constants.unitRequestRecTypeId &&
                    assetRec.Status == BCMOH_Constants.pendingInvoiceStatus) {
-                    system.debug('insdie for if aseet fvs'+assetRec.Id);
                     List<Asset> assetList = new List<Asset>();
                     if(invoiceAssetMap.containsKey(assetRec.AccountId)) {
                         assetList = invoiceAssetMap.get(assetRec.AccountId);
@@ -56,7 +55,6 @@ public with sharing class GenerateInvoiceController {
                                                       WHERE AccountId IN: invoiceAssetMap.keySet() WITH SECURITY_ENFORCED
                                                       ORDER BY LastModifiedDate DESC]) {
                                                           if(!blaAccMap.containsKey(blaRec.AccountId)) {
-                                                              system.debug('^^ cds blaRec '+blaRec.Id);
                                                               blaAccMap.put(blaRec.AccountId, blaRec);
                                                           }
             }
@@ -97,7 +95,7 @@ public with sharing class GenerateInvoiceController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static void generateRenewalInvoices(List<Asset> assetListNew) {

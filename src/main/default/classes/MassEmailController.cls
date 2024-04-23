@@ -3,7 +3,7 @@
 * @Date:       
 * @Description: The purpose of this Controller class to send mass email
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
-                          ALR -560             Sweta        
+                          ALR -560             Sweta          Renewal verification and renewal mass email
 ***********************************************************************************************/
 public class MassEmailController {
     public static Id templateId = NULL;
@@ -45,7 +45,7 @@ public class MassEmailController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //method to to send email to records
@@ -159,7 +159,7 @@ public class MassEmailController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //method to to send email to records-ALR-1000
@@ -273,7 +273,7 @@ public class MassEmailController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //send email method
@@ -336,7 +336,7 @@ public class MassEmailController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //method to replace merge fields in email template
@@ -399,7 +399,7 @@ public class MassEmailController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  Map<Id, String>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //fetch templateId needed to send the email
@@ -447,7 +447,7 @@ public class MassEmailController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  Map<Id, String>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //fetch templateId needed to send the email-ALR-1000
@@ -498,7 +498,7 @@ public class MassEmailController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  Id
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //get org wide email address based on custom setting
@@ -527,7 +527,7 @@ public class MassEmailController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  Map<Id, Set<Id>>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //fetch blaId-ContentVersions Map needed to add attachments to the email
@@ -561,7 +561,7 @@ public class MassEmailController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //update bla success and error maps after sending email
@@ -600,7 +600,7 @@ public class MassEmailController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //update all bla records - DML
@@ -637,7 +637,7 @@ public class MassEmailController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  Id
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //method to get AccountId-ALR-1000
@@ -649,7 +649,7 @@ public class MassEmailController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  List of Account
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //Method to update Account Status-ALR-1000
@@ -661,7 +661,7 @@ public class MassEmailController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  List of BusinessLicenseApplication
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static List<BusinessLicenseApplication> blaErrQuery(Id blaId) {
@@ -672,7 +672,7 @@ public class MassEmailController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //update all latefee bla records - DML-ALR-1000

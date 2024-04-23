@@ -3,6 +3,14 @@
 * @Date:       
 * @Description: The purpose of this Class is to declare Constant variables
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
+                           ALR-36              ACN-ALR        License renewal initiation
+                           ALR-1000            ACN-ALR        Send Late Fees Notifications
+                           ALR-40              ACN-ALR        Fee calculation for newly added unit(s)       
+                           ALR-775             ACN-ALR        Name of the Template is Incorrect   
+                           ALR-726             ACN-ALR        Issues on Business License Application and Regulatory Fee   
+                           ALR-820             ACN-ALR        Changing 'Application Status’ field       
+                           ALR-996             ACN-ALR        Late Fee Initiation - Interface 
+                           ALR-997             ACN-ALR        Generate Renewal Late Fee Transaction      
 ***********************************************************************************************/
 public class BCMOH_Constants {
     public static final String IM_INPUT = 'input';

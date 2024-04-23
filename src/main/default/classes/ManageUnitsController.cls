@@ -19,7 +19,7 @@ public class ManageUnitsController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     @AuraEnabled
@@ -41,12 +41,11 @@ public class ManageUnitsController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     @AuraEnabled
     public static string updateUnits(Object data) {
-        system.debug('data--'+data);
         List<Asset> assetForCreateList = new List<Asset>();
         List<Asset> assetForValidateList = new List<Asset>();
         List<Asset> assetForUpdateList = (List<Asset>) JSON.deserialize(JSON.serialize(data),List<Asset>.class);

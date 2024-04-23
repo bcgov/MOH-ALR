@@ -3,7 +3,9 @@
 * @Date:       
 * @Description: The purpose of this Class is for 
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
-                12-4-23                        ChangeMeIn@UserSettingsUnder.SFDoc         
+                12-4-23                        ChangeMeIn@UserSettingsUnder.SFDoc
+                           ALR-185             ACN-ALR        Generating Transaction Fee  
+                           ALR-726             ACN-ALR        Issues on Business License Application and Regulatory Fee            
 ***********************************************************************************************/
 @isTest
 private class ManageUnitOmniServiceTest {

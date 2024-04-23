@@ -3,7 +3,7 @@
 * @Date:       
 * @Description: The purpose of this Class is to Create Regulatory Transaction Fee and Regulatory Transaction Fee Item records related to BLA
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
-                              ALR-660           Siddharth
+                              ALR-660           Siddharth     Generating Regulatory Transaction Fee
 ***********************************************************************************************/
 public class GenerateFeeRecords {
     public static String className = 'GenerateFeeRecords';
@@ -13,7 +13,7 @@ public class GenerateFeeRecords {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  List of String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     @InvocableMethod

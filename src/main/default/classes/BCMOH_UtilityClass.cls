@@ -3,7 +3,7 @@
 * @Date:       
 * @Description: The purpose of this Class is for Util class for common re-usable methods
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
-                            ALR -560             Sweta 
+                            ALR -560             Sweta        Renewal verification and renewal mass email
 ***********************************************************************************************/
 public class BCMOH_UtilityClass {
     public static String className = 'BCMOH_UtilityClass';
@@ -11,7 +11,7 @@ public class BCMOH_UtilityClass {
 * @Author:
 * @date: 
 * @description: The purpose of this method is to fetch renewal details FROM metadata
-* @return:  
+* @return:  Map<String, List<String>>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static Map<String, List<String>> getAccRenewals(String renewalName) {
@@ -31,7 +31,7 @@ public class BCMOH_UtilityClass {
 * @Author:
 * @date: 
 * @description: The purpose of this method is to fetch active email template developer name based on purpose FROM metadata
-* @return:  
+* @return:  Map<Id, String>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static Map<Id, String> getEmailtemplateName(String templatePurpose) {
@@ -54,7 +54,7 @@ public class BCMOH_UtilityClass {
 * @Author:
 * @date: 
 * @description: The purpose of this method is to fetch active email template developer name based on purpose FROM metadata-ALR-1000
-* @return:  
+* @return:  Map<Id, String>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static Map<Id, String> getEmailtemplatebyName(String templatePurposeDetails) {
@@ -77,7 +77,7 @@ public class BCMOH_UtilityClass {
 * @Author:
 * @date: 
 * @description: The purpose of this method is to fetch email template based on developer name provided
-* @return:  
+* @return:  EmailTemplate
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static EmailTemplate getEmailTemplate(String templateDevName) {
@@ -95,7 +95,7 @@ public class BCMOH_UtilityClass {
 * @Author:
 * @date: 
 * @description: The purpose of this method is to fetch contentVersion Ids for provided LinkedEntity Ids
-* @return:  
+* @return:  ContentDocWrapper
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static ContentDocWrapper getContentDocMap(Set<Id> linkedIds) {
@@ -135,7 +135,7 @@ public class BCMOH_UtilityClass {
 * @Author:
 * @date: 
 * @description: The purpose of this method is to fetch fetch org wide email based on Org
-* @return:  
+* @return:  OrgWideEmailAddress
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static OrgWideEmailAddress getOrgWideEmailAddress() {
@@ -143,7 +143,7 @@ public class BCMOH_UtilityClass {
         String fromAddress = '';
         try {
             if(Test.isRunningTest()) {
-                orgWideAddr = [SELECT Id FROM OrgWideEmailAddress LIMIT 1];
+                orgWideAddr = [SELECT Id FROM OrgWideEmailAddress WITH SECURITY_ENFORCED LIMIT 1];
             }
             else {
                 //stores email addresses in custom setting
@@ -152,7 +152,7 @@ public class BCMOH_UtilityClass {
                 Boolean isSandbox = String.isEmpty(DomainParser.parse(DomainCreator.getOrgMyDomainHostname()).getSandboxName()) ? false : true;
                 //based on org type, fetch respective email as fromAddress
                 fromAddress = isSandbox ? notifDefault.TestSupportEmail__c : notifDefault.ProductionSupportEmail__c;
-                orgWideAddr = [SELECT Id FROM OrgWideEmailAddress WHERE Address =: fromAddress LIMIT 1];
+                orgWideAddr = [SELECT Id FROM OrgWideEmailAddress WHERE Address =: fromAddress WITH SECURITY_ENFORCED LIMIT 1];
             }
         }
         catch(Exception ex) {
@@ -165,6 +165,7 @@ public class BCMOH_UtilityClass {
 * @Author:
 * @date: 
 * @description: The purpose of this method is to set Email parameters
+* @return:  Messaging.SingleEmailMessage
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static Messaging.SingleEmailMessage setEmailParams(Id targetId, Id templateId, Id orgWideAddressId, List<Id> attachmentIds, Id whatId, String emailBody, String subjectValue, String emailHtmlBody) {//ALR-827 - added param htmlbody
@@ -183,7 +184,7 @@ public class BCMOH_UtilityClass {
 * @Author:
 * @date: 
 * @description: The purpose of this method is to fetch DocumentTemplateContentDoc map given template name
-* @return:  
+* @return:  Map<String, DocumentTemplateContentDoc>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static Map<String, DocumentTemplateContentDoc> getDocTempContentMap(List<String> templateNames) {
@@ -201,7 +202,7 @@ public class BCMOH_UtilityClass {
 * @Author:
 * @date: 
 * @description: The purpose of this method is to convert a Map to a JSON string
-* @return:  
+* @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static String mapToJson(Map<String, Object> inputMap) {
@@ -213,7 +214,7 @@ public class BCMOH_UtilityClass {
 * @Author:
 * @date: 
 * @description: The purpose of this method is to get substring of document title without file extension
-* @return:  
+* @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static String getSubstringWithoutExtension(String documentTitle) {
@@ -230,7 +231,7 @@ public class BCMOH_UtilityClass {
 * @Author:
 * @date: 
 * @description: The purpose of this method is to create document record
-* @return:  
+* @return:  DocumentGenerationProcess
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static DocumentGenerationProcess getDocGenProcRec(String type, String requestText, String referenceId, String tokenData, String docGenType) {
@@ -247,7 +248,7 @@ public class BCMOH_UtilityClass {
 * @Author:
 * @date: 
 * @description: The purpose of this method is to get map of document name and title for given purpose- ALR-775
-* @return:  
+* @return:  Map<String, String>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static Map<String, String> getDocNameTitle(String docGenPurpose) {
@@ -268,7 +269,7 @@ public class BCMOH_UtilityClass {
 * @Author:
 * @date: 
 * @description: The purpose of this method is to ALR-997
-* @return:  
+* @return:  Map<String, String>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static Map<String, String> getDocNameTitleLateFee(String docGenPurpose) {
@@ -288,7 +289,7 @@ public class BCMOH_UtilityClass {
 * @Author:
 * @date: 
 * @description: The purpose of this method is to update all bla records - DML
-* @return:  
+* @return:  List of BusinessLicenseApplication
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //ALR-560 - common util class
@@ -317,7 +318,7 @@ public class BCMOH_UtilityClass {
 * @Author:
 * @date: 
 * @description: The purpose of this method is to update all bla late fee status
-* @return:  
+* @return:  List of BusinessLicenseApplication
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static List<BusinessLicenseApplication> updateBlaLateFeeStatus(Map<Id, String> blaIdDetailsMap, String blalatefeeStatus) {

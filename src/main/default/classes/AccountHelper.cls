@@ -1,17 +1,17 @@
 /**********************************************************************************************
 * @Author:Accenture_ALR Dev Team   
 * @Date:       
-* @Description: The purpose of this Class is to create Inspection Records
+* @Description: The purpose of this Class is to have the methods related to account trigger
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
-                           ALR-928             Komal 
+                           ALR-928             Komal          Compliance inspection scheduling based on compliance score
 ***********************************************************************************************/
 public class AccountHelper {
     static String className = 'AccountHelper';
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is to create Inspection Records
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static void createInspection(List<Account> accList){
@@ -24,7 +24,7 @@ public class AccountHelper {
             List<Account> accList1 = [SELECT Id, Name, Rating, OwnerId, 
                                       (SELECT Id, Location.VisitorAddress.Address, LocationId 
                                        FROM AssociatedLocations LIMIT 1) 
-                                      FROM Account WHERE Id IN: accList WITH SECURITY_ENFORCED];
+                                      FROM Account WHERE Id IN: accList AND Rating != NULL WITH SECURITY_ENFORCED];
             List<InspectionType> insTypeList = [SELECT Id, Name FROM InspectionType 
                                                 WHERE Name = 'Compliance Monitoring Inspection' WITH SECURITY_ENFORCED LIMIT 1];
             mapInspectionType.put('InspectionType', insTypeList.get(0).Id);

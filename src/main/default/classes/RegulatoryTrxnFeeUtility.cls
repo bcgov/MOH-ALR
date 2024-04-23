@@ -3,7 +3,7 @@
 * @Date:       
 * @Description: The purpose of this Controller class for RegulatoryTrxnFeeTriggerHandler
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
-                           ALR-40              Sweta
+                           ALR-40              Sweta          Fee calculation for newly added unit(s)
 ***********************************************************************************************/
 public class RegulatoryTrxnFeeUtility {
     public static String className = 'RegulatoryTrxnFeeUtility';
@@ -12,7 +12,7 @@ public class RegulatoryTrxnFeeUtility {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //method to check if fee recs status is updated to paid and update respective unit recs to paid based on FeeType__c of fee item recs
@@ -42,14 +42,11 @@ public class RegulatoryTrxnFeeUtility {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  Map<Id, Asset>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //fetch unit recs whose status needs to be updated
     public static Map<Id, Asset> fetchUnitRecs(Map<Id, RegulatoryTrxnFee> regTransMap) {
-        Map<Id, RegulatoryTrxnFeeItem> transFeeItemMap = new Map<Id, RegulatoryTrxnFeeItem>();
-        Map<Id, String> assetUpdateMap = new Map<Id, String>();
-        Set<Id> assetParentIds = new Set<Id>();
         Set<Id> assetChildIds = new Set<Id>();
         Map<Id, String> assetChildIdStatusMap = new Map<Id, String>();
         Map<Id, Asset> updateAssetMap = new Map<Id, Asset>();

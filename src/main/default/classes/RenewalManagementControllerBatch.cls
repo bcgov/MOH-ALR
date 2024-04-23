@@ -41,7 +41,7 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //fetching flow inputs into attribute and run batch 
@@ -61,7 +61,7 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  Database.QueryLocator
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //start method
@@ -94,7 +94,7 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //execute method
@@ -136,7 +136,7 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //finish method

@@ -4,7 +4,7 @@
 * @Description: The purpose of this Controller class to create renewal records and related fee records
                 referenced in GenerateRenewalsForAccounts flow and RenewalManagementControllerBatch class
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
-                           ALR-36             Sweta
+                           ALR-36             Sweta           License renewal initiation
 ***********************************************************************************************/
 public with sharing class RenewalManagementController {
     //static Constants
@@ -18,7 +18,7 @@ public with sharing class RenewalManagementController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  List of String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //method to return number of active accounts ready for renewal for current year
@@ -51,7 +51,7 @@ public with sharing class RenewalManagementController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  Map<Id, BusinessLicenseApplication>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //method to create bla records for account (bulkified)
@@ -91,7 +91,7 @@ public with sharing class RenewalManagementController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  BusinessLicenseApplication
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //method to form a bla record with given parameters
@@ -112,7 +112,7 @@ public with sharing class RenewalManagementController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  Map<Id, RegulatoryTrxnFee>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //create transaction fee records
@@ -140,7 +140,7 @@ public with sharing class RenewalManagementController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  RegulatoryTrxnFee
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //method to form a RegulatoryTrxnFee record with given parameters
@@ -159,7 +159,7 @@ public with sharing class RenewalManagementController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  List of RegulatoryTrxnFeeItem
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //create transaction fee ITEM records
@@ -189,7 +189,7 @@ public with sharing class RenewalManagementController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  RegulatoryTrxnFeeItem
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //method to form a RegulatoryTrxnFeeItem record with given parameters
@@ -209,7 +209,7 @@ public with sharing class RenewalManagementController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  Map<Id, RegulatoryTrxnFee>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     // start of ALR-997
@@ -225,7 +225,6 @@ public with sharing class RenewalManagementController {
                 RegulatoryTrxnFee transFeeRec = createLateFeeTransFeeRecord(transFeeRecTypeId, BLARec.AccountId, BLARec.Id, lateFeeType, feeStatus, dueDate);
                 transFeeAccMap.put(BLARec.Id, transFeeRec);
             }
-            
             //Insert RegulatoryTrxnFee records
             Database.SaveResult[] srList = Database.Insert(transFeeAccMap.values(), false);
         }
@@ -239,7 +238,7 @@ public with sharing class RenewalManagementController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  RegulatoryTrxnFee
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //method to form a RegulatoryTrxnFee record with given parameters for Late Fee
@@ -258,7 +257,7 @@ public with sharing class RenewalManagementController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  List of RegulatoryTrxnFeeItem
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //create transaction fee ITEM records for Late Fee
@@ -289,7 +288,7 @@ public with sharing class RenewalManagementController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  RegulatoryTrxnFeeItem
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //method to form a RegulatoryTrxnFeeItem record with given parameters for Late Fee

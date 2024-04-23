@@ -3,7 +3,9 @@
 * @Date:       
 * @Description: The purpose of this Class is for 
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
-                11-8-23                        ChangeMeIn@UserSettingsUnder.SFDoc         
+                11-8-23                        ChangeMeIn@UserSettingsUnder.SFDoc   
+                           ALR-185             ACN-ALR        Generating Transaction Fee  
+                           ALR-726             ACN-ALR        Issues on Business License Application and Regulatory Fee                  
 ***********************************************************************************************/
 @isTest
 public class ManageUnitsControllerTest {
@@ -18,7 +20,6 @@ public class ManageUnitsControllerTest {
         BusinessLicenseApplication blaRec = TestDataFactory.createRenewalBla(residence.LicenseType__c, residence.Id, true);
         Asset unit1 = TestDataFactory.createUnit('1','Private',2,residence.Id,true);
         unit1.recordTypeId = parentAssetRTId;
-        //unit1.GenerateInvoice__c = true;
         update unit1;
         
     }
@@ -33,9 +34,7 @@ public class ManageUnitsControllerTest {
         unitupdate.AccountId=residence.Id;
         unitupdate.GenerateRenewalInvoice__c=true;
         updateUnits.add(unitupdate);
-       // string str = JSON.serialize(unit);
         object data =(object)updateUnits;        
-        
         
         try{
         ManageUnitsController.getUnitBasedOnResidence(residence.Id);
@@ -44,7 +43,6 @@ public class ManageUnitsControllerTest {
             Assert.areEqual('Script-thrown exception', e.getMessage());  
         } 
         Assert.areEqual(unitupdate.Quantity,1); 
-        
     }
     
     @isTest
@@ -57,7 +55,6 @@ public class ManageUnitsControllerTest {
         unitupdate.Id = unitupdate.Id;
         unitupdate.AccountId=residence.Id;
         updateUnits.add(unitupdate);
-       // string str = JSON.serialize(unit);
         object data =(object)updateUnits;   
         try{
         ManageUnitsController.getUnitBasedOnResidence(residence.Id);

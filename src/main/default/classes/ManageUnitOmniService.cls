@@ -90,8 +90,7 @@ global class ManageUnitOmniService implements Callable {
 * Created For:
 * ********************************************************************************************************/
     private void insertMergedAssets(Map<String, List<Asset>> assetsByUniqueStringMap,Map<String,Decimal> totalQuantityByUnqStringMap,Map<String, Asset> assetsByUniqueParentStringMap) {
-        List<Asset> insertAssetList = new List<Asset>();
-        List<Asset> updateParentAssetList = new List<Asset>();             
+        List<Asset> insertAssetList = new List<Asset>();            
         try{
             for (String uniqueStr : assetsByUniqueStringMap.keySet()) {
                 List<Asset> mergedUnits = assetsByUniqueStringMap.get(uniqueStr);                            
@@ -174,7 +173,6 @@ global class ManageUnitOmniService implements Callable {
 * ********************************************************************************************************/
     private void updateParentOnChildAssets(Database.UpsertResult[] insertedAssetsSR){
         Map<String, Asset> insertedParentMap = new Map<String, Asset>();
-        Map<String, Asset> insertedChildMap = new Map<String, Asset>();
         List<Asset> updateParentonChildAssetList = new List<Asset>();  
         Set<Id> insertedAssetIdSet = new Set<Id>();
         try{
@@ -183,7 +181,7 @@ global class ManageUnitOmniService implements Callable {
                     insertedAssetIdSet.add(sr.getId()); 
                 }                                      
             }
-            List<Asset> insertedAssetList = [SELECT Id, Amount__c, Status, Name, Description, GenerateRenewalInvoice__c,GenerateInvoice__c, Quantity, AccountId, Capacity__c, Type__c, ParentId ,RecordTypeId FROM Asset WHERE Id IN : insertedAssetIdSet];
+            List<Asset> insertedAssetList = [SELECT Id, Amount__c, Status, Name, Description, GenerateRenewalInvoice__c,GenerateInvoice__c, Quantity, AccountId, Capacity__c, Type__c, ParentId ,RecordTypeId FROM Asset WHERE Id IN : insertedAssetIdSet WITH SECURITY_ENFORCED];
             for (Asset insertedAsset : insertedAssetList){
                 String unitstr = insertedAsset.AccountId+insertedAsset.Capacity__c+insertedAsset.Type__c;
                 if(!insertedParentMap.containsKey(unitstr) && insertedAsset.RecordTypeId == BCMOH_Constants.parentAssetRecTypeId ){

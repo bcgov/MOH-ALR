@@ -3,7 +3,7 @@
 * @Date:       
 * @Description: The purpose of this Controller class is for LateFeeManagementTable LWC
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
-                            ALR-996            Anilkumar             
+                            ALR-996            Anilkumar      Generate Renewal Late Fee Transaction         
 ***********************************************************************************************/
 public class LateFeeManagementTableController {
     public static String className = 'LateFeeManagementTableController';
@@ -12,7 +12,7 @@ public class LateFeeManagementTableController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  List of BusinessLicenseApplication
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
       @AuraEnabled(cacheable=true)
@@ -56,7 +56,7 @@ public class LateFeeManagementTableController {
 * @Author: Accenture_ALR Dev Team
 * @date: 
 * @description: The purpose of this method is to
-* @return:  
+* @return:  Boolean
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     @AuraEnabled

@@ -3,7 +3,7 @@
 * @Date:       
 * @Description: The purpose of this Class is to 
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
-                           ALR-928             Komal 
+                           ALR-928             Komal          Compliance inspection scheduling based on compliance score 
 ***********************************************************************************************/
 @isTest
 public class AccountTriggerTest {

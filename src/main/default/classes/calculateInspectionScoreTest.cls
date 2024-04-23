@@ -3,6 +3,7 @@
 * @Date:       
 * @Description: The purpose of this Class is to 
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
+                           ALR -860           Komal Gupta    Performing CAT Inspection - Part A (Inspection assessment)
 ***********************************************************************************************/
 @isTest
 public class calculateInspectionScoreTest {
