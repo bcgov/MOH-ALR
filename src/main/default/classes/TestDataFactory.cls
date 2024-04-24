@@ -22,7 +22,7 @@ public class TestDataFactory {
         //residence.ClassType__c = 'Mental Helath';
         residence.LicenseType__c = licenseId;//ALR-185
         Residence.ParentId =Registrant.Id;
-        Residence.Status__c = 'Registered Active with Conditions';//'Registered Active';//ALR-36 - added status
+                Residence.Status__c = 'Registered Active with Conditions';//'Registered Active';//ALR-36 - added status
         if(dmlOption){
             insert Residence;
         }
@@ -198,5 +198,21 @@ public class TestDataFactory {
             insert complaintCase;
         }
         return complaintCase;
+    }
+    
+    @testVisible
+    public static Visit createinspection(Id accountId, Id visittypeId, Id placeid, String inspectionmethod, Boolean dmlOption) {
+        //ALR-860
+        Visit inspection = new Visit(
+            AccountId = accountId,
+            VisitTypeId = visittypeId,
+            InspectionMethod__c = inspectionmethod,
+            PlannedVisitStartTime = System.today(),
+            PlaceId = placeid
+                    );
+        if (dmlOption) {
+            insert inspection;
+        }
+        return inspection;
     }
 }

@@ -11,16 +11,6 @@
     </approvalPageFields>
     <approvalStep>
         <allowDelegate>false</allowDelegate>
-        <approvalActions>
-            <action>
-                <name>ComplaintCaseApproveDateFieldUpdate</name>
-                <type>FieldUpdate</type>
-            </action>
-            <action>
-                <name>EmailRegistrantwithUnsubstantiatedLetter</name>
-                <type>Task</type>
-            </action>
-        </approvalActions>
         <assignedApprover>
             <approver>
                 <name>ApprovalQueue</name>
@@ -35,6 +25,10 @@
     <approvalStep>
         <allowDelegate>false</allowDelegate>
         <approvalActions>
+            <action>
+                <name>ComplaintCaseApproveDateFieldUpdate</name>
+                <type>FieldUpdate</type>
+            </action>
             <action>
                 <name>EmailRegistrantwithSubstantiatedLetterandWebPosting</name>
                 <type>Task</type>
@@ -67,7 +61,7 @@
     <description>Approval Process for Investigators to submit Complaint Case for approval - ALR-278</description>
     <enableMobileDeviceAccess>false</enableMobileDeviceAccess>
     <entryCriteria>
-        <booleanFilter>1 And (2 OR 3)</booleanFilter>
+        <booleanFilter>1 And (2 OR 3) And 4 And 5</booleanFilter>
         <criteriaItems>
             <field>Case.RecordType</field>
             <operation>equals</operation>
@@ -82,6 +76,15 @@
             <field>Case.Status</field>
             <operation>equals</operation>
             <value>Under Inspection</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Case.ApprovedDate__c</field>
+            <operation>equals</operation>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Case.IsSubstantiated__c</field>
+            <operation>equals</operation>
+            <value>True</value>
         </criteriaItems>
     </entryCriteria>
     <finalApprovalActions>

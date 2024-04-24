@@ -14,7 +14,7 @@ public class RenewalManagementControllerTest {
         
         //RegulatoryAuthorizationType
         RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
-        
+
         //account - insert scenario
         Account residenceRec1 = TestDataFactory.createResidence('Residence', 'residenceAccount1', regAuth.Id, true);
         //registrant billing address
@@ -24,6 +24,7 @@ public class RenewalManagementControllerTest {
         //bla
         //BusinessLicenseApplication blaRec = TestDataFactory.createRenewalBla(residenceRec1.LicenseType__c, residenceRec1.Id, true); 
         //asset parent
+
         Asset unitRec1 = TestDataFactory.createUnit('1', 'Private', 5, residenceRec1.Id, false);
         unitRec1.recordTypeId = parentAssetRTId;
         unitRec1.Amount__c = 'Full Unit Fee';

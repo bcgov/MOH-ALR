@@ -30,13 +30,50 @@ public class BCMOH_UtilityClass {
                     templateDetailsMap.put(emailTemplateRec.Id, emailTemplateRec.EmailTemplateDeveloperName__c);
                     break;
                 }
+                                
             }
+                
         }
         catch(Exception ex) {
             system.debug('use exception handling'+ex.getMessage());
         }
         return templateDetailsMap;
     }
+    
+    
+    //method to fetch active email template developer name based on purpose from metadata-ALR-1000
+      public static Map<Id, String> getEmailtemplatebyName(String templatePurposeDetails) {
+        Map<Id, String> templateDetailsMap = new Map<Id, String>();
+        try {
+            for(EmailTemplateDetails__mdt emailTemplateRec : EmailTemplateDetails__mdt.getAll().values()) {
+                 if(emailTemplateRec.IsActive__c && emailTemplateRec.Purpose__c == templatePurposeDetails) {
+                    templateDetailsMap.put(emailTemplateRec.Id, emailTemplateRec.EmailTemplateDeveloperName__c);
+                    break;
+                }
+              }
+        }
+        catch(Exception ex) {
+            system.debug('use exception handling'+ex.getMessage());
+        }
+        return templateDetailsMap;
+    }
+    
+    //method to fetch active email template developer name based on purpose from metadata-ALR-1000
+      /*public static Map<Id, String> getLateFeeEmailtemplateName(String templatePurpose) {
+        Map<Id, String> templateDetailsMap = new Map<Id, String>();
+        try {
+            for(EmailTemplateDetails__mdt emailTemplateRec : EmailTemplateDetails__mdt.getAll().values()) {
+                if(emailTemplateRec.IsActive__c && emailTemplateRec.Purpose__c == templatePurpose) {
+                    templateDetailsMap.put(emailTemplateRec.Id, emailTemplateRec.EmailTemplateDeveloperName__c);
+                    break;
+                }
+            }
+        }
+        catch(Exception ex) {
+            system.debug('use exception handling'+ex.getMessage());
+        }
+        return templateDetailsMap;
+    }*/
     
     //method to fetch email template based on developer name provided
     public static EmailTemplate getEmailTemplate(String templateDevName) {
@@ -63,22 +100,18 @@ public class BCMOH_UtilityClass {
                                                   WHERE LinkedEntityId IN: linkedIds]) {
                                                       //all doc Ids
                                                       allDocIds.add(contentDoc.ContentDocument.Id);
-                                                      system.debug('yui getContentDocMap meth allDocIds '+allDocIds);
                                                       //map of linkedId with its associated doc ids
                                                       Set<Id> docIdSet = new Set<Id>();
                                                       if(entityContentIdsMap1.containsKey(contentDoc.LinkedEntityId)) {
-                                                          system.debug('yui inside if contans wrapper rec '+entityContentIdsMap1);
                                                           docIdSet = entityContentIdsMap1.get(contentDoc.LinkedEntityId);
                                                       }
                                                       docIdSet.add(contentDoc.ContentDocument.Id);
                                                       entityContentIdsMap1.put(contentDoc.LinkedEntityId, docIdSet);
             }
-            system.debug('cdws'+entityContentIdsMap1);
             ContentDocWrapperRecord.entityContentIdsMap = entityContentIdsMap1;
             //fetch content version vs content doc map
             for(ContentVersion contentVerRec : [SELECT Id, ContentDocument.Id, ContentSize FROM ContentVersion
                                                 WHERE ContentDocument.Id IN: allDocIds]) {
-                                                    system.debug('yui inside for content version wrap '+contentDocVerMap1);
                                                     contentDocVerMap1.put(contentVerRec.ContentDocument.Id, contentVerRec.Id);
                                                 }
             ContentDocWrapperRecord.contentDocVerMap = contentDocVerMap1;
@@ -97,18 +130,15 @@ public class BCMOH_UtilityClass {
         try {
             if(Test.isRunningTest()) {
             	orgWideAddr = [SELECT Id from OrgWideEmailAddress LIMIT 1];
-                system.debug('fsd'+orgWideAddr);
             }
             else {
                 //stores email addresses in custom setting
                 Notification__c notifDefault = Notification__c.getOrgDefaults();
-                system.debug('csd Notification__c '+notifDefault);
                 //fetch org type
                 Boolean isSandbox = String.isEmpty(DomainParser.parse(DomainCreator.getOrgMyDomainHostname()).getSandboxName()) ? false : true;
                 //based on org type, fetch respective email as fromAddress
                 fromAddress = isSandbox ? notifDefault.TestSupportEmail__c : notifDefault.ProductionSupportEmail__c;
                 orgWideAddr = [SELECT Id from OrgWideEmailAddress WHERE Address =: fromAddress LIMIT 1];
-                system.debug('csd orgWideAddr '+orgWideAddr);
             }
         }
         catch(Exception ex) {
@@ -130,7 +160,9 @@ public class BCMOH_UtilityClass {
         emailMsg.setplainTextBody(emailBody);
         emailMsg.setHtmlBody(emailHtmlBody);//ALR-827 - added html body
         return emailMsg;
+        
     }
+    
     
     //method to fetch DocumentTemplateContentDoc map given template name
     public static Map<String, DocumentTemplateContentDoc> getDocTempContentMap(List<String> templateNames) {
@@ -139,10 +171,8 @@ public class BCMOH_UtilityClass {
                                                      FROM DocumentTemplateContentDoc
                                                      WHERE DocumentTemplate.Name IN: templateNames 
                                                      LIMIT 5000]) {
-                                                       system.debug('## csd LatestContentVersionId '+docTempRec.LatestContentVersionId);
-                                                         system.debug('## csd docTempRec.DocumentTemplate.Name '+docTempRec.DocumentTemplate.Name);
                                                        templateNameDocMap.put(docTempRec.DocumentTemplate.Name, docTempRec);
-                                                     }
+                                                    }
         return templateNameDocMap;
     }
     
@@ -189,6 +219,22 @@ public class BCMOH_UtilityClass {
         return docNameWithTitleMap;
     }
     
+    //start of ALR-997
+    public static Map<String, String> getDocNameTitleLateFee(String docGenPurpose) {
+        Map<String, String> docNameWithTitleMap = new Map<String, String>();
+        try {
+            if(docGenPurpose.equals(BCMOH_Constants.templatePurposeDetails)){
+                docNameWithTitleMap.put('LateFee_Template', 'Late Fee Invoice '+BCMOH_Constants.invoiceIdMerge);//ALR-1000
+            }
+        }
+        catch(Exception ex) {
+            LogService.logAndPublish(className, 'getTemplateNameWithTitleMap', '', ex);
+        }
+        return docNameWithTitleMap;
+    }
+    //end of ALR-997
+
+      
     //ALR-560 - common util class
     //update all bla records - DML
 	public static List<BusinessLicenseApplication> updateBlaStatus(Map<Id, String> blaIdDetailsMap, String blaStatus) {
@@ -202,8 +248,8 @@ public class BCMOH_UtilityClass {
                BusinessLicenseApplication blaRec = new BusinessLicenseApplication(
                Id = blaId,
                Status = blaStatus,
-               RenewalError__c = renewalMsg);
-               blaUpdateList.add(blaRec);
+               RenewalDetail__c = renewalMsg);
+                blaUpdateList.add(blaRec);
            }
        }
        catch(exception ex) {
@@ -212,7 +258,33 @@ public class BCMOH_UtilityClass {
        }
         return blaUpdateList;
 	}
-        
+    
+    //update all bla late fee status
+	public static List<BusinessLicenseApplication> updateBlaLateFeeStatus(Map<Id, String> blaIdDetailsMap, String blalatefeeStatus) {
+       List<BusinessLicenseApplication> blaUpdateList = new List<BusinessLicenseApplication>();
+       try {     
+            BusinessLicenseApplication BLAquery = [SELECT Id, RenewalDetail__c FROM BusinessLicenseApplication WHERE Id =:blaIdDetailsMap.keySet() LIMIT 1];
+            
+           //loop through bla update map
+           for(Id blaId : blaIdDetailsMap.keySet()) {
+               //truncate the message if length more than 255 chars
+               String renewalMsg = blaIdDetailsMap.get(blaId);
+               renewalMsg = BLAquery.RenewalDetail__c != NULL ? BLAquery.RenewalDetail__c + ' ; ' + renewalMsg : renewalMsg;
+               BusinessLicenseApplication blaRec = new BusinessLicenseApplication(
+               Id = blaId,
+               Late_Fee_Status__c = blalatefeeStatus,
+               RenewalDetail__c = renewalMsg);
+               blaUpdateList.add(blaRec);
+           }
+       }
+       catch(exception ex) {
+           system.debug('caught in updateBlaLateFeeStatus - '+ex.getMessage());
+           LogService.logAndPublish(className, 'updateBlaLateFeeStatus', '', ex);
+       }
+        return blaUpdateList;
+	}
+    
+             
     //wrapper class to pass content doc details
     public class ContentDocWrapper {
         public Map<Id, Set<Id>> entityContentIdsMap;// {get;set;}

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Restricting_BLA_Status_edit_post_approva</fullName>
+    <active>true</active>
+    <description>Restricting users not to change statuses manually from pending approval to approved or vice-versa</description>
+    <errorConditionFormula>AND(RecordType.DeveloperName = &quot;New_License_Application_Record_Type&quot;,
+    ISPICKVAL(Status, &quot;Pending Approval&quot;),
+    NOT(
+        OR(
+            ISPICKVAL(PRIORVALUE(Status), &quot;Pending Approval&quot;)
+            
+        )
+    )
+) ||
+AND(RecordType.DeveloperName = &quot;New_License_Application_Record_Type&quot;,
+    ISPICKVAL(Status, &quot;Approved&quot;),
+    NOT(
+        OR(
+            ISPICKVAL(PRIORVALUE(Status), &quot;Approved&quot;)
+        )
+    )
+)</errorConditionFormula>
+    <errorMessage>Status cannot be changed. Use another Status.</errorMessage>
+</ValidationRule>
