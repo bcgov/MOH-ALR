@@ -1,10 +1,11 @@
-/**
-* @Name              : InspTasksCreationControllerTest
-* @Description       : Test class for Controller class for Inspection Assessment Indicator Creation
-* @Author            : Anilkumar (Accenture)
-* @StoryNo           : ALR-1230
-**/
-@IsTest(SeeAllData=true)
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this Controller class for Inspection Assessment Indicator Creation
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]    
+                           ALR-1230             Anilkumar     Error while creating the inspection
+***********************************************************************************************/
+@isTest(SeeAllData=true)
 public class InspTasksCreationControllerTest {
     public static testMethod void testInsert(){
         List<Account> accList = new List<Account>();
@@ -14,7 +15,7 @@ public class InspTasksCreationControllerTest {
         RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Health', 'License', 'MH', 1, 2, 3, 4, true);
         Account AccRec = TestDataFactory.createResidence('Residence', 'residence1', regAuth.Id, true);
         accList.add(AccRec);
-        Account acc = [Select Id from Account Where Name ='residence1'];
+        Account acc = [SELECT Id FROM Account WHERE Name ='residence1'];
         
         Schema.Location loc = new Schema.Location();
         loc.Name = 'U.S. 101N';
@@ -22,7 +23,7 @@ public class InspTasksCreationControllerTest {
         loc.Latitude = 28.635308;
         insert loc;
         Set<Id>loct = New Set<Id>();
-        List<Schema.location> loction =[select id,Name from Location where Name ='U.S. 101N'];
+        List<Schema.location> loction =[SELECT id,Name FROM Location WHERE Name ='U.S. 101N'];
         
         for(Account acc1 : accList){
             AssociatedLocation assosicatedloc = new AssociatedLocation();
@@ -51,14 +52,14 @@ public class InspTasksCreationControllerTest {
         insp.PlaceId = loction[0].Id;
         insp.VisitTypeId =insType.Id;
         Insert insp;
-        Visit inspec = [Select id from Visit where AccountId =:acc.id Limit 1];
+        Visit inspec = [SELECT id FROM Visit WHERE AccountId =:acc.id Limit 1];
 
         String likeValue = '%Application%Inspection%';
-            List<ActionPlanTemplate> apt = [Select id,ActionPlanType,Status from ActionPlanTemplate WHERE Name Like :likevalue and Status ='Final' LIMIT 3];
+            List<ActionPlanTemplate> apt = [SELECT id,ActionPlanType,Status FROM ActionPlanTemplate WHERE Name Like :likevalue and Status ='Final' LIMIT 3];
 
-        List<ActionPlanTemplateVersion> aptv =[Select id from ActionPlanTemplateVersion WHERE ActionPlanTemplateId =: apt[0].Id Limit 3];
+        List<ActionPlanTemplateVersion> aptv =[SELECT id FROM ActionPlanTemplateVersion WHERE ActionPlanTemplateId =: apt[0].Id Limit 3];
 
-        List <ActionPlanTemplateItem> apti = [Select Id from ActionPlanTemplateItem WHERE ActionPlanTemplateVersionId =: aptv[0].Id Limit 3 ];
+        List <ActionPlanTemplateItem> apti = [SELECT Id FROM ActionPlanTemplateItem WHERE ActionPlanTemplateVersionId =: aptv[0].Id Limit 3 ];
         
         List<InspTasksCreationController.FlowInputs> flowInputs = new List<InspTasksCreationController.FlowInputs>();
         InspTasksCreationController.FlowInputs input = new InspTasksCreationController.FlowInputs();
@@ -68,13 +69,13 @@ public class InspTasksCreationControllerTest {
             input.InspId = inspec.id;
         flowInputs.add(input);
               
-        List<ActionPlanTemplateItemValue> aptiv = [Select id,ItemEntityFieldName, ValueLiteral, ActionPlanTemplateItemId from ActionPlanTemplateItemValue WHERE ActionPlanTemplateItemId =: apti[0].id AND ItemEntityFieldName = :BCMOH_Constants.ItemEntityName];
+        List<ActionPlanTemplateItemValue> aptiv = [SELECT id,ItemEntityFieldName, ValueLiteral, ActionPlanTemplateItemId FROM ActionPlanTemplateItemValue WHERE ActionPlanTemplateItemId =: apti[0].id AND ItemEntityFieldName = :BCMOH_Constants.ItemEntityName];
         Set<Id> LiteralValues = new Set<Id>();
         for(ActionPlanTemplateItemValue aptiv3 : aptiv){
             LiteralValues.add(aptiv3.ValueLiteral);
         }
          If(LiteralValues.Size() !=0){
-            List<AssessmentTaskDefinition> atds= [Select Id,Category__c From AssessmentTaskDefinition Where Id IN: LiteralValues];
+            List<AssessmentTaskDefinition> atds= [SELECT Id,Category__c FROM AssessmentTaskDefinition WHERE Id IN: LiteralValues];
 
         List<AssessmentTask> ATstoInsert = new List<AssessmentTask>();
         AssessmentTask  newAssessmentTask = new AssessmentTask();

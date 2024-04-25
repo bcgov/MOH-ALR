@@ -1,3 +1,9 @@
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this Class is for 
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]               
+***********************************************************************************************/
 public class InputWrapper {
    
     public String elementName{get;set;}
@@ -15,11 +21,4 @@ public class InputWrapper {
 		public String Description{get;set;}
         public Boolean GenerateInvoiceValue{get;set;}
 	}
-
-	
-	/*public static InputWrapper parse(String json) {
-		return (InputWrapper) System.JSON.deserialize(json, InputWrapper.class);
-	}*/
-
-
 }

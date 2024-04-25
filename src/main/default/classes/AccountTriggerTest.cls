@@ -1,9 +1,10 @@
-/**
-* @Name              : AccountTriggerTest
-* @Description       : Test class of AccountTrigger and AccountHelper
-* @Author            : Komal Gupta (Accenture)
-* @StoryNo           : ALR-928
-**/
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this Class is to 
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
+                           ALR-928             Komal          Compliance inspection scheduling based on compliance score 
+***********************************************************************************************/
 @isTest
 public class AccountTriggerTest {
     public static testMethod void testInsert(){
@@ -15,7 +16,7 @@ public class AccountTriggerTest {
 		Account AccRec = TestDataFactory.createResidence('Residence', 'residence1', regAuth.Id, true);
         accList.add(AccRec);
 
-        List<Account> ownridList = [select id, ownerid from account where Id =: AccRec.Id limit 1];
+        List<Account> ownridList = [SELECT id, ownerid FROM account WHERE Id =: AccRec.Id limit 1];
         accList.addAll(ownridList);
         accList.sort();
 
@@ -83,7 +84,7 @@ public class AccountTriggerTest {
 		Account AccRec = TestDataFactory.createResidence('Residence', 'residence1', regAuth.Id, true);
         accList.add(AccRec);
 
-        List<Account> ownridList = [select id, ownerid from account where Id =: AccRec.Id limit 1];
+        List<Account> ownridList = [SELECT id, ownerid FROM account WHERE Id =: AccRec.Id limit 1];
         accList.addAll(ownridList);
         accList.sort();
 
@@ -152,7 +153,7 @@ public class AccountTriggerTest {
 		Account AccRec = TestDataFactory.createResidence('Residence', 'residence1', regAuth.Id, true);
         accList.add(AccRec);
 
-        List<Account> ownridList = [select id, ownerid from account where Id =: AccRec.Id limit 1];
+        List<Account> ownridList = [SELECT id, ownerid FROM account WHERE Id =: AccRec.Id limit 1];
         accList.addAll(ownridList);
         accList.sort();
 

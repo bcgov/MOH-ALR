@@ -1,3 +1,10 @@
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this Class is for 
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
+                            ALR-996            Anilkumar      Generate Renewal Late Fee Transaction                     
+***********************************************************************************************/
 @isTest
 public class LateFeeManagementTableController_Test {
     //test data setup
@@ -80,7 +87,7 @@ public class LateFeeManagementTableController_Test {
         contactRec.MobilePhone = '8856589554';
         update contactRec;
         
-        AccountContactRelation acRec = [SELECT Id, ContactId, AccountId from AccountContactRelation LIMIT 1];
+        AccountContactRelation acRec = [SELECT Id, ContactId, AccountId FROM AccountContactRelation LIMIT 1];
         system.debug('csdcsd'+acRec);
         acRec.PrimaryContact__c = true;
         acRec.isActive = true;
@@ -124,11 +131,11 @@ public class LateFeeManagementTableController_Test {
     static void testGetLateFeeRecs() {
         BusinessLicenseApplication bla = new BusinessLicenseApplication();
         bla.AppliedDate = Date.today();
-        List<BusinessLicense> blRec = [SELECT Id, Account.Name from BusinessLicense];
+        List<BusinessLicense> blRec = [SELECT Id, Account.Name FROM BusinessLicense];
          List<String> accNames = new List<String>{'residenceAccount1'};
         List<Id> accIds = new List<Id>();
         List<Id> blaIds = new List<Id>();
-        for(Account accId : [SELECT Id from Account where Name IN: accNames LIMIT 10]) {
+        for(Account accId : [SELECT Id FROM Account WHERE Name IN: accNames LIMIT 10]) {
             for(BusinessLicenseApplication blaRec : accId.BusinessLicenseApplicationAccount){
                 if(blaRec.Status == 'Excluded'){
                     blaRec.Late_Fee_Status__c = blaRec.Status;
@@ -148,11 +155,11 @@ public class LateFeeManagementTableController_Test {
     @isTest
     static void testUpdateLateFeeRecs() {BusinessLicenseApplication bla = new BusinessLicenseApplication();
         bla.AppliedDate = Date.today();
-        List<BusinessLicense> blRec = [SELECT Id, Account.Name from BusinessLicense];
+        List<BusinessLicense> blRec = [SELECT Id, Account.Name FROM BusinessLicense];
          List<String> accNames = new List<String>{'residenceAccount1'};
         List<Id> accIds = new List<Id>();
         List<Id> blaIds = new List<Id>();
-        for(Account accId : [SELECT Id from Account where Name IN: accNames LIMIT 10]) {
+        for(Account accId : [SELECT Id FROM Account WHERE Name IN: accNames LIMIT 10]) {
             for(BusinessLicenseApplication blaRec : accId.BusinessLicenseApplicationAccount){
                 if(blaRec.Status == 'Excluded'){
                     blaRec.Late_Fee_Status__c = blaRec.Status;

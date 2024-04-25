@@ -1,10 +1,12 @@
-/**
- * @description       : 
- * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
- * @group             : 
- * @last modified on  : 12-04-2023
- * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
-**/
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this Class is for 
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
+                12-4-23                        ChangeMeIn@UserSettingsUnder.SFDoc
+                           ALR-185             ACN-ALR        Generating Transaction Fee  
+                           ALR-726             ACN-ALR        Issues on Business License Application and Regulatory Fee            
+***********************************************************************************************/
 @isTest
 private class ManageUnitOmniServiceTest {
 /*********************************************************************************************************
@@ -79,15 +81,12 @@ private class ManageUnitOmniServiceTest {
         Object result1 = unitService1.call('mergeUnits', inputMap1);
         //Test.stopTest();
         
-        System.assertEquals(true, result, 'Expected result to be true');
+        Assert.areEqual(true, result, 'Expected result to be true');
         //Test.startTest();
         RegulatoryTrxnFee regTransFeeRec = [SELECT Id, Status FROM RegulatoryTrxnFee limit 1];
         system.debug('ghh'+regTransFeeRec);
         regTransFeeRec.Status = BCMOH_Constants.feeStatus;
         Database.Update(regTransFeeRec);
         Test.stopTest();
-        // Assertions on the inserted assets
-       // List<Asset> insertedAssets = [SELECT Id, Name, AccountId, Capacity__c, Type__c, Quantity FROM Asset WHERE AccountId =:residence.Id];
-       // System.assertEquals(2, insertedAssets.size(), 'Expected 2 Asset records to be inserted');
     }
 }

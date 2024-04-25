@@ -1,3 +1,9 @@
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this class is 
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
+***********************************************************************************************/
 public without sharing class RegulatoryTrxnFeeTriggerHandler implements TriggerHandler {
     public RegulatoryTrxnFeeTriggerHandler helper;
     //beforeInsert
