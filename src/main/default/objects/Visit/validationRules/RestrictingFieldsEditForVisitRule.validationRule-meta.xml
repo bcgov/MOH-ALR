@@ -6,7 +6,8 @@
 Only the ALR Admin and Data Analyst will be able to update WebsitePostConfirmed, DatePosted, PostingRemovalDate fields . All other users can view these fields</description>
     <errorConditionFormula>NOT($Permission.EHISBypassValidationRuleCustomPermission)
 &amp;&amp;
-RecordType.DeveloperName = &apos;Inspection&apos; 
+RecordType.DeveloperName = &apos;Inspection&apos; &amp;&amp;
+NOT(ISNEW())
  &amp;&amp; 
 ($Permission.EHISAdminUser || $Permission.EHISDataAnalystUser)
 
