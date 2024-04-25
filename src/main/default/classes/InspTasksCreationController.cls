@@ -5,8 +5,7 @@
 * @StoryNo           : ALR-1230
 **/
 
-public with sharing class InspTasksCreationController {
-    Public Static String className = 'InspTasksCreationController';
+public class InspTasksCreationController {
     public class FlowInputs {
         @InvocableVariable public List<String> ATIId;
         @InvocableVariable Public String InspId; 
@@ -35,8 +34,6 @@ public with sharing class InspTasksCreationController {
         Set<Id>ATsIds = new Set<Id>();
         String categoryKey;
         Map<String, List<Id>> mapIds = new Map<String, List<Id>>();
-        List<InspectionAssessmentInd> IAIstoInsert = new List<InspectionAssessmentInd>();
-        try{
         for(ActionPlanTemplateItemValue APTIV : [Select Id,ItemEntityFieldName,ValueLiteral,ActionPlanTemplateItemId
                                                  From ActionPlanTemplateItemValue
                                                  Where ActionPlanTemplateItemId IN :APTIds
@@ -44,8 +41,7 @@ public with sharing class InspTasksCreationController {
                                                      LiteralValues.add(APTIV.ValueLiteral);   
                                                  }
         If(LiteralValues.Size() !=0){
-            ATD = [Select Id,Name,Category__c From AssessmentTaskDefinition Where Id IN: LiteralValues
-                  order by Name];
+            ATD = [Select Id,Category__c From AssessmentTaskDefinition Where Id IN: LiteralValues];
             for(AssessmentTaskDefinition ATDs : ATD){
                 ATDIds.add(ATDs.Id);
             }            
@@ -68,7 +64,7 @@ public with sharing class InspTasksCreationController {
                 }
                 mapAIDIds.get(atdid.AssessmentTaskDefinitionId).add(atdid.AssessmentIndDefinitionId);
             }            
-            
+            List<InspectionAssessmentInd> IAIstoInsert = new List<InspectionAssessmentInd>();
             for(AssessmentTask assessTask : ATstoInsert){
                 if(mapAIDIds.containsKey(assessTask.AssessmentTaskDefinitionId)){
                     for(Id aidId : mapAIDIds.get(assessTask.AssessmentTaskDefinitionId)){
@@ -78,13 +74,8 @@ public with sharing class InspTasksCreationController {
                         IAIstoInsert.add(newInspectionAssessmentInd);
                     }
                 }
-            }
-        }
-        }
-        catch(exception err) {
-            LogService.logAndPublish(className, 'Insptasks', '', err);
-            
-        }
+            } 
             Database.insert(IAIstoInsert);
         }
     }
+}
