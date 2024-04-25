@@ -1,3 +1,9 @@
+/**********************************************************************************************
+* @Author:Accenture_ALR Team   
+* @Date:       
+* @Description: The purpose of this Trigger is to trigger on particular events for Asset
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
+***********************************************************************************************/
 trigger AssetTrigger on Asset (before insert, before update, after insert, after update, before delete, after delete, after undelete) {
     
    //ByPass Trigger through Custom setting
