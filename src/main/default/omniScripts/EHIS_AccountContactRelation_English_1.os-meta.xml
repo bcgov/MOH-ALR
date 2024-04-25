@@ -106,14 +106,14 @@
         <propertySetConfig>{
   &quot;label&quot; : &quot;Confirmation&quot;,
   &quot;validationRequired&quot; : true,
-  &quot;previousLabel&quot; : &quot;Finish&quot;,
-  &quot;previousWidth&quot; : 3,
-  &quot;nextLabel&quot; : &quot;Next&quot;,
-  &quot;nextWidth&quot; : 3,
+  &quot;previousLabel&quot; : &quot;&quot;,
+  &quot;previousWidth&quot; : &quot;0&quot;,
+  &quot;nextLabel&quot; : &quot;&quot;,
+  &quot;nextWidth&quot; : &quot;0&quot;,
   &quot;cancelLabel&quot; : &quot;Cancel&quot;,
   &quot;cancelMessage&quot; : &quot;Are you sure?&quot;,
-  &quot;saveLabel&quot; : &quot;Save for later&quot;,
-  &quot;saveMessage&quot; : &quot;Are you sure you want to save it for later?&quot;,
+  &quot;saveLabel&quot; : &quot;&quot;,
+  &quot;saveMessage&quot; : &quot;&quot;,
   &quot;completeLabel&quot; : &quot;Complete&quot;,
   &quot;completeMessage&quot; : &quot;Are you sure you want to complete the script?&quot;,
   &quot;instruction&quot; : &quot;&quot;,
@@ -147,7 +147,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>7.0</sequenceNumber>
+        <sequenceNumber>8.0</sequenceNumber>
         <type>Step</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -738,6 +738,50 @@
     &quot;name&quot; : &quot;Assistant manager&quot;,
     &quot;developerName&quot; : null,
     &quot;value&quot; : &quot;Assistant manager&quot;
+  }, {
+    &quot;name&quot; : &quot;Administrative Personnel&quot;,
+    &quot;developerName&quot; : null,
+    &quot;value&quot; : &quot;Administrative Personnel&quot;
+  }, {
+    &quot;name&quot; : &quot;Registrant Main Contact&quot;,
+    &quot;developerName&quot; : null,
+    &quot;value&quot; : &quot;Registrant Main Contact&quot;
+  }, {
+    &quot;name&quot; : &quot;Registrant Secondary Contact&quot;,
+    &quot;developerName&quot; : null,
+    &quot;value&quot; : &quot;Registrant Secondary Contact&quot;
+  }, {
+    &quot;name&quot; : &quot;Director of Wellness&quot;,
+    &quot;developerName&quot; : null,
+    &quot;value&quot; : &quot;Director of Wellness&quot;
+  }, {
+    &quot;name&quot; : &quot;Executive Director&quot;,
+    &quot;developerName&quot; : null,
+    &quot;value&quot; : &quot;Executive Director&quot;
+  }, {
+    &quot;name&quot; : &quot;Director&quot;,
+    &quot;developerName&quot; : null,
+    &quot;value&quot; : &quot;Director&quot;
+  }, {
+    &quot;name&quot; : &quot;Nurse / Care Manager&quot;,
+    &quot;developerName&quot; : null,
+    &quot;value&quot; : &quot;Nurse / Care Manager&quot;
+  }, {
+    &quot;name&quot; : &quot;CEO&quot;,
+    &quot;developerName&quot; : null,
+    &quot;value&quot; : &quot;CEO&quot;
+  }, {
+    &quot;name&quot; : &quot;Assistant&quot;,
+    &quot;developerName&quot; : null,
+    &quot;value&quot; : &quot;Assistant&quot;
+  }, {
+    &quot;name&quot; : &quot;Accounts&quot;,
+    &quot;developerName&quot; : null,
+    &quot;value&quot; : &quot;Accounts&quot;
+  }, {
+    &quot;name&quot; : &quot;Other&quot;,
+    &quot;developerName&quot; : null,
+    &quot;value&quot; : &quot;Other&quot;
   } ],
   &quot;optionSource&quot; : {
     &quot;type&quot; : &quot;&quot;,
@@ -776,8 +820,8 @@
   &quot;nextWidth&quot; : 3,
   &quot;cancelLabel&quot; : &quot;Cancel&quot;,
   &quot;cancelMessage&quot; : &quot;Are you sure?&quot;,
-  &quot;saveLabel&quot; : &quot;Save for later&quot;,
-  &quot;saveMessage&quot; : &quot;Are you sure you want to save it for later?&quot;,
+  &quot;saveLabel&quot; : &quot;&quot;,
+  &quot;saveMessage&quot; : &quot;&quot;,
   &quot;completeLabel&quot; : &quot;Complete&quot;,
   &quot;completeMessage&quot; : &quot;Are you sure you want to complete the script?&quot;,
   &quot;instruction&quot; : &quot;&quot;,
@@ -882,8 +926,8 @@
   &quot;nextWidth&quot; : &quot;3&quot;,
   &quot;cancelLabel&quot; : &quot;Cancel&quot;,
   &quot;cancelMessage&quot; : &quot;Are you sure?&quot;,
-  &quot;saveLabel&quot; : &quot;Save for later&quot;,
-  &quot;saveMessage&quot; : &quot;Are you sure you want to save it for later?&quot;,
+  &quot;saveLabel&quot; : &quot;&quot;,
+  &quot;saveMessage&quot; : &quot;&quot;,
   &quot;completeLabel&quot; : &quot;Complete&quot;,
   &quot;completeMessage&quot; : &quot;Are you sure you want to complete the script?&quot;,
   &quot;instruction&quot; : &quot;&quot;,
@@ -948,7 +992,16 @@
   &quot;redirectPreviousLabel&quot; : &quot;Previous&quot;,
   &quot;redirectPreviousWidth&quot; : 3,
   &quot;showPersistentComponent&quot; : [ true, false ],
-  &quot;show&quot; : null,
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;Create New Contact&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;field&quot; : &quot;Contact&quot;
+      } ]
+    }
+  },
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;wpm&quot; : false,
   &quot;ssm&quot; : false,
@@ -963,8 +1016,101 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>5.0</sequenceNumber>
+        <sequenceNumber>6.0</sequenceNumber>
         <type>DataRaptor Post Action</type>
+    </omniProcessElements>
+    <omniProcessElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>TextBlock1</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;TextBlock1&quot;,
+  &quot;text&quot; : &quot;&lt;p&gt;&lt;em&gt;You must specify either Phone, Mobile or Email for this record.&lt;/em&gt;&lt;/p&gt;&quot;,
+  &quot;show&quot; : null,
+  &quot;dataJSON&quot; : false,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;textKey&quot; : &quot;&quot;,
+  &quot;sanitize&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>0.0</sequenceNumber>
+            <type>Text Block</type>
+        </childElements>
+        <isActive>true</isActive>
+        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+        <level>0.0</level>
+        <name>Error</name>
+        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+        <propertySetConfig>{
+  &quot;label&quot; : &quot;Error&quot;,
+  &quot;validationRequired&quot; : true,
+  &quot;previousLabel&quot; : &quot;&quot;,
+  &quot;previousWidth&quot; : &quot;0&quot;,
+  &quot;nextLabel&quot; : &quot;&quot;,
+  &quot;nextWidth&quot; : &quot;0&quot;,
+  &quot;cancelLabel&quot; : &quot;Cancel&quot;,
+  &quot;cancelMessage&quot; : &quot;Are you sure?&quot;,
+  &quot;saveLabel&quot; : &quot;&quot;,
+  &quot;saveMessage&quot; : &quot;&quot;,
+  &quot;completeLabel&quot; : &quot;Complete&quot;,
+  &quot;completeMessage&quot; : &quot;Are you sure you want to complete the script?&quot;,
+  &quot;instruction&quot; : &quot;&quot;,
+  &quot;showPersistentComponent&quot; : [ true, false ],
+  &quot;remoteClass&quot; : &quot;&quot;,
+  &quot;remoteMethod&quot; : &quot;&quot;,
+  &quot;remoteTimeout&quot; : 30000,
+  &quot;remoteOptions&quot; : { },
+  &quot;knowledgeOptions&quot; : {
+    &quot;language&quot; : &quot;English&quot;,
+    &quot;publishStatus&quot; : &quot;Online&quot;,
+    &quot;keyword&quot; : &quot;&quot;,
+    &quot;dataCategoryCriteria&quot; : &quot;&quot;,
+    &quot;remoteTimeout&quot; : 30000,
+    &quot;typeFilter&quot; : &quot;&quot;
+  },
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;Add an Existing Contact&quot;,
+        &quot;condition&quot; : &quot;&lt;&gt;&quot;,
+        &quot;field&quot; : &quot;Contact&quot;
+      }, {
+        &quot;field&quot; : &quot;Phone&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;data&quot; : null
+      }, {
+        &quot;field&quot; : &quot;Email&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;data&quot; : null
+      }, {
+        &quot;field&quot; : &quot;Mobile&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;data&quot; : null
+      } ]
+    }
+  },
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;instructionKey&quot; : &quot;&quot;,
+  &quot;chartLabel&quot; : null,
+  &quot;allowSaveForLater&quot; : true,
+  &quot;errorMessage&quot; : {
+    &quot;custom&quot; : [ ],
+    &quot;default&quot; : null
+  },
+  &quot;wpm&quot; : false,
+  &quot;ssm&quot; : false,
+  &quot;message&quot; : { },
+  &quot;pubsub&quot; : false,
+  &quot;businessCategory&quot; : &quot;&quot;,
+  &quot;businessEvent&quot; : &quot;&quot;
+}</propertySetConfig>
+        <sequenceNumber>5.0</sequenceNumber>
+        <type>Step</type>
     </omniProcessElements>
     <omniProcessElements>
         <isActive>false</isActive>
@@ -1001,6 +1147,42 @@
 }</propertySetConfig>
         <sequenceNumber>3.0</sequenceNumber>
         <type>DataRaptor Turbo Action</type>
+    </omniProcessElements>
+    <omniProcessElements>
+        <isActive>false</isActive>
+        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+        <level>0.0</level>
+        <name>NavigateAction1</name>
+        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+        <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;NavigateAction1&quot;,
+  &quot;validationRequired&quot; : &quot;Submit&quot;,
+  &quot;show&quot; : null,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;wpm&quot; : false,
+  &quot;ssm&quot; : false,
+  &quot;pubsub&quot; : false,
+  &quot;message&quot; : { },
+  &quot;targetType&quot; : &quot;Record&quot;,
+  &quot;objectAction&quot; : &quot;home&quot;,
+  &quot;recordAction&quot; : &quot;view&quot;,
+  &quot;loginAction&quot; : &quot;login&quot;,
+  &quot;targetFilter&quot; : &quot;Recent&quot;,
+  &quot;targetId&quot; : &quot;%AccountId%&quot;,
+  &quot;variant&quot; : &quot;brand&quot;,
+  &quot;iconName&quot; : &quot;&quot;,
+  &quot;iconVariant&quot; : &quot;&quot;,
+  &quot;iconPosition&quot; : &quot;left&quot;,
+  &quot;replace&quot; : false,
+  &quot;targetLWCLayout&quot; : &quot;lightning&quot;,
+  &quot;businessCategory&quot; : &quot;&quot;,
+  &quot;businessEvent&quot; : &quot;&quot;,
+  &quot;targetName&quot; : &quot;Account&quot;,
+  &quot;targetParams&quot; : &quot;AccountId&quot;
+}</propertySetConfig>
+        <sequenceNumber>9.0</sequenceNumber>
+        <type>Navigate Action</type>
     </omniProcessElements>
     <omniProcessElements>
         <isActive>false</isActive>
@@ -1053,7 +1235,16 @@
   &quot;redirectPreviousLabel&quot; : &quot;Previous&quot;,
   &quot;redirectPreviousWidth&quot; : 3,
   &quot;showPersistentComponent&quot; : [ true, false ],
-  &quot;show&quot; : null,
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;Add an Existing Contact&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;field&quot; : &quot;Contact&quot;
+      } ]
+    }
+  },
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;wpm&quot; : false,
   &quot;ssm&quot; : false,
@@ -1068,7 +1259,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>6.0</sequenceNumber>
+        <sequenceNumber>7.0</sequenceNumber>
         <type>DataRaptor Post Action</type>
     </omniProcessElements>
     <omniProcessType>OmniScript</omniProcessType>
@@ -1077,5 +1268,5 @@
     <type>EHIS</type>
     <uniqueName>EHIS_AccountContactRelation_English_1</uniqueName>
     <versionNumber>1.0</versionNumber>
-    <webComponentKey>ff3fa48e-838f-42c5-fc23-2320c98e5963</webComponentKey>
+    <webComponentKey>33f5a010-1fb2-4c61-789a-cbbb69f29e3b</webComponentKey>
 </OmniScript>
