@@ -19,7 +19,7 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
     public Final static List<String> allALUnitTypes = BCMOH_Constants.allALUnitTypes;
     public Final static String activeStatusBl = BCMOH_Constants.activeStatusBl;
     //flow attribute
-    public List<Id> CONLIST = new List<Id>();
+    public List<Id> cONLIST = new List<Id>();
     
 /**
 * @Author: Accenture_ALR Dev Team
@@ -30,11 +30,11 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
 */
     //constructor
     public RenewalManagementControllerBatch(List<Id> conlist) {
-        this.CONLIST = conlist;//assigns flow list to static const
+        this.cONLIST = conlist;//assigns flow list to static const
     }
     //declaring invocable variables
     public class FlowInputs {
-        @InvocableVariable public List<Id> ConId;
+        @InvocableVariable public List<Id> conId;
     }
 
 /**
@@ -102,7 +102,7 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
         Map<Id, String> blaStatusMap = new Map<Id, String>();
         Map<Id, Account> renewalAccMap = new Map<Id, Account>();
         Map<Id, Account> renewalFeeAccMap = new Map<Id, Account>();
-        List<Id> includedAccIds = CONLIST;
+        List<Id> includedAccIds = cONLIST;
         try {
             for(Account accRec : renewalAccList) {
                 //check if non cancelled renewalbla already exists for the current year to avoid duplicates

@@ -26,7 +26,7 @@ public with sharing class LateFeeManagementControllerBatch implements Database.B
     public Final static String activeStatusBl = BCMOH_Constants.activeStatusBl;
     public Final static String FeeTypeStatuses = 'Renewal Unit Fee';
     
-    public List<Id> CONLIST = new List<Id>();
+    public List<Id> cONLIST = new List<Id>();
 
 /**
 * @Author: Accenture_ALR Dev Team
@@ -36,11 +36,11 @@ public with sharing class LateFeeManagementControllerBatch implements Database.B
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */    
     public LateFeeManagementControllerBatch(List<Id> conlist) {
-        this.CONLIST = conlist;
+        this.cONLIST = conlist;
     }
 
     public class FlowInputs {
-        @InvocableVariable public List<Id> ConId;
+        @InvocableVariable public List<Id> conId;
     }
 
 /**

@@ -18,9 +18,9 @@ public class AccountHelper {
         try{
             List<Visit> inspectList = new List<Visit>();
             Map<String, Id> mapInspectionType = new Map<String, Id>();
-            String ACCRATINGLOW = 'Low'; 
-            String ACCRATINGMEDIUM = 'Medium'; 
-            String ACCRATINGHIGH = 'High'; 
+            String aCCRATINGLOW = 'Low'; 
+            String aCCRATINGMEDIUM = 'Medium'; 
+            String aCCRATINGHIGH = 'High'; 
             List<Account> accList1 = [SELECT Id, Name, Rating, OwnerId, 
                                       (SELECT Id, Location.VisitorAddress.Address, LocationId 
                                        FROM AssociatedLocations LIMIT 1) 
@@ -30,9 +30,9 @@ public class AccountHelper {
             mapInspectionType.put('InspectionType', insTypeList.get(0).Id);
             
             for(Account accObj : accList1){
-                Integer noOfMonths = ACCRATINGLOW.containsIgnoreCase(accObj.Rating) ? 3 : 
-                ACCRATINGMEDIUM.containsIgnoreCase(accObj.Rating) ? 6 :
-                ACCRATINGHIGH.containsIgnoreCase(accObj.Rating) ? 12 : 0;
+                Integer noOfMonths = aCCRATINGLOW.containsIgnoreCase(accObj.Rating) ? 3 : 
+                aCCRATINGMEDIUM.containsIgnoreCase(accObj.Rating) ? 6 :
+                aCCRATINGHIGH.containsIgnoreCase(accObj.Rating) ? 12 : 0;
                 if(accObj.Rating != NULL){
                     Visit inspection = new Visit();
                     inspection.AccountId = accObj.Id;

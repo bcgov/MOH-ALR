@@ -55,7 +55,9 @@ public without sharing class LogService {
     private static void processFailedPlatformEvents(List<Database.SaveResult> results){
         List<Log__c> logsToCreate = new  List<Log__c>();
         for (Database.SaveResult eventPublishingResult : results) {
-            if (eventPublishingResult.isSuccess()) continue;
+            if (eventPublishingResult.isSuccess()){
+                 continue;
+            }
             for (Database.Error err : eventPublishingResult.getErrors()) {
                 logsToCreate.add(createLog('Publish Platform Event', 'publish',
                         err.getMessage(), String.valueOf(err.getStatusCode())));

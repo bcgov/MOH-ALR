@@ -8,8 +8,8 @@
 public with sharing class InspTasksCreationController {
     public static String className = 'InspTasksCreationController';
     public class FlowInputs {
-        @InvocableVariable public List<String> ATIId;
-        @InvocableVariable public String InspId; 
+        @InvocableVariable public List<String> aTIId;
+        @InvocableVariable public String inspId; 
     }
 
 /**
@@ -35,10 +35,9 @@ public with sharing class InspTasksCreationController {
         string visitId = null; 
         try{
             for (FlowInputs input : ATI) {
-                aPTIds.addAll(input.ATIId);
-                inspectionId.add(input.InspId);   
+                aPTIds.addAll(input.aTIId);
+                inspectionId.add(input.inspId);   
             }
-            
             for (string setElement :inspectionId ) {
                 visitId = setElement; 
                 break; 

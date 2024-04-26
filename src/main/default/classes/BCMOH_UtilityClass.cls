@@ -102,7 +102,7 @@ public class BCMOH_UtilityClass {
         Map<Id, Set<Id>> entityContentIdsMap1 = new Map<Id, Set<Id>>();
         Set<Id> allDocIds = new Set<Id>();
         Map<Id, Id> contentDocVerMap1 = new Map<Id, Id>();
-        ContentDocWrapper ContentDocWrapperRecord = new ContentDocWrapper();
+        ContentDocWrapper contentDocWrapperRecord = new ContentDocWrapper();
         try {
             for(ContentDocumentLink contentDoc : [SELECT Id, ContentDocument.Id, LinkedEntityId 
                                                   FROM ContentDocumentLink 
@@ -117,18 +117,18 @@ public class BCMOH_UtilityClass {
                                                       docIdSet.add(contentDoc.ContentDocument.Id);
                                                       entityContentIdsMap1.put(contentDoc.LinkedEntityId, docIdSet);
                                                   }
-            ContentDocWrapperRecord.entityContentIdsMap = entityContentIdsMap1;
+            contentDocWrapperRecord.entityContentIdsMap = entityContentIdsMap1;
             //fetch content version vs content doc map
             for(ContentVersion contentVerRec : [SELECT Id, ContentDocument.Id, ContentSize FROM ContentVersion
                                                 WHERE ContentDocument.Id IN: allDocIds WITH SECURITY_ENFORCED]) {
                                                     contentDocVerMap1.put(contentVerRec.ContentDocument.Id, contentVerRec.Id);
                                                 }
-            ContentDocWrapperRecord.contentDocVerMap = contentDocVerMap1;
+            contentDocWrapperRecord.contentDocVerMap = contentDocVerMap1;
         }
         catch(Exception ex) {
             LogService.logAndPublish(className, 'getContentDocMap', '', ex);
         }
-        return ContentDocWrapperRecord;
+        return contentDocWrapperRecord;
     }
     
 /**
@@ -324,13 +324,13 @@ public class BCMOH_UtilityClass {
     public static List<BusinessLicenseApplication> updateBlaLateFeeStatus(Map<Id, String> blaIdDetailsMap, String blalatefeeStatus) {
         List<BusinessLicenseApplication> blaUpdateList = new List<BusinessLicenseApplication>();
         try {     
-            BusinessLicenseApplication BLAquery = [SELECT Id, RenewalDetail__c FROM BusinessLicenseApplication WHERE Id =:blaIdDetailsMap.keySet() WITH SECURITY_ENFORCED LIMIT 1];
+            BusinessLicenseApplication bLAquery = [SELECT Id, RenewalDetail__c FROM BusinessLicenseApplication WHERE Id =:blaIdDetailsMap.keySet() WITH SECURITY_ENFORCED LIMIT 1];
             
             //loop through bla update map
             for(Id blaId : blaIdDetailsMap.keySet()) {
                 //truncate the message if length more than 255 chars
                 String renewalMsg = blaIdDetailsMap.get(blaId);
-                renewalMsg = BLAquery.RenewalDetail__c != NULL ? BLAquery.RenewalDetail__c + ' ; ' + renewalMsg : renewalMsg;
+                renewalMsg = bLAquery.RenewalDetail__c != NULL ? bLAquery.RenewalDetail__c + ' ; ' + renewalMsg : renewalMsg;
                 BusinessLicenseApplication blaRec = new BusinessLicenseApplication(
                     Id = blaId,
                     Late_Fee_Status__c = blalatefeeStatus,

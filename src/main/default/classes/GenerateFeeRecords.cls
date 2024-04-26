@@ -18,16 +18,16 @@ public class GenerateFeeRecords {
 */
     @InvocableMethod
     public static List<String> recordCreations(List<id> blaids){
-        List<String> RTFId = new List<String>();
+        List<String> rTFId = new List<String>();
         try{
             BusinessLicenseApplication blarec = new BusinessLicenseApplication(Id = blaids[0]);
             //check if Application Fee record is present
-            List<RegulatoryTrxnFee> RTFids = [SELECT id FROM RegulatoryTrxnFee 
+            List<RegulatoryTrxnFee> rTFIds = [SELECT id FROM RegulatoryTrxnFee 
                                               WHERE ParentRecordId =: blarec.Id and FeeType__c = 'Application Fee' 
                                               WITH SECURITY_ENFORCED LIMIT 1];
-            if(RTFids.size()>0){
-                RTFId.add(RTFids[0].Id);
-                return RTFId;
+            if(rTFIds.size()>0){
+                rTFId.add(rTFIds[0].Id);
+                return rTFId;
             }
             //Create Regulatory Transaction Fee record
             List<BusinessLicenseApplication> blaList = [SELECT AccountId, LicenseType.OneTimeFee__c 
@@ -41,22 +41,22 @@ public class GenerateFeeRecords {
                 Status = 'Paid'
             );
             //Insert RegulatoryTrxnFee record
-            Database.SaveResult RTFrec = Database.Insert(transFeeRec);
-            RTFId.add(RTFrec.getId());
+            Database.SaveResult rTFrec = Database.Insert(transFeeRec);
+            rTFId.add(rTFrec.getId());
             //Create Regulatory Transaction Fee Item record
             RegulatoryTrxnFeeItem transFeeItemRec = new RegulatoryTrxnFeeItem(
-                RegulatoryTrxnFeeId = RTFrec.getId(),
+                RegulatoryTrxnFeeId = rTFrec.getId(),
                 Name = 'Application Fee',
                 FeeAmount = blaList[0].LicenseType.OneTimeFee__c,
                 Amount__c = blaList[0].LicenseType.OneTimeFee__c
             );
             //Insert RegulatoryTrxnFeeItem record
-            Database.SaveResult RTFIrec = Database.Insert(transFeeItemRec);
+            Database.SaveResult rTFIrec = Database.Insert(transFeeItemRec);
         }
         catch(exception ex){
             LogService.logAndPublish(className, 'recordCreations', '', ex);
         }
-        return RTFId;
+        return rTFId;
     }
 
 }

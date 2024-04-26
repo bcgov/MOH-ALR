@@ -535,16 +535,16 @@ public class MassEmailController {
         Map<Id, Set<Id>> blaContentVerMap = new Map<Id, Set<Id>>();
         try {
             //fetch wrapper details with blaId-DocId Map and docId-contentVerId Map
-            BCMOH_UtilityClass.ContentDocWrapper ContentDocWrapperRec = BCMOH_UtilityClass.getContentDocMap(blaIds);
+            BCMOH_UtilityClass.ContentDocWrapper contentDocWrapperRec = BCMOH_UtilityClass.getContentDocMap(blaIds);
             //fetch content versions per Bla record
-            if(ContentDocWrapperRec != NULL) {
-                for(Id blaId : ContentDocWrapperRec.entityContentIdsMap.KeySet()) {//for each bla rec Id
-                    for(Id docId : ContentDocWrapperRec.entityContentIdsMap.get(blaId)) {//for each of its content document id
+            if(contentDocWrapperRec != NULL) {
+                for(Id blaId : contentDocWrapperRec.entityContentIdsMap.KeySet()) {//for each bla rec Id
+                    for(Id docId : contentDocWrapperRec.entityContentIdsMap.get(blaId)) {//for each of its content document id
                         Set<Id> contentVerIdSet = new Set<Id>();
                         if(blaContentVerMap.containsKey(blaId)) {//if map contains the bla id
                             contentVerIdSet = blaContentVerMap.get(blaId);//fetch its content versions
                         }
-                        contentVerIdSet.add(ContentDocWrapperRec.contentDocVerMap.get(docId));//add current version also to the list
+                        contentVerIdSet.add(contentDocWrapperRec.contentDocVerMap.get(docId));//add current version also to the list
                         //map's key value pair holds the whatId vs attachment ids per email
                         blaContentVerMap.put(blaId, contentVerIdSet);//set blaId-ContentVersionId map
                     }
@@ -679,15 +679,15 @@ public class MassEmailController {
     public static void updateLateFeeBlaStatus() {
         //List<BusinessLicenseApplication> statusBla = new List<BusinessLicenseApplication>();
         List<Account> accToUpdate = new List<Account>();
-        List<BusinessLicenseApplication> BLAquery = new List<BusinessLicenseApplication>();
+        List<BusinessLicenseApplication> bLAquery = new List<BusinessLicenseApplication>();
         try {    
             //loop through bla error map
             for(Id blaId : blaErrMap.keySet()) {
-                BLAquery=blaErrQuery(blaId);
+                bLAquery=blaErrQuery(blaId);
                 //truncate the err message if length more than 255 chars
                 String lateFeeMsg = blaErrMap.get(blaId).length() > 255 ? blaErrMap.get(blaId).Substring(0,255) : blaErrMap.get(blaId);
                 String errMsg = blaErrMap.get(blaId);
-                errMsg = BLAquery[0].RenewalDetail__c != NULL ? BLAquery[0].RenewalDetail__c + ' ; ' + lateFeeMsg : lateFeeMsg;
+                errMsg = bLAquery[0].RenewalDetail__c != NULL ? bLAquery[0].RenewalDetail__c + ' ; ' + lateFeeMsg : lateFeeMsg;
                 BusinessLicenseApplication blaRec = new BusinessLicenseApplication(
                     Id = blaId,
                     Late_Fee_Status__c = BCMOH_Constants.errorBlaStatus,
@@ -696,17 +696,17 @@ public class MassEmailController {
             }
             //loop through bla success map   
             for (Id blaId : blaSuccessMap.keySet()) {
-                BLAquery=blaErrQuery(blaId);
+                bLAquery=blaErrQuery(blaId);
                 Id statusBla = getAccountId(blaId);
                 accToUpdate=updateAccountStatus(statusBla);
                 accToUpdate[0].Status__c=BCMOH_Constants.AccStatus;
                 
                 String lateFeeMsg = blaSuccessMap.get(blaId).length() > 255 ? blaSuccessMap.get(blaId).Substring(0,255) : blaSuccessMap.get(blaId);
                 String succMsg;
-                if(String.isEmpty(BLAquery[0].RenewalDetail__c)){
+                if(String.isEmpty(bLAquery[0].RenewalDetail__c)){
                     succMsg = lateFeeMsg;
                 }else{
-                   succMsg = BLAquery[0].RenewalDetail__c + ' ; ' + LatefeeMsg;
+                   succMsg = bLAquery[0].RenewalDetail__c + ' ; ' + LatefeeMsg;
                 }
                   blaSuccessMap.put(blaid,succMsg);
                 BusinessLicenseApplication blaRec = new BusinessLicenseApplication(Id = blaId, 
