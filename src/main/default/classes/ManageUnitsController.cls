@@ -31,8 +31,8 @@ public class ManageUnitsController {
             assetListString =  JSON.serialize(assetList);
         }catch(AuraHandledException e)
         {
-            throw new AuraHandledException(e.getMessage());
             LogService.logAndPublish(className, 'getUnitBasedOnResidence', '', e);
+            throw new AuraHandledException(e.getMessage());
         }
         return assetListString;
     }
@@ -80,7 +80,7 @@ public class ManageUnitsController {
                 insert assetForCreateList;
             }
             Map<Id,Decimal> mapOfUnitRequest = new Map<Id,Decimal>();
-            List<AggregateResult> sumOfQuantity = [SELECT SUM(Quantity)sumQty,ParentId FROM Asset WHERE ParentId IN :assetForUpdateList AND status !=: PENDING_INVOICE group by ParentId WITH SECURITY_ENFORCED];
+            List<AggregateResult> sumOfQuantity = [SELECT SUM(Quantity)sumQty,ParentId FROM Asset WHERE ParentId IN :assetForUpdateList AND status !=: PENDING_INVOICE WITH SECURITY_ENFORCED group by ParentId];
             if(sumOfQuantity.size()>0){
                 for(AggregateResult a: sumOfQuantity){
                     Id unitsIds = (Id)a.get('ParentId');

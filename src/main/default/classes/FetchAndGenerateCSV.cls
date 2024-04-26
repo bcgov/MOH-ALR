@@ -16,12 +16,7 @@ public class FetchAndGenerateCSV {
                                                                                  'Interior Health - IH' => 'IHA',
                                                                                  'Fraser Health - FH' => 'FHA',
                                                                                  'Northern Health - NH' => 'NHA',
-                                                                                 'Vancouver Coastal Health - VCH' => 'VCHA'};
-    List<String> serviceNameList = new List<String>{'Meal Services', 'Housekeeping', 'Laundry', 
-                                  'Social and Recreational Opps', '24-Hour Emergency Response System','Assistance with daily living activities',
-                                  'Assistance with managing medication','Assistance managing therapeutic diets',
-                                  'Safekeeping of money/personal property', 'Psychosocial support','Assistance with behaviour management'};
-    List<String> typeList = new List<String>{'Public', 'Private', 'Per Diem'};                              
+                                                                                 'Vancouver Coastal Health - VCH' => 'VCHA'};                         
                 
 /**
 * @Author: Accenture_ALR Dev Team
@@ -33,6 +28,11 @@ public class FetchAndGenerateCSV {
     @AuraEnabled(cacheable=true)
     public static String generateCSV(){
       csvContent = csvHeader;  
+      List<String> serviceNameList = new List<String>{'Meal Services', 'Housekeeping', 'Laundry', 
+                                  'Social and Recreational Opps', '24-Hour Emergency Response System','Assistance with daily living activities',
+                                  'Assistance with managing medication','Assistance managing therapeutic diets',
+                                  'Safekeeping of money/personal property', 'Psychosocial support','Assistance with behaviour management'};
+      List<String> typeList = new List<String>{'Public', 'Private', 'Per Diem'};     
       List<Account> accounts = [SELECT Id, RegId__c, Name, HealthAuthority__c, Phone, Extension__c, Fax, Website, Status__c, Parent.Name,
                                (SELECT ContactId, PrimaryContact__c, Contact.Name FROM AccountContactRelations WHERE PrimaryContact__c = true LIMIT 1),
                                (SELECT RegistrationCertificate__c FROM AccountBusinessLicenses__r WHERE Status = 'Active' LIMIT 1),
