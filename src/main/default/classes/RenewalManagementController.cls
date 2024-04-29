@@ -17,7 +17,7 @@ public with sharing class RenewalManagementController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for RenewalManagementController
 * @return:  List of String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -50,7 +50,7 @@ public with sharing class RenewalManagementController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for RenewalManagementController
 * @return:  Map<Id, BusinessLicenseApplication>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -90,7 +90,7 @@ public with sharing class RenewalManagementController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for RenewalManagementController
 * @return:  BusinessLicenseApplication
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -111,7 +111,7 @@ public with sharing class RenewalManagementController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for RenewalManagementController
 * @return:  Map<Id, RegulatoryTrxnFee>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -139,7 +139,7 @@ public with sharing class RenewalManagementController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for RenewalManagementController
 * @return:  RegulatoryTrxnFee
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -158,7 +158,7 @@ public with sharing class RenewalManagementController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for RenewalManagementController
 * @return:  List of RegulatoryTrxnFeeItem
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -188,7 +188,7 @@ public with sharing class RenewalManagementController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for RenewalManagementController
 * @return:  RegulatoryTrxnFeeItem
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -208,7 +208,7 @@ public with sharing class RenewalManagementController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for RenewalManagementController
 * @return:  Map<Id, RegulatoryTrxnFee>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -237,7 +237,7 @@ public with sharing class RenewalManagementController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for RenewalManagementController
 * @return:  RegulatoryTrxnFee
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -256,7 +256,7 @@ public with sharing class RenewalManagementController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for RenewalManagementController
 * @return:  List of RegulatoryTrxnFeeItem
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -287,7 +287,7 @@ public with sharing class RenewalManagementController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for RenewalManagementController
 * @return:  RegulatoryTrxnFeeItem
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */

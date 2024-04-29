@@ -11,7 +11,7 @@ global with sharing class calculateInspectionScore implements Callable {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is to return invokeMethod
 * @return:  Boolean
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */    
@@ -24,7 +24,7 @@ global with sharing class calculateInspectionScore implements Callable {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is to return boolean for invokeMethod
 * @return:  Boolean
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -44,7 +44,7 @@ global with sharing class calculateInspectionScore implements Callable {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for Performing CAT Inspection
 * @return:  Map<String, Object>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */    
@@ -117,7 +117,7 @@ global with sharing class calculateInspectionScore implements Callable {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for Performing CAT Inspection
 * @return:  List of RegulatoryCodeViolation
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */

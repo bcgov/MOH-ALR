@@ -5,7 +5,8 @@
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
                 12-4-23                        ChangeMeIn@UserSettingsUnder.SFDoc
                            ALR-185             ACN-ALR        Generating Transaction Fee  
-                           ALR-726             ACN-ALR        Issues on Business License Application and Regulatory Fee            
+                           ALR-726             ACN-ALR        Issues on Business License Application and Regulatory Fee  
+                           ALR-826             ACN-ALR        Unit Asset Name Update             
 ***********************************************************************************************/
 @isTest
 private class ManageUnitOmniServiceTest {

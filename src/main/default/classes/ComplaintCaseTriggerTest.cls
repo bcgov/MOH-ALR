@@ -12,8 +12,7 @@ public class ComplaintCaseTriggerTest {
 	@testSetup
     public static void makeData() {
         RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
-        Account residence = TestDataFactory.createResidence('Residence','residence1', regAuth.Id, true);
-		
+        Account residence = TestDataFactory.createResidence('Residence','residence1', regAuth.Id, true);	
     }
     //ALR-762
     @isTest

@@ -5,7 +5,7 @@
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
                            ALR-928             Komal          Compliance inspection scheduling based on compliance score
 ***********************************************************************************************/
-public class AccountHelper {
+public with sharing class AccountHelper {
     static String className = 'AccountHelper';
 /**
 * @Author: Accenture_ALR Dev Team

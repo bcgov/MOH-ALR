@@ -11,7 +11,7 @@ public with sharing class RenewalBlaTableController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for RenewalBlaTableController
 * @return:  List of BusinessLicenseApplication
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -47,7 +47,7 @@ public with sharing class RenewalBlaTableController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for RenewalBlaTableController
 * @return: Boolean 
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */

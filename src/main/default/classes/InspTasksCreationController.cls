@@ -11,11 +11,10 @@ public with sharing class InspTasksCreationController {
         @InvocableVariable public List<String> aTIId;
         @InvocableVariable public String inspId; 
     }
-
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for InspTasksCreationController
 * @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */

@@ -3,6 +3,7 @@
 * @Date:       
 * @Description: The purpose of this class is 
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
+                           ALR-40              ACN-ALR        Fee calculation for newly added unit(s)
 ***********************************************************************************************/
 public without sharing class RegulatoryTrxnFeeTriggerHandler implements TriggerHandler {
     public RegulatoryTrxnFeeTriggerHandler helper;

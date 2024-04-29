@@ -9,11 +9,10 @@
 public with sharing class GenerateInvoiceController {
     public static String className = 'GenerateInvoiceController';
     private Final static Decimal defaultFee = 0;
-
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for GenerateInvoiceController
 * @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -94,7 +93,7 @@ public with sharing class GenerateInvoiceController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for GenerateInvoiceController
 * @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */

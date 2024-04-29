@@ -5,13 +5,13 @@
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
                            ALR-40              Sweta          Fee calculation for newly added unit(s)
 ***********************************************************************************************/
-public class RegulatoryTrxnFeeUtility {
+public with sharing class RegulatoryTrxnFeeUtility {
     public static String className = 'RegulatoryTrxnFeeUtility';
 
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for RegulatoryTrxnFeeUtility
 * @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -41,7 +41,7 @@ public class RegulatoryTrxnFeeUtility {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for RegulatoryTrxnFeeUtility
 * @return:  Map<Id, Asset>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */

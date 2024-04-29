@@ -3,7 +3,7 @@
 * @Date:       
 * @Description: The purpose of this class is 
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
-                           ALR-40              Sweta
+                           ALR-40              Sweta          Fee calculation for newly added unit(s)
 ***********************************************************************************************/
 //@isTest
 public class RegulatoryTrxnFeeTriggerHandlerTest {

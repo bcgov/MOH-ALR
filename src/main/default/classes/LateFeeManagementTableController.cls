@@ -5,13 +5,12 @@
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
                             ALR-996            Anilkumar      Generate Renewal Late Fee Transaction         
 ***********************************************************************************************/
-public class LateFeeManagementTableController {
+public with sharing class LateFeeManagementTableController {
     public static String className = 'LateFeeManagementTableController';
-
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for LateFeeManagementTableController
 * @return:  List of BusinessLicenseApplication
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -55,7 +54,7 @@ public class LateFeeManagementTableController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for LateFeeManagementTableController
 * @return:  Boolean
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */

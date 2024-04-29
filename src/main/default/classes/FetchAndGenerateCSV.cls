@@ -3,9 +3,9 @@
 * @Date:       
 * @Description: The purpose of this Class is for TriggerHandler for CompliantCaseTrigger
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
-                              ALR -               
+                           ALR-799             ACN-ALR        Issues on Web Services Residence Report         
 ***********************************************************************************************/
-public class FetchAndGenerateCSV {
+public with sharing class FetchAndGenerateCSV {
     static String className = 'FetchAndGenerateCSV';
     static String csvHeader = 'ResID,Residence,HACode,Res_Address,Res_City,Res_PostalCode,Res_Phone,Res_Phone_Ext,Res_Fax,Website,Appl_LegalName,Registrant_Contact,RegNo,RegStatus,HospSvc_Meal,HospSvc_HouseKeep,HospSvc_Laundry,HospSvc_SocialRec,HospSvc_24HResp,ResCatCode,Public_Units,Private_Units,Per_Diem_Units,Number_of_AL_Units,ADLS,Meds,Diets,Safekeeping,Psychosocial,Behaviour,Res_Building_Floor,\n';
     static String csvContent = '';
@@ -21,7 +21,7 @@ public class FetchAndGenerateCSV {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for FetchAndGenerateCSV
 * @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */    
@@ -101,7 +101,7 @@ public class FetchAndGenerateCSV {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for FetchAndGenerateCSV
 * @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -119,7 +119,7 @@ public class FetchAndGenerateCSV {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for FetchAndGenerateCSV
 * @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -136,7 +136,7 @@ public class FetchAndGenerateCSV {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for FetchAndGenerateCSV
 * @return:  Integer
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -154,7 +154,7 @@ public class FetchAndGenerateCSV {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for FetchAndGenerateCSV
 * @return:  Contact
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -180,7 +180,7 @@ public class FetchAndGenerateCSV {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for FetchAndGenerateCSV
 * @return:  List of String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */

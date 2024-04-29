@@ -3,7 +3,7 @@
 * @Date:       
 * @Description: The purpose of this Class is for 
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
-                11-8-23                        ChangeMeIn@UserSettingsUnder.SFDoc   
+                11-8-23    ALR-907             ACN-ALR        Validation Error is not getting populated on Remove Existing Units.      
                            ALR-185             ACN-ALR        Generating Transaction Fee  
                            ALR-726             ACN-ALR        Issues on Business License Application and Regulatory Fee                  
 ***********************************************************************************************/

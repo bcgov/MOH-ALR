@@ -5,10 +5,10 @@
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
                             ALR -560             Sweta        Renewal verification and renewal mass email
 ***********************************************************************************************/
-public class BCMOH_UtilityClass {
+public with sharing class BCMOH_UtilityClass {
     public static String className = 'BCMOH_UtilityClass';
 /**
-* @Author:
+* @Author: ACN-ALR
 * @date: 
 * @description: The purpose of this method is to fetch renewal details FROM metadata
 * @return:  Map<String, List<String>>
@@ -28,7 +28,7 @@ public class BCMOH_UtilityClass {
     }
 
 /**
-* @Author:
+* @Author: ACN-ALR
 * @date: 
 * @description: The purpose of this method is to fetch active email template developer name based on purpose FROM metadata
 * @return:  Map<Id, String>
@@ -51,7 +51,7 @@ public class BCMOH_UtilityClass {
     }
 
 /**
-* @Author:
+* @Author: ACN-ALR
 * @date: 
 * @description: The purpose of this method is to fetch active email template developer name based on purpose FROM metadata-ALR-1000
 * @return:  Map<Id, String>
@@ -74,7 +74,7 @@ public class BCMOH_UtilityClass {
     }
     
 /**
-* @Author:
+* @Author: ACN-ALR
 * @date: 
 * @description: The purpose of this method is to fetch email template based on developer name provided
 * @return:  EmailTemplate
@@ -92,7 +92,7 @@ public class BCMOH_UtilityClass {
     }
 
 /**
-* @Author:
+* @Author: ACN-ALR
 * @date: 
 * @description: The purpose of this method is to fetch contentVersion Ids for provided LinkedEntity Ids
 * @return:  ContentDocWrapper
@@ -132,7 +132,7 @@ public class BCMOH_UtilityClass {
     }
     
 /**
-* @Author:
+* @Author: ACN-ALR
 * @date: 
 * @description: The purpose of this method is to fetch fetch org wide email based on Org
 * @return:  OrgWideEmailAddress
@@ -162,7 +162,7 @@ public class BCMOH_UtilityClass {
     }
 
 /**
-* @Author:
+* @Author: ACN-ALR
 * @date: 
 * @description: The purpose of this method is to set Email parameters
 * @return:  Messaging.SingleEmailMessage
@@ -181,7 +181,7 @@ public class BCMOH_UtilityClass {
     }
 
 /**
-* @Author:
+* @Author: ACN-ALR
 * @date: 
 * @description: The purpose of this method is to fetch DocumentTemplateContentDoc map given template name
 * @return:  Map<String, DocumentTemplateContentDoc>
@@ -199,7 +199,7 @@ public class BCMOH_UtilityClass {
     }
 
 /**
-* @Author:
+* @Author: ACN-ALR
 * @date: 
 * @description: The purpose of this method is to convert a Map to a JSON string
 * @return:  String
@@ -211,7 +211,7 @@ public class BCMOH_UtilityClass {
     }
 
 /**
-* @Author:
+* @Author: ACN-ALR
 * @date: 
 * @description: The purpose of this method is to get substring of document title without file extension
 * @return:  String
@@ -228,7 +228,7 @@ public class BCMOH_UtilityClass {
     }
     
 /**
-* @Author:
+* @Author: ACN-ALR
 * @date: 
 * @description: The purpose of this method is to create document record
 * @return:  DocumentGenerationProcess
@@ -245,7 +245,7 @@ public class BCMOH_UtilityClass {
     }
 
 /**
-* @Author:
+* @Author: ACN-ALR
 * @date: 
 * @description: The purpose of this method is to get map of document name and title for given purpose- ALR-775
 * @return:  Map<String, String>
@@ -266,7 +266,7 @@ public class BCMOH_UtilityClass {
     }
 
 /**
-* @Author:
+* @Author: ACN-ALR
 * @date: 
 * @description: The purpose of this method is to ALR-997
 * @return:  Map<String, String>
@@ -286,7 +286,7 @@ public class BCMOH_UtilityClass {
     }
     
 /**
-* @Author:
+* @Author: ACN-ALR
 * @date: 
 * @description: The purpose of this method is to update all bla records - DML
 * @return:  List of BusinessLicenseApplication
@@ -315,7 +315,7 @@ public class BCMOH_UtilityClass {
     }
     
 /**
-* @Author:
+* @Author: ACN-ALR
 * @date: 
 * @description: The purpose of this method is to update all bla late fee status
 * @return:  List of BusinessLicenseApplication
@@ -345,7 +345,7 @@ public class BCMOH_UtilityClass {
     } 
 
 /**
-* @Author:
+* @Author: ACN-ALR
 * @date: 
 * @description: The purpose of this method is to 
 * @return:  

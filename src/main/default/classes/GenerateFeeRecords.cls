@@ -5,14 +5,12 @@
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
                               ALR-660           Siddharth     Generating Regulatory Transaction Fee
 ***********************************************************************************************/
-public class GenerateFeeRecords {
+public with sharing class GenerateFeeRecords {
     public static String className = 'GenerateFeeRecords';
-    //method to return RTF Id and create RTF and RTFI records
-
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is to return RTF Id and create RTF and RTFI records
 * @return:  List of String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */

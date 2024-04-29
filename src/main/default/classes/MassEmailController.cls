@@ -5,7 +5,7 @@
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
                           ALR -560             Sweta          Renewal verification and renewal mass email
 ***********************************************************************************************/
-public class MassEmailController {
+public with sharing class MassEmailController {
     public static Id templateId = NULL;
     public static String templateEntity = '';
     public static Map<Id, Id> targetWhatIdMap = new Map<Id, Id>();
@@ -44,7 +44,7 @@ public class MassEmailController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for MassEmailController
 * @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -158,7 +158,7 @@ public class MassEmailController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for MassEmailController
 * @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -272,7 +272,7 @@ public class MassEmailController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for MassEmailController
 * @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -335,7 +335,7 @@ public class MassEmailController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for MassEmailController
 * @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -398,7 +398,7 @@ public class MassEmailController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for MassEmailController
 * @return:  Map<Id, String>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -446,7 +446,7 @@ public class MassEmailController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for MassEmailController
 * @return:  Map<Id, String>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -497,7 +497,7 @@ public class MassEmailController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for MassEmailController
 * @return:  Id
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -526,7 +526,7 @@ public class MassEmailController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for MassEmailController
 * @return:  Map<Id, Set<Id>>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -560,7 +560,7 @@ public class MassEmailController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for MassEmailController
 * @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -599,7 +599,7 @@ public class MassEmailController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for MassEmailController
 * @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -636,7 +636,7 @@ public class MassEmailController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for MassEmailController
 * @return:  Id
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -648,7 +648,7 @@ public class MassEmailController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for MassEmailController
 * @return:  List of Account
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -660,7 +660,7 @@ public class MassEmailController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for MassEmailController
 * @return:  List of BusinessLicenseApplication
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -671,7 +671,7 @@ public class MassEmailController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for MassEmailController
 * @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */

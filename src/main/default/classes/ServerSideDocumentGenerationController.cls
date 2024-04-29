@@ -9,7 +9,7 @@
                                                              referenced in LateFeeManagementControllerBatch
                            ALR-1107            Komal gupta   modified "fetchFeeRelatedInformation" method
 ***********************************************************************************************/
-public class ServerSideDocumentGenerationController {
+public with sharing class ServerSideDocumentGenerationController {
    public static Map<String, String> tempNameStatusMsgMap = new Map<String, String>();//success or error details for each template
    public static Map<Id, Account> parentAccMap = new Map<Id, Account>();
    public static String className = 'ServerSideDocumentGenerationController';
@@ -31,7 +31,7 @@ public class ServerSideDocumentGenerationController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for ServerSideDocumentGenerationController
 * @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -93,7 +93,7 @@ public class ServerSideDocumentGenerationController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for ServerSideDocumentGenerationController
 * @return:  DocumentGenerationProcess
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -121,7 +121,7 @@ public class ServerSideDocumentGenerationController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for ServerSideDocumentGenerationController
 * @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -167,7 +167,7 @@ public class ServerSideDocumentGenerationController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for ServerSideDocumentGenerationController
 * @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -270,7 +270,7 @@ public class ServerSideDocumentGenerationController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for ServerSideDocumentGenerationController
 * @return:  Boolean
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -393,7 +393,7 @@ public class ServerSideDocumentGenerationController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for ServerSideDocumentGenerationController
 * @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -454,7 +454,7 @@ public class ServerSideDocumentGenerationController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for ServerSideDocumentGenerationController
 * @return:  DocumentGenerationProcess
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -482,7 +482,7 @@ public class ServerSideDocumentGenerationController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for ServerSideDocumentGenerationController
 * @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -523,7 +523,7 @@ public class ServerSideDocumentGenerationController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for ServerSideDocumentGenerationController
 * @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -625,7 +625,7 @@ public class ServerSideDocumentGenerationController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for ServerSideDocumentGenerationController
 * @return:  Boolean
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */

@@ -1,11 +1,11 @@
 /**********************************************************************************************
 * @Author:Accenture_ALR Dev Team   
 * @Date:       
-* @Description: The purpose of this Class is for 
+* @Description: The purpose of this Class is for Validation Error is not getting populated on Remove Existing Units.
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
-                11-8-23                        ChangeMeIn@UserSettingsUnder.SFDoc         
+                11-8-23   ALR-907             ACN-ALR         Validation Error is not getting populated on Remove Existing Units.      
 ***********************************************************************************************/
-public class ManageUnitsController {
+public with sharing class ManageUnitsController {
     public static String className = 'ManageUnitsController';
     public static String VALIDATE_QTY = 'Updated Quantity cannot be equal, null, negative or greater than the existing quantity.';
     public static final String UNITREQUEST_RECTYPEID_NAME = 'Unit_Request_Record_Type';
@@ -18,7 +18,7 @@ public class ManageUnitsController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for ManageUnitsController
 * @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -40,7 +40,7 @@ public class ManageUnitsController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for ManageUnitsController
 * @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -113,7 +113,7 @@ public class ManageUnitsController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for ManageUnitsController
 * @return:  
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */

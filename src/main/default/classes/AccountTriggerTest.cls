@@ -16,7 +16,7 @@ public class AccountTriggerTest {
 		Account AccRec = TestDataFactory.createResidence('Residence', 'residence1', regAuth.Id, true);
         accList.add(AccRec);
 
-        List<Account> ownridList = [SELECT id, ownerid FROM account WHERE Id =: AccRec.Id limit 1];
+        List<Account> ownridList = [SELECT Id, ownerId FROM account WHERE Id =: AccRec.Id limit 1];
         accList.addAll(ownridList);
         accList.sort();
 

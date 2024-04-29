@@ -4,7 +4,7 @@
 * @Description: The purpose of this batch class to create renewal records and related fee records based on criteria
 					   called FROM flow - GenerateRenewalsForAccounts
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
-                           ALR-36             Sweta
+                           ALR-36             Sweta           License renewal initiation
 ***********************************************************************************************/
 public with sharing class RenewalManagementControllerBatch implements Database.Batchable<sObject> {
     //static Constants
@@ -24,8 +24,8 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for RenewalManagementControllerBatch
+* @return:  List<Id>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //constructor
@@ -40,7 +40,7 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for RenewalManagementControllerBatch
 * @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -60,7 +60,7 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for RenewalManagementControllerBatch
 * @return:  Database.QueryLocator
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -93,7 +93,7 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for RenewalManagementControllerBatch
 * @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -135,7 +135,7 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for RenewalManagementControllerBatch
 * @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */

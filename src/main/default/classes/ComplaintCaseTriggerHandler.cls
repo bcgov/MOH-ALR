@@ -6,13 +6,13 @@
                           ALR-509             Sri Teja       Public complaints/Cases additional changes
                           ALR-762             ACN-ALR        Error Thrown on creation of Reportable Incident Case 
 ***********************************************************************************************/
-public class ComplaintCaseTriggerHandler {
+public with sharing class ComplaintCaseTriggerHandler {
     static String className = 'ComplaintCaseTriggerHandler';
 
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for ComplaintCaseTriggerHandler
 * @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -57,7 +57,7 @@ public class ComplaintCaseTriggerHandler {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for ComplaintCaseTriggerHandler
 * @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -77,7 +77,7 @@ public class ComplaintCaseTriggerHandler {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for ComplaintCaseTriggerHandler
 * @return:  Map<String, String>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -100,7 +100,7 @@ public class ComplaintCaseTriggerHandler {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for ComplaintCaseTriggerHandler
 * @return:  Map<String, String>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -116,7 +116,7 @@ public class ComplaintCaseTriggerHandler {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for ComplaintCaseTriggerHandler
 * @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -133,7 +133,7 @@ public class ComplaintCaseTriggerHandler {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for ComplaintCaseTriggerHandler
 * @return:  Map<String, Id>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -152,7 +152,7 @@ public class ComplaintCaseTriggerHandler {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for ComplaintCaseTriggerHandler
 * @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -179,7 +179,7 @@ public class ComplaintCaseTriggerHandler {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for ComplaintCaseTriggerHandler
 * @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -205,7 +205,7 @@ public class ComplaintCaseTriggerHandler {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: Map<String, Id>
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for ComplaintCaseTriggerHandler
 * @return:  
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */

@@ -2,7 +2,8 @@
 * @Author:Accenture_ALR Team   
 * @Date:       
 * @Description: The purpose of this Trigger is to trigger on particular events for Asset
-* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
+                            ALR-810             ACN-ALR        Business License Update to display both Organization (Registrant) and Account (Residence)
 ***********************************************************************************************/
 trigger AssetTrigger on Asset (before insert, before update, after insert, after update, before delete, after delete, after undelete) {
     
