@@ -8,11 +8,13 @@
             <axisBinding>y</axisBinding>
             <column>RowCount</column>
         </chartSummaries>
-        <chartType>VerticalColumn</chartType>
+        <chartType>VerticalColumnStacked</chartType>
         <enableHoverLabels>false</enableHoverLabels>
         <expandOthers>true</expandOthers>
-        <groupingColumn>RegulatoryCodeViolation$CreatedDate</groupingColumn>
+        <groupingColumn>RegulatoryCodeViolation$Inspection.VisitType</groupingColumn>
+        <legendPosition>Right</legendPosition>
         <location>CHART_BOTTOM</location>
+        <secondaryGroupingColumn>RegulatoryCodeViolation$InspectionAssmntInd.AssessmentTask</secondaryGroupingColumn>
         <showAxisLabels>true</showAxisLabels>
         <showPercentage>false</showPercentage>
         <showTotal>false</showTotal>
@@ -28,46 +30,23 @@
         <field>RegulatoryCodeViolation$Inspection.Account</field>
     </columns>
     <columns>
-        <field>RegulatoryCodeViolation$Inspection</field>
-    </columns>
-    <columns>
-        <field>RegulatoryCodeViolation$InspectionAssmntInd.AssessmentTask</field>
-    </columns>
-    <columns>
-        <field>RegulatoryCodeViolation$Status</field>
-    </columns>
-    <columns>
         <field>RegulatoryCodeViolation$RegulatoryCode</field>
     </columns>
     <columns>
-        <field>RegulatoryCodeViolation$Name</field>
+        <field>RegulatoryCodeViolation$Inspection.PlannedVisitStartTime</field>
     </columns>
-    <columns>
-        <field>RegulatoryCodeViolation$DateCreated</field>
-    </columns>
-    <columns>
-        <field>RegulatoryCodeViolation$DateResolved</field>
-    </columns>
-    <columns>
-        <aggregateTypes>Sum</aggregateTypes>
-        <field>RegulatoryCodeViolation$DaysOpen</field>
-    </columns>
-    <columns>
-        <field>RegulatoryCodeViolation$CorrectiveActionDescription</field>
-    </columns>
-    <columns>
-        <field>RegulatoryCodeViolation$Inspection.VisitPriority</field>
-    </columns>
-    <columns>
-        <field>RegulatoryCodeViolation$Priority</field>
-    </columns>
-    <format>Summary</format>
+    <format>Matrix</format>
+    <groupingsAcross>
+        <dateGranularity>Day</dateGranularity>
+        <field>RegulatoryCodeViolation$InspectionAssmntInd.AssessmentTask</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsAcross>
     <groupingsDown>
-        <dateGranularity>Month</dateGranularity>
-        <field>RegulatoryCodeViolation$CreatedDate</field>
+        <dateGranularity>Day</dateGranularity>
+        <field>RegulatoryCodeViolation$Inspection.VisitType</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
-    <name>MMHA Non-Compliant Issues Report</name>
+    <name>Non-Compliant by Inspection Name &amp; Type</name>
     <params>
         <name>co</name>
         <value>1</value>
@@ -78,7 +57,7 @@
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>true</showSubTotals>
     <timeFrameFilter>
-        <dateColumn>RegulatoryCodeViolation$CreatedDate</dateColumn>
+        <dateColumn>RegulatoryCodeViolation$Inspection.PlannedVisitStartTime</dateColumn>
         <interval>INTERVAL_CUSTOM</interval>
     </timeFrameFilter>
 </Report>

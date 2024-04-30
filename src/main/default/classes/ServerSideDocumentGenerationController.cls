@@ -291,8 +291,30 @@ public with sharing class ServerSideDocumentGenerationController {
         try {
             RegulatoryTrxnFee feeRec = transFeeMap1.get(accId);
             documentMappingData1.put('InvoiceId', feeRec.Name);//ALR-775
-            documentMappingData1.put('TotalFeeAmount', '$'+feeRec.TotalFeeAmount);//ALR-775            
-            
+            Decimal totalFeeAmount = feeRec.TotalFeeAmount; 
+            String formattedTotalFeeAmount = TotalFeeAmount.setScale(2).toPlainString();
+
+                    if (formattedTotalFeeAmount.indexOf('.') == -1) {
+                        formattedTotalFeeAmount += '.00';
+                    }
+
+                    List<String> part = formattedTotalFeeAmount.split('\\.');
+                    String integerParts = part[0];
+                    String decimalParts = part.size() > 1 ? part[1] : '00';
+
+                    String results = '';
+                    Integer countcomma = 0;
+                    for (Integer i = integerParts.length() - 1; i >= 0; i--) {
+                        if (countcomma > 0 && Math.mod(countcomma, 3) == 0) {
+                          results = ',' + results;
+                        }
+                    results = integerParts.substring(i, i + 1) + results;
+                    countcomma++;
+                    }
+                     results += '.' + decimalParts;
+                    documentMappingData1.put('TotalFeeAmount','$'+ results.toString());
+                    
+
             for(RegulatoryTrxnFeeItem transRec : transFeeItemMap1.values()) {
                 
                  if(transRec.RegulatoryTrxnFeeId == feeRec.Id && BCMOH_Constants.allALUnitTypes.contains(transRec.Name) &&
@@ -365,22 +387,84 @@ public with sharing class ServerSideDocumentGenerationController {
                 blaErrMap.put(blaMap.get(accId).Id, BCMOH_Constants.docDataNotFetched+': '+BCMOH_Constants.regulatoryTransactionFeeItem);
             }else {
                 if(documentMappingData1.keySet().contains('Unit1')) {
-                    documentMappingData1.put('quantitySum1', quantitySum1);
-                    documentMappingData1.put('sum1', '$'+sum1);
-                    feeSum1 = feeSum1.setscale(2);//ALR-805 - setting decimal points to 2
-                    documentMappingData1.put('feeSum1', '$'+feeSum1);
+                    documentMappingData1.put('QuantitySum1', QuantitySum1);
+                    documentMappingData1.put('Sum1', '$'+Sum1);
+                    String formattedFeeSum1 = FeeSum1.setScale(2).toPlainString();
+
+                    if (formattedFeeSum1.indexOf('.') == -1) {
+                        formattedFeeSum1 += '.00';
+                    }
+
+                    List<String> parts = formattedFeeSum1.split('\\.');
+                    String integerPart = parts[0];
+                    String decimalPart = parts.size() > 1 ? parts[1] : '00';
+
+                    String result = '';
+                    Integer count1 = 0;
+                    for (Integer i = integerPart.length() - 1; i >= 0; i--) {
+                        if (count1 > 0 && Math.mod(count1, 3) == 0) {
+                          result = ',' + result;
+                        }
+                    result = integerPart.substring(i, i + 1) + result;
+                    count1++;
+                    }
+                     result += '.' + decimalPart;
+                    documentMappingData1.put('FeeSum1','$'+ result.toString());
+                   
                 }
                 if(documentMappingData1.keySet().contains('Unit2')) {
-                    documentMappingData1.put('quantitySum2', quantitySum2);
-                    documentMappingData1.put('sum2', '$'+sum2);
-                    feeSum2 = feeSum2.setscale(2);//ALR-805 - setting decimal points to 2
-                    documentMappingData1.put('feeSum2', '$'+feeSum2);
+                    documentMappingData1.put('QuantitySum2', QuantitySum2);
+                    documentMappingData1.put('Sum2', '$'+Sum2);
+                    
+                    String formattedFeeSum2 = FeeSum2.setScale(2).toPlainString();
+
+                    if (formattedFeeSum2.indexOf('.') == -1) {
+                        formattedFeeSum2 += '.00';
+                    }
+
+                    List<String> parts = formattedFeeSum2.split('\\.');
+                    String integerPart = parts[0];
+                    String decimalPart = parts.size() > 1 ? parts[1] : '00';
+
+                    String result = '';
+                    Integer count2 = 0;
+                    for (Integer i = integerPart.length() - 1; i >= 0; i--) {
+                        if (count2 > 0 && Math.mod(count2, 3) == 0) {
+                          result = ',' + result;
+                        }
+                    result = integerPart.substring(i, i + 1) + result;
+                    count2++;
+                    }
+                     result += '.' + decimalPart;
+                    documentMappingData1.put('FeeSum2','$'+ result.toString());
+                       
                 }
                 if(documentMappingData1.keySet().contains('Unit3')) {
-                    documentMappingData1.put('quantitySum3', quantitySum3);
-                    documentMappingData1.put('sum3', '$'+sum3);
-                    feeSum3 = feeSum3.setscale(2);//ALR-805 - setting decimal points to 2
-                    documentMappingData1.put('feeSum3', '$'+feeSum3);
+                    documentMappingData1.put('QuantitySum3', QuantitySum3);
+                    documentMappingData1.put('Sum3', '$'+Sum3);
+                    
+                    String formattedFeeSum3 = FeeSum3.setScale(2).toPlainString();
+
+                    if (formattedFeeSum3.indexOf('.') == -1) {
+                        formattedFeeSum3 += '.00';
+                    }
+
+                    List<String> parts = formattedFeeSum3.split('\\.');
+                    String integerPart = parts[0];
+                    String decimalPart = parts.size() > 1 ? parts[1] : '00';
+
+                    String result = '';
+                    Integer count3 = 0;
+                    for (Integer i = integerPart.length() - 1; i >= 0; i--) {
+                        if (count3 > 0 && Math.mod(count3, 3) == 0) {
+                          result = ',' + result;
+                        }
+                    result = integerPart.substring(i, i + 1) + result;
+                    count3++;
+                    }
+                     result += '.' + decimalPart;
+                    documentMappingData1.put('FeeSum3','$'+ result.toString());
+                    
                 }
             }
         }
@@ -666,4 +750,6 @@ public with sharing class ServerSideDocumentGenerationController {
         }
         return reqdDataPresent;
     }
+   
+    
 }

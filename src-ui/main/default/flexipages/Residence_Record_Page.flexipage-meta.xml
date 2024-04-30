@@ -19,6 +19,16 @@
                         <valueListItems>
                             <value>Account.NewApplication</value>
                         </valueListItems>
+                        <valueListItems>
+                            <value>Account.New_Inspection</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!$Permission.CustomPermission.EHISInvestigator}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>true</rightValue>
+                                </criteria>
+                            </visibilityRule>
+                        </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
@@ -857,7 +867,7 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>relatedListComponentOverride</name>
-                    <value>NONE</value>
+                    <value>ADVGRID</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>rowsToDisplay</name>
@@ -1269,77 +1279,80 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
-                    <name>defaultNumberofRecordsToDisplay</name>
+                    <name>flexcardName</name>
+                    <value>EHISContact</value>
+                </componentInstanceProperties>
+                <componentName>runtime_omnistudio:flexcard</componentName>
+                <identifier>runtime_omnistudio_flexcard2</identifier>
+            </componentInstance>
+        </itemInstances>
+                <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>actionNames</name>
+                    <valueList>
+                        <valueListItems>
+                            <value>NewContact</value>
+                        </valueListItems>
+                    </valueList>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>adminFilters</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>maxRecordsToDisplay</name>
                     <value>3</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>defaultRecordType</name>
+                    <name>parentFieldApiName</name>
+                    <value>Account.Id</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>displayType</name>
-                    <value>Tile 1</value>
+                    <name>relatedListApiName</name>
+                    <value>AccountContactRelations</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>filter</name>
+                    <name>relatedListDisplayType</name>
+                    <value>ADVGRID</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>hideOnNoRecord</name>
-                    <value>false</value>
+                    <name>relatedListFieldAliases</name>
+                    <valueList>
+                        <valueListItems>
+                            <value>CONTACT.FULL_NAME</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>PrimaryContact__c</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>ACCCONRELATION.IS_ACTIVE</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>ACCCONRELATION.ROLES</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>CONTACT.PHONE1</value>
+                        </valueListItems>
+                    </valueList>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>iconName</name>
-                    <value>standard:case</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>layoutType</name>
-                    <value>1 Column</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>maxNumberofRecordsToDisplay</name>
-                    <value>50</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>newRecord</name>
-                    <value>Standard</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>objectAPIName</name>
-                    <value>AccountContactRelation</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>parentField</name>
-                    <value>AccountId</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>parentObjectIdField</name>
-                    <value>Id</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>relatedListName</name>
-                    <value>RelatedContacts</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>showHeader</name>
-                    <value>true</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>showMenuAction</name>
-                    <value>true</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>showRefreshButton</name>
-                    <value>true</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>sort</name>
-                    <value>IsActive DESC</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>title</name>
+                    <name>relatedListLabel</name>
                     <value>Related Contacts</value>
                 </componentInstanceProperties>
-                <componentName>CMTD:EnhancedRelatedList</componentName>
-                <identifier>CMTD_EnhancedRelatedList</identifier>
+                <componentInstanceProperties>
+                    <name>showActionBar</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>sortFieldAlias</name>
+                    <value>ACCCONRELATION.IS_ACTIVE</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>sortFieldOrder</name>
+                    <value>Descending</value>
+                </componentInstanceProperties>
+                <componentName>lst:dynamicRelatedList</componentName>
+                <identifier>lst_dynamicRelatedList5</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -1354,12 +1367,8 @@
         </itemInstances>
         <itemInstances>
             <componentInstance>
-                <componentInstanceProperties>
-                    <name>flexcardName</name>
-                    <value>DisplayUnitsAndCapacityInformation</value>
-                </componentInstanceProperties>
-                <componentName>runtime_omnistudio:flexcard</componentName>
-                <identifier>runtime_omnistudio_flexcard2</identifier>
+                <componentName>cfDisplayUnitsAndCapacityInformation</componentName>
+                <identifier>c_cfDisplayUnitsAndCapacityInformation</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>

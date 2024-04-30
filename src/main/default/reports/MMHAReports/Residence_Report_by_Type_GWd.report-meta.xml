@@ -14,7 +14,7 @@
         <groupingColumn>Visit$Account.HealthAuthority__c</groupingColumn>
         <legendPosition>Right</legendPosition>
         <location>CHART_BOTTOM</location>
-        <secondaryGroupingColumn>Visit$Visitor</secondaryGroupingColumn>
+        <secondaryGroupingColumn>Visit$Account.Status__c</secondaryGroupingColumn>
         <showAxisLabels>true</showAxisLabels>
         <showPercentage>false</showPercentage>
         <showTotal>false</showTotal>
@@ -23,6 +23,7 @@
         <summaryAxisRange>Auto</summaryAxisRange>
         <textColor>#000000</textColor>
         <textSize>12</textSize>
+        <title>Residence Report by HA</title>
         <titleColor>#000000</titleColor>
         <titleSize>18</titleSize>
     </chart>
@@ -30,9 +31,19 @@
         <field>Visit$Account</field>
     </columns>
     <columns>
-        <field>Visit$Status</field>
+        <field>Visit$Account.Parent</field>
+    </columns>
+    <columns>
+        <field>Visit$Account.LicenseType__c</field>
     </columns>
     <filter>
+        <criteriaItems>
+            <column>Visit$Account.Status__c</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>CURR In Compliance,CURR Not in Compliance,CURR SIU Referral,Deregistered Location Change,Deregistered Owner Change,Deregistered Withdrawn,Registered Active,Registered Active Progressive Enforcement,Registered Active with Conditions</value>
+        </criteriaItems>
         <criteriaItems>
             <column>Visit$Account.RecordType</column>
             <columnToColumn>false</columnToColumn>
@@ -44,7 +55,7 @@
     <format>Matrix</format>
     <groupingsAcross>
         <dateGranularity>Day</dateGranularity>
-        <field>Visit$Visitor</field>
+        <field>Visit$Account.Status__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsAcross>
     <groupingsDown>
@@ -52,7 +63,7 @@
         <field>Visit$Account.HealthAuthority__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
-    <name>MMHA - Investigator Workload by Region</name>
+    <name>Residence Report by Type</name>
     <params>
         <name>co</name>
         <value>1</value>
@@ -63,7 +74,7 @@
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>true</showSubTotals>
     <timeFrameFilter>
-        <dateColumn>Visit$ActualVisitEndTime</dateColumn>
+        <dateColumn>Visit$CreatedDate</dateColumn>
         <interval>INTERVAL_CUSTOM</interval>
     </timeFrameFilter>
 </Report>
