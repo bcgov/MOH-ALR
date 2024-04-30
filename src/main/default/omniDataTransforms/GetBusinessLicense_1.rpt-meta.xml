@@ -11,62 +11,11 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>ResidenceAccount:ParentId</filterValue>
-        <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem0</globalKey>
-        <inputFieldName>Id</inputFieldName>
-        <inputObjectName>Account</inputObjectName>
-        <inputObjectQuerySequence>4.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetBusinessLicense</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>RegistrantAccount</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>Id</filterValue>
-        <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem3</globalKey>
-        <inputFieldName>Id</inputFieldName>
-        <inputObjectName>BusinessLicense</inputObjectName>
-        <inputObjectQuerySequence>1.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetBusinessLicense</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Certificate</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>Certificate:Account__c</filterValue>
-        <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem5</globalKey>
-        <inputFieldName>Id</inputFieldName>
-        <inputObjectName>Account</inputObjectName>
-        <inputObjectQuerySequence>2.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetBusinessLicense</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>ResidenceAccount</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:Address:Street &quot;/\/\/&quot; var:Address:City &quot;/\/\/&quot; var:Address:State &quot;/\/\/&quot; var:Address:PostalCode &quot;/\/\/&quot; var:Address:Country CONCAT</formulaConverted>
-        <formulaExpression>CONCAT(%Address:Street%, &quot; &quot;,%Address:City%, &quot; &quot;,%Address:State%, &quot; &quot;,%Address:PostalCode%, &quot; &quot;,%Address:Country%)</formulaExpression>
-        <formulaResultPath>ResidenceAddress</formulaResultPath>
-        <formulaSequence>2.0</formulaSequence>
-        <globalKey>GetBusinessLicenseCustom9554</globalKey>
+        <formulaConverted>| var:Unit:PrivateQuantityCount SUM</formulaConverted>
+        <formulaExpression>SUM(Unit:PrivateQuantityCount)</formulaExpression>
+        <formulaResultPath>TotalPrivateUnits</formulaResultPath>
+        <formulaSequence>4.0</formulaSequence>
+        <globalKey>GetBusinessLicenseCustom3467</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicense</name>
@@ -79,136 +28,31 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>&quot;$Vlocity.NULL&quot;</filterValue>
-        <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem7</globalKey>
-        <inputFieldName>ParentId</inputFieldName>
-        <inputObjectName>Asset</inputObjectName>
-        <inputObjectQuerySequence>3.0</inputObjectQuerySequence>
+        <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem23</globalKey>
+        <inputFieldName>RegistrantAccount:BillingAddress</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegistrantAddress</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:TotalPrivateUnits var:TotalPublicUnits var:TotalPerDiemUnits SUM</formulaConverted>
+        <formulaExpression>SUM(TotalPrivateUnits,TotalPublicUnits,TotalPerDiemUnits)</formulaExpression>
+        <formulaResultPath>TotalUnits</formulaResultPath>
+        <formulaSequence>9.0</formulaSequence>
+        <globalKey>GetBusinessLicenseCustom6266</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicense</name>
         <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Unit</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetBusinessLicenseCustom1729</globalKey>
-        <inputFieldName>Address:Id</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetBusinessLicense</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>AddId</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>ResidenceAccount:Id</filterValue>
-        <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem8</globalKey>
-        <inputFieldName>AccountId</inputFieldName>
-        <inputObjectName>Asset</inputObjectName>
-        <inputObjectQuerySequence>3.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetBusinessLicense</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Unit</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem11</globalKey>
-        <inputFieldName>Certificate:RegistrationCertificate__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetBusinessLicense</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>CertificateId</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem12</globalKey>
-        <inputFieldName>Certificate:CreatedDate</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetBusinessLicense</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldFormat>Date(MM/dd/yyyy)</outputFieldFormat>
-        <outputFieldName>InvoiceCreatedDate</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem17</globalKey>
-        <inputFieldName>Unit:Price</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetBusinessLicense</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldFormat>Currency</outputFieldFormat>
-        <outputFieldName>Units:Price</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem16</globalKey>
-        <inputFieldName>Unit:Amount__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetBusinessLicense</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Units:Amount</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem19</globalKey>
-        <inputFieldName>Unit:Name</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetBusinessLicense</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldFormat>String</outputFieldFormat>
-        <outputFieldName>Units:Name</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <defaultValue>[]</defaultValue>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem18</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetBusinessLicense</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldFormat>List&lt;Map&gt;</outputFieldFormat>
-        <outputFieldName>Units</outputFieldName>
-        <outputObjectName>json</outputObjectName>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
@@ -243,13 +87,59 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem23</globalKey>
-        <inputFieldName>RegistrantAccount:BillingAddress</inputFieldName>
+        <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem25</globalKey>
+        <inputFieldName>ResidenceAccount:BillingAddress</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicense</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>RegistrantAddress</outputFieldName>
+        <outputFieldName>ResidenceAddress</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetBusinessLicenseCustom6226</globalKey>
+        <inputFieldName>Certificate:PeriodStart</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Date(MM/dd/yyyy)</outputFieldFormat>
+        <outputFieldName>CertificateEffectiveDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>true</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:Unit:Quantity SUM</formulaConverted>
+        <formulaExpression>SUM(Unit:Quantity)</formulaExpression>
+        <formulaResultPath>TotalUnits</formulaResultPath>
+        <formulaSequence>1.0</formulaSequence>
+        <globalKey>GetBusinessLicenseCustom2114</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetBusinessLicenseCustom804</globalKey>
+        <inputFieldName>AssociatedLoc:Id</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>AssId</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -285,11 +175,60 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:Unit:Quantity SUM</formulaConverted>
-        <formulaExpression>SUM(Unit:Quantity)</formulaExpression>
-        <formulaResultPath>TotalUnits</formulaResultPath>
-        <formulaSequence>1.0</formulaSequence>
-        <globalKey>GetBusinessLicenseCustom2114</globalKey>
+        <filterOperator>=</filterOperator>
+        <filterValue>&quot;$Vlocity.NULL&quot;</filterValue>
+        <globalKey>GetBusinessLicenseCustom8961</globalKey>
+        <inputFieldName>ActiveTo</inputFieldName>
+        <inputObjectName>AssociatedLocation</inputObjectName>
+        <inputObjectQuerySequence>5.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>AssociatedLoc</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetBusinessLicenseCustom1096</globalKey>
+        <inputFieldName>Certificate:PeriodEnd</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Date(MM/dd/yyyy)</outputFieldFormat>
+        <outputFieldName>CertificateExpiryDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>Location:Id</filterValue>
+        <globalKey>GetBusinessLicenseCustom426</globalKey>
+        <inputFieldName>ParentId</inputFieldName>
+        <inputObjectName>Address</inputObjectName>
+        <inputObjectQuerySequence>7.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Address</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:Unit:Type__c &apos;Per/\/\/Diem&apos; == var:Unit:Quantity var:NULL IF</formulaConverted>
+        <formulaExpression>IF(Unit:Type__c==&apos;Per Diem&apos;,Unit:Quantity,NULL)</formulaExpression>
+        <formulaResultPath>Unit:PerDiemQuantityCount</formulaResultPath>
+        <formulaSequence>7.0</formulaSequence>
+        <globalKey>GetBusinessLicenseCustom3070</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicense</name>
@@ -302,22 +241,8 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>GetBusinessLicenseCustom804</globalKey>
-        <inputFieldName>AssociatedLoc:Id</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetBusinessLicense</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>AssId</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem25</globalKey>
-        <inputFieldName>ResidenceAccount:BillingAddress</inputFieldName>
+        <globalKey>GetBusinessLicenseCustom1309</globalKey>
+        <inputFieldName>ResidenceAddress</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicense</name>
@@ -330,14 +255,47 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>GetBusinessLicenseCustom6226</globalKey>
-        <inputFieldName>Certificate:PeriodStart</inputFieldName>
+        <formulaConverted>| var:Unit:Type__c &apos;Private&apos; == var:Unit:Quantity var:NULL IF</formulaConverted>
+        <formulaExpression>IF(Unit:Type__c==&apos;Private&apos;,Unit:Quantity,NULL)</formulaExpression>
+        <formulaResultPath>Unit:PrivateQuantityCount</formulaResultPath>
+        <formulaSequence>3.0</formulaSequence>
+        <globalKey>GetBusinessLicenseCustom9013</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:Unit:Type__c &apos;Public&apos; == var:Unit:Quantity var:NULL IF</formulaConverted>
+        <formulaExpression>IF(Unit:Type__c==&apos;Public&apos;,Unit:Quantity,NULL)</formulaExpression>
+        <formulaResultPath>Unit:PublicQuantityCount</formulaResultPath>
+        <formulaSequence>5.0</formulaSequence>
+        <globalKey>GetBusinessLicenseCustom7579</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetBusinessLicenseCustom378</globalKey>
+        <inputFieldName>Location:Id</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicense</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldFormat>Date(MM/dd/yyyy)</outputFieldFormat>
-        <outputFieldName>CertificateEffectiveDate</outputFieldName>
+        <outputFieldName>LocId</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -376,45 +334,16 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaResultPath>ResidenceClassType</formulaResultPath>
-        <formulaSequence>3.0</formulaSequence>
-        <globalKey>GetBusinessLicenseCustom9013</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetBusinessLicense</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetBusinessLicenseCustom378</globalKey>
-        <inputFieldName>Location:Id</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetBusinessLicense</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>LocId</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
         <filterOperator>=</filterOperator>
-        <filterValue>Location:Id</filterValue>
-        <globalKey>GetBusinessLicenseCustom426</globalKey>
-        <inputFieldName>ParentId</inputFieldName>
-        <inputObjectName>Address</inputObjectName>
-        <inputObjectQuerySequence>7.0</inputObjectQuerySequence>
+        <filterValue>ResidenceAccount:ParentId</filterValue>
+        <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem0</globalKey>
+        <inputFieldName>Id</inputFieldName>
+        <inputObjectName>Account</inputObjectName>
+        <inputObjectQuerySequence>4.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicense</name>
         <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Address</outputFieldName>
+        <outputFieldName>RegistrantAccount</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -422,45 +351,13 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>GetBusinessLicenseCustom1309</globalKey>
-        <inputFieldName>ResidenceAddress</inputFieldName>
+        <globalKey>GetBusinessLicenseCustom6786</globalKey>
+        <inputFieldName>TotalUnits</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicense</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>ResidenceAddress</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>&quot;$Vlocity.NULL&quot;</filterValue>
-        <globalKey>GetBusinessLicenseCustom8961</globalKey>
-        <inputFieldName>ActiveTo</inputFieldName>
-        <inputObjectName>AssociatedLocation</inputObjectName>
-        <inputObjectQuerySequence>5.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetBusinessLicense</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>AssociatedLoc</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetBusinessLicenseCustom1096</globalKey>
-        <inputFieldName>Certificate:PeriodEnd</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetBusinessLicense</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldFormat>Date(MM/dd/yyyy)</outputFieldFormat>
-        <outputFieldName>CertificateExpiryDate</outputFieldName>
+        <outputFieldName>TotalUnits</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -502,20 +399,227 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>GetBusinessLicenseCustom6786</globalKey>
-        <inputFieldName>TotalUnits</inputFieldName>
+        <globalKey>GetBusinessLicenseCustom1729</globalKey>
+        <inputFieldName>Address:Id</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicense</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>TotalUnits</outputFieldName>
+        <outputFieldName>AddId</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:Address:Street &quot;/\/\/&quot; var:Address:City &quot;/\/\/&quot; var:Address:State &quot;/\/\/&quot; var:Address:PostalCode &quot;/\/\/&quot; var:Address:Country CONCAT</formulaConverted>
+        <formulaExpression>CONCAT(%Address:Street%, &quot; &quot;,%Address:City%, &quot; &quot;,%Address:State%, &quot; &quot;,%Address:PostalCode%, &quot; &quot;,%Address:Country%)</formulaExpression>
+        <formulaResultPath>ResidenceAddress</formulaResultPath>
+        <formulaSequence>2.0</formulaSequence>
+        <globalKey>GetBusinessLicenseCustom9554</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>&quot;$Vlocity.NULL&quot;</filterValue>
+        <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem7</globalKey>
+        <inputFieldName>ParentId</inputFieldName>
+        <inputObjectName>Asset</inputObjectName>
+        <inputObjectQuerySequence>3.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Unit</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:Unit:PerDiemQuantityCount SUM</formulaConverted>
+        <formulaExpression>SUM(Unit:PerDiemQuantityCount)</formulaExpression>
+        <formulaResultPath>TotalPerDiemUnits</formulaResultPath>
+        <formulaSequence>8.0</formulaSequence>
+        <globalKey>GetBusinessLicenseCustom9147</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>Id</filterValue>
+        <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem3</globalKey>
+        <inputFieldName>Id</inputFieldName>
+        <inputObjectName>BusinessLicense</inputObjectName>
+        <inputObjectQuerySequence>1.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Certificate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>Certificate:Account__c</filterValue>
+        <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem5</globalKey>
+        <inputFieldName>Id</inputFieldName>
+        <inputObjectName>Account</inputObjectName>
+        <inputObjectQuerySequence>2.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>ResidenceAccount</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:Unit:PublicQuantityCount SUM</formulaConverted>
+        <formulaExpression>SUM(Unit:PublicQuantityCount)</formulaExpression>
+        <formulaResultPath>TotalPublicUnits</formulaResultPath>
+        <formulaSequence>6.0</formulaSequence>
+        <globalKey>GetBusinessLicenseCustom9206</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem19</globalKey>
+        <inputFieldName>Unit:Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>String</outputFieldFormat>
+        <outputFieldName>Units:Name</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <defaultValue>[]</defaultValue>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem18</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>List&lt;Map&gt;</outputFieldFormat>
+        <outputFieldName>Units</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem17</globalKey>
+        <inputFieldName>Unit:Price</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Currency</outputFieldFormat>
+        <outputFieldName>Units:Price</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem16</globalKey>
+        <inputFieldName>Unit:Amount__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Units:Amount</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem11</globalKey>
+        <inputFieldName>Certificate:RegistrationCertificate__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>CertificateId</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem12</globalKey>
+        <inputFieldName>Certificate:CreatedDate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Date(MM/dd/yyyy)</outputFieldFormat>
+        <outputFieldName>InvoiceCreatedDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>ResidenceAccount:Id</filterValue>
+        <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem8</globalKey>
+        <inputFieldName>AccountId</inputFieldName>
+        <inputObjectName>Asset</inputObjectName>
+        <inputObjectQuerySequence>3.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Unit</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <outputType>JSON</outputType>
     <previewJsonData>{
-  &quot;Id&quot; : &quot;0cEAs0000001ehlMAA&quot;
+  &quot;Id&quot; : &quot;0cEAq0000004yaHMAQ&quot;
 }</previewJsonData>
     <processSuperBulk>false</processSuperBulk>
     <responseCacheTtlMinutes>0.0</responseCacheTtlMinutes>

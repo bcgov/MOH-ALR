@@ -345,7 +345,16 @@
     <formulas>
         <name>PeriodEnd</name>
         <dataType>Date</dataType>
-        <expression>IF(MONTH(TODAY()) &gt;= 3, DATE(YEAR(TODAY()) + 1, 3, 31), DATE(YEAR(TODAY()), 3, 31))+1</expression>
+        <expression>IF(MONTH(TODAY()) &gt;= 3, DATE(YEAR(TODAY()) + 1, 3, 31), DATE(YEAR(TODAY()), 3, 31))</expression>
+    </formulas>
+    <formulas>
+        <name>PeriodEndTime</name>
+        <dataType>DateTime</dataType>
+        <expression>IF(
+MONTH(TODAY()) &gt;= 3,
+DATETIMEVALUE(TEXT(DATE(YEAR(TODAY()) + 1, 3, 31)) &amp; &quot; 08:00:00&quot;),
+DATETIMEVALUE(TEXT(DATE(YEAR(TODAY()) , 3, 31)) &amp; &quot; 08:00:00&quot;)
+)</expression>
     </formulas>
     <formulas>
         <name>renewalEndDate</name>
@@ -411,7 +420,7 @@
         <inputAssignments>
             <field>PeriodEnd</field>
             <value>
-                <elementReference>PeriodEnd</elementReference>
+                <elementReference>PeriodEndTime</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
