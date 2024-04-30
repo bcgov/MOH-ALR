@@ -8,7 +8,7 @@
             <axisBinding>y</axisBinding>
             <column>RowCount</column>
         </chartSummaries>
-        <chartType>VerticalColumnGrouped</chartType>
+        <chartType>VerticalColumnStacked</chartType>
         <enableHoverLabels>false</enableHoverLabels>
         <expandOthers>true</expandOthers>
         <groupingColumn>Account.HealthAuthority__c</groupingColumn>
@@ -18,7 +18,7 @@
         <showAxisLabels>true</showAxisLabels>
         <showPercentage>false</showPercentage>
         <showTotal>false</showTotal>
-        <showValues>true</showValues>
+        <showValues>false</showValues>
         <size>Medium</size>
         <summaryAxisRange>Auto</summaryAxisRange>
         <textColor>#000000</textColor>
@@ -30,20 +30,16 @@
         <field>ACCOUNT.NAME</field>
     </columns>
     <columns>
-        <field>CASE_NUMBER</field>
+        <field>PARENT_ACCOUNT_NAME</field>
     </columns>
     <columns>
-        <field>STATUS</field>
+        <field>Account.LicenseType__c</field>
     </columns>
     <columns>
         <field>ORIGIN</field>
     </columns>
     <columns>
         <field>Case.PlaceOfIncident__c</field>
-    </columns>
-    <columns>
-        <aggregateTypes>Sum</aggregateTypes>
-        <field>AGE</field>
     </columns>
     <filter>
         <criteriaItems>
@@ -63,17 +59,13 @@
     </filter>
     <format>Matrix</format>
     <groupingsAcross>
-        <field>Case.IncidentDate__c</field>
+        <dateGranularity>Day</dateGranularity>
+        <field>Case.TypeOfIncident__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsAcross>
     <groupingsDown>
         <dateGranularity>Day</dateGranularity>
         <field>Account.HealthAuthority__c</field>
-        <sortOrder>Asc</sortOrder>
-    </groupingsDown>
-    <groupingsDown>
-        <dateGranularity>Day</dateGranularity>
-        <field>Case.TypeOfIncident__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
     <name>MMHA - Reportable Incidents Report</name>
