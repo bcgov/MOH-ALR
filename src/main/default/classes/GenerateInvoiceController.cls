@@ -160,8 +160,8 @@ public with sharing class GenerateInvoiceController {
             //set data for RegulatoryTrxnFeeItem records
             for(Id accId : invoiceAssetMap.keySet()) {
                 for(Asset assetRec : invoiceAssetMap.get(accId)) {
-                            amtVal = defaultFee;
-                    Decimal amtVal = assetRec?.Account?.LicenseType__r?.UnitFee__c ?? defaultFee;//ALR-726 (2) - for renewals, amount is always unit fee  
+                    Decimal amtVal = defaultFee;
+                    amtVal = assetRec?.Account?.LicenseType__r?.UnitFee__c ?? defaultFee;//ALR-726 (2) - for renewals, amount is always unit fee  
                     RegulatoryTrxnFeeItem transFeeItemRec = RenewalManagementController.createTransFeeItemRecord(transFeeItemRT, transFeeAccMap.get(assetRec.AccountId).Id, assetRec.Id, assetRec.Type__c, amtVal, assetRec.Quantity, BCMOH_Constants.feeType);//ALR-829 - updated fee type (Renewal Unit Fee)
                     transFeeItemList.add(transFeeItemRec);
                 }
