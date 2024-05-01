@@ -31,8 +31,8 @@ public with sharing class ManageUnitsController {
             assetListString =  JSON.serialize(assetList);
         }catch(AuraHandledException e)
         {
-            throw new AuraHandledException(e.getMessage());
             LogService.logAndPublish(className, 'getUnitBasedOnResidence', '', e);
+            throw new AuraHandledException(e.getMessage());
         }
         return assetListString;
     }

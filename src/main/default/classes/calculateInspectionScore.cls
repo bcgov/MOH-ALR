@@ -6,7 +6,7 @@
                             ALR -860           Komal Gupta 
 ***********************************************************************************************/
 global with sharing class calculateInspectionScore implements Callable {
-    public String className = 'calculateInspectionScore';
+    public static String className = 'calculateInspectionScore';
     
 /**
 * @Author: Accenture_ALR Dev Team
@@ -129,6 +129,6 @@ global with sharing class calculateInspectionScore implements Callable {
         return [SELECT Id, Scope__c, Severity__c, Description, InspectionAssmntIndId, UserScore__c,
                 RegulatoryCode.Name, InspectionAssmntInd.AssessmentIndDefinition.Name, InspectionAssmntInd.AssessmentIndDefinition.Category__c
                 FROM RegulatoryCodeViolation
-                WHERE InspectionId =:recordId AND Inspection.VisitType.Name = 'Compliance Monitoring Inspection' WITH SECURITY_ENFORCED];
+                WHERE InspectionId =:recordId AND Inspection.VisitType.Name = 'Compliance Monitoring Inspection'];
     }  
 }

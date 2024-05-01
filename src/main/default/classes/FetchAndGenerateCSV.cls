@@ -17,11 +17,11 @@ public with sharing class FetchAndGenerateCSV {
                                                                                  'Fraser Health - FH' => 'FHA',
                                                                                  'Northern Health - NH' => 'NHA',
                                                                                  'Vancouver Coastal Health - VCH' => 'VCHA'};
-    List<String> serviceNameList = new List<String>{'Meal Services', 'Housekeeping', 'Laundry', 
+    static List<String> serviceNameList = new List<String>{'Meal Services', 'Housekeeping', 'Laundry', 
                                   'Social and Recreational Opps', '24-Hour Emergency Response System','Assistance with daily living activities',
                                   'Assistance with managing medication','Assistance managing therapeutic diets',
                                   'Safekeeping of money/personal property', 'Psychosocial support','Assistance with behaviour management'};
-    List<String> typeList = new List<String>{'Public', 'Private', 'Per Diem'};                              
+    static List<String> typeList = new List<String>{'Public', 'Private', 'Per Diem'};                              
                 
 /**
 * @Author: Accenture_ALR Dev Team
