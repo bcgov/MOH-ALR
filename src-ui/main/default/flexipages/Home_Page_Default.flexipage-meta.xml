@@ -412,8 +412,14 @@
                 <componentName>flexipage:filterListCard</componentName>
                 <identifier>flexipage_filterListCard8</identifier>
                 <visibilityRule>
+                    <booleanFilter>1 OR 2</booleanFilter>
                     <criteria>
                         <leftValue>{!$Permission.CustomPermission.EHIS_MMHA_User}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>false</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!$Permission.CustomPermission.EHIS_SDPR_User}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>false</rightValue>
                     </criteria>
