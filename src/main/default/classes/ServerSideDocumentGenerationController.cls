@@ -4,7 +4,7 @@
 * @Description: The purpose of thisclass to generate documents and attach to record
 			    referenced in RenewalManagementControllerBatch, TestClassCoverage - RenewalManagementControllerTest
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
-                           ALR-560             Sweta
+                           ALR-560             Sweta         Renewal verification and renewal mass email
                            ALR-997             Komal gupta   added new method for late fee document generation and attach to BLA record. 
                                                              referenced in LateFeeManagementControllerBatch
                            ALR-1107            Komal gupta   modified "fetchFeeRelatedInformation" method
@@ -31,8 +31,8 @@ public with sharing class ServerSideDocumentGenerationController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for ServerSideDocumentGenerationController
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
      public static void startDocGenProcess(List<Account> accData, Map<Id, BusinessLicenseApplication> blaMap1,
@@ -93,8 +93,8 @@ public with sharing class ServerSideDocumentGenerationController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for ServerSideDocumentGenerationController
+* @return:  DocumentGenerationProcess
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static DocumentGenerationProcess createDocumentGenerationProcessRequest(Id accId, String tempName) {
@@ -121,8 +121,8 @@ public with sharing class ServerSideDocumentGenerationController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for ServerSideDocumentGenerationController
+* @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static String prepareRequestText(Id accId, String tempName) {
@@ -167,8 +167,8 @@ public with sharing class ServerSideDocumentGenerationController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for ServerSideDocumentGenerationController
+* @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static String prepareTokenData(Id accId) {
@@ -270,8 +270,8 @@ public with sharing class ServerSideDocumentGenerationController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for ServerSideDocumentGenerationController
+* @return:  Boolean
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     private static Boolean fetchFeeRelatedInformation(Id accId) {
@@ -477,8 +477,8 @@ public with sharing class ServerSideDocumentGenerationController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for ServerSideDocumentGenerationController
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static void startDocGenProcessLateFee(Map<Id, Account> accmap, Map<Id, BusinessLicenseApplication> blaMap1,
@@ -538,8 +538,8 @@ public with sharing class ServerSideDocumentGenerationController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for ServerSideDocumentGenerationController
+* @return:  DocumentGenerationProcess
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static DocumentGenerationProcess createDocumentGenerationProcessRequestLateFee(Id accId, String tempName) {
@@ -566,8 +566,8 @@ public with sharing class ServerSideDocumentGenerationController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for ServerSideDocumentGenerationController
+* @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static String prepareRequestTextLateFee(Id accId, String tempName) {
@@ -607,8 +607,8 @@ public with sharing class ServerSideDocumentGenerationController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for ServerSideDocumentGenerationController
+* @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static String prepareTokenDataLateFee(Id accId) {
@@ -709,14 +709,13 @@ public with sharing class ServerSideDocumentGenerationController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for ServerSideDocumentGenerationController
+* @return:  Boolean
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     private static Boolean fetchFeeRelatedInformationLateFee(Id accId) {
         Boolean hasFeeItem = false;
         Decimal lateFeeSum = 0;
-        Decimal lateFeeQuantitySum = 0;
         Decimal latefeeFeeSum = 0;
         try {
             RegulatoryTrxnFee feeRec = transFeeMap1.get(transFeeMap1.get(accId).AccountId);

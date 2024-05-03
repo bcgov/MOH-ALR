@@ -3,7 +3,7 @@
 * @Date:       
 * @Description: The purpose of this Class is to 
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
-                              ALR-660           Siddharth
+                              ALR-660           Siddharth      Generating Regulatory Transaction Fee
 ***********************************************************************************************/
 @isTest
 public class GenerateFeeRecordsTest {

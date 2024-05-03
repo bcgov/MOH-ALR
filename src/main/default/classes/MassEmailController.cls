@@ -3,7 +3,7 @@
 * @Date:       
 * @Description: The purpose of this Controller class to send mass email
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
-                          ALR -560             Sweta        
+                          ALR -560             Sweta          Renewal verification and renewal mass email
 ***********************************************************************************************/
 public with sharing class MassEmailController {
     public static Id templateId = NULL;
@@ -44,8 +44,8 @@ public with sharing class MassEmailController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for MassEmailController
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //method to to send email to records
@@ -158,8 +158,8 @@ public with sharing class MassEmailController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for MassEmailController
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //method to to send email to records-ALR-1000
@@ -272,8 +272,8 @@ public with sharing class MassEmailController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for MassEmailController
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //send email method
@@ -335,8 +335,8 @@ public with sharing class MassEmailController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for MassEmailController
+* @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //method to replace merge fields in email template
@@ -398,8 +398,8 @@ public with sharing class MassEmailController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for MassEmailController
+* @return:  Map<Id, String>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //fetch templateId needed to send the email
@@ -446,8 +446,8 @@ public with sharing class MassEmailController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for MassEmailController
+* @return:  Map<Id, String>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //fetch templateId needed to send the email-ALR-1000
@@ -497,8 +497,8 @@ public with sharing class MassEmailController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for MassEmailController
+* @return:  Id
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //get org wide email address based on custom setting
@@ -526,8 +526,8 @@ public with sharing class MassEmailController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for MassEmailController
+* @return:  Map<Id, Set<Id>>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //fetch blaId-ContentVersions Map needed to add attachments to the email
@@ -535,16 +535,16 @@ public with sharing class MassEmailController {
         Map<Id, Set<Id>> blaContentVerMap = new Map<Id, Set<Id>>();
         try {
             //fetch wrapper details with blaId-DocId Map and docId-contentVerId Map
-            BCMOH_UtilityClass.ContentDocWrapper ContentDocWrapperRec = BCMOH_UtilityClass.getContentDocMap(blaIds);
+            BCMOH_UtilityClass.ContentDocWrapper contentDocWrapperRec = BCMOH_UtilityClass.getContentDocMap(blaIds);
             //fetch content versions per Bla record
-            if(ContentDocWrapperRec != NULL) {
-                for(Id blaId : ContentDocWrapperRec.entityContentIdsMap.KeySet()) {//for each bla rec Id
-                    for(Id docId : ContentDocWrapperRec.entityContentIdsMap.get(blaId)) {//for each of its content document id
+            if(contentDocWrapperRec != NULL) {
+                for(Id blaId : contentDocWrapperRec.entityContentIdsMap.KeySet()) {//for each bla rec Id
+                    for(Id docId : contentDocWrapperRec.entityContentIdsMap.get(blaId)) {//for each of its content document id
                         Set<Id> contentVerIdSet = new Set<Id>();
                         if(blaContentVerMap.containsKey(blaId)) {//if map contains the bla id
                             contentVerIdSet = blaContentVerMap.get(blaId);//fetch its content versions
                         }
-                        contentVerIdSet.add(ContentDocWrapperRec.contentDocVerMap.get(docId));//add current version also to the list
+                        contentVerIdSet.add(contentDocWrapperRec.contentDocVerMap.get(docId));//add current version also to the list
                         //map's key value pair holds the whatId vs attachment ids per email
                         blaContentVerMap.put(blaId, contentVerIdSet);//set blaId-ContentVersionId map
                     }
@@ -560,8 +560,8 @@ public with sharing class MassEmailController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for MassEmailController
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //update bla success and error maps after sending email
@@ -599,8 +599,8 @@ public with sharing class MassEmailController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for MassEmailController
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //update all bla records - DML
@@ -636,8 +636,8 @@ public with sharing class MassEmailController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for MassEmailController
+* @return:  Id
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //method to get AccountId-ALR-1000
@@ -648,8 +648,8 @@ public with sharing class MassEmailController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for MassEmailController
+* @return:  List of Account
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //Method to update Account Status-ALR-1000
@@ -660,8 +660,8 @@ public with sharing class MassEmailController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for MassEmailController
+* @return:  List of BusinessLicenseApplication
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static List<BusinessLicenseApplication> blaErrQuery(Id blaId) {
@@ -671,23 +671,23 @@ public with sharing class MassEmailController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for MassEmailController
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //update all latefee bla records - DML-ALR-1000
     public static void updateLateFeeBlaStatus() {
         //List<BusinessLicenseApplication> statusBla = new List<BusinessLicenseApplication>();
         List<Account> accToUpdate = new List<Account>();
-        List<BusinessLicenseApplication> BLAquery = new List<BusinessLicenseApplication>();
+        List<BusinessLicenseApplication> bLAquery = new List<BusinessLicenseApplication>();
         try {    
             //loop through bla error map
             for(Id blaId : blaErrMap.keySet()) {
-                BLAquery=blaErrQuery(blaId);
+                bLAquery=blaErrQuery(blaId);
                 //truncate the err message if length more than 255 chars
                 String lateFeeMsg = blaErrMap.get(blaId).length() > 255 ? blaErrMap.get(blaId).Substring(0,255) : blaErrMap.get(blaId);
                 String errMsg = blaErrMap.get(blaId);
-                errMsg = BLAquery[0].RenewalDetail__c != NULL ? BLAquery[0].RenewalDetail__c + ' ; ' + lateFeeMsg : lateFeeMsg;
+                errMsg = bLAquery[0].RenewalDetail__c != NULL ? bLAquery[0].RenewalDetail__c + ' ; ' + lateFeeMsg : lateFeeMsg;
                 BusinessLicenseApplication blaRec = new BusinessLicenseApplication(
                     Id = blaId,
                     Late_Fee_Status__c = BCMOH_Constants.errorBlaStatus,
@@ -696,17 +696,17 @@ public with sharing class MassEmailController {
             }
             //loop through bla success map   
             for (Id blaId : blaSuccessMap.keySet()) {
-                BLAquery=blaErrQuery(blaId);
+                bLAquery=blaErrQuery(blaId);
                 Id statusBla = getAccountId(blaId);
                 accToUpdate=updateAccountStatus(statusBla);
                 accToUpdate[0].Status__c=BCMOH_Constants.AccStatus;
                 
                 String lateFeeMsg = blaSuccessMap.get(blaId).length() > 255 ? blaSuccessMap.get(blaId).Substring(0,255) : blaSuccessMap.get(blaId);
                 String succMsg;
-                if(String.isEmpty(BLAquery[0].RenewalDetail__c)){
+                if(String.isEmpty(bLAquery[0].RenewalDetail__c)){
                     succMsg = lateFeeMsg;
                 }else{
-                   succMsg = BLAquery[0].RenewalDetail__c + ' ; ' + LatefeeMsg;
+                   succMsg = bLAquery[0].RenewalDetail__c + ' ; ' + LatefeeMsg;
                 }
                   blaSuccessMap.put(blaid,succMsg);
                 BusinessLicenseApplication blaRec = new BusinessLicenseApplication(Id = blaId, 

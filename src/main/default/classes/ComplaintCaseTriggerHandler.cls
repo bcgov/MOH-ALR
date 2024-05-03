@@ -3,7 +3,8 @@
 * @Date:       
 * @Description: The purpose of this Class is for TriggerHandler for CompliantCaseTrigger
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
-                          ALR -509             Sri Teja 
+                          ALR-509             Sri Teja       Public complaints/Cases additional changes
+                          ALR-762             ACN-ALR        Error Thrown on creation of Reportable Incident Case 
 ***********************************************************************************************/
 public with sharing class ComplaintCaseTriggerHandler {
     static String className = 'ComplaintCaseTriggerHandler';
@@ -11,8 +12,8 @@ public with sharing class ComplaintCaseTriggerHandler {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for ComplaintCaseTriggerHandler
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static void handleBeforeInsert(List<Case> newCases) {
@@ -56,8 +57,8 @@ public with sharing class ComplaintCaseTriggerHandler {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for ComplaintCaseTriggerHandler
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     private static void generateComplaintCaseIDs(List<Case> cases, Set<String> licenseTypeSet) {
@@ -76,8 +77,8 @@ public with sharing class ComplaintCaseTriggerHandler {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for ComplaintCaseTriggerHandler
+* @return:  Map<String, String>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     private static Map<String, String> getLicenseTypeCodeMap(List<Case> cases) {
@@ -99,8 +100,8 @@ public with sharing class ComplaintCaseTriggerHandler {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for ComplaintCaseTriggerHandler
+* @return:  Map<String, String>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     private static Map<String, String> getMaxSequenceNumbers(Set<String> licenseTypes, Integer year) {
@@ -115,8 +116,8 @@ public with sharing class ComplaintCaseTriggerHandler {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for ComplaintCaseTriggerHandler
+* @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     private static String getFormattedSequenceNumber(String sequenceNumber) {
@@ -132,8 +133,8 @@ public with sharing class ComplaintCaseTriggerHandler {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for ComplaintCaseTriggerHandler
+* @return:  Map<String, Id>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     private static Map<String, Id> getRecordTypesMap(String developerName) {
@@ -151,8 +152,8 @@ public with sharing class ComplaintCaseTriggerHandler {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for ComplaintCaseTriggerHandler
+* @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     private static String getMaxSequenceNumber(String licenseType, Integer year) {
@@ -178,8 +179,8 @@ public with sharing class ComplaintCaseTriggerHandler {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for ComplaintCaseTriggerHandler
+* @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     private static String getLicenseTypeCode(Id accountId) {
@@ -203,8 +204,8 @@ public with sharing class ComplaintCaseTriggerHandler {
 
 /**
 * @Author: Accenture_ALR Dev Team
-* @date: 
-* @description: The purpose of this method is to
+* @date: Map<String, Id>
+* @description: The purpose of this method is for ComplaintCaseTriggerHandler
 * @return:  
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */

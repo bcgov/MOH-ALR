@@ -2,12 +2,13 @@
 * @Author:Accenture_ALR Dev Team   
 * @Date:       
 * @Description: The purpose of this Class is for 
-* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]               
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
+                           ALR-651              ACN-ALR        Deploy and Configure Error Handling Framework in ALR Org             
 ***********************************************************************************************/
 public with sharing class Application {
     static String className = 'Application';
 /**
-* @Author:
+* @Author: ACN-ALR
 * @date: 
 * @description: The purpose of this method is to Configure and create the UnitOfWorkFactory for this Application
 * @return:  
@@ -26,7 +27,7 @@ public with sharing class Application {
     );
     
 /**
-* @Author:
+* @Author: ACN-ALR
 * @date: 
 * @description: The purpose of this method is to Configure and create the ServiceFactory for this Application
 * @return:  
@@ -38,7 +39,7 @@ public with sharing class Application {
     );
     
 /**
-* @Author:
+* @Author: ACN-ALR
 * @date: 
 * @description: The purpose of this method is to Configure and create the SelectorFactory for this Application
 * @return:  
@@ -50,7 +51,7 @@ public with sharing class Application {
     );
     
 /**
-* @Author:
+* @Author: ACN-ALR
 * @date: 
 * @description: The purpose of this method is to Configure and create the DomainFactory for this Application
 * @return:  

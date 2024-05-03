@@ -3,7 +3,7 @@
 * @Date:       
 * @Description: The purpose of this Test class for RenewalManagementController and RenewalManagementControllerBatch
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
-                           ALR-36             Sweta
+                           ALR-36             Sweta           License renewal initiation
 ***********************************************************************************************/
 @isTest
 public class RenewalManagementControllerTest {

@@ -3,96 +3,89 @@
 * @Date:       
 * @Description: The purpose of this Controller class for Inspection Assessment Indicator Creation
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]    
-                           ALR-1230             Anilkumar
+                           ALR-1230             Anilkumar     Error while creating the inspection
 ***********************************************************************************************/
 public with sharing class InspTasksCreationController {
     public static String className = 'InspTasksCreationController';
     public class FlowInputs {
-        @InvocableVariable public List<String> ATIId;
-        @InvocableVariable public String InspId; 
+        @InvocableVariable public List<String> aTIId;
+        @InvocableVariable public String inspId; 
     }
-
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for InspTasksCreationController
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     @InvocableMethod
     public static void getActionPlanItemIds(List<FlowInputs> ATI ) {
-        Set<String> APTIds = new Set<String>();
-        Set<Id> InspectionId = new Set<Id>();
-        Set<Id> LiteralValues = new Set<Id>();
-        List<AssessmentTaskDefinition> ATD = new List<AssessmentTaskDefinition>();
-        Set<Id>AIDIdIds = new Set<Id>();
-        List<AssessmentTaskIndDefinition> ATID = new List<AssessmentTaskIndDefinition>();
-        Set<Id> ATDIds = new Set<Id>();
-        List<AssessmentIndicatorDefinition> AID = new List<AssessmentIndicatorDefinition>();
-        List<Id> AssessIndDefList = new List<Id>();
-        Id AIDIds;
-        Set<Id>ATsIds = new Set<Id>();
-        String categoryKey;
-        Map<String, List<Id>> mapIds = new Map<String, List<Id>>();
+        Set<String> aPTIds = new Set<String>();
+        Set<Id> inspectionId = new Set<Id>();
+        Set<Id> literalValues = new Set<Id>();
+        List<AssessmentTaskDefinition> aTD = new List<AssessmentTaskDefinition>();
+        List<AssessmentTaskIndDefinition> aTID = new List<AssessmentTaskIndDefinition>();
+        Set<Id> aTDIds = new Set<Id>();
+        List<AssessmentIndicatorDefinition> aID = new List<AssessmentIndicatorDefinition>();
+        Id aIDIds;
         Map<Id, List<Id>> mapAIDIds = new Map<Id, List<Id>>();
-        List<AssessmentTask> ATstoInsert = new List<AssessmentTask>();
-        List<InspectionAssessmentInd> IAIstoInsert = new List<InspectionAssessmentInd>();
+        List<AssessmentTask> aTstoInsert = new List<AssessmentTask>();
+        List<InspectionAssessmentInd> iAIstoInsert = new List<InspectionAssessmentInd>();
         string visitId = null; 
         try{
             for (FlowInputs input : ATI) {
-                APTIds.addAll(input.ATIId);
-                InspectionId.add(input.InspId);   
+                aPTIds.addAll(input.aTIId);
+                inspectionId.add(input.inspId);   
             }
-            
-            for (string setElement :InspectionId ) {
+            for (string setElement :inspectionId ) {
                 visitId = setElement; 
                 break; 
             }
             for(ActionPlanTemplateItemValue APTIV : [SELECT Id,ItemEntityFieldName,ValueLiteral,ActionPlanTemplateItemId
                                                      FROM ActionPlanTemplateItemValue
-                                                     WHERE ActionPlanTemplateItemId IN :APTIds
+                                                     WHERE ActionPlanTemplateItemId IN :aPTIds
                                                      AND ItemEntityFieldName = :BCMOH_Constants.ItemEntityName WITH SECURITY_ENFORCED]){
-                                                         LiteralValues.add(APTIV.ValueLiteral);   
+                                                         literalValues.add(APTIV.ValueLiteral);   
                                                      }
-            if(LiteralValues.Size() !=0){
-                ATD = [SELECT Id,Category__c FROM AssessmentTaskDefinition WHERE Id IN: LiteralValues WITH SECURITY_ENFORCED];
-                for(AssessmentTaskDefinition ATDs : ATD){
-                    ATDIds.add(ATDs.Id);
+            if(literalValues.Size() !=0){
+                aTD = [SELECT Id,Category__c FROM AssessmentTaskDefinition WHERE Id IN: literalValues WITH SECURITY_ENFORCED];
+                for(AssessmentTaskDefinition ATDs : aTD){
+                    aTDIds.add(ATDs.Id);
                 }            
                 
-                for(AssessmentTaskDefinition ATDs :ATD){
+                for(AssessmentTaskDefinition ATDs :aTD){
                     AssessmentTask  newAssessmentTask = new AssessmentTask();
                     newAssessmentTask.Name = ATDs.Category__c;
                     newAssessmentTask.AssessmentTaskDefinitionId = ATDs.Id;
                     newAssessmentTask.ParentId = visitId;
                     newAssessmentTask.TaskType = BCMOH_Constants.TaskType;
-                    ATstoInsert.add(newAssessmentTask);
+                    aTstoInsert.add(newAssessmentTask);
                 }
-                if(!ATstoInsert.isEmpty()){
-                    database.insert(ATstoInsert);
+                if(!aTstoInsert.isEmpty()){
+                    database.insert(aTstoInsert);
                 }
-                ATID = [SELECT AssessmentIndDefinitionId,AssessmentTaskDefinitionId 
-                        FROM AssessmentTaskIndDefinition WHERE AssessmentTaskDefinitionId IN: ATDIds WITH SECURITY_ENFORCED];
+                aTID = [SELECT AssessmentIndDefinitionId,AssessmentTaskDefinitionId 
+                        FROM AssessmentTaskIndDefinition WHERE AssessmentTaskDefinitionId IN: aTDIds WITH SECURITY_ENFORCED];
                 
-                for(AssessmentTaskIndDefinition atdid : ATID){
+                for(AssessmentTaskIndDefinition atdid : aTID){
                     if(!mapAIDIds.containsKey(atdid.AssessmentTaskDefinitionId)){
                         mapAIDIds.put(atdid.AssessmentTaskDefinitionId, new List<Id>());
                     }
                     mapAIDIds.get(atdid.AssessmentTaskDefinitionId).add(atdid.AssessmentIndDefinitionId);
                 }            
                 
-                for(AssessmentTask assessTask : ATstoInsert){
+                for(AssessmentTask assessTask : aTstoInsert){
                     if(mapAIDIds.containsKey(assessTask.AssessmentTaskDefinitionId)){
                         for(Id aidId : mapAIDIds.get(assessTask.AssessmentTaskDefinitionId)){
                             InspectionAssessmentInd newInspectionAssessmentInd = new InspectionAssessmentInd();
                             newInspectionAssessmentInd.AssessmentTaskId = assessTask.Id;
                             newInspectionAssessmentInd.AssessmentIndDefinitionId = aidId;
-                            IAIstoInsert.add(newInspectionAssessmentInd);
+                            iAIstoInsert.add(newInspectionAssessmentInd);
                         }
                     }
                 } 
-                if(!IAIstoInsert.isEmpty()){
-                    Database.insert(IAIstoInsert);
+                if(!iAIstoInsert.isEmpty()){
+                    Database.insert(iAIstoInsert);
                 }
             }
         }

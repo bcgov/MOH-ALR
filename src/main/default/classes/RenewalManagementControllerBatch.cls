@@ -4,7 +4,7 @@
 * @Description: The purpose of this batch class to create renewal records and related fee records based on criteria
 					   called FROM flow - GenerateRenewalsForAccounts
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
-                           ALR-36             Sweta
+                           ALR-36             Sweta           License renewal initiation
 ***********************************************************************************************/
 public with sharing class RenewalManagementControllerBatch implements Database.Batchable<sObject> {
     //static Constants
@@ -19,29 +19,29 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
     public Final static List<String> allALUnitTypes = BCMOH_Constants.allALUnitTypes;
     public Final static String activeStatusBl = BCMOH_Constants.activeStatusBl;
     //flow attribute
-    public List<Id> CONLIST = new List<Id>();
+    public List<Id> cONLIST = new List<Id>();
     
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for RenewalManagementControllerBatch
+* @return:  List<Id>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //constructor
     public RenewalManagementControllerBatch(List<Id> conlist) {
-        this.CONLIST = conlist;//assigns flow list to static const
+        this.cONLIST = conlist;//assigns flow list to static const
     }
     //declaring invocable variables
     public class FlowInputs {
-        @InvocableVariable public List<Id> ConId;
+        @InvocableVariable public List<Id> conId;
     }
 
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for RenewalManagementControllerBatch
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //fetching flow inputs into attribute and run batch 
@@ -60,8 +60,8 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for RenewalManagementControllerBatch
+* @return:  Database.QueryLocator
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //start method
@@ -93,8 +93,8 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for RenewalManagementControllerBatch
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //execute method
@@ -102,7 +102,7 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
         Map<Id, String> blaStatusMap = new Map<Id, String>();
         Map<Id, Account> renewalAccMap = new Map<Id, Account>();
         Map<Id, Account> renewalFeeAccMap = new Map<Id, Account>();
-        List<Id> includedAccIds = CONLIST;
+        List<Id> includedAccIds = cONLIST;
         try {
             for(Account accRec : renewalAccList) {
                 //check if non cancelled renewalbla already exists for the current year to avoid duplicates
@@ -135,8 +135,8 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for RenewalManagementControllerBatch
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //finish method
