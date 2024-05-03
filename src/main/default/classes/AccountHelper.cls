@@ -1,60 +1,56 @@
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this Class is to have the methods related to account trigger
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
+                           ALR-928             Komal          Compliance inspection scheduling based on compliance score
+***********************************************************************************************/
+public with sharing class AccountHelper {
+    static String className = 'AccountHelper';
 /**
-* @Name              : AccountHelper
-* @Description       : class is to create Inspection Records
-* @Author            : Komal Gupta (Accenture)
-* @StoryNo           : ALR-928
-**/
-public class AccountHelper {
+* @Author: Accenture_ALR Dev Team
+* @date: 
+* @description: The purpose of this method is to create Inspection Records
+* @return:  void
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
     public static void createInspection(List<Account> accList){
-        List<Visit> inspectList = new List<Visit>();
-        Map<String, Id> mapInspectionType = new Map<String, Id>();
-        Map<String, Id> mapAccount = new Map<String, Id>();
-
-        List<Account> accList1 = [SELECT Id, Name, Rating, OwnerId, (SELECT Id, Location.VisitorAddress.Address, LocationId FROM AssociatedLocations LIMIT 1) FROM Account WHERE Id =: accList];
-        InspectionType insType = [SELECT Id, Name FROM InspectionType WHERE Name = 'Compliance Monitoring Inspection' LIMIT 1];
-        mapInspectionType.put('InspectionType', insType.Id);
-        
-        for(Account accObj : accList1){
-            if(accObj.Rating != NULL){
-                if(accObj.Rating == 'Low'){
-                Visit inspection = new Visit();
-                inspection.AccountId = accObj.Id;
-                inspection.InspectionMethod__c = 'Unannounced on site inspection';
-                inspection.VisitPriority = 'Medium';
-                inspection.VisitTypeId = mapInspectionType.get('InspectionType');
-                inspection.OwnerId = accObj.OwnerId;
-                inspection.PlaceId = accObj.AssociatedLocations[0].LocationId;
-                inspection.PlannedVisitStartTime = System.today().addMonths(3);
-                inspectList.add(inspection);
-        }
-            else if (accObj.Rating == 'Medium'){
-                Visit inspection = new Visit();
-                inspection.AccountId = accObj.Id;
-                inspection.InspectionMethod__c = 'Unannounced on site inspection';
-                inspection.VisitPriority = 'Medium';
-                inspection.VisitTypeId = mapInspectionType.get('InspectionType');
-                inspection.PlaceId = accObj.AssociatedLocations[0].LocationId;
-                inspection.OwnerId = accObj.OwnerId;
-                inspection.PlannedVisitStartTime = System.today().addMonths(6);
-                inspectList.add(inspection);
-            }
-            else if (accObj.Rating == 'High'){
-                Visit inspection = new Visit();
-                inspection.AccountId = accObj.Id;
-                inspection.InspectionMethod__c = 'Unannounced on site inspection';
-                inspection.VisitPriority = 'Medium';
-                inspection.VisitTypeId = mapInspectionType.get('InspectionType');
-                inspection.PlaceId = accObj.AssociatedLocations[0].LocationId;
-                inspection.OwnerId = accObj.OwnerId;
-                inspection.PlannedVisitStartTime = System.today().addMonths(12);
-                inspectList.add(inspection);
-            }
-            }
+        try{
+            List<Visit> inspectList = new List<Visit>();
+            Map<String, Id> mapInspectionType = new Map<String, Id>();
+            String aCCRATINGLOW = 'Low'; 
+            String aCCRATINGMEDIUM = 'Medium'; 
+            String aCCRATINGHIGH = 'High'; 
+            List<Account> accList1 = [SELECT Id, Name, Rating, OwnerId, 
+                                      (SELECT Id, Location.VisitorAddress.Address, LocationId 
+                                       FROM AssociatedLocations LIMIT 1) 
+                                      FROM Account WHERE Id IN: accList AND Rating != NULL WITH SECURITY_ENFORCED];
+            List<InspectionType> insTypeList = [SELECT Id, Name FROM InspectionType 
+                                                WHERE Name = 'Compliance Monitoring Inspection' WITH SECURITY_ENFORCED LIMIT 1];
+            mapInspectionType.put('InspectionType', insTypeList.get(0).Id);
             
+            for(Account accObj : accList1){
+                Integer noOfMonths = aCCRATINGLOW.containsIgnoreCase(accObj.Rating) ? 3 : 
+                aCCRATINGMEDIUM.containsIgnoreCase(accObj.Rating) ? 6 :
+                aCCRATINGHIGH.containsIgnoreCase(accObj.Rating) ? 12 : 0;
+                if(accObj.Rating != NULL){
+                    Visit inspection = new Visit();
+                    inspection.AccountId = accObj.Id;
+                    inspection.InspectionMethod__c = 'Unannounced on site inspection';
+                    inspection.VisitPriority = 'Medium';
+                    inspection.VisitTypeId = mapInspectionType.get('InspectionType');
+                    inspection.OwnerId = accObj.OwnerId;
+                    inspection.PlaceId = accObj.AssociatedLocations[0].LocationId;
+                    inspection.PlannedVisitStartTime = System.today().addMonths(noOfMonths);
+                    inspectList.add(inspection);
+                }
+            }
+            if(!inspectList.isEmpty()){
+                SObjectAccessDecision securityDecision = Security.stripInaccessible(AccessType.CREATABLE, inspectList);
+                insert securityDecision.getRecords();
+            }
+        }catch (Exception e) {
+            LogService.logAndPublish(className, 'createInspection', '', e);
         }
-        if(!inspectList.isEmpty()){
-        insert inspectList;
-        }
-        }
-
+    }
 }

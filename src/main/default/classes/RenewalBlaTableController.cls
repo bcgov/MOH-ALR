@@ -1,11 +1,20 @@
-/**
-* @Name              : RenewalBlaTableController
-* @Description       : Controller class for renewalBlaTable LWC
-* @Author            : Sweta (Accenture)
-* @StoryNo           : ALR-560
-**/
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this class Controller class for renewalBlaTable LWC
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
+                           ALR-560             Sweta           Renewal verification and renewal mass email
+***********************************************************************************************/
 public with sharing class RenewalBlaTableController {
-    Public Static String className = 'RenewalBlaTableController';
+    public static String className = 'RenewalBlaTableController';
+
+/**
+* @Author: Accenture_ALR Dev Team
+* @date: 
+* @description: The purpose of this method is for RenewalBlaTableController
+* @return:  List of BusinessLicenseApplication
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
     //fetch the BLA records to display on table
     @AuraEnabled(cacheable=true)
     public static List<BusinessLicenseApplication> getBlaRecs() {
@@ -23,7 +32,7 @@ public with sharing class RenewalBlaTableController {
                                                      RecordType.DeveloperName =: BCMOH_Constants.blaRecType AND
                                                      Status IN: BCMOH_Constants.renewalTableStatus 
                                                      AND RenewalYear__c =: BCMOH_Constants.renewalYear 
-                                                     AND Account.Status__c IN: accDetails.values()[0] 
+                                                     AND Account.Status__c IN: accDetails.values()[0] WITH SECURITY_ENFORCED
                                                      Order By CreatedDate LIMIT 50000]) {
                                                          blaMap.put(blaRec.Id, blaRec);
                                                          blaList.add(blaRec);
@@ -31,11 +40,18 @@ public with sharing class RenewalBlaTableController {
                     }
         catch(exception ex) {
             LogService.logAndPublish(className, 'getBlaRecs', '', ex);
-            system.debug('qblaaa im caught getBlaRecs'+ex.getMessage());
         }
         return blaList;
     }
-    //update bla records from lwc
+
+/**
+* @Author: Accenture_ALR Dev Team
+* @date: 
+* @description: The purpose of this method is for RenewalBlaTableController
+* @return: Boolean 
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
+    //update bla records FROM lwc
     @AuraEnabled
     public static Boolean updateBlaRecs(Object data) {
         List<BusinessLicenseApplication> blaUpdateList = new List<BusinessLicenseApplication>(); 

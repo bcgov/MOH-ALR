@@ -1,12 +1,19 @@
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this Controller class is for LateFeeManagementTable LWC
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
+                            ALR-996            Anilkumar      Generate Renewal Late Fee Transaction         
+***********************************************************************************************/
+public with sharing class LateFeeManagementTableController {
+    public static String className = 'LateFeeManagementTableController';
 /**
-* @Name              : LateFeeManagementTableController
-* @Description       : Controller class for LateFeeManagementTable LWC
-* @Author            : Anilkumar (Accenture)
-* @StoryNo           : ALR-996
-**/
-public class LateFeeManagementTableController {
-    Public Static String className = 'LateFeeManagementTableController';
-   
+* @Author: Accenture_ALR Dev Team
+* @date: 
+* @description: The purpose of this method is for LateFeeManagementTableController
+* @return:  List of BusinessLicenseApplication
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
       @AuraEnabled(cacheable=true)
         public static List<BusinessLicenseApplication> getLateFeeRecs() {
         Map<Id, BusinessLicenseApplication> blaMap = new Map<Id, BusinessLicenseApplication>();
@@ -23,12 +30,12 @@ public class LateFeeManagementTableController {
                                                      AND RenewalYear__c =: BCMOH_Constants.renewalYear 
                                                      AND Late_Fee_Status__c =:BCMOH_Constants.LateFeeStatuses
                                                      AND Id IN(
-                                                        Select ParentRecordId FROM RegulatoryTrxnFee
+                                                        SELECT ParentRecordId FROM RegulatoryTrxnFee
 														WHERE Status =:BCMOH_Constants.dueFeeStatus
 														AND FeeType__c IN :BCMOH_Constants.FeeTypeStatuses
                                                      	)                                                     
                                                      AND Account.Status__c IN: accDetails.values()[0]
-                                                     Order By CreatedDate LIMIT 50000]) {
+                                                     WITH SECURITY_ENFORCED Order By CreatedDate LIMIT 50000]) {
                                                          blaMap.put(blaRec.Id, blaRec);
                                                          blaList.add(blaRec);
                                                      }
@@ -44,6 +51,13 @@ public class LateFeeManagementTableController {
         return blaList;       
     }
 
+/**
+* @Author: Accenture_ALR Dev Team
+* @date: 
+* @description: The purpose of this method is for LateFeeManagementTableController
+* @return:  Boolean
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
     @AuraEnabled
     public static Boolean updateLateFeeRecs(Object data) {
         List<BusinessLicenseApplication> blaUpdateList = new List<BusinessLicenseApplication>(); 

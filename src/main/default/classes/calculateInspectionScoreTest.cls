@@ -1,3 +1,10 @@
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this Class is to 
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
+                           ALR -860           Komal Gupta    Performing CAT Inspection - Part A (Inspection assessment)
+***********************************************************************************************/
 @isTest
 public class calculateInspectionScoreTest {
     @isTest
@@ -92,7 +99,7 @@ public class calculateInspectionScoreTest {
         Object result = calculation.call('getInspectionScores', inputMap);
         Object result1 = calculation.call('getInspectionScores', inputMap1);
         
-        System.assertEquals(true, result, 'Expected result to be true');
+        Assert.areEqual(true, result, 'Expected result to be true');
         Test.stopTest();
     }
     public static void getAccounts_Method(){
@@ -101,11 +108,11 @@ public class calculateInspectionScoreTest {
 
         List<RegulatoryCodeViolation> result1 = calculateInspectionScore.getRecords('Account');
 
-        System.assertEquals(true,result1!=null);
+        Assert.areEqual(true,result1!=null);
 
         List<RegulatoryCodeViolation> result2 = calculateInspectionScore.getRecords(null);
 
-        System.assertEquals(false,result2==null);
+        Assert.areEqual(false,result2==null);
 
         Test.stopTest();
 

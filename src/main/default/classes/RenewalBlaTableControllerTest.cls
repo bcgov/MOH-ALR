@@ -81,7 +81,7 @@ public class RenewalBlaTableControllerTest {
         contactRec.MobilePhone = '8856589554';
         update contactRec;
         
-        AccountContactRelation acRec = [SELECT Id, ContactId, AccountId from AccountContactRelation LIMIT 1];
+        AccountContactRelation acRec = [SELECT Id, ContactId, AccountId FROM AccountContactRelation LIMIT 1];
         system.debug('csdcsd'+acRec);
         acRec.PrimaryContact__c = true;
         acRec.isActive = true;
@@ -122,14 +122,14 @@ public class RenewalBlaTableControllerTest {
     }
      @isTest
     static void getsendEmailTestTest1() {
-        //List<BusinessLicense> blRec = [SELECT Id, Account.Name from BusinessLicense];
-        List<Asset> assetRec = [SELECT Id, Account.Name from Asset];
-        AccountContactRelation acRec = [SELECT Id, ContactId, AccountId, isActive, PrimaryContact__c from AccountContactRelation LIMIT 1];
+        //List<BusinessLicense> blRec = [SELECT Id, Account.Name FROM BusinessLicense];
+        List<Asset> assetRec = [SELECT Id, Account.Name FROM Asset];
+        AccountContactRelation acRec = [SELECT Id, ContactId, AccountId, isActive, PrimaryContact__c FROM AccountContactRelation LIMIT 1];
         
         system.debug('csd'+acRec+' '+assetRec);
         List<String> accNames = new List<String>{'residenceAccount1'};
         List<Id> accIds = new List<Id>();
-        for(Account accId : [SELECT Id from Account where Name IN: accNames LIMIT 10]) {
+        for(Account accId : [SELECT Id FROM Account WHERE Name IN: accNames LIMIT 10]) {
             accIds.add(accId.Id);
         }
         system.debug('csd'+accIds);
@@ -138,7 +138,7 @@ public class RenewalBlaTableControllerTest {
         accntIds.ConId = accIds;
         RenewalManagementControllerBatch.sendEmailTest(new List<RenewalManagementControllerBatch.FlowInputs>{accntIds});
         Test.stopTest();
-        List<RegulatoryTrxnFeeItem> regTrans = [SELECT Id from RegulatoryTrxnFeeItem LIMIT 10];
+        List<RegulatoryTrxnFeeItem> regTrans = [SELECT Id FROM RegulatoryTrxnFeeItem LIMIT 10];
         Assert.isNotNull(regTrans.size());
     }
 }*/

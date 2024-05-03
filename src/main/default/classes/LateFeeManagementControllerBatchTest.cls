@@ -1,9 +1,10 @@
-/**
-* @Name              : LateFeeManagementControllerBatchTest
-* @Description       : Test Class to cover batch class LateFeeManagementControllerBatch
-* @Author            : Komal Gupta (Accenture)
-* @StoryNo           : ALR-997
-**/
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this 
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
+                          ALR -997             Komal Gupta    Generate Renewal Late Fee Transaction      
+***********************************************************************************************/
 @isTest
 public class LateFeeManagementControllerBatchTest {
 
@@ -34,7 +35,7 @@ public class LateFeeManagementControllerBatchTest {
         contactRec.MobilePhone = '8856589554';
         update contactRec;
         
-        AccountContactRelation acRec = [SELECT Id, ContactId, AccountId from AccountContactRelation LIMIT 1];
+        AccountContactRelation acRec = [SELECT Id, ContactId, AccountId FROM AccountContactRelation LIMIT 1];
         acRec.PrimaryContact__c = true;
         acRec.isActive = true;
         update acRec;
@@ -66,14 +67,14 @@ public class LateFeeManagementControllerBatchTest {
     }
      @isTest
     static void getsendEmailTestTest1() {
-        List<BusinessLicense> blRec = [SELECT Id, Account.Name from BusinessLicense];
-        List<Asset> assetRec = [SELECT Id, Account.Name from Asset];
-        AccountContactRelation acRec = [SELECT Id, ContactId, AccountId, isActive, PrimaryContact__c from AccountContactRelation LIMIT 1];
+        List<BusinessLicense> blRec = [SELECT Id, Account.Name FROM BusinessLicense];
+        List<Asset> assetRec = [SELECT Id, Account.Name FROM Asset];
+        AccountContactRelation acRec = [SELECT Id, ContactId, AccountId, isActive, PrimaryContact__c FROM AccountContactRelation LIMIT 1];
 
         List<String> accNames = new List<String>{'residenceAccount1'};
         List<Id> accIds = new List<Id>();
         List<Id> blaIds = new List<Id>();
-        for(Account accId : [SELECT Id from Account where Name IN: accNames LIMIT 10]) {
+        for(Account accId : [SELECT Id FROM Account WHERE Name IN: accNames LIMIT 10]) {
             for(BusinessLicenseApplication blaRec : accId.BusinessLicenseApplicationAccount){
                 if(blaRec.Status == 'Excluded'){
                     blaRec.Late_Fee_Status__c = blaRec.Status;
@@ -89,7 +90,7 @@ public class LateFeeManagementControllerBatchTest {
         accntIds.ConId = accIds;
         LateFeeManagementControllerBatch.sendEmailTest(new List<LateFeeManagementControllerBatch.FlowInputs>{accntIds});
         Test.stopTest();
-        List<RegulatoryTrxnFeeItem> regTrans = [SELECT Id from RegulatoryTrxnFeeItem LIMIT 10];
+        List<RegulatoryTrxnFeeItem> regTrans = [SELECT Id FROM RegulatoryTrxnFeeItem LIMIT 10];
         Assert.isNotNull(regTrans.size());
     }
     
