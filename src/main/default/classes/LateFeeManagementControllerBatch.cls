@@ -4,7 +4,7 @@
 * @Description: The purpose of this batch class to update bla records, related fee records
                 and creating and attaching document based on criteria called FROM flow - Generate_Late_Fee 
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
-                          ALR -997             Komal Gupta          
+                          ALR -997             Komal Gupta    Generate Renewal Late Fee Transaction      
 ***********************************************************************************************/
 public with sharing class LateFeeManagementControllerBatch implements Database.Batchable<sObject> {
     //static Constants
@@ -26,28 +26,28 @@ public with sharing class LateFeeManagementControllerBatch implements Database.B
     public Final static String activeStatusBl = BCMOH_Constants.activeStatusBl;
     public Final static String FeeTypeStatuses = 'Renewal Unit Fee';
     
-    public List<Id> CONLIST = new List<Id>();
+    public List<Id> cONLIST = new List<Id>();
 
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for LateFeeManagementControllerBatch
 * @return:  
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */    
     public LateFeeManagementControllerBatch(List<Id> conlist) {
-        this.CONLIST = conlist;
+        this.cONLIST = conlist;
     }
 
     public class FlowInputs {
-        @InvocableVariable public List<Id> ConId;
+        @InvocableVariable public List<Id> conId;
     }
 
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for LateFeeManagementControllerBatch
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     @invocablemethod
@@ -65,8 +65,8 @@ public with sharing class LateFeeManagementControllerBatch implements Database.B
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for LateFeeManagementControllerBatch
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public Database.QueryLocator start(Database.BatchableContext BC){
@@ -101,13 +101,12 @@ public with sharing class LateFeeManagementControllerBatch implements Database.B
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for LateFeeManagementControllerBatch
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public void execute(Database.BatchableContext BC, List<Account> latefeeaccList){
         Map<Id, Account> lateFeeAccMap = new Map<Id, Account>();
-        List<RegulatoryTrxnFee> regTxnList = new List<RegulatoryTrxnFee>();
         List<BusinessLicenseApplication> blaList = new List<BusinessLicenseApplication>();
         Map<Id, BusinessLicenseApplication> lateFeeBLAMap = new Map<Id, BusinessLicenseApplication>();
         
@@ -153,8 +152,8 @@ public with sharing class LateFeeManagementControllerBatch implements Database.B
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for LateFeeManagementControllerBatch
+* @return:  void
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public void finish(Database.BatchableContext BC){

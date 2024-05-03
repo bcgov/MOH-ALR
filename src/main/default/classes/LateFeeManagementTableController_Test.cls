@@ -3,7 +3,7 @@
 * @Date:       
 * @Description: The purpose of this Class is for 
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
-                            ALR-996            Anilkumar                           
+                            ALR-996            Anilkumar      Generate Renewal Late Fee Transaction                     
 ***********************************************************************************************/
 @isTest
 public class LateFeeManagementTableController_Test {

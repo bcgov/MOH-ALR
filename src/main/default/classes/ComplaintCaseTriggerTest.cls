@@ -3,7 +3,8 @@
 * @Date:       
 * @Description: The purpose of this Class is to 
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
-                           ALR - 509           Sri Teja
+                           ALR - 509           Sri Teja       Public complaints/Cases additional changes
+                           ALR-762             ACN-ALR        Error Thrown on creation of Reportable Incident Case 
 ***********************************************************************************************/
 @isTest
 public class ComplaintCaseTriggerTest {
@@ -11,8 +12,7 @@ public class ComplaintCaseTriggerTest {
 	@testSetup
     public static void makeData() {
         RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
-        Account residence = TestDataFactory.createResidence('Residence','residence1', regAuth.Id, true);
-		
+        Account residence = TestDataFactory.createResidence('Residence','residence1', regAuth.Id, true);	
     }
     //ALR-762
     @isTest

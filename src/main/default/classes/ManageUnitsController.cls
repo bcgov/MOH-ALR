@@ -1,9 +1,9 @@
 /**********************************************************************************************
 * @Author:Accenture_ALR Dev Team   
 * @Date:       
-* @Description: The purpose of this Class is for 
+* @Description: The purpose of this Class is for Validation Error is not getting populated on Remove Existing Units.
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
-                11-8-23                        ChangeMeIn@UserSettingsUnder.SFDoc         
+                11-8-23   ALR-907             ACN-ALR         Validation Error is not getting populated on Remove Existing Units.      
 ***********************************************************************************************/
 public with sharing class ManageUnitsController {
     public static String className = 'ManageUnitsController';
@@ -18,8 +18,8 @@ public with sharing class ManageUnitsController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for ManageUnitsController
+* @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     @AuraEnabled
@@ -40,13 +40,12 @@ public with sharing class ManageUnitsController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for ManageUnitsController
+* @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     @AuraEnabled
     public static string updateUnits(Object data) {
-        system.debug('data--'+data);
         List<Asset> assetForCreateList = new List<Asset>();
         List<Asset> assetForValidateList = new List<Asset>();
         List<Asset> assetForUpdateList = (List<Asset>) JSON.deserialize(JSON.serialize(data),List<Asset>.class);
@@ -114,7 +113,7 @@ public with sharing class ManageUnitsController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
+* @description: The purpose of this method is for ManageUnitsController
 * @return:  
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */

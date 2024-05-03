@@ -2,7 +2,8 @@
 * @Author:Accenture_ALR Dev Team   
 * @Date:       
 * @Description: The purpose of this Class is for 
-* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]               
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
+                           ALR-33              ACN-ALR        View and Modify Residence Services details within Residence Class Record            
 ***********************************************************************************************/
 public class InputWrapper {
    

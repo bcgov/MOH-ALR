@@ -3,7 +3,7 @@
 * @Date:       
 * @Description: The purpose of this Class is for TriggerHandler for CompliantCaseTrigger
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
-                              ALR -               
+                           ALR-799             ACN-ALR        Issues on Web Services Residence Report         
 ***********************************************************************************************/
 public with sharing class FetchAndGenerateCSV {
     static String className = 'FetchAndGenerateCSV';
@@ -16,23 +16,23 @@ public with sharing class FetchAndGenerateCSV {
                                                                                  'Interior Health - IH' => 'IHA',
                                                                                  'Fraser Health - FH' => 'FHA',
                                                                                  'Northern Health - NH' => 'NHA',
-                                                                                 'Vancouver Coastal Health - VCH' => 'VCHA'};
-    static List<String> serviceNameList = new List<String>{'Meal Services', 'Housekeeping', 'Laundry', 
-                                  'Social and Recreational Opps', '24-Hour Emergency Response System','Assistance with daily living activities',
-                                  'Assistance with managing medication','Assistance managing therapeutic diets',
-                                  'Safekeeping of money/personal property', 'Psychosocial support','Assistance with behaviour management'};
-    static List<String> typeList = new List<String>{'Public', 'Private', 'Per Diem'};                              
+                                                                                 'Vancouver Coastal Health - VCH' => 'VCHA'};                         
                 
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for FetchAndGenerateCSV
+* @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */    
     @AuraEnabled(cacheable=true)
     public static String generateCSV(){
       csvContent = csvHeader;  
+      List<String> serviceNameList = new List<String>{'Meal Services', 'Housekeeping', 'Laundry', 
+                                  'Social and Recreational Opps', '24-Hour Emergency Response System','Assistance with daily living activities',
+                                  'Assistance with managing medication','Assistance managing therapeutic diets',
+                                  'Safekeeping of money/personal property', 'Psychosocial support','Assistance with behaviour management'};
+      List<String> typeList = new List<String>{'Public', 'Private', 'Per Diem'};     
       List<Account> accounts = [SELECT Id, RegId__c, Name, HealthAuthority__c, Phone, Extension__c, Fax, Website, Status__c, Parent.Name,
                                (SELECT ContactId, PrimaryContact__c, Contact.Name FROM AccountContactRelations WHERE PrimaryContact__c = true LIMIT 1),
                                (SELECT RegistrationCertificate__c FROM AccountBusinessLicenses__r WHERE Status = 'Active' LIMIT 1),
@@ -101,8 +101,8 @@ public with sharing class FetchAndGenerateCSV {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for FetchAndGenerateCSV
+* @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     // Helper method to get the registration certificates
@@ -119,8 +119,8 @@ public with sharing class FetchAndGenerateCSV {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for FetchAndGenerateCSV
+* @return:  String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     // Helper method to get the service flag
@@ -136,8 +136,8 @@ public with sharing class FetchAndGenerateCSV {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for FetchAndGenerateCSV
+* @return:  Integer
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     // Helper method to get the asset quantity based on type
@@ -154,8 +154,8 @@ public with sharing class FetchAndGenerateCSV {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for FetchAndGenerateCSV
+* @return:  Contact
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     // Helper method to retrieve primary contacts FROM AccountContactRelation
@@ -180,8 +180,8 @@ public with sharing class FetchAndGenerateCSV {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for FetchAndGenerateCSV
+* @return:  List of String
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //Helper method to retrieve Address and handle NullPointerException

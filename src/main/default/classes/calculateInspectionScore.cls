@@ -3,7 +3,7 @@
 * @Date:       
 * @Description: The purpose of this Class is to calculate the Inspection Score and is called in Omniscript (RiskAssessment) and LWC (ShowRegulatoryViolationRecords)
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
-                            ALR -860           Komal Gupta 
+                            ALR -860           Komal Gupta    Performing CAT Inspection - Part A (Inspection assessment)
 ***********************************************************************************************/
 global with sharing class calculateInspectionScore implements Callable {
     public static String className = 'calculateInspectionScore';
@@ -11,8 +11,8 @@ global with sharing class calculateInspectionScore implements Callable {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is to return invokeMethod
+* @return:  Boolean
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */    
     public Object call(String action, Map<String,Object> args){
@@ -24,8 +24,8 @@ global with sharing class calculateInspectionScore implements Callable {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is to return boolean for invokeMethod
+* @return:  Boolean
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     global Boolean invokeMethod(String methodName, Map<String,Object> inputMap, Map<String,Object> outMap, Map<String,Object> options){
@@ -44,8 +44,8 @@ global with sharing class calculateInspectionScore implements Callable {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for Performing CAT Inspection
+* @return:  Map<String, Object>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */    
     public static Map<String, Object> getInspectionScores(Map<String,Object> inputMap, Map<String, Object> outMap){
@@ -53,8 +53,6 @@ global with sharing class calculateInspectionScore implements Callable {
         String jsonInput = Json.serialize(inputMap.get('input'));
         Map<String, Object> inputMap1 = (Map<String, Object>) JSON.deserializeUntyped(jsonInput);
         String inspectionId = (String)(inputMap1.get('InspectionId'));
-        
-        Map<String, Object> resultMap = new Map<String, Object>();
         
         try {
             // Fetch all Regulatory Code Violations for the given Inspection record
@@ -106,8 +104,7 @@ global with sharing class calculateInspectionScore implements Callable {
                 for (Decimal score1 : top3Scores) {
                     totalScore = totalScore + score1;
                 } 
-            }
-            
+            } 
             // Add the categoryScoreMap to the resultMap
             outMap.put('RiskMatrix', totalScore);
             
@@ -120,15 +117,16 @@ global with sharing class calculateInspectionScore implements Callable {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for Performing CAT Inspection
+* @return:  List of RegulatoryCodeViolation
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     @AuraEnabled(cacheable=true)
     public static List<RegulatoryCodeViolation> getRecords(String recordId){
-        return [SELECT Id, Scope__c, Severity__c, Description, InspectionAssmntIndId, UserScore__c,
+        SObjectAccessDecision decision = Security.stripInaccessible(AccessType.READABLE, [SELECT Id, Scope__c, Severity__c, Description, InspectionAssmntIndId, UserScore__c,
                 RegulatoryCode.Name, InspectionAssmntInd.AssessmentIndDefinition.Name, InspectionAssmntInd.AssessmentIndDefinition.Category__c
                 FROM RegulatoryCodeViolation
-                WHERE InspectionId =:recordId AND Inspection.VisitType.Name = 'Compliance Monitoring Inspection'];
+                WHERE InspectionId =:recordId AND Inspection.VisitType.Name = 'Compliance Monitoring Inspection'] );
+               return decision.getRecords();
     }  
 }

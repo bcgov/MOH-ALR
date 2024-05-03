@@ -3,7 +3,7 @@
 * @Date:       
 * @Description: The purpose of this class Controller class for renewalBlaTable LWC
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
-                           ALR-560             Sweta
+                           ALR-560             Sweta           Renewal verification and renewal mass email
 ***********************************************************************************************/
 public with sharing class RenewalBlaTableController {
     public static String className = 'RenewalBlaTableController';
@@ -11,8 +11,8 @@ public with sharing class RenewalBlaTableController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for RenewalBlaTableController
+* @return:  List of BusinessLicenseApplication
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //fetch the BLA records to display on table
@@ -47,8 +47,8 @@ public with sharing class RenewalBlaTableController {
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
-* @description: The purpose of this method is to
-* @return:  
+* @description: The purpose of this method is for RenewalBlaTableController
+* @return: Boolean 
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     //update bla records FROM lwc
