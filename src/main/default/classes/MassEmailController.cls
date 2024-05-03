@@ -1,53 +1,52 @@
-/**********************************************************************************************
-* @Author:Accenture_ALR Dev Team   
-* @Date:       
-* @Description: The purpose of this Controller class to send mass email
-* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
-                          ALR -560             Sweta          Renewal verification and renewal mass email
-***********************************************************************************************/
-public with sharing class MassEmailController {
-    public static Id templateId = NULL;
-    public static String templateEntity = '';
-    public static Map<Id, Id> targetWhatIdMap = new Map<Id, Id>();
-    public static Map<Id, Id> whatIdTargetMap = new Map<Id, Id>();
-    public static Id orgWideAddrId = NULL;
-    public static String templateDevName = '';
-    public static Map<Id, String> templateDetailsMap = new Map<Id, String>();
-    public static String templateDetailName = '';
-    //verified attributes all below are needed - remove comment later.
-    public static String className = 'MassEmailController';
-    public static Id templateDetailsId = NULL;
-    public static String emailBody = '';
-    public static String subjectValue = '';
-    public static String emailBodyConst = '';
-    public static String subjectValueConst = '';
-    //ALR-827 - for html body
-    public static String emailHtmlBodyConst = '';
-    public static String emailHtmlBody = '';
-    //ALR-827 ends
-    public static Map<Id, BusinessLicenseApplication> blaMap = new Map<Id, BusinessLicenseApplication>();
-    public static Map<Id, Id> blaContactMap = new Map<Id, Id>();
-    public static Map<Id, AccountContactRelation> accContactMap = new Map<Id, AccountContactRelation>();
-    public static Map<Id, Account> accMap = new Map<Id, Account>();
-    public static Map<Id, BusinessLicense> blMap = new Map<Id, BusinessLicense>();
-    public static Map<Id, Integer> blaTotalAlUnitsMap = new Map<Id, Integer>();
-    public static Map<Id, Set<Id>> blaContentVerMap = new Map<Id, Set<Id>>();
-    private Final static String RegTxnFeeStatus = 'Due';
-    public Final static String FeeTypeStatuses = 'Renewal Unit Fee';
-    
-    public static String errMessage = '';//common err message for all records
-    public static Boolean sendEmailValid = true;//false if template or org wide address is not found
-    public static Map<Id, String> blaErrMap = new Map<Id, String>();
-    public static Map<Id, String> blaSuccessMap = new Map<Id, String>();
-    public static List<BusinessLicenseApplication> blaUpdateList = new List<BusinessLicenseApplication>();//bla records to update
-    
 /**
-* @Author: Accenture_ALR Dev Team
-* @date: 
-* @description: The purpose of this method is for MassEmailController
-* @return:  void
-* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
-*/
+* @Name              : MassEmailController
+* @Description       : Controller class to send mass email
+Test class MassEmailControllerTest
+* @Author            : Sweta (Accenture)
+* @StoryNo           : ALR-560
+**/
+public with sharing class MassEmailController {
+    //Set<Id> selectedBlaIds = new Set<Id>{'0f0As000000065RIAQ'};//may get from list view/lightning comp
+    Public Static Id templateId = NULL;
+    Public Static String templateEntity = '';
+    Public Static Map<Id, Id> targetWhatIdMap = new Map<Id, Id>();
+    Public Static Map<Id, Id> whatIdTargetMap = new Map<Id, Id>();
+    
+    
+    Public Static Id orgWideAddrId = NULL;
+    Public Static String templateDevName = '';
+    Public Static Map<Id, String> templateDetailsMap = new Map<Id, String>();
+    Public Static String templateDetailName = '';
+    
+    //verified attributes all below are needed - remove comment later.
+    Public Static String className = 'MassEmailController';
+    
+    Public Static Id templateDetailsId = NULL;
+    Public Static String emailBody = '';
+    Public Static String subjectValue = '';
+    Public Static String emailBodyConst = '';
+    Public Static String subjectValueConst = '';
+    //ALR-827 - for html body
+    Public Static String emailHtmlBodyConst = '';
+    Public Static String emailHtmlBody = '';
+    //ALR-827 ends
+    
+    Public Static Map<Id, BusinessLicenseApplication> blaMap = new Map<Id, BusinessLicenseApplication>();
+    Public Static Map<Id, Id> blaContactMap = new Map<Id, Id>();
+    Public Static Map<Id, AccountContactRelation> accContactMap = new Map<Id, AccountContactRelation>();
+    Public Static Map<Id, Account> accMap = new Map<Id, Account>();
+    Public Static Map<Id, BusinessLicense> blMap = new Map<Id, BusinessLicense>();
+    Public Static Map<Id, Integer> blaTotalAlUnitsMap = new Map<Id, Integer>();
+    Public Static Map<Id, Set<Id>> blaContentVerMap = new Map<Id, Set<Id>>();
+    private Final Static String RegTxnFeeStatus = 'Due';
+    public Final Static String FeeTypeStatuses = 'Renewal Unit Fee';
+    
+    Public Static String errMessage = '';//common err message for all records
+    Public Static Boolean sendEmailValid = true;//false if template or org wide address is not found
+    Public Static Map<Id, String> blaErrMap = new Map<Id, String>();
+    Public Static Map<Id, String> blaSuccessMap = new Map<Id, String>();
+    Public Static List<BusinessLicenseApplication> blaUpdateList = new List<BusinessLicenseApplication>();//bla records to update
+    
     //method to to send email to records
     @AuraEnabled
     public static void doSendRenewals() {
@@ -56,8 +55,10 @@ public with sharing class MassEmailController {
         Map<Id, String> templateIdEntityMap = new Map<Id, String>();
         Id orgWideAddrId = NULL;
         Map<Id, Set<Id>> contactContentVerMap = new Map<Id, Set<Id>>();
+        Set<Id> accIdSetTemp = new Set<Id>{'001As00000IGcv0IAD','001As00000IMmIEIA1','001As00000HVRtTIAX'};//temp delete acc
+            //Set<Id> accIdSetTemp = new Set<Id>{'001As00000IMmIEIA1'};//temp delete xyz 
             try {
-                //fetch acc status and rec type FROM metadata
+                //fetch acc status and rec type from metadata
                 accDetails = BCMOH_UtilityClass.getAccRenewals(BCMOH_Constants.renewalName);
                 //fetch account, bla details
                 //need to make query dynamic?
@@ -78,8 +79,9 @@ public with sharing class MassEmailController {
                                              AND Type__c IN: BCMOH_Constants.allALUnitTypes)
                                             FROM Account 
                                             WHERE RecordType.DeveloperName =: accDetails.keyset() AND 
-                                            Status__c IN: accDetails.values()[0] WITH SECURITY_ENFORCED
-                                            ]) {
+                                            Status__c IN: accDetails.values()[0] 
+                                            //AND Id IN: accIdSetTemp
+                                           ]) {
                                                isValidAcc = true;//setting account as valid initially
                                                
                                                //when valid renewal bla record is not available
@@ -131,7 +133,7 @@ public with sharing class MassEmailController {
                     //fetch template Id
                     templateIdEntityMap = fetchTemplateDetails(BCMOH_Constants.templatePurpose);//email template
                     //fetch org wide address id
-                    orgWideAddrId = getOrgWideId();//email FROM address
+                    orgWideAddrId = getOrgWideId();//email from address
                     //if template or org wide id is not fetched, update error on valid bla records
                     if(!sendEmailValid) {
                         for(Id blaId : blaMap.keySet()) {
@@ -151,17 +153,11 @@ public with sharing class MassEmailController {
                 updateBlaStatus();
             }
         catch(exception ex) {
+            system.debug('yui im caught'+ex.getMessage());
             LogService.logAndPublish(className, 'doSendRenewals', '', ex);
         }
     }
-
-/**
-* @Author: Accenture_ALR Dev Team
-* @date: 
-* @description: The purpose of this method is for MassEmailController
-* @return:  void
-* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
-*/
+    
     //method to to send email to records-ALR-1000
     @AuraEnabled
     public static void doSendLateFee() {
@@ -170,8 +166,10 @@ public with sharing class MassEmailController {
         Map<Id, String> templateIdEntityMap = new Map<Id, String>();
         Id orgWideAddrId = NULL;
         Map<Id, Set<Id>> contactContentVerMap = new Map<Id, Set<Id>>();
+        Set<Id> accIdSetTemp = new Set<Id>{'001As00000IGcv0IAD','001As00000IMmIEIA1','001As00000HVRtTIAX'};//temp delete acc
+            //Set<Id> accIdSetTemp = new Set<Id>{'001As00000IMmIEIA1'};//temp delete xyz 
             try {
-                //fetch acc status and rec type FROM metadata
+                //fetch acc status and rec type from metadata
                 accDetails = BCMOH_UtilityClass.getAccRenewals(BCMOH_Constants.renewalName);
                 //fetch account, bla details
                 //need to make query dynamic?
@@ -193,6 +191,7 @@ public with sharing class MassEmailController {
                                             FROM Account 
                                             WHERE RecordType.DeveloperName =: accDetails.keyset() AND 
                                             Status__c IN: accDetails.values()[0] 
+                                            //AND Id IN: accIdSetTemp
                                            ]) {
                                                isValidAcc = true;//setting account as valid initially
                                                //when valid renewal bla record is not available
@@ -245,7 +244,7 @@ public with sharing class MassEmailController {
                     //fetch template Id
                     templateIdEntityMap = fetchTemplate(BCMOH_Constants.templatePurposeDetails);//email template
                     //fetch org wide address id
-                    orgWideAddrId = getOrgWideId();//email FROM address
+                    orgWideAddrId = getOrgWideId();//email from address
                     //if template or org wide id is not fetched, update error on valid bla records
                     if(!sendEmailValid) {
                         for(Id blaId : blaMap.keySet()) {
@@ -265,17 +264,12 @@ public with sharing class MassEmailController {
                 updateLateFeeBlaStatus();
             }
         catch(exception ex) {
+            system.debug('yui im caught'+ex.getMessage());
             LogService.logAndPublish(className, 'doSendLateFee', '', ex);
         }
     }
-
-/**
-* @Author: Accenture_ALR Dev Team
-* @date: 
-* @description: The purpose of this method is for MassEmailController
-* @return:  void
-* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
-*/
+    
+    
     //send email method
     public static void sendEmailForRenewals(Map<Id, Set<Id>> blaContentVerMap, Map<Id, Id> whatIdTargetMap) {
         //List<Id> attachIds = new List<Id>();
@@ -316,7 +310,8 @@ public with sharing class MassEmailController {
                            singleEmailMsgList.add(emailMsgRec);
                            
                        }
-                   }else {
+                   }
+                else {
                     blaErrMap.put(whatId, BCMOH_Constants.mappingDataMissing);//required data missing account and bla records-corner scenario
                 }
             }
@@ -328,17 +323,10 @@ public with sharing class MassEmailController {
             }
         }
         catch(Exception ex) {
-            LogService.logAndPublish(className, 'sendEmailForRenewals', '', ex);
+            system.debug('use exception handling sendEmailForRenewals'+ex.getMessage());
         }
     }
-
-/**
-* @Author: Accenture_ALR Dev Team
-* @date: 
-* @description: The purpose of this method is for MassEmailController
-* @return:  String
-* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
-*/
+    
     //method to replace merge fields in email template
     public static String replaceMergeFields(String templateData, AccountContactRelation accContactRec, 
                                             BusinessLicenseApplication blaRec, Account accRec, 
@@ -390,29 +378,23 @@ public with sharing class MassEmailController {
                                                     }
                                                 }
                                                 catch(Exception ex) {
+                                                    system.debug('use exception handling replaceMergeFields '+ex.getMessage());
                                                     LogService.logAndPublish(className, 'replaceMergeFields', blaRec.Id, ex);
                                                 }
                                                 return templateData;
                                             }
-
-/**
-* @Author: Accenture_ALR Dev Team
-* @date: 
-* @description: The purpose of this method is for MassEmailController
-* @return:  Map<Id, String>
-* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
-*/
+    
     //fetch templateId needed to send the email
     public static Map<Id, String> fetchTemplateDetails(String purpose) {
         Map<Id, String> templateDetails = new Map<Id, String>();
         EmailTemplate emailTempRec = new EmailTemplate();
         try {
-            //fetch email template name FROM metadata
+            //fetch email template name from metadata
             templateDetailsMap = BCMOH_UtilityClass.getEmailtemplateName(purpose);
             templateDetailName = templateDetailsMap.values()[0];
             templateDetailsId = new List<Id>(templateDetailsMap.keyset())[0];
             if(!templateDetailsMap.isEmpty()) {
-                //fetch template details FROM email template
+                //fetch template details from email template
                 emailTempRec = BCMOH_UtilityClass.getEmailTemplate(templateDetailName);
                 if(emailTempRec != NULL) {
                     templateDetails.put(emailTempRec.Id, emailTempRec.RelatedEntityType);
@@ -428,43 +410,37 @@ public with sharing class MassEmailController {
                 else {
                     //set error when email template was not fetched
                     errMessage = templateId == NULL ? BCMOH_Constants.templateNameMissing+templateDetailName : '';
-                   sendEmailValid = false;
+                    system.debug(errMessage);//add in error handling
+                    sendEmailValid = false;
                 }
             }
             else {
                 //set error when valid email template config is not available
                 errMessage = BCMOH_Constants.activePurposeTemplateMissing+purpose+' purpose';
+                system.debug(errMessage);//add in error handling
                 sendEmailValid = false;
             }
         }
         catch(Exception ex) {
+            system.debug('use exception handling fetchTemplateId'+ex.getMessage());
             LogService.logAndPublish(className, 'fetchTemplateDetails', '', ex);
         }
         return templateDetails;
     }
-
-/**
-* @Author: Accenture_ALR Dev Team
-* @date: 
-* @description: The purpose of this method is for MassEmailController
-* @return:  Map<Id, String>
-* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
-*/
+    
     //fetch templateId needed to send the email-ALR-1000
     public static Map<Id, String> fetchTemplate(String purpose) {
         Map<Id, String> templateDetails = new Map<Id, String>();
         EmailTemplate emailTempRec = new EmailTemplate();
         try {
-            //fetch email template name FROM metadata
+            //fetch email template name from metadata
             templateDetailsMap = BCMOH_UtilityClass.getEmailtemplatebyName(purpose);
             templateDetailName = templateDetailsMap.values()[0];
             templateDetailsId = new List<Id>(templateDetailsMap.keyset())[0];
             if(!templateDetailsMap.isEmpty()) {
-                //fetch template details FROM email template
+                //fetch template details from email template
                 //emailTempRec = BCMOH_UtilityClass.getEmailTemplate(templateDetailName);
-                emailTempRec =[SELECT Id, Name, DeveloperName, Description, Subject, HtmlValue, Body, RelatedEntityType 
-                               FROM EmailTemplate 
-                               WHERE name='Renewal Late Fee Notification Letter' WITH SECURITY_ENFORCED];
+                emailTempRec =[Select Id, Name, DeveloperName, Description, Subject, HtmlValue, Body, RelatedEntityType from EmailTemplate where name='Renewal Late Fee Notification Letter'];
                 if(emailTempRec != NULL) {
                     templateDetails.put(emailTempRec.Id, emailTempRec.RelatedEntityType);
                     templateEntity = emailTempRec.RelatedEntityType;
@@ -479,28 +455,24 @@ public with sharing class MassEmailController {
                 else {
                     //set error when email template was not fetched
                     errMessage = templateId == NULL ? BCMOH_Constants.templateNameMissing+templateDetailName : '';
+                    system.debug(errMessage);//add in error handling
                     sendEmailValid = false;
                 }
             }
             else {
                 //set error when valid email template config is not available
                 errMessage = BCMOH_Constants.activePurposeTemplateMissing+purpose+' purpose';
+                system.debug(errMessage);//add in error handling
                 sendEmailValid = false;
             }
         }
         catch(Exception ex) {
+            system.debug('use exception handling fetchTemplateId is'+ex.getMessage());
             LogService.logAndPublish(className, 'fetchTemplate', '', ex);
         }
         return templateDetails;
     }    
-
-/**
-* @Author: Accenture_ALR Dev Team
-* @date: 
-* @description: The purpose of this method is for MassEmailController
-* @return:  Id
-* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
-*/
+    
     //get org wide email address based on custom setting
     public static Id getOrgWideId() {
         OrgWideEmailAddress orgWideAddr = new OrgWideEmailAddress();
@@ -513,38 +485,33 @@ public with sharing class MassEmailController {
                 else {
                     //set error when valid org wide email address is not available
                     errMessage = BCMOH_Constants.noOrgWideAddr;
+                    system.debug(errMessage);//add in error handling
                     sendEmailValid = false;
                 }
             }
         }
         catch(Exception ex) {
+            system.debug('use exception handling getOrgWideId '+ex.getMessage());
             LogService.logAndPublish(className, 'getOrgWideId', '', ex);
         }
         return orgWideAddrId;
     }
- 
-/**
-* @Author: Accenture_ALR Dev Team
-* @date: 
-* @description: The purpose of this method is for MassEmailController
-* @return:  Map<Id, Set<Id>>
-* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
-*/
+    
     //fetch blaId-ContentVersions Map needed to add attachments to the email
     public static Map<Id, Set<Id>> fetchAttachmentDetails(Set<Id> blaIds) {
         Map<Id, Set<Id>> blaContentVerMap = new Map<Id, Set<Id>>();
         try {
             //fetch wrapper details with blaId-DocId Map and docId-contentVerId Map
-            BCMOH_UtilityClass.ContentDocWrapper contentDocWrapperRec = BCMOH_UtilityClass.getContentDocMap(blaIds);
+            BCMOH_UtilityClass.ContentDocWrapper ContentDocWrapperRec = BCMOH_UtilityClass.getContentDocMap(blaIds);
             //fetch content versions per Bla record
-            if(contentDocWrapperRec != NULL) {
-                for(Id blaId : contentDocWrapperRec.entityContentIdsMap.KeySet()) {//for each bla rec Id
-                    for(Id docId : contentDocWrapperRec.entityContentIdsMap.get(blaId)) {//for each of its content document id
+            if(ContentDocWrapperRec != NULL) {
+                for(Id blaId : ContentDocWrapperRec.entityContentIdsMap.KeySet()) {//for each bla rec Id
+                    for(Id docId : ContentDocWrapperRec.entityContentIdsMap.get(blaId)) {//for each of its content document id
                         Set<Id> contentVerIdSet = new Set<Id>();
                         if(blaContentVerMap.containsKey(blaId)) {//if map contains the bla id
                             contentVerIdSet = blaContentVerMap.get(blaId);//fetch its content versions
                         }
-                        contentVerIdSet.add(contentDocWrapperRec.contentDocVerMap.get(docId));//add current version also to the list
+                        contentVerIdSet.add(ContentDocWrapperRec.contentDocVerMap.get(docId));//add current version also to the list
                         //map's key value pair holds the whatId vs attachment ids per email
                         blaContentVerMap.put(blaId, contentVerIdSet);//set blaId-ContentVersionId map
                     }
@@ -552,18 +519,12 @@ public with sharing class MassEmailController {
             }
         }
         catch(Exception ex) {
+            system.debug('use exception handling fetchAttachmentDetails '+ex.getMessage());
             LogService.logAndPublish(className, 'fetchAttachmentDetails', '', ex);
         }
         return blaContentVerMap;
     }
-
-/**
-* @Author: Accenture_ALR Dev Team
-* @date: 
-* @description: The purpose of this method is for MassEmailController
-* @return:  void
-* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
-*/
+    
     //update bla success and error maps after sending email
     public static void getEmailStatus(Messaging.SendEmailResult[] emailResultList, 
                                       List<Messaging.SingleEmailMessage> singleEmailMsgList, Map<Id, Id> whatIdTargetMap) {
@@ -592,17 +553,11 @@ public with sharing class MassEmailController {
                                               }
                                           }
                                           catch(exception ex) {
+                                              system.debug('caught in meth - '+ex.getMessage());
                                               LogService.logAndPublish(className, 'updateTargetRecsStatus', '', ex);
                                           }
                                       }
-
-/**
-* @Author: Accenture_ALR Dev Team
-* @date: 
-* @description: The purpose of this method is for MassEmailController
-* @return:  void
-* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
-*/
+    
     //update all bla records - DML
     public static void updateBlaStatus() {
         try {
@@ -629,98 +584,84 @@ public with sharing class MassEmailController {
             }
         }
         catch(exception ex) {
+            system.debug('caught in updateBlaStatus - '+ex.getMessage());
             LogService.logAndPublish(className, 'updateBlaStatus', '', ex);
         }
     }
-
-/**
-* @Author: Accenture_ALR Dev Team
-* @date: 
-* @description: The purpose of this method is for MassEmailController
-* @return:  Id
-* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
-*/
     //method to get AccountId-ALR-1000
-    public static Id getAccountId(Id blaId) {
-        return [SELECT AccountId FROM BusinessLicenseApplication WHERE Id = :blaId WITH SECURITY_ENFORCED][0].AccountId;
+    public Static Id getAccountId(Id blaId) {
+        return [SELECT AccountId FROM BusinessLicenseApplication WHERE Id = :blaId][0].AccountId;
     }
-
-/**
-* @Author: Accenture_ALR Dev Team
-* @date: 
-* @description: The purpose of this method is for MassEmailController
-* @return:  List of Account
-* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
-*/
+    
     //Method to update Account Status-ALR-1000
-    public static List<Account> updateAccountStatus(Id accId) {
-        return [SELECT Status__c FROM Account WHERE Id = :accId WITH SECURITY_ENFORCED];
+    public Static List<Account> updateAccountStatus(Id accId) {
+        return [SELECT Status__c FROM Account WHERE Id = :accId];
     }
 
-/**
-* @Author: Accenture_ALR Dev Team
-* @date: 
-* @description: The purpose of this method is for MassEmailController
-* @return:  List of BusinessLicenseApplication
-* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
-*/
-    public static List<BusinessLicenseApplication> blaErrQuery(Id blaId) {
-        return [SELECT RenewalDetail__c FROM BusinessLicenseApplication WHERE Id =:blaId WITH SECURITY_ENFORCED LIMIT 1];
+    public Static List<BusinessLicenseApplication> blaErrQuery(Id blaId) {
+        return [SELECT RenewalDetail__c FROM BusinessLicenseApplication WHERE Id =:blaId LIMIT 1];
     }
- 
-/**
-* @Author: Accenture_ALR Dev Team
-* @date: 
-* @description: The purpose of this method is for MassEmailController
-* @return:  void
-* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
-*/
+    
+    
     //update all latefee bla records - DML-ALR-1000
     public static void updateLateFeeBlaStatus() {
         //List<BusinessLicenseApplication> statusBla = new List<BusinessLicenseApplication>();
         List<Account> accToUpdate = new List<Account>();
-        List<BusinessLicenseApplication> bLAquery = new List<BusinessLicenseApplication>();
-        try {    
+        List<BusinessLicenseApplication> BLAquery = new List<BusinessLicenseApplication>();
+        try {
+               
             //loop through bla error map
             for(Id blaId : blaErrMap.keySet()) {
-                bLAquery=blaErrQuery(blaId);
+                BLAquery=blaErrQuery(blaId);
                 //truncate the err message if length more than 255 chars
                 String lateFeeMsg = blaErrMap.get(blaId).length() > 255 ? blaErrMap.get(blaId).Substring(0,255) : blaErrMap.get(blaId);
                 String errMsg = blaErrMap.get(blaId);
-                errMsg = bLAquery[0].RenewalDetail__c != NULL ? bLAquery[0].RenewalDetail__c + ' ; ' + lateFeeMsg : lateFeeMsg;
+                errMsg = BLAquery[0].RenewalDetail__c != NULL ? BLAquery[0].RenewalDetail__c + ' ; ' + lateFeeMsg : lateFeeMsg;
                 BusinessLicenseApplication blaRec = new BusinessLicenseApplication(
                     Id = blaId,
                     Late_Fee_Status__c = BCMOH_Constants.errorBlaStatus,
                     RenewalDetail__c = errMsg);
                     blaUpdateList.add(blaRec);
             }
-            //loop through bla success map   
+            //loop through bla success map
+            
             for (Id blaId : blaSuccessMap.keySet()) {
-                bLAquery=blaErrQuery(blaId);
+                BLAquery=blaErrQuery(blaId);
                 Id statusBla = getAccountId(blaId);
                 accToUpdate=updateAccountStatus(statusBla);
                 accToUpdate[0].Status__c=BCMOH_Constants.AccStatus;
                 
                 String lateFeeMsg = blaSuccessMap.get(blaId).length() > 255 ? blaSuccessMap.get(blaId).Substring(0,255) : blaSuccessMap.get(blaId);
                 String succMsg;
-                if(String.isEmpty(bLAquery[0].RenewalDetail__c)){
+                if(String.isEmpty(BLAquery[0].RenewalDetail__c)){
                     succMsg = lateFeeMsg;
-                }else{
-                   succMsg = bLAquery[0].RenewalDetail__c + ' ; ' + LatefeeMsg;
+                }
+                              
+                else
+                {
+                   succMsg = BLAquery[0].RenewalDetail__c + ' ; ' + LatefeeMsg;
                 }
                   blaSuccessMap.put(blaid,succMsg);
-                BusinessLicenseApplication blaRec = new BusinessLicenseApplication(Id = blaId, 
-                                                        Late_Fee_Status__c = BCMOH_Constants.sentBlaStatus,                  
-                                                        RenewalDetail__c = blaSuccessMap.get(blaId));
-               blaUpdateList.add(blaRec);  
+                BusinessLicenseApplication blaRec = new BusinessLicenseApplication(
+                    Id = blaId,
+                     
+                    Late_Fee_Status__c = BCMOH_Constants.sentBlaStatus,
+                    
+                    RenewalDetail__c = blaSuccessMap.get(blaId));
+                
+                blaUpdateList.add(blaRec);
+                
             }
             
             if(!blaUpdateList.isEmpty() && BusinessLicenseApplication.sObjectType.getDescribe().isUpdateable()) {
                 Database.Update(blaUpdateList, false);//add error logs for failed records 
                 Database.Update(accToUpdate, false);
-            }    
+            }
+            
+            
         }
         catch(exception ex) {
+            system.debug('caught in updateLateFeeBlaStatus - '+ex.getMessage());
             LogService.logAndPublish(className, 'updateLateFeeBlaStatus', '', ex);
         }
     }
