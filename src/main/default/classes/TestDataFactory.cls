@@ -1,10 +1,16 @@
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this class is to maintain re-uable test methods
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
+***********************************************************************************************/
 @isTest
 public class TestDataFactory {
     
     @testVisible
     static Account createResidence(String recordTypeName, String Name, String licenseId,  Boolean dmlOption){
         
-        Account Registrant = new Account(
+        Account registrant = new Account(
             RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('Registrant').getRecordTypeId(),
             Name = Name +' '+'Registrant',
             BillingCity = 'TT',
@@ -13,20 +19,20 @@ public class TestDataFactory {
             BillingState = 'TT',
             BillingStreet = 'YT');
         if(dmlOption){
-            insert Registrant;
+            insert registrant;
         }
         
-        Account Residence = new Account();
-        Residence.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get(recordTypeName).getRecordTypeId();
-        Residence.Name = Name;
-        //residence.ClassType__c = 'Mental Helath';
-        residence.LicenseType__c = licenseId;//ALR-185
-        Residence.ParentId =Registrant.Id;
-                Residence.Status__c = 'Registered Active with Conditions';//'Registered Active';//ALR-36 - added status
+        Account  residence = new Account();
+         residence.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get(recordTypeName).getRecordTypeId();
+         residence.Name = Name;
+        // residence.ClassType__c = 'Mental Helath';
+         residence.LicenseType__c = licenseId;//ALR-185
+         residence.ParentId = registrant.Id;
+                 residence.Status__c = 'Registered Active with Conditions';//'Registered Active';//ALR-36 - added status
         if(dmlOption){
-            insert Residence;
+            insert  residence;
         }
-        return Residence;
+        return  residence;
     }
     
      @testVisible

@@ -1,10 +1,10 @@
-/**
-* @Name              : ComplaintCaseTriggerTest
-* @Description       : Test class for ComplaintCaseTriggerHandler and ComplaintCaseTrigger
-* @Author            : Sri Teja (Accenture)
-* @StoryNo           : ALR-509
-**/
-
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this Class is to 
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
+                           ALR - 509           Sri Teja
+***********************************************************************************************/
 @isTest
 public class ComplaintCaseTriggerTest {
     
@@ -19,7 +19,7 @@ public class ComplaintCaseTriggerTest {
     static void testComplaintCaseTrigger() {
         List<Case> caseList = new List<Case>();
         Test.startTest();
-        Account residence =[Select Id from account WHERE Name = 'residence1' limit 1];
+        Account residence =[SELECT Id FROM account WHERE Name = 'residence1' LIMIT 1];
         Case complaintCase = TestDataFactory.createComplaintCase(residence.Id,'Test Case','Testing the trigger',false,false,false,false);
         caseList.add(complaintCase);
         insert complaintCase;
@@ -37,10 +37,10 @@ public class ComplaintCaseTriggerTest {
 	/*@isTest
     static void testComplaintCaseTrigger() {
          List<Case> caseList = new List<Case>();
-		 Account residence =[Select Id from account limit 1];        
-		 Case complaintCase = [select id,Accountid,subject,Description,WishtoRemainAnonymous__c,NeedFeedbackOnResolution__c,ResidentAwareofComplaint__c FROM Case where Subject = 'Test Case' limit 1];
-		 Case complaintCase1 = [select id,Accountid,subject,Description,WishtoRemainAnonymous__c,NeedFeedbackOnResolution__c,ResidentAwareofComplaint__c FROM Case where Subject = 'Test Case1' limit 1];
-		Case complaintCase2 = [select id,Accountid,subject,Description,WishtoRemainAnonymous__c,NeedFeedbackOnResolution__c,ResidentAwareofComplaint__c FROM Case where Subject = 'Test Case2' limit 1];
+		 Account residence =[SELECT Id FROM account limit 1];        
+		 Case complaintCase = [SELECT id,Accountid,subject,Description,WishtoRemainAnonymous__c,NeedFeedbackOnResolution__c,ResidentAwareofComplaint__c FROM Case WHERE Subject = 'Test Case' limit 1];
+		 Case complaintCase1 = [SELECT id,Accountid,subject,Description,WishtoRemainAnonymous__c,NeedFeedbackOnResolution__c,ResidentAwareofComplaint__c FROM Case WHERE Subject = 'Test Case1' limit 1];
+		Case complaintCase2 = [SELECT id,Accountid,subject,Description,WishtoRemainAnonymous__c,NeedFeedbackOnResolution__c,ResidentAwareofComplaint__c FROM Case WHERE Subject = 'Test Case2' limit 1];
 		caseList.add(complaintCase);
         caseList.add(complaintCase1);
         caseList.add(complaintCase2);
@@ -48,8 +48,8 @@ public class ComplaintCaseTriggerTest {
         Test.startTest();
          ComplaintCaseTriggerHandler.handleBeforeInsert(caseList);
         Test.stopTest();    
-		System.assertEquals('Test Case', caseList[0].subject, 'Assertion for Test Case');
-        System.assertEquals('Test Case1', caseList[1].subject, 'Assertion for Test Case1');
-        System.assertEquals('Test Case2', caseList[2].subject, 'Assertion for Test Case2');
+		Assert.areEqual('Test Case', caseList[0].subject, 'Assertion for Test Case');
+        Assert.areEqual('Test Case1', caseList[1].subject, 'Assertion for Test Case1');
+        Assert.areEqual('Test Case2', caseList[2].subject, 'Assertion for Test Case2');
 
     }*/

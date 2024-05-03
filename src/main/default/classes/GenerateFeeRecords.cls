@@ -1,26 +1,38 @@
-/**
-* @Name              : GenerateFeeRecords
-* @Description       : Create Regulatory Transaction Fee and Regulatory Transaction Fee Item records related to BLA
-* @Author            : Siddharth (Accenture)
-* @StoryNo           : ALR-660
-**/
-
-
-public class GenerateFeeRecords {
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this Class is to Create Regulatory Transaction Fee and Regulatory Transaction Fee Item records related to BLA
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
+                              ALR-660           Siddharth
+***********************************************************************************************/
+public with sharing class GenerateFeeRecords {
+    public static String className = 'GenerateFeeRecords';
     //method to return RTF Id and create RTF and RTFI records
+
+/**
+* @Author: Accenture_ALR Dev Team
+* @date: 
+* @description: The purpose of this method is to
+* @return:  
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
     @InvocableMethod
     public static List<String> recordCreations(List<id> blaids){
         List<String> RTFId = new List<String>();
         try{
             BusinessLicenseApplication blarec = new BusinessLicenseApplication(Id = blaids[0]);
             //check if Application Fee record is present
-            List<RegulatoryTrxnFee> RTFids = [select id from RegulatoryTrxnFee where ParentRecordId =: blarec.Id and FeeType__c = 'Application Fee' LIMIT 1];
+            List<RegulatoryTrxnFee> RTFids = [SELECT id FROM RegulatoryTrxnFee 
+                                              WHERE ParentRecordId =: blarec.Id and FeeType__c = 'Application Fee' 
+                                              WITH SECURITY_ENFORCED LIMIT 1];
             if(RTFids.size()>0){
                 RTFId.add(RTFids[0].Id);
                 return RTFId;
             }
             //Create Regulatory Transaction Fee record
-            List<BusinessLicenseApplication> blaList = [Select AccountId, LicenseType.OneTimeFee__c from BusinessLicenseApplication where id =: blarec.Id LIMIT 1];
+            List<BusinessLicenseApplication> blaList = [SELECT AccountId, LicenseType.OneTimeFee__c 
+                                                        FROM BusinessLicenseApplication WHERE id =: blarec.Id 
+                                                        WITH SECURITY_ENFORCED LIMIT 1];
             RegulatoryTrxnFee transFeeRec = new RegulatoryTrxnFee(
                 AccountId = blaList[0].AccountId,
                 DueDate = BCMOH_Constants.feeDueDateTime,
@@ -42,7 +54,7 @@ public class GenerateFeeRecords {
             Database.SaveResult RTFIrec = Database.Insert(transFeeItemRec);
         }
         catch(exception ex){
-            system.debug(ex.getMessage());
+            LogService.logAndPublish(className, 'recordCreations', '', ex);
         }
         return RTFId;
     }

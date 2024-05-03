@@ -1,9 +1,10 @@
-/**
-* @Name              : MassEmailControllerTest
-* @Description       : Test class for MassEmailController and BCMOH_UtilityClass and RenewalBlaTableController
-* @Author            : Sweta (Accenture)
-* @StoryNo           : ALR-560
-**/
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this Test class for MassEmailController and BCMOH_UtilityClass and RenewalBlaTableController
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
+                          ALR -560             Sweta        
+***********************************************************************************************/
 @isTest
 public class MassEmailControllerTest {
     //test data setup

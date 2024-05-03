@@ -1,4 +1,10 @@
-@IsTest
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this Class is for 
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]               
+***********************************************************************************************/
+@isTest
 private class LogServiceTest {
 
     /**
@@ -6,7 +12,7 @@ private class LogServiceTest {
      * @StateUnderTest: An exception has occurred in the execution
      * @ExpectedBehaviour: A Log__c record is created with the details
      */
-    @IsTest
+    @isTest
     private static void Log_Enabled_Test(){
         //GIVEN : Enable_Logging__c is set to TRUE at Org Level
         insert new Log_Configuration__c(SetupOwnerId = UserInfo.getOrganizationId(), Enable_Logging__c = true);
@@ -24,9 +30,9 @@ private class LogServiceTest {
         //THEN
         //Log__c records are created.
         List<Log__c> logs = [SELECT Id, Class_Name__c, Method_Name__c FROM Log__c ];
-        System.assertEquals(logs.size(), 1, 'a log record is not created');
-        System.assertEquals(logs[0].Class_Name__c, 'LogServiceTest');
-        System.assertEquals(logs[0].Method_Name__c, 'LogTest');
+        Assert.areEqual(logs.size(), 1, 'a log record is not created');
+        Assert.areEqual(logs[0].Class_Name__c, 'LogServiceTest');
+        Assert.areEqual(logs[0].Method_Name__c, 'LogTest');
     }
 
     /**
@@ -34,7 +40,7 @@ private class LogServiceTest {
      * @StateUnderTest: An exception has occurred in the execution
      * @ExpectedBehaviour: A Log__c record is not created
      */
-    @IsTest
+    @isTest
     private static void Log_Disabled_Test(){
         //GIVEN : Enable_Logging__c is set to FALSE at Org Level
         insert new Log_Configuration__c(SetupOwnerId = UserInfo.getOrganizationId(), Enable_Logging__c = false);
@@ -60,7 +66,7 @@ private class LogServiceTest {
      * @StateUnderTest: An exception has occurred in the execution
      * @ExpectedBehaviour: A Log__c record is created with the details
      */
-    @IsTest
+    @isTest
     private static void LogAndPublish_Test(){
         //GIVEN : Enable_Logging__c is set to TRUE at Org Level
         insert new Log_Configuration__c(SetupOwnerId = UserInfo.getOrganizationId(), Enable_Logging__c = true);
@@ -77,9 +83,9 @@ private class LogServiceTest {
         //THEN
         //Log__c records are created.
         List<Log__c> logs = [SELECT Id, Class_Name__c, Method_Name__c FROM Log__c ];
-        System.assertEquals(logs.size(), 1, 'a log record is not created');
-        System.assertEquals(logs[0].Class_Name__c, 'LogServiceTest');
-        System.assertEquals(logs[0].Method_Name__c, 'LogTest');
+        Assert.areEqual(logs.size(), 1, 'a log record is not created');
+        Assert.areEqual(logs[0].Class_Name__c, 'LogServiceTest');
+        Assert.areEqual(logs[0].Method_Name__c, 'LogTest');
     }
     
     /**
@@ -87,7 +93,7 @@ private class LogServiceTest {
      * @StateUnderTest: An exception has occurred in the execution
      * @ExpectedBehaviour: A Log__c record is created with the details
      */
-    @IsTest
+    @isTest
     private static void processFailedLogs_Test(){
     
         //GIVEN : Enable_Logging__c is set to TRUE at Org Level
@@ -108,8 +114,8 @@ private class LogServiceTest {
         //THEN
         //Log__c records are created.
         List<Log__c> logs = [SELECT Id, Class_Name__c, Method_Name__c FROM Log__c ];
-        System.assertEquals(logs.size(), 1, 'a log record is created');
-        System.assertEquals(logs[0].Class_Name__c, 'LogServiceTest');
-        System.assertEquals(logs[0].Method_Name__c, 'LogTest');
+        Assert.areEqual(logs.size(), 1, 'a log record is created');
+        Assert.areEqual(logs[0].Class_Name__c, 'LogServiceTest');
+        Assert.areEqual(logs[0].Method_Name__c, 'LogTest');
     }
 }

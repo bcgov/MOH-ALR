@@ -8,90 +8,73 @@
             <axisBinding>y</axisBinding>
             <column>RowCount</column>
         </chartSummaries>
-        <chartType>VerticalColumnGrouped</chartType>
+        <chartType>VerticalColumnStacked</chartType>
         <enableHoverLabels>false</enableHoverLabels>
         <expandOthers>true</expandOthers>
-        <groupingColumn>Account.HealthAuthority__c</groupingColumn>
+        <groupingColumn>Visit$Account.HealthAuthority__c</groupingColumn>
         <legendPosition>Right</legendPosition>
         <location>CHART_BOTTOM</location>
-        <secondaryGroupingColumn>Case.TypeOfIncident__c</secondaryGroupingColumn>
+        <secondaryGroupingColumn>Visit$Account.Status__c</secondaryGroupingColumn>
         <showAxisLabels>true</showAxisLabels>
         <showPercentage>false</showPercentage>
         <showTotal>false</showTotal>
-        <showValues>true</showValues>
+        <showValues>false</showValues>
         <size>Medium</size>
         <summaryAxisRange>Auto</summaryAxisRange>
         <textColor>#000000</textColor>
         <textSize>12</textSize>
+        <title>Residence Report by HA</title>
         <titleColor>#000000</titleColor>
         <titleSize>18</titleSize>
     </chart>
     <columns>
-        <field>ACCOUNT.NAME</field>
+        <field>Visit$Account</field>
     </columns>
     <columns>
-        <field>CASE_NUMBER</field>
+        <field>Visit$Account.Parent</field>
     </columns>
     <columns>
-        <field>STATUS</field>
-    </columns>
-    <columns>
-        <field>ORIGIN</field>
-    </columns>
-    <columns>
-        <field>Case.PlaceOfIncident__c</field>
-    </columns>
-    <columns>
-        <aggregateTypes>Sum</aggregateTypes>
-        <field>AGE</field>
+        <field>Visit$Account.LicenseType__c</field>
     </columns>
     <filter>
         <criteriaItems>
-            <column>RECORDTYPE</column>
+            <column>Visit$Account.Status__c</column>
             <columnToColumn>false</columnToColumn>
             <isUnlocked>true</isUnlocked>
             <operator>equals</operator>
-            <value>Case.ReportableIncident</value>
+            <value>CURR In Compliance,CURR Not in Compliance,CURR SIU Referral,Deregistered Location Change,Deregistered Owner Change,Deregistered Withdrawn,Registered Active,Registered Active Progressive Enforcement,Registered Active with Conditions</value>
         </criteriaItems>
         <criteriaItems>
-            <column>Case.TypeOfIncident__c</column>
+            <column>Visit$Account.RecordType</column>
             <columnToColumn>false</columnToColumn>
             <isUnlocked>true</isUnlocked>
             <operator>equals</operator>
-            <value>Attempted Suicide,Death,Emotional Abuse,Financial Abuse,Medication Error,Neglect,Overdose,Physical Abuse,Police Call,Service Delivery Problem,Sexual Abuse</value>
+            <value>Account.Residence</value>
         </criteriaItems>
     </filter>
     <format>Matrix</format>
     <groupingsAcross>
-        <field>Case.IncidentDate__c</field>
+        <dateGranularity>Day</dateGranularity>
+        <field>Visit$Account.Status__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsAcross>
     <groupingsDown>
         <dateGranularity>Day</dateGranularity>
-        <field>Account.HealthAuthority__c</field>
+        <field>Visit$Account.HealthAuthority__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
-    <groupingsDown>
-        <dateGranularity>Day</dateGranularity>
-        <field>Case.TypeOfIncident__c</field>
-        <sortOrder>Asc</sortOrder>
-    </groupingsDown>
-    <name>MMHA - Reportable Incidents Report</name>
-    <params>
-        <name>units</name>
-        <value>h</value>
-    </params>
+    <name>Residence by Registration Status</name>
     <params>
         <name>co</name>
         <value>1</value>
     </params>
-    <reportType>CaseList</reportType>
+    <reportType>Inspection_Report_Type__c</reportType>
     <scope>organization</scope>
     <showDetails>true</showDetails>
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>true</showSubTotals>
     <timeFrameFilter>
-        <dateColumn>CREATED_DATEONLY</dateColumn>
+        <dateColumn>Visit$CreatedDate</dateColumn>
         <interval>INTERVAL_CUSTOM</interval>
     </timeFrameFilter>
 </Report>
