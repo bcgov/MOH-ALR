@@ -14,7 +14,7 @@
         <groupingColumn>Visit$Account.HealthAuthority__c</groupingColumn>
         <legendPosition>Right</legendPosition>
         <location>CHART_BOTTOM</location>
-        <secondaryGroupingColumn>Visit$Visitor</secondaryGroupingColumn>
+        <secondaryGroupingColumn>Visit$VisitType</secondaryGroupingColumn>
         <showAxisLabels>true</showAxisLabels>
         <showPercentage>false</showPercentage>
         <showTotal>false</showTotal>
@@ -32,6 +32,9 @@
     <columns>
         <field>Visit$Status</field>
     </columns>
+    <columns>
+        <field>Visit$Account.LicenseType__c</field>
+    </columns>
     <filter>
         <criteriaItems>
             <column>Visit$Account.RecordType</column>
@@ -40,11 +43,18 @@
             <operator>equals</operator>
             <value>Account.Residence</value>
         </criteriaItems>
+        <criteriaItems>
+            <column>Visit$Status</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>2</value>
+        </criteriaItems>
     </filter>
     <format>Matrix</format>
     <groupingsAcross>
         <dateGranularity>Day</dateGranularity>
-        <field>Visit$Visitor</field>
+        <field>Visit$VisitType</field>
         <sortOrder>Asc</sortOrder>
     </groupingsAcross>
     <groupingsDown>
@@ -52,7 +62,7 @@
         <field>Visit$Account.HealthAuthority__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
-    <name>MMHA - Investigator Workload by Region</name>
+    <name>Inspections Completed by Region</name>
     <params>
         <name>co</name>
         <value>1</value>
@@ -63,7 +73,7 @@
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>true</showSubTotals>
     <timeFrameFilter>
-        <dateColumn>Visit$ActualVisitEndTime</dateColumn>
-        <interval>INTERVAL_CUSTOM</interval>
+        <dateColumn>Visit$PlannedVisitStartTime</dateColumn>
+        <interval>INTERVAL_PREVCURFY</interval>
     </timeFrameFilter>
 </Report>

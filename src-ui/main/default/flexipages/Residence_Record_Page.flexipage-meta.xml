@@ -21,6 +21,13 @@
                         </valueListItems>
                         <valueListItems>
                             <value>Account.New_Inspection</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!$Permission.CustomPermission.EHISInvestigator}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>true</rightValue>
+                                </criteria>
+                            </visibilityRule>
                         </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
@@ -1279,7 +1286,7 @@
                 <identifier>runtime_omnistudio_flexcard2</identifier>
             </componentInstance>
         </itemInstances>
-        <itemInstances>
+                <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
                     <name>actionNames</name>
