@@ -14,7 +14,7 @@
         <groupingColumn>Visit$Account.HealthAuthority__c</groupingColumn>
         <legendPosition>Right</legendPosition>
         <location>CHART_BOTTOM</location>
-        <secondaryGroupingColumn>Visit$Account.LicenseType__c</secondaryGroupingColumn>
+        <secondaryGroupingColumn>Visit$Account.Status__c</secondaryGroupingColumn>
         <showAxisLabels>true</showAxisLabels>
         <showPercentage>false</showPercentage>
         <showTotal>false</showTotal>
@@ -33,21 +33,21 @@
         <field>Visit$Account.Parent</field>
     </columns>
     <columns>
-        <field>Visit$Account.Status__c</field>
+        <field>Visit$Account.LicenseType__c</field>
     </columns>
     <filter>
         <criteriaItems>
-            <column>Visit$Account.RecordType</column>
+            <column>Visit$Account.Status__c</column>
             <columnToColumn>false</columnToColumn>
             <isUnlocked>true</isUnlocked>
             <operator>equals</operator>
-            <value>Account.Residence</value>
+            <value>CURR Application in Progress,CURR In Compliance,CURR Not in Compliance,CURR SIU Referral,Deregistered Location Change,Deregistered Owner Change,Deregistered Withdrawn,Registered Active,Registered Active Progressive Enforcement,Registered Active with Conditions</value>
         </criteriaItems>
     </filter>
     <format>Matrix</format>
     <groupingsAcross>
         <dateGranularity>Day</dateGranularity>
-        <field>Visit$Account.LicenseType__c</field>
+        <field>Visit$Account.Status__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsAcross>
     <groupingsDown>
@@ -55,12 +55,12 @@
         <field>Visit$Account.HealthAuthority__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
-    <name>Residences within Region</name>
+    <name>Residence by Registration Status</name>
     <params>
         <name>co</name>
         <value>1</value>
     </params>
-    <reportType>Inspection_Report_Type__c</reportType>
+    <reportType>Inspection_Account_Report_Type__c</reportType>
     <scope>organization</scope>
     <showDetails>true</showDetails>
     <showGrandTotal>true</showGrandTotal>

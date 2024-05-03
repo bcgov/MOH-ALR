@@ -24,7 +24,7 @@
             </criteriaItems>
         </filter>
         <format>Summary</format>
-        <name>Complaint Cases Details</name>
+        <name>Cases block 1</name>
         <params>
             <name>units</name>
             <value>h</value>
@@ -48,23 +48,23 @@
             <joinTable>RegulatoryCodeViolation.Inspection.Account</joinTable>
         </blockInfo>
         <columns>
-            <field>RegulatoryCodeViolation$InspectionAssmntInd.AssessmentTask</field>
+            <field>RegulatoryCodeViolation$InspectionAssmntInd.AssessmentTask.Name</field>
         </columns>
         <columns>
-            <field>RegulatoryCodeViolation$RegulatoryCode</field>
+            <field>RegulatoryCodeViolation$RegulatoryCode.Name</field>
         </columns>
         <format>Summary</format>
-        <name>Violations</name>
+        <name>Violations block 1</name>
         <params>
             <name>co</name>
             <value>1</value>
         </params>
-        <reportType>Violations_with_Visits__c</reportType>
+        <reportType>Violations__c</reportType>
         <scope>organization</scope>
         <showGrandTotal>true</showGrandTotal>
         <showSubTotals>true</showSubTotals>
         <timeFrameFilter>
-            <dateColumn>RegulatoryCodeViolation$ComplianceDueDate</dateColumn>
+            <dateColumn>RegulatoryCodeViolation$Inspection.PlannedVisitStartTime</dateColumn>
             <interval>INTERVAL_CUSTOM</interval>
         </timeFrameFilter>
     </block>
@@ -90,7 +90,7 @@
         <groupingColumn>ACCOUNT.NAME</groupingColumn>
         <legendPosition>Right</legendPosition>
         <location>CHART_BOTTOM</location>
-        <showAxisLabels>true</showAxisLabels>
+        <showAxisLabels>false</showAxisLabels>
         <showPercentage>false</showPercentage>
         <showTotal>false</showTotal>
         <showValues>true</showValues>

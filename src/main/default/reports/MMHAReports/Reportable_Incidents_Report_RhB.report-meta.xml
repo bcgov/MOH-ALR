@@ -11,10 +11,10 @@
         <chartType>VerticalColumnStacked</chartType>
         <enableHoverLabels>false</enableHoverLabels>
         <expandOthers>true</expandOthers>
-        <groupingColumn>Account.HealthAuthority__c</groupingColumn>
+        <groupingColumn>Account$HealthAuthority__c</groupingColumn>
         <legendPosition>Right</legendPosition>
         <location>CHART_BOTTOM</location>
-        <secondaryGroupingColumn>Case.TypeOfIncident__c</secondaryGroupingColumn>
+        <secondaryGroupingColumn>Account.Cases$TypeOfIncident__c</secondaryGroupingColumn>
         <showAxisLabels>true</showAxisLabels>
         <showPercentage>false</showPercentage>
         <showTotal>false</showTotal>
@@ -27,30 +27,30 @@
         <titleSize>18</titleSize>
     </chart>
     <columns>
-        <field>ACCOUNT.NAME</field>
+        <field>Account$Name</field>
     </columns>
     <columns>
-        <field>PARENT_ACCOUNT_NAME</field>
+        <field>Account$Parent.Name</field>
     </columns>
     <columns>
-        <field>Account.LicenseType__c</field>
+        <field>Account$LicenseType__c</field>
     </columns>
     <columns>
-        <field>ORIGIN</field>
+        <field>Account.Cases$Origin</field>
     </columns>
     <columns>
-        <field>Case.PlaceOfIncident__c</field>
+        <field>Account.Cases$PlaceOfIncident__c</field>
     </columns>
     <filter>
         <criteriaItems>
-            <column>RECORDTYPE</column>
+            <column>Account.Cases$RecordType.DeveloperName</column>
             <columnToColumn>false</columnToColumn>
             <isUnlocked>true</isUnlocked>
             <operator>equals</operator>
-            <value>Case.ReportableIncident</value>
+            <value>Reportable Incident</value>
         </criteriaItems>
         <criteriaItems>
-            <column>Case.TypeOfIncident__c</column>
+            <column>Account.Cases$TypeOfIncident__c</column>
             <columnToColumn>false</columnToColumn>
             <isUnlocked>true</isUnlocked>
             <operator>equals</operator>
@@ -60,30 +60,26 @@
     <format>Matrix</format>
     <groupingsAcross>
         <dateGranularity>Day</dateGranularity>
-        <field>Case.TypeOfIncident__c</field>
+        <field>Account.Cases$TypeOfIncident__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsAcross>
     <groupingsDown>
         <dateGranularity>Day</dateGranularity>
-        <field>Account.HealthAuthority__c</field>
+        <field>Account$HealthAuthority__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
     <name>Reportable Incidents Report</name>
     <params>
-        <name>units</name>
-        <value>h</value>
-    </params>
-    <params>
         <name>co</name>
         <value>1</value>
     </params>
-    <reportType>CaseList</reportType>
+    <reportType>Accounts_with_Cases__c</reportType>
     <scope>organization</scope>
     <showDetails>true</showDetails>
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>true</showSubTotals>
     <timeFrameFilter>
-        <dateColumn>CREATED_DATEONLY</dateColumn>
+        <dateColumn>Account.Cases$CreatedDate</dateColumn>
         <interval>INTERVAL_CUSTOM</interval>
     </timeFrameFilter>
 </Report>

@@ -11,10 +11,10 @@
         <chartType>VerticalColumnStacked</chartType>
         <enableHoverLabels>false</enableHoverLabels>
         <expandOthers>true</expandOthers>
-        <groupingColumn>Visit$Account.HealthAuthority__c</groupingColumn>
+        <groupingColumn>Account$HealthAuthority__c</groupingColumn>
         <legendPosition>Right</legendPosition>
         <location>CHART_BOTTOM</location>
-        <secondaryGroupingColumn>Visit$Account.Status__c</secondaryGroupingColumn>
+        <secondaryGroupingColumn>Account$LicenseType__c</secondaryGroupingColumn>
         <showAxisLabels>true</showAxisLabels>
         <showPercentage>false</showPercentage>
         <showTotal>false</showTotal>
@@ -23,29 +23,28 @@
         <summaryAxisRange>Auto</summaryAxisRange>
         <textColor>#000000</textColor>
         <textSize>12</textSize>
-        <title>Residence Report by HA</title>
         <titleColor>#000000</titleColor>
         <titleSize>18</titleSize>
     </chart>
     <columns>
-        <field>Visit$Account</field>
+        <field>Account$Name</field>
     </columns>
     <columns>
-        <field>Visit$Account.Parent</field>
+        <field>Account$Status__c</field>
     </columns>
     <columns>
-        <field>Visit$Account.LicenseType__c</field>
+        <field>Account$Parent.Name</field>
     </columns>
     <filter>
         <criteriaItems>
-            <column>Visit$Account.Status__c</column>
+            <column>Account$Status__c</column>
             <columnToColumn>false</columnToColumn>
             <isUnlocked>true</isUnlocked>
             <operator>equals</operator>
-            <value>CURR In Compliance,CURR Not in Compliance,CURR SIU Referral,Deregistered Location Change,Deregistered Owner Change,Deregistered Withdrawn,Registered Active,Registered Active Progressive Enforcement,Registered Active with Conditions</value>
+            <value>CURR Application in Progress,CURR In Compliance,CURR Not in Compliance,CURR SIU Referral,PURR,PURR Application in Progress</value>
         </criteriaItems>
         <criteriaItems>
-            <column>Visit$Account.RecordType</column>
+            <column>Account$RecordType</column>
             <columnToColumn>false</columnToColumn>
             <isUnlocked>true</isUnlocked>
             <operator>equals</operator>
@@ -55,26 +54,26 @@
     <format>Matrix</format>
     <groupingsAcross>
         <dateGranularity>Day</dateGranularity>
-        <field>Visit$Account.Status__c</field>
+        <field>Account$LicenseType__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsAcross>
     <groupingsDown>
         <dateGranularity>Day</dateGranularity>
-        <field>Visit$Account.HealthAuthority__c</field>
+        <field>Account$HealthAuthority__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
-    <name>Residence by Registration Status</name>
+    <name>Illegal Operators</name>
     <params>
         <name>co</name>
         <value>1</value>
     </params>
-    <reportType>Inspection_Report_Type__c</reportType>
+    <reportType>Accounts_with_Cases__c</reportType>
     <scope>organization</scope>
     <showDetails>true</showDetails>
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>true</showSubTotals>
     <timeFrameFilter>
-        <dateColumn>Visit$CreatedDate</dateColumn>
+        <dateColumn>Account$CreatedDate</dateColumn>
         <interval>INTERVAL_CUSTOM</interval>
     </timeFrameFilter>
 </Report>
