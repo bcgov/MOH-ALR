@@ -14,7 +14,7 @@
         <groupingColumn>Visit$Account.HealthAuthority__c</groupingColumn>
         <legendPosition>Right</legendPosition>
         <location>CHART_BOTTOM</location>
-        <secondaryGroupingColumn>Visit$VisitType</secondaryGroupingColumn>
+        <secondaryGroupingColumn>Visit$Account.LicenseType__c</secondaryGroupingColumn>
         <showAxisLabels>true</showAxisLabels>
         <showPercentage>false</showPercentage>
         <showTotal>false</showTotal>
@@ -30,10 +30,10 @@
         <field>Visit$Account</field>
     </columns>
     <columns>
-        <field>Visit$Status</field>
+        <field>Visit$Account.Parent</field>
     </columns>
     <columns>
-        <field>Visit$Account.LicenseType__c</field>
+        <field>Visit$Account.Status__c</field>
     </columns>
     <filter>
         <criteriaItems>
@@ -43,18 +43,11 @@
             <operator>equals</operator>
             <value>Account.Residence</value>
         </criteriaItems>
-        <criteriaItems>
-            <column>Visit$Status</column>
-            <columnToColumn>false</columnToColumn>
-            <isUnlocked>true</isUnlocked>
-            <operator>equals</operator>
-            <value>2</value>
-        </criteriaItems>
     </filter>
     <format>Matrix</format>
     <groupingsAcross>
         <dateGranularity>Day</dateGranularity>
-        <field>Visit$VisitType</field>
+        <field>Visit$Account.LicenseType__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsAcross>
     <groupingsDown>
@@ -62,18 +55,18 @@
         <field>Visit$Account.HealthAuthority__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
-    <name>Inspections Completed by Region</name>
+    <name>Residences within Region</name>
     <params>
         <name>co</name>
         <value>1</value>
     </params>
-    <reportType>Inspection_Report_Type__c</reportType>
+    <reportType>Inspection_Account_Report_Type__c</reportType>
     <scope>organization</scope>
     <showDetails>true</showDetails>
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>true</showSubTotals>
     <timeFrameFilter>
-        <dateColumn>Visit$PlannedVisitStartTime</dateColumn>
-        <interval>INTERVAL_PREVCURFY</interval>
+        <dateColumn>Visit$CreatedDate</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
     </timeFrameFilter>
 </Report>

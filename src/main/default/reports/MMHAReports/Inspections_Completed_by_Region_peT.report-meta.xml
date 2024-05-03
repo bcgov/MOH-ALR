@@ -11,10 +11,10 @@
         <chartType>VerticalColumnStacked</chartType>
         <enableHoverLabels>false</enableHoverLabels>
         <expandOthers>true</expandOthers>
-        <groupingColumn>Account.HealthAuthority__c</groupingColumn>
+        <groupingColumn>Visit$Account.HealthAuthority__c</groupingColumn>
         <legendPosition>Right</legendPosition>
         <location>CHART_BOTTOM</location>
-        <secondaryGroupingColumn>Account.LicenseType__c</secondaryGroupingColumn>
+        <secondaryGroupingColumn>Visit$VisitType.Name</secondaryGroupingColumn>
         <showAxisLabels>true</showAxisLabels>
         <showPercentage>false</showPercentage>
         <showTotal>false</showTotal>
@@ -27,53 +27,53 @@
         <titleSize>18</titleSize>
     </chart>
     <columns>
-        <field>ACCOUNT.NAME</field>
+        <field>Visit$Account</field>
     </columns>
     <columns>
-        <field>Account.Status__c</field>
+        <field>Visit$Status</field>
     </columns>
     <columns>
-        <field>PARENT.NAME</field>
+        <field>Visit$Account.LicenseType__c</field>
     </columns>
     <filter>
         <criteriaItems>
-            <column>Account.Status__c</column>
-            <columnToColumn>false</columnToColumn>
-            <isUnlocked>true</isUnlocked>
-            <operator>equals</operator>
-            <value>CURR Application in Progress,CURR In Compliance,CURR Not in Compliance,CURR SIU Referral,PURR,PURR Application in Progress</value>
-        </criteriaItems>
-        <criteriaItems>
-            <column>RECORDTYPE</column>
+            <column>Visit$Account.RecordType</column>
             <columnToColumn>false</columnToColumn>
             <isUnlocked>true</isUnlocked>
             <operator>equals</operator>
             <value>Account.Residence</value>
         </criteriaItems>
+        <criteriaItems>
+            <column>Visit$Status</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>2</value>
+        </criteriaItems>
     </filter>
     <format>Matrix</format>
     <groupingsAcross>
         <dateGranularity>Day</dateGranularity>
-        <field>Account.LicenseType__c</field>
+        <field>Visit$VisitType.Name</field>
         <sortOrder>Asc</sortOrder>
     </groupingsAcross>
     <groupingsDown>
         <dateGranularity>Day</dateGranularity>
-        <field>Account.HealthAuthority__c</field>
+        <field>Visit$Account.HealthAuthority__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
-    <name>Illegal Operators</name>
+    <name>Inspections Completed by Region</name>
     <params>
         <name>co</name>
         <value>1</value>
     </params>
-    <reportType>AccountList</reportType>
+    <reportType>Inspection_Account_Report_Type__c</reportType>
     <scope>organization</scope>
     <showDetails>true</showDetails>
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>true</showSubTotals>
     <timeFrameFilter>
-        <dateColumn>CREATED_DATE</dateColumn>
-        <interval>INTERVAL_CUSTOM</interval>
+        <dateColumn>Visit$PlannedVisitStartTime</dateColumn>
+        <interval>INTERVAL_PREVCURFY</interval>
     </timeFrameFilter>
 </Report>
