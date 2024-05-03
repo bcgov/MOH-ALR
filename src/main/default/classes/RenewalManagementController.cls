@@ -170,8 +170,9 @@ public with sharing class RenewalManagementController {
         try {
             for(Account accRec : renewalFeeAccMap.values()) {
                 for(Asset assetRec : accRec.Assets) {
-                    Decimal amtVal = defaultFee;
-                    amtVal = accRec.LicenseType__r?.UnitFee__c ?? defaultFee;
+                    // Decimal amtVal = defaultFee;
+                    // amtVal = accRec.LicenseType__r?.UnitFee__c ?? defaultFee;
+                    Decimal amtVal = (accRec.LicenseType__r.UnitFee__c == NULL) ? defaultFee :  accRec.LicenseType__r.UnitFee__c;
                     RegulatoryTrxnFeeItem transFeeItemRec = createTransFeeItemRecord(transFeeItemRT, transFeeMap.get(accRec.Id).Id, assetRec.Id, assetRec.Type__c, amtVal, assetRec.Quantity, feeType);
                     transFeeItemList.add(transFeeItemRec);
                 }
