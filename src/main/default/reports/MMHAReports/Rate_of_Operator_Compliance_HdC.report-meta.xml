@@ -9,22 +9,13 @@
     <columns>
         <field>Visit$Account.LicenseType__c</field>
     </columns>
-    <columns>
-        <field>Visit$PlannedVisitStartTime</field>
-    </columns>
-    <columns>
-        <field>Visit$Status</field>
-    </columns>
-    <columns>
-        <field>Visit$VisitType.Name</field>
-    </columns>
     <filter>
         <criteriaItems>
-            <column>Visit$VisitType.Name</column>
+            <column>Visit$Account.LicenseType__c</column>
             <columnToColumn>false</columnToColumn>
-            <isUnlocked>true</isUnlocked>
+            <isUnlocked>false</isUnlocked>
             <operator>equals</operator>
-            <value>Compliance Monitoring Inspection</value>
+            <value>Mental Health,Supportive Recovery</value>
         </criteriaItems>
     </filter>
     <format>Matrix</format>
@@ -49,7 +40,7 @@
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>true</showSubTotals>
     <timeFrameFilter>
-        <dateColumn>Visit$PlannedVisitStartTime</dateColumn>
+        <dateColumn>Visit.AssessmentTasks$StartTime</dateColumn>
         <interval>INTERVAL_CUSTOM</interval>
     </timeFrameFilter>
 </Report>

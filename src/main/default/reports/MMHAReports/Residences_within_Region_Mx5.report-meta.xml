@@ -10,12 +10,20 @@
         <field>Visit$Account.Status__c</field>
     </columns>
     <filter>
+        <booleanFilter>1 AND 2</booleanFilter>
         <criteriaItems>
             <column>Visit$Account.RecordType</column>
             <columnToColumn>false</columnToColumn>
-            <isUnlocked>true</isUnlocked>
+            <isUnlocked>false</isUnlocked>
             <operator>equals</operator>
             <value>Account.Residence</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Visit$Account.LicenseType__c</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>false</isUnlocked>
+            <operator>equals</operator>
+            <value>Mental Health,Supportive Recovery</value>
         </criteriaItems>
     </filter>
     <format>Matrix</format>
@@ -40,7 +48,7 @@
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>true</showSubTotals>
     <timeFrameFilter>
-        <dateColumn>Visit$CreatedDate</dateColumn>
+        <dateColumn>Visit.AssessmentTasks$StartTime</dateColumn>
         <interval>INTERVAL_CUSTOM</interval>
     </timeFrameFilter>
 </Report>

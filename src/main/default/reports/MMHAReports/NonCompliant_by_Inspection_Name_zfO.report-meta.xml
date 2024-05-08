@@ -6,9 +6,15 @@
     <columns>
         <field>RegulatoryCodeViolation$RegulatoryCode.Name</field>
     </columns>
-    <columns>
-        <field>RegulatoryCodeViolation$Inspection.PlannedVisitStartTime</field>
-    </columns>
+    <filter>
+        <criteriaItems>
+            <column>RegulatoryCodeViolation$Inspection.Account.LicenseType__c</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>false</isUnlocked>
+            <operator>equals</operator>
+            <value>Supportive Recovery,Mental Health</value>
+        </criteriaItems>
+    </filter>
     <format>Matrix</format>
     <groupingsAcross>
         <dateGranularity>Day</dateGranularity>
@@ -30,8 +36,4 @@
     <showDetails>true</showDetails>
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>true</showSubTotals>
-    <timeFrameFilter>
-        <dateColumn>RegulatoryCodeViolation$Inspection.PlannedVisitStartTime</dateColumn>
-        <interval>INTERVAL_CUSTOM</interval>
-    </timeFrameFilter>
 </Report>

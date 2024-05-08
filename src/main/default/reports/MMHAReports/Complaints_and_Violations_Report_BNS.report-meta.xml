@@ -18,9 +18,16 @@
             <criteriaItems>
                 <column>RECORDTYPE</column>
                 <columnToColumn>false</columnToColumn>
-                <isUnlocked>true</isUnlocked>
+                <isUnlocked>false</isUnlocked>
                 <operator>equals</operator>
                 <value>Case.PublicComplaintCase</value>
+            </criteriaItems>
+            <criteriaItems>
+                <column>Account.LicenseType__c</column>
+                <columnToColumn>false</columnToColumn>
+                <isUnlocked>false</isUnlocked>
+                <operator>equals</operator>
+                <value>Supportive Recovery,Mental Health</value>
             </criteriaItems>
         </filter>
         <format>Summary</format>
@@ -53,6 +60,15 @@
         <columns>
             <field>RegulatoryCodeViolation$RegulatoryCode.Name</field>
         </columns>
+        <filter>
+            <criteriaItems>
+                <column>RegulatoryCodeViolation$Inspection.Account.LicenseType__c</column>
+                <columnToColumn>false</columnToColumn>
+                <isUnlocked>false</isUnlocked>
+                <operator>equals</operator>
+                <value>Mental Health,Supportive Recovery</value>
+            </criteriaItems>
+        </filter>
         <format>Summary</format>
         <name>Violations block 1</name>
         <params>
@@ -63,10 +79,6 @@
         <scope>organization</scope>
         <showGrandTotal>true</showGrandTotal>
         <showSubTotals>true</showSubTotals>
-        <timeFrameFilter>
-            <dateColumn>RegulatoryCodeViolation$Inspection.PlannedVisitStartTime</dateColumn>
-            <interval>INTERVAL_CUSTOM</interval>
-        </timeFrameFilter>
     </block>
     <blockInfo>
         <blockId xsi:nil="true"/>
