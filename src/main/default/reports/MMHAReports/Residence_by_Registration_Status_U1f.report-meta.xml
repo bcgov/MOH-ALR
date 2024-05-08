@@ -13,9 +13,16 @@
         <criteriaItems>
             <column>Visit$Account.Status__c</column>
             <columnToColumn>false</columnToColumn>
-            <isUnlocked>true</isUnlocked>
+            <isUnlocked>false</isUnlocked>
             <operator>equals</operator>
             <value>CURR Application in Progress,CURR In Compliance,CURR Not in Compliance,CURR SIU Referral,Deregistered Location Change,Deregistered Owner Change,Deregistered Withdrawn,Registered Active,Registered Active Progressive Enforcement,Registered Active with Conditions</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Visit$Account.LicenseType__c</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>false</isUnlocked>
+            <operator>equals</operator>
+            <value>Supportive Recovery,Mental Health</value>
         </criteriaItems>
     </filter>
     <format>Matrix</format>
@@ -40,7 +47,7 @@
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>true</showSubTotals>
     <timeFrameFilter>
-        <dateColumn>Visit$CreatedDate</dateColumn>
+        <dateColumn>Visit.AssessmentTasks$StartTime</dateColumn>
         <interval>INTERVAL_CUSTOM</interval>
     </timeFrameFilter>
 </Report>

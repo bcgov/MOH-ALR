@@ -4,25 +4,22 @@
         <field>Visit$Account</field>
     </columns>
     <columns>
-        <field>Visit$Status</field>
-    </columns>
-    <columns>
         <field>Visit$Account.LicenseType__c</field>
     </columns>
     <filter>
         <criteriaItems>
             <column>Visit$Account.RecordType</column>
             <columnToColumn>false</columnToColumn>
-            <isUnlocked>true</isUnlocked>
+            <isUnlocked>false</isUnlocked>
             <operator>equals</operator>
             <value>Account.Residence</value>
         </criteriaItems>
         <criteriaItems>
-            <column>Visit$Status</column>
+            <column>Visit$Account.LicenseType__c</column>
             <columnToColumn>false</columnToColumn>
-            <isUnlocked>true</isUnlocked>
+            <isUnlocked>false</isUnlocked>
             <operator>equals</operator>
-            <value>2</value>
+            <value>Supportive Recovery,Mental Health</value>
         </criteriaItems>
     </filter>
     <format>Matrix</format>
@@ -47,7 +44,7 @@
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>true</showSubTotals>
     <timeFrameFilter>
-        <dateColumn>Visit$PlannedVisitStartTime</dateColumn>
-        <interval>INTERVAL_PREVCURFY</interval>
+        <dateColumn>Visit.AssessmentTasks$StartTime</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
     </timeFrameFilter>
 </Report>
