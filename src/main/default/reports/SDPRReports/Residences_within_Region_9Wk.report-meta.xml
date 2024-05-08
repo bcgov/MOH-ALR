@@ -7,28 +7,21 @@
         <field>Visit$Account.Parent</field>
     </columns>
     <columns>
-        <field>Visit$Account.LicenseType__c</field>
+        <field>Visit$Account.Status__c</field>
     </columns>
     <filter>
         <criteriaItems>
-            <column>Visit$Account.Status__c</column>
+            <column>Visit$Account.RecordType</column>
             <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>equals</operator>
-            <value>CURR Application in Progress,CURR In Compliance,CURR Not in Compliance,CURR SIU Referral,Deregistered Location Change,Deregistered Owner Change,Deregistered Withdrawn,Registered Active,Registered Active Progressive Enforcement,Registered Active with Conditions</value>
-        </criteriaItems>
-        <criteriaItems>
-            <column>Visit$Account.LicenseType__c</column>
-            <columnToColumn>false</columnToColumn>
-            <isUnlocked>false</isUnlocked>
-            <operator>equals</operator>
-            <value>Supportive Recovery,Mental Health</value>
+            <value>Account.Residence</value>
         </criteriaItems>
     </filter>
     <format>Matrix</format>
     <groupingsAcross>
         <dateGranularity>Day</dateGranularity>
-        <field>Visit$Account.Status__c</field>
+        <field>Visit$Account.LicenseType__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsAcross>
     <groupingsDown>
@@ -36,7 +29,7 @@
         <field>Visit$Account.HealthAuthority__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
-    <name>Residence by Registration Status</name>
+    <name>Residences within Region</name>
     <params>
         <name>co</name>
         <value>1</value>
