@@ -1,3 +1,12 @@
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this Class is for 
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
+                11-8-23    ALR-907             ACN-ALR        Validation Error is not getting populated on Remove Existing Units.      
+                           ALR-185             ACN-ALR        Generating Transaction Fee  
+                           ALR-726             ACN-ALR        Issues on Business License Application and Regulatory Fee                  
+***********************************************************************************************/
 @isTest
 public class ManageUnitsControllerTest {
     
@@ -11,52 +20,47 @@ public class ManageUnitsControllerTest {
         BusinessLicenseApplication blaRec = TestDataFactory.createRenewalBla(residence.LicenseType__c, residence.Id, true);
         Asset unit1 = TestDataFactory.createUnit('1','Private',2,residence.Id,true);
         unit1.recordTypeId = parentAssetRTId;
-        //unit1.GenerateInvoice__c = true;
         update unit1;
         
     }
      @isTest
     static void unitInsertTest(){
         List<Asset> updateUnits = new List<Asset>();
-        Account residence =[Select Id from account limit 1];        
-        Asset unit = [Select id,Quantity,AccountId from Asset limit 1]; 
+        Account residence =[SELECT Id FROM account limit 1];        
+        Asset unit = [SELECT id,Quantity,AccountId FROM Asset limit 1]; 
         Asset unitupdate = new Asset();
         unitupdate.Quantity = 1;
         unitupdate.Id = unit.Id;
         unitupdate.AccountId=residence.Id;
         unitupdate.GenerateRenewalInvoice__c=true;
         updateUnits.add(unitupdate);
-       // string str = JSON.serialize(unit);
         object data =(object)updateUnits;        
-        
         
         try{
         ManageUnitsController.getUnitBasedOnResidence(residence.Id);
         ManageUnitsController.updateUnits(data);
         }Catch(Exception e){
-            System.assertEquals('Script-thrown exception', e.getMessage());  
+            Assert.areEqual('Script-thrown exception', e.getMessage());  
         } 
-        System.assertEquals(unitupdate.Quantity,1); 
-        
+        Assert.areEqual(unitupdate.Quantity,1); 
     }
     
     @isTest
     static void unitInsertExpTest(){
         List<Asset> updateUnits = new List<Asset>();
-        Account residence =[Select Id from account limit 1];        
-        Asset unit = [Select id,Quantity,AccountId from Asset limit 1]; 
+        Account residence =[SELECT Id FROM account limit 1];        
+        Asset unit = [SELECT id,Quantity,AccountId FROM Asset limit 1]; 
         Asset unitupdate = new Asset();
         unitupdate.Quantity = 1;
         unitupdate.Id = unitupdate.Id;
         unitupdate.AccountId=residence.Id;
         updateUnits.add(unitupdate);
-       // string str = JSON.serialize(unit);
         object data =(object)updateUnits;   
         try{
         ManageUnitsController.getUnitBasedOnResidence(residence.Id);
         ManageUnitsController.updateUnits(data);
         }Catch(Exception e){
-            System.assertEquals('Script-thrown exception', e.getMessage());  
+            Assert.areEqual('Script-thrown exception', e.getMessage());  
         }
     }
 }

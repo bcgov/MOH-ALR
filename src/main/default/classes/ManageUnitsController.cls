@@ -1,19 +1,27 @@
-/**
-* @description       : 
-* @author            : ChangeMeIn@UserSettingsUnder.SFDoc
-* @group             : 
-* @last modified on  : 11-08-2023
-* @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
-**/
-public class ManageUnitsController {
-    Public static String VALIDATE_QTY = 'Updated Quantity cannot be equal, null, negative or greater than the existing quantity.';
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this Class is for Validation Error is not getting populated on Remove Existing Units.
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
+                11-8-23   ALR-907             ACN-ALR         Validation Error is not getting populated on Remove Existing Units.      
+***********************************************************************************************/
+public with sharing class ManageUnitsController {
+    public static String className = 'ManageUnitsController';
+    public static String VALIDATE_QTY = 'Updated Quantity cannot be equal, null, negative or greater than the existing quantity.';
     public static final String UNITREQUEST_RECTYPEID_NAME = 'Unit_Request_Record_Type';
-    Public static String NEW_UNIT_NAME='UnitRequest';
-    Public static String UNIT_FEE='Full Unit Fee';
-    Public static String PENDING_INVOICE = 'Pending Invoice';
-    Public static String UNITREQUEST_STATUS='Completed';
+    public static String NEW_UNIT_NAME='UnitRequest';
+    public static String UNIT_FEE='Full Unit Fee';
+    public static String PENDING_INVOICE = 'Pending Invoice';
+    public static String UNITREQUEST_STATUS='Completed';
     public static final Id UNITREQUESTRECTYPEID = Schema.SObjectType.Asset.getRecordTypeInfosByDeveloperName().get(UNITREQUEST_RECTYPEID_NAME).getRecordTypeId();
-    
+
+/**
+* @Author: Accenture_ALR Dev Team
+* @date: 
+* @description: The purpose of this method is for ManageUnitsController
+* @return:  String
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
     @AuraEnabled
     public static string getUnitBasedOnResidence(String recordId){
         String assetListString = '[]';
@@ -23,19 +31,25 @@ public class ManageUnitsController {
             assetListString =  JSON.serialize(assetList);
         }catch(AuraHandledException e)
         {
+            LogService.logAndPublish(className, 'getUnitBasedOnResidence', '', e);
             throw new AuraHandledException(e.getMessage());
         }
         return assetListString;
     }
+
+/**
+* @Author: Accenture_ALR Dev Team
+* @date: 
+* @description: The purpose of this method is for ManageUnitsController
+* @return:  String
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
     @AuraEnabled
     public static string updateUnits(Object data) {
-        system.debug('data--'+data);
         List<Asset> assetForCreateList = new List<Asset>();
         List<Asset> assetForValidateList = new List<Asset>();
         List<Asset> assetForUpdateList = (List<Asset>) JSON.deserialize(JSON.serialize(data),List<Asset>.class);
-        system.debug('assetForUpdateList--'+assetForUpdateList);
-        Map<ID, Asset> existingUnits = new Map<ID, Asset>([SELECT Id,Name,GenerateRenewalInvoice__c, Quantity,AccountId,Capacity__c,Type__c FROM Asset where Id IN :assetForUpdateList]);
-        system.debug('existingUnits--'+existingUnits);
+        Map<ID, Asset> existingUnits = new Map<ID, Asset>([SELECT Id,Name,GenerateRenewalInvoice__c, Quantity,AccountId,Capacity__c,Type__c FROM Asset WHERE Id IN :assetForUpdateList WITH SECURITY_ENFORCED]);
         try {
             for(Asset unit : assetForUpdateList){
                 Asset newUnit = new Asset();
@@ -48,9 +62,7 @@ public class ManageUnitsController {
                 newunit.Capacity__c = existingUnits.get(unit.Id).Capacity__c;
                 newunit.Type__c = existingUnits.get(unit.Id).Type__c;
                 newunit.Status = UNITREQUEST_STATUS;
-                system.debug('unit.Quantity'+unit.Quantity);
-				                if(unit.Quantity >= existingUnits.get(unit.Id).Quantity || unit.Quantity < 0 || unit.Quantity == null)
-                {
+				if(unit.Quantity >= existingUnits.get(unit.Id).Quantity || unit.Quantity < 0 || unit.Quantity == null){
                     throw new MyException(VALIDATE_QTY);
                 }else{
                     newunit.Quantity=unit.Quantity-existingUnits.get(unit.Id).Quantity;
@@ -65,18 +77,17 @@ public class ManageUnitsController {
             }
             if(!assetForUpdateList.isEmpty() && Asset.SObjectType.getDescribe().isAccessible() && !assetForCreateList.isEmpty()){
                 update assetForUpdateList;
-                System.debug('assetForCreateList--'+ assetForCreateList);
                 insert assetForCreateList;
             }
             Map<Id,Decimal> mapOfUnitRequest = new Map<Id,Decimal>();
-            List<AggregateResult> sumOfQuantity = [Select SUM(Quantity)sumQty,ParentId from Asset where ParentId IN :assetForUpdateList AND status !=: PENDING_INVOICE group by ParentId];
+            List<AggregateResult> sumOfQuantity = [SELECT SUM(Quantity)sumQty,ParentId FROM Asset WHERE ParentId IN :assetForUpdateList AND status !=: PENDING_INVOICE WITH SECURITY_ENFORCED group by ParentId];
             if(sumOfQuantity.size()>0){
                 for(AggregateResult a: sumOfQuantity){
                     Id unitsIds = (Id)a.get('ParentId');
                     Decimal totalQty = (Decimal)a.get('sumQty');
                     mapOfUnitRequest.put(unitsIds,totalQty);
                 }
-                For(Asset unit : assetForUpdateList){
+                for(Asset unit : assetForUpdateList){
                     if (mapOfUnitRequest.containsKey(unit.Id) && mapOfUnitRequest.get(unit.Id) !=unit.Quantity ) {
                         unit.Quantity = mapOfUnitRequest.get(unit.Id);
                         assetForValidateList.add(unit);
@@ -85,7 +96,6 @@ public class ManageUnitsController {
                 if(!assetForValidateList.isEmpty() && Asset.SObjectType.getDescribe().isAccessible()){
                     update assetForValidateList;
                 }
-                system.debug('---csdcs'+assetForUpdateList);
                 GenerateInvoiceController.generateRenewalInvoices(assetForUpdateList);
             }
             return 'Success';
@@ -96,10 +106,17 @@ public class ManageUnitsController {
                 throw new AuraHandledException(e.getMessage().split('error:')[1].split(':')[0] + '.');
             } else {
                 throw new AuraHandledException(e.getMessage());
-            }
-            
+            }    
         }
     }
+
+/**
+* @Author: Accenture_ALR Dev Team
+* @date: 
+* @description: The purpose of this method is for ManageUnitsController
+* @return:  
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
     public class MyException extends Exception {
         
     }

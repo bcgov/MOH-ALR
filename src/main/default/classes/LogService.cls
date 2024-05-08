@@ -1,3 +1,10 @@
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this Class is for 
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
+                           ALR-651              ACN-ALR       Deploy and Configure Error Handling Framework in ALR Org              
+***********************************************************************************************/
 public without sharing class LogService {
 
     public static List<Log_Event__e> logEvents;
@@ -49,7 +56,9 @@ public without sharing class LogService {
     private static void processFailedPlatformEvents(List<Database.SaveResult> results){
         List<Log__c> logsToCreate = new  List<Log__c>();
         for (Database.SaveResult eventPublishingResult : results) {
-            if (eventPublishingResult.isSuccess()) continue;
+            if (eventPublishingResult.isSuccess()){
+                 continue;
+            }
             for (Database.Error err : eventPublishingResult.getErrors()) {
                 logsToCreate.add(createLog('Publish Platform Event', 'publish',
                         err.getMessage(), String.valueOf(err.getStatusCode())));
@@ -104,22 +113,17 @@ public without sharing class LogService {
    */
     public static void processFailedLogs(String className, String methodName,List<Database.SaveResult> results){
     
-        List<Log__c> logsToCreate = new  List<Log__c>();
-        
-        for (Database.SaveResult eventPublishingResult : results) {
-        
-            if (eventPublishingResult.isSuccess()) {
-            
+        List<Log__c> logsToCreate = new  List<Log__c>();        
+        for (Database.SaveResult eventPublishingResult : results) {        
+            if (eventPublishingResult.isSuccess()) {            
                 continue;
             }
-            for (Database.Error err : eventPublishingResult.getErrors()) {
-            
+            for (Database.Error err : eventPublishingResult.getErrors()) {            
                 logsToCreate.add(createLog(className, methodName,err.getMessage(), String.valueOf(err.getStatusCode())));                
             }
         }
         
-        if(!logsToCreate.isEmpty()){
-        
+        if(!logsToCreate.isEmpty()){        
             insert logsToCreate;
         }
     }        

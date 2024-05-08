@@ -1,0 +1,43 @@
+<!--
+* @Name              : LateFeeManagementTable
+* @Description       : LWC for displaying Late Fee BLA records data table. 
+                       
+* @Author            : Anilkumar (Accenture)
+* @StoryNo           : ALR-996
+-->
+
+<template>
+    <lightning-card>
+        <!-- Spinner Component-->
+        <template if={hasLoaded} class="slds-is-relative">
+            <lightning-spinner size="medium" alternative-text="Loading.."></lightning-spinner>
+        </template>
+            <!-- Buttons which on click generate late fee renewals and the other which sends an email and updates BLA Records-->
+            <div class="slds-text-align_right ">
+                <lightning-button-group>
+                    <lightning-button variant="brand" label ="Generate Late Fees" title="Generate Late Fees" 
+                        onclick={handleGenerateLateFees}></lightning-button>
+                    <lightning-button variant="brand-outline" label ="Send Late Fees" title="Send Late Fees" 
+                        onclick={handleSendLateFees}></lightning-button>
+                </lightning-button-group>
+                <lightning-flow  if:true={renderFlow}
+                        flow-api-name='Generate_Late_Fee'
+                        onstatuschange={handleStatusChange}  >
+                    </lightning-flow>
+            </div>
+            <!-- Lightnining Data Table for Late Fee Records and Inline Edit for Late Fee Status and Exclusion Reason-->
+            <div style="height:400px;" class="table-wrapper">
+                <lightning-datatable
+                        key-field="Id"
+                        data={blaList}
+                        show-row-number-column
+                        hide-checkbox-column
+                        draft-values={draftValues}
+                        row-number-offset={rowOffset}
+                        columns={columns}
+                        onsave={handleSave}>
+                </lightning-datatable>
+            </div>
+        
+    </lightning-card>
+</template>

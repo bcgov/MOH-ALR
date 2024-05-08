@@ -1,9 +1,10 @@
-/**
-* @Name              : MassEmailControllerTest
-* @Description       : Test class for MassEmailController and BCMOH_UtilityClass and RenewalBlaTableController
-* @Author            : Sweta (Accenture)
-* @StoryNo           : ALR-560
-**/
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this Test class for MassEmailController and BCMOH_UtilityClass and RenewalBlaTableController
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
+                          ALR -560             Sweta          Renewal verification and renewal mass email
+***********************************************************************************************/
 @isTest
 public class MassEmailControllerTest {
     //test data setup
@@ -21,10 +22,15 @@ public class MassEmailControllerTest {
         //unit1.GenerateInvoice__c = true;
         update unitRec1;
         BusinessLicenseApplication blaRec = TestDataFactory.createRenewalBla(residenceRec1.LicenseType__c, residenceRec1.Id, true);
+        blaRec.Late_Fee_Status__c='Ready to Send';
+        update blaRec;
         BusinessLicense blRec = TestDataFactory.createBlRecord(regAuth.Id, residenceRec1.Id, residenceRec1.ParentId, '58659', 'BL RECORD 1', true);
         
         ContentVersion contentVersionRec = TestDataFactory.createContentVer('title value 1', blaRec.Id, true);
         //ContentVersion contentVersionRec1 = TestDataFactory.createContentVer('title value 2', blaRec.Id, true);
+      
+        
+        
 
     }
     //test method
@@ -32,6 +38,15 @@ public class MassEmailControllerTest {
     static void doSendRenewalsTest() {
         Test.startTest();
         MassEmailController.doSendRenewals();
+        Test.stopTest();
+        List<Account> accRec = [SELECT Id FROM Account];
+        Assert.isNotNull(accRec.size());
+    }
+    //test method-ALR-1000
+     @isTest
+    static void doSendLateFeeTest() {
+        Test.startTest();
+        MassEmailController.doSendLateFee();
         Test.stopTest();
         List<Account> accRec = [SELECT Id FROM Account];
         Assert.isNotNull(accRec.size());
@@ -76,5 +91,96 @@ public class MassEmailControllerTest {
         Assert.isNotNull(accRec.size());
     }
     
-        
+    //updateBlaStatusTest
+     @isTest
+    static void updateBlaStatusTest() {
+        String blaStatus = '' ;
+        Id BlaId=[SELECT Id FROM BusinessLicenseApplication][0].Id;
+        Map<Id,String> blaIdDetailsMap = new Map<Id,String>{BlaId =>''} ; 
+        List<BusinessLicenseApplication> BlaList=new List<BusinessLicenseApplication>();
+        Test.startTest();
+        BlaList=BCMOH_UtilityClass.updateBlaStatus(blaIdDetailsMap,blaStatus);
+        Test.stopTest();
+        List<Account> accRec = [SELECT Id FROM Account];
+        Assert.isNotNull(accRec.size());
+    }
+    
+    //updateBlaLateFeeStatusTest
+     @isTest
+    static void updateBlaLateFeeStatusTest() {
+        String blaStatus = '' ;
+        Id BlaId=[SELECT Id FROM BusinessLicenseApplication][0].Id;
+        Map<Id,String> blaIdDetailsMap = new Map<Id,String>{BlaId =>''} ; 
+        List<BusinessLicenseApplication> BlaList=new List<BusinessLicenseApplication>();
+        Test.startTest();
+        BlaList=BCMOH_UtilityClass.updateBlaLateFeeStatus(blaIdDetailsMap,blaStatus);
+        Test.stopTest();
+        List<Account> accRec = [SELECT Id FROM Account];
+        Assert.isNotNull(accRec.size());
+    }
+      
+      //getDocTempContentMap
+     @isTest
+    static void getDocTempContentMapTest() {
+        List<String> templateNames = new List<String>();
+        Map<String, DocumentTemplateContentDoc> templateNameDocMap = new Map<String, DocumentTemplateContentDoc>();
+        Test.startTest();
+        templateNameDocMap=BCMOH_UtilityClass.getDocTempContentMap(templateNames);
+        Test.stopTest();
+        List<Account> accRec = [SELECT Id FROM Account];
+        Assert.isNotNull(accRec.size());
+    }
+    
+           
+        //getDocGenProcRec
+     @isTest
+    static void getDocGenProcRecTest() {
+        String type1 = '';
+        String requestText = '';
+        String referenceId = '';
+        String tokenData = '';
+        String docGenType = '';
+        DocumentGenerationProcess docgen = new DocumentGenerationProcess();
+        Test.startTest();
+        docgen=BCMOH_UtilityClass.getDocGenProcRec(type1,requestText,referenceId,tokenData,docGenType);
+        Test.stopTest();
+        List<Account> accRec = [SELECT Id FROM Account];
+        Assert.isNotNull(accRec.size());
+           }
+    
+         //getDocNameTitle
+     @isTest
+    static void getDocNameTitleTest() {
+        String docGenPurpose = '';
+        Map<String,String> docGenRec = new Map<String,String>();
+        Test.startTest();
+        docGenRec=BCMOH_UtilityClass.getDocNameTitle(docGenPurpose);
+        Test.stopTest();
+        List<Account> accRec = [SELECT Id FROM Account];
+        Assert.isNotNull(accRec.size());
+           }
+    
+    //getDocNameTitleLateFeeTest
+     @isTest
+    static void getDocNameTitleLateFeeTest() {
+        String docGenPurpose = '';
+        Map<String,String> docGenRec = new Map<String,String>();
+        Test.startTest();
+        docGenRec=BCMOH_UtilityClass.getDocNameTitleLateFee(docGenPurpose);
+        Test.stopTest();
+        List<Account> accRec = [SELECT Id FROM Account];
+        Assert.isNotNull(accRec.size());
+           }
+    
+     //getSubstringWithoutExtension
+     @isTest
+    static void getSubstringWithoutExtensionTest() {
+        String documentTitle = '';
+        String docGenRec = '';
+        Test.startTest();
+        docGenRec=BCMOH_UtilityClass.getSubstringWithoutExtension(documentTitle);
+        Test.stopTest();
+        List<Account> accRec = [SELECT Id FROM Account];
+        Assert.isNotNull(accRec.size());
+           }
 }

@@ -1,9 +1,10 @@
-/**
-* @Name              : RenewalManagementControllerTest
-* @Description       : Test class for RenewalManagementController and RenewalManagementControllerBatch
-* @Author            : Sweta (Accenture)
-* @StoryNo           : ALR-36
-**/
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this Test class for RenewalManagementController and RenewalManagementControllerBatch
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
+                           ALR-36             Sweta           License renewal initiation
+***********************************************************************************************/
 @isTest
 public class RenewalManagementControllerTest {
     //test data setup
@@ -14,7 +15,7 @@ public class RenewalManagementControllerTest {
         
         //RegulatoryAuthorizationType
         RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
-        
+
         //account - insert scenario
         Account residenceRec1 = TestDataFactory.createResidence('Residence', 'residenceAccount1', regAuth.Id, true);
         //registrant billing address
@@ -24,6 +25,7 @@ public class RenewalManagementControllerTest {
         //bla
         //BusinessLicenseApplication blaRec = TestDataFactory.createRenewalBla(residenceRec1.LicenseType__c, residenceRec1.Id, true); 
         //asset parent
+
         Asset unitRec1 = TestDataFactory.createUnit('1', 'Private', 5, residenceRec1.Id, false);
         unitRec1.recordTypeId = parentAssetRTId;
         unitRec1.Amount__c = 'Full Unit Fee';
@@ -85,7 +87,7 @@ public class RenewalManagementControllerTest {
         contactRec.MobilePhone = '8856589554';
         update contactRec;
         
-        AccountContactRelation acRec = [SELECT Id, ContactId, AccountId from AccountContactRelation LIMIT 1];
+        AccountContactRelation acRec = [SELECT Id, ContactId, AccountId FROM AccountContactRelation LIMIT 1];
         system.debug('csdcsd'+acRec);
         acRec.PrimaryContact__c = true;
         acRec.isActive = true;
@@ -127,14 +129,14 @@ public class RenewalManagementControllerTest {
     //RenewalManagementControllerBatch coverage
      @isTest
     static void getsendEmailTestTest1() {
-        //List<BusinessLicense> blRec = [SELECT Id, Account.Name from BusinessLicense];
-        List<Asset> assetRec = [SELECT Id, Account.Name from Asset];
-        AccountContactRelation acRec = [SELECT Id, ContactId, AccountId, isActive, PrimaryContact__c from AccountContactRelation LIMIT 1];
+        //List<BusinessLicense> blRec = [SELECT Id, Account.Name FROM BusinessLicense];
+        List<Asset> assetRec = [SELECT Id, Account.Name FROM Asset];
+        AccountContactRelation acRec = [SELECT Id, ContactId, AccountId, isActive, PrimaryContact__c FROM AccountContactRelation LIMIT 1];
         
         system.debug('csd'+acRec+' '+assetRec);
         List<String> accNames = new List<String>{'residenceAccount1'};
         List<Id> accIds = new List<Id>();
-        for(Account accId : [SELECT Id from Account where Name IN: accNames LIMIT 10]) {
+        for(Account accId : [SELECT Id FROM Account WHERE Name IN: accNames LIMIT 10]) {
             accIds.add(accId.Id);
         }
         system.debug('csd'+accIds);
@@ -143,7 +145,7 @@ public class RenewalManagementControllerTest {
         accntIds.ConId = accIds;
         RenewalManagementControllerBatch.sendEmailTest(new List<RenewalManagementControllerBatch.FlowInputs>{accntIds});
         Test.stopTest();
-        List<RegulatoryTrxnFeeItem> regTrans = [SELECT Id from RegulatoryTrxnFeeItem LIMIT 10];
+        List<RegulatoryTrxnFeeItem> regTrans = [SELECT Id FROM RegulatoryTrxnFeeItem LIMIT 10];
         Assert.isNotNull(regTrans.size());
     }
     //invocable method in RenewalManagementController
