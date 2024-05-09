@@ -3,7 +3,8 @@
 * @Date:       
 * @Description: The purpose of this Class is for TriggerHandler for CompliantCaseTrigger
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
-                           ALR-799             ACN-ALR        Issues on Web Services Residence Report         
+                           ALR-799             ACN-ALR        Issues on Web Services Residence Report  
+Changed By - ACN-ALR - Story - ALR-1259 - showing values on the basis of ExemptionofAddressPublication__c.
 ***********************************************************************************************/
 public with sharing class FetchAndGenerateCSV {
     static String className = 'FetchAndGenerateCSV';
@@ -47,7 +48,6 @@ public with sharing class FetchAndGenerateCSV {
                         Residence = (acc.Name != null) ? acc.Name : '';
                         HACode = healthAuthorityMap.get(acc.HealthAuthority__c );
                         HACode = (HACode != null) ? HACode : '';
-                        //ALR-1259 - showing values on the basis of check.
                         if(acc.ExemptionofAddressPublication__c == true){
                             Res_Phone = '';
                             Res_Phone_Ext = '';
@@ -72,7 +72,6 @@ public with sharing class FetchAndGenerateCSV {
                         
                         List<String> Adrs = new List<String>();
                         Adrs = Adrs(acc);
-                        //ALR-1259 - showing values on the basis of check.
                         if(acc.ExemptionofAddressPublication__c == true){
                             Res_Address = '';
                             Res_City = '';
