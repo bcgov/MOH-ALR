@@ -3,7 +3,9 @@
 * @Date:       
 * @Description: The purpose of this Class is for 
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]    
-                           ALR-799              ACN-ALR       Issues on Web Services Residence Report           
+                           ALR-799              ACN-ALR       Issues on Web Services Residence Report   
+*@Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]    
+                09-05-2024      ALR-1259        ACN-ALR     Added New Method (testGenerateCSVAddedCheck) to Cover check in class
 ***********************************************************************************************/
 @isTest
 private class FetchAndGenerateCSVTest {
@@ -67,6 +69,68 @@ private class FetchAndGenerateCSVTest {
         System.debug('Generated CSV: ' + generatedCSV);
 
         // Add your assertions here based on the expected CSV content or any specific criteria
+        Assert.areEqual(true, generatedCSV.contains(Registrant.Name), 'CSV should contain Registrant name');
+        Assert.areEqual(true, generatedCSV.contains(Residence.Name), 'CSV should contain Residence name');
+        Test.stopTest();
+
+    }
+    
+    @isTest
+    static void testGenerateCSVAddedCheck() {
+
+        RegulatoryAuthorizationType testRegulatoryAuthorization = new RegulatoryAuthorizationType(
+            Name = 'Test Regulatory Authorization'
+        );
+        insert testRegulatoryAuthorization;
+        
+        Account testParentAccount = new Account(
+            Name = 'AAA Recovery Society',
+            LicenseType__c = testRegulatoryAuthorization.Id
+        );
+        insert testParentAccount;
+
+        Account Registrant = new Account(
+            RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('Registrant').getRecordTypeId(),
+            Name = 'Test Registrant',
+            LicenseType__c = testRegulatoryAuthorization.Id
+        );
+        insert Registrant;
+              
+        Account Residence = new Account(
+            RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('Residence').getRecordTypeId(),
+            Name = 'Test Residence',
+            ParentId = Registrant.Id,
+            LicenseType__c = testRegulatoryAuthorization.Id,
+            Status__c = 'Registered Active',
+            ExemptionofAddressPublication__c = true
+        );
+        insert Residence;
+        
+        Service__c ser = new Service__c(
+            ServiceName__c = 'Assistance with daily living activities',
+            ServiceType__c = 'Assisted Living Service',
+            ProvidedBy__c = 'Registrant',
+            Account__c = Residence.id
+        );
+        insert ser;
+        
+        BusinessLicense blRec = new BusinessLicense(
+              RecordTypeId = Schema.getGlobalDescribe().get('BusinessLicense').getDescribe().getRecordTypeInfosByDeveloperName().get('License').getRecordTypeId(),
+              Account__c = Residence.Id,
+              RegulatoryAuthorizationTypeId = testRegulatoryAuthorization.Id,
+              Status = 'Active',
+              RegistrationCertificate__c = 'Test Reg Certificate',
+              Name = 'Test Business License'
+        );
+        insert blRec;
+        
+        Asset unit1 = TestDataFactory.createUnit('1','Private',2,Residence.Id,true);
+        
+        Test.startTest();
+        String generatedCSV = FetchAndGenerateCSV.generateCSV();
+
+        System.debug('Generated CSV: ' + generatedCSV);
+
         Assert.areEqual(true, generatedCSV.contains(Registrant.Name), 'CSV should contain Registrant name');
         Assert.areEqual(true, generatedCSV.contains(Residence.Name), 'CSV should contain Residence name');
         Test.stopTest();
