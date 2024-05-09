@@ -219,7 +219,7 @@
             <assignToReference>InspectionQuestion.AssessmentIndDefinitionId</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>createInspectionQuestion.Id</elementReference>
+                <elementReference>createInspectionQuestion.AssessmentIndDefinitionId</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -273,12 +273,12 @@
         <label>filterQuestionsByCategory</label>
         <locationX>642</locationX>
         <locationY>2714</locationY>
-        <assignNextValueToReference>currentItem_filterQuestionsByCategory_0</assignNextValueToReference>
+        <assignNextValueToReference>currentItem_filterQuestionsByCategory</assignNextValueToReference>
         <collectionProcessorType>FilterCollectionProcessor</collectionProcessorType>
-        <collectionReference>selectedInspectionQuestions</collectionReference>
+        <collectionReference>SelectedInspectionTasks</collectionReference>
         <conditionLogic>and</conditionLogic>
         <conditions>
-            <leftValueReference>currentItem_filterQuestionsByCategory_0.Category__c</leftValueReference>
+            <leftValueReference>currentItem_filterQuestionsByCategory.AssessmentIndicatorDefinitionCategory__c</leftValueReference>
             <operator>EqualTo</operator>
             <rightValue>
                 <elementReference>LoopingAssessmentTask.Name</elementReference>
@@ -379,7 +379,7 @@
                 <leftValueReference>existingAssessmentIndicatorList</leftValueReference>
                 <operator>Contains</operator>
                 <rightValue>
-                    <elementReference>createInspectionQuestion.Id</elementReference>
+                    <elementReference>createInspectionQuestion.AssessmentIndDefinitionId</elementReference>
                 </rightValue>
             </conditions>
             <connector>
@@ -820,12 +820,12 @@
         <objectType>AssessmentTask</objectType>
     </variables>
     <variables>
-        <name>currentItem_filterQuestionsByCategory_0</name>
+        <name>currentItem_filterQuestionsByCategory</name>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
-        <objectType>AssessmentIndicatorDefinition</objectType>
+        <objectType>RegulatoryCodeAssessmentInd</objectType>
     </variables>
     <variables>
         <name>currentItemFromSourceCollection</name>
