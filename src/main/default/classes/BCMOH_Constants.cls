@@ -104,4 +104,6 @@ public class BCMOH_Constants {
     public final static String EXCEPMESSAGE = 'This is exception for testing and code coverage';
     public final static String ItemEntityName = 'AssessmentTask.AssessmentTaskDefinitionId';
 	public final static String TaskType = 'InspectionChecklist';
+    public final static String resultt = 'Non-compliant';
+	public final static String nulltest = 'null';
 }
