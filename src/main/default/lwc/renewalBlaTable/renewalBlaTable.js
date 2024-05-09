@@ -1,10 +1,13 @@
-import { LightningElement, track, wire } from 'lwc';
+import { LightningElement, api, track, wire } from 'lwc';
 import getBlaMap from '@salesforce/apex/RenewalBlaTableController.getBlaRecs';
 import sendRenewals from "@salesforce/apex/MassEmailController.doSendRenewals";
 import updateBlaRecs from "@salesforce/apex/RenewalBlaTableController.updateBlaRecs";
 import { refreshApex } from "@salesforce/apex";
 import { loadStyle } from 'lightning/platformResourceLoader';
 import cssrenewalBlaTable from '@salesforce/resourceUrl/cssrenewalBlaTable';
+import BusinessLicenseApplication_OBJECT from '@salesforce/schema/BusinessLicenseApplication';
+import STATUS_FIELD from '@salesforce/schema/BusinessLicenseApplication.Status';
+import { getPicklistValues, getObjectInfo } from 'lightning/uiObjectInfoApi';
 
 const tableColumns = [
 {label: 'Application Id', fieldName: 'appId', type: 'url',
@@ -18,20 +21,55 @@ typeAttributes: {label: { fieldName: 'Name' }, target: '_parent'}},
     typeAttributes: {label: { fieldName: 'ParentName' }, target: '_parent'}},
 {label: 'Health Authority', fieldName: 'HealthAuthorityName', type: 'text'},
 {label: 'Residence Status', fieldName: 'AccountStatus', type: 'text'},
-{label: 'Application Status', fieldName: 'Status', type: 'text', editable: true},
+{label: 'Application Status', fieldName: 'Status', type: 'picklistColumn', editable: true, 
+    typeAttributes: {
+        placeholder: '--None--', options: { fieldName: 'pickListOptions' }, 
+        value: { fieldName: 'Status' },
+        context: { fieldName: 'Id' },
+        }
+    },
 {label: 'Exclusion Reason', fieldName: 'ExclusionReason__c', type: 'text', editable: true
  , cellAttributes: { alignment: 'left'}}
 ];
 
 export default class RenewalBlaTable extends LightningElement {
-
+    
+    @api recordId;
     @track error;
     @track columns = tableColumns;
     @track blaList;
+    @track isdata=getBlaMap.length===0?false:true;
+    @track data = [];
+    @track pickListOptions;
     draftValues = [];
-    @track hasLoaded = false;//spinner attribute
-    //wired property
-    _wiredResult;
+    @track recordTypeId;
+    @track hasLoaded = false;
+   _wiredResult;
+    
+
+    @wire(getObjectInfo, { objectApiName: BusinessLicenseApplication_OBJECT })
+    wiredObjectInfo({ error, data }) {
+    if (error) {
+        
+    } else if (data) {
+        const rtis = data.recordTypeInfos;
+        this.recordTypeId = Object.keys(rtis).find(rti => rtis[rti].name == 'Renewal');
+    }
+};
+
+   
+    @wire(getPicklistValues, {
+        recordTypeId: "$recordTypeId",
+        fieldApiName: STATUS_FIELD
+    })
+          wirePickListStatus({ error, data }) {
+        if (data) {
+            this.pickListOptions = JSON.parse(JSON.stringify(data.values));
+            console.log(data);
+        } else if (error) {
+            console.log(error);
+        }
+    }
 
     renderedCallback() {
         
@@ -46,8 +84,8 @@ export default class RenewalBlaTable extends LightningElement {
 
     }
 
-    //wire method to fetch bla records
-    @wire(getBlaMap)
+    
+    @wire(getBlaMap, { pickList: '$pickListOptions' } )
     wiredCallback(result) {
         this._wiredResult = result;
         if(result.data) {
@@ -56,6 +94,7 @@ export default class RenewalBlaTable extends LightningElement {
             blaParsedData.forEach(bla => {
                 if(bla.Name) {
                     bla.appId = '/'+bla.Id;
+                    bla.pickListOptions = this.pickListOptions;
                 }
                 if(bla.Account.Id) {
                     bla.AccName = bla.Account.Name;
@@ -71,29 +110,28 @@ export default class RenewalBlaTable extends LightningElement {
                 }
             });
             this.blaList = blaParsedData;
-            this.hasLoaded = true;//to remove spinnner
+            this.isdata = this.blaList && this.blaList.length > 0; 
+            this.hasLoaded = true;
             this.error = undefined;
         } else if(result.error) {
             this.error = result.error;
             this.blaList = undefined;
+            
         }
+       
     }
 
-    //on click of save
     async handleSave(event) {
         try {
             if(event.detail.draftValues) {
                 this.hasLoaded = false;
                 const saveDraftValues = event.detail.draftValues;
-                // Pass edited fields to the Apex controller
                 await updateBlaRecs({ data: saveDraftValues })
                 .then(result => {
                     if(result) {
-                       //refresh the table with updated data
                        this.refreshData();
                     }
                     else {
-                        //if no update manually refresh data table data
                         var tempBlaList = this.blaList;
                         this.blaList = [];
                         this.blaList = tempBlaList;
@@ -110,12 +148,10 @@ export default class RenewalBlaTable extends LightningElement {
         };
     }
 
-    // in order to refresh wired property
     refreshData() {
         return refreshApex(this._wiredResult);
     }
 
-    //send renewals on click
     async handleSendRenewals(event) {
         try {
             this.hasLoaded = false;
@@ -124,7 +160,7 @@ export default class RenewalBlaTable extends LightningElement {
         } catch (error) {
             let message = error.body.message.includes('FIELD_CUSTOM_VALIDATION_EXCEPTION') ?
                 error.body.message.split('EXCEPTION, ')[1].split(': [')[0] : error.body.message;
-                //this.showToastMessage('Error', message, 'error');
+                
         };
     }
 }
