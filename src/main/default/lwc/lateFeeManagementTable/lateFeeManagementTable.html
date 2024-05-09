@@ -8,12 +8,10 @@
 
 <template>
     <lightning-card>
-        <!-- Spinner Component-->
         <template if={hasLoaded} class="slds-is-relative">
             <lightning-spinner size="medium" alternative-text="Loading.."></lightning-spinner>
         </template>
-            <!-- Buttons which on click generate late fee renewals and the other which sends an email and updates BLA Records-->
-            <div class="slds-text-align_right ">
+             <div class="slds-text-align_right ">
                 <lightning-button-group>
                     <lightning-button variant="brand" label ="Generate Late Fees" title="Generate Late Fees" 
                         onclick={handleGenerateLateFees}></lightning-button>
@@ -25,8 +23,8 @@
                         onstatuschange={handleStatusChange}  >
                     </lightning-flow>
             </div>
-            <!-- Lightnining Data Table for Late Fee Records and Inline Edit for Late Fee Status and Exclusion Reason-->
             <div style="height:400px;" class="table-wrapper">
+                <template if:true={isdata}>
                 <lightning-datatable
                         key-field="Id"
                         data={blaList}
@@ -37,6 +35,12 @@
                         columns={columns}
                         onsave={handleSave}>
                 </lightning-datatable>
+                </template>
+                <template if:false={isdata}>
+                    <div class="slds-text-color_red slds-align_absolute-center">
+                        <h1 if:true={blaList}> No records to display.</h1>
+                    </div>
+                </template>
             </div>
         
     </lightning-card>
