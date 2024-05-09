@@ -44,21 +44,20 @@ export default class RenewalBlaTable extends LightningElement {
     draftValues = [];
     @track recordTypeId;
     @track hasLoaded = false;
-    //wired property
-    _wiredResult;
+   _wiredResult;
     
 
     @wire(getObjectInfo, { objectApiName: BusinessLicenseApplication_OBJECT })
     wiredObjectInfo({ error, data }) {
     if (error) {
-        // handle Error
+        
     } else if (data) {
         const rtis = data.recordTypeInfos;
         this.recordTypeId = Object.keys(rtis).find(rti => rtis[rti].name == 'Renewal');
     }
 };
 
-    //fetch picklist options
+   
     @wire(getPicklistValues, {
         recordTypeId: "$recordTypeId",
         fieldApiName: STATUS_FIELD
@@ -85,7 +84,7 @@ export default class RenewalBlaTable extends LightningElement {
 
     }
 
-    //wire method to fetch bla records
+    
     @wire(getBlaMap, { pickList: '$pickListOptions' } )
     wiredCallback(result) {
         this._wiredResult = result;
@@ -122,21 +121,17 @@ export default class RenewalBlaTable extends LightningElement {
        
     }
 
-    //on click of save
     async handleSave(event) {
         try {
             if(event.detail.draftValues) {
                 this.hasLoaded = false;
                 const saveDraftValues = event.detail.draftValues;
-                // Pass edited fields to the Apex controller
                 await updateBlaRecs({ data: saveDraftValues })
                 .then(result => {
                     if(result) {
-                       //refresh the table with updated data
                        this.refreshData();
                     }
                     else {
-                        //if no update manually refresh data table data
                         var tempBlaList = this.blaList;
                         this.blaList = [];
                         this.blaList = tempBlaList;
@@ -153,12 +148,10 @@ export default class RenewalBlaTable extends LightningElement {
         };
     }
 
-    // in order to refresh wired property
     refreshData() {
         return refreshApex(this._wiredResult);
     }
 
-    //send renewals on click
     async handleSendRenewals(event) {
         try {
             this.hasLoaded = false;
