@@ -1,4 +1,4 @@
-import { LightningElement, track, wire } from 'lwc';
+import { LightningElement, api, track, wire } from 'lwc';
 import getBlaMap from '@salesforce/apex/RenewalBlaTableController.getBlaRecs';
 import sendRenewals from "@salesforce/apex/MassEmailController.doSendRenewals";
 import updateBlaRecs from "@salesforce/apex/RenewalBlaTableController.updateBlaRecs";
@@ -34,6 +34,7 @@ typeAttributes: {label: { fieldName: 'Name' }, target: '_parent'}},
 
 export default class RenewalBlaTable extends LightningElement {
     
+    @api recordId;
     @track error;
     @track columns = tableColumns;
     @track blaList;
@@ -41,20 +42,28 @@ export default class RenewalBlaTable extends LightningElement {
     @track data = [];
     @track pickListOptions;
     draftValues = [];
+    @track recordTypeId;
     @track hasLoaded = false;
     //wired property
     _wiredResult;
     
 
     @wire(getObjectInfo, { objectApiName: BusinessLicenseApplication_OBJECT })
-    objectInfo;
+    wiredObjectInfo({ error, data }) {
+    if (error) {
+        // handle Error
+    } else if (data) {
+        const rtis = data.recordTypeInfos;
+        this.recordTypeId = Object.keys(rtis).find(rti => rtis[rti].name == 'Renewal');
+    }
+};
 
     //fetch picklist options
     @wire(getPicklistValues, {
-        recordTypeId: "$objectInfo.data.defaultRecordTypeId",
+        recordTypeId: "$recordTypeId",
         fieldApiName: STATUS_FIELD
     })
-    wirePickListStatus({ error, data }) {
+          wirePickListStatus({ error, data }) {
         if (data) {
             this.pickListOptions = JSON.parse(JSON.stringify(data.values));
             console.log(data);
