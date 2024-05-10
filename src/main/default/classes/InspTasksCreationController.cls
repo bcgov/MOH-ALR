@@ -48,7 +48,8 @@ public with sharing class InspTasksCreationController {
                                                          literalValues.add(APTIV.ValueLiteral);   
                                                      }
             if(literalValues.Size() !=0){
-                aTD = [SELECT Id,Category__c FROM AssessmentTaskDefinition WHERE Id IN: literalValues WITH SECURITY_ENFORCED];
+                aTD = [SELECT Id,Name,Category__c FROM AssessmentTaskDefinition 
+						WHERE Id IN: literalValues WITH SECURITY_ENFORCED order by Name];
                 for(AssessmentTaskDefinition ATDs : aTD){
                     aTDIds.add(ATDs.Id);
                 }            
