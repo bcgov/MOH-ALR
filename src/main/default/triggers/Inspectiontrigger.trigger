@@ -6,10 +6,12 @@
 **/
 trigger Inspectiontrigger on Visit (after update) {
     List<Visit> completedVisits = New List<Visit>();
+    if(Trigger.isAfter && Trigger.isUpdate){
     for(Visit insp : trigger.new){
-        if(insp.status == 'Completed'){         
+        if(insp.status == 'Completed'&& Trigger.oldMap.get(insp.Id).Status != 'Completed'){         
              RCVCreationHelper.createRegulatoryCodeViolations(insp.Id);
         }
     }
     
+}
 }
