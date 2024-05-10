@@ -30,8 +30,8 @@ public with sharing class AccountHelper {
             mapInspectionType.put('InspectionType', insTypeList.get(0).Id);
             
             for(Account accObj : accList1){
-                Integer noOfMonths = aCCRATINGLOW.containsIgnoreCase(accObj.Rating) ? 3 : 
-                aCCRATINGMEDIUM.containsIgnoreCase(accObj.Rating) ? 6 :
+                Integer noOfMonths = aCCRATINGLOW.containsIgnoreCase(accObj.Rating) ? 12 : 
+                aCCRATINGMEDIUM.containsIgnoreCase(accObj.Rating) ? 12 :
                 aCCRATINGHIGH.containsIgnoreCase(accObj.Rating) ? 12 : 0;
                 if(accObj.Rating != NULL){
                     Visit inspection = new Visit();

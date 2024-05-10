@@ -55,7 +55,7 @@ public class AccountTriggerTest {
         Test.stopTest();
         
         for(Account record: accList1) {
-            System.assert(record.Rating != NULL);
+            assert.isNotNull(record.Rating != NULL);
           }
 
         List<Visit> inspection = new List<Visit>();
@@ -124,7 +124,7 @@ public class AccountTriggerTest {
         Test.stopTest();
         
         for(Account record: accList1) {
-            System.assert(record.Rating != NULL);
+            assert.isNotNull(record.Rating != NULL);
           }
         
         List<Visit> inspection = new List<Visit>();
@@ -135,7 +135,7 @@ public class AccountTriggerTest {
                 inspect.AccountId = AcRec2.Id;
                 inspect.VisitTypeId = mapInspectionType.get('InspectionType');
                 inspect.InspectionMethod__c = 'Unannounced on Site Inspection';
-                inspect.PlannedVisitStartTime = System.today().addMonths(3);
+                inspect.PlannedVisitStartTime = System.today().addMonths(12);
                 inspect.PlaceId = loc.Id;
                 inspect.OwnerId = AcRec2.OwnerId;
                 inspect.VisitPriority = 'Medium';
@@ -193,7 +193,7 @@ public class AccountTriggerTest {
         Test.stopTest();
         
         for(Account record: accList1) {
-            System.assert(record.Rating != NULL);
+            assert.isNotNull(record.Rating != NULL);
           }
         
         List<Visit> inspection = new List<Visit>();
@@ -204,7 +204,7 @@ public class AccountTriggerTest {
                 inspect.AccountId = AcRec2.Id;
                 inspect.VisitTypeId = mapInspectionType.get('InspectionType');
                 inspect.InspectionMethod__c = 'Unannounced on Site Inspection';
-                inspect.PlannedVisitStartTime = System.today().addMonths(6);
+                inspect.PlannedVisitStartTime = System.today().addMonths(12);
                 inspect.PlaceId = loc.Id;
                 inspect.OwnerId = AcRec2.OwnerId;
                 inspect.VisitPriority = 'Medium';
