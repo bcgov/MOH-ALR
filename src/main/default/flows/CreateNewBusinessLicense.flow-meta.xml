@@ -20,6 +20,13 @@
                 <elementReference>getBusinessLicenseApplication.LicenseType.RegulatoryAuthorizationCode__c</elementReference>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>StoreBLAType</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>getBusinessLicenseApplication.RecordType.Name</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
             <targetReference>getInvoiceStatus</targetReference>
         </connector>
@@ -38,6 +45,40 @@
         </assignmentItems>
         <connector>
             <targetReference>getLicenseWithLatestRegistrationNumber</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Copy_1_of_set_new_BL_id_to_output_variable</name>
+        <label>set new BL id to output variable for Renewals</label>
+        <locationX>644</locationX>
+        <locationY>1706</locationY>
+        <assignmentItems>
+            <assignToReference>newLicenseId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Copy_1_of_CreateNewBusinessLicense</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>showError</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>newRegNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>licenseNameFormula</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Does_License_exist_for_Residence</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -63,8 +104,8 @@
     <assignments>
         <name>set_new_BL_id_to_output_variable</name>
         <label>set new BL id to output variable</label>
-        <locationX>776</locationX>
-        <locationY>1598</locationY>
+        <locationX>908</locationX>
+        <locationY>1706</locationY>
         <assignmentItems>
             <assignToReference>newLicenseId</assignToReference>
             <operator>Assign</operator>
@@ -97,7 +138,7 @@
     <assignments>
         <name>setError</name>
         <label>setError</label>
-        <locationX>2712</locationX>
+        <locationX>2184</locationX>
         <locationY>242</locationY>
         <assignmentItems>
             <assignToReference>errorMessage</assignToReference>
@@ -127,7 +168,7 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>CreateNewBusinessLicense</targetReference>
+            <targetReference>DecisionforRecordType</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -150,7 +191,7 @@
         <name>setLatestLicenseToInactive</name>
         <label>setOldLicenseToInactive</label>
         <locationX>864</locationX>
-        <locationY>1814</locationY>
+        <locationY>2006</locationY>
         <assignmentItems>
             <assignToReference>latestResidenceLicense.Status</assignToReference>
             <operator>Assign</operator>
@@ -189,7 +230,7 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>CreateNewBusinessLicense</targetReference>
+            <targetReference>DecisionforRecordType</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -212,7 +253,7 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>CreateNewBusinessLicense</targetReference>
+            <targetReference>DecisionforRecordType</targetReference>
         </connector>
     </assignments>
     <decisions>
@@ -266,10 +307,60 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Copy_1_of_DecisionforRecordTypetoCreateBL</name>
+        <label>DecisionforRecordTypetoUpdateBLA</label>
+        <locationX>776</locationX>
+        <locationY>2354</locationY>
+        <defaultConnector>
+            <targetReference>updateBusinessLicenseApplication</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Copy_1_of_Outcome_1_of_Decision_5</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>StoreBLAType</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Renewal</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Copy_1_of_updateBusinessLicenseApplication</targetReference>
+            </connector>
+            <label>Copy 1 of Outcome 1 of Decision 5</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>DecisionforRecordType</name>
+        <label>DecisionforRecordTypetoCreateBL</label>
+        <locationX>776</locationX>
+        <locationY>1490</locationY>
+        <defaultConnector>
+            <targetReference>CreateNewBusinessLicense</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Outcome_1_of_Decision_5</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>StoreBLAType</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Renewal</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Copy_1_of_CreateNewBusinessLicense</targetReference>
+            </connector>
+            <label>Outcome 1 of Decision 5</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Does_License_exist_for_Residence</name>
         <label>Does License exist for Residence</label>
         <locationX>776</locationX>
-        <locationY>1706</locationY>
+        <locationY>1898</locationY>
         <defaultConnector>
             <targetReference>setLatestLicenseToInactive</targetReference>
         </defaultConnector>
@@ -285,7 +376,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>updateBusinessLicenseApplication</targetReference>
+                <targetReference>Copy_1_of_DecisionforRecordTypetoCreateBL</targetReference>
             </connector>
             <label>First License</label>
         </rules>
@@ -315,7 +406,8 @@
             <label>Invoice Pending</label>
         </rules>
     </decisions>
-    <description>Changes for ALR 810. added new field Account for residence &amp; org is associated with Registrant</description>
+    <description>Changes for ALR 810. added new field Account for residence &amp; org is associated with Registrant
+Updated the flow for ALR-1154</description>
     <environments>Default</environments>
     <formulas>
         <name>endDate</name>
@@ -348,13 +440,27 @@
         <expression>IF(MONTH(TODAY()) &gt;= 3, DATE(YEAR(TODAY()) + 1, 3, 31), DATE(YEAR(TODAY()), 3, 31))</expression>
     </formulas>
     <formulas>
+        <name>PeriodEndDateRenewal</name>
+        <dataType>DateTime</dataType>
+        <expression>DATETIMEVALUE(TEXT(DATE(YEAR(ADDMONTHS(TODAY(), 12)), 3 , 31)) &amp; &quot; 08:00:00&quot;)</expression>
+    </formulas>
+    <formulas>
         <name>PeriodEndTime</name>
         <dataType>DateTime</dataType>
         <expression>IF(
-MONTH(TODAY()) &gt;= 3,
+MONTH(TODAY()) &gt;= 4,
 DATETIMEVALUE(TEXT(DATE(YEAR(TODAY()) + 1, 3, 31)) &amp; &quot; 08:00:00&quot;),
-DATETIMEVALUE(TEXT(DATE(YEAR(TODAY()) , 3, 31)) &amp; &quot; 08:00:00&quot;)
+    IF(
+       MONTH(TODAY()) &lt;= 3,
+       DATETIMEVALUE(TEXT(DATE(YEAR(TODAY()) , 3, 31)) &amp; &quot; 08:00:00&quot;),
+       NULL
+    )
 )</expression>
+    </formulas>
+    <formulas>
+        <name>PeriodStartDateRenewal</name>
+        <dataType>DateTime</dataType>
+        <expression>DATETIMEVALUE(TEXT(DATE(YEAR(TODAY()), 4, 1)) &amp; &quot; 08:00:00&quot;)</expression>
     </formulas>
     <formulas>
         <name>renewalEndDate</name>
@@ -388,17 +494,66 @@ DATETIMEVALUE(TEXT(DATE(YEAR(TODAY()) , 3, 31)) &amp; &quot; 08:00:00&quot;)
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordCreates>
+        <name>Copy_1_of_CreateNewBusinessLicense</name>
+        <label>CreateNewBusinessLicenseForRenewal</label>
+        <locationX>644</locationX>
+        <locationY>1598</locationY>
+        <connector>
+            <targetReference>Copy_1_of_set_new_BL_id_to_output_variable</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>AccountId</field>
+            <value>
+                <elementReference>licenseApplication.Account.ParentId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Account__c</field>
+            <value>
+                <elementReference>licenseApplication.AccountId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>licenseNameFormula</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PeriodEnd</field>
+            <value>
+                <elementReference>PeriodEndDateRenewal</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PeriodStart</field>
+            <value>
+                <elementReference>PeriodStartDateRenewal</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RegistrationCertificate__c</field>
+            <value>
+                <elementReference>registrationCertificateNUmber</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RegulatoryAuthorizationTypeId</field>
+            <value>
+                <elementReference>licenseApplication.LicenseType.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>BusinessLicense</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
         <name>CreateNewBusinessLicense</name>
         <label>CreateNewBusinessLicense</label>
-        <locationX>776</locationX>
-        <locationY>1490</locationY>
+        <locationX>908</locationX>
+        <locationY>1598</locationY>
         <connector>
             <targetReference>set_new_BL_id_to_output_variable</targetReference>
         </connector>
-        <faultConnector>
-            <isGoTo>true</isGoTo>
-            <targetReference>setError</targetReference>
-        </faultConnector>
         <inputAssignments>
             <field>AccountId</field>
             <value>
@@ -565,10 +720,34 @@ DATETIMEVALUE(TEXT(DATE(YEAR(TODAY()) , 3, 31)) &amp; &quot; 08:00:00&quot;)
         <sortOrder>Desc</sortOrder>
     </recordLookups>
     <recordUpdates>
+        <name>Copy_1_of_updateBusinessLicenseApplication</name>
+        <label>updateBusinessLicenseApplicationforRenewal</label>
+        <locationX>644</locationX>
+        <locationY>2462</locationY>
+        <connector>
+            <targetReference>update_Fields_in_Accounts</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>LicensePermitNameId</field>
+            <value>
+                <elementReference>Copy_1_of_CreateNewBusinessLicense</elementReference>
+            </value>
+        </inputAssignments>
+        <object>BusinessLicenseApplication</object>
+    </recordUpdates>
+    <recordUpdates>
         <name>update_Fields_in_Accounts</name>
         <label>update Fields in Accounts</label>
         <locationX>776</locationX>
-        <locationY>2270</locationY>
+        <locationY>2654</locationY>
         <faultConnector>
             <isGoTo>true</isGoTo>
             <targetReference>setError</targetReference>
@@ -598,15 +777,11 @@ DATETIMEVALUE(TEXT(DATE(YEAR(TODAY()) , 3, 31)) &amp; &quot; 08:00:00&quot;)
     <recordUpdates>
         <name>updateBusinessLicenseApplication</name>
         <label>updateBusinessLicenseApplication</label>
-        <locationX>776</locationX>
-        <locationY>2162</locationY>
+        <locationX>908</locationX>
+        <locationY>2462</locationY>
         <connector>
             <targetReference>update_Fields_in_Accounts</targetReference>
         </connector>
-        <faultConnector>
-            <isGoTo>true</isGoTo>
-            <targetReference>setError</targetReference>
-        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -627,9 +802,9 @@ DATETIMEVALUE(TEXT(DATE(YEAR(TODAY()) , 3, 31)) &amp; &quot; 08:00:00&quot;)
         <name>updateOldLicenseToInactive</name>
         <label>updateOldLicenseToInactive</label>
         <locationX>864</locationX>
-        <locationY>1922</locationY>
+        <locationY>2114</locationY>
         <connector>
-            <targetReference>updateBusinessLicenseApplication</targetReference>
+            <targetReference>Copy_1_of_DecisionforRecordTypetoCreateBL</targetReference>
         </connector>
         <faultConnector>
             <isGoTo>true</isGoTo>
@@ -774,5 +949,12 @@ DATETIMEVALUE(TEXT(DATE(YEAR(TODAY()) , 3, 31)) &amp; &quot; 08:00:00&quot;)
         <value>
             <booleanValue>false</booleanValue>
         </value>
+    </variables>
+    <variables>
+        <name>StoreBLAType</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
     </variables>
 </Flow>
