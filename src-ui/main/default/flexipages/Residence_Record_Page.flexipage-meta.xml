@@ -132,6 +132,16 @@
                 <identifier>RecordRegId_cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.CURR_Event_Activated__c</fieldItem>
+                <identifier>RecordCURR_Event_Activated__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-02f0fa9d-ccf2-4e24-ba4c-e15fc670ceaf</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -1321,7 +1331,7 @@
                 <name>defaultNumberofRecordsToDisplay</name>
                     <value>3</value>
                 </componentInstanceProperties>
-                <componentInstanceProperties>
+                                <componentInstanceProperties>
                     <name>defaultRecordType</name>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
@@ -1379,16 +1389,21 @@
                     <name>showRefreshButton</name>
                     <value>true</value>
                 </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>sort</name>
-                    <value>IsActive DESC</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>title</name>
-                    <value>Related Contacts</value>
-                </componentInstanceProperties>
-                <componentName>CMTD:EnhancedRelatedList</componentName>
-                <identifier>CMTD_EnhancedRelatedList</identifier>
+                <componentName>lst:dynamicRelatedList</componentName>
+                <identifier>lst_dynamicRelatedList5</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!$Permission.CustomPermission.EHIS_MMHA_User}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>false</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!$Permission.CustomPermission.EHIS_SDPR_User}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>false</rightValue>
+                    </criteria>
+                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -1399,16 +1414,19 @@
                 </componentInstanceProperties>
                 <componentName>runtime_omnistudio:flexcard</componentName>
                 <identifier>runtime_omnistudio_flexcard</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>flexcardName</name>
-                    <value>DisplayUnitsAndCapacityInformation</value>
-                </componentInstanceProperties>
-                <componentName>runtime_omnistudio:flexcard</componentName>
-                <identifier>runtime_omnistudio_flexcard2</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!$Permission.CustomPermission.EHIS_MMHA_User}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>false</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!$Permission.CustomPermission.EHIS_SDPR_User}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>false</rightValue>
+                    </criteria>
+                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -1425,7 +1443,7 @@
                     <criteria>
                         <leftValue>{!$Permission.CustomPermission.EHIS_SDPR_User}</leftValue>
                         <operator>EQUAL</operator>
-                        <rightValue>true</rightValue>
+                        <rightValue>false</rightValue>
                     </criteria>
                 </visibilityRule>
             </componentInstance>
@@ -1464,7 +1482,7 @@
                     <criteria>
                         <leftValue>{!$Permission.CustomPermission.EHIS_SDPR_User}</leftValue>
                         <operator>EQUAL</operator>
-                        <rightValue>true</rightValue>
+                        <rightValue>false</rightValue>
                     </criteria>
                 </visibilityRule>
             </componentInstance>
