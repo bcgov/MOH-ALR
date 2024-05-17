@@ -157,6 +157,6 @@ public class RenewalManagementControllerTest {
         Test.startTest();
         List<Account> accIdCount = RenewalManagementController.getAccountIds();
         Test.stopTest();
-        //Assert.isTrue(accIdCount[0] > 0);
+        Assert.isNotNull(accIdCount.size());
     }
 }
