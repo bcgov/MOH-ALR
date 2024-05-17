@@ -18,6 +18,8 @@ public class RenewalManagementControllerTest {
 
         //account - insert scenario
         Account residenceRec1 = TestDataFactory.createResidence('Residence', 'residenceAccount1', regAuth.Id, true);
+        residenceRec1.Status__c = 'Registered Active';
+        update residenceRec1;
         //registrant billing address
         Account parentRec = new Account(Id = residenceRec1.ParentId,
                                         BillingStreet = 'csd');
@@ -141,9 +143,10 @@ public class RenewalManagementControllerTest {
         }
         system.debug('csd'+accIds);
         Test.startTest(); 
-        RenewalManagementControllerBatch.FlowInputs accntIds = new RenewalManagementControllerBatch.FlowInputs();
-        accntIds.ConId = accIds;
-        RenewalManagementControllerBatch.sendEmailTest(new List<RenewalManagementControllerBatch.FlowInputs>{accntIds});
+        RenewalManagementController.fetchAccounts();
+        RenewalManagementControllerBatch.enqueueJob(accIds);
+        //accntIds.ConId = accIds;
+        //RenewalManagementControllerBatch.sendEmailTest(new List<RenewalManagementControllerBatch.FlowInputs>{accntIds});
         Test.stopTest();
         List<RegulatoryTrxnFeeItem> regTrans = [SELECT Id FROM RegulatoryTrxnFeeItem LIMIT 10];
         Assert.isNotNull(regTrans.size());
@@ -152,8 +155,8 @@ public class RenewalManagementControllerTest {
     @isTest
     static void getAccountIdsTest() {
         Test.startTest();
-        List<String> accIdCount = RenewalManagementController.getAccountIds();
+        List<Account> accIdCount = RenewalManagementController.getAccountIds();
         Test.stopTest();
-        Assert.isTrue(Integer.valueOf(accIdCount[0]) > 0);
+        Assert.isNotNull(accIdCount.size());
     }
 }

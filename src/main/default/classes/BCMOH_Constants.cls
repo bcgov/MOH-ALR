@@ -27,6 +27,8 @@ public class BCMOH_Constants {
     public Final static String blaExcludedStatus = 'Excluded';
     public Final static String feeType = 'Renewal Unit Fee';
     public Final static String feeStatus = 'Paid';
+    //ALR-1348
+    public Final static String accountStatus = 'Registered Active';
     //ALR-1000
     public Final static String blaLateFeeStatus = 'Ready to Send';
     public Final static String lateFeeTitle = 'Late Fee Invoice';

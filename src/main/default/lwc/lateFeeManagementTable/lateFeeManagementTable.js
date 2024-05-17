@@ -1,10 +1,13 @@
-import { LightningElement, track, wire } from 'lwc';
+import { LightningElement, api, track, wire } from 'lwc';
 import getLateFeeMap from '@salesforce/apex/LateFeeManagementTableController.getLateFeeRecs';
 import sendLateFeeRenewals from '@salesforce/apex/MassEmailController.doSendLateFee';
 import updateLateFeeRecords from "@salesforce/apex/LateFeeManagementTableController.updateLateFeeRecs";
 import { refreshApex } from '@salesforce/apex';
 import { loadStyle } from 'lightning/platformResourceLoader';
 import cssrenewalBlaTable from '@salesforce/resourceUrl/cssrenewalBlaTable';
+import { getPicklistValues, getObjectInfo } from 'lightning/uiObjectInfoApi';
+import BusinessLicenseApplication_OBJECT from '@salesforce/schema/BusinessLicenseApplication';
+import LATE_FEE_STATUS__C_FIELD from '@salesforce/schema/BusinessLicenseApplication.Late_Fee_Status__c';
 
 const tableColumns = [
     {label: 'Application Id', fieldName: 'appId', type: 'url',
@@ -20,19 +23,46 @@ const tableColumns = [
     {label: 'Residence Status', fieldName: 'AccountStatus', type: 'text'},
     {label: 'Application Status', fieldName: 'Status', type: 'text'},
     {label: 'Renewal Detail', fieldName: 'RenewalDetail', type: 'text' },
-    {label: 'Late Fee Status', fieldName: 'Late_Fee_Status__c', type: 'text', editable: true},
+    {label: 'Late Fee Status', fieldName: 'Late_Fee_Status__c', type: 'picklistColumn', editable: true, 
+    typeAttributes: {
+        placeholder: '--None--', options: { fieldName: 'pickListOptions' }, 
+        value: { fieldName: 'Late_Fee_Status__c' },
+        context: { fieldName: 'Id' },
+        }
+    },
     {label: 'Exclusion Reason', fieldName: 'ExclusionReason__c', type: 'text', editable: true,
         cellAttributes: {alignment :'left'}}
 ];
 export default class LateFeeManagementTable extends LightningElement {
+    
+    @api recordId;
     @track error;
     @track columns = tableColumns;
     @track blaList;
     @track isdata=getLateFeeMap.length===0?false:true;
     draftValues = [];
+    @track data = [];
+    @track pickListOptions;
+    @track recordTypeId;
     @track hasLoaded = false; 
     @track renderFlow = false;
     _wiredResult;
+
+    @wire(getObjectInfo, { objectApiName: BusinessLicenseApplication_OBJECT })
+    objectInfo;
+
+    //fetch picklist options
+    @wire(getPicklistValues, {
+        recordTypeId: "$objectInfo.data.defaultRecordTypeId",
+        fieldApiName: LATE_FEE_STATUS__C_FIELD
+    })
+    wirePickListScope({ error, data }) {
+        if (data) {
+            this.pickListOptions = JSON.parse(JSON.stringify(data.values));
+        } else if (error) {
+            console.log(error);
+        }
+    }
     renderedCallback(){
         Promise.all([
             loadStyle( this, cssrenewalBlaTable)
@@ -52,6 +82,7 @@ export default class LateFeeManagementTable extends LightningElement {
                 if(bla.Name){
                     bla.appId = '/'+bla.Id;
                     bla.RenewalDetail =bla.RenewalDetail__c;
+                    bla.pickListOptions = this.pickListOptions;
                 }
                 if(bla.Account.Id){
                     bla.AccName = bla.Account.Name;
