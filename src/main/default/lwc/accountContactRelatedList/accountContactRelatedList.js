@@ -9,7 +9,7 @@ import getAllRelatedContacts from '@salesforce/apex/AccountContactRelationContro
 
 export default class RelatedContactsLWC extends NavigationMixin(LightningElement) {
     @api recordId;
-
+@api contextId;
     relatedContacts = [];
     dropdownVisible = false;
 
@@ -62,8 +62,10 @@ export default class RelatedContactsLWC extends NavigationMixin(LightningElement
     callOmniScript() {
         console.log(this.recordId);
         const contextId = this.recordId;
-        const Url = '/lightning/page/omnistudio/omniscript?omniscript__type=EHIS&omniscript__subType=AccountContactRelation&omniscript__language=English&omniscript__theme=lightning&omniscript__tabIcon=custom:custom18&omniscript__tabLabel=Contact&c__ObjectId={!contextId}';
-        console.log('Constructed URL:', Url);
+        //const encodedContextId = encodeURIComponent(contextId);
+    const Url = `/lightning/page/omnistudio/omniscript?omniscript__type=EHIS&omniscript__subType=AccountContactRelation&omniscript__language=English&omniscript__theme=lightning&omniscript__tabIcon=custom:custom18&omniscript__tabLabel=Contact&c__ContextId=${encodeURIComponent(contextId)}`;
+    console.log('Constructed URL:', Url);
+       
         this[NavigationMixin.Navigate]({
             type: 'standard__webPage',
             attributes: {
