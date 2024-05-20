@@ -23,9 +23,11 @@ export default class RelatedContactsLWC extends NavigationMixin(LightningElement
     }
 
     @wire(getAllRelatedContacts, { accountId: '$recordId' })
-    wiredRelatedContacts({ error, data }) {
-        if (data) {
-            this.relatedContacts = data.map(item => ({
+    wiredRelatedContacts(result) {
+        this._wiredResult = result;
+        if (result.data) {
+            const data = result.data;
+            this.relatedContacts  = data.map(item => ({
                 Id: item.relation.Id,
                 Contact: {
                     Id: item.relation.Contact ? item.relation.Contact.Id : null,
@@ -39,7 +41,7 @@ export default class RelatedContactsLWC extends NavigationMixin(LightningElement
                     Roles: item.relation.Roles
                 }
             }));
-        } else if (error) {
+        } else if (result.error) {
             console.error('Error fetching related contacts:', error);
         }
     }
@@ -60,7 +62,7 @@ export default class RelatedContactsLWC extends NavigationMixin(LightningElement
     callOmniScript() {
         console.log(this.recordId);
         const contextId = this.recordId;
-        const Url = '/lightning/page/omnistudio/omniscript?omniscript__type=EHIS&omniscript__subType=AccountContactRelation&omniscript__language=English&omniscript__theme=lightning&omniscript__tabIcon=custom:custom18&omniscript__tabLabel=Contact&ContextId={!contextId}';
+        const Url = '/lightning/page/omnistudio/omniscript?omniscript__type=EHIS&omniscript__subType=AccountContactRelation&omniscript__language=English&omniscript__theme=lightning&omniscript__tabIcon=custom:custom18&omniscript__tabLabel=Contact&c__ObjectId={!contextId}';
         console.log('Constructed URL:', Url);
         this[NavigationMixin.Navigate]({
             type: 'standard__webPage',
@@ -122,7 +124,8 @@ export default class RelatedContactsLWC extends NavigationMixin(LightningElement
         this.dropdownVisible = false;
     }
     handleRefresh() {
-        refreshApex(this.relatedContacts);
+        refreshApex(this._wiredResult);
+        
     }
 
     get dropdownClass() {
