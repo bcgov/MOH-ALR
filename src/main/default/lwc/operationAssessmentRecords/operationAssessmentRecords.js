@@ -31,6 +31,7 @@ const columns = [
 
 export default class operationAssessmentRecords extends OmniscriptBaseMixin(NavigationMixin(LightningElement)) {
     @api recordId;
+    @api CATAssessmentJSON;
     @track error;
     showSpinner = false;
     columns = columns;
@@ -60,15 +61,21 @@ export default class operationAssessmentRecords extends OmniscriptBaseMixin(Navi
             sMethodName: "inspection_AssessmentQuestions",
             options: JSON.stringify(options)
         };
+        if(this.CATAssessmentJSON) {
+            const data = this.CATAssessmentJSON;  
+            let rcvParsedData = JSON.parse(JSON.stringify(data));
         this._actionUtil
             .executeAction(params, null, this, null, null)
             .then((response) => {
-                response.result.IPResult.assessments.CATAssessment.forEach(currentItem => {
+                //response.result.IPResult.assessments.CATAssessment.forEach(currentItem => {
+                    rcvParsedData.forEach(currentItem => {
                     var items = {};
                     let allscore = [];
                     items.QuestionTitle = currentItem.name;
                     items.AssessmentQuestion = currentItem.description;
+                    items.comments = currentItem.comments;
                     items.Id = currentItem.Id;
+                    items.Value = currentItem.score;
                     response.result.IPResult.assessments.Scores.forEach(score => {
                         if(currentItem.Id == score.Id){
                             var scoreOption = {};
@@ -83,7 +90,7 @@ export default class operationAssessmentRecords extends OmniscriptBaseMixin(Navi
                 this.showBlock = true;
                 this.hasLoaded = true;//to remove spinnner
             })
-            .catch((error) => {
+        } else if((error) => {
                 console.error(error, "ERROR");
             });
     }
@@ -134,7 +141,7 @@ export default class operationAssessmentRecords extends OmniscriptBaseMixin(Navi
         let myData = {
             "UpdatedJSONScore" : this.draftValues,
             "Anotherprop" : {
-            "prop1" : "anothervalue"
+            "prop1" : ""
             }
             }
             this.omniApplyCallResp(myData);
