@@ -4,18 +4,9 @@
     <active>true</active>
     <description>BLA cannot be closed/Completed without Closure Reason</description>
     <errorConditionFormula>AND(
-    OR(
-        AND(
-            RecordType.DeveloperName = &quot;New_License_Application_Record_Type&quot;,
-            ISPICKVAL(Status, &quot;Closed&quot;),
-            ISPICKVAL(ClosureReason__c, &apos;&apos;)
-        ),
-        AND(
-            RecordType.DeveloperName = &quot;Renewal&quot;,
-            ISPICKVAL(Status, &quot;Completed&quot;),
-            ISPICKVAL(ClosureReason__c, &apos;&apos;)
-        )
-    )
+RecordType.DeveloperName = &quot;New_License_Application_Record_Type&quot;,
+ISPICKVAL(Status, &quot;Closed&quot;),
+ISPICKVAL(ClosureReason__c, &apos;&apos;)
 )</errorConditionFormula>
     <errorMessage>Provide Closure Reason before closing this record</errorMessage>
 </ValidationRule>
