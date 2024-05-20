@@ -19,7 +19,7 @@ public with sharing class AccountContactRelationController {
                 SELECT Id, Contact.Id, Contact.Name, Contact.Phone, Contact.Email, isActive, PrimaryContact__c, Roles
                 FROM AccountContactRelation
                 WHERE AccountId = :accountId AND IsActive = true
-                ORDER BY CreatedDate DESC
+                ORDER BY PrimaryContact__c desc
                 LIMIT 3
             ];
         } catch (QueryException err) {

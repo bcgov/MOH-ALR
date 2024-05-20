@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Phone_or_EmailValueCheck</fullName>
+    <active>true</active>
+    <description>ALR-666</description>
+    <errorConditionFormula>AND(
+    ISBLANK(Phone),
+    ISBLANK(MobilePhone),
+    ISBLANK(Email)
+)</errorConditionFormula>
+    <errorMessage>You must specify either Phone, Mobile or Email for this record</errorMessage>
+</ValidationRule>
