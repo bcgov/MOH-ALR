@@ -171,7 +171,7 @@
             <label>Residence Type</label>
         </rules>
     </decisions>
-    <description>ALR-990 v3</description>
+    <description>ALR-990 v5 curr check</description>
     <environments>Default</environments>
     <interviewLabel>Business Milestone Update {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Business Milestone Update</label>
@@ -381,7 +381,7 @@
         <connector>
             <targetReference>Recordtype</targetReference>
         </connector>
-        <filterLogic>or</filterLogic>
+        <filterLogic>and</filterLogic>
         <filters>
             <field>Status__c</field>
             <operator>IsChanged</operator>
@@ -389,8 +389,15 @@
                 <booleanValue>true</booleanValue>
             </value>
         </filters>
+        <filters>
+            <field>CURR_Event_Activated__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
         <object>Account</object>
-        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <recordTriggerType>Update</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
