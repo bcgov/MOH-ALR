@@ -53,9 +53,9 @@ public with sharing class RenewalManagementController {
                    (SELECT Id FROM BusinessLicenseApplicationAccount WHERE RecordType.DeveloperName = 'Renewal'
                    AND Status ='Cancelled')
             FROM Account 
-            WHERE Status__c IN ('Registered Active','Registered Active with Conditions', 
-            'Registered Active Progressive Enforcement1')  
-                  AND RecordType.DeveloperName = 'Residence'
+           WHERE Status__c IN ('Registered Active','Registered Active with Conditions', 
+           'Registered Active Progressive Enforcement1') 
+            AND RecordType.DeveloperName = 'Residence'
                ];
     }
 
@@ -147,8 +147,6 @@ public with sharing class RenewalManagementController {
         try {
             for(Account accRec : renewalFeeAccMap.values()) {
                 for(Asset assetRec : accRec.Assets) {
-                    // Decimal amtVal = defaultFee;
-                    // amtVal = accRec.LicenseType__r?.UnitFee__c ?? defaultFee;
                     Decimal amtVal = (accRec.LicenseType__r.UnitFee__c == NULL) ? defaultFee :  accRec.LicenseType__r.UnitFee__c;
                     RegulatoryTrxnFeeItem transFeeItemRec = createTransFeeItemRecord(transFeeItemRT, transFeeMap.get(accRec.Id).Id, assetRec.Id, assetRec.Type__c, amtVal, assetRec.Quantity, feeType);
                     transFeeItemList.add(transFeeItemRec);
