@@ -1,10 +1,10 @@
-/**
-* @Name              : MassEmailController
-* @Description       : Controller class to send mass email
-Test class MassEmailControllerTest
-* @Author            : Sweta (Accenture)
-* @StoryNo           : ALR-560
-**/
+/**********************************************************************************************
+* @Author:Accenture_ALR Dev Team   
+* @Date:       
+* @Description: The purpose of this Test class for MassEmailController and BCMOH_UtilityClass and RenewalBlaTableController
+* @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
+                          ALR -560             Sweta          Renewal verification and renewal mass email
+***********************************************************************************************/
 public with sharing class MassEmailController {
     Public Static Id templateId = NULL;
     Public Static String templateEntity = '';
@@ -507,7 +507,7 @@ public with sharing class MassEmailController {
                     Id = blaId,
                     Status = BCMOH_Constants.errorBlaStatus,
                     RenewalDetail__c = errMsg);
-                blaUpdateList.add(blaRec);
+                    blaUpdateList.add(blaRec);
             }
             for(Id blaId : blaSuccessMap.keySet()) {
                 BusinessLicenseApplication blaRec = new BusinessLicenseApplication(
@@ -553,7 +553,7 @@ public with sharing class MassEmailController {
             if (blaRec != null) {
                   // Update BLAs based on the map they are present in
                 if (blaErrMap.containsKey(blaId)) {
-                      String lateFeeMsg = blaErrMap.get(blaId).length() > 255 ? blaErrMap.get(blaId).Substring(0, 255) : blaErrMap.get(blaId);
+                     String lateFeeMsg = blaErrMap.get(blaId).length() > 255 ? blaErrMap.get(blaId).Substring(0, 255) : blaErrMap.get(blaId);
                     String errMsg = blaErrMap.get(blaId);
                     errMsg = blaRec.RenewalDetail__c != null ? blaRec.RenewalDetail__c + ' ; ' + lateFeeMsg : lateFeeMsg;
                     blaRec.Late_Fee_Status__c = BCMOH_Constants.errorBlaStatus;
@@ -563,17 +563,15 @@ public with sharing class MassEmailController {
                     String succMsg = String.isEmpty(blaRec.RenewalDetail__c) ? lateFeeMsg : blaRec.RenewalDetail__c + ' ; ' + lateFeeMsg;
                     blaRec.Late_Fee_Status__c = BCMOH_Constants.sentBlaStatus;
                     blaRec.RenewalDetail__c = succMsg;
- 
-
-                }
-                blaToUpdate.add(blaRec);
-                }
-                                // Add Account to the update list if AccountId is not null
+                    // Add Account to the update list if AccountId is not null
                     if (blaRec.AccountId != null) {
                        accToUpdate.add(new Account(Id = blaRec.AccountId, Status__c = BCMOH_Constants.AccStatus));
-                         } 
-            else {
+                    } 
                  }
+                blaToUpdate.add(blaRec);
+             }
+            else {
+            }
         }
  
         // Perform updates
