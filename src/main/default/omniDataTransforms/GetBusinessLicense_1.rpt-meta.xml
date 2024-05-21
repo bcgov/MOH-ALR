@@ -11,6 +11,20 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <globalKey>GetBusinessLicenseCustom8676</globalKey>
+        <inputFieldName>Signature</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Signature</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <formulaConverted>| var:Signature var:NULL != var:Signature:Id var:SignatureSue:Id IF</formulaConverted>
         <formulaExpression>IF(Signature!=NULL,Signature:Id,SignatureSue:Id)</formulaExpression>
         <formulaResultPath>ApproverSignature</formulaResultPath>
@@ -33,7 +47,7 @@
         <globalKey>GetBusinessLicenseCustom2535</globalKey>
         <inputFieldName>Name</inputFieldName>
         <inputObjectName>StaticResource</inputObjectName>
-        <inputObjectQuerySequence>11.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>13.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicense</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -62,12 +76,85 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <globalKey>GetBusinessLicenseCustom972</globalKey>
+        <inputFieldName>latestbla:Status</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLA:Status</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetBusinessLicenseCustom5456</globalKey>
+        <inputFieldName>BLARecordType</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLARecordType</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>&quot;New_License_Application_Record_Type&quot;</filterValue>
+        <globalKey>GetBusinessLicenseCustom6772</globalKey>
+        <inputFieldName>RecordType.DeveloperName</inputFieldName>
+        <inputObjectName>BusinessLicenseApplication</inputObjectName>
+        <inputObjectQuerySequence>3.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>latestbla</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetBusinessLicenseCustom7092</globalKey>
+        <inputFieldName>latestbla:CreatedDate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLA:Date</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetBusinessLicenseCustom8831</globalKey>
+        <inputFieldName>latestbla:Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLA:Name</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <filterOperator>=</filterOperator>
         <filterValue>&quot;Active&quot;</filterValue>
         <globalKey>GetBusinessLicenseCustom1789</globalKey>
         <inputFieldName>Status__c</inputFieldName>
         <inputObjectName>Service__c</inputObjectName>
-        <inputObjectQuerySequence>3.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>5.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicense</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -96,12 +183,29 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:BLARecordType &quot;Renewal&quot; == var:RenewalSign2 var:ApproverSignature IF</formulaConverted>
+        <formulaExpression>IF(BLARecordType ==&quot;Renewal&quot;,RenewalSign2,ApproverSignature)</formulaExpression>
+        <formulaResultPath>MainSign</formulaResultPath>
+        <formulaSequence>18.0</formulaSequence>
+        <globalKey>GetBusinessLicenseCustom2830</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <filterOperator>=</filterOperator>
         <filterValue>&quot;DefaultSign&quot;</filterValue>
         <globalKey>GetBusinessLicenseCustom5023</globalKey>
         <inputFieldName>Name</inputFieldName>
         <inputObjectName>StaticResource</inputObjectName>
-        <inputObjectQuerySequence>12.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>14.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicense</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -113,15 +217,58 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <filterOperator>ORDER BY</filterOperator>
-        <filterValue>Name asc</filterValue>
-        <globalKey>GetBusinessLicenseCustom5506</globalKey>
-        <inputObjectName>Service__c</inputObjectName>
-        <inputObjectQuerySequence>3.0</inputObjectQuerySequence>
+        <globalKey>GetBusinessLicenseCustom2195</globalKey>
+        <inputFieldName>latestbla:Approver_Name__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLA:Approver Name</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>LIKE</filterOperator>
+        <filterValue>latestbla:Approver_Name__c</filterValue>
+        <globalKey>GetBusinessLicenseCustom4584</globalKey>
+        <inputFieldName>Name</inputFieldName>
+        <inputObjectName>StaticResource</inputObjectName>
+        <inputObjectQuerySequence>4.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicense</name>
         <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Service</outputFieldName>
+        <outputFieldName>Renewalsign</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetBusinessLicenseCustom5729</globalKey>
+        <inputFieldName>MainSign</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>MainSign</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>true</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetBusinessLicenseCustom9740</globalKey>
+        <inputFieldName>test</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>test</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -148,7 +295,7 @@
         <globalKey>GetBusinessLicenseCustom8220</globalKey>
         <inputFieldName>Account__c</inputFieldName>
         <inputObjectName>Service__c</inputObjectName>
-        <inputObjectQuerySequence>3.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>5.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicense</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -177,6 +324,23 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:BLARecordType &quot;Renewal&quot; == | var:Renewalsign:Id var:NULL != var:Renewalsign:Id var:SignatureSue:Id IF var:SignatureSue:Id IF</formulaConverted>
+        <formulaExpression>IF (BLARecordType ==&quot;Renewal&quot;,IF( Renewalsign:Id != NULL,Renewalsign:Id,SignatureSue:Id),SignatureSue:Id)</formulaExpression>
+        <formulaResultPath>RenewalSign2</formulaResultPath>
+        <formulaSequence>17.0</formulaSequence>
+        <globalKey>GetBusinessLicenseCustom2676</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <formulaConverted>| var:ResidenceAccount:Conditions__c var:NULL == &quot;/\/\/&quot; var:ResidenceAccount:Conditions__c IF</formulaConverted>
         <formulaExpression>IF(ResidenceAccount:Conditions__c==NULL,&quot; &quot;,ResidenceAccount:Conditions__c)</formulaExpression>
         <formulaResultPath>Condition</formulaResultPath>
@@ -188,6 +352,37 @@
         <outputCreationSequence>0.0</outputCreationSequence>
         <outputFieldName>Formula</outputFieldName>
         <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>ResidenceAccount:Id</filterValue>
+        <globalKey>GetBusinessLicenseCustom3602</globalKey>
+        <inputFieldName>AccountId</inputFieldName>
+        <inputObjectName>BusinessLicenseApplication</inputObjectName>
+        <inputObjectQuerySequence>3.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>latestbla</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetBusinessLicenseCustom9412</globalKey>
+        <inputFieldName>LatestBLASign</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>LatestBLASign</outputFieldName>
+        <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
@@ -335,11 +530,27 @@
         <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem8</globalKey>
         <inputFieldName>AccountId</inputFieldName>
         <inputObjectName>Asset</inputObjectName>
-        <inputObjectQuerySequence>4.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>6.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicense</name>
         <outputCreationSequence>0.0</outputCreationSequence>
         <outputFieldName>Unit</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>ORDER BY</filterOperator>
+        <filterValue>CreatedDate desc</filterValue>
+        <globalKey>GetBusinessLicenseCustom6753</globalKey>
+        <inputObjectName>BusinessLicenseApplication</inputObjectName>
+        <inputObjectQuerySequence>3.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>latestbla</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -352,7 +563,7 @@
         <globalKey>GetBusinessLicenseCustom3069</globalKey>
         <inputFieldName>ServiceType__c</inputFieldName>
         <inputObjectName>Service__c</inputObjectName>
-        <inputObjectQuerySequence>3.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>5.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicense</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -561,7 +772,7 @@
         <globalKey>GetBusinessLicenseCustom8961</globalKey>
         <inputFieldName>ActiveTo</inputFieldName>
         <inputObjectName>AssociatedLocation</inputObjectName>
-        <inputObjectQuerySequence>6.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>8.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicense</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -593,7 +804,7 @@
         <globalKey>GetBusinessLicenseCustom426</globalKey>
         <inputFieldName>ParentId</inputFieldName>
         <inputObjectName>Address</inputObjectName>
-        <inputObjectQuerySequence>8.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>10.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicense</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -686,7 +897,7 @@
         <globalKey>GetBusinessLicenseCustom1856</globalKey>
         <inputFieldName>Id</inputFieldName>
         <inputObjectName>Location</inputObjectName>
-        <inputObjectQuerySequence>7.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>9.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicense</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -703,7 +914,7 @@
         <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem0</globalKey>
         <inputFieldName>Id</inputFieldName>
         <inputObjectName>Account</inputObjectName>
-        <inputObjectQuerySequence>5.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>7.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicense</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -720,7 +931,7 @@
         <globalKey>GetBusinessLicenseCustom3117</globalKey>
         <inputFieldName>LicensePermitNameId</inputFieldName>
         <inputObjectName>BusinessLicenseApplication</inputObjectName>
-        <inputObjectQuerySequence>10.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>12.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicense</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -751,7 +962,7 @@
         <globalKey>GetBusinessLicenseCustom1786</globalKey>
         <inputFieldName>Id</inputFieldName>
         <inputObjectName>RegulatoryAuthorizationType</inputObjectName>
-        <inputObjectQuerySequence>9.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>11.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicense</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -785,11 +996,27 @@
         <globalKey>GetBusinessLicenseCustom2162</globalKey>
         <inputFieldName>ParentRecordId</inputFieldName>
         <inputObjectName>AssociatedLocation</inputObjectName>
-        <inputObjectQuerySequence>6.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>8.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicense</name>
         <outputCreationSequence>0.0</outputCreationSequence>
         <outputFieldName>AssociatedLoc</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>LIMIT</filterOperator>
+        <filterValue>1</filterValue>
+        <globalKey>GetBusinessLicenseCustom2707</globalKey>
+        <inputObjectName>BusinessLicenseApplication</inputObjectName>
+        <inputObjectQuerySequence>3.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>latestbla</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -833,7 +1060,7 @@
         <globalKey>GetBusinessLicenseCustom0jIAs0000000U4XMAUItem7</globalKey>
         <inputFieldName>ParentId</inputFieldName>
         <inputObjectName>Asset</inputObjectName>
-        <inputObjectQuerySequence>4.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>6.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicense</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -879,6 +1106,23 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>&quot;Approved&quot;</filterValue>
+        <globalKey>GetBusinessLicenseCustom4143</globalKey>
+        <inputFieldName>Status</inputFieldName>
+        <inputObjectName>BusinessLicenseApplication</inputObjectName>
+        <inputObjectQuerySequence>3.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>latestbla</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <formulaConverted>| var:Service:Name TOSTRING</formulaConverted>
         <formulaExpression>TOSTRING(Service:Name)</formulaExpression>
         <formulaResultPath>ServiceName2</formulaResultPath>
@@ -890,6 +1134,20 @@
         <outputCreationSequence>0.0</outputCreationSequence>
         <outputFieldName>Formula</outputFieldName>
         <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetBusinessLicenseCustom4667</globalKey>
+        <inputFieldName>latestbla:Id</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLA:BLAID</outputFieldName>
+        <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
@@ -910,20 +1168,93 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <formulaConverted>var:BLA:RecordType.DeveloperName</formulaConverted>
+        <formulaExpression>BLA:RecordType.DeveloperName</formulaExpression>
+        <formulaResultPath>BLARecordType</formulaResultPath>
+        <formulaSequence>16.0</formulaSequence>
+        <globalKey>GetBusinessLicenseCustom9405</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetBusinessLicenseCustom9849</globalKey>
+        <inputFieldName>Renewalsign:Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Renewalsign:Name</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetBusinessLicenseCustom2315</globalKey>
+        <inputFieldName>RenewalSign3</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RenewalSign3</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetBusinessLicenseCustom6119</globalKey>
+        <inputFieldName>RenewalSign2</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RenewalSign2</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <globalKey>GetBusinessLicenseCustom4101</globalKey>
         <inputFieldName>BLA:Id</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicense</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>BLAId</outputFieldName>
+        <outputFieldName>Id</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetBusinessLicenseCustom1640</globalKey>
+        <inputFieldName>BLA:Approver_Name__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicense</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Approver Name</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <outputType>JSON</outputType>
     <previewJsonData>{
-  &quot;Id&quot; : &quot;0cEAq0000005prVMAQ&quot;
+  &quot;Id&quot; : &quot;0cEAq0000005w3NMAQ&quot;
 }</previewJsonData>
     <processSuperBulk>false</processSuperBulk>
     <responseCacheTtlMinutes>0.0</responseCacheTtlMinutes>
