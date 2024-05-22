@@ -54,7 +54,7 @@ public with sharing class RenewalManagementController {
                    AND Status ='Cancelled')
             FROM Account 
            WHERE Status__c IN ('Registered Active','Registered Active with Conditions', 
-           'Registered Active Progressive Enforcement1') 
+           'Registered Active Progressive Enforcement') 
             AND RecordType.DeveloperName = 'Residence'
                ];
     }
