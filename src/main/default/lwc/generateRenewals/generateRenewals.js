@@ -7,17 +7,19 @@ import { NavigationMixin } from 'lightning/navigation';
 const tableColumns = [
     { label: 'Residence ID', fieldName: 'RegId__c', type: 'text' },
     { label: 'Account Name', fieldName: 'accountUrl', type: 'url',
-        typeAttributes: { label: { fieldName: 'Name' }, target: '_blank' } },
+        typeAttributes: { label: { fieldName: 'Name' }, target: '_self' } },
     { label: 'Parent Account', fieldName: 'parentAccountUrl', type: 'url',
-        typeAttributes: { label: { fieldName: 'parentAccountName' }, target: '_blank' } },
+        typeAttributes: { label: { fieldName: 'parentAccountName' }, target: '_self' } },
     { label: 'Status', fieldName: 'Status__c', type: 'text' },
     { label: 'Health Authority', fieldName: 'HealthAuthority__c', type: 'text' },
     { label: 'License Type', fieldName: 'licenseTypeUrl', type: 'url',
-        typeAttributes: { label: { fieldName: 'LicenseTypeName' }, target: '_blank' } }
+        typeAttributes: { label: { fieldName: 'LicenseTypeName' }, target: '_self' } }
 ];
 
 export default class GenerateRenewals extends NavigationMixin(LightningElement) {
     @track error;
+    @track data;
+    @track result;
     columns = tableColumns;
     accounts;
     @track accList = [];
@@ -56,13 +58,15 @@ export default class GenerateRenewals extends NavigationMixin(LightningElement) 
     }
 
     handleGenerateRenewals() {
+        
         const selectedRows = this.template.querySelector('lightning-datatable').getSelectedRows();
         if (selectedRows.length > 0) {
             console.log('flow is called');
             this.accountIds = selectedRows.map(row => row.Id);
+            
             console.log('flowVariables', JSON.stringify(this.accountIds));
             enqueueJob({ recordIds: this.accountIds })
-                .then(result => {
+                .then(data => {
                     console.log('recordIds is called');
                 })
                 .catch(error => {
