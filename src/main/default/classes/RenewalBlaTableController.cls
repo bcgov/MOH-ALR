@@ -62,11 +62,9 @@ public with sharing class RenewalBlaTableController {
                                                                    List<BusinessLicenseApplication>.class);
             //ALR-820 - if status is updated to Cancelled or Excluded only then update the records
             for(BusinessLicenseApplication blaRec : blaList) {
-                        if(BCMOH_Constants.renewalTableUpdateStatus.contains(blaRec.Status) || blaRec.ExclusionReason__c != NULL){
-                        blaUpdateList.add(blaRec); 
-            }                
+                          blaUpdateList.add(blaRec); 
             }
-            if(!blaUpdateList.isEmpty() && BusinessLicenseApplication.SObjectType.getDescribe().isUpdateable()) {
+          if(!blaUpdateList.isEmpty() && BusinessLicenseApplication.SObjectType.getDescribe().isUpdateable()) {
                 Database.Update(blaUpdateList, false);
                 hasUpdated = true;
             }
