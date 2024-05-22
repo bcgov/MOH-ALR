@@ -158,7 +158,7 @@ public class LateFeeManagementTableController_Test {
         Test.startTest();
         Boolean hasUpdated = LateFeeManagementTableController.updateLateFeeRecs(new List<BusinessLicenseApplication>{bla});
         Test.stopTest();
-        assert.areEqual(false, hasUpdated, 'Expected update to be successful');
+        assert.areEqual(true, hasUpdated, 'Expected update to be successful');
        
     }
     
