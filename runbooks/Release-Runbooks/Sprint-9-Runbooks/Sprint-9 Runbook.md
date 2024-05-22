@@ -99,11 +99,16 @@ save the template and activate it
 7.[ ] Flow status verification
 
 - Please verify if the latest version of the mentioned flows are activated in all orgs. If not, Please activate the latest version.
-- Flows 
+- Flows
  1.Get Category List From Assessment Indicator Definition
  2.add Inspection Tasks
 
+ 8.[ ] ALR-1586 List view deletion
+-From app launcher - EHIS Services - Go to Accounts(in home dropdown)->ListView->Residence Ready for Renewals->select settings->Delete
+
+9.[ ] ALR-1587 refer jira
 DevOps checklist:
 
 1. Make sure you activated the templates CertificateTemplateMH , CertificateTemplateSN Json ,CertificateTemplateSU Json
-2. Validate the flows in org with Repo make sure active/inactive versions in branch which are deployed by devops should match in org
+2. Validate the flows in org with Repo make sure active/inactive versions in branch which are deployed by devops should match in org3
+3.Accounts-ListView->Residence Ready for Renewals is deleted sometimes its not deleting properly
