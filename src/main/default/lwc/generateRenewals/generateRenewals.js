@@ -1,87 +1,81 @@
 import { LightningElement, track, wire } from 'lwc';
 import { refreshApex } from '@salesforce/apex';
-import fetchAccounts from '@salesforce/apex/RenewalManagementController.fetchAccounts';
-import enqueueJob  from '@salesforce/apex/RenewalManagementControllerBatch.enqueueJob';
-
+import getAccounts from '@salesforce/apex/RenewalManagementController.fetchAccounts';
+import enqueueJob from '@salesforce/apex/RenewalManagementControllerBatch.enqueueJob';
+import { NavigationMixin } from 'lightning/navigation';
 
 const tableColumns = [
-    { label: 'Account Name', fieldName: 'Name', type: 'text' },
-    {label: 'Parent Account', fieldName: 'ParentId', type: 'text',
-    typeAttributes: {label: { fieldName: 'ParentName' }, target: '_parent'}},
+    { label: 'Residence ID', fieldName: 'RegId__c', type: 'text' },
+    { label: 'Account Name', fieldName: 'accountUrl', type: 'url',
+        typeAttributes: { label: { fieldName: 'Name' }, target: '_blank' } },
+    { label: 'Parent Account', fieldName: 'parentAccountUrl', type: 'url',
+        typeAttributes: { label: { fieldName: 'parentAccountName' }, target: '_blank' } },
     { label: 'Status', fieldName: 'Status__c', type: 'text' },
-    { label: 'License Type', fieldName: 'LicenseType__c', type: 'text',
-        typeAttributes: {label: { fieldName: 'LicenseTypeName'}, target: '_parent'}},
-    { label: 'Health Authority', fieldName: 'HealthAuthority__c', type: 'text' }
+    { label: 'Health Authority', fieldName: 'HealthAuthority__c', type: 'text' },
+    { label: 'License Type', fieldName: 'licenseTypeUrl', type: 'url',
+        typeAttributes: { label: { fieldName: 'LicenseTypeName' }, target: '_blank' } }
 ];
 
-export default class GenerateRenewals extends LightningElement {
+export default class GenerateRenewals extends NavigationMixin(LightningElement) {
     @track error;
-    @track columns = tableColumns;
+    columns = tableColumns;
+    accounts;
     @track accList = [];
     @track isdata = false;
     @track draftValues = [];
     @track hasLoaded = false;
     @track renderFlow = false;
+    
     _wiredResult;
 
-    @wire(fetchAccounts)
-    wiredFetchAccounts(result) {
-        this._wiredResult = result;
-        if (result.data) {
-            const data = result.data;
-            let accParsedData = JSON.parse(JSON.stringify(data));
-            accParsedData.forEach(acc => {
-                if(acc.Name) {
-                   acc.ParentName = acc.Parent.Name;
-                    acc.ParentId = '/'+acc.ParentId;
-                }
-                if(acc.LicenseTypeId) {
-                    acc.LicenseTypeName = acc.LicenseType.Name;
-                    acc.LicenseType__c = '/'+acc.LicenseType__c;
-                }
-                });
-            this.accList = result.data;
-            this.isdata = this.accList.length > 0;
-            this.hasLoaded = true;
+    @wire(getAccounts)
+    wiredAccounts({ error, data }) {
+        if (data) {
+            this.accounts = data.map(account => {
+                return {
+                    ...account,
+                    accountUrl: `/lightning/r/Account/${account.Id}/view`,
+                    parentAccountUrl: account.ParentId ? `/lightning/r/Account/${account.ParentId}/view` : null,
+                    parentAccountName: account.Parent ? account.Parent.Name : '',
+                    licenseTypeUrl: account.LicenseType__c ? `/lightning/r/LicenseType/${account.LicenseType__c}/view` : null,
+                    LicenseTypeName: account.LicenseType__r ? account.LicenseType__r.Name : ''
+                };
+            });
             this.error = undefined;
-        } else if (result.error) {
-            this.error = result.error;
-            this.accList = undefined;
             this.hasLoaded = true;
+            this.isdata = this.accounts.length > 0;
+        } else if (error) {
+            this.error = error;
+            this.accounts = undefined;
+            this.hasLoaded = false;
         }
     }
-    
 
     refreshData() {
         return refreshApex(this._wiredResult);
     }
 
     handleGenerateRenewals() {
-    const selectedRows = this.template.querySelector('lightning-datatable').getSelectedRows();
-    if (selectedRows.length > 0) {
-        console.log('flow is called');
-        this.accountIds = selectedRows.map(row => row.Id);
-        //alert(this.accountIds);
-        //let flowVariables=this.accountIds;
-        console.log('flowVariables', JSON.stringify(this.accountIds));
-        enqueueJob({ recordIds: this.accountIds })
-            .then(result => {
-                console.log('recordIds is called');
-            })
-            .catch(error => {
-                console.log('Error');
-            });
+        const selectedRows = this.template.querySelector('lightning-datatable').getSelectedRows();
+        if (selectedRows.length > 0) {
+            console.log('flow is called');
+            this.accountIds = selectedRows.map(row => row.Id);
+            console.log('flowVariables', JSON.stringify(this.accountIds));
+            enqueueJob({ recordIds: this.accountIds })
+                .then(result => {
+                    console.log('recordIds is called');
+                })
+                .catch(error => {
+                    console.log('Error');
+                });
+        } else {
+            console.log('recordIds is not called');
+        }
     }
 
-     else {
-        console.log('recordIds is not called');
-    }
-    }
-    
     async handleStatusChange(event) {
         if (event.detail.status) {
             await this.refreshData();
-            //this.renderFlow = false;
         } else {
             console.log('Flow execution encountered an unexpected status.');
         }
