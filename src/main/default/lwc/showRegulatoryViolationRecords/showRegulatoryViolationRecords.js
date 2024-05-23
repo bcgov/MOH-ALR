@@ -98,35 +98,30 @@ export default class ShowRegulatoryViolationRecords extends OmniscriptBaseMixin(
         if(this.Questions1JSON) {
             const data = this.Questions1JSON;  
             let rcvParsedData = JSON.parse(JSON.stringify(data));
-            rcvParsedData.forEach(rcv => {
-                rcv.Category = rcv.Category;
-                rcv.RegulatoryCode = rcv.RegulatoryCode;
-                rcv.AssessmentQuestion = rcv.AssessmentQuestion;
-                rcv.pickListOptions = this.pickListOptions;
-                rcv.Scope__c = rcv.Scope;
-                rcv.severityOptions = this.severityOptions;
-                rcv.Severity__c = rcv.Severity;
-                rcv.Description = rcv.Description;
-
-            });
+            if(rcvParsedData.length > 0) {
+                rcvParsedData.forEach(rcv => {
+                    rcv.Category = rcv.Category;
+                    rcv.RegulatoryCode = rcv.RegulatoryCode;
+                    rcv.AssessmentQuestion = rcv.AssessmentQuestion;
+                    rcv.pickListOptions = this.pickListOptions;
+                    rcv.Scope__c = rcv.Scope;
+                    rcv.severityOptions = this.severityOptions;
+                    rcv.Severity__c = rcv.Severity;
+                    rcv.Description = rcv.Description;
+    
+                });
+            }
             this.rcvList = rcvParsedData;
             if(this.rcvList != null){
                 console.log('this.rcvList', this.rcvList);
             }
             this.hasLoaded = true;//to remove spinnner
             this.error = undefined;
-        } else if(result.error) {
+        } else{
+            console.log('Error Thrown', this.rcvList);
+            this.hasLoaded = true;//to remove spinnner
             this.error = result.error;
-            this.rcvList = undefined;
         }
-
-        /*let myData = {
-            "UpdateData" : this.rcvList,
-            "Anotherprop" : {
-            "prop1" : this.error
-            }
-            }
-            this.omniApplyCallResp(myData);*/
     }
 
     updateDataValues(updateItem) {
