@@ -3,11 +3,11 @@
 |Sandbox|`SP9`|
 |-|-|This deployment is done before PRD Spirnt-5 deployment
 |Runbook Created|`2024-05-21`|
-|Runbook Last Modified|`2024-05-21`|
+|Runbook Last Modified|`2024-05-23`|
 
 ## Pre-Requisites [5 min ]
 
-1. [ ] Deployment User has assigned Permission Sets
+1. [x] Deployment User has assigned Permission Sets
 
    1.EHIS ALR Data Migration PS
    2.EHIS Enable MFA PS
@@ -17,7 +17,7 @@
    6.ALR All Users PG
    7.ALR Data Analyst Users PG
 
-2. [ ] Checkout to `latest QA.tag` code  - create new branch out of it "release-UAT-SP9"
+2. [x] Checkout to `latest QA.284` code  - create new branch out of it "release-UAT-SP9.1"
 
 ## Assumptions
 
@@ -27,27 +27,27 @@
 
 ## Pre-Deployment Steps (3 mins)
 
-[ ] ALR-1567 destructive deployment
+[x] ALR-1567 destructive deployment
 
 - Deleting validation rule - go to Setup-->Object Manager-->Inspection object-->validation rule-->RestrictingFieldsEditForVisitRule--> edit--> uncheck Active checkbox → Save 
 
 ## Deployment Steps (20 mins)
 
-1. [ ] Deploy OmniStudio components and its dependencies (5 min)
+1. [x] Deploy OmniStudio components and its dependencies (5 min)
    > sfdx force:source:deploy --sourcepath "src\main\default\omniDataTransforms,src\main\default\omniIntegrationProcedures,src\main\default\omniUiCard,src\main\default\omniScripts" --wait 30 --targetusername deployment.user@gov.bc.ca.alr
 
-3. [ ]  Deploy full repository (~20 min)
-   1. [ ] Verify folders
+3. [x]  Deploy full repository (~20 min)
+   1. [x] Verify folders
       |Folder|Path|
       |-|-|
       |`src`|`src\main\default`|
       |`src-access-mgmt`|`src-access-mgmt\main\default`|
       |`src-ui`|`src-ui\main\default`|
    
-   2. [ ] Deploy 
+   2. [x] Deploy 
       > sfdx force:source:deploy --sourcepath "src\main\default,src-access-mgmt\main\default,src-ui\main\default" --wait 30 --targetusername deployment.user@gov.bc.ca.alr -l RunLocalTests
 
-   3. [ ] Re-activate Omnistudio components
+   3. [x] Re-activate Omnistudio components
       1. App Launcher -> OmniStudio -> Omnistudio **Integration Procedures**
       2. Locate all active custom **Integration Procedures** -> deactivate them -> activate them back.
       3. App Launcher -> OmniStudio -> **Omnistudio FlexCards**
@@ -57,58 +57,53 @@
 
 ## Post-Deployment Steps (30 mins)
 
-1.[ ] ALR-1486 Uncheck the violation checkbox
+1.[x] ALR-1486 Uncheck the violation checkbox
 
 - Login as System Administrator, click on gear icon and open setup
 - Go to Object Manager and open Inspection Assessment Indicator 
 - Open Assessment Question Status (Result) field in Fields & Relationships
 - Go to Assessment Question Status Pick list Values and Click edit Next to Non-compliant field and uncheck the violation checkbox.
 
-2.[ ] ALR-1540 Delete Existing templates below in Org 
+2.[x] ALR-1540 Delete Existing templates below in Org 
 
 - Step 1 :- App launcher-> Document template designer ->delete below 3 templates and import one after other one by one
 - Step 2 :- First Import all 3 certificate template Json files and then replace with ppt and activate the template
 
 1.CertificateTemplateSN Json->CertificateBackground_SN.pptx
 2.CertificateTemplateSU Json ->CertificateBackground_SU.pptx
+3.CertificateTemplateSN->replace with CertificateBackground_MH.pptx 
 
-Template for CertificateTemplateMH.Json failing to upload so follow below steps
-
-3.Clone CertificateTemplateSN->replace with CertificateBackground_MH.pptx → edit name of CertificateTemplateSN as CertificateTemplateMH 
-Mapping Dataraptor Bundle Name -TransformBusinessLicense
-Data Extract Dataraptor Bundle Name - GetBusinessLicense
-save the template and activate it
-
-3.[ ] ALR-1544
+3.[x] ALR-1544
 
 - Login as System administrator, click on setup and open static resources,find “SumanLeadership“ and “Sue_Benford_Sign“ and Delete it.
 
-4.[ ] ALR-1533
+4.[x] ALR-1533
 
 - Deactivate the flow in every org with this story deployment:
 - Flow Name: GenerateRenewalsForAccounts
 
-5.[ ] ALR-1562 Refer Jira for this step
+5.[x] ALR-1562 Refer Jira for this step
 
-6.[ ] ALR-1577 Assign PS in all the higher orgs till production
+6.[x] ALR-1577 Assign PS in all the higher orgs till production
 
 - Log in as System Administrator
 - Assign the following Permission Set to all ALR Active Users (Business+Onshore+offshore) the necessary users 
 - Permission Set - Business Milestones and Life Events Access
 
-7.[ ] Flow status verification
+7.[x] Flow status verification
 
 - Please verify if the latest version of the mentioned flows are activated in all orgs. If not, Please activate the latest version.
 - Flows
  1.Get Category List From Assessment Indicator Definition
  2.add Inspection Tasks
 
- 8.[ ] ALR-1586 List view deletion
+ 8.[x] ALR-1586 List view deletion
 -From app launcher - EHIS Services - Go to Accounts(in home dropdown)->ListView->Residence Ready for Renewals->select settings->Delete
 
-9.[ ] ALR-1587 refer jira
+9.[x] ALR-1587 refer jira
+
 DevOps checklist:
 
 1. Make sure you activated the templates CertificateTemplateMH , CertificateTemplateSN Json ,CertificateTemplateSU Json
-2. Validate the flows in org with Repo make sure active/inactive versions in branch which are deployed by devops should match in org3
+2. Validate the flows in org with Repo make sure active/inactive versions in branch which are deployed by devops should match in org
 3.Accounts-ListView->Residence Ready for Renewals is deleted sometimes its not deleting properly
