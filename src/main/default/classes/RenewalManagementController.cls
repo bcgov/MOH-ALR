@@ -49,15 +49,20 @@ public with sharing class RenewalManagementController {
     }
     @AuraEnabled(cacheable=true)
     public static List<Account> fetchAccounts() {
-    return [SELECT Id, RegId__c,Name, Parent.Name, Status__c, LicenseType__r.Name, HealthAuthority__c,
-                   (SELECT Id FROM BusinessLicenseApplicationAccount WHERE RecordType.DeveloperName = 'Renewal'
-                   AND Status ='Cancelled')
-            FROM Account 
-           WHERE Status__c IN ('Registered Active','Registered Active with Conditions', 
-           'Registered Active Progressive Enforcement') 
-            AND RecordType.DeveloperName = 'Residence'
-               ];
-    }
+    return [
+        SELECT Id, RegId__c, Name, Parent.Name, Status__c, LicenseType__r.Name, HealthAuthority__c
+        FROM Account 
+        WHERE Status__c IN ('Registered Active', 'Registered Active with Conditions', 'Registered Active Progressive Enforcement') 
+        AND RecordType.DeveloperName = 'Residence'
+        AND Id NOT IN (
+            SELECT AccountId 
+            FROM BusinessLicenseApplication 
+            WHERE RecordType.DeveloperName = 'Renewal' 
+            AND Status IN ('Sent', 'Errored', 'Ready for Renewal', 'Completed', 'Excluded')
+        )
+    ];
+}
+ 
 
     //method to create bla records for account (bulkified)
     public static Map<Id, BusinessLicenseApplication> createBlaRecords(Map<Id, Account> accMap, Map<Id, String> blaStatusMap) {//, Map<String, RegulatoryAuthorizationType> regAuthNameMap) {
