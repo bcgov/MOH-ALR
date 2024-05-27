@@ -18,9 +18,10 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
     public static String parentAssetRT ='Units_Record_Type';
     public Final static List<String> allALUnitTypes = BCMOH_Constants.allALUnitTypes;
     public Final static String activeStatusBl = BCMOH_Constants.activeStatusBl;
+    public Final static List<String> Accountstatus = BCMOH_Constants.AccountTypeStatuses;
 
     public List<Id> recordListIds = new List<Id>();
-
+    
     @AuraEnabled
     public static void enqueueJob(List<Id> recordIds) {
         Database.executeBatch(new RenewalManagementControllerBatch(recordIds));
@@ -29,6 +30,7 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
     public RenewalManagementControllerBatch(List<Id> recordIds) {
         this.recordListIds = recordIds;
     }
+   
     public Database.QueryLocator start(Database.BatchableContext BC) {
         RenewalProcessCriteria__mdt renewalCriteriaRec = RenewalProcessCriteria__mdt.getInstance(renewalName);
         String accRecType = renewalCriteriaRec.AccountRecordType__c;
@@ -46,8 +48,8 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
             +' (SELECT Id, Type__c, Quantity, Amount__c FROM Assets WHERE RecordType.DeveloperName =: parentAssetRT'
             +' AND Type__c IN: allALUnitTypes AND Quantity > 0)'//ALR-769 - added type check, ALR-726 - quantity to be greater than 0
             +' FROM Account'
-            +' WHERE Id IN: recordListIds AND recordType.DeveloperName =: accRecType AND LicenseType__c != NULL'
-            +' AND Status__c IN: accStatuses';
+            +' WHERE recordType.DeveloperName =: accRecType AND LicenseType__c != NULL'
+            +' AND Status__c IN: Accountstatus';
         return Database.getQueryLocator(query);
     }
 
@@ -56,7 +58,7 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
         Map<Id, Account> renewalAccMap = new Map<Id, Account>();
         Map<Id, Account> renewalFeeAccMap = new Map<Id, Account>();
         List<Id> includedAccIds = recordListIds;
-        try {
+                try {
             for(Account accRec : renewalAccList) {
                 //check if non cancelled renewalbla already exists for the current year to avoid duplicates
                 if(accRec.BusinessLicenseApplicationAccount.size() == 0) {
@@ -73,9 +75,9 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
         	}
             //1) create BLA records in controlled class
             Map<Id, BusinessLicenseApplication> blaRecCreateMap = RenewalManagementController.createBlaRecords(renewalAccMap, blaStatusMap);
-            //2) create Trans Fee Record
+                        //2) create Trans Fee Record
             Map<Id, RegulatoryTrxnFee> transFeeMap = RenewalManagementController.createTransFeeRecords(renewalFeeAccMap, blaRecCreateMap);
-            //3) create Trans Fee Item rec
+                        //3) create Trans Fee Item rec
             List<RegulatoryTrxnFeeItem> transFeeItemList = RenewalManagementController.createTransFeeItemRecords(renewalFeeAccMap, transFeeMap);
             //4) attach documents to bla records
             ServerSideDocumentGenerationController.startDocGenProcess(renewalAccList, blaRecCreateMap, transFeeMap, transFeeItemList);//?documents to be attached for ready for renewal and excluded?
