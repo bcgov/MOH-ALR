@@ -21,8 +21,7 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
     public Final static List<String> Accountstatus = BCMOH_Constants.AccountTypeStatuses;
 
     public List<Id> recordListIds = new List<Id>();
-    private List<Id> selectedIds;
-    private List<Id> unselectedIds;
+    
     @AuraEnabled
     public static void enqueueJob(List<Id> recordIds) {
         Database.executeBatch(new RenewalManagementControllerBatch(recordIds));
@@ -58,8 +57,8 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
         Map<Id, String> blaStatusMap = new Map<Id, String>();
         Map<Id, Account> renewalAccMap = new Map<Id, Account>();
         Map<Id, Account> renewalFeeAccMap = new Map<Id, Account>();
-        List<Id> includedAccIds = recordListIds;  
-        try {
+        List<Id> includedAccIds = recordListIds;
+                try {
             for(Account accRec : renewalAccList) {
                 //check if non cancelled renewalbla already exists for the current year to avoid duplicates
                 if(accRec.BusinessLicenseApplicationAccount.size() == 0) {
@@ -76,9 +75,9 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
         	}
             //1) create BLA records in controlled class
             Map<Id, BusinessLicenseApplication> blaRecCreateMap = RenewalManagementController.createBlaRecords(renewalAccMap, blaStatusMap);
-            //2) create Trans Fee Record
+                        //2) create Trans Fee Record
             Map<Id, RegulatoryTrxnFee> transFeeMap = RenewalManagementController.createTransFeeRecords(renewalFeeAccMap, blaRecCreateMap);
-            //3) create Trans Fee Item rec
+                        //3) create Trans Fee Item rec
             List<RegulatoryTrxnFeeItem> transFeeItemList = RenewalManagementController.createTransFeeItemRecords(renewalFeeAccMap, transFeeMap);
             //4) attach documents to bla records
             ServerSideDocumentGenerationController.startDocGenProcess(renewalAccList, blaRecCreateMap, transFeeMap, transFeeItemList);//?documents to be attached for ready for renewal and excluded?
