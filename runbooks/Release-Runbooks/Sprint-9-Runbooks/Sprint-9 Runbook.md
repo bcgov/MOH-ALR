@@ -29,7 +29,7 @@
 
 [x] ALR-1567 destructive deployment
 
-- Deleting validation rule - go to Setup-->Object Manager-->Inspection object-->validation rule-->RestrictingFieldsEditForVisitRule--> edit--> uncheck Active checkbox → Save 
+- Deleting validation rule - go to Setup-->Object Manager-->Inspection object-->validation rule-->RestrictingFieldsEditForVisitRule--> click on dropdown and delete it
 
 ## Deployment Steps (20 mins)
 
@@ -66,10 +66,10 @@
 
 2.[x] ALR-1540 Delete Existing templates below in Org 
 
-- Step 1 :- App launcher-> Document template designer ->delete below 3 templates and import one after other one by one
+- Step 1 :- App launcher-> omni studio -> Document template designer ->delete below 3 templates and import one after other one by one
 - Step 2 :- First Import all 3 certificate template Json files and then replace with ppt and activate the template
 
-1.CertificateTemplateSN Json->CertificateBackground_SN.pptx
+1.CertificateTemplateMH Json->CertificateBackground_MH.pptx
 2.CertificateTemplateSU Json ->CertificateBackground_SU.pptx
 3.CertificateTemplateSN->replace with CertificateBackground_MH.pptx 
 
@@ -101,6 +101,8 @@
 -From app launcher - EHIS Services - Go to Accounts(in home dropdown)->ListView->Residence Ready for Renewals->select settings->Delete
 
 9.[x] ALR-1587 refer jira
+
+10.[x] ALR-1199 Go to Omniscript “RiskAssessment“ → Open active version → Click on dropdown and select “Select Deploy Standard Runtime Compatible LWC “ → Done. 
 
 DevOps checklist:
 
