@@ -104,6 +104,12 @@
 
 10.[x] ALR-1199 Go to Omniscript “RiskAssessment“ → Open active version → Click on dropdown and select “Select Deploy Standard Runtime Compatible LWC “ → Done. 
 
+11.[ ] ALR-1524 Email Template Access to Public Groups
+
+   1.Go to ‘Email templates' from App Launcher
+   2.Go to “All Folders “ & click on the arrow on the right-hand side of ‘ALR Renewal Notification Templates’ and select 'Share’
+   3.Select ‘Share With’ as “Public Group“ & select ‘ALR Data Analyst User PG' give ‘Manage’ access as shown in below image. and click 'Share' & 'Done’
+
 DevOps checklist:
 
 1. Make sure you activated the templates CertificateTemplateMH , CertificateTemplateSN Json ,CertificateTemplateSU Json
