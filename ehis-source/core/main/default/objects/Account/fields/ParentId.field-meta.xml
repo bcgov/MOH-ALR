@@ -3,11 +3,37 @@
     <fullName>ParentId</fullName>
     <lookupFilter>
         <active>true</active>
-        <errorMessage>Please select Registrant</errorMessage>
+        <booleanFilter>(1 AND 2) OR (3 AND 4) OR (5 AND 6)</booleanFilter>
+        <errorMessage>Sorry, that is an invalid selection. Please use the lookup to select a valid Account.</errorMessage>
         <filterItems>
             <field>Account.RecordType.Name</field>
             <operation>equals</operation>
             <value>Registrant</value>
+        </filterItems>
+        <filterItems>
+            <field>$Source.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Residence</value>
+        </filterItems>
+        <filterItems>
+            <field>$Source.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>HA Hierarchy</value>
+        </filterItems>
+        <filterItems>
+            <field>$Source.RecordTypeId</field>
+            <operation>equals</operation>
+            <valueField>Account.RecordTypeId</valueField>
+        </filterItems>
+        <filterItems>
+            <field>$Source.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Water System</value>
+        </filterItems>
+        <filterItems>
+            <field>Account.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Business Entity</value>
         </filterItems>
         <isOptional>false</isOptional>
     </lookupFilter>
