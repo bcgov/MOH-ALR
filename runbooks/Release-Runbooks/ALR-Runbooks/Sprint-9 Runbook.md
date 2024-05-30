@@ -102,7 +102,14 @@
 
 9.[x] ALR-1587 refer jira
 
-10.[x] ALR-1199 Go to Omniscript “RiskAssessment“ → Open active version → Click on dropdown and select “Select Deploy Standard Runtime Compatible LWC “ → Done. 
+10.[x] ALR-1199 Go to Omniscript “RiskAssessment“ → Open active version → Click on dropdown and select “Select Deploy Standard Runtime Compatible LWC “ → Done.
+
+11.[ ] ALR-1577,ALR-1524
+
+12.[ ]  Delete two flows
+
+1.Account Contact Relationship Delete Restriction	
+2.Task Created On Business License Record Create
 
 DevOps checklist:
 
