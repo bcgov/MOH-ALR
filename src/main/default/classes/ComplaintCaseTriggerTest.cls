@@ -8,48 +8,32 @@
 ***********************************************************************************************/
 @isTest
 public class ComplaintCaseTriggerTest {
-    
-	@testSetup
+
+    @testSetup
     public static void makeData() {
-        RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
-        Account residence = TestDataFactory.createResidence('Residence','residence1', regAuth.Id, true);	
+        RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Health', 'License', 'MH', 1, 2, 3, 4, true);
+        System.assertNotEquals(null, regAuth.Id, 'RegulatoryAuthorizationType record creation failed');
+        Account residence = TestDataFactory.createResidence('Residence','residence1', regAuth.Id, true);
+        System.assertNotEquals(null, residence.Id, 'Residence account creation failed');
     }
-    //ALR-762
+
     @isTest
     static void testComplaintCaseTrigger() {
         List<Case> caseList = new List<Case>();
         Test.startTest();
-        Account residence =[SELECT Id FROM account WHERE Name = 'residence1' LIMIT 1];
-        Case complaintCase = TestDataFactory.createComplaintCase(residence.Id,'Test Case','Testing the trigger',false,false,false,false);
+        Account residence = [SELECT Id FROM Account WHERE Name = 'residence1' LIMIT 1];
+        System.assertNotEquals(null, residence.Id, 'Residence account not found');
+        
+        Case complaintCase = TestDataFactory.createComplaintCase(residence.Id, 'Test Case', 'Testing the trigger', false, false, false, false);
+        System.assertNotEquals(null, complaintCase.RecordTypeId, 'Complaint case record type is not set');
+        
         caseList.add(complaintCase);
         insert complaintCase;
         Test.stopTest();
-        Case caseRec = [SELECT Id, Complaint_Case_ID__c FROM Case LIMIT 1];
-        Assert.isNotNull(caseRec.Complaint_Case_ID__c);
+        
+        Case caseRec = [SELECT Id, Complaint_Case_ID__c FROM Case WHERE Id = :caseList[0].Id LIMIT 1];
+        System.assertNotEquals(null, caseRec.Id, 'Inserted case record not found');
+        
+        Assert.isNotNull(caseRec.Complaint_Case_ID__c, 'Complaint_Case_ID__c should not be null');
     }
 }
-
-/*Case testCase = TestDataFactory.createComplaintCase(residence.Id,'Test Case','Testing the trigger',false,false,false,true);
-		Case testCase1 = TestDataFactory.createComplaintCase(residence.Id,'Test Case1','Testing the trigger',false,false,false,true);
-		Case testCase2 = TestDataFactory.createComplaintCase(residence.Id,'Test Case2','Testing the trigger',false,false,false,true);*/
-
-
-	/*@isTest
-    static void testComplaintCaseTrigger() {
-         List<Case> caseList = new List<Case>();
-		 Account residence =[SELECT Id FROM account limit 1];        
-		 Case complaintCase = [SELECT id,Accountid,subject,Description,WishtoRemainAnonymous__c,NeedFeedbackOnResolution__c,ResidentAwareofComplaint__c FROM Case WHERE Subject = 'Test Case' limit 1];
-		 Case complaintCase1 = [SELECT id,Accountid,subject,Description,WishtoRemainAnonymous__c,NeedFeedbackOnResolution__c,ResidentAwareofComplaint__c FROM Case WHERE Subject = 'Test Case1' limit 1];
-		Case complaintCase2 = [SELECT id,Accountid,subject,Description,WishtoRemainAnonymous__c,NeedFeedbackOnResolution__c,ResidentAwareofComplaint__c FROM Case WHERE Subject = 'Test Case2' limit 1];
-		caseList.add(complaintCase);
-        caseList.add(complaintCase1);
-        caseList.add(complaintCase2);
-        // Test trigger execution
-        Test.startTest();
-         ComplaintCaseTriggerHandler.handleBeforeInsert(caseList);
-        Test.stopTest();    
-		Assert.areEqual('Test Case', caseList[0].subject, 'Assertion for Test Case');
-        Assert.areEqual('Test Case1', caseList[1].subject, 'Assertion for Test Case1');
-        Assert.areEqual('Test Case2', caseList[2].subject, 'Assertion for Test Case2');
-
-    }*/
