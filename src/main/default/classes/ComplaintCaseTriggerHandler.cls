@@ -90,7 +90,7 @@ public with sharing class ComplaintCaseTriggerHandler {
         
         for (Account acc : [SELECT Id, LicenseType__r.RegulatoryAuthorizationCode__c
                             FROM Account
-                            WHERE Id IN :accountIds WITH SECURITY_ENFORCED]) {
+                            WHERE Id IN :accountIds]) {
                                 licenseTypeCodeMap.put(acc.Id, acc.LicenseType__r.RegulatoryAuthorizationCode__c);
                             }
         return licenseTypeCodeMap;
