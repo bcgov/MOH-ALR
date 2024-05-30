@@ -68,7 +68,6 @@ public with sharing class ComplaintCaseTriggerHandler {
         for (Case newCase : cases) {
             String licenseTypeCode = licenseTypeCodeMap.get(newCase.AccountId);
             String sequenceNumber = maxSequenceNumbers.get(licenseTypeCode);
-            
             String formattedSequenceNumber = getFormattedSequenceNumber(sequenceNumber);
             newCase.Complaint_Case_ID__c = 'C' + System.today().year() + '-' + licenseTypeCode + formattedSequenceNumber;
         }
@@ -122,8 +121,8 @@ public with sharing class ComplaintCaseTriggerHandler {
 */
     private static String getFormattedSequenceNumber(String sequenceNumber) {
         Integer numericSequenceNumber = 0;
-        
-        if (sequenceNumber != '0') {
+
+        if (sequenceNumber != null && sequenceNumber != '0') {
             String numericPart = sequenceNumber.substring(8).replaceAll('[^0-9]', '');
             numericSequenceNumber = numericPart.length() > 2 ? Integer.valueOf(numericPart.substring(numericPart.length() - 3)) : 0;
         }
