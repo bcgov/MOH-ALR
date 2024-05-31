@@ -11,10 +11,13 @@ import { OmniscriptBaseMixin } from 'omnistudio/omniscriptBaseMixin';
 import REGULATORYCODEVIOLATION_OBJECT from '@salesforce/schema/RegulatoryCodeViolation';
 import SCOPE_FIELD from '@salesforce/schema/RegulatoryCodeViolation.Scope__c';
 import SEVERITY_FIELD from '@salesforce/schema/RegulatoryCodeViolation.Severity__c';
-import { updateRecord } from 'lightning/uiRecordApi';
+import { updateRecord, getFieldValue } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { NavigationMixin } from 'lightning/navigation';
 import { getPicklistValues, getObjectInfo } from 'lightning/uiObjectInfoApi';
+
+const STORAGE_KEY_SCOPE = 'selectedScopePicklistValues';
+const STORAGE_KEY_SEVERITY = 'selectedSeverityPicklistValues';
 
 const columns = [
     { label: 'Category', fieldName: 'Category', type: 'text', wrapText: true,
@@ -23,14 +26,13 @@ const columns = [
         cellAttributes: { class: 'wrap-text'} },
     { label: 'Assessment Question', fieldName: 'AssessmentQuestion', type: 'text', wrapText: true,
         cellAttributes: { class: 'wrap-text'} },
-    { label: 'Scope*', fieldName: 'Scope__c', type: 'picklistColumn', editable: true, wrapText: true,
-    typeAttributes: {
-        placeholder: '--None--', options: { fieldName: 'pickListOptions' }, 
-        value: { fieldName: 'Scope__c' },
-        context: { fieldName: 'Id' },
-        helptext: 'This is a helptext' // need to add helptext
-        }
-    },
+        { label: 'Scope*', fieldName: 'Scope__c', type: 'picklistColumn', editable: true, wrapText: true,
+        typeAttributes: {
+            placeholder: '--None--', options: { fieldName: 'pickListOptions' }, 
+            value: { fieldName: 'Scope__c' },
+            context: { fieldName: 'Id' }
+            }
+        },
     { label: 'Severity*', fieldName: 'Severity__c', type: 'picklistColumn', editable: true, wrapText: true,
     typeAttributes: {
         placeholder: '--None--', options: { fieldName: 'severityOptions' }, 
@@ -43,10 +45,12 @@ const columns = [
 
 export default class ShowRegulatoryViolationRecords extends OmniscriptBaseMixin(NavigationMixin(LightningElement)) {
     @api recordId;
+    @api Questions1JSON;
     @track error;
     showSpinner = false;
     columns = columns;
     @track rcvList;
+    @track omniQuestionsList;
     @track accountData;
     draftValues = [];
     @track data = [];
@@ -54,6 +58,8 @@ export default class ShowRegulatoryViolationRecords extends OmniscriptBaseMixin(
     @track pickListOptions;
     @track severityOptions;
     @track hasLoaded = false;
+    @track selectedOption;
+    
     lastSavedData = [];
     _wiredResult;
 
@@ -89,25 +95,32 @@ export default class ShowRegulatoryViolationRecords extends OmniscriptBaseMixin(
     @wire(getRecords, { recordId: '$recordId', pickList: '$pickListOptions', pickList: '$severityOptions' } )
     wiredCallback(result) {
         this._wiredResult = result;
-        if(result.data) {
-            const data = result.data;
+        if(this.Questions1JSON) {
+            const data = this.Questions1JSON;  
             let rcvParsedData = JSON.parse(JSON.stringify(data));
-            rcvParsedData.forEach(rcv => {
-                    rcv.Category = rcv.InspectionAssmntInd.AssessmentIndDefinition.Category__c;
-                    rcv.RegulatoryCode = rcv.RegulatoryCode.Name;
-                    rcv.AssessmentQuestion = rcv.InspectionAssmntInd.AssessmentIndDefinition.Name;
+            if(rcvParsedData.length > 0) {
+                rcvParsedData.forEach(rcv => {
+                    rcv.Category = rcv.Category;
+                    rcv.RegulatoryCode = rcv.RegulatoryCode;
+                    rcv.AssessmentQuestion = rcv.AssessmentQuestion;
                     rcv.pickListOptions = this.pickListOptions;
+                    rcv.Scope__c = rcv.Scope;
                     rcv.severityOptions = this.severityOptions;
-            });
+                    rcv.Severity__c = rcv.Severity;
+                    rcv.Description = rcv.Description;
+    
+                });
+            }
             this.rcvList = rcvParsedData;
             if(this.rcvList != null){
-                console.log('this.rcvList');
+                console.log('this.rcvList', this.rcvList);
             }
             this.hasLoaded = true;//to remove spinnner
             this.error = undefined;
-        } else if(result.error) {
+        } else{
+            console.log('Error Thrown', this.rcvList);
+            this.hasLoaded = true;//to remove spinnner
             this.error = result.error;
-            this.rcvList = undefined;
         }
     }
 
@@ -155,15 +168,13 @@ export default class ShowRegulatoryViolationRecords extends OmniscriptBaseMixin(
     handleCellChange(event) {
         // Check if Scope__c field is empty in any draft value
         let draftValues = event.detail.draftValues;
-        draftValues.forEach(ele=>{
-            this.updateDraftValues(ele);
-        })
-        
+            draftValues.forEach(ele=>{
+                this.updateDraftValues(ele);
+            })
+
         let myData = {
-            "UpdateData" : this.draftValues,
-            "Anotherprop" : {
-            "prop1" : this.updateDraftValues
-            }
+            "UpdateData" : this.rcvList,
+            "Anotherprop" : this.draftValues
             }
             this.omniApplyCallResp(myData);
     }

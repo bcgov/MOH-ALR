@@ -3,7 +3,8 @@
 * @Date:       
 * @Description: The purpose of this Class is for TriggerHandler for CompliantCaseTrigger
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
-                           ALR-799             ACN-ALR        Issues on Web Services Residence Report         
+                           ALR-799             ACN-ALR        Issues on Web Services Residence Report  
+Changed By - ACN-ALR - Story - ALR-1259 - showing values on the basis of ExemptionofAddressPublication__c.
 ***********************************************************************************************/
 public with sharing class FetchAndGenerateCSV {
     static String className = 'FetchAndGenerateCSV';
@@ -33,7 +34,7 @@ public with sharing class FetchAndGenerateCSV {
                                   'Assistance with managing medication','Assistance managing therapeutic diets',
                                   'Safekeeping of money/personal property', 'Psychosocial support','Assistance with behaviour management'};
       List<String> typeList = new List<String>{'Public', 'Private', 'Per Diem'};     
-      List<Account> accounts = [SELECT Id, RegId__c, Name, HealthAuthority__c, Phone, Extension__c, Fax, Website, Status__c, Parent.Name,
+      List<Account> accounts = [SELECT Id, RegId__c, Name, HealthAuthority__c, ExemptionofAddressPublication__c, Phone, Extension__c, Fax, Website, Status__c, Parent.Name,
                                (SELECT ContactId, PrimaryContact__c, Contact.Name FROM AccountContactRelations WHERE PrimaryContact__c = true LIMIT 1),
                                (SELECT RegistrationCertificate__c FROM AccountBusinessLicenses__r WHERE Status = 'Active' LIMIT 1),
                                (SELECT ServiceName__c FROM Services__r WHERE ServiceName__c IN: serviceNameList LIMIT 50),
@@ -47,9 +48,16 @@ public with sharing class FetchAndGenerateCSV {
                         Residence = (acc.Name != null) ? acc.Name : '';
                         HACode = healthAuthorityMap.get(acc.HealthAuthority__c );
                         HACode = (HACode != null) ? HACode : '';
-                        Res_Phone = (acc.Phone != null) ? acc.Phone : '';
-                        Res_Phone_Ext = (acc.Extension__c != null) ? acc.Extension__c : '';
-                        Res_Fax = (acc.Fax != null) ? acc.Fax : '';
+                        if(acc.ExemptionofAddressPublication__c == true){
+                            Res_Phone = '';
+                            Res_Phone_Ext = '';
+                            Res_Fax = '';
+                        } else {
+                            Res_Phone = (acc.Phone != null) ? acc.Phone : '';
+                            Res_Phone_Ext = (acc.Extension__c != null) ? acc.Extension__c : '';
+                            Res_Fax = (acc.Fax != null) ? acc.Fax : '';
+                        }
+
                         Website = (acc.Website != null) ? acc.Website : '';
                         RegStatus = (acc.Status__c != null) ? acc.Status__c : '';
                         ResCatCode = (acc.LicenseType__r.RegulatoryAuthorizationCode__c != null) ? acc.LicenseType__r.RegulatoryAuthorizationCode__c : '';
@@ -64,9 +72,15 @@ public with sharing class FetchAndGenerateCSV {
                         
                         List<String> Adrs = new List<String>();
                         Adrs = Adrs(acc);
-                        Res_Address = Adrs[0];
-                        Res_City = Adrs[1];
-                        Res_PostalCode = Adrs[2];
+                        if(acc.ExemptionofAddressPublication__c == true){
+                            Res_Address = '';
+                            Res_City = '';
+                            Res_PostalCode = '';
+                        } else {
+                            Res_Address = Adrs[0];
+                            Res_City = Adrs[1];
+                            Res_PostalCode = Adrs[2];
+                        }
                         
                         HospSvc_Meal = getServiceFlag(acc.Services__r, 'Meal Services');
                         HospSvc_HouseKeep = getServiceFlag(acc.Services__r, 'Housekeeping'); 

@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
     <fieldUpdates>
+        <fullName>ALR_ApproverName</fullName>
+        <field>Approver_Name__c</field>
+        <formula>LastModifiedBy.FirstName  &amp;  LastModifiedBy.LastName</formula>
+        <name>ALR ApproverName</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
         <fullName>ApprovalFieldUpdate</fullName>
         <description>Updates Status of BLA to &quot;Approved&quot; if approver approves the record - ALR-204</description>
         <field>Status</field>
@@ -8,6 +18,37 @@
         <name>Approval Field Update</name>
         <notifyAssignee>false</notifyAssignee>
         <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>ApprovedDateFieldUpdate</fullName>
+        <description>Update Approved Date of BLA once Approved - ALR-204</description>
+        <field>ApprovedDate</field>
+        <formula>NOW()</formula>
+        <name>Approved Date Field Update</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>ApproverName</fullName>
+        <field>Description</field>
+        <formula>LastModifiedBy.FirstName  &amp;  LastModifiedBy.LastName</formula>
+        <name>ApproverName</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>ApproverName1</fullName>
+        <field>Description</field>
+        <formula>LastModifiedBy.FirstName  &amp;  LastModifiedBy.LastName</formula>
+        <name>ApproverName1</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
         <protected>false</protected>
         <reevaluateOnChange>false</reevaluateOnChange>
     </fieldUpdates>
@@ -64,17 +105,6 @@
         <protected>false</protected>
         <reevaluateOnChange>false</reevaluateOnChange>
     </fieldUpdates>
-    <fieldUpdates>
-        <fullName>ApprovedDateFieldUpdate</fullName>
-        <description>Update Approved Date of BLA once Approved - ALR-204</description>
-        <field>ApprovedDate</field>
-        <formula>NOW()</formula>
-        <name>Approved Date Field Update</name>
-        <notifyAssignee>false</notifyAssignee>
-        <operation>Formula</operation>
-        <protected>false</protected>
-        <reevaluateOnChange>false</reevaluateOnChange>
-    </fieldUpdates>
     <tasks>
         <fullName>BLAApprovalTaskAction</fullName>
         <assignedToType>owner</assignedToType>
@@ -83,6 +113,6 @@
         <priority>Normal</priority>
         <protected>false</protected>
         <status>Not Started</status>
-        <subject>Unit Fee Invoice and Follow-up with Webservices</subject>
-    </tasks>   
+        <subject>Send Unit Invoice to Registrant Primary Contact</subject>
+    </tasks>
 </Workflow>

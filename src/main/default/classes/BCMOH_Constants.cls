@@ -27,6 +27,12 @@ public class BCMOH_Constants {
     public Final static String blaExcludedStatus = 'Excluded';
     public Final static String feeType = 'Renewal Unit Fee';
     public Final static String feeStatus = 'Paid';
+    //ALR-1348
+    public Final static String accountStatus = 'Registered Active';
+    public Final static String accountStat = 'Registered Active with Conditions';
+    public Final static String accStat= 'Registered Active Progressive Enforcement';
+    public Final static String accRecType= 'Residence';
+    public Final static String blaCompletedStatus= 'Completed';
     //ALR-1000
     public Final static String blaLateFeeStatus = 'Ready to Send';
     public Final static String lateFeeTitle = 'Late Fee Invoice';
@@ -100,8 +106,11 @@ public class BCMOH_Constants {
     public Final static List<String> renewalTableUpdateStatus = new List<String>{'Excluded', 'Cancelled'};
     // ALR-996
     public Final static List<String> FeeTypeStatuses = new List<String>{'Late Fee', 'Renewal Unit Fee'};
+    public Final static List<String> AccountTypeStatuses = new List<String>{'Registered Active', 'Registered Active with Conditions', 'Registered Active Progressive Enforcement'};
 	public Final static List<String> LateFeeStatuses = new List<String>{'', 'Ready to Send'};  
     public final static String EXCEPMESSAGE = 'This is exception for testing and code coverage';
     public final static String ItemEntityName = 'AssessmentTask.AssessmentTaskDefinitionId';
 	public final static String TaskType = 'InspectionChecklist';
+    public final static String resultt = 'Non-compliant';
+	public final static String nulltest = 'null';
 }

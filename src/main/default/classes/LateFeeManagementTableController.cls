@@ -67,10 +67,8 @@ public with sharing class LateFeeManagementTableController {
                 (List<BusinessLicenseApplication>)JSON.deserialize(JSON.serialize(data), 
                                                                    List<BusinessLicenseApplication>.class);
             for(BusinessLicenseApplication blaRec : blaList) {
-                if(BCMOH_Constants.renewalTableUpdateStatus.contains(blaRec.Late_Fee_Status__c)) {
                     blaUpdateList.add(blaRec);
-                }
-            }
+                  }
             if(!blaUpdateList.isEmpty() && BusinessLicenseApplication.SObjectType.getDescribe().isUpdateable()) {
                 Database.Update(blaUpdateList, false);
                 hasUpdated = true;
