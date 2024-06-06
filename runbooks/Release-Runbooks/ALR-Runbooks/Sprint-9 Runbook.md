@@ -1,4 +1,3 @@
-# Post refresh Deployment Runbook
 
 |Sandbox|`SP9`|
 |-|-|This deployment is done before PRD Spirnt-5 deployment
