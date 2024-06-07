@@ -1,7 +1,7 @@
 # Post refresh Deployment Runbook
 
 |Sandbox|`Updated-ALR-SP9`|
-|-|-|This runbook is used for 1st deployment to EHISDev org
+|-|-|This runbook is updated with ALR-SP9 deployment to EHISDev org
 |Runbook Created|`2024-05-28`|
 |Runbook Last Modified|`2024-05-29`|
 
