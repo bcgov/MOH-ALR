@@ -22,7 +22,7 @@
                         <valueListItems>
                             <value>CustomButton.BusinessLicenseApplication.GenerateLicense</value>
                             <visibilityRule>
-                                <booleanFilter>1 OR 2</booleanFilter>
+                                <booleanFilter>1 OR 2 OR 3</booleanFilter>
                                 <criteria>
                                     <leftValue>{!$Permission.CustomPermission.EHISAdminUser}</leftValue>
                                     <operator>EQUAL</operator>
@@ -32,6 +32,11 @@
                                     <leftValue>{!$Permission.CustomPermission.EHISRegistrarUser}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>true</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Status}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Approved</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
@@ -302,6 +307,11 @@
                 <identifier>force_relatedListSingleContainer2</identifier>
             </componentInstance>
         </itemInstances>
+        <mode>Replace</mode>
+        <name>main</name>
+        <type>Region</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
@@ -310,17 +320,6 @@
                 </componentInstanceProperties>
                 <componentName>runtime_sales_activities:activityPanel</componentName>
                 <identifier>runtime_sales_activities_activityPanel2</identifier>
-            </componentInstance>
-        </itemInstances>
-        <mode>Replace</mode>
-        <name>main</name>
-        <type>Region</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentName>runtime_industries_actionplan:listCard</componentName>
-                <identifier>runtime_industries_actionplan_listCard</identifier>
             </componentInstance>
         </itemInstances>
         <mode>Replace</mode>
