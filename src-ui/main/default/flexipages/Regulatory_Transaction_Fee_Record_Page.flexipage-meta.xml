@@ -19,10 +19,16 @@
                         <valueListItems>
                             <value>CustomButton.RegulatoryTrxnFee.Generate_Receipt</value>
                             <visibilityRule>
+                                <booleanFilter>1 AND 2</booleanFilter>
                                 <criteria>
                                     <leftValue>{!$Permission.CustomPermission.EHISAdminUser}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>true</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Status}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>PAID</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
