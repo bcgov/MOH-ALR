@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>UpdateStartTimeToCurrentOrPast</fullName>
+    <active>true</active>
+    <description>ALR- 1253</description>
+    <errorConditionFormula>AND(
+NOT($Permission.EHISBypassValidationRuleCustomPermission),
+RecordType.DeveloperName = &apos;Inspection&apos;,
+DATETIMEVALUE(PlannedVisitStartTime) &gt; NOW(),
+ISPICKVAL(Status,&quot;Completed&quot;) 
+)</errorConditionFormula>
+    <errorMessage>Update Planned Start Time to a current or past date.</errorMessage>
+</ValidationRule>
