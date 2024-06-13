@@ -105,7 +105,7 @@
         <name>set_new_BL_id_to_output_variable</name>
         <label>set new BL id to output variable</label>
         <locationX>908</locationX>
-        <locationY>1706</locationY>
+        <locationY>1814</locationY>
         <assignmentItems>
             <assignToReference>newLicenseId</assignToReference>
             <operator>Assign</operator>
@@ -138,8 +138,8 @@
     <assignments>
         <name>setError</name>
         <label>setError</label>
-        <locationX>2184</locationX>
-        <locationY>242</locationY>
+        <locationX>1392</locationX>
+        <locationY>2870</locationY>
         <assignmentItems>
             <assignToReference>errorMessage</assignToReference>
             <operator>Assign</operator>
@@ -191,7 +191,7 @@
         <name>setLatestLicenseToInactive</name>
         <label>setOldLicenseToInactive</label>
         <locationX>864</locationX>
-        <locationY>2006</locationY>
+        <locationY>2114</locationY>
         <assignmentItems>
             <assignToReference>latestResidenceLicense.Status</assignToReference>
             <operator>Assign</operator>
@@ -310,7 +310,7 @@
         <name>Copy_1_of_DecisionforRecordTypetoCreateBL</name>
         <label>DecisionforRecordTypetoUpdateBLA</label>
         <locationX>776</locationX>
-        <locationY>2354</locationY>
+        <locationY>2462</locationY>
         <defaultConnector>
             <targetReference>updateBusinessLicenseApplication</targetReference>
         </defaultConnector>
@@ -360,7 +360,7 @@
         <name>Does_License_exist_for_Residence</name>
         <label>Does License exist for Residence</label>
         <locationX>776</locationX>
-        <locationY>1898</locationY>
+        <locationY>2006</locationY>
         <defaultConnector>
             <targetReference>setLatestLicenseToInactive</targetReference>
         </defaultConnector>
@@ -552,7 +552,7 @@ DATETIMEVALUE(TEXT(DATE(YEAR(TODAY()) + 1, 3, 31)) &amp; &quot; 08:00:00&quot;),
         <locationX>908</locationX>
         <locationY>1598</locationY>
         <connector>
-            <targetReference>set_new_BL_id_to_output_variable</targetReference>
+            <targetReference>UpdateAccountStatus</targetReference>
         </connector>
         <inputAssignments>
             <field>AccountId</field>
@@ -609,6 +609,7 @@ DATETIMEVALUE(TEXT(DATE(YEAR(TODAY()) + 1, 3, 31)) &amp; &quot; 08:00:00&quot;),
             <targetReference>assignBL</targetReference>
         </connector>
         <faultConnector>
+            <isGoTo>true</isGoTo>
             <targetReference>setError</targetReference>
         </faultConnector>
         <filterLogic>and</filterLogic>
@@ -723,7 +724,7 @@ DATETIMEVALUE(TEXT(DATE(YEAR(TODAY()) + 1, 3, 31)) &amp; &quot; 08:00:00&quot;),
         <name>Copy_1_of_updateBusinessLicenseApplication</name>
         <label>updateBusinessLicenseApplicationforRenewal</label>
         <locationX>644</locationX>
-        <locationY>2462</locationY>
+        <locationY>2570</locationY>
         <connector>
             <targetReference>update_Fields_in_Accounts</targetReference>
         </connector>
@@ -747,9 +748,8 @@ DATETIMEVALUE(TEXT(DATE(YEAR(TODAY()) + 1, 3, 31)) &amp; &quot; 08:00:00&quot;),
         <name>update_Fields_in_Accounts</name>
         <label>update Fields in Accounts</label>
         <locationX>776</locationX>
-        <locationY>2654</locationY>
+        <locationY>2762</locationY>
         <faultConnector>
-            <isGoTo>true</isGoTo>
             <targetReference>setError</targetReference>
         </faultConnector>
         <filterLogic>and</filterLogic>
@@ -775,10 +775,34 @@ DATETIMEVALUE(TEXT(DATE(YEAR(TODAY()) + 1, 3, 31)) &amp; &quot; 08:00:00&quot;),
         <object>Account</object>
     </recordUpdates>
     <recordUpdates>
+        <name>UpdateAccountStatus</name>
+        <label>UpdateAccountStatus</label>
+        <locationX>908</locationX>
+        <locationY>1706</locationY>
+        <connector>
+            <targetReference>set_new_BL_id_to_output_variable</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>licenseApplication.AccountId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Registered Active</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Account</object>
+    </recordUpdates>
+    <recordUpdates>
         <name>updateBusinessLicenseApplication</name>
         <label>updateBusinessLicenseApplication</label>
         <locationX>908</locationX>
-        <locationY>2462</locationY>
+        <locationY>2570</locationY>
         <connector>
             <targetReference>update_Fields_in_Accounts</targetReference>
         </connector>
@@ -802,7 +826,7 @@ DATETIMEVALUE(TEXT(DATE(YEAR(TODAY()) + 1, 3, 31)) &amp; &quot; 08:00:00&quot;),
         <name>updateOldLicenseToInactive</name>
         <label>updateOldLicenseToInactive</label>
         <locationX>864</locationX>
-        <locationY>2114</locationY>
+        <locationY>2222</locationY>
         <connector>
             <targetReference>Copy_1_of_DecisionforRecordTypetoCreateBL</targetReference>
         </connector>
