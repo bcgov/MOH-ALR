@@ -39,6 +39,8 @@ public class BCMOH_Constants {
     public Final static String lateFeeTemplate = 'LateFeeTemplate';
     public Final static String templatePurposeDetails = 'LateFee';
     public Final static String AccStatus = 'Registered Active Pending Renewal';
+    //ALR-1289
+    public Final static String AccUnRegisteredStatus = 'Unregistered Active Pending Renewals';
 
     //ALR-40
     public Final static String transFeeRecTypeId = Schema.getGlobalDescribe().get('RegulatoryTrxnFee').getDescribe().getRecordTypeInfosByDeveloperName().get('TransactionFee').getRecordTypeId();
