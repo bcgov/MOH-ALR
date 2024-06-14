@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Hierarchy_HA__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(ISPICKVAL(Type, &quot;1-HA&quot;),
+Hyperlink_Account_Name__c,
+IF(ISPICKVAL(Type, &quot;2-HSDA&quot;),
+Parent.Hyperlink_Account_Name__c,
+IF(ISPICKVAL(Type, &quot;3-LHA&quot;),
+Parent.Parent.Hyperlink_Account_Name__c,
+IF(ISPICKVAL(Type, &quot;4-CHSA&quot;),
+Parent.Parent.Parent.Hyperlink_Account_Name__c,
+&quot;&quot;
+)
+)
+)
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>HA</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>
