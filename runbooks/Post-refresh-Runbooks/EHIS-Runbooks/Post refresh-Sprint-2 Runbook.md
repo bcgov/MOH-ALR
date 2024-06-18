@@ -1,6 +1,6 @@
 # Post refresh Deployment Runbook
 
-|Sandbox|`Post refresh runbook for EHIS-SP1 " QA ORG "`|
+|Sandbox|`Post refresh runbook for EHIS-SP2 " QA ORG "`|
 |-|-|
 |Runbook Created|`2024-06-17`|
 |Runbook Last Modified|`2024-06-17`|
@@ -70,7 +70,7 @@
 7.Assessment Task Indicator Definition
 8.Inspection Type
 
-- sfdx sfdmu:run --path "Omnistudio\data" --sourceusername csvfile --targetusername gandloju.vishwantha@accenture.com.alr.qa
+- sfdx sfdmu:run --path "Dataloading\data" --sourceusername csvfile --targetusername gandloju.vishwantha@accenture.com.alr.qa
 
 - 2. [x] ALR-1123 After creating data for above objects verify ALR-1123, if not linked excecute it manually  
 
