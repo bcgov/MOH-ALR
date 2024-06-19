@@ -8,6 +8,9 @@ import cssrenewalBlaTable from '@salesforce/resourceUrl/cssrenewalBlaTable';
 import { getPicklistValues, getObjectInfo } from 'lightning/uiObjectInfoApi';
 import BusinessLicenseApplication_OBJECT from '@salesforce/schema/BusinessLicenseApplication';
 import LATE_FEE_STATUS__C_FIELD from '@salesforce/schema/BusinessLicenseApplication.Late_Fee_Status__c';
+import LightningConfirm from "lightning/confirm";
+
+const DELAY_BEFORE_REFRESH = 2000;
 
 const tableColumns = [
     {label: 'Application Id', fieldName: 'appId', type: 'url',
@@ -47,6 +50,7 @@ export default class LateFeeManagementTable extends LightningElement {
     @track hasLoaded = false; 
     @track renderFlow = false;
     _wiredResult;
+    searchKey = '';
 
     @wire(getObjectInfo, { objectApiName: BusinessLicenseApplication_OBJECT })
     objectInfo;
@@ -143,15 +147,40 @@ export default class LateFeeManagementTable extends LightningElement {
             this.hasLoaded = false;
             await sendLateFeeRenewals();
             await this.refreshData();
+            this.handleConfirmSendLateFee();
         }catch(error){
             let message = error.body.message.includes('FIELD_CUSTOM_VALIDATION_EXCEPTION') ?
                 error.body.message.split('EXCEPTION, ')[1].split(': [')[0] : error.body.message;
         }
-
     }
+    
+    handleConfirmSendLateFee(){
+      const result = LightningConfirm.open({
+        message: "Late Fees Sent Successfully",
+        theme: "Success",
+        label: "Confirm"
+      });
+      setTimeout(() => {
+            location.reload();
+        }, DELAY_BEFORE_REFRESH);
+    }
+
     handleGenerateLateFees(event){
             this.renderFlow = true;
+            this.handleConfirmGenerateLateFee();
     }
+    
+    handleConfirmGenerateLateFee(){
+      const result = LightningConfirm.open({
+        message: "Late Fees Generated Successfully",
+        theme: "Success",
+        label: "Confirm"
+      });
+      setTimeout(() => {
+            location.reload();
+        }, DELAY_BEFORE_REFRESH);
+    }
+
     async handleStatusChange(event){
       if (event.detail.status === 'FINISHED_SCREEN') {
             await this.refreshData();
@@ -161,5 +190,17 @@ export default class LateFeeManagementTable extends LightningElement {
       else{
         console.log('Flow execution encountered an unexpected status.');
         }
+    }
+
+    handleSearchChange(event) {
+        this.searchKey = event.target.value.toLowerCase();
+    }
+    get filteredBlaList() {
+        if (this.blaList && this.searchKey) {
+            return this.blaList.filter(item =>
+                item.AccName.toLowerCase().includes(this.searchKey)
+            );
+        }
+        return this.blaList;
     }
 }
