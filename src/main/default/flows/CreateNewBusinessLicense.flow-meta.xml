@@ -652,6 +652,13 @@ DATETIMEVALUE(TEXT(DATE(YEAR(TODAY()) + 1, 3, 31)) &amp; &quot; 08:00:00&quot;),
                 <stringValue>DUE</stringValue>
             </value>
         </filters>
+        <filters>
+            <field>FeeType__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Late Fee</stringValue>
+            </value>
+        </filters>
         <object>RegulatoryTrxnFee</object>
         <outputReference>invoiceDue</outputReference>
         <queriedFields>Id</queriedFields>

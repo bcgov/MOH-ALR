@@ -8,6 +8,9 @@ import cssrenewalBlaTable from '@salesforce/resourceUrl/cssrenewalBlaTable';
 import BusinessLicenseApplication_OBJECT from '@salesforce/schema/BusinessLicenseApplication';
 import STATUS_FIELD from '@salesforce/schema/BusinessLicenseApplication.Status';
 import { getPicklistValues, getObjectInfo } from 'lightning/uiObjectInfoApi';
+import LightningConfirm from "lightning/confirm";
+
+const DELAY_BEFORE_REFRESH = 2000;
 
 const tableColumns = [
 {label: 'Application Id', fieldName: 'appId', type: 'url',
@@ -45,6 +48,7 @@ export default class RenewalBlaTable extends LightningElement {
     @track recordTypeId;
     @track hasLoaded = false;
    _wiredResult;
+   searchKey = '';
     
 
     @wire(getObjectInfo, { objectApiName: BusinessLicenseApplication_OBJECT })
@@ -157,10 +161,33 @@ export default class RenewalBlaTable extends LightningElement {
             this.hasLoaded = false;
             await sendRenewals();
             await this.refreshData();
+            this.handleConfirm();
         } catch (error) {
             let message = error.body.message.includes('FIELD_CUSTOM_VALIDATION_EXCEPTION') ?
                 error.body.message.split('EXCEPTION, ')[1].split(': [')[0] : error.body.message;
-                
         };
+    }
+
+    handleConfirm(){
+      const result = LightningConfirm.open({
+        message: "Renewals Sent Successfully",
+        theme: "Success",
+        label: "Confirm"
+      });
+      setTimeout(() => {
+            location.reload();
+        }, DELAY_BEFORE_REFRESH);
+    }
+
+    handleSearchChange(event) {
+        this.searchKey = event.target.value.toLowerCase();
+    }
+    get filteredBlaList() {
+        if (this.blaList && this.searchKey) {
+            return this.blaList.filter(item =>
+                item.AccName.toLowerCase().includes(this.searchKey)
+            );
+        }
+        return this.blaList;
     }
 }
