@@ -110,6 +110,16 @@ export default class ShowRegulatoryViolationRecords extends OmniscriptBaseMixin(
                     rcv.Description = rcv.Description;
     
                 });
+                rcvParsedData.sort((a, b) => {
+                    if (a.Category < b.Category) {
+                        return -1;
+                    } else if (a.Category > b.Category) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                });
+
             }
             this.rcvList = rcvParsedData;
             if(this.rcvList != null){
