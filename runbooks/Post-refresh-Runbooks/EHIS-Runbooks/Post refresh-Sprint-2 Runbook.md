@@ -3,7 +3,7 @@
 |Sandbox|`Post refresh runbook for EHIS-SP1 " QA ORG "`|
 |-|-|
 |Runbook Created|`2024-06-17`|
-|Runbook Last Modified|`2024-06-17`|
+|Runbook Last Modified|`2024-06-20`|
 
 ## Pre-Requisites [5 min ]
 
@@ -44,7 +44,7 @@
 
 3.[ ] ALR-818 creating Auth Provider and also search for Identity verification and check enable MFA option
 
-4. [ ] Fix the OmniStudio package omnistudio:DML currently not allowed error (1 min)
+4.[ ] Fix the OmniStudio package omnistudio:DML currently not allowed error (1 min)
 
 - Switch to Classic Mode. Click on the + sign from the Tab Panel. Search Documents.
 - Go to Documents.
@@ -53,13 +53,21 @@
 - Name and Unique Name = VlocityLogoDocumentUploads.
 - Attach the sample file [any image file will do] and click Save
 
-5.[ ] Destructive deployment - Delete Action Plan Template
+5.[ ] EHIS-1291 
+
+- Go to Setup → Permission Set Group → Open below mentioned PSGs → Select permission set → Remove Permission Set → Done.
+    1 . Delete "EHIS_CRE_Group_Membership_PS" permission set from the "EHIS_Water_Business_Admin_PSG" 
+    2. "EHIS_Read_Group_Membership_PS" permission set from "EHIS_Water_Public_Health_Engineer_PSG,EHIS_Water_Officer_PSG"
+
+6.[ ] Destructive deployment -
+
+1."Delete Physical_address__c from all the orgs.
+2. Delete EHIS_CRE_Group_Membership_PS ,EHIS_Read_Group_Membership_PS
+3. Action Plan Template
 
 > sfdx force:source:deploy --manifest "destructive\destructive-post-refresh\package.xml" --postdestructivechanges "destructive\destructive-post-refresh\destructiveChanges.xml" -w 30 --targetusername  gandloju.vishwantha@accenture.com.alr.devops
 
-6.[ ] Data Loading ALR-1180, ALR-1123 
-
-- 1. ALR-1180 Please deploy these Login as Data Analyst and create data in the order as mentioned below
+7.[ ] Data Loading ALR-1180, ALR-1123
 
 1.Regulatory Authority
 2.Regulatory Authorization Type
@@ -70,16 +78,18 @@
 7.Assessment Task Indicator Definition
 8.Inspection Type
 
-- sfdx sfdmu:run --path "Dataloading\data" --sourceusername csvfile --targetusername gandloju.vishwantha@accenture.com.alr.qa
+- Run below command to deploy above objects data loaded
 
-- 2. [x] ALR-1123 After creating data for above objects verify ALR-1123, if not linked excecute it manually  
+> sfdx sfdmu:run --path "Dataloading\data" --sourceusername csvfile --targetusername gandloju.vishwantha@accenture.com.alr.qa
 
-- 3. [x] Create Action plan templates from Jira ALR-1268
+- 2. [ ] ALR-1123 After creating data for above objects verify ALR-1123, if not linked excecute it manually  
+
+- 3. [ ] Create Action plan templates from Jira ALR-1268
 
 - Load action plan templates through Work bench 
 - Now perform ALR-1268 LINK Assessment task definition to Action plan template Item
 
-7.[ ] Delete DecisionMatrix versions , DecisionMatrix Definitions
+8.[ ] Delete DecisionMatrix versions , DecisionMatrix Definitions
    -Query and delete
       > select Id , DeveloperName from DecisionMatrixDefinitionVersion 
       > select Id , DeveloperName from DecisionMatrixDefinition 
@@ -117,11 +127,11 @@ delete the flow
 
 > [ ] Deploy
 
-   sfdx force:source:deploy --sourcepath "ehis-source\app-programworkareaassignment\main\default,ehis-source\app-segmentationterritories\main\default,src\main\default,ehis-source\core\main\default,ehis-source\ehis-access-mgmt\main\default,ehis-source\ehis-ui\main\default,src-access-mgmt\main\default,src-ui\main\default" --wait 30 --targetusername gandloju.vishwantha@accenture.com.alr.devops -l RunLocalTests
+- sfdx force:source:deploy --sourcepath "ehis-source,src\main\default,src-access-mgmt\main\default,src-ui\main\default" --wait 30 --targetusername gandloju.vishwantha@accenture.com.alr.devops -l RunLocalTests
 
->[ ] Deploy custom metadata env specific folder - This step is not required to DevOps org
+> [ ] Deploy custom metadata env specific folder - This step is not required to DevOps org
 
-sfdx force:source:deploy --sourcepath 
+- sfdx force:source:deploy --sourcepath 
 "src-env-specific\devops\main\default\customMetadata" --wait 30 --targetusername gandloju.vishwantha@accenture.com.alr.qa
 
 >[ ] Re-activate Omnistudio components
@@ -189,15 +199,44 @@ sfdx force:source:deploy --sourcepath
 
    3. Click **Save**
 
-5. [ ] ALR-1073,1102 This step needs to be done after creating Admin person in ORG
+4. [ ] EHIS-1282
 
-6. [ ] ALR-1206,ALR-1387,1386,1577 - This step to be performed after creating all users
+- "Login as EHIS Admin User and create 2 records mentioned below:
+
+a.  Steps: Go to Apps → Search Party Role Relationship → New → Mentioned below,Party Role Relationship Id = “Downstream-Upstream-AAR” (will be appear once it is created)
+
+- Role Name = “Downstream”
+- Relationship Object Name = “Account Account Relationship”
+- Related Inverse Record = “Upstream-Downstream-AAR” (First create without adding this, then once second record created, edit and add the second record)
+- Related Role Name = “Upstream”
+- Create Inverse Role Automatically = Fasle (does not work for PSS)
+
+b. Party Role Relationship Id = “Upstream-Downstream-AAR” (will be appear once it is created)
+
+- Role Name = “Upstream”
+- Relationship Object Name = “Account Account Relationship”
+- Related Inverse Record = “Downstream-Upstream-AAR” (First create without adding this, then once above record created, edit and add the above record)
+- Related Role Name = “Downstream”
+- Create Inverse Role Automatically = Fasle (does not work for PSS)"
+
+5 .[ ] ALR-1681
+
+- "STEP 1: Go to app launcher
+- STEP 2: Select Salesforce Inspector->Data Export->Execute the below Query.
+Select Id, Name, DeveloperName from EmailTemplate where name='Renewal Late Fee Notification Letter'
+- STEP 3 : Copy the ID of Name “Renewal Late Fee Notification Letter” from the export.
+- STEP 4 : Replace the ID Column in New Email Template-Dataload for 1 column to the copied Id from data export->Save the file
+- STEP 5 : Select Salesforce Inspector ->Data Import->Action : Select Update->Object : EmailTemplate->Copy all the content from New Email Template-Subject-Dataload and paste in Data (Excel)->Import"
+
+6.[ ] ALR-1073,1102 This step needs to be done after creating Admin person in ORG
+
+7.[ ] ALR-1206,ALR-1387,1386,1577 - This step to be performed after creating all users
 
 DevOps checklist:
 
 1. Make sure you activated the all docugen templates 
 2. Validate the flows in org with Repo make sure active/inactive versions in branch which are deployed by devops should match in org
-3. Check reports and dashboards users access
-4. Email templates access
-5. Decision matrix data uploaded, activated back
-6. deploy env specific folder for alr.org specific 
+3. Email templates access and check body is present,html for templates 
+4. Decision matrix data uploaded, activated back
+5. deploy env specific folder for alr.org specific 
+6. Ping Yen to send email to dawn to verify OWD
