@@ -9,7 +9,7 @@
 
 1. [ ] Deployment User has assigned Permission Sets
 
-   1.EHIS ALR Data Migration PS
+   1.EHIS Data Migration PS
    2.EHIS Enable MFA PS
    3.Action Plans PS
    4.Document checklist PS
@@ -70,7 +70,7 @@
 7.Assessment Task Indicator Definition
 8.Inspection Type
 
-- sfdx sfdmu:run --path "Omnistudio\data" --sourceusername csvfile --targetusername gandloju.vishwantha@accenture.com.alr.qa
+- sfdx sfdmu:run --path "Dataloading\data" --sourceusername csvfile --targetusername gandloju.vishwantha@accenture.com.alr.qa
 
 - 2. [x] ALR-1123 After creating data for above objects verify ALR-1123, if not linked excecute it manually  
 

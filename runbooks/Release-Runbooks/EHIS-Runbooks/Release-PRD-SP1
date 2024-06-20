@@ -1,8 +1,8 @@
 # Release Deployment Runbook
 
-|Sandbox|`UAT`
-|Runbook Created|`2024-06-06`|
-|Runbook Last Modified|`2024-06-06`|
+|Sandbox|`PRD`
+|Runbook Created|`2024-06-20`|
+|Runbook Last Modified|`2024-06-20`|
 
 ## Pre-Requisites [5 min ]
 
@@ -15,6 +15,7 @@
    5.DocGen Designer PS
    6.ALR All Users PG
    7.ALR Data Analyst Users PG
+   8.Business Milestones and Life Events Access PS
 
 2. [ ] Checkout to `latest QA.312`code -create new branch out of it "release-sp1-ehis"
  
@@ -32,6 +33,8 @@
 > Enable Create and manage households and groups
 > This needs to be done in all the higher orgs else deployment will fail
 
+[ ] Business Milestones and Life Events Access PS assign this PS to all users in PRD
+
 ## Deployment Steps (20 mins)
 
 1. [ ]  Deploy full repository (~20 min)
@@ -40,8 +43,9 @@
       |-|-|
       |'ehis-source`|
    
-   2. [ ] Deploy 
-   sfdx force:source:deploy --sourcepath "ehis-source\app-programworkareaassignment\main\default,ehis-source\app-segmentationterritories\main\default,ehis-source\core\main\default,ehis-source\ehis-access-mgmt\main\default,C:\repo\MOH-ALR\ehis-source\ehis-ui\main\default" --wait 30 --u deployment.user@gov.bc.ca.alr -l RunLocalTests
+   2. [ ] Deploy
+
+   - sfdx force:source:deploy --sourcepath "ehis-source\app-programworkareaassignment\main\default,ehis-source\app-segmentationterritories\main\default,ehis-source\core\main\default,ehis-source\ehis-access-mgmt\main\default,C:\repo\MOH-ALR\ehis-source\ehis-ui\main\default" --wait 30 --u deployment.user@gov.bc.ca.alr -l RunLocalTests
 
 ## Post-Deployment Steps (30 mins)
 
