@@ -5,17 +5,39 @@
         <name>CompleteTask</name>
         <label>CompleteTask</label>
         <locationX>50</locationX>
-        <locationY>539</locationY>
+        <locationY>647</locationY>
         <customErrorMessages>
             <errorMessage>Please complete all assessment tasks</errorMessage>
             <isFieldError>false</isFieldError>
         </customErrorMessages>
     </customErrors>
     <decisions>
+        <name>Check_User_Profile</name>
+        <label>Check User Profile</label>
+        <locationX>380</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>IsNotAdmin</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Profile.Name</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>System Administrator</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>GetAssessmentTaskRecord</targetReference>
+            </connector>
+            <label>IsNotAdmin</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>CheckIfCompletedRecordFound</name>
         <label>CheckIfInCompletedRecordFound</label>
         <locationX>182</locationX>
-        <locationY>431</locationY>
+        <locationY>539</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>IfRecord</name>
@@ -59,7 +81,7 @@
         <name>GetAssessmentTaskRecord</name>
         <label>GetAssessmentTaskRecord</label>
         <locationX>182</locationX>
-        <locationY>323</locationY>
+        <locationY>431</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>CheckIfCompletedRecordFound</targetReference>
@@ -91,10 +113,10 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <start>
-        <locationX>56</locationX>
+        <locationX>254</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>GetAssessmentTaskRecord</targetReference>
+            <targetReference>Check_User_Profile</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
