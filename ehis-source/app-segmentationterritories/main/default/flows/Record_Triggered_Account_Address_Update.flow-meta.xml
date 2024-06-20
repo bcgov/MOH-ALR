@@ -65,20 +65,6 @@
                     <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
-            <conditions>
-                <leftValueReference>$Record.Physical_Address__Latitude__s</leftValueReference>
-                <operator>IsChanged</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.Physical_Address__Longitude__s</leftValueReference>
-                <operator>IsChanged</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
             <connector>
                 <targetReference>Get_PA_Location_Records</targetReference>
             </connector>
@@ -699,7 +685,7 @@
         <inputAssignments>
             <field>LocationId</field>
             <value>
-                <elementReference>Get_PL_Location_Records.Id</elementReference>
+                <elementReference>LocationId</elementReference>
             </value>
         </inputAssignments>
         <object>AssociatedLocation</object>
@@ -745,20 +731,6 @@
         </filters>
         <filters>
             <field>PhysicalLocation__Longitude__s</field>
-            <operator>IsChanged</operator>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </filters>
-        <filters>
-            <field>Physical_Address__Latitude__s</field>
-            <operator>IsChanged</operator>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </filters>
-        <filters>
-            <field>Physical_Address__Longitude__s</field>
             <operator>IsChanged</operator>
             <value>
                 <booleanValue>true</booleanValue>
