@@ -1,0 +1,82 @@
+# Release Deployment Runbook
+
+|Sandbox|`ES-SP1`
+|Runbook Created|`2024-06-20`|
+|Runbook Last Modified|`2024-06-20`|
+
+## Pre-Requisites [5 min ]
+
+1. [ ] Deployment User has assigned Permission Sets
+
+   1.EHIS Data Migration PS
+   2.EHIS Enable MFA PS
+   3.Action Plans PS
+   4.Document checklist PS
+   5.DocGen Designer PS
+   6.ALR All Users PG
+   7.ALR Data Analyst Users PG
+   8.Business Milestones and Life Events Access PS
+
+2. [ ] Checkout to `latest QA.312`code - create new branch out of it "release-sp1-ehis"
+ 
+## Assumptions
+
+1. Total execution time ~ > 30 mins
+
+## Open Items
+
+## Pre-Deployment Steps (3 mins)
+
+[ ] EHIS - 1153
+> Log in as System Administrator - Click on gear icon and open setup
+> In the Quick find type Group Membership settings and open it
+> Enable Create and manage households and groups
+> This needs to be done in all the higher orgs else deployment will fail
+
+## Deployment Steps (20 mins)
+
+1. [ ]  Deploy full repository (~20 min)
+   1. [x] Verify folders
+      |Folder|Path|
+      |-|-|
+      |'ehis-source`|
+   
+   2. [ ] Deploy 
+   sfdx force:source:deploy --sourcepath "ehis-source\app-programworkareaassignment\main\default,ehis-source\app-segmentationterritories\main\default,ehis-source\core\main\default,ehis-source\ehis-access-mgmt\main\default,C:\repo\MOH-ALR\ehis-source\ehis-ui\main\default" --wait 30 --u deployment.user@gov.bc.ca.alr -l RunLocalTests
+
+## Post-Deployment Steps (30 mins)
+
+1. Create Test users 
+
+[ ] Name - EHIS Admin Test User
+> Username : EHIS-ADMIN-USER@test.UAT.com
+> Email id : agnes.kreps@accenture.com
+> Profile assigned - EHIS Standard User
+> User License - Salesforce
+> PSG Assigned - EHIS Water Business Admin PSG
+> Public Group Membership - EHIS Water Admin Users PG
+
+[ ] Name - EHIS PHE Test User
+> Username : EHIS-PHE-USER@test.UAT.com
+> Email id : agnes.kreps@accenture.com
+> Profile assigned - EHIS Standard User
+> User License - Salesforce
+> PSG Assigned - EHIS Water Public Health Engineer PSG
+> Public Group Membership - EHIS PHE Users PG
+
+[ ] Name - EHIS Officer Test
+> Username : EHIS-Officer-USER@test.UAT.com
+> Email id : agnes.kreps@accenture.com
+> Profile assigned - EHIS Standard User
+> User License - Salesforce
+> PSG Assigned - EHIS Water Officer PSG
+> PS License Assignments - Public Sector Access
+> Public Group Membership - EHIS Officer Users PG
+
+DevOps checklist:
+
+1.Inform Gorisha or Divya to check this PD steps deployed post deployment
+> EHIS-1154
+> EHIS-1152
+> EHIS-1161
+> EHS-1163
