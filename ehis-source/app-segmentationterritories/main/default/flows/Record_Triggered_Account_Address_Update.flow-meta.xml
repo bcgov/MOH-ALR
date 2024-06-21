@@ -4,8 +4,8 @@
     <customErrors>
         <name>PL_Associated_Location_Error</name>
         <label>PL Associated Location Error</label>
-        <locationX>1898</locationX>
-        <locationY>1248</locationY>
+        <locationX>1634</locationX>
+        <locationY>1187</locationY>
         <customErrorMessages>
             <errorMessage>Error in Creating Physical Location Associated Location Records</errorMessage>
             <isFieldError>false</isFieldError>
@@ -14,8 +14,8 @@
     <customErrors>
         <name>PL_Location_Error</name>
         <label>PL Location Error</label>
-        <locationX>2162</locationX>
-        <locationY>1032</locationY>
+        <locationX>1898</locationX>
+        <locationY>971</locationY>
         <customErrorMessages>
             <errorMessage>Error in Creating Physical Location Location Records</errorMessage>
             <isFieldError>false</isFieldError>
@@ -24,45 +24,17 @@
     <decisions>
         <name>LocationType_Check</name>
         <label>LocationType Check</label>
-        <locationX>1617</locationX>
-        <locationY>492</locationY>
+        <locationX>1205</locationX>
+        <locationY>539</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Physical_Address_Records</name>
             <conditionLogic>or</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.Physical_Address__Street__s</leftValueReference>
-                <operator>IsChanged</operator>
+                <operator>IsNull</operator>
                 <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.Physical_Address__StateCode__s</leftValueReference>
-                <operator>IsChanged</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.Physical_Address__PostalCode__s</leftValueReference>
-                <operator>IsChanged</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.Physical_Address__CountryCode__s</leftValueReference>
-                <operator>IsChanged</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.Physical_Address__City__s</leftValueReference>
-                <operator>IsChanged</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
+                    <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -75,16 +47,16 @@
             <conditionLogic>or</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.PhysicalLocation__Latitude__s</leftValueReference>
-                <operator>IsChanged</operator>
+                <operator>IsNull</operator>
                 <rightValue>
-                    <booleanValue>true</booleanValue>
+                    <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
             <conditions>
                 <leftValueReference>$Record.PhysicalLocation__Longitude__s</leftValueReference>
-                <operator>IsChanged</operator>
+                <operator>IsNull</operator>
                 <rightValue>
-                    <booleanValue>true</booleanValue>
+                    <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -97,7 +69,7 @@
         <name>PA_Associated_Location_Availability_Check</name>
         <label>PA Associated Location Availability Check</label>
         <locationX>446</locationX>
-        <locationY>1248</locationY>
+        <locationY>1187</locationY>
         <defaultConnector>
             <targetReference>Create_PA_AssosciatedLocation_Records2</targetReference>
         </defaultConnector>
@@ -122,7 +94,7 @@
         <name>PA_Location_Records_Check</name>
         <label>PA Location Records Check</label>
         <locationX>248</locationX>
-        <locationY>816</locationY>
+        <locationY>755</locationY>
         <defaultConnector>
             <targetReference>Create_PA_Location_Record2</targetReference>
         </defaultConnector>
@@ -137,6 +109,13 @@
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>Get_AssociatedLocation_Records.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>Update_PA_Associated_Loc_Record1</targetReference>
             </connector>
@@ -144,32 +123,10 @@
         </rules>
     </decisions>
     <decisions>
-        <name>PA_Records_Update_Check</name>
-        <label>PA Records Update  Check</label>
-        <locationX>545</locationX>
-        <locationY>708</locationY>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>Update_Physical_Address</name>
-            <conditionLogic>or</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.Physical_Address__Street__s</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>PA_Location_Records_Check</targetReference>
-            </connector>
-            <label>Update Physical Address</label>
-        </rules>
-    </decisions>
-    <decisions>
         <name>PL_Associated_Location_Check1</name>
         <label>PL Associated Location Check</label>
-        <locationX>1502</locationX>
-        <locationY>1032</locationY>
+        <locationX>1238</locationX>
+        <locationY>971</locationY>
         <defaultConnector>
             <targetReference>Create_PL_AssosciatedLocation_Records</targetReference>
         </defaultConnector>
@@ -193,8 +150,8 @@
     <decisions>
         <name>PL_Location_Records_Check</name>
         <label>PL Location Records Check</label>
-        <locationX>1304</locationX>
-        <locationY>816</locationY>
+        <locationX>1040</locationX>
+        <locationY>755</locationY>
         <defaultConnector>
             <targetReference>Create_PL_Location_Record</targetReference>
         </defaultConnector>
@@ -209,6 +166,13 @@
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>Get_AssociatedLocation_Records.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>Update_PL_Associated_Loc_Record</targetReference>
             </connector>
@@ -216,39 +180,10 @@
         </rules>
     </decisions>
     <decisions>
-        <name>PL_Records_Update_Check</name>
-        <label>PL Records Update Check</label>
-        <locationX>1865</locationX>
-        <locationY>708</locationY>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>Update_Physical_Location</name>
-            <conditionLogic>or</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.PhysicalLocation__Latitude__s</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.PhysicalLocation__Longitude__s</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>PL_Location_Records_Check</targetReference>
-            </connector>
-            <label>Update Physical Location</label>
-        </rules>
-    </decisions>
-    <decisions>
         <name>Record_Type_Check</name>
         <label>Record Type Check</label>
-        <locationX>2285</locationX>
-        <locationY>276</locationY>
+        <locationX>1815</locationX>
+        <locationY>323</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Recordtype_Check</name>
@@ -273,7 +208,7 @@
             <label>Recordtype Check</label>
         </rules>
     </decisions>
-    <description>Flow to Update or create Location , Address , Associated Location Records</description>
+    <description>Flow to Update or create Location , Address , Associated Location Records - final</description>
     <environments>Default</environments>
     <formulas>
         <description>Concat Lat and Long</description>
@@ -306,7 +241,7 @@
         <name>Create_PA_Address_Records2</name>
         <label>Create PA Address Records</label>
         <locationX>446</locationX>
-        <locationY>1032</locationY>
+        <locationY>971</locationY>
         <assignRecordIdToReference>AddressId</assignRecordIdToReference>
         <connector>
             <targetReference>Update_PA_Location_Record2</targetReference>
@@ -383,7 +318,7 @@
         <name>Create_PA_AssosciatedLocation_Records2</name>
         <label>Create PA AssosciatedLocation Records</label>
         <locationX>578</locationX>
-        <locationY>1356</locationY>
+        <locationY>1295</locationY>
         <inputAssignments>
             <field>LocationId</field>
             <value>
@@ -409,7 +344,7 @@
         <name>Create_PA_Location_Record2</name>
         <label>Create PA Location Record</label>
         <locationX>446</locationX>
-        <locationY>924</locationY>
+        <locationY>863</locationY>
         <assignRecordIdToReference>LocationId</assignRecordIdToReference>
         <connector>
             <targetReference>Create_PA_Address_Records2</targetReference>
@@ -449,15 +384,15 @@
     <recordCreates>
         <name>Create_PL_AssosciatedLocation_Records</name>
         <label>Create PL AssosciatedLocation Records</label>
-        <locationX>1634</locationX>
-        <locationY>1140</locationY>
+        <locationX>1370</locationX>
+        <locationY>1079</locationY>
         <faultConnector>
             <targetReference>PL_Associated_Location_Error</targetReference>
         </faultConnector>
         <inputAssignments>
             <field>LocationId</field>
             <value>
-                <elementReference>LocationId</elementReference>
+                <elementReference>PLLocationId</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -478,9 +413,9 @@
     <recordCreates>
         <name>Create_PL_Location_Record</name>
         <label>Create PL Location Record</label>
-        <locationX>1502</locationX>
-        <locationY>924</locationY>
-        <assignRecordIdToReference>LocationId</assignRecordIdToReference>
+        <locationX>1238</locationX>
+        <locationY>863</locationY>
+        <assignRecordIdToReference>PLLocationId</assignRecordIdToReference>
         <connector>
             <targetReference>PL_Associated_Location_Check1</targetReference>
         </connector>
@@ -522,8 +457,8 @@
     <recordLookups>
         <name>Get_AssociatedLocation_Records</name>
         <label>Get AssociatedLocation Records</label>
-        <locationX>1617</locationX>
-        <locationY>384</locationY>
+        <locationX>1205</locationX>
+        <locationY>431</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>LocationType_Check</targetReference>
@@ -538,16 +473,18 @@
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>AssociatedLocation</object>
+        <sortField>LastModifiedDate</sortField>
+        <sortOrder>Desc</sortOrder>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
         <name>Get_PA_Location_Records</name>
         <label>Get PA Location Records</label>
-        <locationX>545</locationX>
-        <locationY>600</locationY>
+        <locationX>248</locationX>
+        <locationY>647</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>PA_Records_Update_Check</targetReference>
+            <targetReference>PA_Location_Records_Check</targetReference>
         </connector>
         <filterLogic>or</filterLogic>
         <filters>
@@ -564,11 +501,11 @@
     <recordLookups>
         <name>Get_PL_Location_Records</name>
         <label>Get PL Location Records</label>
-        <locationX>1865</locationX>
-        <locationY>600</locationY>
+        <locationX>1040</locationX>
+        <locationY>647</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>PL_Records_Update_Check</targetReference>
+            <targetReference>PL_Location_Records_Check</targetReference>
         </connector>
         <filterLogic>or</filterLogic>
         <filters>
@@ -580,26 +517,21 @@
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>Location</object>
+        <sortField>LastModifiedDate</sortField>
+        <sortOrder>Desc</sortOrder>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordUpdates>
         <name>Update_PA_Associated_Loc_Record</name>
         <label>Update PA Associated Loc Record</label>
         <locationX>314</locationX>
-        <locationY>1356</locationY>
+        <locationY>1295</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
             <operator>EqualTo</operator>
             <value>
                 <elementReference>Get_AssociatedLocation_Records.Id</elementReference>
-            </value>
-        </filters>
-        <filters>
-            <field>ParentRecordId</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>$Record.Id</elementReference>
             </value>
         </filters>
         <inputAssignments>
@@ -614,20 +546,13 @@
         <name>Update_PA_Associated_Loc_Record1</name>
         <label>Update PA Associated Loc Record</label>
         <locationX>50</locationX>
-        <locationY>924</locationY>
+        <locationY>863</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
             <operator>EqualTo</operator>
             <value>
                 <elementReference>Get_AssociatedLocation_Records.Id</elementReference>
-            </value>
-        </filters>
-        <filters>
-            <field>ParentRecordId</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>$Record.Id</elementReference>
             </value>
         </filters>
         <inputAssignments>
@@ -642,7 +567,7 @@
         <name>Update_PA_Location_Record2</name>
         <label>Update PA Location Record</label>
         <locationX>446</locationX>
-        <locationY>1140</locationY>
+        <locationY>1079</locationY>
         <connector>
             <targetReference>PA_Associated_Location_Availability_Check</targetReference>
         </connector>
@@ -665,36 +590,8 @@
     <recordUpdates>
         <name>Update_PL_Associated_Loc</name>
         <label>Update PL Associated Loc</label>
-        <locationX>1370</locationX>
-        <locationY>1140</locationY>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>Get_AssociatedLocation_Records.LocationId</elementReference>
-            </value>
-        </filters>
-        <filters>
-            <field>ParentRecordId</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>$Record.Id</elementReference>
-            </value>
-        </filters>
-        <inputAssignments>
-            <field>LocationId</field>
-            <value>
-                <elementReference>LocationId</elementReference>
-            </value>
-        </inputAssignments>
-        <object>AssociatedLocation</object>
-    </recordUpdates>
-    <recordUpdates>
-        <name>Update_PL_Associated_Loc_Record</name>
-        <label>Update PL Associated Loc Record</label>
         <locationX>1106</locationX>
-        <locationY>924</locationY>
+        <locationY>1079</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -703,11 +600,25 @@
                 <elementReference>Get_AssociatedLocation_Records.Id</elementReference>
             </value>
         </filters>
+        <inputAssignments>
+            <field>LocationId</field>
+            <value>
+                <elementReference>PLLocationId</elementReference>
+            </value>
+        </inputAssignments>
+        <object>AssociatedLocation</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_PL_Associated_Loc_Record</name>
+        <label>Update PL Associated Loc Record</label>
+        <locationX>842</locationX>
+        <locationY>863</locationY>
+        <filterLogic>and</filterLogic>
         <filters>
-            <field>ParentRecordId</field>
+            <field>Id</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>$Record.Id</elementReference>
+                <elementReference>Get_AssociatedLocation_Records.Id</elementReference>
             </value>
         </filters>
         <inputAssignments>
@@ -719,8 +630,11 @@
         <object>AssociatedLocation</object>
     </recordUpdates>
     <start>
-        <locationX>909</locationX>
+        <locationX>1689</locationX>
         <locationY>0</locationY>
+        <connector>
+            <targetReference>Record_Type_Check</targetReference>
+        </connector>
         <filterLogic>or</filterLogic>
         <filters>
             <field>PhysicalLocation__Latitude__s</field>
@@ -743,35 +657,8 @@
                 <booleanValue>true</booleanValue>
             </value>
         </filters>
-        <filters>
-            <field>Physical_Address__City__s</field>
-            <operator>IsChanged</operator>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </filters>
-        <filters>
-            <field>Physical_Address__PostalCode__s</field>
-            <operator>IsChanged</operator>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </filters>
-        <filters>
-            <field>Physical_Address__StateCode__s</field>
-            <operator>IsChanged</operator>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </filters>
         <object>Account</object>
         <recordTriggerType>Update</recordTriggerType>
-        <scheduledPaths>
-            <connector>
-                <targetReference>Record_Type_Check</targetReference>
-            </connector>
-            <pathType>AsyncAfterCommit</pathType>
-        </scheduledPaths>
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
@@ -784,6 +671,13 @@
     </variables>
     <variables>
         <name>LocationId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>PLLocationId</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
