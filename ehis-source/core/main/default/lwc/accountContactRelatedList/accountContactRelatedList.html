@@ -7,9 +7,8 @@
                         <a href="#" onclick={navigateToAccountContactRelation} data-account-id={recordId} class="custom-heading-link">Related Contacts</a>
                     </h2>
                     <div>
-                        <!-- Refresh Icon Button -->
                         <lightning-button-icon icon-name="utility:refresh" alternative-text="Refresh" onclick={handleRefresh} class="slds-m-right_small"></lightning-button-icon>
-                    <lightning-button label="Manage Contact" onclick={callOmniScript}></lightning-button>
+                        <lightning-button label="Manage Contact" onclick={callOmniScript}></lightning-button>
                     </div>
                 </div>
             </div>
@@ -22,17 +21,27 @@
                             <div class="slds-col">
                                 <p><a href="#" onclick={navigateToContact} data-contact-id={contact.Contact.Id}>{contact.Contact.Name}</a></p>
                                 <div class="slds-grid slds-wrap">
-                                    <p class="slds-size_1-of-2">{label.PrimaryContact} </p>
-                                    <p class="slds-size_1-of-2"><lightning-input type="checkbox"   checked={contact.relation.PrimaryContact__c}  disabled ></lightning-input></p>
-                                    <p class="slds-size_1-of-2">{label.Roles} </p>
-                                    <p class="slds-size_1-of-2">{contact.relation.Roles}</p>
-                                    <template if:true={contact.Contact.Phone}>
-                                        <p class="slds-size_1-of-2">{label.Phone} </p>
-                                        <p class="slds-size_1-of-2">{contact.Contact.Phone}</p>
+                                    <template if:true={isBusinessEntityOrWaterSourceIntake}>
+                                        <p class="slds-size_1-of-2">{label.Roles} </p>
+                                        <p class="slds-size_1-of-2">{contact.relation.Roles}</p>
+                                        <p class="slds-size_1-of-2">{label.PrimaryContact} </p>
+                                        <p class="slds-size_1-of-2"><lightning-input type="checkbox" checked={contact.relation.PrimaryContact__c} disabled></lightning-input></p>
+                                        <p class="slds-size_1-of-2"> Active</p>
+                                        <p class="slds-size_1-of-2"><lightning-input type="checkbox" checked={contact.relation.isActive} disabled></lightning-input></p>
                                     </template>
-                                    <template if:true={contact.Contact.Email}>
-                                        <p class="slds-size_1-of-2">{label.Email} </p>
-                                        <p class="slds-size_1-of-2">{contact.Contact.Email}</p>
+                                    <template if:false={isBusinessEntityOrWaterSourceIntake}>
+                                        <p class="slds-size_1-of-2">{label.PrimaryContact} </p>
+                                        <p class="slds-size_1-of-2"><lightning-input type="checkbox" checked={contact.relation.PrimaryContact__c} disabled></lightning-input></p>
+                                        <p class="slds-size_1-of-2">{label.Roles} </p>
+                                        <p class="slds-size_1-of-2">{contact.relation.Roles}</p>
+                                        <template if:true={contact.Contact.Phone}>
+                                            <p class="slds-size_1-of-2">{label.Phone} </p>
+                                            <p class="slds-size_1-of-2">{contact.Contact.Phone}</p>
+                                        </template>
+                                        <template if:true={contact.Contact.Email}>
+                                            <p class="slds-size_1-of-2">{label.Email} </p>
+                                            <p class="slds-size_1-of-2">{contact.Contact.Email}</p>
+                                        </template>
                                     </template>
                                 </div>
                             </div>
@@ -47,14 +56,13 @@
                                     <section if:true={contact.dropdownVisible} class="slds-dropdown slds-dropdown_right">
                                         <ul class="slds-dropdown__list" role="menu">
                                             <li role="presentation"><a href="#" role="menuitem" onclick={handleViewRelationship} data-relation-id={contact.Id}>View Relationship</a></li>
-                                            </br>
+                                            <br>
                                             <li role="presentation"><a href="#" role="menuitem" onclick={handleEditRelationship} data-relation-id={contact.Id}>Edit Relationship</a></li>
                                         </ul>
                                     </section>
                                 </div>
                             </div>
                         </div>
-                        
                     </div>
                 </template>
             </div>

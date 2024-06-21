@@ -1,3 +1,11 @@
+/**
+* @Name              : AccountContactRelatedList
+* @Description       : This LWC component has been created to show the related contact on the account.
+* @Author            : Suman Dey (Accenture)
+* @StoryNo           : ALR-666
+* Modification done as part of EHIS-228 Story by Chaitai Gatkine (Accenture) Dated: 21-June-2024.
+**/
+
 import { LightningElement, api, wire } from 'lwc';
 import { refreshApex } from '@salesforce/apex';
 import ALR_Primary_Contact from '@salesforce/label/c.ALR_Primary_Contact';
@@ -9,8 +17,9 @@ import getAllRelatedContacts from '@salesforce/apex/AccountContactRelationContro
 
 export default class RelatedContactsLWC extends NavigationMixin(LightningElement) {
     @api recordId;
-@api contextId;
+    @api contextId;
     relatedContacts = [];
+    accountRecordTypeName = '';
     dropdownVisible = false;
 
     get label() {
@@ -26,23 +35,23 @@ export default class RelatedContactsLWC extends NavigationMixin(LightningElement
     wiredRelatedContacts(result) {
         this._wiredResult = result;
         if (result.data) {
-            const data = result.data;
-            this.relatedContacts  = data.map(item => ({
-                Id: item.relation.Id,
+            this.relatedContacts = result.data.relations.map(item => ({
+                Id: item.Id,
                 Contact: {
-                    Id: item.relation.Contact ? item.relation.Contact.Id : null,
-                    Name: item.relation.Contact ? item.relation.Contact.Name : null,
-                    Phone: item.relation.Contact ? item.relation.Contact.Phone : null,
-                    Email: item.relation.Contact ? item.relation.Contact.Email : null
+                    Id: item.Contact ? item.Contact.Id : null,
+                    Name: item.Contact ? item.Contact.Name : null,
+                    Phone: item.Contact ? item.Contact.Phone : null,
+                    Email: item.Contact ? item.Contact.Email : null
                 },
                 relation: {
-                    isActive: item.relation.isActive,
-                    PrimaryContact__c: item.relation.PrimaryContact__c,
-                    Roles: item.relation.Roles
+                    isActive: item.IsActive,
+                    PrimaryContact__c: item.PrimaryContact__c,
+                    Roles: item.Roles
                 }
             }));
+            this.accountRecordTypeName = result.data.accountRecordTypeName;
         } else if (result.error) {
-            console.error('Error fetching related contacts:', error);
+            console.error('Error fetching related contacts:', result.error);
         }
     }
 
@@ -60,12 +69,7 @@ export default class RelatedContactsLWC extends NavigationMixin(LightningElement
     }
 
     callOmniScript() {
-        console.log(this.recordId);
-        const contextId = this.recordId;
-        //const encodedContextId = encodeURIComponent(contextId);
-    const Url = `/lightning/page/omnistudio/omniscript?omniscript__type=EHIS&omniscript__subType=AccountContactRelation&omniscript__language=English&omniscript__theme=lightning&omniscript__tabIcon=custom:custom18&omniscript__tabLabel=Contact&c__ContextId=${encodeURIComponent(contextId)}`;
-    console.log('Constructed URL:', Url);
-       
+        const Url = `/lightning/page/omnistudio/omniscript?omniscript__type=EHIS&omniscript__subType=AccountContactRelation&omniscript__language=English&omniscript__theme=lightning&omniscript__tabIcon=custom:custom18&omniscript__tabLabel=Contact&c__ContextId=${encodeURIComponent(this.recordId)}`;
         this[NavigationMixin.Navigate]({
             type: 'standard__webPage',
             attributes: {
@@ -77,14 +81,14 @@ export default class RelatedContactsLWC extends NavigationMixin(LightningElement
     navigateToAccountContactRelation(event) {
         event.preventDefault();
         this[NavigationMixin.Navigate]({
-        type: 'standard__recordRelationshipPage',
-        attributes: {
-            recordId: this.recordId,
-            relationshipApiName: 'AccountContactRelations', // Specify the relationship name
-            actionName: 'view'
-        }
-    });
-}
+            type: 'standard__recordRelationshipPage',
+            attributes: {
+                recordId: this.recordId,
+                relationshipApiName: 'AccountContactRelations',
+                actionName: 'view'
+            }
+        });
+    }
 
     navigateToContact(event) {
         const contactId = event.target.dataset.contactId;
@@ -125,12 +129,16 @@ export default class RelatedContactsLWC extends NavigationMixin(LightningElement
         });
         this.dropdownVisible = false;
     }
+
     handleRefresh() {
         refreshApex(this._wiredResult);
-        
     }
 
     get dropdownClass() {
         return this.dropdownVisible ? 'slds-dropdown slds-dropdown_left slds-dropdown_small slds-dropdown_menu show' : 'slds-dropdown slds-dropdown_left slds-dropdown_small slds-dropdown_menu';
+    }
+
+    get isBusinessEntityOrWaterSourceIntake() {
+        return this.accountRecordTypeName === 'Business Entity' || this.accountRecordTypeName === 'Water Source Intake' || this.accountRecordTypeName === 'Water System' || this.accountRecordTypeName === 'HA Hierarchy';
     }
 }
