@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Visit.AssessmentTasks$AssessmentTaskDefinition</field>
+    </columns>
+    <columns>
+        <field>Visit$Account.Name</field>
+    </columns>
+    <columns>
+        <field>Visit$Account.LicenseType__c</field>
+    </columns>
+    <filter>
+        <criteriaItems>
+            <column>Visit$Account.LicenseType__c</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>false</isUnlocked>
+            <operator>equals</operator>
+            <value>Mental Health,Supportive Recovery</value>
+        </criteriaItems>
+    </filter>
+    <format>Matrix</format>
+    <groupingsAcross>
+        <dateGranularity>Day</dateGranularity>
+        <field>Visit$Account.Rating</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsAcross>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Visit$Account.HealthAuthority__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>Rate of Operator Compliance</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>Inspection_Account_Report_Type__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>Visit.AssessmentTasks$StartTime</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

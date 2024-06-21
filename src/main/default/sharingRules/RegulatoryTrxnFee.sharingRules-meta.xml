@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingCriteriaRules>
+        <fullName>RegulatoryTransactionFeeSharingRuleALRAdminUsersPG</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>Access has been given to ALR Admin Users as part of ALR-185</description>
+        <label>Regulatory Transaction Fee Sharing Rule - ALR Admin Users PG</label>
+        <sharedTo>
+            <group>ALRAdminUsersPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Transaction Fee</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingOwnerRules>
+        <fullName>RegulatoryTransactionFeeALRALLUSER</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>Sharing rule for  ALR ALL Users as part of ALR-444 &amp; ALR-185</description>
+        <label>Regulatory Transaction Fee ALR ALL USER</label>
+        <sharedTo>
+            <group>ALRAllUsersPG</group>
+        </sharedTo>
+        <sharedFrom>
+            <group>ALRAllUsersPG</group>
+        </sharedFrom>
+    </sharingOwnerRules>
+</SharingRules>

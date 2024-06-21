@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>IncidentDateCannotBeInFutureRule</fullName>
+    <active>true</active>
+    <description>Throws error when Incident Date of Reportable Incident type Case is a future date - ALR-89</description>
+    <errorConditionFormula>RecordType.DeveloperName = &quot;ReportableIncident&quot; &amp;&amp; IncidentDate__c &gt; TODAY()</errorConditionFormula>
+    <errorDisplayField>IncidentDate__c</errorDisplayField>
+    <errorMessage>Date cannot be in the future</errorMessage>
+</ValidationRule>

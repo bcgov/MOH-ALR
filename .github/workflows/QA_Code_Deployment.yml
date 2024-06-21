@@ -1,0 +1,111 @@
+# Unique name for this workflow
+name: QA Code Deployment
+
+# Definition when the workflow should run
+on:
+  ## Deploy manually
+  workflow_dispatch:
+    inputs:
+      QA:
+        type: boolean
+        default: true
+        description: Deploy in QA
+
+      DEMO:
+        type: boolean
+        default: true
+        description: Deploy in DEMO
+
+      create-tag:
+        type: boolean
+        default: true
+        description: Create Git tag after successful deployment
+
+# Jobs to be executed
+jobs:
+  Code-Deploy-Run-QA:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.QA == 'true' }}
+    environment: QA
+    env:
+        SFDXAUTHURL: ${{ secrets.SFDXAUTHURL }}
+    steps:
+      # Install Salesforce CLI
+      - name: 'Install Salesforce CLI'
+        run: |
+          wget https://developer.salesforce.com/media/salesforce-cli/sfdx/channels/stable/sfdx-linux-x64.tar.xz
+          mkdir ~/sfdx
+          tar xJf sfdx-linux-x64.tar.xz -C ~/sfdx --strip-components 1
+          echo "$HOME/sfdx/bin" >> $GITHUB_PATH
+          ~/sfdx/bin/sfdx version
+      # Checkout the source code
+      - name: 'Checkout source code'
+        uses: actions/checkout@v4
+
+      # Authenticate sandbox
+      - name: 'Authenticate Sandbox'
+        run: |
+            echo "${{ env.SFDXAUTHURL }}" > ./authfile
+            sf org login sfdx-url -f authfile -a QA
+
+      # deploy code without running test classes
+      - name: 'Deploy source code'
+        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --testlevel RunLocalTests --targetusername QA
+
+  Code-Deploy-Run-DEMO:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.DEMO == 'true' }}
+    environment: DEMO
+    env:
+        SFDXAUTHURL: ${{ secrets.SFDXAUTHURL }}
+    steps:
+      # Install Salesforce CLI
+      - name: 'Install Salesforce CLI'
+        run: |
+          wget https://developer.salesforce.com/media/salesforce-cli/sfdx/channels/stable/sfdx-linux-x64.tar.xz
+          mkdir ~/sfdx
+          tar xJf sfdx-linux-x64.tar.xz -C ~/sfdx --strip-components 1
+          echo "$HOME/sfdx/bin" >> $GITHUB_PATH
+          ~/sfdx/bin/sfdx version
+      # Checkout the source code
+      - name: 'Checkout source code'
+        uses: actions/checkout@v4
+
+      # Authenticate sandbox
+      - name: 'Authenticate Sandbox'
+        run: |
+            echo "${{ env.SFDXAUTHURL }}" > ./authfile
+            sf org login sfdx-url -f authfile -a DEMO
+
+      # deploy code without running test classes
+      - name: 'Deploy source code'
+        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --testlevel RunLocalTests --targetusername DEMO
+
+  Git-Tag-Run:
+    needs: Code-Deploy-Run-QA
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.create-tag == 'true' }}
+    steps:
+      - name: 'Checkout source code'
+        uses: actions/checkout@v4
+        with:
+          ref: dev
+          fetch-depth: 0
+
+      - name: 'Get latest tag'
+        id: latesttag
+        run: echo "LATEST_TAG=$(git describe --tags --match "QA*" --abbrev=0 HEAD)" >> $GITHUB_OUTPUT
+
+      - name: 'Increment Tag'
+        id: newtag
+        run: |
+          LATEST_TAG=${{ steps.latesttag.outputs.LATEST_TAG }}
+          NUMBER=${LATEST_TAG#QA.}
+          NEW_NUMBER=$((NUMBER + 1))
+          NEW_TAG=QA.${NEW_NUMBER}
+          echo "NEW_TAG=$NEW_TAG" >> $GITHUB_OUTPUT
+
+      - name: 'Push new tag'
+        run: |
+          git tag ${{ steps.newtag.outputs.NEW_TAG }}
+          git push origin ${{ steps.newtag.outputs.NEW_TAG }}

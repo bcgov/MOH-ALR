@@ -1,0 +1,36 @@
+<!--
+* @Name              : GenerateRenewals
+* @Description       : LWC for displaying Account records data table. 
+                       Controller class: RenewalManagementController and RenewalManagementControllerBatch
+* @Author            : Keerthana (Accenture)
+* @StoryNo           : ALR-1348
+-->
+<template>
+    <lightning-card>
+       
+        <template if:false={hasLoaded} class="slds-is-relative">
+            <lightning-spinner size="medium" alternative-text="Loading"></lightning-spinner>
+        </template>
+       <div class="slds-text-align_right">
+            <lightning-button variant="brand" label="Generate Renewals" title="Generate Renewals" 
+                onclick={handleGenerateRenewals}></lightning-button>
+         </div>
+        <div style="height: 400px;" class="table-wrapper">
+            <template if:true={isdata}>
+             <lightning-datatable
+                        key-field="Id"
+                        data={accounts}
+                        hide-row-number-column
+                        show-checkbox-column
+                        columns={columns}
+                        onsave={handleSave}>
+              </lightning-datatable>
+            </template>
+            <template if:false={isdata}>
+            <div class="slds-text-color_red slds-align_absolute-center">
+                <h1 if:true={accounts}> No records to display.</h1>
+            </div>
+        </template>
+        </div>
+     </lightning-card>
+</template>

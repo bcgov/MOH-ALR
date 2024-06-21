@@ -1,0 +1,55 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 11-09-2023
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+-->
+<template>
+	<lightning-card>
+		<div class="slds-grid slds-gutters manage-units">
+			<div class="slds-col manage-units-combobox">
+			  <span>
+			  <template if:true={typeOptions.data}>
+			  <lightning-combobox name="Type" label="Type" value={value} placeholder="Select Value" options={typeOptions.data.values} onchange={handleTypeChange}>	</lightning-combobox>
+			  </template>
+			  </span>
+			</div>
+			<div class="slds-col manage-units-combobox">
+			  <span>
+				 <template if:true={capacityOptions.data}>
+				  <lightning-combobox name="Capacity" label="Capacity" value={value} placeholder="Select Value" options={capacityOptions.data.values} onchange={handleCapacityChange}> </lightning-combobox>
+			     </template>
+			  </span>
+			</div>
+			<div class="slds-col manage-units-button">
+			  <span class="manage-units-button-margin"><lightning-button variant="brand" label="Search" title="Search" onclick={handleSearch}></lightning-button></span>
+			  <span><lightning-button variant="brand" label="Search All" title="Clear" onclick={handleClearSearch}></lightning-button></span>
+			</div>
+			<!--<div class="slds-col">
+			 <span><lightning-button variant="brand" label="Clear Search" title="Clear" onclick={handleClearSearch}></lightning-button></span>
+			</div>-->
+		  </div>
+		<div class="slds-p-top_large slds-p-bottom_large">
+			<lightning-input type="checkbox" lwc:ref='renewed' variant="standard" name="Renewed" label="Generate Renewal Invoice"></lightning-input>
+		</div>
+		<lightning-spinner alternative-text="Loading" size="Large" if:true={isLoading}></lightning-spinner>
+		<div style={datatableHeight}>
+			<lightning-datatable key-field="Id" data={recordList} columns={column} onsave={handleSave}
+				draft-values={draftValues} hide-checkbox-column show-row-number-column >
+			</lightning-datatable>
+		</div>
+	    <div lwc:if={noRecord}>
+			<div class="slds-illustration slds-illustration_small slds-m-top_xx-large slds-p-top_xx-large"
+				aria-hidden="true">
+				<img src="/img/chatter/OpenRoad.svg" class="slds-illustration__svg" alt="" />
+				<div class="slds-m-top_xx-large slds-m-bottom_xx-large">
+					<h1 class="slds-text-heading_medium">No Record To Display</h1>
+					<div class="slds-text-color_weak">
+						<p class="slds-text-body_medium slds-p-bottom_large"></p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</lightning-card>
+</template>

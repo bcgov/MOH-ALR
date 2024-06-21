@@ -1,0 +1,39 @@
+<!--
+* @Name              : RenewalBlaTable
+* @Description       : LWC for displaying BLA records data table. 
+                       Controller class: RenewalBlaTableController and MassEmailController
+* @Author            : Sweta (Accenture)
+* @StoryNo           : ALR-560
+-->
+<template>
+    <lightning-card>
+       
+        <template if:false={hasLoaded} class="slds-is-relative">
+            <lightning-spinner size="medium" alternative-text="Loading"></lightning-spinner>
+        </template>
+       <div class="slds-text-align_right">
+            <lightning-button variant="brand" label="Send Renewals" title="Send Renewals" 
+                onclick={handleSendRenewals}></lightning-button>
+        </div>
+        
+        <div style="height: 400px;" class="table-wrapper">
+            <template if:true={isdata}>
+              <c-l-w-c-custom-datatable-type
+                    key-field="Id"
+                    data={blaList}
+                    show-row-number-column
+                    hide-checkbox-column
+                    draft-values={draftValues}
+                    row-number-offset={rowOffset}
+                    columns={columns}
+                    onsave={handleSave}>
+              </c-l-w-c-custom-datatable-type>
+            </template>
+            <template if:false={isdata}>
+            <div class="slds-text-color_red slds-align_absolute-center">
+                <h1 if:true={blaList}> No records to display.</h1>
+            </div>
+        </template>
+        </div>
+     </lightning-card>
+</template>

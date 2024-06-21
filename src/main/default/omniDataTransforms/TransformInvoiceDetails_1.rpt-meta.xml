@@ -1,0 +1,680 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OmniDataTransform xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <assignmentRulesUsed>false</assignmentRulesUsed>
+    <deletedOnSuccess>false</deletedOnSuccess>
+    <errorIgnored>false</errorIgnored>
+    <expectedInputJson>{
+  &quot;Units&quot; : [ {
+    &quot;Name&quot; : &quot;Units&quot;,
+    &quot;Fees&quot; : 125,
+    &quot;Id&quot; : &quot;02iAs000000HMwzIAG&quot;,
+    &quot;Quantity&quot; : 6,
+    &quot;Price&quot; : &quot;$6.50&quot;,
+    &quot;Type&quot; : &quot;Private&quot;
+  }, {
+    &quot;Name&quot; : &quot;Units&quot;,
+    &quot;Id&quot; : &quot;02iAs000000HMx0IAG&quot;,
+    &quot;Quantity&quot; : 10,
+    &quot;Price&quot; : &quot;$6.50&quot;,
+    &quot;Type&quot; : &quot;Public&quot;
+  }, {
+    &quot;Name&quot; : &quot;Units&quot;,
+    &quot;Id&quot; : &quot;02iAs000000HMybIAG&quot;,
+    &quot;Quantity&quot; : 12,
+    &quot;Price&quot; : &quot;$6.50&quot;,
+    &quot;Type&quot; : &quot;Independent Living&quot;
+  }, {
+    &quot;Name&quot; : &quot;Units&quot;,
+    &quot;Id&quot; : &quot;02iAs000000HN0DIAW&quot;,
+    &quot;Quantity&quot; : 20,
+    &quot;Price&quot; : &quot;$6.50&quot;,
+    &quot;Type&quot; : &quot;Per Diem&quot;
+  }, {
+    &quot;Name&quot; : &quot;Units&quot;,
+    &quot;Id&quot; : &quot;02iAs000000HV4DIAW&quot;,
+    &quot;Quantity&quot; : 0,
+    &quot;Price&quot; : &quot;$6.50&quot;,
+    &quot;Type&quot; : &quot;Public&quot;
+  } ],
+  &quot;InvoiceId&quot; : &quot;FEE-000000003&quot;,
+  &quot;ResidenceName&quot; : &quot;ABC567&quot;,
+  &quot;InvoiceItems&quot; : [ {
+    &quot;FeeAmount&quot; : 125,
+    &quot;Units&quot; : &quot;02iAs000000HMwzIAG&quot;
+  } ],
+  &quot;InvoiceCreatedDate&quot; : &quot;11/22/2023&quot;,
+  &quot;CertificateId&quot; : &quot;000002&quot;,
+  &quot;RegistrantName&quot; : &quot;ABC12&quot;,
+  &quot;TotalFeeAmount&quot; : 125
+}</expectedInputJson>
+    <expectedOutputJson>{
+  &quot;Units&quot; : [ {
+    &quot;Name&quot; : &quot;Units&quot;,
+    &quot;Type&quot; : &quot;Private&quot;
+  }, {
+    &quot;Name&quot; : &quot;Units&quot;,
+    &quot;Type&quot; : &quot;Public&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Private&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Public&quot;
+  }, {
+    &quot;Name&quot; : &quot;Units&quot;,
+    &quot;Type&quot; : &quot;Independent Living&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Independent Living&quot;
+  }, {
+    &quot;Name&quot; : &quot;Units&quot;,
+    &quot;Type&quot; : &quot;Per Diem&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Per Diem&quot;
+  }, {
+    &quot;Name&quot; : &quot;Units&quot;,
+    &quot;Type&quot; : &quot;Public&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Public&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Public&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Per Diem&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Private&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Private&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Private&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Private&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Private&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Private&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Private&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Private&quot;
+  } ],
+  &quot;ResidenceName&quot; : &quot;ABC567&quot;,
+  &quot;RegistrantName&quot; : &quot;ABC12&quot;
+}</expectedOutputJson>
+    <fieldLevelSecurityEnabled>false</fieldLevelSecurityEnabled>
+    <inputType>JSON</inputType>
+    <name>TransformInvoiceDetails</name>
+    <nullInputsIncludedInOutput>false</nullInputsIncludedInOutput>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom2862</globalKey>
+        <inputFieldName>Licensed:LicensedQuantitySum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Licensed:LicensedQuantitySum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom6838</globalKey>
+        <inputFieldName>Other:OtherQuantitySum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Other:OtherQuantitySum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom4010</globalKey>
+        <inputFieldName>Public:PublicQuantitySum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Public:PublicQuantitySum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom6368</globalKey>
+        <inputFieldName>Private:PrivateSum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Private:PrivateSum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom9014</globalKey>
+        <inputFieldName>Independent Living:IndLivingQuantitySum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Independent Living:IndLivingQuantitySum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <defaultValue>[]</defaultValue>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom8618</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>List&lt;Map&gt;</outputFieldFormat>
+        <outputFieldName>Unit</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom2499</globalKey>
+        <inputFieldName>TotalFeeAmount</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TotalFeeAmount</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom4017</globalKey>
+        <inputFieldName>InvoicePaymentDate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>InvoicePaymentDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom6058</globalKey>
+        <inputFieldName>Per Diem:PerDiemQuantitySum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Per Diem:PerDiemQuantitySum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom3889</globalKey>
+        <inputFieldName>Independent Living:IndLivingSum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Independent Living:IndLivingSum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom9140</globalKey>
+        <inputFieldName>CertificateId</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>CertificateId</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom5387</globalKey>
+        <inputFieldName>InvoiceItem:Price</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>InvoiceItem:Price</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom9524</globalKey>
+        <inputFieldName>Public:PublicSum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Public:PublicSum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom8450</globalKey>
+        <inputFieldName>Other:OtherFeeSum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Other:OtherFeeSum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom7465</globalKey>
+        <inputFieldName>RegistrantAddress</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegistrantAddress</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom9353</globalKey>
+        <inputFieldName>Private:PrivateFeeSum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Private:PrivateFeeSum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom8548</globalKey>
+        <inputFieldName>Licensed:LicensedSum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Licensed:LicensedSum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom6747</globalKey>
+        <inputFieldName>Licensed:LicensedFeeSum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Licensed:LicensedFeeSum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom5283</globalKey>
+        <inputFieldName>Other:OtherSum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Other:OtherSum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom3186</globalKey>
+        <inputFieldName>Public:PublicFeeSum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Public:PublicFeeSum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom3912</globalKey>
+        <inputFieldName>InvoiceItem:Fees</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>InvoiceItem:Fees</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom191</globalKey>
+        <inputFieldName>InvoiceId</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>InvoiceId</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <defaultValue>[]</defaultValue>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom3685</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>List&lt;Map&gt;</outputFieldFormat>
+        <outputFieldName>InvoiceItem</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom9344</globalKey>
+        <inputFieldName>Per Diem:PerDiemFeeSum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Per Diem:PerDiemFeeSum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom6779</globalKey>
+        <inputFieldName>InvoiceItem:Amount</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Currency</outputFieldFormat>
+        <outputFieldName>InvoiceItem:Amount</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetails3425745248858889</globalKey>
+        <inputFieldName>ResidenceName</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>ResidenceName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaSequence>1.0</formulaSequence>
+        <globalKey>TransformInvoiceDetailsCustom5266</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetails8661248267129991</globalKey>
+        <inputFieldName>RegistrantName</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegistrantName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetails8899549683541721</globalKey>
+        <inputFieldName>InvoiceItem:Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>InvoiceItem:Name</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom4405</globalKey>
+        <inputFieldName>Per Diem:PerDiemSum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Per Diem:PerDiemSum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom2989</globalKey>
+        <inputFieldName>InvoiceCreatedDate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>InvoiceCreatedDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetails504198556042736</globalKey>
+        <inputFieldName>InvoiceItem:Quantity</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>InvoiceItem:Quantity</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom3813</globalKey>
+        <inputFieldName>Independent Living:IndLivingFeeSum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Independent Living:IndLivingFeeSum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetails4090131982094194</globalKey>
+        <inputFieldName>InvoiceItem:Type</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>InvoiceItem:Type</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom8345</globalKey>
+        <inputFieldName>ResidenceAddress</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>ResidenceAddress</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom3139</globalKey>
+        <inputFieldName>Private:PrivateQuantitySum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Private:PrivateQuantitySum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInvoiceDetailsCustom3679</globalKey>
+        <inputFieldName>InvoiceItem:Id</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>InvoiceItem:Id</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <outputType>JSON</outputType>
+    <previewJsonData>{
+  &quot;Other&quot; : [ {
+    &quot;OtherQuantitySum&quot; : 345,
+    &quot;OtherSum&quot; : &quot;$7.00&quot;,
+    &quot;OtherFeeSum&quot; : &quot;$2,415.00&quot;
+  } ],
+  &quot;ResidenceName&quot; : &quot;ABC Residence&quot;,
+  &quot;Private&quot; : &quot;[]&quot;,
+  &quot;ResidenceAddress&quot; : &quot;876 Sacramento Street San Francisco CA 94108 United States&quot;,
+  &quot;Licensed&quot; : &quot;[]&quot;,
+  &quot;InvoiceCreatedDate&quot; : &quot;01/04/2024&quot;,
+  &quot;RegistrantState&quot; : &quot;CA&quot;,
+  &quot;RegistrantName&quot; : &quot;Registrant Test&quot;,
+  &quot;RegistrantAddress&quot; : &quot;City Hall 303 E. B Street Ontario, California 91764 Ontario CA  United States&quot;,
+  &quot;RegistrantZipCode&quot; : &quot;91764&quot;,
+  &quot;Per Diem&quot; : &quot;[]&quot;,
+  &quot;RegistrantStreet&quot; : &quot;City Hall 303 E. B Street Ontario, California 91764&quot;,
+  &quot;InvoiceId&quot; : &quot;FEE-000000273&quot;,
+  &quot;Public&quot; : &quot;[]&quot;,
+  &quot;RegistrantCity&quot; : &quot;Ontario&quot;,
+  &quot;Independent Living&quot; : &quot;[]&quot;,
+  &quot;CertificateId&quot; : &quot;134&quot;,
+  &quot;TotalFeeAmount&quot; : &quot;$2,415.00&quot;
+}</previewJsonData>
+    <processSuperBulk>false</processSuperBulk>
+    <responseCacheTtlMinutes>0.0</responseCacheTtlMinutes>
+    <rollbackOnError>false</rollbackOnError>
+    <sourceObject>json</sourceObject>
+    <sourceObjectDefault>false</sourceObjectDefault>
+    <synchronousProcessThreshold>0.0</synchronousProcessThreshold>
+    <targetOutputFileName>UnitReceiptTemplate(Version 1)</targetOutputFileName>
+    <type>Transform</type>
+    <uniqueName>TransformInvoiceDetails_1</uniqueName>
+    <versionNumber>1.0</versionNumber>
+    <xmlDeclarationRemoved>false</xmlDeclarationRemoved>
+</OmniDataTransform>

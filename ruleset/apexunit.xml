@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<ruleset
+    name="ApexUnit"
+    xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+    <description>
+        These rules deal with different problems that can occur with Apex unit
+        tests.
+    </description>
+
+    <exclude-pattern>.*/framework-fflib/.*</exclude-pattern>
+
+    <rule
+        ref="category/apex/bestpractices.xml/ApexUnitTestClassShouldHaveAsserts">
+        <priority>1</priority>
+    </rule>
+    <rule ref="category/apex/performance.xml/AvoidDmlStatementsInLoops">
+        <priority>1</priority>
+    </rule>
+    <rule ref="category/apex/performance.xml/AvoidSoqlInLoops">
+        <priority>1</priority>
+    </rule>
+    <rule ref="category/apex/security.xml/ApexSOQLInjection">
+        <priority>1</priority>
+    </rule>
+</ruleset>

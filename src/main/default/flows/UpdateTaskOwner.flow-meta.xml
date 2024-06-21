@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>58.0</apiVersion>
+    <assignments>
+        <description>Assign QueueId As Task Owner - ALR-204</description>
+        <name>AssignQueueIdAsTaskOwner</name>
+        <label>Assign QueueId As Task Owner</label>
+        <locationX>176</locationX>
+        <locationY>395</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.OwnerId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>GetAdministrativeTasksQueueDetails.Id</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <constants>
+        <description>Administrative Tasks Queue Name - ALR-204</description>
+        <name>AdministrativeTasksQueueName</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Administrative Tasks Queue</stringValue>
+        </value>
+    </constants>
+    <description>On creation of task with Subject as &quot;Unit Fee Invoice and Follow-up with Webservices&quot;, change task Owner to &quot;Administrative Tasks&quot; queue - ALR-204, ALR-278, ALR-1316</description>
+    <environments>Default</environments>
+    <interviewLabel>UpdateTaskOwner {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Update Task Owner</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>Get Administrative Tasks Queue Details - ALR-204</description>
+        <name>GetAdministrativeTasksQueueDetails</name>
+        <label>Get Administrative Tasks Queue Details</label>
+        <locationX>176</locationX>
+        <locationY>287</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>AssignQueueIdAsTaskOwner</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>AdministrativeTasksQueue</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Type</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Queue</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Group</object>
+        <queriedFields>Id</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>GetAdministrativeTasksQueueDetails</targetReference>
+        </connector>
+        <filterLogic>(1 OR 4 OR 5 OR 6) AND 2 AND 3</filterLogic>
+        <filters>
+            <field>Subject</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Send Unit Invoice to Registrant Primary Contact</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Status</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Not Started</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Priority</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Normal</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Subject</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Email Registrant with Unsubstantiated Letter</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Subject</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Follow-up with Webservices to upload Web Posting</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Subject</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Email Registrant with Substantiated Letter and Web Posting</stringValue>
+            </value>
+        </filters>
+        <object>Task</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingCriteriaRules>
+        <fullName>RGVSharingRuleALRMMHAUser</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>RGV Sharing Rule ALR MMHA User</label>
+        <sharedTo>
+            <group>ALR_MMHA_Users_PG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>notEqual</operation>
+            <value></value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>RGV_Sharing_Rule_ALR_SDPR_User</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>RGV Sharing Rule ALR SDPR User</label>
+        <sharedTo>
+            <group>ALR_SDPR_User_PG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>notEqual</operation>
+            <value></value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingOwnerRules>
+        <fullName>Regulatory_Code_Violation_Sharing_Rule_ALR_All_Users_PG</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>Read access to all personas - ALR-163</description>
+        <label>Regulatory Code Violation Sharing Rule-ALR All Users PG</label>
+        <sharedTo>
+            <group>ALRAllUsersPG</group>
+        </sharedTo>
+        <sharedFrom>
+            <group>ALRAllUsersPG</group>
+        </sharedFrom>
+    </sharingOwnerRules>
+    <sharingOwnerRules>
+        <fullName>Regulatory_Code_Violation_Sharing_Rule_ALR_DataAnalysts_PG</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>Giving ALR Data analyst access to CRE on ALR violations  - ALR 1582</description>
+        <label>Regulatory_Code_Violation_Sharing_Rule_ALR_DataAnalysts_PG</label>
+        <sharedTo>
+            <group>ALRDataAnalystUsersPG</group>
+        </sharedTo>
+        <sharedFrom>
+            <group>ALRAllUsersPG</group>
+        </sharedFrom>
+    </sharingOwnerRules>
+</SharingRules>

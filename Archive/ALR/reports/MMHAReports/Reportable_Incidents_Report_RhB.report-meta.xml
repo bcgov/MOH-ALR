@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Account$Name</field>
+    </columns>
+    <columns>
+        <field>Account$Parent.Name</field>
+    </columns>
+    <columns>
+        <field>Account$LicenseType__c</field>
+    </columns>
+    <columns>
+        <field>Account.Cases$Origin</field>
+    </columns>
+    <columns>
+        <field>Account.Cases$PlaceOfIncident__c</field>
+    </columns>
+    <filter>
+        <criteriaItems>
+            <column>Account.Cases$RecordType.DeveloperName</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>false</isUnlocked>
+            <operator>equals</operator>
+            <value>Reportable Incident</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Account.Cases$TypeOfIncident__c</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>false</isUnlocked>
+            <operator>equals</operator>
+            <value>Attempted Suicide,Death,Emotional Abuse,Financial Abuse,Medication Error,Neglect,Overdose,Physical Abuse,Police Call,Service Delivery Problem,Sexual Abuse</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Account$LicenseType__c</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>false</isUnlocked>
+            <operator>equals</operator>
+            <value>Supportive Recovery,Mental Health</value>
+        </criteriaItems>
+    </filter>
+    <format>Matrix</format>
+    <groupingsAcross>
+        <dateGranularity>Day</dateGranularity>
+        <field>Account.Cases$TypeOfIncident__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsAcross>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Account$HealthAuthority__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>Reportable Incidents Report</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>Accounts_with_Cases__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>Account.Cases$CreatedDate</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>
