@@ -7,7 +7,7 @@
 
 ## Pre-Requisites [5 min ]
 
-1. [ ] Deployment User has assigned Permission Sets
+1. [x] Deployment User has assigned Permission Sets
 
    1.EHIS Data Migration PS
    2.EHIS Enable MFA PS
@@ -18,7 +18,7 @@
    7.ALR Data Analyst Users PG
    8.Business Milestones and Life Events Access PS
 
-2. [ ] Checkout to `latest tag` code 
+2. [x] Checkout to `dev` code 
 
 ## Assumptions
 
@@ -28,13 +28,12 @@
 
 ## Pre-Deployment Steps (1-2 hrs)
 
-1.[ ] EHIS - 1153 , 1263
+1.[x] EHIS - 1153 , 1263
 
 - Setup -> Email -> Deliverability -> Update **Access Level** dropdown to `All Email` -> click **Save**
-- Setup -> search for Group Membership settings and open it -> Enable Create and manage households and groups
 - Setup → User Interface → Enable “Use custom address fields“. → Save.
 
-2.[ ] ALR -1646 Add OWD email address and display name
+2.[x] ALR -1646 Add OWD email address and display name
 
 - Setup -> Organization-Wide Addresses- Change Display Name from Test to ALR Support Email
    > Provide the below details:
@@ -42,9 +41,9 @@
    2. Email Address: hlth.assistedlivingregistry.test@hlthpss.gov.bc.ca
    3. Select - Allow All Profiles to Use this From Address ->Save
 
-3.[ ] ALR-818 creating Auth Provider and also search for Identity verification and check enable MFA option
+3.[x] ALR-818 creating Auth Provider and also search for Identity verification and check enable MFA option
 
-4.[ ] Fix the OmniStudio package omnistudio:DML currently not allowed error (1 min)
+4.[x] Fix the OmniStudio package omnistudio:DML currently not allowed error (1 min)
 
 - Switch to Classic Mode. Click on the + sign from the Tab Panel. Search Documents.
 - Go to Documents.
@@ -53,21 +52,22 @@
 - Name and Unique Name = VlocityLogoDocumentUploads.
 - Attach the sample file [any image file will do] and click Save
 
-5.[ ] EHIS-1291 
+5.[x] EHIS-1291 
 
 - Go to Setup → Permission Set Group → Open below mentioned PSGs → Select permission set → Remove Permission Set → Done.
     1 . Delete "EHIS_CRE_Group_Membership_PS" permission set from the "EHIS_Water_Business_Admin_PSG" 
     2. "EHIS_Read_Group_Membership_PS" permission set from "EHIS_Water_Public_Health_Engineer_PSG,EHIS_Water_Officer_PSG"
 
-6.[ ] Destructive deployment -
+6.[x] Destructive deployment -
 
 1."Delete Physical_address__c from all the orgs.
 2. Delete EHIS_CRE_Group_Membership_PS ,EHIS_Read_Group_Membership_PS
 3. Action Plan Template
 
-> sfdx force:source:deploy --manifest "destructive\destructive-post-refresh\package.xml" --postdestructivechanges "destructive\destructive-post-refresh\destructiveChanges.xml" -w 30 --targetusername  gandloju.vishwantha@accenture.com.alr.devops
+> sfdx force:source:deploy --manifest "destructive\destructive-post-refresh\package.xml" --postdestructivechanges "destructive\destructive-post-refresh\destructiveChanges.xml" -w 30 --targetusername  gandloju.vishwantha@accenture.com.alr.st
 
-7.[ ] Data Loading ALR-1180, ALR-1123
+
+7.[x] Data Loading ALR-1180, ALR-1123
 
 1.Regulatory Authority
 2.Regulatory Authorization Type
@@ -80,16 +80,16 @@
 
 - Run below command to deploy above objects data loaded
 
-> sfdx sfdmu:run --path "Dataloading\data" --sourceusername csvfile --targetusername gandloju.vishwantha@accenture.com.alr.qa
+> sfdx sfdmu:run --path "Dataloading\data" --sourceusername csvfile --targetusername gandloju.vishwantha@accenture.com.alr.st
 
-- 2. [ ] ALR-1123 After creating data for above objects verify ALR-1123, if not linked excecute it manually  
+- 2. [x] ALR-1123 After creating data for above objects verify ALR-1123, if not linked excecute it manually  
 
-- 3. [ ] Create Action plan templates from Jira ALR-1268
+- 3. [x] Create Action plan templates from Jira ALR-1268
 
 - Load action plan templates through Work bench 
 - Now perform ALR-1268 LINK Assessment task definition to Action plan template Item
 
-8.[ ] Delete DecisionMatrix versions , DecisionMatrix Definitions
+8.[x] Delete DecisionMatrix versions , DecisionMatrix Definitions
    -Query and delete
       > select Id , DeveloperName from DecisionMatrixDefinitionVersion 
       > select Id , DeveloperName from DecisionMatrixDefinition 
@@ -100,9 +100,9 @@ delete the flow
 
 ## Deployment Steps (20 mins)
 
-1. [ ] Deploy Decision Matrix (5 min)
+1. [x] Deploy Decision Matrix (5 min)
    - Deploy decisionMatrixDefinition folder
-   > sfdx force:source:deploy --sourcepath "src-bre\main\default\decisionMatrixDefinition" --wait 30 --targetusername gandloju.vishwantha@accenture.com.alr.qa
+   > sfdx force:source:deploy --sourcepath "src-bre\main\default\decisionMatrixDefinition" --wait 30 --targetusername gandloju.vishwantha@accenture.com.alr.ci
 
 > [ALR-1250] App launcher → Business Rules Engine → Lookup Table Navigation Tab
    > Open one by one below matrix:
@@ -112,10 +112,10 @@ delete the flow
       - Total Compliance Score Decision Matrix
    > Open - Open the Matrix version - edit - uncheck the Active checkbox - >  Upload the csv for the required decision matrix -> activate the template again 
 
-2.[ ] Deploy OmniStudio components and its dependencies (5 min)
-   > sfdx force:source:deploy --sourcepath "src\main\default\omniDataTransforms,src\main\default\omniIntegrationProcedures,src\main\default\omniUiCard,src\main\default\omniScripts" --wait 30 --targetusername gandloju.vishwantha@accenture.com.alr.qa
+2.[x] Deploy OmniStudio components and its dependencies (5 min)
+   > sfdx force:source:deploy --sourcepath "src\main\default\omniDataTransforms,src\main\default\omniIntegrationProcedures,src\main\default\omniUiCard,src\main\default\omniScripts" --wait 30 --targetusername gandloju.vishwantha@accenture.com.alr.st
 
-3.[ ]  Deploy full repository (~20 min)
+3.[x]  Deploy full repository (~20 min)
 
 > [ ] Verify folders
       |Folder|Path|
@@ -125,16 +125,16 @@ delete the flow
       |`src-ui`|`src-ui\main\default`|
       |'Ehis-source'|
 
-> [ ] Deploy
+> [x] Deploy
 
-- sfdx force:source:deploy --sourcepath "ehis-source,src\main\default,src-access-mgmt\main\default,src-ui\main\default" --wait 30 --targetusername gandloju.vishwantha@accenture.com.alr.devops -l RunLocalTests
+- sfdx force:source:deploy --sourcepath "ehis-source\app-programworkareaassignment\main\default,ehis-source\app-segmentationterritories\main\default,ehis-source\core\main\default,ehis-source\ehis-access-mgmt\main\default,ehis-source\ehis-ui\main\default,src\main\default,src-access-mgmt\main\default,src-ui\main\default" --wait 30 --targetusername gandloju.vishwantha@accenture.com.alr.ci -l RunLocalTests
 
-> [ ] Deploy custom metadata env specific folder - This step is not required to DevOps org
+> [x] Deploy custom metadata env specific folder - This step is not required to DevOps org
 
 - sfdx force:source:deploy --sourcepath 
-"src-env-specific\devops\main\default\customMetadata" --wait 30 --targetusername gandloju.vishwantha@accenture.com.alr.qa
+"src-env-specific\devops\main\default\customMetadata" --wait 30 --targetusername gandloju.vishwantha@accenture.com.alr.st
 
->[ ] Re-activate Omnistudio components
+>[x] Re-activate Omnistudio components
       1. App Launcher -> OmniStudio -> Omnistudio **Integration Procedures**
       2. Locate all active custom **Integration Procedures** -> deactivate them -> activate them back.
       3. App Launcher -> OmniStudio -> **Omnistudio FlexCards**
@@ -142,18 +142,18 @@ delete the flow
       5. App Launcher -> OmniStudio -> **OmniScripts**
       6. Locate all active custom **OmniScripts** -> open each omni script -> deactivate -> activate back
 
-4.[ ] ALR-1199 Go to Omniscript “RiskAssessment“ → Open active version → Click on dropdown and select “Select Deploy Standard Runtime Compatible LWC “ → Done.
+4.[x] ALR-1199 Go to Omniscript “RiskAssessment“ → Open active version → Click on dropdown and select “Select Deploy Standard Runtime Compatible LWC “ → Done.
 
 ## Post-Deployment Steps (30 mins)
 
-1.[ ] ALR-792 Residence ID will be starting at 000XX
+1.[x] ALR-792 Residence ID will be starting at 000XX
     1. Go to Object Manager and select the Account object
     2. Click Fields & Relationships, select the UniqueAccountNumber__c field, then click Edit
     3. Click Change Field Type. Select 'Text' for the Data Type, then click Next - > Click Save on the next screen.
     4. Repeat Step 2–4. For step 3, select 'Auto-Number' for the Data Type.
     5. Set the Start Number as 10000
 
-2. [ ] 1. Import Templates: ALR-1540,1014,932,899,1018,1085,1178
+2. [x] 1. Import Templates: ALR-1540,1014,932,899,1018,1085,1178
       - App Launcher -> OMNISTUDIO - Document Template Designer
       - Select import on right top and First Import all Json files 
 
@@ -176,11 +176,11 @@ delete the flow
          |LateFee_Template|
          |'InspectionReport'|
 
-3.[ ] Update Sharing on Action Plan Template `Application Document Checklist template` record (1 min) ALR-793 ,853, 948
+3.[x] Update Sharing on Action Plan Template `Application Document Checklist template` record (1 min) ALR-793 ,853, 948
 
    1. App Launcher -> Action Plan Templates -> **navigate** to `Application Document Checklist template updated version` record
 
-   [ ] ALR-793 - As part of post deployment steps, after the creation of “Application Document Checklist template“, the status of this template is ‘Read only’, it's not visible to the users while adding a template on Action plan creation.
+   [x] ALR-793 - As part of post deployment steps, after the creation of “Application Document Checklist template“, the status of this template is ‘Read only’, it's not visible to the users while adding a template on Action plan creation.
    -So please do the following steps to activate the template, 
    -Note: Login as Data Analyst
    -Step 1: Clone the existing Template and edit the Name as  “Application Document Checklist Template" 
@@ -199,7 +199,7 @@ delete the flow
 
    3. Click **Save**
 
-4. [ ] EHIS-1282
+4. [x] EHIS-1282
 
 - "Login as EHIS Admin User and create 2 records mentioned below:
 
@@ -219,7 +219,7 @@ b. Party Role Relationship Id = “Upstream-Downstream-AAR” (will be appear on
 - Related Role Name = “Downstream”
 - Create Inverse Role Automatically = Fasle (does not work for PSS)"
 
-5 .[ ] ALR-1681
+5 .[x] ALR-1681
 
 - "STEP 1: Go to app launcher
 - STEP 2: Select Salesforce Inspector->Data Export->Execute the below Query.
@@ -228,9 +228,9 @@ Select Id, Name, DeveloperName from EmailTemplate where name='Renewal Late Fee N
 - STEP 4 : Replace the ID Column in New Email Template-Dataload for 1 column to the copied Id from data export->Save the file
 - STEP 5 : Select Salesforce Inspector ->Data Import->Action : Select Update->Object : EmailTemplate->Copy all the content from New Email Template-Subject-Dataload and paste in Data (Excel)->Import"
 
-6.[ ] ALR-1073,1102 This step needs to be done after creating Admin person in ORG
+6.[x] ALR-1073,1102 This step needs to be done after creating Admin person in ORG
 
-7.[ ] ALR-1206,ALR-1387,1386,1577 - This step to be performed after creating all users
+7.[x] ALR-1206,ALR-1387,1386,1577 - This step to be performed after creating all users
 
 DevOps checklist:
 
