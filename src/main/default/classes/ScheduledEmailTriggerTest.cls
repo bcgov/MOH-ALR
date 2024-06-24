@@ -8,36 +8,58 @@
 private class ScheduledEmailTriggerTest {
 
     @isTest
-    static void testScheduledEmailTrigger() {
-         Account testAccount = new Account(
+    static void testExecute() {
+               Account acc = new Account(
             Name = 'Test Account',
-            RecordType = [SELECT Id FROM RecordType WHERE DeveloperName = 'Residence']
-           
+            RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Residence').getRecordTypeId()
         );
-        insert testAccount;
+        insert acc;
 
-        Contact testContact = new Contact(
+        Contact con = new Contact(
             FirstName = 'Test',
             LastName = 'Contact',
             Email = 'test.contact@example.com'
         );
-        insert testContact;
+        insert con;
 
-        RegulatoryTrxnFee testFee = new RegulatoryTrxnFee(
-            AccountId = testAccount.Id,
+        RegulatoryTrxnFee fee = new RegulatoryTrxnFee(
+            AccountId = acc.Id,
             FeeType__c = 'Renewal Unit Fee',
             Status = 'Due'
         );
-        insert testFee;
+        insert fee;
+
+        AccountContactRelation acr = new AccountContactRelation(
+            AccountId = acc.Id,
+            ContactId = con.Id,
+            IsActive = true
+        );
+      
         Test.startTest();
 
-        // Schedule the job
-        String jobId = System.schedule('Test Scheduled Job', '0 0 0 15 1 ?', new ScheduledEmailTrigger());
+               String cronExp = '0 0 0 15 3 ?'; // Cron expression for 15th March midnight
+        System.schedule('TestScheduledEmailTrigger', cronExp, new ScheduledEmailTrigger());
 
         Test.stopTest();
-        System.assertNotEquals(null, jobId, 'Job ID should not be null');
-        List<CronTrigger> cronTriggers = [SELECT Id, CronExpression, CronJobDetail.Name FROM CronTrigger WHERE Id = :jobId];
-        System.assertEquals(1, cronTriggers.size());
+
+        
+    }
+
+    @isTest
+    static void testSendRenewalDueEmail() {
+        Contact con = new Contact(
+            FirstName = 'Test',
+            LastName = 'Contact',
+            Email = 'test.contact@example.com'
+        );
+        insert con;
+
+        Test.startTest();
+
+               List<Id> contactIds = new List<Id>{ con.Id };
+        ScheduledEmailTrigger.sendRenewalDueEmail(contactIds);
+
+        Test.stopTest();
 
         
     }

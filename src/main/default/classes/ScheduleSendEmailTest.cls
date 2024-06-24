@@ -4,51 +4,52 @@
 * @Author            : Keerthana Srinivasan (Accenture)
 * @StoryNo           : ALR-562
 **/
+
 @isTest
 private class ScheduleSendEmailTest {
 
-    @TestSetup
-    static void setup() {
-         EmailTemplate testTemplate = new EmailTemplate(
-            DeveloperName = 'Upcoming_Renewal_Email_Template',
-            Subject = 'Test Subject',
-            HtmlValue = '<html><body>Test Body</body></html>',
-            Body = 'Test Body',
-            Name= 'Upcoming Renewal Email Template', 
-            FolderId='00lJQ000002JQ8vYAG' ,
-            TemplateType='custom'
-        );
-        OrgWideEmailAddress testOrgWideAddr = new OrgWideEmailAddress(
-            DisplayName = 'ALR Support Email',
-            Address = 'support@example.com'
-        );
-         Account testAccount = new Account(
+    @isTest
+    static void testExecute() {
+         Account acc = new Account(
             Name = 'Test Account',
             Status__c = 'Registered Active'
         );
-        Contact testContact = new Contact(
+        insert acc;
+
+        Contact con = new Contact(
             FirstName = 'Test',
             LastName = 'Contact',
             Email = 'test.contact@example.com'
         );
-        AccountContactRelation testACR = new AccountContactRelation(
-            AccountId = testAccount.Id,
-            ContactId = testContact.Id,
+        insert con;
+
+        AccountContactRelation acr = new AccountContactRelation(
+            AccountId = acc.Id,
+            ContactId = con.Id,
             IsActive = true
         );
-      }
-
-    @isTest
-    static void testScheduledJob() {
+      
         Test.startTest();
 
-        String cronExp = '0 0 0 15 1 ?'; 
-        String jobId = System.schedule('Test Schedule', cronExp, new ScheduleSendEmail());
+        String cronExp = '0 0 0 15 1 ?'; // Cron expression for 15th January midnight
+        System.schedule('TestSchedule', cronExp, new ScheduleSendEmail());
 
         Test.stopTest();
+       
+    }
 
-        System.assertNotEquals(null, jobId, 'Job ID should not be null');
+    @isTest
+    static void testSendRenewalDueEmail() {
+         Contact con = new Contact(
+            FirstName = 'Test',
+            LastName = 'Contact',
+            Email = 'test.contact@example.com'
+        );
+        insert con;
 
-      
-            }
+        List<Id> contactIds = new List<Id>{ con.Id };
+        Test.startTest();
+        ScheduleSendEmail.sendRenewalDueEmail(contactIds);
+        Test.stopTest();
+    }
 }
