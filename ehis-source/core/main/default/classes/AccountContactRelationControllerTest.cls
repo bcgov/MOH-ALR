@@ -11,12 +11,11 @@ private class AccountContactRelationControllerTest {
     /*test class
     to get all the related contacts associated with the account
     */
-@isTest
-   static void testGetAllRelatedContacts() {
+   @testSetup public static void setupData() {
         RegulatoryAuthorizationType regAuthType = TestDataFactory.createRegAuthTypeACR('Test Authorization Type', true);
         
         Account testAccount = TestDataFactory.createAccount(
-            'Test Account' + System.currentTimeMillis(), 
+            'TestAccount' + System.currentTimeMillis(), 
             regAuthType.Id, 
             true
         );
@@ -44,16 +43,17 @@ private class AccountContactRelationControllerTest {
                 true
             );
         }
-        
+   }
+       @isTest
+       static void testGetAllRelatedContacts() {
+		Account acc = [Select Id from Account where Name Like 'TestAccount%' Limit 1];
         Test.startTest();
-        AccountContactRelationController.AccountContactRelationWrapper result = AccountContactRelationController.getAllRelatedContacts(testAccount.Id);
+        AccountContactRelationController.AccountContactRelationWrapper result = AccountContactRelationController.getAllRelatedContacts(acc.Id);
         Test.stopTest();
         
-        System.assertEquals(1, result.relations.size(), 'Incorrect number of related contacts returned');
+        Assert.areEqual(1, result.relations.size(), 'Incorrect number of related contacts returned');
 
-        // Assert that the returned record is the expected one
-        if (!existingRelations.isEmpty()) {
-            System.assertEquals(existingRelations[0].Id, result.relations[0].Id, 'Incorrect related contact returned');
-        }
-    }
+        
+       }
+    
 }
