@@ -29,11 +29,13 @@ private class ScheduledEmailTriggerTest {
             Status = 'Due'
         );
         insert testFee;
+        Test.startTest();
 
+        // Schedule the job
         String jobId = System.schedule('Test Scheduled Job', '0 0 0 15 1 ?', new ScheduledEmailTrigger());
 
-        System.assertNotEquals(null, jobId);
-
+        Test.stopTest();
+        System.assertNotEquals(null, jobId, 'Job ID should not be null');
         List<CronTrigger> cronTriggers = [SELECT Id, CronExpression, CronJobDetail.Name FROM CronTrigger WHERE Id = :jobId];
         System.assertEquals(1, cronTriggers.size());
 
