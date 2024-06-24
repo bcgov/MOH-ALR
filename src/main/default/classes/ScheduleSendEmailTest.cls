@@ -35,6 +35,9 @@ private class ScheduleSendEmailTest {
         System.schedule('TestSchedule', cronExp, new ScheduleSendEmail());
 
         Test.stopTest();
+        
+        List<EmailTemplate> emailTem = [SELECT Id FROM EmailTemplate];
+          System.assertEquals(1, emailTem.size(), 'Expected 1 email to be sent');
        
     }
 
@@ -51,5 +54,8 @@ private class ScheduleSendEmailTest {
         Test.startTest();
         ScheduleSendEmail.sendRenewalDueEmail(contactIds);
         Test.stopTest();
+        
+        List<EmailTemplate> emailTem = [SELECT Id FROM EmailTemplate];
+          System.assertEquals(1, emailTem.size(), 'Expected 1 email to be sent');
     }
 }

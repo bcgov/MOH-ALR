@@ -41,7 +41,8 @@ private class ScheduledEmailTriggerTest {
         System.schedule('TestScheduledEmailTrigger', cronExp, new ScheduledEmailTrigger());
 
         Test.stopTest();
-
+ List<EmailTemplate> emailTem = [SELECT Id FROM EmailTemplate];
+          System.assertEquals(1, emailTem.size(), 'Expected 1 email to be sent');
         
     }
 
@@ -61,6 +62,7 @@ private class ScheduledEmailTriggerTest {
 
         Test.stopTest();
 
-        
+         List<EmailTemplate> emailTem = [SELECT Id FROM EmailTemplate];
+          System.assertEquals(1, emailTem.size(), 'Expected 1 email to be sent');
     }
 }
