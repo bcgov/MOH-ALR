@@ -39,15 +39,14 @@ trigger RegulatoryTrxnFeeNewTrigger on RegulatoryTrxnFee (after update) {
         Boolean hasCanceled = false;
 
         for (RegulatoryTrxnFee fee : fees) {
-            if (fee.Status != 'Paid') {
+            if (fee.Status != 'Paid' && fee.Status != 'Canceled') {
                 allPaid = false;
             }
-            if (fee.Status == 'Canceled') {
-                hasCanceled = true;
-            }
+          
         }
 
-        if (allPaid || (hasCanceled && !allPaid)) {
+        if (allPaid ){
+      
             try {
                 Account acc = new Account(Id = accId, Status__c = 'Registered Active');
                 accountsToUpdate.add(acc);
