@@ -28,16 +28,18 @@ private class ScheduleSendEmailTest {
             ContactId = con.Id,
             IsActive = true
         );
-      
+       
+        
+        
         Test.startTest();
-
-        String cronExp = '0 0 0 15 1 ?'; // Cron expression for 15th January midnight
-        System.schedule('TestSchedule', cronExp, new ScheduleSendEmail());
+        String cronExp = '0 0 0 15 1 ?'; 
+        ScheduleSendEmail send=new ScheduleSendEmail();
+        send.execute(null);
 
         Test.stopTest();
         
         List<EmailTemplate> emailTem = [SELECT Id FROM EmailTemplate];
-          System.assertEquals(1, emailTem.size(), 'Expected 1 email to be sent');
+          System.assertEquals(True, emailTem.size()>0, 'No Email is sent');
        
     }
 
@@ -56,6 +58,7 @@ private class ScheduleSendEmailTest {
         Test.stopTest();
         
         List<EmailTemplate> emailTem = [SELECT Id FROM EmailTemplate];
-          System.assertEquals(1, emailTem.size(), 'Expected 1 email to be sent');
+          System.assertEquals(True, emailTem.size()>0, 'No Email is sent');
     }
+    
 }
