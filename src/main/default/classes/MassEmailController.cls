@@ -109,17 +109,15 @@ public with sharing class MassEmailController {
                                                    blaTotalAlUnitsMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, unitCounter);
                                                }
                                                //bla map and blaId-contactId map for email targetIds
-                                               for(BusinessLicenseApplication blaRec : 
-                                                   activeAccRec.BusinessLicenseApplicationAccount) {
-                                                       blaMap.put(blaRec.Id, blaRec);
-                                                       for(Contact cont : [Select id,Name from Contact where Contact.AccountId =:blaRec.AccountId ])
-
-                                                           {
-
-                                                                blaContactMap.put(blaRec.Id,cont.Id); 
-
-                                                           }
-                                                   }
+                                               for(BusinessLicenseApplication blaRec : activeAccRec.BusinessLicenseApplicationAccount) {
+                                                   blaMap.put(blaRec.Id, blaRec);
+                                                   List<Contact> contacts = getContacts(blaRec.AccountId);
+                                                    for(Contact cont : contacts)
+                                                    {
+                                                  blaContactMap.put(blaRec.Id,cont.Id); 
+ 
+                                                     }
+                                                 }
                                                    
                                            }
          }
@@ -150,7 +148,9 @@ public with sharing class MassEmailController {
             LogService.logAndPublish(className, 'doSendRenewals', '', err);
         }
     }
-    
+    public Static List<Contact> getContacts(Id accountId){
+          return [Select id, Name from Contact where AccountId = :accountId];
+}
     //method to to send email to records-ALR-1000
     @AuraEnabled
     public static void doSendLateFee() {
@@ -212,17 +212,15 @@ public with sharing class MassEmailController {
                                                    }
                                                    blaTotalAlUnitsMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, unitCounter);
                                                }
-                                               for(BusinessLicenseApplication blaRec : 
-                                                   activeAccRec.BusinessLicenseApplicationAccount) {
-                                                        blaMap.put(blaRec.Id, blaRec);
-                                                        for(Contact cont : [Select id,Name from Contact where Contact.AccountId =:blaRec.AccountId ])
-
-                                                           {
-
-                                                                blaContactMap.put(blaRec.Id,cont.Id); 
-
-                                                           }
-                                                   }
+                                               for(BusinessLicenseApplication blaRec : activeAccRec.BusinessLicenseApplicationAccount) {
+                                                  blaMap.put(blaRec.Id, blaRec);
+                                                  List<Contact> contacts = getContacts(blaRec.AccountId);
+                                                 for(Contact cont : contacts)
+                                                   {
+                                                     blaContactMap.put(blaRec.Id,cont.Id); 
+ 
+                                                    }
+                                                }
                                            }
                                        }
             
@@ -266,7 +264,6 @@ public with sharing class MassEmailController {
             for(Id whatId : whatIdTargetMap.KeySet()) {
                 blaIdRec = whatId;
                contactId = whatIdTargetMap.isEmpty() ? NULL : whatIdTargetMap.get(whatId);
-                
                 if(!blaMap.isEmpty() && !accMap.isEmpty() &&
                    blaMap.get(whatId) != NULL && accMap.get(whatId) != NULL) {
                        blRec = !blMap.isEmpty() && blMap.get(whatId) != NULL ? blMap.get(whatId) : NULL;//get BL record
