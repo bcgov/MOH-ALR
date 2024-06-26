@@ -12,7 +12,7 @@
                         <valueListItems>
                             <value>CustomButton.BusinessLicenseApplication.GenerateLicense</value>
                             <visibilityRule>
-                                <booleanFilter>1 OR 2 OR 3 OR 4</booleanFilter>
+                                <booleanFilter>(5 OR 6) AND (1 OR 2 OR 3 OR 4)</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.Status}</leftValue>
                                     <operator>EQUAL</operator>
@@ -32,6 +32,16 @@
                                     <leftValue>{!Record.Status}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>Completed</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!$Permission.CustomPermission.EHISAdminUser}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>true</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!$Permission.CustomPermission.EHISRegistrarUser}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>true</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
