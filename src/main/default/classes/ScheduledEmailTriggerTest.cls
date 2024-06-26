@@ -36,10 +36,9 @@ private class ScheduledEmailTriggerTest {
         );
       
         Test.startTest();
-
-               String cronExp = '0 0 0 15 3 ?'; // Cron expression for 15th March midnight
-        System.schedule('TestScheduledEmailTrigger', cronExp, new ScheduledEmailTrigger());
-
+        ScheduledEmailTrigger send=new ScheduledEmailTrigger();
+        send.execute(null);
+            
         Test.stopTest();
  List<EmailTemplate> emailTem = [SELECT Id FROM EmailTemplate];
           System.assertEquals(True, emailTem.size()>0, 'No Email is sent');

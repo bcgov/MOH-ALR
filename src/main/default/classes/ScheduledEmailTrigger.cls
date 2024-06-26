@@ -9,8 +9,6 @@ public with sharing class ScheduledEmailTrigger implements Schedulable {
      public static Set<Id> accountIds = new Set<Id>();
  
          public void execute(SchedulableContext sc) {
-         Date currentDate = Date.today();
-         if(currentDate.month() == 3 && currentDate.day() == 15){
          try {
             
             Map<Id, Set<Id>> accountIdToContactIdsMap = new Map<Id, Set<Id>>();
@@ -51,7 +49,6 @@ public with sharing class ScheduledEmailTrigger implements Schedulable {
          catch (Exception e) {
             System.debug('Exception occurred in execute method: ' + e.getMessage());
         }
-    }
  }
     public static void sendRenewalDueEmail(List<Id> contactIds) {
         try {
