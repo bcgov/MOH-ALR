@@ -32,7 +32,6 @@ private class ScheduleSendEmailTest {
         
         
         Test.startTest();
-        String cronExp = '0 0 0 15 1 ?'; 
         ScheduleSendEmail send=new ScheduleSendEmail();
         send.execute(null);
 
