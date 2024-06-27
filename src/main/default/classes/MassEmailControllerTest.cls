@@ -183,4 +183,76 @@ public class MassEmailControllerTest {
         List<Account> accRec = [SELECT Id FROM Account];
         Assert.isNotNull(accRec.size());
            }
+    
+    //relpaceMergeFieldsTest
+    @isTest
+    Static void relpaceMergeFieldsTest(){
+        Account acc = new Account(Name = 'Test Account');
+        insert acc;
+
+        Contact con = new Contact(LastName = 'Test Contact',Phone ='1234567890');
+        insert con;
+
+        AccountContactRelation acr = new AccountContactRelation(
+            AccountId = acc.Id,
+            ContactId = con.Id,
+            Roles = 'Decision Maker'
+        );
+        
+        BusinessLicense bl = new BusinessLicense(Name = 'Test License');
+        insert bl;
+
+        BusinessLicenseApplication bla = new BusinessLicenseApplication(
+           Status = 'Pending'
+        );
+        
+        String templateData = 'Hello {!AccountContactRelation.FirstName}, your license {!BusinessLicenseApplication.Status} is pending.';
+
+       TemplateMergeFieldMapping__mdt mapping1 = new TemplateMergeFieldMapping__mdt(
+            ObjectName__c = 'AccountContactRelation',
+            MergeField__c = '{!AccountContactRelation.FirstName}',
+            FieldAPIName__c = 'Contact.FirstName'
+        );
+       
+        TemplateMergeFieldMapping__mdt mapping2 = new TemplateMergeFieldMapping__mdt(
+            ObjectName__c = 'BusinessLicenseApplication',
+            MergeField__c = '{!BusinessLicenseApplication.Status}',
+            FieldAPIName__c = 'Status'
+        );
+       
+      Test.startTest();
+        String result = MassEmailController.replaceMergeFields(templateData, acr, bla, acc, bl, '10');
+         Test.stopTest(); 
+       
+         System.assertEquals('Hello {!AccountContactRelation.FirstName}, your license {!BusinessLicenseApplication.Status} is pending.',result);
+    }
+
+    //getEmailStatus
+    @isTest
+    Static void getEmailStatusTest(){
+    List<Messaging.SingleEmailMessage> testEmailMessages = new List<Messaging.SingleEmailMessage>();
+        Messaging.SingleEmailMessage email1 = new Messaging.SingleEmailMessage();
+        email1.setSubject('Test Email 1');
+        email1.setPlainTextBody('This is a test email.');
+        testEmailMessages.add(email1);
+
+        List<Messaging.SendEmailResult> testEmailResults = new List<Messaging.SendEmailResult>();
+        Map<Id, Id> whatIdTargetMap = new Map<Id, Id>();
+        whatIdTargetMap.put(email1.getWhatId(), email1.getTargetObjectId());
+
+        Map<Id, Contact> accContactMap = new Map<Id, Contact>();
+        Contact testContact = new Contact();
+        testContact.Id = email1.getTargetObjectId();
+        testContact.Email = 'test@gmail.com';
+        accContactMap.put(testContact.Id, testContact);
+
+        Test.startTest();
+        MassEmailController.getEmailStatus(testEmailResults, testEmailMessages, whatIdTargetMap);
+        Test.stopTest();
+
+        
+        System.assertEquals(0, MassEmailController.blaSuccessMap.size());
+        System.assertEquals(0, MassEmailController.blaErrMap.size()); 
+      
+    }
 }

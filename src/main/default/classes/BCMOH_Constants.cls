@@ -32,6 +32,7 @@ public class BCMOH_Constants {
     public Final static String accountStat = 'Registered Active with Conditions';
     public Final static String accStat= 'Registered Active Progressive Enforcement';
     public Final static String accRecType= 'Residence';
+    public Final static String accRegType= 'Registrant';
     public Final static String blaCompletedStatus= 'Completed';
     //ALR-1000
     public Final static String blaLateFeeStatus = 'Ready to Send';
@@ -55,11 +56,15 @@ public class BCMOH_Constants {
     public Final static String templatePurpose = 'Renewal';
     //error handling
     public Final static String noPrimaryContact = 'No primary contact record or no email id on primary contact';
+    public Final static String noEmailFound = 'Invalid Email';
     public Final static String noOrgWideAddr = 'No valid org wide email address found';
     public Final static String noBLRec = 'No business license record found';
     public Final static String mappingDataMissing = System.Label.TemplateFieldDataMissing;//'Data required for template merge field mapping is missing';
     public Final static String templateNameMissing = 'No email template found for ';
     public Final static String activePurposeTemplateMissing = 'No active email template name configured for ';
+    public Final static String noBusinessLicenseApplication = 'No Business License Application record';
+    public Final static String noBusinessLicense = 'No Business License record';
+    public Final static String noAssets = 'No Assets record';
     //document error
     public Final static String documentNotFound = 'Document not found for specified template name';
     public Final static String nextYear = String.valueOf(Date.Today().Year() + 1);
@@ -87,6 +92,7 @@ public class BCMOH_Constants {
     public Final static String regulatoryTransactionFee = 'Regulatory Transaction Fee';
     public Final static String LatestContentVersionId = 'LatestContentVersionId';
     public Final static String accountParent = 'Parent Account';
+
     public Final static String accountParentAddr = 'Parent Account Billing Address';
     public Final static String accountAddr = 'Account Address';
     public Final static String relatedContacts = 'Related Contacts';
@@ -115,4 +121,7 @@ public class BCMOH_Constants {
 	public final static String TaskType = 'InspectionChecklist';
     public final static String resultt = 'Non-compliant';
 	public final static String nulltest = 'null';
+    //ALR-192
+    public final static String orgDisplayName = 'ALR Support Email';
+    public final static String emailTemplate = 'UpcomingRenewalmailTemplate';
 }
