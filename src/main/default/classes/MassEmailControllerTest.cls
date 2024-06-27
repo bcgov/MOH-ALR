@@ -15,7 +15,9 @@ public class MassEmailControllerTest {
         Account residenceRec1 = TestDataFactory.createResidence('Residence', 'residenceAccount1', regAuth.Id, true);
         Account residenceRec2 = TestDataFactory.createResidence('Residence', 'Account2', regAuth.Id, true);
         Contact contactRec = TestDataFactory.createContactRecord(residenceRec2.Id, 'test@xyz.com', 'fname1', 'lname1', true);
-		AccountContactRelation acConRelRec = TestDataFactory.createAccContRelRecord(residenceRec1.Id, contactRec.Id , true, true, true);
+		Contact contRec = TestDataFactory.createContactRecord(residenceRec1.Id, 'test1@xyz.com', 'firstname1', 'lastname1', true);
+        
+        AccountContactRelation acConRelRec = TestDataFactory.createAccContRelRecord(residenceRec1.Id, contactRec.Id , true, true, true);
 
         Asset unitRec1 = TestDataFactory.createUnit('1', 'Private', 2, residenceRec1.Id, true);
         unitRec1.recordTypeId = parentAssetRTId;
@@ -23,6 +25,7 @@ public class MassEmailControllerTest {
         update unitRec1;
         BusinessLicenseApplication blaRec = TestDataFactory.createRenewalBla(residenceRec1.LicenseType__c, residenceRec1.Id, true);
         blaRec.Late_Fee_Status__c='Ready to Send';
+        blaRec.AccountId=residenceRec1.Id;
         update blaRec;
         BusinessLicense blRec = TestDataFactory.createBlRecord(regAuth.Id, residenceRec1.Id, residenceRec1.ParentId, '58659', 'BL RECORD 1', true);
         
@@ -90,34 +93,7 @@ public class MassEmailControllerTest {
         List<Account> accRec = [SELECT Id FROM Account];
         Assert.isNotNull(accRec.size());
     }
-    
-    //updateBlaStatusTest
-    /* @isTest
-    static void updateBlaStatusTest() {
-        String blaStatus = '' ;
-        Id BlaId=[SELECT Id FROM BusinessLicenseApplication][0].Id;
-        Map<Id,String> blaIdDetailsMap = new Map<Id,String>{BlaId =>''} ; 
-        List<BusinessLicenseApplication> BlaList=new List<BusinessLicenseApplication>();
-        Test.startTest();
-        BlaList=BCMOH_UtilityClass.updateBlaStatus(blaIdDetailsMap,blaStatus);
-        Test.stopTest();
-        List<Account> accRec = [SELECT Id FROM Account];
-        Assert.isNotNull(accRec.size());
-    }*/
-    
-    //updateBlaLateFeeStatusTest
-     @isTest
-    static void updateBlaLateFeeStatusTest() {
-        String blaStatus = '' ;
-        Id BlaId=[SELECT Id FROM BusinessLicenseApplication][0].Id;
-        Map<Id,String> blaIdDetailsMap = new Map<Id,String>{BlaId =>''} ; 
-        List<BusinessLicenseApplication> BlaList=new List<BusinessLicenseApplication>();
-        Test.startTest();
-        BlaList=BCMOH_UtilityClass.updateBlaLateFeeStatus(blaIdDetailsMap,blaStatus);
-        Test.stopTest();
-        List<Account> accRec = [SELECT Id FROM Account];
-        Assert.isNotNull(accRec.size());
-    }
+   
       
       //getDocTempContentMap
      @isTest
