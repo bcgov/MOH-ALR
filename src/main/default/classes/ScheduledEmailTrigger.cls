@@ -13,32 +13,44 @@ public with sharing class ScheduledEmailTrigger implements Schedulable {
             
             Map<Id, Set<Id>> accountIdToContactIdsMap = new Map<Id, Set<Id>>();
             List<RegulatoryTrxnFee> fees = [
-                SELECT Id,AccountId,ParentRecordId 
+                SELECT Id,AccountId,Account.ParentId,ParentRecordId 
                 FROM RegulatoryTrxnFee
                 WHERE FeeType__c = 'Renewal Unit Fee'
-                    AND Status = 'Due'
+                    AND Status = 'Due' 
             ];
               for (RegulatoryTrxnFee fee : fees) {
                 accountIds.add(fee.AccountId);
+                accountIds.add(fee.Account.ParentId);
                 accountIdToContactIdsMap.put(fee.AccountId, new Set<Id>());
+                accountIdToContactIdsMap.put(fee.Account.ParentId, new Set<Id>());
             }
             
-            Map<Id, Account> accountIdToAccountMap = new Map<Id, Account>([
+                Map<Id, Account> accountIdToAccountMap = new Map<Id, Account>([
                 SELECT Id,parentId,
                      (SELECT Id, ContactId, Contact.Name, Contact.Email
                       FROM AccountContactRelations
                       WHERE IsActive = true AND Contact.Email != null)
                 FROM Account
-                WHERE RecordType.DeveloperName = 'Residence'
-                    AND Id IN :accountIds
+                WHERE Id IN: accountIds 
             ]);
+
+             for (Account account : [
+    SELECT  parentId, 
+         (SELECT Id, ContactId, Contact.Name, Contact.Email 
+          FROM AccountContactRelations 
+          WHERE IsActive = true AND Contact.Email!= null)
+    FROM Account 
+    WHERE Id IN : accountIds
+]) {
+    accountIdToAccountMap.put(account.Id, account);
+}
              for (Account acc : accountIdToAccountMap.values()) {
                 for (AccountContactRelation acr : acc.AccountContactRelations) {
                     accountIdToContactIdsMap.get(acc.Id).add(acr.ContactId);
                 }
             }
 
-            List<Id> contactIdsList = new List<Id>();
+           List<Id> contactIdsList = new List<Id>();
             for (Set<Id> contactIds : accountIdToContactIdsMap.values()) {
                 contactIdsList.addAll(contactIds);
             }
@@ -51,56 +63,63 @@ public with sharing class ScheduledEmailTrigger implements Schedulable {
         }
  }
     public static void sendRenewalDueEmail(List<Id> contactIds) {
-        try {
-            EmailTemplate emailTemplate = getEmailTemplate('Renewal_Reminder_Email');
-           
-            if (emailTemplate != null && emailTemplate.Id != null) {
-                OrgWideEmailAddress orgWideAddr = [
-                    SELECT Id, DisplayName, Address
-                    FROM OrgWideEmailAddress
-                    WHERE DisplayName = 'ALR Support Email'
-                ];
-               
-                 List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
+    try {
+        EmailTemplate emailTemplate = getEmailTemplate('Renewal_Reminder_Email');
+        OrgWideEmailAddress orgWideAddr = [
+            SELECT Id, DisplayName, Address
+            FROM OrgWideEmailAddress
+            WHERE DisplayName = 'ALR Support Email'
+        ];
 
-                 for (Id contactId : contactIds){
-                      Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
-                      email.setTemplateId(emailTemplate.Id);
-                      email.setOrgWideEmailAddressId(orgWideAddr.Id);
-                      email.setTargetObjectId(contactId);
-                     
-                      String emailSubject = emailTemplate.Subject;
-                      String emailBody = emailTemplate.HtmlValue;
-
-                     email.setSubject(emailSubject);
-                     email.setHtmlBody(emailBody);
-                     emails.add(email);
-                }
-               
-            if (!emails.isEmpty()) {
-                List<Messaging.SendEmailResult> sendResults = Messaging.sendEmail(emails);
-                
-                for (Integer i = 0; i < sendResults.size(); i++) {
-                    if (sendResults[i].isSuccess()) {
-                        System.debug('Email sent successfully to ContactId: ' + contactIds[i]);
-                        
+        List<Contact> contactRec =[Select Id,Email from Contact WHERE Id IN: contactIds ];
+        
+        Integer batchSize = 100; 
+        List<List<Messaging.SingleEmailMessage>> emailBatches = new List<List<Messaging.SingleEmailMessage>>();
+        List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
+        for (Contact contact : contactRec){
+            Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
+            email.setTemplateId(emailTemplate.Id);
+            email.setOrgWideEmailAddressId(orgWideAddr.Id);
+            email.setToAddresses(new String[] {contact.Email});
+            email.setTargetObjectId(contact.Id);
+            String emailSubject = emailTemplate.Subject;
+            String emailBody = emailTemplate.HtmlValue;
+            email.setSubject(emailSubject);
+            email.setHtmlBody(emailBody);
+            emails.add(email);
+            if (emails.size() == batchSize) {
+                emailBatches.add(emails);
+                emails = new List<Messaging.SingleEmailMessage>();
+            }
+        }
+        if (!emails.isEmpty()) {
+            emailBatches.add(emails);
+        }
+        for (List<Messaging.SingleEmailMessage> emailBatch : emailBatches) {
+            try {
+                List<Messaging.SendEmailResult> results = Messaging.sendEmail(emailBatch);
+                for (Integer i = 0; i < results.size(); i++) {
+                    if (results[i].isSuccess()) {
+                        System.debug('Email sent successfully to ' + emailBatch[i].getToAddresses()[0]);
                     } else {
-                        System.debug('Failed to send email to ContactId: ' + contactIds[i] + '. Error: ' + sendResults[i].getErrors()[0].getMessage());
+                        
                     }
                 }
+            } catch (Exception e) {
+                System.debug('Exception occurred in sendEmails method: ' + e.getMessage());
             }
-        } 
-        }catch (Exception e) {
-            System.debug('Exception occurred in sendRenewalDueEmail method: ' + e.getMessage());
         }
+    } catch (Exception e) {
+        System.debug('Exception occurred in sendRenewalDueEmail method: ' + e.getMessage());
     }
+}
 
     public static EmailTemplate getEmailTemplate(String templateDevName) {
         EmailTemplate emailTemplateRec = null;
         List<Id> contactIdsList = new List<Id>();
         try {
             emailTemplateRec = [
-                SELECT Id, DeveloperName, Subject, HtmlValue
+                SELECT Id, DeveloperName, Subject, HtmlValue ,Body
                 FROM EmailTemplate
                 WHERE DeveloperName = :templateDevName
                 LIMIT 1
