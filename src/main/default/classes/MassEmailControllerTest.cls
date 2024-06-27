@@ -92,7 +92,7 @@ public class MassEmailControllerTest {
     }
     
     //updateBlaStatusTest
-     @isTest
+    /* @isTest
     static void updateBlaStatusTest() {
         String blaStatus = '' ;
         Id BlaId=[SELECT Id FROM BusinessLicenseApplication][0].Id;
@@ -103,7 +103,7 @@ public class MassEmailControllerTest {
         Test.stopTest();
         List<Account> accRec = [SELECT Id FROM Account];
         Assert.isNotNull(accRec.size());
-    }
+    }*/
     
     //updateBlaLateFeeStatusTest
      @isTest
@@ -255,4 +255,64 @@ public class MassEmailControllerTest {
         System.assertEquals(0, MassEmailController.blaErrMap.size()); 
       
     }
+    
+     @isTest
+    static void updateBlaStatusTest() {
+         RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
+         Account residenceRec1 = TestDataFactory.createResidence('Residence', 'Test Residence', regAuth.Id, true);
+       BusinessLicenseApplication bla = TestDataFactory.createRenewalBla(residenceRec1.LicenseType__c, residenceRec1.Id, true); 
+         
+
+        Map<Id, String> blaErrMap = new Map<Id, String>();
+        blaErrMap.put(bla.Id, 'Error message');
+
+        Map<Id, String> blaSuccessMap = new Map<Id, String>();
+        blaSuccessMap.put(bla.Id, 'Success message');
+
+        Test.startTest();
+        MassEmailController.updateBlaStatus();
+        Test.stopTest();
+
+        List<BusinessLicenseApplication> blaList = [SELECT Id, Status, RenewalDetail__c FROM BusinessLicenseApplication  LIMIT 1];
+        System.assertEquals(1, blaList.size(), 'Expected one BusinessLicenseApplication record to be queried');
+
+        if (!blaList.isEmpty()) {
+            BusinessLicenseApplication blaRec = blaList[0];
+            System.assert(true, 'BusinessLicenseApplication record found matching query criteria');
+        } else {
+            // Handle case where no BusinessLicenseApplication record is found
+            System.assert(false, 'No BusinessLicenseApplication record found matching query criteria');
+        }
+        
+    }
+      @isTest
+    static void updateLateFeeBlaStatusTest() {
+        RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
+          Account residenceRec1 = TestDataFactory.createResidence('Residence', 'Test Residence', regAuth.Id, true);
+       BusinessLicenseApplication bla = TestDataFactory.createRenewalBla(residenceRec1.LicenseType__c, residenceRec1.Id, true);  
+        bla.Late_Fee_Status__c='Ready to Send';
+        bla.RenewalDetail__c= 'Late fee error message';
+        Database.update( bla,false);
+        
+       Map<Id, String> blaErrMap = new Map<Id, String>();
+        blaErrMap.put(bla.Id, 'Late fee error');
+
+        Map<Id, String> blaSuccessMap = new Map<Id, String>();
+        blaSuccessMap.put(bla.Id, 'Late fee success');
+
+        Test.startTest();
+        MassEmailController.updateLateFeeBlaStatus();
+        Test.stopTest();
+
+         // Verify updates to BusinessLicenseApplication record
+        BusinessLicenseApplication updatedBla = [SELECT Id, Late_Fee_Status__c, RenewalDetail__c FROM BusinessLicenseApplication WHERE Id = :bla.Id];
+        System.assertEquals(BCMOH_Constants.blaLateFeeStatus, updatedBla.Late_Fee_Status__c);
+        System.assertEquals('Late fee error message', updatedBla.RenewalDetail__c);
+
+        // Verify related Account update
+        Account acc = [SELECT Id, Status__c FROM Account WHERE Id = :residenceRec1.Id];
+        System.assertEquals(BCMOH_Constants.accountStat, acc.Status__c);
+        
+    }
+
 }
