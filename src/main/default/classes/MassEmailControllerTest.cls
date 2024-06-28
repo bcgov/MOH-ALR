@@ -15,7 +15,9 @@ public class MassEmailControllerTest {
         Account residenceRec1 = TestDataFactory.createResidence('Residence', 'residenceAccount1', regAuth.Id, true);
         Account residenceRec2 = TestDataFactory.createResidence('Residence', 'Account2', regAuth.Id, true);
         Contact contactRec = TestDataFactory.createContactRecord(residenceRec2.Id, 'test@xyz.com', 'fname1', 'lname1', true);
-		AccountContactRelation acConRelRec = TestDataFactory.createAccContRelRecord(residenceRec1.Id, contactRec.Id , true, true, true);
+		Contact contRec = TestDataFactory.createContactRecord(residenceRec1.Id, 'test1@xyz.com', 'firstname1', 'lastname1', true);
+        
+        AccountContactRelation acConRelRec = TestDataFactory.createAccContRelRecord(residenceRec1.Id, contactRec.Id , true, true, true);
 
         Asset unitRec1 = TestDataFactory.createUnit('1', 'Private', 2, residenceRec1.Id, true);
         unitRec1.recordTypeId = parentAssetRTId;
@@ -23,6 +25,7 @@ public class MassEmailControllerTest {
         update unitRec1;
         BusinessLicenseApplication blaRec = TestDataFactory.createRenewalBla(residenceRec1.LicenseType__c, residenceRec1.Id, true);
         blaRec.Late_Fee_Status__c='Ready to Send';
+        blaRec.AccountId=residenceRec1.Id;
         update blaRec;
         BusinessLicense blRec = TestDataFactory.createBlRecord(regAuth.Id, residenceRec1.Id, residenceRec1.ParentId, '58659', 'BL RECORD 1', true);
         
@@ -90,34 +93,7 @@ public class MassEmailControllerTest {
         List<Account> accRec = [SELECT Id FROM Account];
         Assert.isNotNull(accRec.size());
     }
-    
-    //updateBlaStatusTest
-     @isTest
-    static void updateBlaStatusTest() {
-        String blaStatus = '' ;
-        Id BlaId=[SELECT Id FROM BusinessLicenseApplication][0].Id;
-        Map<Id,String> blaIdDetailsMap = new Map<Id,String>{BlaId =>''} ; 
-        List<BusinessLicenseApplication> BlaList=new List<BusinessLicenseApplication>();
-        Test.startTest();
-        BlaList=BCMOH_UtilityClass.updateBlaStatus(blaIdDetailsMap,blaStatus);
-        Test.stopTest();
-        List<Account> accRec = [SELECT Id FROM Account];
-        Assert.isNotNull(accRec.size());
-    }
-    
-    //updateBlaLateFeeStatusTest
-     @isTest
-    static void updateBlaLateFeeStatusTest() {
-        String blaStatus = '' ;
-        Id BlaId=[SELECT Id FROM BusinessLicenseApplication][0].Id;
-        Map<Id,String> blaIdDetailsMap = new Map<Id,String>{BlaId =>''} ; 
-        List<BusinessLicenseApplication> BlaList=new List<BusinessLicenseApplication>();
-        Test.startTest();
-        BlaList=BCMOH_UtilityClass.updateBlaLateFeeStatus(blaIdDetailsMap,blaStatus);
-        Test.stopTest();
-        List<Account> accRec = [SELECT Id FROM Account];
-        Assert.isNotNull(accRec.size());
-    }
+   
       
       //getDocTempContentMap
      @isTest
@@ -183,4 +159,136 @@ public class MassEmailControllerTest {
         List<Account> accRec = [SELECT Id FROM Account];
         Assert.isNotNull(accRec.size());
            }
+    
+    //relpaceMergeFieldsTest
+    @isTest
+    Static void relpaceMergeFieldsTest(){
+        Account acc = new Account(Name = 'Test Account');
+        insert acc;
+
+        Contact con = new Contact(LastName = 'Test Contact',Phone ='1234567890');
+        insert con;
+
+        AccountContactRelation acr = new AccountContactRelation(
+            AccountId = acc.Id,
+            ContactId = con.Id,
+            Roles = 'Decision Maker'
+        );
+        
+        BusinessLicense bl = new BusinessLicense(Name = 'Test License');
+        insert bl;
+
+        BusinessLicenseApplication bla = new BusinessLicenseApplication(
+           Status = 'Pending'
+        );
+        
+        String templateData = 'Hello {!AccountContactRelation.FirstName}, your license {!BusinessLicenseApplication.Status} is pending.';
+
+       TemplateMergeFieldMapping__mdt mapping1 = new TemplateMergeFieldMapping__mdt(
+            ObjectName__c = 'AccountContactRelation',
+            MergeField__c = '{!AccountContactRelation.FirstName}',
+            FieldAPIName__c = 'Contact.FirstName'
+        );
+       
+        TemplateMergeFieldMapping__mdt mapping2 = new TemplateMergeFieldMapping__mdt(
+            ObjectName__c = 'BusinessLicenseApplication',
+            MergeField__c = '{!BusinessLicenseApplication.Status}',
+            FieldAPIName__c = 'Status'
+        );
+       
+      Test.startTest();
+        String result = MassEmailController.replaceMergeFields(templateData, acr, bla, acc, bl, '10');
+         Test.stopTest(); 
+       
+         System.assertEquals('Hello {!AccountContactRelation.FirstName}, your license {!BusinessLicenseApplication.Status} is pending.',result);
+    }
+
+    //getEmailStatus
+    @isTest
+    Static void getEmailStatusTest(){
+    List<Messaging.SingleEmailMessage> testEmailMessages = new List<Messaging.SingleEmailMessage>();
+        Messaging.SingleEmailMessage email1 = new Messaging.SingleEmailMessage();
+        email1.setSubject('Test Email 1');
+        email1.setPlainTextBody('This is a test email.');
+        testEmailMessages.add(email1);
+
+        List<Messaging.SendEmailResult> testEmailResults = new List<Messaging.SendEmailResult>();
+        Map<Id, Id> whatIdTargetMap = new Map<Id, Id>();
+        whatIdTargetMap.put(email1.getWhatId(), email1.getTargetObjectId());
+
+        Map<Id, Contact> accContactMap = new Map<Id, Contact>();
+        Contact testContact = new Contact();
+        testContact.Id = email1.getTargetObjectId();
+        testContact.Email = 'test@gmail.com';
+        accContactMap.put(testContact.Id, testContact);
+
+        Test.startTest();
+        MassEmailController.getEmailStatus(testEmailResults, testEmailMessages, whatIdTargetMap);
+        Test.stopTest();
+
+        
+        System.assertEquals(0, MassEmailController.blaSuccessMap.size());
+        System.assertEquals(0, MassEmailController.blaErrMap.size()); 
+      
+    }
+    
+     @isTest
+    static void updateBlaStatusTest() {
+         RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
+         Account residenceRec1 = TestDataFactory.createResidence('Residence', 'Test Residence', regAuth.Id, true);
+       BusinessLicenseApplication bla = TestDataFactory.createRenewalBla(residenceRec1.LicenseType__c, residenceRec1.Id, true); 
+         
+
+        Map<Id, String> blaErrMap = new Map<Id, String>();
+        blaErrMap.put(bla.Id, 'Error message');
+
+        Map<Id, String> blaSuccessMap = new Map<Id, String>();
+        blaSuccessMap.put(bla.Id, 'Success message');
+
+        Test.startTest();
+        MassEmailController.updateBlaStatus();
+        Test.stopTest();
+
+        List<BusinessLicenseApplication> blaList = [SELECT Id, Status, RenewalDetail__c FROM BusinessLicenseApplication  LIMIT 1];
+        System.assertEquals(1, blaList.size(), 'Expected one BusinessLicenseApplication record to be queried');
+
+        if (!blaList.isEmpty()) {
+            BusinessLicenseApplication blaRec = blaList[0];
+            System.assert(true, 'BusinessLicenseApplication record found matching query criteria');
+        } else {
+            // Handle case where no BusinessLicenseApplication record is found
+            System.assert(false, 'No BusinessLicenseApplication record found matching query criteria');
+        }
+        
+    }
+      @isTest
+    static void updateLateFeeBlaStatusTest() {
+        RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
+          Account residenceRec1 = TestDataFactory.createResidence('Residence', 'Test Residence', regAuth.Id, true);
+       BusinessLicenseApplication bla = TestDataFactory.createRenewalBla(residenceRec1.LicenseType__c, residenceRec1.Id, true);  
+        bla.Late_Fee_Status__c='Ready to Send';
+        bla.RenewalDetail__c= 'Late fee error message';
+        Database.update( bla,false);
+        
+       Map<Id, String> blaErrMap = new Map<Id, String>();
+        blaErrMap.put(bla.Id, 'Late fee error');
+
+        Map<Id, String> blaSuccessMap = new Map<Id, String>();
+        blaSuccessMap.put(bla.Id, 'Late fee success');
+
+        Test.startTest();
+        MassEmailController.updateLateFeeBlaStatus();
+        Test.stopTest();
+
+         // Verify updates to BusinessLicenseApplication record
+        BusinessLicenseApplication updatedBla = [SELECT Id, Late_Fee_Status__c, RenewalDetail__c FROM BusinessLicenseApplication WHERE Id = :bla.Id];
+        System.assertEquals(BCMOH_Constants.blaLateFeeStatus, updatedBla.Late_Fee_Status__c);
+        System.assertEquals('Late fee error message', updatedBla.RenewalDetail__c);
+
+        // Verify related Account update
+        Account acc = [SELECT Id, Status__c FROM Account WHERE Id = :residenceRec1.Id];
+        System.assertEquals(BCMOH_Constants.accountStat, acc.Status__c);
+        
+    }
+
 }

@@ -57,9 +57,9 @@ public with sharing class MassEmailController {
             //fetch acc status and rec type from metadata
             accDetails = BCMOH_UtilityClass.getAccRenewals(BCMOH_Constants.renewalName);
             for(Account activeAccRec : [SELECT Id, Status__c, Name, 
-                                        (SELECT Id, ContactId, Contact.Name, Contact.Email, PrimaryContact__c
+                                        (SELECT Id, ContactId, Contact.Name, Contact.Email, PrimaryContact__c,IsActive
                                          FROM AccountContactRelations 
-                                         WHERE PrimaryContact__c = TRUE AND IsActive = TRUE AND Contact.Email != NULL LIMIT 1),
+                                         WHERE IsActive = TRUE AND Contact.Email != NULL),
                                         (SELECT Id, Account.Name, RenewalYear__c, CreatedDate 
                                          FROM BusinessLicenseApplicationAccount 
                                          WHERE RecordType.DeveloperName =: BCMOH_Constants.blaRecType AND 
@@ -72,9 +72,9 @@ public with sharing class MassEmailController {
                                          WHERE RecordType.DeveloperName =: BCMOH_Constants.parentAssetRecType
                                          AND Type__c IN: BCMOH_Constants.allALUnitTypes)
                                         FROM Account 
-                                        WHERE RecordType.DeveloperName =: accDetails.keyset() AND 
+                                        WHERE (RecordType.DeveloperName =: BCMOH_Constants.accRecType OR RecordType.DeveloperName =: BCMOH_Constants.accRegType) AND 
                                         Status__c IN: accDetails.values()[0] 
-                                       ]) {
+                                       ]){
                                            isValidAcc = true;
                                            
                                            if(activeAccRec.BusinessLicenseApplicationAccount.size() == 0) {
@@ -109,13 +109,21 @@ public with sharing class MassEmailController {
                                                    blaTotalAlUnitsMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, unitCounter);
                                                }
                                                //bla map and blaId-contactId map for email targetIds
-                                               for(BusinessLicenseApplication blaRec : 
-                                                   activeAccRec.BusinessLicenseApplicationAccount) {
-                                                       blaMap.put(blaRec.Id, blaRec);
-                                                       blaContactMap.put(blaRec.Id, activeAccRec.AccountContactRelations[0].ContactId);
-                                                   }
+                                               for(BusinessLicenseApplication blaRec : activeAccRec.BusinessLicenseApplicationAccount) {
+                                                   blaMap.put(blaRec.Id, blaRec);
+                                                   List<Contact> contacts = getContacts(blaRec.AccountId);
+                                                    for(Contact cont : contacts)
+                                                    {
+                                                  blaContactMap.put(blaRec.Id,cont.Id); 
+ 
+                                                     }
+                                                 }
+                                                   
                                            }
-                                       }
+         }
+                                       
+                                       
+
             //if valid blas are fetched
             if(!blaMap.isEmpty()) {
                 //fetch template Id
@@ -140,7 +148,9 @@ public with sharing class MassEmailController {
             LogService.logAndPublish(className, 'doSendRenewals', '', err);
         }
     }
-    
+    public Static List<Contact> getContacts(Id accountId){
+          return [Select id, Name from Contact where AccountId = :accountId];
+}
     //method to to send email to records-ALR-1000
     @AuraEnabled
     public static void doSendLateFee() {
@@ -153,9 +163,9 @@ public with sharing class MassEmailController {
             //fetch acc status and rec type from metadata
             accDetails = BCMOH_UtilityClass.getAccRenewals(BCMOH_Constants.renewalName);
             for(Account activeAccRec : [SELECT Id, Status__c, Name, 
-                                        (SELECT Id, ContactId, Contact.Name, Contact.Email, PrimaryContact__c
+                                        (SELECT Id, ContactId, Contact.Name, Contact.Email, PrimaryContact__c,IsActive
                                          FROM AccountContactRelations 
-                                         WHERE PrimaryContact__c = TRUE AND IsActive = TRUE AND Contact.Email != NULL LIMIT 1),
+                                         WHERE IsActive = TRUE AND Contact.Email != NULL),
                                         (SELECT Id, Account.Name, RenewalYear__c, CreatedDate,AccountId
                                          FROM BusinessLicenseApplicationAccount 
                                          WHERE RecordType.DeveloperName =: BCMOH_Constants.blaRecType AND 
@@ -168,7 +178,7 @@ public with sharing class MassEmailController {
                                          WHERE RecordType.DeveloperName =: BCMOH_Constants.parentAssetRecType
                                          AND Type__c IN: BCMOH_Constants.allALUnitTypes)
                                         FROM Account 
-                                        WHERE RecordType.DeveloperName =: accDetails.keyset() AND 
+                                       WHERE (RecordType.DeveloperName =: BCMOH_Constants.accRecType OR RecordType.DeveloperName =: BCMOH_Constants.accRegType) AND
                                         Status__c IN: accDetails.values()[0] 
                                         
                                        ]) {
@@ -202,11 +212,15 @@ public with sharing class MassEmailController {
                                                    }
                                                    blaTotalAlUnitsMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, unitCounter);
                                                }
-                                               for(BusinessLicenseApplication blaRec : 
-                                                   activeAccRec.BusinessLicenseApplicationAccount) {
-                                                        blaMap.put(blaRec.Id, blaRec);
-                                                       blaContactMap.put(blaRec.Id, activeAccRec.AccountContactRelations[0].ContactId);
-                                                   }
+                                               for(BusinessLicenseApplication blaRec : activeAccRec.BusinessLicenseApplicationAccount) {
+                                                  blaMap.put(blaRec.Id, blaRec);
+                                                  List<Contact> contacts = getContacts(blaRec.AccountId);
+                                                 for(Contact cont : contacts)
+                                                   {
+                                                     blaContactMap.put(blaRec.Id,cont.Id); 
+ 
+                                                    }
+                                                }
                                            }
                                        }
             
@@ -241,11 +255,15 @@ public with sharing class MassEmailController {
         Id contactId = NULL;
         BusinessLicense blRec = new BusinessLicense();
         Integer totalALUnits = 0;
-        List<Messaging.SingleEmailMessage> singleEmailMsgList = new List<Messaging.SingleEmailMessage>();
+        Id blaIdRec = NULL;
+         Set<Id> contId =New Set<Id>();
+ 
+        List<Id> attachIds = new List<Id>();
+         List<Messaging.SingleEmailMessage> singleEmailMsgList = new List<Messaging.SingleEmailMessage>();
         try {
             for(Id whatId : whatIdTargetMap.KeySet()) {
+                blaIdRec = whatId;
                contactId = whatIdTargetMap.isEmpty() ? NULL : whatIdTargetMap.get(whatId);
-                List<Id> attachIds = new List<Id>(blaContentVerMap.get(whatId));
                 if(!blaMap.isEmpty() && !accMap.isEmpty() &&
                    blaMap.get(whatId) != NULL && accMap.get(whatId) != NULL) {
                        blRec = !blMap.isEmpty() && blMap.get(whatId) != NULL ? blMap.get(whatId) : NULL;//get BL record
@@ -263,24 +281,34 @@ public with sharing class MassEmailController {
                        if(subjectValue == NULL) {
                            continue;
                        }
-                       if(!blaErrMap.containsKey(whatId)) {
-                           Messaging.SingleEmailMessage emailMsgRec = BCMOH_UtilityClass.setEmailParams(contactId, NULL, orgWideAddrId, attachIds, whatId, emailBody, subjectValue, emailHtmlBody);//ALR-827 - added emailHtmlBody
-                           singleEmailMsgList.add(emailMsgRec);
-                           
-                       }
+                       
                    }
                 else {
                     blaErrMap.put(whatId, BCMOH_Constants.mappingDataMissing);//required data missing account and bla records-corner scenario
                 }
             }
-            
-            if(singleEmailMsgList != NULL && singleEmailMsgList.size() > 0) {
+            BusinessLicenseApplication blaObject= [select AccountId,Account.ParentId from BusinessLicenseApplication where Id=:blaIdRec LIMIT 1];
+           
+            List<AccountContactRelation> conRec = [Select Id,AccountId,ContactId, Contact.Email,Account.ParentId from AccountContactRelation where (AccountId =: blaObject.AccountId OR AccountId =: blaObject.Account.ParentId) AND IsActive = TRUE];
+                      for(AccountContactRelation acr : conRec){
+                contId.add(acr.ContactId);
+            }
+             for(AccountContactRelation conIds : conRec) {
+                           if(!blaErrMap.containsKey(blaIdRec)) {
+                           Messaging.SingleEmailMessage emailMsgRec = BCMOH_UtilityClass.setEmailParams(conIds.ContactId, NULL, orgWideAddrId, attachIds, blaIdRec, emailBody, subjectValue, emailHtmlBody);//ALR-827 - added emailHtmlBody
+                           singleEmailMsgList.add(emailMsgRec);
+                       }
+            }
+             if(singleEmailMsgList != NULL && singleEmailMsgList.size() > 0) {
                 Messaging.SendEmailResult[] emailResultList = Messaging.SendEmail(singleEmailMsgList, false);//send email inspite of failures in list
                 getEmailStatus(emailResultList, singleEmailMsgList, whatIdTargetMap);
+                
             }
+            
         }
         catch(Exception err) {
             system.debug('use exception handling sendEmailForRenewals'+err.getMessage());
+            system.debug('use exception handling sendEmailForRenewals'+err.getLineNumber());
         }
     }
     
