@@ -1,6 +1,6 @@
 /**
 * @Name              : AccountStatusUpdate
-* @Description       : Test Class for Updating Account Status on April 1st 
+* @Description       : Test Class for Updating Account Status on April 1st and May 1st
 * @Author            : Keerthana Srinivasan (Accenture)
 * @StoryNo           : ALR-1289
 **/
@@ -24,7 +24,7 @@ private class AccountStatusUpdateTest {
         Test.stopTest();
 
          Account updatedAccount = [SELECT Id, Status__c FROM Account WHERE Id = :residenceRec1.Id];
-        System.assertEquals(BCMOH_Constants.accountStat, updatedAccount.Status__c, 'Account status should have been updated.');
+        System.assertEquals(BCMOH_Constants.accountStatus, updatedAccount.Status__c, 'Account status should have been updated.');
       
     }
 }
