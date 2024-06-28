@@ -107,7 +107,13 @@ public with sharing class ScheduleSendEmail implements Schedulable {
                     if (results[i].isSuccess()) {
                         System.debug('Email sent successfully to ' + emailBatch[i].getToAddresses()[0]);
                     } else {
-                        
+                       String errorMessage = results[i].getErrors()[0].getMessage();
+                        if (errorMessage.contains('EMAIL_ADDRESS_BOUNCED')) {
+                            System.debug('Bounced email address: ' + emailBatch[i].getToAddresses()[0]);
+                        } else {
+                            System.debug('Failed to send email to ' + emailBatch[i].getToAddresses()[0] +
+                                 '. Error message: ' + errorMessage);
+                        }
                     }
                 }
             } catch (Exception e) {
