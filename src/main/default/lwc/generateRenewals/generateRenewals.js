@@ -3,118 +3,155 @@ import { refreshApex } from '@salesforce/apex';
 import getAccounts from '@salesforce/apex/RenewalManagementController.fetchAccounts';
 import enqueueJob from '@salesforce/apex/RenewalManagementControllerBatch.enqueueJob';
 import { NavigationMixin } from 'lightning/navigation';
-import LightningConfirm from "lightning/confirm";
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import ascendingIcon from '@salesforce/resourceUrl/ascendingIcon';
+import descendingIcon from '@salesforce/resourceUrl/descendingIcon';
 
 const DELAY_BEFORE_REFRESH = 2000;
 
 const tableColumns = [
-    { label: 'Residence ID', fieldName: 'RegId__c', type: 'text' },
-    { label: 'Account Name', fieldName: 'accountUrl', type: 'url',
+    { label: 'Residence ID', fieldName: 'RegId__c', type: 'text', sortable: true },
+    { label: 'Account Name', fieldName: 'accountUrl', type: 'url', sortable: true,
         typeAttributes: { label: { fieldName: 'Name' }, target: '_self' } },
-    { label: 'Parent Account', fieldName: 'parentAccountUrl', type: 'url',
+    { label: 'Parent Account', fieldName: 'parentAccountUrl', type: 'url', sortable: true,
         typeAttributes: { label: { fieldName: 'parentAccountName' }, target: '_self' } },
-    { label: 'Status', fieldName: 'Status__c', type: 'text' },
-    { label: 'Health Authority', fieldName: 'HealthAuthority__c', type: 'text' },
-    { label: 'License Type', fieldName: 'licenseTypeUrl', type: 'url',
+    { label: 'Status', fieldName: 'Status__c', type: 'text', sortable: true },
+    { label: 'Health Authority', fieldName: 'HealthAuthority__c', type: 'text', sortable: true },
+    { label: 'License Type', fieldName: 'licenseTypeUrl', type: 'url', sortable: true,
         typeAttributes: { label: { fieldName: 'LicenseTypeName' }, target: '_self' } }
 ];
 
 export default class GenerateRenewals extends NavigationMixin(LightningElement) {
-    @track error;
-    @track data;
-    @track result;
-    columns = tableColumns;
-    accounts;
-    @track accList = [];
-    @track isdata = false;
-    @track draftValues = [];
+    @track accounts;
+    @track filteredAccounts;
+    @track columns = tableColumns;
     @track hasLoaded = false;
-    @track renderFlow = false;
-    _wiredResult;
-    searchKey = '';
+    @track isdata = false;
+    @track searchKey = '';
+    @track sortedBy;
+    @track sortedDirection = 'asc';
+
+    ascendingIconUrl = ascendingIcon;
+    descendingIconUrl = descendingIcon;
 
     @wire(getAccounts)
     wiredAccounts({ error, data }) {
         if (data) {
-            this.accounts = data.map(account => {
-                return {
-                    ...account,
-                    accountUrl: `/lightning/r/Account/${account.Id}/view`,
-                    parentAccountUrl: account.ParentId ? `/lightning/r/Account/${account.ParentId}/view` : null,
-                    parentAccountName: account.Parent ? account.Parent.Name : '',
-                    licenseTypeUrl: account.LicenseType__c ? `/lightning/r/LicenseType/${account.LicenseType__c}/view` : null,
-                    LicenseTypeName: account.LicenseType__r ? account.LicenseType__r.Name : ''
-                };
-            });
-            this.error = undefined;
+            this.accounts = data.map(account => ({
+                ...account,
+                accountUrl: `/lightning/r/Account/${account.Id}/view`,
+                parentAccountUrl: account.ParentId ? `/lightning/r/Account/${account.ParentId}/view` : null,
+                parentAccountName: account.Parent ? account.Parent.Name : '',
+                licenseTypeUrl: account.LicenseType__c ? `/lightning/r/LicenseType/${account.LicenseType__c}/view` : null,
+                LicenseTypeName: account.LicenseType__r ? account.LicenseType__r.Name : ''
+            }));
+            this.applyFilters();
             this.hasLoaded = true;
-            this.isdata = this.accounts.length > 0;
         } else if (error) {
-            this.error = error;
-            this.accounts = undefined;
-            this.hasLoaded = false;
+            console.error('Error fetching accounts:', error);
+            this.handleError();
         }
     }
 
-    refreshData() {
-        return refreshApex(this._wiredResult);
+    handleError() {
+        const event = new ShowToastEvent({
+            title: 'Error',
+            message: 'Failed to fetch account data.',
+            variant: 'error'
+        });
+        this.dispatchEvent(event);
     }
-    
-    
+
+    applyFilters() {
+        this.filteredAccounts = this.accounts;
+        this.isdata = this.filteredAccounts.length > 0;
+    }
+
     handleGenerateRenewals() {
         const selectedRows = this.template.querySelector('lightning-datatable').getSelectedRows();
         if (selectedRows.length > 0) {
-            console.log('flow is called');
-            this.accountIds = selectedRows.map(row => row.Id);
-            
-            console.log('flowVariables', JSON.stringify(this.accountIds));
-            enqueueJob({ recordIds: this.accountIds })
+            const accountIds = selectedRows.map(row => row.Id);
+            enqueueJob({ recordIds: accountIds })
                 .then(data => {
-                    console.log('recordIds is called');
                     this.handleConfirm();
                 })
                 .catch(error => {
-                    console.log('Error');
+                    console.error('Error enqueuing job:', error);
+                    const event = new ShowToastEvent({
+                        title: 'Error',
+                        message: 'Failed to generate renewals.',
+                        variant: 'error'
+                    });
+                    this.dispatchEvent(event);
                 });
         } else {
-            console.log('recordIds is not called');
+            const event = new ShowToastEvent({
+                title: 'Warning',
+                message: 'Please select at least one account to generate renewals.',
+                variant: 'warning'
+            });
+            this.dispatchEvent(event);
         }
     }
 
-    handleConfirm(){
-      const result = LightningConfirm.open({
-        message: "Renewals Generated Successfully",
-        theme: "Success",
-        label: "Confirm"
-      });
-      setTimeout(() => {
+    handleConfirm() {
+        const event = new ShowToastEvent({
+            title: 'Success',
+            message: 'Renewals Generated Successfully',
+            variant: 'success'
+        });
+        this.dispatchEvent(event);
+        setTimeout(() => {
             location.reload();
         }, DELAY_BEFORE_REFRESH);
     }
 
-    async handleStatusChange(event) {
-        if (event.detail.status) {
-            await this.refreshData();
-        } else {
-            console.log('Flow execution encountered an unexpected status.');
-        }
-    }
-     
     handleSearchChange(event) {
-        // Debouncing logic (if needed)
-        window.clearTimeout(this.delayTimeout);
-        const searchKey = event.target.value;
-        this.delayTimeout = setTimeout(() => {
-            this.searchKey = searchKey;
-        }, 300);
+        this.searchKey = event.target.value.toLowerCase();
+        this.applyFilters();
     }
     get filteredAccounts() {
         if (this.accounts && this.searchKey) {
             return this.accounts.filter(account =>
-                account.Name.toLowerCase().includes(this.searchKey.toLowerCase())
+                account.Name.toLowerCase().includes(this.searchKey.toLowerCase()) ||
+                account.RegId__c.toLowerCase().includes(this.searchKey.toLowerCase()) ||
+                account.parentAccountName.toLowerCase().includes(this.searchKey.toLowerCase()) ||
+                account.Status__c.toLowerCase().includes(this.searchKey.toLowerCase()) ||
+                account.LicenseTypeName.toLowerCase().includes(this.searchKey.toLowerCase()) ||
+                account.HealthAuthority__c.toLowerCase().includes(this.searchKey.toLowerCase())
+
             );
         }
         return this.accounts;
     }
+    applyFilters() {
+        this.filteredAccounts = this.accounts.filter(account =>
+            Object.values(account).some(
+                value => typeof value === 'string' && value.toLowerCase().includes(this.searchKey)
+            )
+        );
+        this.isdata = this.filteredAccounts.length > 0;
+    }
 
+    handleSort(event) {
+        const { fieldName: sortedBy, sortDirection } = event.detail;
+        this.sortedBy = sortedBy;
+        this.sortedDirection = sortDirection;
+        this.sortData(sortedBy, sortDirection);
+    }
+
+    sortData(field, direction) {
+        let parseData = JSON.parse(JSON.stringify(this.filteredAccounts));
+        const fieldValue = row => {
+            return row[field] ? row[field].toLowerCase() : '';
+        };
+        const reverse = direction === 'asc' ? 1 : -1;
+        parseData.sort((value1, value2) => {
+            return reverse * ((fieldValue(value1) > fieldValue(value2)) - (fieldValue(value1) < fieldValue(value2)));
+        });
+        this.filteredAccounts = parseData;
+    }
+     handleRowSelection(event){
+            const selectedRows = event.detail.selectedRows
+    }
 }
