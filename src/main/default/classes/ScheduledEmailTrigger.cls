@@ -71,12 +71,12 @@ public with sharing class ScheduledEmailTrigger implements Schedulable {
             WHERE DisplayName = 'ALR Support Email'
         ];
 
-        List<Contact> contactRec =[Select Id,Email from Contact WHERE Id IN: contactIds ];
-        
+        List<Contact> contactRec = [SELECT Id, Email FROM Contact WHERE Id IN :contactIds];
+
         Integer batchSize = 100; 
         List<List<Messaging.SingleEmailMessage>> emailBatches = new List<List<Messaging.SingleEmailMessage>>();
         List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
-        for (Contact contact : contactRec){
+        for (Contact contact : contactRec) {
             Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
             email.setTemplateId(emailTemplate.Id);
             email.setOrgWideEmailAddressId(orgWideAddr.Id);
@@ -102,7 +102,13 @@ public with sharing class ScheduledEmailTrigger implements Schedulable {
                     if (results[i].isSuccess()) {
                         System.debug('Email sent successfully to ' + emailBatch[i].getToAddresses()[0]);
                     } else {
-                        
+                        String errorMessage = results[i].getErrors()[0].getMessage();
+                        if (errorMessage.contains('EMAIL_ADDRESS_BOUNCED')) {
+                            System.debug('Bounced email address: ' + emailBatch[i].getToAddresses()[0]);
+                        } else {
+                            System.debug('Failed to send email to ' + emailBatch[i].getToAddresses()[0] +
+                                 '. Error message: ' + errorMessage);
+                        }
                     }
                 }
             } catch (Exception e) {
@@ -113,7 +119,6 @@ public with sharing class ScheduledEmailTrigger implements Schedulable {
         System.debug('Exception occurred in sendRenewalDueEmail method: ' + e.getMessage());
     }
 }
-
     public static EmailTemplate getEmailTemplate(String templateDevName) {
         EmailTemplate emailTemplateRec = null;
         List<Id> contactIdsList = new List<Id>();
