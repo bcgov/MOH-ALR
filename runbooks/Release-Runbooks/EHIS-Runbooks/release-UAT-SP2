@@ -7,7 +7,7 @@
 
 ## Pre-Requisites [5 min ]
 
-1. [ ] Deployment User has assigned Permission Sets
+1. [x] Deployment User has assigned Permission Sets
 
    1.EHIS Data Migration PS
    2.EHIS Enable MFA PS
@@ -18,7 +18,7 @@
    7.ALR Data Analyst Users PG
    8.Business Milestones and Life Events Access PS
 
-2. [ ] Checkout to `latest tag` code
+2. [x] Checkout to `QA.353' code and create release branch out of it 'release-Sp2'
 
 ## Assumptions
 
@@ -28,23 +28,15 @@
 
 ## Pre-Deployment Steps (1-2 hrs)
 
-1.[ ] ALR-1263
+1.[x] ALR-1263
 
 - Go to Setup → User Interface → Enable “Use custom address fields“. → Save.
 
-2.[ ] ALR -1646 Add OWD email address and display name
-
-- Setup -> Organization-Wide Addresses- Change Display Name from Test to ALR Support Email
-   > Provide the below details:
-   1. Display Name:Change Display Name to ALR Support Email
-   2. Email Address: hlth.assistedlivingregistry.test@hlthpss.gov.bc.ca
-   3. Select - Allow All Profiles to Use this From Address ->Save
-
-3. [ ] Go to Setup → Permission Set Group → Open above mentioned PSGs → Select permission set → Remove Permission Set → Done.
+2. [x] Go to Setup → Permission Set Group → Open above mentioned PSGs → Select permission set → Remove Permission Set → Done.
     1 Delete EHIS_CRE_Group_Membership_PS permission set from the EHIS_Water_Business_Admin_PSG and
     2.EHIS_Read_Group_Membership_PS permission set from EHIS_Water_Public_Health_Engineer_PSG, EHIS_Water_Officer_PSG
-    
-4. [ ] ALR-1688
+
+3. [x] ALR-1688
    1. Go to app launcher
    2. Select Salesforce Inspector->Data Export->Execute the below Query.
       Select  FolderId from EmailTemplate where Name ='Renewal Late Fee Notification Letter'
@@ -54,24 +46,24 @@
       Action->Insert
    6. Object->Email Template , Copy and paste the content in Data Space and Import."
 
-5.[ ] ALR-1710
-"1.Go to SetUp->Search Deployment Settings->Enable “Allow deployments of components when corresponding Apex jobs are pending or in progress.
+4. [x] ALR-1710
+1. Go to SetUp->Search Deployment Settings->Enable “Allow deployments of components when corresponding Apex jobs are pending or in progress.
 Caution: Enabling this option may cause Apex jobs to fail.” in Deployment Option
 ->Save" 
 
-6.[ ] Destructive deployment -
+5.[x] Destructive deployment -
 
 1."Delete Physical_address__c from all the orgs.
 2. Delete EHIS_CRE_Group_Membership_PS ,EHIS_Read_Group_Membership_PS
 
-> sfdx force:source:deploy --manifest "destructive\destructive-post-refresh\package.xml" --postdestructivechanges "destructive\destructive-post-refresh\destructiveChanges.xml" -w 30 --targetusername  gandloju.vishwantha@accenture.com.alr.devops
+> sfdx force:source:deploy --manifest "destructive\destructive-post-refresh\package.xml" --postdestructivechanges "destructive\destructive-post-refresh\destructiveChanges.xml" -w 30 --targetusername gandloju.vishwantha@accenture.com.alr.uat
 
 ## Deployment Steps (20 mins)
 
-1.[ ] Deploy OmniStudio components and its dependencies (5 min)
-   > sfdx force:source:deploy --sourcepath "src\main\default\omniDataTransforms,src\main\default\omniIntegrationProcedures,src\main\default\omniUiCard,src\main\default\omniScripts,ehis-source\core\main\default\omniDataTransforms,ehis-source\core\main\default\omniScripts" --wait 30 --targetusername gandloju.vishwantha@accenture.com.alr.qa
+1.[x] Deploy OmniStudio components and its dependencies (5 min)
+   > sfdx force:source:deploy --sourcepath "src\main\default\omniDataTransforms,src\main\default\omniIntegrationProcedures,src\main\default\omniUiCard,src\main\default\omniScripts,ehis-source\core\main\default\omniDataTransforms,ehis-source\core\main\default\omniScripts" --wait 30 --targetusername gandloju.vishwantha@accenture.com.alr.uat
 
-3.[ ]  Deploy full repository (~20 min)
+2.[X]  Deploy full repository (~20 min)
 
 > [ ] Verify folders
       |Folder|Path|
@@ -81,16 +73,16 @@ Caution: Enabling this option may cause Apex jobs to fail.” in Deployment Opti
       |`src-ui`|`src-ui\main\default`|
       |'Ehis-source'|
 
-> [ ] Deploy
+> [x] Deploy
 
-- sfdx force:source:deploy --sourcepath "ehis-source,src-access-mgmt\main\default,src-ui\main\default,src\main\default" --wait 30 --targetusername gandloju.vishwantha@accenture.com.alr.devops -l RunLocalTests
+- sfdx force:source:deploy --sourcepath "ehis-source,src-access-mgmt\main\default,src-ui\main\default,src\main\default" --wait 30 --targetusername gandloju.vishwantha@accenture.com.alr.uat -l RunLocalTests
 
-> [ ] Deploy custom metadata env specific folder - This step is not required to DevOps org
+> [x] Deploy custom metadata env specific folder - This step is not required to DevOps org
 
 - sfdx force:source:deploy --sourcepath 
-"src-env-specific\devops\main\default\customMetadata" --wait 30 --targetusername gandloju.vishwantha@accenture.com.alr.qa
+"src-env-specific\devops\main\default\customMetadata" --wait 30 --targetusername gandloju.vishwantha@accenture.com.alr.uat
 
->[ ] Re-activate Omnistudio components
+>[x] Re-activate Omnistudio components
       1. App Launcher -> OmniStudio -> Omnistudio **Integration Procedures**
       2. Locate all active custom **Integration Procedures** -> deactivate them -> activate them back.
       3. App Launcher -> OmniStudio -> **Omnistudio FlexCards**
@@ -98,11 +90,11 @@ Caution: Enabling this option may cause Apex jobs to fail.” in Deployment Opti
       5. App Launcher -> OmniStudio -> **OmniScripts**
       6. Locate all active custom **OmniScripts** -> open each omni script -> deactivate -> activate back
 
-4.[ ] ALR-1199 Go to Omniscript “RiskAssessment“ → Open active version → Click on dropdown and select “Select Deploy Standard Runtime Compatible LWC “ → Done
+4.[x] ALR-1199 Go to Omniscript “RiskAssessment“ → Open active version → Click on dropdown and select “Select Deploy Standard Runtime Compatible LWC “ → Done
 
 ## Post-Deployment Steps (30 mins)
 
-[ ] EHIS-1282
+1. [x] EHIS-1282
 
 - "Login as EHIS Admin User and create 2 records mentioned below:
 
@@ -130,7 +122,7 @@ Select Id, Name, DeveloperName from EmailTemplate where name='Renewal Late Fee N
 - STEP 4 : Replace the ID Column in New Email Template-Dataload for 1 column to the copied Id from data export->Save the file
 - STEP 5 : Select Salesforce Inspector ->Data Import->Action : Select Update->Object : EmailTemplate->Copy all the content from New Email Template-Subject-Dataload and paste in Data (Excel)->Import"
 
-3. [ ] ALR-1700
+3. [X] ALR-1700
 - Log in to Salesforce.
 - Go to Setup->Search “Scheduled Jobs”->Scheduled Apex.
 - Provide the below details:
@@ -139,7 +131,7 @@ Select Id, Name, DeveloperName from EmailTemplate where name='Renewal Late Fee N
   > Select Cron Expression->”0 0 0 15 3 ?”
 - Save
 
-4. [ ] ALR-1701
+4. [X] ALR-1701
 
 - Log in to Salesforce.
 - Go to Setup->Search “Scheduled Jobs”->Scheduled Apex.
@@ -147,7 +139,7 @@ Select Id, Name, DeveloperName from EmailTemplate where name='Renewal Late Fee N
 - Job Name->Trigger Email on Jan-15
 - Apex Class-> search and select “ScheduleSendEmail” - Select Cron Expression->”0 0 0 15 1 ?” - Save
 
-[ ] ALR-1712
+[X] ALR-1712
 - Schedule Jobs1:
 1.Log in to Salesforce.
 2.Go to Setup->Search “Scheduled Jobs”->Scheduled Apex.
@@ -166,12 +158,7 @@ Apex Class-> search and select “AccountStatusUpdateOnMay”
 Select Cron Expression->0 0 0 1 5 ?
 4.Save
 
-5. [ ] ALR-1710
-"1.Go to SetUp->Search Deployment Settings->Enable “Allow deployments of components when corresponding Apex jobs are pending or in progress.
-Caution: Enabling this option may cause Apex jobs to fail.” in Deployment Option
-->Save" 
-
-6. [ ] EHIS-1344
+6. [X] EHIS-1344
 
 1. Login as System Administrator and click on setup icon
 2. In Quick FInd section search for  State and Country/Territory Picklists
