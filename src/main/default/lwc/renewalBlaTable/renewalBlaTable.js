@@ -193,15 +193,16 @@ export default class RenewalBlaTable extends LightningElement {
 
     get filteredBlaList() {
         if(this.blaList && this.searchKey) {
-            return this.blaList.filter(item =>
-                item.AccName.toLowerCase().includes(this.searchKey) ||
-                item.Name.toLowerCase().includes(this.searchKey) ||
-                item.RenewalYear__c.toLowerCase().includes(this.searchKey) ||
-                item.ParentId.toLowerCase().includes(this.searchKey) ||
-                item.AccountStatus.toLowerCase().includes(this.searchKey) ||
-                item.Status.toLowerCase().includes(this.searchKey)
-
-            );
+            return this.blaList.filter(item =>{
+                     return (item.AccName && item.AccName.toLowerCase().includes(this.searchKey)) ||
+                    (item.Name && item.Name.toLowerCase().includes(this.searchKey)) ||
+                    (item.LicenseType && item.LicenseType.Name && item.LicenseType.Name.toLowerCase().includes(this.searchKey)) ||
+                    (item.RenewalYear__c && item.RenewalYear__c.toLowerCase().includes(this.searchKey)) ||
+                    (item.Account && item.Account.Parent && item.Account.Parent.Name && item.Account.Parent.Name.toLowerCase().includes(this.searchKey)) ||
+                    (item.AccountStatus && item.AccountStatus.toLowerCase().includes(this.searchKey)) ||
+                    (item.Status && item.Status.toLowerCase().includes(this.searchKey)) ||
+                    (item.Account && item.Account.HealthAuthority__c && item.Account.HealthAuthority__c.toLowerCase().includes(this.searchKey))
+            });
         }
         return this.blaList;
     }

@@ -150,6 +150,10 @@ export default class LateFeeManagementTable extends LightningElement {
         return refreshApex(this._wiredResult);
     }
      async handleSendLateFees(){
+         if (!this.isdata || !this.blaList || this.blaList.length === 0) {
+        //Returning Blank
+        return;
+        }
         
         try{
             this.hasLoaded = false;
@@ -206,21 +210,22 @@ export default class LateFeeManagementTable extends LightningElement {
     }
     get filteredBlaList() {
         if (this.blaList && this.searchKey) {
-            return this.blaList.filter(item =>
-                item.AccName.toLowerCase().includes(this.searchKey) ||
-                item.Name.toLowerCase().includes(this.searchKey) ||
-                item.LicenseType.Name.toLowerCase().includes(this.searchKey) ||
-                item.RenewalYear__c.toLowerCase().includes(this.searchKey) ||
-                item.Account.Parent.Name.toLowerCase().includes(this.searchKey) ||
-                item.AccountStatus.toLowerCase().includes(this.searchKey) ||
-                item.Status.toLowerCase().includes(this.searchKey) ||
-                item.Account.HealthAuthority__c.toLowerCase().includes(this.searchKey) ||
-                item.Late_Fee_Status__c.toLowerCase().includes(this.searchKey) ||
-                item.RenewalDetail.toLowerCase().includes(this.searchKey)
-            );
+            return this.blaList.filter(item => {
+                return (item.AccName && item.AccName.toLowerCase().includes(this.searchKey)) ||
+                    (item.Name && item.Name.toLowerCase().includes(this.searchKey)) ||
+                    (item.LicenseType && item.LicenseType.Name && item.LicenseType.Name.toLowerCase().includes(this.searchKey)) ||
+                    (item.RenewalYear__c && item.RenewalYear__c.toLowerCase().includes(this.searchKey)) ||
+                    (item.Account && item.Account.Parent && item.Account.Parent.Name && item.Account.Parent.Name.toLowerCase().includes(this.searchKey)) ||
+                    (item.AccountStatus && item.AccountStatus.toLowerCase().includes(this.searchKey)) ||
+                    (item.Status && item.Status.toLowerCase().includes(this.searchKey)) ||
+                    (item.Account && item.Account.HealthAuthority__c && item.Account.HealthAuthority__c.toLowerCase().includes(this.searchKey)) ||
+                    (item.Late_Fee_Status__c && item.Late_Fee_Status__c.toLowerCase().includes(this.searchKey)) ||
+                    (item.RenewalDetail && item.RenewalDetail.toLowerCase().includes(this.searchKey));
+            });
         }
         return this.blaList;
     }
+
     handleSort(event) {
         const { fieldName: sortedBy, sortDirection } = event.detail;
         const cloneData = [...this.blaList];
