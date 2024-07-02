@@ -72,9 +72,8 @@ public with sharing class MassEmailController {
                                          WHERE RecordType.DeveloperName =: BCMOH_Constants.parentAssetRecType
                                          AND Type__c IN: BCMOH_Constants.allALUnitTypes)
                                         FROM Account 
-                                        WHERE (RecordType.DeveloperName =: BCMOH_Constants.accRecType OR RecordType.DeveloperName =: BCMOH_Constants.accRegType) AND 
-                                        Status__c IN: accDetails.values()[0] 
-                                       ]){
+                                        WHERE (RecordType.DeveloperName =: BCMOH_Constants.accRecType OR RecordType.DeveloperName =: BCMOH_Constants.accRegType) 
+                                        ]){
                                            isValidAcc = true;
                                            
                                            if(activeAccRec.BusinessLicenseApplicationAccount.size() == 0) {
@@ -144,8 +143,7 @@ public with sharing class MassEmailController {
             updateBlaStatus();
         }
         catch(exception err) {
-            system.debug('yui im caught'+err.getMessage());
-            LogService.logAndPublish(className, 'doSendRenewals', '', err);
+			 LogService.logAndPublish(className, 'doSendRenewals', '', err);
         }
     }
     public Static List<Contact> getContacts(Id accountId){
@@ -178,9 +176,8 @@ public with sharing class MassEmailController {
                                          WHERE RecordType.DeveloperName =: BCMOH_Constants.parentAssetRecType
                                          AND Type__c IN: BCMOH_Constants.allALUnitTypes)
                                         FROM Account 
-                                       WHERE (RecordType.DeveloperName =: BCMOH_Constants.accRecType OR RecordType.DeveloperName =: BCMOH_Constants.accRegType) AND
-                                        Status__c IN: accDetails.values()[0] 
-                                        
+                                       WHERE (RecordType.DeveloperName =: BCMOH_Constants.accRecType OR RecordType.DeveloperName =: BCMOH_Constants.accRegType) 
+                                         
                                        ]) {
                                            isValidAcc = true;
                                            if(activeAccRec.BusinessLicenseApplicationAccount.size() == 0) {
@@ -245,7 +242,6 @@ public with sharing class MassEmailController {
             updateLateFeeBlaStatus();
         }
         catch(exception err) {
-            system.debug('yui im caught'+err.getMessage());
             LogService.logAndPublish(className, 'doSendLateFee', '', err);
         }
     }
@@ -255,14 +251,15 @@ public with sharing class MassEmailController {
         Id contactId = NULL;
         BusinessLicense blRec = new BusinessLicense();
         Integer totalALUnits = 0;
-        Id blaIdRec = NULL;
-         Set<Id> contId =New Set<Id>();
+        List<Id> blaIdRec = new List<Id>();
+         List<Id> contId =New List<Id>();
  
         List<Id> attachIds = new List<Id>();
-         List<Messaging.SingleEmailMessage> singleEmailMsgList = new List<Messaging.SingleEmailMessage>();
+         List<Messaging.SingleEmailMessage> singleEmailMsgList = new List<Messaging.SingleEmailMessage>();        
         try {
             for(Id whatId : whatIdTargetMap.KeySet()) {
-                blaIdRec = whatId;
+                //blaIdRec = whatId;
+                blaIdRec.add(whatId);
                contactId = whatIdTargetMap.isEmpty() ? NULL : whatIdTargetMap.get(whatId);
                 if(!blaMap.isEmpty() && !accMap.isEmpty() &&
                    blaMap.get(whatId) != NULL && accMap.get(whatId) != NULL) {
@@ -291,14 +288,15 @@ public with sharing class MassEmailController {
            
             List<AccountContactRelation> conRec = [Select Id,AccountId,ContactId, Contact.Email,Account.ParentId from AccountContactRelation where (AccountId =: blaObject.AccountId OR AccountId =: blaObject.Account.ParentId) AND IsActive = TRUE];
                       for(AccountContactRelation acr : conRec){
-                contId.add(acr.ContactId);
-            }
-             for(AccountContactRelation conIds : conRec) {
-                           if(!blaErrMap.containsKey(blaIdRec)) {
-                           Messaging.SingleEmailMessage emailMsgRec = BCMOH_UtilityClass.setEmailParams(conIds.ContactId, NULL, orgWideAddrId, attachIds, blaIdRec, emailBody, subjectValue, emailHtmlBody);//ALR-827 - added emailHtmlBody
-                           singleEmailMsgList.add(emailMsgRec);
-                       }
-            }
+               				  contId.add(acr.ContactId);
+                              if(blaIdRec != NULL) {
+                                  for(Id BLARecord : blaIdRec){
+                                      Messaging.SingleEmailMessage emailMsgRec = BCMOH_UtilityClass.setEmailParams(acr.ContactId, NULL, orgWideAddrId, attachIds, BLARecord, emailBody, subjectValue, emailHtmlBody);//ALR-827 - added emailHtmlBody
+                                  	  singleEmailMsgList.add(emailMsgRec);
+                                  }
+                            }
+                          
+            }            
              if(singleEmailMsgList != NULL && singleEmailMsgList.size() > 0) {
                 Messaging.SendEmailResult[] emailResultList = Messaging.SendEmail(singleEmailMsgList, false);//send email inspite of failures in list
                 getEmailStatus(emailResultList, singleEmailMsgList, whatIdTargetMap);
@@ -308,7 +306,6 @@ public with sharing class MassEmailController {
         }
         catch(Exception err) {
             system.debug('use exception handling sendEmailForRenewals'+err.getMessage());
-            system.debug('use exception handling sendEmailForRenewals'+err.getLineNumber());
         }
     }
     
@@ -363,7 +360,6 @@ public with sharing class MassEmailController {
                                                     }
                                                 }
                                                 catch(Exception err) {
-                                                    system.debug('use exception handling replaceMergeFields '+err.getMessage());
                                                     LogService.logAndPublish(className, 'replaceMergeFields', blaRec.Id, err);
                                                 }
                                                 return templateData;
@@ -404,7 +400,6 @@ public with sharing class MassEmailController {
             }
         }
         catch(Exception err) {
-            system.debug('use exception handling fetchTemplateId'+ err.getMessage());
             LogService.logAndPublish(className, 'fetchTemplateDetails', '', err);
         }
         return templateDetails;
@@ -444,7 +439,6 @@ public with sharing class MassEmailController {
             }
         }
         catch(Exception err) {
-            system.debug('use exception handling fetchTemplateId is'+err.getMessage());
             LogService.logAndPublish(className, 'fetchTemplate', '', err);
         }
         return templateDetails;
@@ -466,7 +460,6 @@ public with sharing class MassEmailController {
             }
         }
         catch(Exception err) {
-            system.debug('use exception handling getOrgWideId '+err.getMessage());
             LogService.logAndPublish(className, 'getOrgWideId', '', err);
         }
         return orgWideAddrId;
@@ -491,7 +484,6 @@ public with sharing class MassEmailController {
             }
         }
         catch(Exception err) {
-            system.debug('use exception handling fetchAttachmentDetails '+err.getMessage());
             LogService.logAndPublish(className, 'fetchAttachmentDetails', '', err);
         }
         return blaContentVerMap;
@@ -521,7 +513,6 @@ public with sharing class MassEmailController {
                                               }
                                           }
                                           catch(exception err) {
-                                              system.debug('caught in meth - '+err.getMessage());
                                               LogService.logAndPublish(className, 'updateTargetRecsStatus', '', err);
                                           }
                                       }
@@ -562,7 +553,6 @@ public with sharing class MassEmailController {
             }
         }
         catch(exception err) {
-            system.debug('caught in updateBlaStatus - '+err.getMessage());
             LogService.logAndPublish(className, 'updateBlaStatus', '', err);
         }
     }
@@ -625,7 +615,6 @@ public with sharing class MassEmailController {
             Database.update(accToUpdate, false);
              }
     } catch (Exception err) {
-        System.debug('caught in updateLateFeeBlaStatus - ' + err.getMessage());
         LogService.logAndPublish(className, 'updateLateFeeBlaStatus', '', err);
     }
 }

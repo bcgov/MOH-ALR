@@ -209,11 +209,12 @@ export default class LateFeeManagementTable extends LightningElement {
             return this.blaList.filter(item =>
                 item.AccName.toLowerCase().includes(this.searchKey) ||
                 item.Name.toLowerCase().includes(this.searchKey) ||
-                item.LicenseTypeId.toLowerCase().includes(this.searchKey) ||
+                item.LicenseType.Name.toLowerCase().includes(this.searchKey) ||
                 item.RenewalYear__c.toLowerCase().includes(this.searchKey) ||
-                item.ParentId.toLowerCase().includes(this.searchKey) ||
+                item.Account.Parent.Name.toLowerCase().includes(this.searchKey) ||
                 item.AccountStatus.toLowerCase().includes(this.searchKey) ||
                 item.Status.toLowerCase().includes(this.searchKey) ||
+                item.Account.HealthAuthority__c.toLowerCase().includes(this.searchKey) ||
                 item.Late_Fee_Status__c.toLowerCase().includes(this.searchKey) ||
                 item.RenewalDetail.toLowerCase().includes(this.searchKey)
             );
