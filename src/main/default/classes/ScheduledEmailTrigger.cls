@@ -6,6 +6,7 @@
 **/
 
 public with sharing class ScheduledEmailTrigger implements Schedulable {
+    public Static Id emailTemplateId =NULL;
     public static Set<Id> accountIds = new Set<Id>();
 
     public void execute(SchedulableContext sc) {
@@ -95,10 +96,10 @@ public with sharing class ScheduledEmailTrigger implements Schedulable {
                         email.setOrgWideEmailAddressId(orgWideAddr.Id);
                         email.setToAddresses(new String[]{acrList.contact.Email});
                         email.setTargetObjectId(acrList.contact.Id);
-                        String emailBody = replaceMergeFields(emailTemplate, blaRec, acrList.Account.Name);
-                        String emailSubject = emailTemplate.Subject;
-                        email.setSubject(emailSubject);
-                        email.setHtmlBody(emailBody);
+                        EmailTemplate emailTemplates = replaceMergeFields(emailTemplate, blaRec, acrList.Account.Name);
+                        //String emailSubject = emailTemplate.Subject;
+                        email.setSubject(emailTemplates.Subject);
+                        email.setHtmlBody(emailTemplates.HtmlValue);
                         emails.add(email);
                         processedEmails.put(key, new List<String>{acrList.contact.Email});
                     }
@@ -117,53 +118,74 @@ public with sharing class ScheduledEmailTrigger implements Schedulable {
 }
 
     public static void sendEmailBatch(List<Messaging.SingleEmailMessage> emailBatch) {
-            for (Messaging.SingleEmailMessage email : emailBatch) {
-                try {
-                    List<Messaging.SingleEmailMessage> singleEmailList = new List<Messaging.SingleEmailMessage>();
-                    singleEmailList.add(email);
-                    List<Messaging.SendEmailResult> results = Messaging.sendEmail(singleEmailList);
- 
-                    if (results[0].isSuccess()) {
-                        System.debug('Email sent successfully to ' + email.getToAddresses()[0]);
-                    } else {
-                        String errorMessage = results[0].getErrors()[0].getMessage();
-                        if (errorMessage.contains('EMAIL_ADDRESS_BOUNCED')) {
-                            System.debug('Bounced email address: ' + email.getToAddresses()[0]);
-                        } else {
-                            System.debug('Failed to send email to ' + email.getToAddresses()[0] +
-                                '. Error message: ' + errorMessage);
-                        }
-                    }
-                } catch (Exception e) {
-                    System.debug('Exception occurred while sending email to ' + email.getToAddresses()[0] + ': ' + e.getMessage());
-                }
+        List<Messaging.SingleEmailMessage> singleEmailList = new List<Messaging.SingleEmailMessage>();
+        for (Messaging.SingleEmailMessage email : emailBatch) {
+            try {
+                
+                singleEmailList.add(email);
+                
+            } catch (Exception e) {
+                System.debug('Exception occurred while sending email to ' + email.getToAddresses()[0] + ': ' + e.getMessage());
             }
         }
-
-    public static String replaceMergeFields(EmailTemplate emailTemplate, BusinessLicenseApplication blaRec, String name) {
+        
+        List<Messaging.SendEmailResult> results = Messaging.sendEmail(singleEmailList);
+        for (Messaging.SingleEmailMessage email : emailBatch) {
+            try{
+                if (results[0].isSuccess()) {
+                    System.debug('Email sent successfully to ' + email.getToAddresses()[0]);
+                } else {
+                    String errorMessage = results[0].getErrors()[0].getMessage();
+                    if (errorMessage.contains('EMAIL_ADDRESS_BOUNCED')) {
+                        System.debug('Bounced email address: ' + email.getToAddresses()[0]);
+                    } else {
+                        System.debug('Failed to send email to ' + email.getToAddresses()[0] +
+                                     '. Error message: ' + errorMessage);
+                    }
+                }
+            } catch (Exception e) {
+                System.debug('Exception occurred while sending email to ' + email.getToAddresses()[0] + ': ' + e.getMessage());
+            }
+            	
+        }        
+        
+                
+    }
+    
+    
+    public static EmailTemplate replaceMergeFields(EmailTemplate emailTemplate, BusinessLicenseApplication blaRec, String name) {
         String mergeFieldValue = '';
+        //Id emailTemplateId =NULL;
         try {
             for (TemplateMergeFieldMapping__mdt templateMapping : TemplateMergeFieldMapping__mdt.getAll().values()) {
-                if (templateMapping.EmailTemplate__c == emailTemplate.Id && templateMapping.ObjectName__c == 'Account') {
+                if ( templateMapping.EmailTemplate__c == emailTemplateId && templateMapping.ObjectName__c == 'Account') {
                     emailTemplate.HtmlValue = emailTemplate.HtmlValue.replace(templateMapping.MergeField__c, name);
+                    emailTemplate.Subject = emailTemplate.Subject.replace(templateMapping.MergeField__c, name);
                       } else if (templateMapping.EmailTemplate__c == emailTemplate.Id && templateMapping.ObjectName__c == 'BusinessLicenseApplication') {
+
                     if (templateMapping.FieldAPIName__c == 'RenewalYear__c') {
                         emailTemplate.HtmlValue = emailTemplate.HtmlValue.replace(templateMapping.MergeField__c,
+                            Date.valueOf(blaRec.get(templateMapping.FieldAPIName__c)).format());
+                        emailTemplate.Subject = emailTemplate.Subject.replace(templateMapping.MergeField__c,
                             Date.valueOf(blaRec.get(templateMapping.FieldAPIName__c)).format());
                           } else {
                         emailTemplate.HtmlValue = emailTemplate.HtmlValue.replace(templateMapping.MergeField__c,
                             blaRec.get(templateMapping.FieldAPIName__c).toString());
+                        emailTemplate.Subject = emailTemplate.Subject.replace(templateMapping.MergeField__c,
+                            blaRec.get(templateMapping.FieldAPIName__c).toString());
                          }
                 } else if (templateMapping.EmailTemplate__c == emailTemplate.Id && templateMapping.MergeFieldFormula__c == 'nextYear') {
                     emailTemplate.HtmlValue = emailTemplate.HtmlValue.replace(templateMapping.MergeField__c, BCMOH_Constants.nextYear);
+                    emailTemplate.Subject = emailTemplate.Subject.replace(templateMapping.MergeField__c, BCMOH_Constants.nextYear);
                      }
             }
         } catch (Exception err) {
             System.debug('Exception occurred in replaceMergeFields method: ' + err.getMessage());
         }
-        return emailTemplate.HtmlValue;
+        return emailTemplate;
     }
-
+    
+     
     public static EmailTemplate getEmailTemplate(String templateDevName) {
         EmailTemplate emailTemplateRec = null;
         try {

@@ -115,12 +115,20 @@ public with sharing class ScheduleSendEmail implements Schedulable {
     }
     
     public static void sendEmailBatch(List<Messaging.SingleEmailMessage> emailBatch) {
+        List<Messaging.SingleEmailMessage> singleEmailList = new List<Messaging.SingleEmailMessage>();
         for (Messaging.SingleEmailMessage email : emailBatch) {
             try {
-                List<Messaging.SingleEmailMessage> singleEmailList = new List<Messaging.SingleEmailMessage>();
-                singleEmailList.add(email);
-                List<Messaging.SendEmailResult> results = Messaging.sendEmail(singleEmailList);
                 
+                singleEmailList.add(email);
+                
+            } catch (Exception e) {
+                System.debug('Exception occurred while sending email to ' + email.getToAddresses()[0] + ': ' + e.getMessage());
+            }
+        }
+        
+        List<Messaging.SendEmailResult> results = Messaging.sendEmail(singleEmailList);
+        for (Messaging.SingleEmailMessage email : emailBatch) {
+            try{
                 if (results[0].isSuccess()) {
                     System.debug('Email sent successfully to ' + email.getToAddresses()[0]);
                 } else {
@@ -135,7 +143,10 @@ public with sharing class ScheduleSendEmail implements Schedulable {
             } catch (Exception e) {
                 System.debug('Exception occurred while sending email to ' + email.getToAddresses()[0] + ': ' + e.getMessage());
             }
-        }
+            	
+        }        
+        
+                
     }
     
     public static EmailTemplate getEmailTemplate(String templateDevName) {
