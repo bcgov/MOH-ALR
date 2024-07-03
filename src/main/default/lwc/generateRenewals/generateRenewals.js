@@ -30,14 +30,18 @@ export default class GenerateRenewals extends NavigationMixin(LightningElement) 
     @track searchKey = '';
     @track sortedBy;
     @track sortedDirection = 'asc';
+    @track selectedRecordIds = new Set();
 
     ascendingIconUrl = ascendingIcon;
     descendingIconUrl = descendingIcon;
 
+    wiredAccountsResult;
+
     @wire(getAccounts)
-    wiredAccounts({ error, data }) {
-        if (data) {
-            this.accounts = data.map(account => ({
+    wiredAccounts(result) {
+        this.wiredAccountsResult = result;
+        if (result.data) {
+            this.accounts = result.data.map(account => ({
                 ...account,
                 accountUrl: `/lightning/r/Account/${account.Id}/view`,
                 parentAccountUrl: account.ParentId ? `/lightning/r/Account/${account.ParentId}/view` : null,
@@ -47,8 +51,8 @@ export default class GenerateRenewals extends NavigationMixin(LightningElement) 
             }));
             this.applyFilters();
             this.hasLoaded = true;
-        } else if (error) {
-            console.error('Error fetching accounts:', error);
+        } else if (result.error) {
+            console.error('Error fetching accounts:', result.error);
             this.handleError();
         }
     }
@@ -63,8 +67,18 @@ export default class GenerateRenewals extends NavigationMixin(LightningElement) 
     }
 
     applyFilters() {
-        this.filteredAccounts = this.accounts;
+        if (this.accounts && this.searchKey) {
+            this.filteredAccounts = this.accounts.filter(account =>
+                Object.values(account).some(
+                    value => typeof value === 'string' && value.toLowerCase().includes(this.searchKey.toLowerCase())
+                )
+            );
+        } else {
+            this.filteredAccounts = this.accounts;
+        }
         this.isdata = this.filteredAccounts.length > 0;
+        this.restoreSelection();
+        console.log('filter', this.filteredAccounts);
     }
 
     handleGenerateRenewals() {
@@ -108,29 +122,8 @@ export default class GenerateRenewals extends NavigationMixin(LightningElement) 
 
     handleSearchChange(event) {
         this.searchKey = event.target.value.toLowerCase();
+        console.log('search',this.searchKey);
         this.applyFilters();
-    }
-    get filteredAccounts() {
-        if (this.accounts && this.searchKey) {
-            return this.accounts.filter(account =>
-                account.Name.toLowerCase().includes(this.searchKey.toLowerCase()) ||
-                account.RegId__c.toLowerCase().includes(this.searchKey.toLowerCase()) ||
-                account.parentAccountName.toLowerCase().includes(this.searchKey.toLowerCase()) ||
-                account.Status__c.toLowerCase().includes(this.searchKey.toLowerCase()) ||
-                account.LicenseTypeName.toLowerCase().includes(this.searchKey.toLowerCase()) ||
-                account.HealthAuthority__c.toLowerCase().includes(this.searchKey.toLowerCase())
-
-            );
-        }
-        return this.accounts;
-    }
-    applyFilters() {
-        this.filteredAccounts = this.accounts.filter(account =>
-            Object.values(account).some(
-                value => typeof value === 'string' && value.toLowerCase().includes(this.searchKey)
-            )
-        );
-        this.isdata = this.filteredAccounts.length > 0;
     }
 
     handleSort(event) {
@@ -150,8 +143,25 @@ export default class GenerateRenewals extends NavigationMixin(LightningElement) 
             return reverse * ((fieldValue(value1) > fieldValue(value2)) - (fieldValue(value1) < fieldValue(value2)));
         });
         this.filteredAccounts = parseData;
+        this.restoreSelection(); 
     }
-     handleRowSelection(event){
-            const selectedRows = event.detail.selectedRows
+
+    handleRowSelection(event) {
+        const selectedRows = event.detail.selectedRows;
+        selectedRows.forEach(row => {
+            this.selectedRecordIds.add(row.Id);
+        });
+        this.filteredAccounts.forEach(account => {
+            if (!selectedRows.some(row => row.Id === account.Id)) {
+                this.selectedRecordIds.delete(account.Id);
+            }
+        });
+        this.restoreSelection();
+    }
+
+    restoreSelection() {
+        if (this.template.querySelector('lightning-datatable')) {
+            this.template.querySelector('lightning-datatable').selectedRows = Array.from(this.selectedRecordIds);
+        }
     }
 }
