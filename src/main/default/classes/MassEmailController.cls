@@ -81,11 +81,6 @@ public with sharing class MassEmailController {
                                                continue;
                                            }
                                            
-                                           if(isValidAcc && activeAccRec.AccountContactRelations.size() == 0) {
-                                               isValidAcc = false;
-                                               blaErrMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, BCMOH_Constants.noPrimaryContact);
-                                               continue;
-                                           }
                                            if(activeAccRec.AccountBusinessLicenses__r.size() == 0) { 
                                            }
                                            else if(isValidAcc) {
@@ -184,11 +179,6 @@ public with sharing class MassEmailController {
                                                isValidAcc = false;
                                                continue;
                                            }
-                                           if(isValidAcc && activeAccRec.AccountContactRelations.size() == 0) {
-                                               isValidAcc = false;
-                                               blaErrMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, BCMOH_Constants.noPrimaryContact);
-                                               continue;
-                                           }
                                            if(activeAccRec.AccountBusinessLicenses__r.size() == 0) { 
                                            }
                                            else if(isValidAcc) {
@@ -258,9 +248,9 @@ public with sharing class MassEmailController {
          List<Messaging.SingleEmailMessage> singleEmailMsgList = new List<Messaging.SingleEmailMessage>();        
         try {
             for(Id whatId : whatIdTargetMap.KeySet()) {
-                //blaIdRec = whatId;
                 blaIdRec.add(whatId);
                contactId = whatIdTargetMap.isEmpty() ? NULL : whatIdTargetMap.get(whatId);
+                attachIds.addAll(blaContentVerMap.get(whatId));
                 if(!blaMap.isEmpty() && !accMap.isEmpty() &&
                    blaMap.get(whatId) != NULL && accMap.get(whatId) != NULL) {
                        blRec = !blMap.isEmpty() && blMap.get(whatId) != NULL ? blMap.get(whatId) : NULL;//get BL record
@@ -286,7 +276,7 @@ public with sharing class MassEmailController {
             }
             BusinessLicenseApplication blaObject= [select AccountId,Account.ParentId from BusinessLicenseApplication where Id=:blaIdRec LIMIT 1];
            
-            List<AccountContactRelation> conRec = [Select Id,AccountId,ContactId, Contact.Email,Account.ParentId from AccountContactRelation where (AccountId =: blaObject.AccountId OR AccountId =: blaObject.Account.ParentId) AND IsActive = TRUE];
+            List<AccountContactRelation> conRec = [Select Id,AccountId,ContactId, Contact.Email,Account.ParentId from AccountContactRelation where (AccountId =: blaObject.AccountId OR AccountId =: blaObject.Account.ParentId) AND IsActive = TRUE AND Contact.Email!= NULL];
                       for(AccountContactRelation acr : conRec){
                				  contId.add(acr.ContactId);
                               if(blaIdRec != NULL) {
