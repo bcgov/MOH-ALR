@@ -81,6 +81,7 @@ public with sharing class MassEmailController {
                                                continue;
                                            }
                                            
+                                           
                                            if(activeAccRec.AccountBusinessLicenses__r.size() == 0) { 
                                            }
                                            else if(isValidAcc) {
@@ -179,6 +180,7 @@ public with sharing class MassEmailController {
                                                isValidAcc = false;
                                                continue;
                                            }
+                                           
                                            if(activeAccRec.AccountBusinessLicenses__r.size() == 0) { 
                                            }
                                            else if(isValidAcc) {
@@ -224,6 +226,7 @@ public with sharing class MassEmailController {
                 else {
                     //fetch email attachments associated to BLA records
                     blaContentVerMap = fetchAttachmentDetails(blaMap.keySet());
+
                     whatIdTargetMap = blaContactMap;
                     sendEmailForRenewals(blaContentVerMap, whatIdTargetMap);
                 }
@@ -275,13 +278,15 @@ public with sharing class MassEmailController {
                 }
             }
             BusinessLicenseApplication blaObject= [select AccountId,Account.ParentId from BusinessLicenseApplication where Id=:blaIdRec LIMIT 1];
-           
+            
+            List<Contact> conList = [Select Id,AccountId, Email,Account.ParentId from Contact where (AccountId =: blaObject.AccountId OR AccountId =: blaObject.Account.ParentId) AND Email!= NULL];
+
             List<AccountContactRelation> conRec = [Select Id,AccountId,ContactId, Contact.Email,Account.ParentId from AccountContactRelation where (AccountId =: blaObject.AccountId OR AccountId =: blaObject.Account.ParentId) AND IsActive = TRUE AND Contact.Email!= NULL];
-                      for(AccountContactRelation acr : conRec){
-               				  contId.add(acr.ContactId);
+
+            for(Contact acr : conList){
                               if(blaIdRec != NULL) {
                                   for(Id BLARecord : blaIdRec){
-                                      Messaging.SingleEmailMessage emailMsgRec = BCMOH_UtilityClass.setEmailParams(acr.ContactId, NULL, orgWideAddrId, attachIds, BLARecord, emailBody, subjectValue, emailHtmlBody);//ALR-827 - added emailHtmlBody
+                                      Messaging.SingleEmailMessage emailMsgRec = BCMOH_UtilityClass.setEmailParams(acr.Id, NULL, orgWideAddrId, attachIds, BLARecord, emailBody, subjectValue, emailHtmlBody);//ALR-827 - added emailHtmlBody
                                   	  singleEmailMsgList.add(emailMsgRec);
                                   }
                             }
@@ -296,6 +301,7 @@ public with sharing class MassEmailController {
         }
         catch(Exception err) {
             system.debug('use exception handling sendEmailForRenewals'+err.getMessage());
+           
         }
     }
     
