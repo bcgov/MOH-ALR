@@ -301,7 +301,7 @@ public with sharing class MassEmailController {
         }
         catch(Exception err) {
             system.debug('use exception handling sendEmailForRenewals'+err.getMessage());
-            system.debug('use exception handling sendEmailForRenewals'+err.getLineNumber());
+           
         }
     }
     
