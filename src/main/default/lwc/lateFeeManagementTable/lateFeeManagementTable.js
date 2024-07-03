@@ -180,22 +180,25 @@ export default class LateFeeManagementTable extends LightningElement {
 
     handleGenerateLateFees(event){
             this.renderFlow = true;
+            this.handleConfirmGenerateLateFee();
+            
     }
+
     
-    handleConfirmGenerateLateFee(){
+   handleConfirmGenerateLateFee(){
       const event = new ShowToastEvent({
             title: "Success",
             message: "Late Fees Generated Successfully",
             variant: "success"
         });
-      setTimeout(() => {
+        this.dispatchEvent(event);
+        setTimeout(() => {
             location.reload();
         }, DELAY_BEFORE_REFRESH);
     }
 
     async handleStatusChange(event){
       if (event.detail.status === 'FINISHED_SCREEN') {
-          this.handleConfirmGenerateLateFee();
             await this.refreshData();
             refreshApex(this._wiredResult);
             this.renderFlow = false;
