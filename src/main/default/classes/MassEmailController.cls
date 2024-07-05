@@ -3,13 +3,13 @@
 * @Date:       
 * @Description: The purpose of this Test class for MassEmailController and BCMOH_UtilityClass and RenewalBlaTableController
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
-                          ALR -560             Sweta          Renewal verification and renewal mass email
+ALR -560             Sweta          Renewal verification and renewal mass email
 ***********************************************************************************************/
 public with sharing class MassEmailController {
     Public Static Id templateId = NULL;
     Public Static String templateEntity = '';
     Public Static Map<Id, Id> targetWhatIdMap = new Map<Id, Id>();
-    Public Static Map<Id, Id> whatIdTargetMap = new Map<Id, Id>();
+    Public Static Map<Id, List<Id>> whatIdTargetMap = new Map<Id, List<Id>>();
     
     Public Static Id orgWideAddrId = NULL;
     Public Static String templateDevName = '';
@@ -29,7 +29,7 @@ public with sharing class MassEmailController {
     Public Static String emailHtmlBody = '';
     
     Public Static Map<Id, BusinessLicenseApplication> blaMap = new Map<Id, BusinessLicenseApplication>();
-    Public Static Map<Id, Id> blaContactMap = new Map<Id, Id>();
+    Public Static Map<Id, List<Id>> blaContactMap = new Map<Id, List<Id>>();
     Public Static Map<Id, AccountContactRelation> accContactMap = new Map<Id, AccountContactRelation>();
     Public Static Map<Id, Account> accMap = new Map<Id, Account>();
     Public Static Map<Id, BusinessLicense> blMap = new Map<Id, BusinessLicense>();
@@ -37,6 +37,7 @@ public with sharing class MassEmailController {
     Public Static Map<Id, Set<Id>> blaContentVerMap = new Map<Id, Set<Id>>();
     private Final Static String RegTxnFeeStatus = 'Due';
     public Final Static String FeeTypeStatuses = 'Renewal Unit Fee';
+    Public Static List<Id> contactIdList = new List<Id>();
     
     Public Static String errMessage = '';
     Public Static Boolean sendEmailValid = true;
@@ -51,7 +52,9 @@ public with sharing class MassEmailController {
         Map<String, List<String>> accDetails = new Map<String, List<String>>();
         Map<Id, String> templateIdEntityMap = new Map<Id, String>();
         Id orgWideAddrId = NULL;
+        Id blaRecord = NULL;
         Map<Id, Set<Id>> contactContentVerMap = new Map<Id, Set<Id>>();
+        List<AccountContactRelation> contacts =new List<AccountContactRelation>();
         
         try {
             //fetch acc status and rec type from metadata
@@ -60,7 +63,7 @@ public with sharing class MassEmailController {
                                         (SELECT Id, ContactId, Contact.Name, Contact.Email, PrimaryContact__c,IsActive
                                          FROM AccountContactRelations 
                                          WHERE IsActive = TRUE AND Contact.Email != NULL),
-                                        (SELECT Id, Account.Name, RenewalYear__c, CreatedDate 
+                                        (SELECT Id, Account.Name, RenewalYear__c, CreatedDate,Account.ParentId
                                          FROM BusinessLicenseApplicationAccount 
                                          WHERE RecordType.DeveloperName =: BCMOH_Constants.blaRecType AND 
                                          Status =: BCMOH_Constants.blaCreatedStatus
@@ -73,7 +76,7 @@ public with sharing class MassEmailController {
                                          AND Type__c IN: BCMOH_Constants.allALUnitTypes)
                                         FROM Account 
                                         WHERE (RecordType.DeveloperName =: BCMOH_Constants.accRecType OR RecordType.DeveloperName =: BCMOH_Constants.accRegType) 
-                                        ]){
+                                       ]){
                                            isValidAcc = true;
                                            
                                            if(activeAccRec.BusinessLicenseApplicationAccount.size() == 0) {
@@ -106,19 +109,25 @@ public with sharing class MassEmailController {
                                                //bla map and blaId-contactId map for email targetIds
                                                for(BusinessLicenseApplication blaRec : activeAccRec.BusinessLicenseApplicationAccount) {
                                                    blaMap.put(blaRec.Id, blaRec);
-                                                   List<Contact> contacts = getContacts(blaRec.AccountId);
-                                                    for(Contact cont : contacts)
-                                                    {
-                                                  blaContactMap.put(blaRec.Id,cont.Id); 
- 
-                                                     }
-                                                 }
+                                                   blaRecord = blaRec.Id;
+                                                   contacts = getContacts(blaRec.AccountId,blaRec.Account.ParentId);
                                                    
+                                                   blaContactMap.put(blaRecord,new List<Id>()); 
+                                               }
+                                               for(AccountContactRelation cont : contacts)
+                                               {
+                                                   contactIdList.add(cont.ContactId);
+                                                   if(blaContactMap.containsKey(blaRecord)) {
+                                                       blaContactMap.get(blaRecord).add(cont.ContactId);
+                                                   } else {
+                                                       blaContactMap.put(blaRecord, new List<Id> { cont.ContactId });
+                                                   } 
+                                               }
                                            }
-         }
-                                       
-                                       
-
+                                       }
+            
+            
+            
             //if valid blas are fetched
             if(!blaMap.isEmpty()) {
                 //fetch template Id
@@ -139,12 +148,13 @@ public with sharing class MassEmailController {
             updateBlaStatus();
         }
         catch(exception err) {
-			 LogService.logAndPublish(className, 'doSendRenewals', '', err);
+            LogService.logAndPublish(className, 'doSendRenewals', '', err);
         }
     }
-    public Static List<Contact> getContacts(Id accountId){
-          return [Select id, Name from Contact where AccountId = :accountId];
-}
+    public Static List<AccountContactRelation> getContacts(Id accountId, Id parentId){
+        return [Select Id,ContactId,AccountId,IsActive,Contact.Email from AccountContactRelation where (AccountId = :accountId OR AccountId =: parentId) AND IsActive =true AND Contact.Email != NULL];
+        
+    }
     //method to to send email to records-ALR-1000
     @AuraEnabled
     public static void doSendLateFee() {
@@ -152,7 +162,9 @@ public with sharing class MassEmailController {
         Map<String, List<String>> accDetails = new Map<String, List<String>>();
         Map<Id, String> templateIdEntityMap = new Map<Id, String>();
         Id orgWideAddrId = NULL;
+        Id blaRecord = NULL;
         Map<Id, Set<Id>> contactContentVerMap = new Map<Id, Set<Id>>();
+        List<AccountContactRelation> contacts =new List<AccountContactRelation>();
         try {
             //fetch acc status and rec type from metadata
             accDetails = BCMOH_UtilityClass.getAccRenewals(BCMOH_Constants.renewalName);
@@ -160,7 +172,7 @@ public with sharing class MassEmailController {
                                         (SELECT Id, ContactId, Contact.Name, Contact.Email, PrimaryContact__c,IsActive
                                          FROM AccountContactRelations 
                                          WHERE IsActive = TRUE AND Contact.Email != NULL),
-                                        (SELECT Id, Account.Name, RenewalYear__c, CreatedDate,AccountId
+                                        (SELECT Id, Account.Name, RenewalYear__c, CreatedDate,Account.ParentId
                                          FROM BusinessLicenseApplicationAccount 
                                          WHERE RecordType.DeveloperName =: BCMOH_Constants.blaRecType AND 
                                          Late_Fee_Status__c =: BCMOH_Constants.blaLateFeeStatus 
@@ -172,9 +184,10 @@ public with sharing class MassEmailController {
                                          WHERE RecordType.DeveloperName =: BCMOH_Constants.parentAssetRecType
                                          AND Type__c IN: BCMOH_Constants.allALUnitTypes)
                                         FROM Account 
-                                       WHERE (RecordType.DeveloperName =: BCMOH_Constants.accRecType OR RecordType.DeveloperName =: BCMOH_Constants.accRegType) 
-                                         
+                                        WHERE (RecordType.DeveloperName =: BCMOH_Constants.accRecType OR RecordType.DeveloperName =: BCMOH_Constants.accRegType) 
+                                        
                                        ]) {
+                                           
                                            isValidAcc = true;
                                            if(activeAccRec.BusinessLicenseApplicationAccount.size() == 0) {
                                                isValidAcc = false;
@@ -189,6 +202,7 @@ public with sharing class MassEmailController {
                                            
                                            //if account is valid then fetch the bla Ids associated with the account to fetch its files attached
                                            if(isValidAcc) {
+                                               
                                                accMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, activeAccRec);
                                                
                                                accContactMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, 
@@ -201,15 +215,24 @@ public with sharing class MassEmailController {
                                                    }
                                                    blaTotalAlUnitsMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, unitCounter);
                                                }
+                                               //bla map and blaId-contactId map for email targetIds
                                                for(BusinessLicenseApplication blaRec : activeAccRec.BusinessLicenseApplicationAccount) {
-                                                  blaMap.put(blaRec.Id, blaRec);
-                                                  List<Contact> contacts = getContacts(blaRec.AccountId);
-                                                 for(Contact cont : contacts)
-                                                   {
-                                                     blaContactMap.put(blaRec.Id,cont.Id); 
- 
-                                                    }
-                                                }
+                                                   blaMap.put(blaRec.Id, blaRec);
+                                                   blaRecord = blaRec.Id;
+                                                   contacts = getContacts(blaRec.AccountId,blaRec.Account.ParentId);
+                                                   
+                                                   blaContactMap.put(blaRecord,new List<Id>()); 
+                                               }
+                                               for(AccountContactRelation cont : contacts)
+                                               {
+                                                   contactIdList.add(cont.ContactId);
+                                                   if(blaContactMap.containsKey(blaRecord)) {
+                                                       blaContactMap.get(blaRecord).add(cont.ContactId);
+                                                   } else {
+                                                       blaContactMap.put(blaRecord, new List<Id> { cont.ContactId });
+                                                   } 
+                                               }
+                                               
                                            }
                                        }
             
@@ -226,7 +249,7 @@ public with sharing class MassEmailController {
                 else {
                     //fetch email attachments associated to BLA records
                     blaContentVerMap = fetchAttachmentDetails(blaMap.keySet());
-
+                    
                     whatIdTargetMap = blaContactMap;
                     sendEmailForRenewals(blaContentVerMap, whatIdTargetMap);
                 }
@@ -240,20 +263,23 @@ public with sharing class MassEmailController {
     }
     
     //send email method
-    public static void sendEmailForRenewals(Map<Id, Set<Id>> blaContentVerMap, Map<Id, Id> whatIdTargetMap) {
+    public static void sendEmailForRenewals(Map<Id, Set<Id>> blaContentVerMap, Map<Id, List<Id>> whatIdTargetMap) {
         Id contactId = NULL;
         BusinessLicense blRec = new BusinessLicense();
         Integer totalALUnits = 0;
         List<Id> blaIdRec = new List<Id>();
-         List<Id> contId =New List<Id>();
- 
-        List<Id> attachIds = new List<Id>();
-         List<Messaging.SingleEmailMessage> singleEmailMsgList = new List<Messaging.SingleEmailMessage>();        
+        List<Id> contId =New List<Id>();
+        Map<String, Id> duplicateEmailRemovalMap = new Map<String, Id>();
+        Id FinalList;
+        
+        //List<Id> attachIds = new List<Id>();
+        List<Messaging.SingleEmailMessage> singleEmailMsgList = new List<Messaging.SingleEmailMessage>();        
         try {
+            
             for(Id whatId : whatIdTargetMap.KeySet()) {
-                blaIdRec.add(whatId);
-               contactId = whatIdTargetMap.isEmpty() ? NULL : whatIdTargetMap.get(whatId);
-                attachIds.addAll(blaContentVerMap.get(whatId));
+                
+                //fetch attachments for email attached to WhatId (Bla Id)
+                List<Id> attachIds = new List<Id>(blaContentVerMap.get(whatId));
                 if(!blaMap.isEmpty() && !accMap.isEmpty() &&
                    blaMap.get(whatId) != NULL && accMap.get(whatId) != NULL) {
                        blRec = !blMap.isEmpty() && blMap.get(whatId) != NULL ? blMap.get(whatId) : NULL;//get BL record
@@ -261,38 +287,34 @@ public with sharing class MassEmailController {
                            blaTotalAlUnitsMap.get(whatId) : 0;//get Total AL Units value
                        emailBody = replaceMergeFields(emailBodyConst, accContactMap.get(whatId), blaMap.get(whatId), 
                                                       accMap.get(whatId), blRec, String.valueOf(totalALUnits));
+                       //ALR-827 - adding html value to email
                        emailHtmlBody = replaceMergeFields(emailHtmlBodyConst, accContactMap.get(whatId), blaMap.get(whatId), 
                                                           accMap.get(whatId), blRec, String.valueOf(totalALUnits));
+                       //ALR-827 - if replaceMergeFields mthod returned null, err in replacing merge fields in template
                        if(emailBody == NULL || emailHtmlBody == NULL) {
-                           continue;
-                       }
+                           continue;//go to next record
+                       }//ALR-827 ends
                        subjectValue = replaceMergeFields(subjectValueConst, accContactMap.get(whatId), blaMap.get(whatId),
                                                          accMap.get(whatId), blRec, String.valueOf(totalALUnits));
                        if(subjectValue == NULL) {
-                           continue;
+                           continue;//go to next record
                        }
-                       
+                       if(!blaErrMap.containsKey(whatId)) {
+                           //set params for email record
+                           for(Id conId : whatIdTargetMap.get(whatId)){
+                               contactId = conId;
+                               Messaging.SingleEmailMessage emailMsgRec = BCMOH_UtilityClass.setEmailParams(contactId, NULL, orgWideAddrId, attachIds, whatId, emailBody, subjectValue, emailHtmlBody);//ALR-827 - added emailHtmlBody
+                               singleEmailMsgList.add(emailMsgRec);
+                           }   
+                           
+                       }
                    }
                 else {
                     blaErrMap.put(whatId, BCMOH_Constants.mappingDataMissing);//required data missing account and bla records-corner scenario
                 }
             }
-            BusinessLicenseApplication blaObject= [select AccountId,Account.ParentId from BusinessLicenseApplication where Id=:blaIdRec LIMIT 1];
             
-            List<Contact> conList = [Select Id,AccountId, Email,Account.ParentId from Contact where (AccountId =: blaObject.AccountId OR AccountId =: blaObject.Account.ParentId) AND Email!= NULL];
-
-            List<AccountContactRelation> conRec = [Select Id,AccountId,ContactId, Contact.Email,Account.ParentId from AccountContactRelation where (AccountId =: blaObject.AccountId OR AccountId =: blaObject.Account.ParentId) AND IsActive = TRUE AND Contact.Email!= NULL];
-
-            for(Contact acr : conList){
-                              if(blaIdRec != NULL) {
-                                  for(Id BLARecord : blaIdRec){
-                                      Messaging.SingleEmailMessage emailMsgRec = BCMOH_UtilityClass.setEmailParams(acr.Id, NULL, orgWideAddrId, attachIds, BLARecord, emailBody, subjectValue, emailHtmlBody);//ALR-827 - added emailHtmlBody
-                                  	  singleEmailMsgList.add(emailMsgRec);
-                                  }
-                            }
-                          
-            }            
-             if(singleEmailMsgList != NULL && singleEmailMsgList.size() > 0) {
+            if(singleEmailMsgList != NULL && singleEmailMsgList.size() > 0) {
                 Messaging.SendEmailResult[] emailResultList = Messaging.SendEmail(singleEmailMsgList, false);//send email inspite of failures in list
                 getEmailStatus(emailResultList, singleEmailMsgList, whatIdTargetMap);
                 
@@ -301,7 +323,7 @@ public with sharing class MassEmailController {
         }
         catch(Exception err) {
             system.debug('use exception handling sendEmailForRenewals'+err.getMessage());
-           
+            
         }
     }
     
@@ -487,13 +509,13 @@ public with sharing class MassEmailController {
     
     //update bla success and error maps after sending email
     public static void getEmailStatus(Messaging.SendEmailResult[] emailResultList, 
-                                      List<Messaging.SingleEmailMessage> singleEmailMsgList, Map<Id, Id> whatIdTargetMap) {
-                                          Map<Id, String> targetIdErrorMap = new Map<Id, String>();
+                                      List<Messaging.SingleEmailMessage> singleEmailMsgList, Map<Id, List<Id>> whatIdTargetMap) {
+                                          Map<List<Id>, String> targetIdErrorMap = new Map<List<Id>, String>();
                                           try {
                                               for(Messaging.SendEmailResult eResRec : emailResultList) {
                                                   if(!eResRec.isSuccess()) {
                                                       for(Messaging.SendEmailError err : eResRec.getErrors()) {
-                                                          targetIdErrorMap.put(err.getTargetObjectId(), err.getMessage());
+                                                          //targetIdErrorMap.put(err.getTargetObjectId(), err.getMessage());
                                                       }
                                                   }
                                               }
@@ -517,33 +539,33 @@ public with sharing class MassEmailController {
         Set<Id> blaIds = new Set<Id>();
         try {
             // Collect BLA IDs from both maps
-        blaIds.addAll(blaErrMap.keySet());
-        blaIds.addAll(blaSuccessMap.keySet());
-        // Query all relevant BLAs at once
-        Map<Id, BusinessLicenseApplication> blaMap = new Map<Id, BusinessLicenseApplication>([SELECT Id, AccountId, RenewalDetail__c, Status FROM BusinessLicenseApplication WHERE Id IN :blaIds]);
-        // Update BLAs and related Accounts
-      
+            blaIds.addAll(blaErrMap.keySet());
+            blaIds.addAll(blaSuccessMap.keySet());
+            // Query all relevant BLAs at once
+            Map<Id, BusinessLicenseApplication> blaMap = new Map<Id, BusinessLicenseApplication>([SELECT Id, AccountId, RenewalDetail__c, Status FROM BusinessLicenseApplication WHERE Id IN :blaIds]);
+            // Update BLAs and related Accounts
+            
             for (Id blaId : blaIds) {
-             BusinessLicenseApplication blaRec = blaMap.get(blaId);
-            if (blaRec != null) {
-                  // Update BLAs based on the map they are present in
-                if (blaErrMap.containsKey(blaId)) {
-                     String renewalMsg = blaErrMap.get(blaId).length() > 255 ? blaErrMap.get(blaId).Substring(0, 255) : blaErrMap.get(blaId);
-                    String errMsg = blaErrMap.get(blaId);
-                    errMsg = blaRec.RenewalDetail__c != null ? blaRec.RenewalDetail__c + ' ; ' + renewalMsg : renewalMsg;
-                    blaRec.Status = BCMOH_Constants.errorBlaStatus;
-                    blaRec.RenewalDetail__c = errMsg;
-                } else if (blaSuccessMap.containsKey(blaId)) {
-                     String renewalMsg = blaSuccessMap.get(blaId).length() > 255 ? blaSuccessMap.get(blaId).Substring(0, 255) : blaSuccessMap.get(blaId);
-                    String succMsg = String.isEmpty(blaRec.RenewalDetail__c) ? renewalMsg : blaRec.RenewalDetail__c + ' ; ' + renewalMsg;
-                    blaRec.Status = BCMOH_Constants.sentBlaStatus;
-                    blaRec.RenewalDetail__c = succMsg;
-                  }
-                blaUpdateList.add(blaRec);
-             }
-            else {
+                BusinessLicenseApplication blaRec = blaMap.get(blaId);
+                if (blaRec != null) {
+                    // Update BLAs based on the map they are present in
+                    if (blaErrMap.containsKey(blaId)) {
+                        String renewalMsg = blaErrMap.get(blaId).length() > 255 ? blaErrMap.get(blaId).Substring(0, 255) : blaErrMap.get(blaId);
+                        String errMsg = blaErrMap.get(blaId);
+                        errMsg = blaRec.RenewalDetail__c != null ? blaRec.RenewalDetail__c + ' ; ' + renewalMsg : renewalMsg;
+                        blaRec.Status = BCMOH_Constants.errorBlaStatus;
+                        blaRec.RenewalDetail__c = errMsg;
+                    } else if (blaSuccessMap.containsKey(blaId)) {
+                        String renewalMsg = blaSuccessMap.get(blaId).length() > 255 ? blaSuccessMap.get(blaId).Substring(0, 255) : blaSuccessMap.get(blaId);
+                        String succMsg = String.isEmpty(blaRec.RenewalDetail__c) ? renewalMsg : blaRec.RenewalDetail__c + ' ; ' + renewalMsg;
+                        blaRec.Status = BCMOH_Constants.sentBlaStatus;
+                        blaRec.RenewalDetail__c = succMsg;
+                    }
+                    blaUpdateList.add(blaRec);
+                }
+                else {
+                }
             }
-        }
             if(!blaUpdateList.isEmpty() && BusinessLicenseApplication.sObjectType.getDescribe().isUpdateable()) {
                 Database.Update(blaUpdateList, false);               
             }
@@ -552,66 +574,66 @@ public with sharing class MassEmailController {
             LogService.logAndPublish(className, 'updateBlaStatus', '', err);
         }
     }
-
+    
     public Static Id getAccountId(Id blaId) {
         return [SELECT AccountId FROM BusinessLicenseApplication WHERE Id = :blaId][0].AccountId;
     }
     public Static List<Account> updateAccountStatus(Id accId) {
-         return [SELECT Status__c FROM Account WHERE Id = :accId];
+        return [SELECT Status__c FROM Account WHERE Id = :accId];
     }
     public Static List<BusinessLicenseApplication> blaErrQuery(Id blaId) {
         return [SELECT RenewalDetail__c FROM BusinessLicenseApplication WHERE Id =:blaId LIMIT 1];
     }
     
-   
+    
     public static void updateLateFeeBlaStatus() {
-    List<Account> accToUpdate = new List<Account>();
-    List<BusinessLicenseApplication> blaToUpdate = new List<BusinessLicenseApplication>();
-    Set<Id> blaIds = new Set<Id>();
- 
-    try {
-        // Collect BLA IDs from both maps
-        blaIds.addAll(blaErrMap.keySet());
-        blaIds.addAll(blaSuccessMap.keySet());
-        // Query all relevant BLAs at once
-        Map<Id, BusinessLicenseApplication> blaMap = new Map<Id, BusinessLicenseApplication>([SELECT Id, AccountId, RenewalDetail__c, Late_Fee_Status__c FROM BusinessLicenseApplication WHERE Id IN :blaIds]);
-        // Update BLAs and related Accounts
-        for (Id blaId : blaIds) {
-             BusinessLicenseApplication blaRec = blaMap.get(blaId);
-            if (blaRec != null) {
-                  // Update BLAs based on the map they are present in
-                if (blaErrMap.containsKey(blaId)) {
-                     String lateFeeMsg = blaErrMap.get(blaId).length() > 255 ? blaErrMap.get(blaId).Substring(0, 255) : blaErrMap.get(blaId);
-                    String errMsg = blaErrMap.get(blaId);
-                    errMsg = blaRec.RenewalDetail__c != null ? blaRec.RenewalDetail__c + ' ; ' + lateFeeMsg : lateFeeMsg;
-                    blaRec.Late_Fee_Status__c = BCMOH_Constants.errorBlaStatus;
-                    blaRec.RenewalDetail__c = errMsg;
-                } else if (blaSuccessMap.containsKey(blaId)) {
-                     String lateFeeMsg = blaSuccessMap.get(blaId).length() > 255 ? blaSuccessMap.get(blaId).Substring(0, 255) : blaSuccessMap.get(blaId);
-                    String succMsg = String.isEmpty(blaRec.RenewalDetail__c) ? lateFeeMsg : blaRec.RenewalDetail__c + ' ; ' + lateFeeMsg;
-                    blaRec.Late_Fee_Status__c = BCMOH_Constants.sentBlaStatus;
-                    blaRec.RenewalDetail__c = succMsg;
-                    // Add Account to the update list if AccountId is not null
-                    if (blaRec.AccountId != null) {
-                       accToUpdate.add(new Account(Id = blaRec.AccountId, Status__c = BCMOH_Constants.AccStatus));
-                    } 
-                 }
-                blaToUpdate.add(blaRec);
-             }
-            else {
+        List<Account> accToUpdate = new List<Account>();
+        List<BusinessLicenseApplication> blaToUpdate = new List<BusinessLicenseApplication>();
+        Set<Id> blaIds = new Set<Id>();
+        
+        try {
+            // Collect BLA IDs from both maps
+            blaIds.addAll(blaErrMap.keySet());
+            blaIds.addAll(blaSuccessMap.keySet());
+            // Query all relevant BLAs at once
+            Map<Id, BusinessLicenseApplication> blaMap = new Map<Id, BusinessLicenseApplication>([SELECT Id, AccountId, RenewalDetail__c, Late_Fee_Status__c FROM BusinessLicenseApplication WHERE Id IN :blaIds]);
+            // Update BLAs and related Accounts
+            for (Id blaId : blaIds) {
+                BusinessLicenseApplication blaRec = blaMap.get(blaId);
+                if (blaRec != null) {
+                    // Update BLAs based on the map they are present in
+                    if (blaErrMap.containsKey(blaId)) {
+                        String lateFeeMsg = blaErrMap.get(blaId).length() > 255 ? blaErrMap.get(blaId).Substring(0, 255) : blaErrMap.get(blaId);
+                        String errMsg = blaErrMap.get(blaId);
+                        errMsg = blaRec.RenewalDetail__c != null ? blaRec.RenewalDetail__c + ' ; ' + lateFeeMsg : lateFeeMsg;
+                        blaRec.Late_Fee_Status__c = BCMOH_Constants.errorBlaStatus;
+                        blaRec.RenewalDetail__c = errMsg;
+                    } else if (blaSuccessMap.containsKey(blaId)) {
+                        String lateFeeMsg = blaSuccessMap.get(blaId).length() > 255 ? blaSuccessMap.get(blaId).Substring(0, 255) : blaSuccessMap.get(blaId);
+                        String succMsg = String.isEmpty(blaRec.RenewalDetail__c) ? lateFeeMsg : blaRec.RenewalDetail__c + ' ; ' + lateFeeMsg;
+                        blaRec.Late_Fee_Status__c = BCMOH_Constants.sentBlaStatus;
+                        blaRec.RenewalDetail__c = succMsg;
+                        // Add Account to the update list if AccountId is not null
+                        if (blaRec.AccountId != null) {
+                            accToUpdate.add(new Account(Id = blaRec.AccountId, Status__c = BCMOH_Constants.AccStatus));
+                        } 
+                    }
+                    blaToUpdate.add(blaRec);
+                }
+                else {
+                }
             }
+            
+            // Perform updates
+            if (!blaToUpdate.isEmpty()) {
+                Database.update(blaToUpdate, false);
+            }
+            if (!accToUpdate.isEmpty()) {
+                //update accToUpdate.values();
+                Database.update(accToUpdate, false);
+            }
+        } catch (Exception err) {
+            LogService.logAndPublish(className, 'updateLateFeeBlaStatus', '', err);
         }
- 
-        // Perform updates
-        if (!blaToUpdate.isEmpty()) {
-            Database.update(blaToUpdate, false);
-        }
-        if (!accToUpdate.isEmpty()) {
-            //update accToUpdate.values();
-            Database.update(accToUpdate, false);
-             }
-    } catch (Exception err) {
-        LogService.logAndPublish(className, 'updateLateFeeBlaStatus', '', err);
     }
-}
 }
