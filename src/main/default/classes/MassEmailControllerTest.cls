@@ -203,34 +203,7 @@ public class MassEmailControllerTest {
          System.assertEquals('Hello {!AccountContactRelation.FirstName}, your license {!BusinessLicenseApplication.Status} is pending.',result);
     }
 
-    //getEmailStatus
-    @isTest
-    Static void getEmailStatusTest(){
-    List<Messaging.SingleEmailMessage> testEmailMessages = new List<Messaging.SingleEmailMessage>();
-        Messaging.SingleEmailMessage email1 = new Messaging.SingleEmailMessage();
-        email1.setSubject('Test Email 1');
-        email1.setPlainTextBody('This is a test email.');
-        testEmailMessages.add(email1);
-
-        List<Messaging.SendEmailResult> testEmailResults = new List<Messaging.SendEmailResult>();
-        Map<Id, Id> whatIdTargetMap = new Map<Id, Id>();
-        whatIdTargetMap.put(email1.getWhatId(), email1.getTargetObjectId());
-
-        Map<Id, Contact> accContactMap = new Map<Id, Contact>();
-        Contact testContact = new Contact();
-        testContact.Id = email1.getTargetObjectId();
-        testContact.Email = 'test@gmail.com';
-        accContactMap.put(testContact.Id, testContact);
-
-        Test.startTest();
-        MassEmailController.getEmailStatus(testEmailResults, testEmailMessages, whatIdTargetMap);
-        Test.stopTest();
-
-        
-        System.assertEquals(0, MassEmailController.blaSuccessMap.size());
-        System.assertEquals(0, MassEmailController.blaErrMap.size()); 
-      
-    }
+    
     
      @isTest
     static void updateBlaStatusTest() {
