@@ -54,6 +54,8 @@ public class BCMOH_Constants {
     public Final static String cancelledStatus = 'Canceled';//ALR-691
     //ALR-560
     public Final static String templatePurpose = 'Renewal';
+    //ALR-1726
+    public Final static String emailTemplateforRenewal = 'Renewal_Reminder_Email';
     //error handling
     public Final static String noPrimaryContact = 'No primary contact record or no email id on primary contact';
     public Final static String noEmailFound = 'Invalid Email';
