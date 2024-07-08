@@ -121,14 +121,18 @@ Caution: Enabling this option may cause Apex jobs to fail.” in Deployment Opti
 - Related Role Name = “Downstream”
 - Create Inverse Role Automatically = Fasle (does not work for PSS)"
 
-2. [ ] ALR-1681
+2. [ ] ALR-1729
 
 - STEP 1: Go to app launcher
 - STEP 2: Select Salesforce Inspector->Data Export->Execute the below Query.
-Select Id, Name, DeveloperName from EmailTemplate where name='Renewal Late Fee Notification Letter'
-- STEP 3 : Copy the ID of Name “Renewal Late Fee Notification Letter” from the export.
-- STEP 4 : Replace the ID Column in New Email Template-Dataload for 1 column to the copied Id from data export->Save the file
-- STEP 5 : Select Salesforce Inspector ->Data Import->Action : Select Update->Object : EmailTemplate->Copy all the content from New Email Template-Subject-Dataload and paste in Data (Excel)->Import"
+  Select Id,FolderId from EmailTemplate where Name ='Renewal Late Fee Notification Letter'
+- STEP 3 : Copy the Id,FolderId of Name “Renewal Late Fee Notification Letter” from the export.
+- STEP 4 : Replace the folderId Column in Email Template-upcoming Renewal.csv for 1 column to the copied Id from data export->Save the file
+- STEP 5 : :Select Salesforce Inspector->Data Import.-Select the below:Select the below:
+
+Action->update
+Object->Email Template
+Copy and paste the content in Data Space and Import.
 
 3. [ ] ALR-1700
 - Log in to Salesforce.
