@@ -3,7 +3,7 @@
 |Sandbox|`Post refresh runbook for ALR-SP10/11'|
 |-|-|
 |Runbook Created|`2024-06-20`|
-|Runbook Last Modified|`2024-07-9`|
+|Runbook Last Modified|`2024-07-10`|
 
 ## Pre-Requisites [5 min ]
 
@@ -42,7 +42,7 @@
 
 - Go to Setup → search for User Interface → Enable “Use custom address fields" → Save.
 
-2.[ ] ALR -1646 Add OWD email address and display name
+2.[ ] ALR -1646 change display name
 
 - Setup -> Organization-Wide Addresses- Change Display Name from "Test" to "ALR Support Email"
    > Provide the below details:
@@ -60,7 +60,7 @@
 
    1. Go to app launcher
    2. Select Salesforce Inspector->Data Export->Execute the below Query.
-      Select  FolderId from EmailTemplate where Name ='Renewal Late Fee Notification Letter'
+      Select FolderId from EmailTemplate where Name ='Renewal Late Fee Notification Letter'
    3. Copy the FolderId of Name “Renewal Late Fee Notification Letter” from the export.
    4. Replace the folderId Column in Email Template-upcoming Renewal.csv to the copied Id from data export-> Save the file
    5. Select Salesforce Inspector->Data Import - Select the below:
@@ -79,12 +79,12 @@ Caution: Enabling this option may cause Apex jobs to fail.” in Deployment Opti
 1."Delete Physical_address__c from all the orgs.
 2. Delete EHIS_CRE_Group_Membership_PS ,EHIS_Read_Group_Membership_PS
 
-> sfdx force:source:deploy --manifest "destructive\destructive-post-refresh\package.xml" --postdestructivechanges "destructive\destructive-post-refresh\destructiveChanges.xml" --wait 30 -u gandloju.vishwantha@accenture.com.alr.uat
+> sfdx force:source:deploy --manifest "destructive\destructive-post-refresh\package.xml" --postdestructivechanges "destructive\destructive-post-refresh\destructiveChanges.xml" --wait 30 -u gandloju.vishwantha@accenture.com.alr.devops
 
 ## Deployment Steps (20 mins)
 
 1.[ ] Deploy OmniStudio components and its dependencies (5 min)
-   > sfdx force:source:deploy --sourcepath "src\main\default\omniDataTransforms,src\main\default\omniIntegrationProcedures,src\main\default\omniUiCard,src\main\default\omniScripts,ehis-source\core\main\default\omniDataTransforms,ehis-source\core\main\default\omniScripts" --wait 30 -u gandloju.vishwantha@accenture.com.alr.uat
+   > sfdx force:source:deploy --sourcepath "src\main\default\omniDataTransforms,src\main\default\omniIntegrationProcedures,src\main\default\omniUiCard,src\main\default\omniScripts,ehis-source\core\main\default\omniDataTransforms,ehis-source\core\main\default\omniScripts" --wait 30 -u gandloju.vishwantha@accenture.com.alr.devops
 
 
 3.[ ]  Deploy full repository (~20 min)
@@ -99,7 +99,7 @@ Caution: Enabling this option may cause Apex jobs to fail.” in Deployment Opti
 
 > [ ] Deploy
 
-- sfdx force:source:deploy --sourcepath "ehis-source,src-access-mgmt\main\default,src-ui\main\default,src\main\default" --wait 30 -u gandloju.vishwantha@accenture.com.alr.uat -l RunLocalTests
+- sfdx force:source:deploy --sourcepath "ehis-source,src-access-mgmt\main\default,src-ui\main\default,src\main\default" --wait 30 -u gandloju.vishwantha@accenture.com.alr.devops -l RunLocalTests
 
 >[ ] Re-activate Omnistudio components
       1. App Launcher -> OmniStudio -> Omnistudio **Integration Procedures**
@@ -181,13 +181,7 @@ Apex Class-> search and select “AccountStatusUpdateOnMay”
 Select Cron Expression->0 0 0 1 5 ?
 4.Save
 
-5. [ ] ALR-1710
-
-- Go to SetUp->Search Deployment Settings->Enable “Allow deployments of components when corresponding Apex jobs are pending or in progress.
-Caution: Enabling this option may cause Apex jobs to fail.” in Deployment Option
-->Save" 
-
-6. [ ] EHIS-1344
+5. [ ] EHIS-1344
 
 1. Login as System Administrator and click on setup icon
 2. In Quick FInd section search for  State and Country/Territory Picklists
@@ -198,5 +192,3 @@ DevOps checklist:
 
 1. Validate the flows in org with Repo make sure active versions in branch which are deployed by devops should match in org
 2. Email templates fieldS from csv uploaded properly
-3. Check status of "Org wide email address" is verified
-4. all the omnistudio components deployed from branch has the same status as branch
