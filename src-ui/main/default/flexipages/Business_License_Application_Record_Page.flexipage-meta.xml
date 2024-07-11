@@ -22,7 +22,27 @@
                         <valueListItems>
                             <value>CustomButton.BusinessLicenseApplication.GenerateLicense</value>
                             <visibilityRule>
-                                <booleanFilter>1 OR 2</booleanFilter>
+                                <booleanFilter>(5 OR 6) AND (1 OR (2 AND 3) OR (2 AND 4))</booleanFilter>
+                                <criteria>
+                                    <leftValue>{!Record.Status}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Approved</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Status}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Closed</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.ClosureReason__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Approved</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.ClosureReason__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Approved with Conditions</rightValue>
+                                </criteria>
                                 <criteria>
                                     <leftValue>{!$Permission.CustomPermission.EHISAdminUser}</leftValue>
                                     <operator>EQUAL</operator>
@@ -302,6 +322,11 @@
                 <identifier>force_relatedListSingleContainer2</identifier>
             </componentInstance>
         </itemInstances>
+        <mode>Replace</mode>
+        <name>main</name>
+        <type>Region</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
@@ -310,17 +335,6 @@
                 </componentInstanceProperties>
                 <componentName>runtime_sales_activities:activityPanel</componentName>
                 <identifier>runtime_sales_activities_activityPanel2</identifier>
-            </componentInstance>
-        </itemInstances>
-        <mode>Replace</mode>
-        <name>main</name>
-        <type>Region</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentName>runtime_industries_actionplan:listCard</componentName>
-                <identifier>runtime_industries_actionplan_listCard</identifier>
             </componentInstance>
         </itemInstances>
         <mode>Replace</mode>

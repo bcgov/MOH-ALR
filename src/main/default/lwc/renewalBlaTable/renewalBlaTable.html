@@ -6,34 +6,40 @@
 * @StoryNo           : ALR-560
 -->
 <template>
-    <lightning-card>
-       
+    <lightning-card class="slds-m-around_medium">
         <template if:false={hasLoaded} class="slds-is-relative">
             <lightning-spinner size="medium" alternative-text="Loading"></lightning-spinner>
         </template>
-       <div class="slds-text-align_right">
-            <lightning-button variant="brand" label="Send Renewals" title="Send Renewals" 
-                onclick={handleSendRenewals}></lightning-button>
+        <div class="slds-grid slds-wrap">
+            <div class="slds-size_1-of-4">
+                <lightning-input type="search" label="Search" onchange={handleSearchChange} value={searchKey}></lightning-input>
+            </div>
+            <div class="slds-size_3-of-4 slds-text-align_right">
+                <lightning-button variant="brand" label="Send Renewals" title="Send Renewals" onclick={handleSendRenewals}></lightning-button>
+            </div>
         </div>
-        
+        <br>
         <div style="height: 400px;" class="table-wrapper">
             <template if:true={isdata}>
-              <c-l-w-c-custom-datatable-type
+                <c-l-w-c-custom-datatable-type
                     key-field="Id"
-                    data={blaList}
+                    data={filteredBlaList}
                     show-row-number-column
                     hide-checkbox-column
                     draft-values={draftValues}
                     row-number-offset={rowOffset}
                     columns={columns}
-                    onsave={handleSave}>
-              </c-l-w-c-custom-datatable-type>
+                    onsave={handleSave}
+                    sorted-by={sortedBy}
+                    sorted-direction={sortedDirection}
+                    onsort={handleSort}>
+                </c-l-w-c-custom-datatable-type>
             </template>
             <template if:false={isdata}>
-            <div class="slds-text-color_red slds-align_absolute-center">
-                <h1 if:true={blaList}> No records to display.</h1>
-            </div>
-        </template>
+                <div class="slds-text-color_red slds-align_absolute-center">
+                    <h1 if:true={blaList}> No records to display.</h1>
+                </div>
+            </template>
         </div>
-     </lightning-card>
+    </lightning-card>
 </template>

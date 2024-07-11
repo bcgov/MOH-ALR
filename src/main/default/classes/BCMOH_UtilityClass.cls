@@ -91,6 +91,27 @@ public with sharing class BCMOH_UtilityClass {
         return emailTemplateRec;
     }
 
+    
+/**
+* @Author: ACN-ALR
+* @date: 
+* @description: The purpose of this method is to fetch email template based on developer name provided
+* @return:  EmailTemplate
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
+
+
+    public static EmailTemplate getEmailTemplateforRenewals(String templateDevName) {
+        EmailTemplate emailTemplateRec = new EmailTemplate();
+        try {
+            emailTemplateRec = [SELECT Id, DeveloperName, RelatedEntityType, Body, Subject, HtmlValue FROM EmailTemplate WHERE DeveloperName = :BCMOH_Constants.emailTemplateforRenewal  WITH SECURITY_ENFORCED LIMIT 1];
+        }
+        catch(Exception ex) {
+            LogService.logAndPublish(className, 'getEmailTemplate', '', ex);
+        }
+        return emailTemplateRec;
+    }
+
 /**
 * @Author: ACN-ALR
 * @date: 

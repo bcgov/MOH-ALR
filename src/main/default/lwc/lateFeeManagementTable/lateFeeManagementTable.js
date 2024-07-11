@@ -8,29 +8,35 @@ import cssrenewalBlaTable from '@salesforce/resourceUrl/cssrenewalBlaTable';
 import { getPicklistValues, getObjectInfo } from 'lightning/uiObjectInfoApi';
 import BusinessLicenseApplication_OBJECT from '@salesforce/schema/BusinessLicenseApplication';
 import LATE_FEE_STATUS__C_FIELD from '@salesforce/schema/BusinessLicenseApplication.Late_Fee_Status__c';
+import LightningConfirm from "lightning/confirm";
+import ascendingIcon from '@salesforce/resourceUrl/ascendingIcon';
+import descendingIcon from '@salesforce/resourceUrl/descendingIcon';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+
+const DELAY_BEFORE_REFRESH = 2000;
 
 const tableColumns = [
-    {label: 'Application Id', fieldName: 'appId', type: 'url',
+    {label: 'Application Id', fieldName: 'appId', type: 'url',sortable: true,
         typeAttributes: {label : { fieldName: 'Name' }, target: '_parent' }},
-    {label: 'License Type', fieldName: 'LicenseTypeId', type: 'url',
+    {label: 'License Type', fieldName: 'LicenseTypeId', type: 'url',sortable: true,
         typeAttributes: {label : { fieldName: 'LicenseTypeName' }, target: '_parent'}},
-    {label: 'Renewal Year', fieldName: 'RenewalYear__c', type: 'text'},
-    {label: 'Residence Name', fieldName: 'AccId', type: 'url',
+    {label: 'Renewal Year', fieldName: 'RenewalYear__c', type: 'text',sortable: true},
+    {label: 'Residence Name', fieldName: 'AccId', type: 'url',sortable: true,
         typeAttributes: {label : {fieldName: 'AccName' }, target: '_parent'}},
-    {label: 'Parent Account', fieldName: 'ParentId', type: 'url',
+    {label: 'Parent Account', fieldName: 'ParentId', type: 'url',sortable: true,
         typeAttributes: {label : {fieldName: 'ParentName' }, target: '_parent'}},
-    {label: 'Health Authority', fieldName: 'HealthAuthorityName', type: 'text'},
-    {label: 'Residence Status', fieldName: 'AccountStatus', type: 'text'},
-    {label: 'Application Status', fieldName: 'Status', type: 'text'},
-    {label: 'Renewal Detail', fieldName: 'RenewalDetail', type: 'text' },
-    {label: 'Late Fee Status', fieldName: 'Late_Fee_Status__c', type: 'picklistColumn', editable: true, 
+    {label: 'Health Authority', fieldName: 'HealthAuthorityName', type: 'text',sortable: true},
+    {label: 'Residence Status', fieldName: 'AccountStatus', type: 'text',sortable: true},
+    {label: 'Application Status', fieldName: 'Status', type: 'text',sortable: true},
+    {label: 'Renewal Detail', fieldName: 'RenewalDetail', type: 'text',sortable: true },
+    {label: 'Late Fee Status', fieldName: 'Late_Fee_Status__c', type: 'picklistColumn', editable: true, sortable: true,
     typeAttributes: {
         placeholder: '--None--', options: { fieldName: 'pickListOptions' }, 
         value: { fieldName: 'Late_Fee_Status__c' },
         context: { fieldName: 'Id' },
         }
     },
-    {label: 'Exclusion Reason', fieldName: 'ExclusionReason__c', type: 'text', editable: true,
+    {label: 'Exclusion Reason', fieldName: 'ExclusionReason__c', type: 'text', editable: true,sortable: true,
         cellAttributes: {alignment :'left'}}
 ];
 export default class LateFeeManagementTable extends LightningElement {
@@ -47,6 +53,12 @@ export default class LateFeeManagementTable extends LightningElement {
     @track hasLoaded = false; 
     @track renderFlow = false;
     _wiredResult;
+    searchKey = '';
+    @track sortedBy;
+    @track sortedDirection = 'asc';
+
+    ascendingIconUrl = ascendingIcon;
+    descendingIconUrl = descendingIcon;
 
     @wire(getObjectInfo, { objectApiName: BusinessLicenseApplication_OBJECT })
     objectInfo;
@@ -138,20 +150,53 @@ export default class LateFeeManagementTable extends LightningElement {
         return refreshApex(this._wiredResult);
     }
      async handleSendLateFees(){
+         if (!this.isdata || !this.blaList || this.blaList.length === 0) {
+        //Returning Blank
+        return;
+        }
         
         try{
             this.hasLoaded = false;
             await sendLateFeeRenewals();
             await this.refreshData();
+            this.handleConfirmSendLateFee();
         }catch(error){
             let message = error.body.message.includes('FIELD_CUSTOM_VALIDATION_EXCEPTION') ?
                 error.body.message.split('EXCEPTION, ')[1].split(': [')[0] : error.body.message;
         }
-
     }
+    
+    handleConfirmSendLateFee(){
+        const event = new ShowToastEvent({
+            title: "Success",
+            message: "Late Fees Sent Successfully",
+            variant: "success"
+        });
+        this.dispatchEvent(event);
+        setTimeout(() => {
+            location.reload();
+        }, DELAY_BEFORE_REFRESH);
+    }
+
     handleGenerateLateFees(event){
             this.renderFlow = true;
+            this.handleConfirmGenerateLateFee();
+            
     }
+
+    
+   handleConfirmGenerateLateFee(){
+      const event = new ShowToastEvent({
+            title: "Success",
+            message: "Late Fees Generated Successfully",
+            variant: "success"
+        });
+        this.dispatchEvent(event);
+        setTimeout(() => {
+            location.reload();
+        }, DELAY_BEFORE_REFRESH);
+    }
+
     async handleStatusChange(event){
       if (event.detail.status === 'FINISHED_SCREEN') {
             await this.refreshData();
@@ -161,5 +206,71 @@ export default class LateFeeManagementTable extends LightningElement {
       else{
         console.log('Flow execution encountered an unexpected status.');
         }
+    }
+
+    handleSearchChange(event) {
+        this.searchKey = event.target.value.toLowerCase();
+    }
+    get filteredBlaList() {
+        if (this.blaList && this.searchKey) {
+            return this.blaList.filter(item => {
+                return (item.AccName && item.AccName.toLowerCase().includes(this.searchKey)) ||
+                    (item.Name && item.Name.toLowerCase().includes(this.searchKey)) ||
+                    (item.LicenseType && item.LicenseType.Name && item.LicenseType.Name.toLowerCase().includes(this.searchKey)) ||
+                    (item.RenewalYear__c && item.RenewalYear__c.toLowerCase().includes(this.searchKey)) ||
+                    (item.Account && item.Account.Parent && item.Account.Parent.Name && item.Account.Parent.Name.toLowerCase().includes(this.searchKey)) ||
+                    (item.AccountStatus && item.AccountStatus.toLowerCase().includes(this.searchKey)) ||
+                    (item.Status && item.Status.toLowerCase().includes(this.searchKey)) ||
+                    (item.Account && item.Account.HealthAuthority__c && item.Account.HealthAuthority__c.toLowerCase().includes(this.searchKey)) ||
+                    (item.Late_Fee_Status__c && item.Late_Fee_Status__c.toLowerCase().includes(this.searchKey)) ||
+                    (item.RenewalDetail && item.RenewalDetail.toLowerCase().includes(this.searchKey));
+            });
+        }
+        return this.blaList;
+    }
+
+    handleSort(event) {
+        const { fieldName: sortedBy, sortDirection } = event.detail;
+        const cloneData = [...this.blaList];
+
+        cloneData.sort(this.sortBy(sortedBy, sortDirection === 'asc' ? 1 : -1));
+
+        this.blaList = cloneData;
+        this.sortedBy = sortedBy;
+        this.sortedDirection = sortDirection;
+
+        // Update sort icons for all columns
+        this.columns = this.columns.map(column => {
+            column.sortIconName = 'utility:arrowup';
+            column.sortDirection = 'asc';
+            if (column.fieldName === sortedBy) {
+                column.sortDirection = sortDirection;
+                column.sortIconName = sortDirection === 'asc' ? 'utility:arrowup' : 'utility:arrowdown';
+            }
+            return column;
+        });
+    }
+
+    sortBy(field, reverse) {
+        const isDateField = field.includes('__c') && field.includes('Date');
+        const key = (a) => {
+            if (isDateField) {
+                return new Date(a[field]) || '';
+            }
+            return typeof a[field] === 'string' ? a[field].toLowerCase() : a[field];
+        };
+
+        return (a, b) => {
+            const A = key(a);
+            const B = key(b);
+
+            let comparison = 0;
+            if (A > B) {
+                comparison = 1;
+            } else if (A < B) {
+                comparison = -1;
+            }
+            return reverse * comparison;
+        };
     }
 }
