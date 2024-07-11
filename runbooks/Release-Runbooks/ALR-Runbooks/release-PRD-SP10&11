@@ -50,22 +50,21 @@
 
 3. [ ] In this step we are removing PS from PSG
 
-- Go to Setup → search for Permission Set Group → Open below mentioned PSGs one after other
+- Go to Setup → search for Permission Set Group → select "Permission Sets in Group" - Open below mentioned PSGs one after other
 
-1.EHIS_Water_Business_Admin_PSG - "Remove EHIS_CRE_Group_Membership_PS permission set - click on done"
+1.EHIS_Water_Business_Admin_PSG - "select and Remove EHIS_CRE_Group_Membership_PS permission set - click on done"
 2.EHIS_Water_Public_Health_Engineer_PSG - "Remove EHIS_Read_Group_Membership_PS - click on done"
 3.EHIS_Water_Officer_PSG - "Remove EHIS_Read_Group_Membership_PS - click on done"
     
 4. [ ] ALR-1688 download excel from Jira
 
    1. Go to app launcher
-   2. Select Salesforce Inspector->Data Export->Execute the below Query.
-      Select FolderId from EmailTemplate where Name ='Renewal Late Fee Notification Letter'
+   2. Select " Salesforce Inspector" ->Data Export->Execute the below Query. OR Go to  "Developer Console" → Query Editor → Execute the below Query.
    3. Copy the FolderId of Name “Renewal Late Fee Notification Letter” from the export.
    4. Replace the folderId Column in Email Template-upcoming Renewal.csv to the copied Id from data export-> Save the file
-   5. Select Salesforce Inspector->Data Import - Select the below:
-      Action->Insert
-   6. Object->Email Template , Copy and paste the content in Data Space and Import
+   5. Select Salesforce Inspector-> Data Import. OR Data Loader-Select the below:
+      "Action-> Insert"
+      " Object-> Email Template" -> Copy and paste the content in Data Space and Import
 
 5.[ ] ALR-1710
 
@@ -134,12 +133,11 @@ Caution: Enabling this option may cause Apex jobs to fail.” in Deployment Opti
 
 2. [ ] ALR-1729 download excel from Jira
 
-- STEP 1: Go to app launcher
-- STEP 2: Select Salesforce Inspector->Data Export->Execute the below Query.
-  Select Id,FolderId from EmailTemplate where Name ='Renewal Late Fee Notification Letter'
-- STEP 3 : Copy the Id,FolderId of Name “Renewal Late Fee Notification Letter” from the export.
-- STEP 4 : Replace the folderId , ID Column in Email Template-upcoming Renewal.csv file 1 column to the copied Id from data export->Save the file
-- STEP 5 : :Select Salesforce Inspector->Data Import.-Select the below:Select the below:
+- 1.Go to app launcher
+- 2.Select Salesforce Inspector->Data Export->Execute the below Query. OR Go to  Developer Console → Query Editor → Execute the below Query.
+- 3.Copy the Id,FolderId of Name “Renewal Late Fee Notification Letter” from the export.
+- 4.Replace the folderId , ID Column in Email Template-upcoming Renewal.csv file 1 column to the copied Id from data export->Save the file
+- 5.Select Salesforce Inspector->Data Import. OR Data Loader-Select the below:
 
 - Action->update
 - Object->Email Template
@@ -188,7 +186,30 @@ Select Cron Expression->0 0 0 1 5 ?
 3. Open it and click on Configure States, Countries, and Territories
 4. Change the Default Country/Territory to None "
 
+6. [ ] ALR-1745
+
+- Description
+> Go to Setup → Object Manager → Account Contact Relationship → Fields & Relationship → Roles → Deactivate the EHIS roles mentioned below:
+
+1. Owner                      16. Contractor
+2. Operator                   17. Water Purveyor
+3. Licensee                   18. Emergency Contact (Primary)
+4. Billing Contact            19. Emergency Contact (Secondary)
+5. Other Contact              20. Emergency Contact (Tertiary)
+6. Manager                    21. Operator (Primary)
+7. Authorized Person          22. Operator (Secondary)
+8. Chef                       23. Operator (Tertiary)
+9. Owner Contact              24. Sampler
+10. Agent
+11. Applicant/Developer
+12. Installer
+13. Development
+14. Referral Agency
+15. Engineering Firm
+
+Sampler
+
 DevOps checklist:
 
-1. Validate the flows in org with Repo make sure active versions in branch which are deployed by devops should match in org
-2. Email templates fieldS from csv uploaded properly
+1. Task_Created_on_Account_Record.flow-meta.xml verify this flow is active in PRD
+2. Email templates fieldS from csv uploaded properly in PRD
