@@ -45,7 +45,11 @@ public with sharing class ChangeAccountOwner {
 		
 		
         List<Account> accList = [SELECT Id, OwnerId FROM Account WHERE Id = :accountId];
-           
+        List<BusinessLicenseApplication> blaRec;  
+		List<PublicComplaint> pubCompList;
+		List<Case> caseList;
+		List<Visit> visitList;
+
         for(Account acc : accList){
             Id oldOwnerId = acc.OwnerId;
         
@@ -54,43 +58,40 @@ public with sharing class ChangeAccountOwner {
 			}
 			
 			if(isBlaChecked == True){
-				List<BusinessLicenseApplication> blaRec = getRelatedBlaRecords(acc.Id,oldOwnerId);
+				blaRec = getRelatedBlaRecords(acc.Id,oldOwnerId);
 				for(BusinessLicenseApplication bla : blaRec){
 					bla.OwnerId = newOwnerId;
 				}
-				update blaRec;
-                 
 			}
 			
 			if(isPublicChecked == True){
-				List<PublicComplaint> pubCompList = getRelatedPublicCompRecords(acc.Id,oldOwnerId);
+				pubCompList = getRelatedPublicCompRecords(acc.Id,oldOwnerId);
 				for(PublicComplaint pubComp : pubCompList){
 					pubComp.OwnerId = newOwnerId;
 				}
-				update pubCompList;
-                
+			      
 			}
 			
 			if(isCaseChecked == True){
-				List<Case> caseList = getRelatedCaseRecords(acc.Id,oldOwnerId);
+				caseList = getRelatedCaseRecords(acc.Id,oldOwnerId);
 				for(Case caseRec : caseList){
 					caseRec.OwnerId = newOwnerId;
 				}
-				update caseList;
-                 
-			}
+				}
 			
 			if(isInspectionChecked == True){
-				List<Visit> visitList = getRelatedVisitRecords(acc.Id,oldOwnerId);
+				visitList = getRelatedVisitRecords(acc.Id,oldOwnerId);
 				for(Visit visit : visitList){
 					visit.OwnerId = newOwnerId;
 				}
-				update visitList;
-                
+			    
 			}
         }
+		update blaRec;
+		update pubCompList;
+		update caseList;
+		update visitList;
 		update accList;
-        
 	}
 	catch (Exception e) {
             System.debug('Exception occurred: ' + e.getMessage());
