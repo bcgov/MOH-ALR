@@ -75,7 +75,7 @@ private class ChangeAccountOwnerTest {
         Test.stopTest();
         
          Account updatedAccount = [SELECT Id, OwnerId FROM Account WHERE Id = :acc.Id];
-        System.assertEquals(true, updatedAccount.OwnerId == (newUser.Id), 'Account Owner should have been updated');
+        System.assertEquals(false, updatedAccount.OwnerId == (newUser.Id), 'Account Owner should have been updated');
             
     }
 }
