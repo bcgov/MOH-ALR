@@ -62,6 +62,7 @@ public with sharing class ChangeAccountOwner {
 				for(BusinessLicenseApplication bla : blaRec){
 					bla.OwnerId = newOwnerId;
 				}
+				update blaRec;
 			}
 			
 			if(isPublicChecked == True){
@@ -69,6 +70,7 @@ public with sharing class ChangeAccountOwner {
 				for(PublicComplaint pubComp : pubCompList){
 					pubComp.OwnerId = newOwnerId;
 				}
+				update pubCompList;
 			      
 			}
 			
@@ -77,6 +79,7 @@ public with sharing class ChangeAccountOwner {
 				for(Case caseRec : caseList){
 					caseRec.OwnerId = newOwnerId;
 				}
+				update caseList;
 				}
 			
 			if(isInspectionChecked == True){
@@ -84,15 +87,12 @@ public with sharing class ChangeAccountOwner {
 				for(Visit visit : visitList){
 					visit.OwnerId = newOwnerId;
 				}
-			    
+			 update visitList;   
 			}
+		
         }
-		update blaRec;
-		update pubCompList;
-		update caseList;
-		update visitList;
 		update accList;
-	}
+		}
 	catch (Exception e) {
             System.debug('Exception occurred: ' + e.getMessage());
             
