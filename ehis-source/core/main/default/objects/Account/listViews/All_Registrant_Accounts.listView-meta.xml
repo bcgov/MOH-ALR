@@ -2,10 +2,14 @@
 <ListView xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>All_Registrant_Accounts</fullName>
     <columns>ACCOUNT.NAME</columns>
-    <columns>ACCOUNT.ADDRESS1_STATE</columns>
-    <columns>ACCOUNT.PHONE1</columns>
+    <columns>ACCOUNT.RECORDTYPE</columns>
+    <columns>Status__c</columns>
+    <columns>LicenseType__c</columns>
     <columns>ACCOUNT.TYPE</columns>
-    <columns>CORE.USERS.ALIAS</columns>
+    <columns>ACCOUNT.PHONE1</columns>
+    <columns>ACCOUNT.CREATED_DATE</columns>
+    <columns>CORE.USERS.FIRST_NAME</columns>
+    <columns>CORE.USERS.LAST_NAME</columns>
     <filterScope>Everything</filterScope>
     <filters>
         <field>ACCOUNT.RECORDTYPE</field>
@@ -13,4 +17,7 @@
         <value>Account.Registrant</value>
     </filters>
     <label>All Registrant Accounts</label>
+    <sharedTo>
+        <group>ALRDataAnalystUsersPG</group>
+    </sharedTo>
 </ListView>
