@@ -66,7 +66,7 @@
     <formulas>
         <name>Description</name>
         <dataType>String</dataType>
-        <expression>{!$Record.Description}&amp;BR()&amp;&quot; Complaint Case created for &quot;&amp;{!$Record.First_Name__c}&amp;&quot; &quot;&amp;{!$Record.Last_Name__c}&amp;&quot; &quot;&amp;{!$Record.Email_ID__c}</expression>
+        <expression>IF(AND(ISBLANK({!$Record.First_Name__c}), ISBLANK({!$Record.Last_Name__c}), ISBLANK({!$Record.Email_ID__c})), {!$Record.Description}, ({!$Record.Description}&amp;BR()&amp;&quot; Complaint Case created for &quot;&amp;{!$Record.First_Name__c}&amp;&quot; &quot;&amp;{!$Record.Last_Name__c}&amp;&quot; &quot;&amp;{!$Record.Email_ID__c}) )</expression>
     </formulas>
     <interviewLabel>UpdateCasetoComplaint {!$Flow.CurrentDateTime}</interviewLabel>
     <label>UpdateCasetoComplaint</label>
