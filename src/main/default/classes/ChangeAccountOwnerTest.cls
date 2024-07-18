@@ -1,9 +1,9 @@
 /**
- * @Name              : AccountContactRelationController
- * @Description       : This Test class transfer Account and related records Owners.
- * @Author            : Keerthana (Accenture)
- * @StoryNo           : ALR-134
-  **/
+* @Name              : AccountContactRelationController
+* @Description       : This Test class transfer Account and related records Owners.
+* @Author            : Keerthana (Accenture)
+* @StoryNo           : ALR-134
+**/
 
 @isTest
 private class ChangeAccountOwnerTest {
@@ -31,7 +31,7 @@ private class ChangeAccountOwnerTest {
         
         
         User newUser = new User(
-            FirstName = 'Test',
+            FirstName = 'Testone',
             LastName = 'User1',
             Username = 'test1user@test.com',
             Email = 'testuser@example.com',
@@ -52,8 +52,8 @@ private class ChangeAccountOwnerTest {
         insert loc;
         
         RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
-        Account acc = TestDataFactory.createResidence('Residence', 'Test Residence', regAuth.Id, true);
-        
+        String uniqueName = 'Residence_' + Datetime.now().getTime();
+        Account acc = TestDataFactory.createResidence('Residence', uniqueName, regAuth.Id, true);
         
         Case caseRec = new Case(AccountId=acc.Id, Status='Under Inspection',OwnerId=oldUser.Id);
         insert caseRec;
@@ -63,7 +63,7 @@ private class ChangeAccountOwnerTest {
         ChangeAccountOwner.FlowInputs flowInputs = new ChangeAccountOwner.FlowInputs();
         flowInputs.newOwnerId = newUser.Id;
         flowInputs.accountId = new List<Id>{ acc.Id };
-        flowInputs.isBlaChecked = true;
+            flowInputs.isBlaChecked = true;
         flowInputs.isPublicChecked = true;
         flowInputs.isCaseChecked = true;
         flowInputs.isInspectionChecked = true;
