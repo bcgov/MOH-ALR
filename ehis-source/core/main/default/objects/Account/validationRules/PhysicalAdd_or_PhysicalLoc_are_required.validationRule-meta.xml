@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PhysicalAdd_or_PhysicalLoc_are_required</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+$Profile.Name = &apos;EHIS Standard User&apos; ,
+
+OR(
+RecordType.Name = &apos;Water Source Intake&apos;,
+RecordType.Name = &apos;Water System&apos;
+),
+
+OR(
+ISBLANK(Physical_Address__City__s),
+ISBLANK(Physical_Address__PostalCode__s),
+ISBLANK(Physical_Address__Street__s),
+ISPICKVAL( Physical_Address__CountryCode__s , &quot;&quot;), 
+ISPICKVAL(  Physical_Address__StateCode__s  , &quot;&quot;)
+),
+OR(
+ISBLANK(PhysicalLocation__Latitude__s),
+ISBLANK(PhysicalLocation__Longitude__s)
+)
+
+)</errorConditionFormula>
+    <errorMessage>You must specify either Physical Address or Physical Location for this record</errorMessage>
+</ValidationRule>

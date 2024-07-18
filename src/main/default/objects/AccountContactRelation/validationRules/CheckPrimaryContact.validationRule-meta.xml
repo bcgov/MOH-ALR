@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CheckPrimaryContact</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND( NOT( $Permission.EHISBypassValidationRuleCustomPermission ),IsActive  = False,
+ PrimaryContact__c  = True )</errorConditionFormula>
+    <errorMessage>Primary Contact must be active, please select Active or uncheck this contact as Primary.</errorMessage>
+</ValidationRule>

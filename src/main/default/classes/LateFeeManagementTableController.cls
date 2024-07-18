@@ -34,8 +34,7 @@ public with sharing class LateFeeManagementTableController {
 														WHERE Status =:BCMOH_Constants.dueFeeStatus
 														AND FeeType__c IN :BCMOH_Constants.FeeTypeStatuses
                                                      	)                                                     
-                                                     AND Account.Status__c IN: accDetails.values()[0]
-                                                     WITH SECURITY_ENFORCED Order By CreatedDate LIMIT 50000]) {
+                                                      WITH SECURITY_ENFORCED Order By CreatedDate LIMIT 50000]) {
                                                          blaMap.put(blaRec.Id, blaRec);
                                                          blaList.add(blaRec);
                                                      }

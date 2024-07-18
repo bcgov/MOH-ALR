@@ -222,4 +222,53 @@ public class TestDataFactory {
         }
         return inspection;
     }
+    //EHIS-228 - Create Account
+    @testVisible
+    static Account createAccount(String name, String licenseTypeId, Boolean isInsert) {
+        Account account = new Account(
+            Name = name,
+            LicenseType__c = licenseTypeId
+        );
+        if (isInsert) {
+            insert account;
+        }
+        return account;
+    }
+    //EHIS-228 - Create Contact
+    @testVisible
+    public static Contact createContact(Id accountId, String firstName, String lastName, String email, String phone, Boolean isInsert) {
+        Contact contact = new Contact(
+            FirstName = firstName,
+            LastName = lastName,
+            Email = email,
+            Phone = phone,
+            AccountId = accountId
+        );
+        if (isInsert) {
+            insert contact;
+        }
+        return contact;
+    }
+    //EHIS-228 - Create AccountContactRelation
+    @testVisible
+    public static AccountContactRelation createAccountContactRelation(Id accountId, Id contactId, Boolean isActive, String roles, Boolean isInsert) {
+        AccountContactRelation relation = new AccountContactRelation(
+            AccountId = accountId,
+            ContactId = contactId,
+            isActive = isActive,
+            Roles = roles
+        );
+        if (isInsert) {
+            insert relation;
+        }
+        return relation;
+    }
+    @testVisible
+    public static RegulatoryAuthorizationType createRegAuthTypeACR(String authName, Boolean isInsert) {
+        RegulatoryAuthorizationType regAuthRec = new RegulatoryAuthorizationType(Name = authName);
+        if (isInsert) {
+            insert regAuthRec;
+        }
+        return regAuthRec;
+    }
 }

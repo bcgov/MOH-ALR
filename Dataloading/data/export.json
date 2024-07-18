@@ -1,0 +1,50 @@
+{
+"apiVersion": "59.0",
+"allOrNone": false,
+    "objects": [
+        {
+            "query": "SELECT Id, Name FROM RegulatoryAuthority",
+            "operation": "Upsert",
+            "externalId": "Name"
+        },
+        {
+            "query": "SELECT Id, Name, RegulatoryAuthCategory, UnitFee__c, PartialUnitFee__c, OneTimeFee__c, LateFee__c, RegulatoryAuthorizationCode__c, IssuingDepartmentId FROM RegulatoryAuthorizationType",
+            "operation": "Upsert",
+            "externalId": "Name"
+        },
+        {
+            "query": "SELECT Id, Name, Subject, Description, EffectiveFrom, RegulatoryAuthorityId, ExternalId__c  FROM RegulatoryCode",
+            "operation": "Upsert",
+            "externalId": "ExternalId__c"
+        },
+        {
+            "query": "SELECT Id, Category__c, Name, Description, DataType, Name  FROM AssessmentIndicatorDefinition",
+            "operation": "Upsert",
+            "externalId": "ExternalId__c"
+        },
+        {
+            "query": "SELECT Id, RegulatoryCodeId, AssessmentIndDefinitionId, ExternalId__c FROM RegulatoryCodeAssessmentInd",
+            "operation": "Upsert",
+            "externalId": "RegulatoryCodeId"
+        },
+        {
+            "query": "SELECT Id, Name, TaskType, Category__c  FROM AssessmentTaskDefinition",
+            "operation": "Upsert",
+            "externalId": "Name"
+        },
+        {
+            "query": "SELECT Id, AssessmentIndDefinitionId, AssessmentTaskDefinitionId, ExternalId__c, DisplayOrder FROM AssessmentTaskIndDefinition",
+            "operation": "Upsert",
+            "externalId": "Name"
+        },
+        {
+            "query": "SELECT AssessmentIndicatorDefinitionId, Id, SequenceNumber, Value FROM AssessmentIndDefinedValue",
+            "operation": "Upsert",
+            "externalId": "AssessmentIndicatorDefinitionId"
+        },
+        {
+            "query": "SELECT Id, Name FROM InspectionType",
+            "operation": "Upsert"
+        }
+    ]
+}

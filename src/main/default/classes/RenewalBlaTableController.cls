@@ -31,8 +31,7 @@ public with sharing class RenewalBlaTableController {
                                                      WHERE 
                                                      RecordType.DeveloperName =: BCMOH_Constants.blaRecType AND
                                                      Status IN: BCMOH_Constants.renewalTableStatus 
-                                                     AND RenewalYear__c =: BCMOH_Constants.renewalYear 
-                                                     AND Account.Status__c IN: accDetails.values()[0] WITH SECURITY_ENFORCED
+                                                     AND RenewalYear__c =: BCMOH_Constants.renewalYear WITH SECURITY_ENFORCED
                                                      Order By CreatedDate LIMIT 50000]) {
                                                          blaMap.put(blaRec.Id, blaRec);
                                                          blaList.add(blaRec);

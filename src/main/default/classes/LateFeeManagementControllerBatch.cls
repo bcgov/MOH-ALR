@@ -90,11 +90,10 @@ public with sharing class LateFeeManagementControllerBatch implements Database.B
             +' (SELECT Id, Location.VisitorAddress.Address FROM AssociatedLocations LIMIT 1),'
             +' (SELECT RegistrationCertificate__c FROM AccountBusinessLicenses__r WHERE Status =: activeStatusBl LIMIT 1),'
             +' (SELECT ContactId, Contact.Name, Contact.Phone, Contact.Email, Contact.MobilePhone, Roles FROM AccountContactRelations'//ALR-560
-            +'  WHERE PrimaryContact__c = TRUE AND IsActive = TRUE LIMIT 1)'
+            +'  WHERE IsActive = TRUE LIMIT 1)'
             +' FROM Account'
-            +' WHERE recordType.DeveloperName =: accRecType AND LicenseType__c != NULL'
-            +' AND Status__c IN: accStatuses';
-        
+            +' WHERE recordType.DeveloperName =: accRecType AND LicenseType__c != NULL';
+       
         return Database.getQueryLocator(query);
     }
 
