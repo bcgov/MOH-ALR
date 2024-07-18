@@ -172,6 +172,57 @@
             <label>CheckIfAllIAICompleted</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>Decision_on_Refresh</name>
+        <label>Decision on Refresh</label>
+        <locationX>314</locationX>
+        <locationY>1895</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Refresh_Activity</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Result</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Non-compliant</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record__Prior.Result</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Compliant</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Publish_Tab_Refresh_Event</targetReference>
+            </connector>
+            <label>Refresh Activity</label>
+        </rules>
+        <rules>
+            <name>Refresh_NA</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Result</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>NA</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record__Prior.Result</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Compliant</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Publish_Tab_Refresh_Event</targetReference>
+            </connector>
+            <label>Refresh NA</label>
+        </rules>
+    </decisions>
     <environments>Default</environments>
     <interviewLabel>UpdateAssessmentStatus {!$Flow.CurrentDateTime}</interviewLabel>
     <label>UpdateAssessmentTaskStatus</label>
@@ -194,6 +245,20 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Publish_Tab_Refresh_Event</name>
+        <label>Publish Tab Refresh Event</label>
+        <locationX>314</locationX>
+        <locationY>2195</locationY>
+        <inputAssignments>
+            <field>RecordIDs__c</field>
+            <value>
+                <elementReference>updateInspectionAssessmentIndicator</elementReference>
+            </value>
+        </inputAssignments>
+        <object>RefreshEvent__e</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
     <recordLookups>
         <name>GetALLAIAIRecords</name>
         <label>GetALLAIAIRecords</label>
@@ -359,6 +424,9 @@
         <label>UpdateInProgress</label>
         <locationX>446</locationX>
         <locationY>1703</locationY>
+        <connector>
+            <targetReference>Decision_on_Refresh</targetReference>
+        </connector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -418,6 +486,9 @@
         <label>UPDATETOCOMPLETED</label>
         <locationX>182</locationX>
         <locationY>1703</locationY>
+        <connector>
+            <targetReference>Decision_on_Refresh</targetReference>
+        </connector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
