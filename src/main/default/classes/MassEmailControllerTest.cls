@@ -208,8 +208,9 @@ public class MassEmailControllerTest {
      @isTest
     static void updateBlaStatusTest() {
          RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
-         Account residenceRec1 = TestDataFactory.createResidence('Residence', 'Test Residence', regAuth.Id, true);
-       BusinessLicenseApplication bla = TestDataFactory.createRenewalBla(residenceRec1.LicenseType__c, residenceRec1.Id, true); 
+          String uniqueName = 'Residence_' + Datetime.now().getTime();
+          Account residenceRec1 = TestDataFactory.createResidence('Residence', uniqueName, regAuth.Id, true);
+          BusinessLicenseApplication bla = TestDataFactory.createRenewalBla(residenceRec1.LicenseType__c, residenceRec1.Id, true); 
          
 
         Map<Id, String> blaErrMap = new Map<Id, String>();
@@ -237,8 +238,9 @@ public class MassEmailControllerTest {
       @isTest
     static void updateLateFeeBlaStatusTest() {
         RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
-          Account residenceRec1 = TestDataFactory.createResidence('Residence', 'Test Residence', regAuth.Id, true);
-       BusinessLicenseApplication bla = TestDataFactory.createRenewalBla(residenceRec1.LicenseType__c, residenceRec1.Id, true);  
+       String uniqueName = 'Residence_' + Datetime.now().getTime();
+        Account residenceRec1 = TestDataFactory.createResidence('Residence', uniqueName, regAuth.Id, true);
+         BusinessLicenseApplication bla = TestDataFactory.createRenewalBla(residenceRec1.LicenseType__c, residenceRec1.Id, true);  
         bla.Late_Fee_Status__c='Ready to Send';
         bla.RenewalDetail__c= 'Late fee error message';
         Database.update( bla,false);
