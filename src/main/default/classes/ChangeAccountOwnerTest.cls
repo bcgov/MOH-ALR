@@ -11,7 +11,6 @@ private class ChangeAccountOwnerTest {
     @isTest
     static void testTransferAccountOwnership() {
         
-        
         Id adminId =[Select Id From Profile where Name='System Administrator'].Id;
         
         User oldUser = new User(
@@ -28,8 +27,7 @@ private class ChangeAccountOwnerTest {
             LanguageLocaleKey = 'en_US'
         );
         insert oldUser;
-        
-        
+       
         User newUser = new User(
             FirstName = 'Testone',
             LastName = 'User1',
@@ -63,7 +61,7 @@ private class ChangeAccountOwnerTest {
         ChangeAccountOwner.FlowInputs flowInputs = new ChangeAccountOwner.FlowInputs();
         flowInputs.newOwnerId = newUser.Id;
         flowInputs.accountId = new List<Id>{ acc.Id };
-            flowInputs.isBlaChecked = true;
+        flowInputs.isBlaChecked = true;
         flowInputs.isPublicChecked = true;
         flowInputs.isCaseChecked = true;
         flowInputs.isInspectionChecked = true;
