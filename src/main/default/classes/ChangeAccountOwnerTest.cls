@@ -1,16 +1,15 @@
 /**
- * @Name              : AccountContactRelationController
- * @Description       : This Test class transfer Account and related records Owners.
- * @Author            : Keerthana (Accenture)
- * @StoryNo           : ALR-134
-  **/
+* @Name              : AccountContactRelationController
+* @Description       : This Test class transfer Account and related records Owners.
+* @Author            : Keerthana (Accenture)
+* @StoryNo           : ALR-134
+**/
 
 @isTest
 private class ChangeAccountOwnerTest {
     
     @isTest
     static void testTransferAccountOwnership() {
-        
         
         Id adminId =[Select Id From Profile where Name='System Administrator'].Id;
         
@@ -28,10 +27,9 @@ private class ChangeAccountOwnerTest {
             LanguageLocaleKey = 'en_US'
         );
         insert oldUser;
-        
-        
+       
         User newUser = new User(
-            FirstName = 'Test',
+            FirstName = 'Testone',
             LastName = 'User1',
             Username = 'test1user@test.com',
             Email = 'testuser@example.com',
@@ -52,8 +50,8 @@ private class ChangeAccountOwnerTest {
         insert loc;
         
         RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
-        Account acc = TestDataFactory.createResidence('Residence', 'Test Residence', regAuth.Id, true);
-        
+        String uniqueName = 'Residence_' + Datetime.now().getTime();
+        Account acc = TestDataFactory.createResidence('Residence', uniqueName, regAuth.Id, true);
         
         Case caseRec = new Case(AccountId=acc.Id, Status='Under Inspection',OwnerId=oldUser.Id);
         insert caseRec;
@@ -73,8 +71,27 @@ private class ChangeAccountOwnerTest {
         Test.startTest();
         ChangeAccountOwner.transferAccountOwnership(inputs);
         Test.stopTest();
+                
+        List<Account> updatedAccount = [SELECT Id, OwnerId FROM Account WHERE Id = :acc.Id];
+        Assert.isNotNull(updatedAccount.size());
         
-        List<Account> updatedAccount = [SELECT Id FROM Account];
-        Assert.isNotNull(updatedAccount.size());  
-    }
+        List<Case> updatedCases = [SELECT Id, OwnerId FROM Case WHERE AccountId = :acc.Id];
+        //for (Case c : updatedCases) {
+            Assert.isNotNull(updatedCases.size());
+        //}
+        
+        List<BusinessLicenseApplication> updatedBlaRecords = [SELECT Id, OwnerId FROM BusinessLicenseApplication WHERE AccountId = :acc.Id];
+       // for (BusinessLicenseApplication blaRecord : updatedBlaRecords) {
+            Assert.isNotNull(updatedBlaRecords.size());
+        //}
+        
+        List<PublicComplaint> updatedPublicCompRecords = [SELECT Id, OwnerId FROM PublicComplaint WHERE AccountId = :acc.Id];
+       // for (PublicComplaint pc : updatedPublicCompRecords) {
+            Assert.isNotNull(updatedCases.size());
+        //}
+        
+        List<Visit> updatedVisitRecords = [SELECT Id, OwnerId FROM Visit WHERE AccountId = :acc.Id];
+             Assert.isNotNull(updatedVisitRecords.size());
+   
+}
 }

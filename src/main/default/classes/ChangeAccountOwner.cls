@@ -26,9 +26,10 @@ public with sharing class ChangeAccountOwner {
         @InvocableVariable
         public Boolean isInspectionChecked;
     }
+    
     @InvocableMethod(label='Transfer Account Ownership' description='Transfers ownership of Accounts and related records.')
     public static void transferAccountOwnership(List<FlowInputs> inputs) {
-        try {   
+        try {
             FlowInputs input = inputs[0];
             
             Id newOwnerId = input.newOwnerId;
@@ -36,77 +37,131 @@ public with sharing class ChangeAccountOwner {
             Boolean isBlaChecked = input.isBlaChecked;
             Boolean isPublicChecked = input.isPublicChecked;
             Boolean isCaseChecked = input.isCaseChecked;
-            Boolean isInspectionChecked = input.isInspectionChecked; 
+            Boolean isInspectionChecked = input.isInspectionChecked;
             
             if (newOwnerId == null || accountId.isEmpty()) {
                 return;
             }
             
-            List<Account> accList = [SELECT Id, OwnerId FROM Account WHERE Id = :accountId];
-            List<BusinessLicenseApplication> blaRec;  
-            List<PublicComplaint> pubCompList;
-            List<Case> caseList;
-            List<Visit> visitList;
+            Map<Id, List<BusinessLicenseApplication>> mapBlaRecords = new Map<Id, List<BusinessLicenseApplication>>();
+            Map<Id, List<PublicComplaint>> mapPublicCompRecords = new Map<Id, List<PublicComplaint>>();
+            Map<Id, List<Case>> mapCaseRecords = new Map<Id, List<Case>>();
+            Map<Id, List<Visit>> mapVisitRecords = new Map<Id, List<Visit>>();
             
-            for(Account acc : accList){
-                Id oldOwnerId = acc.OwnerId;
+            if (isBlaChecked) {
+                mapBlaRecords = getRelatedBlaRecords(accountId);
+            }
+            if (isPublicChecked) {
+                mapPublicCompRecords = getRelatedPublicCompRecords(accountId);
+            }
+            if (isCaseChecked) {
+                mapCaseRecords = getRelatedCaseRecords(accountId);
+            }
+            if (isInspectionChecked) {
+                mapVisitRecords = getRelatedVisitRecords(accountId);
+            }
+            
+            List<Account> accountsToUpdate = new List<Account>();
+            List<BusinessLicenseApplication> blaRecordsToUpdate = new List<BusinessLicenseApplication>();
+            List<PublicComplaint> publicCompRecordsToUpdate = new List<PublicComplaint>();
+            List<Case> caseRecordsToUpdate = new List<Case>();
+            List<Visit> visitRecordsToUpdate = new List<Visit>();
+            
+            for (Id accId : accountId) {
+                Account acc = new Account(Id = accId, OwnerId = newOwnerId);
+                accountsToUpdate.add(acc);
                 
-                {
-                    acc.OwnerId = newOwnerId;
-                }
-                
-                if(isBlaChecked == True){
-                    blaRec = getRelatedBlaRecords(acc.Id,oldOwnerId);
-                    for(BusinessLicenseApplication bla : blaRec){
+                if (isBlaChecked && mapBlaRecords.containsKey(accId)) {
+                    for (BusinessLicenseApplication bla : mapBlaRecords.get(accId)) {
                         bla.OwnerId = newOwnerId;
+                        blaRecordsToUpdate.add(bla);
                     }
-                    Database.update(blaRec,FALSE) ;
                 }
                 
-                if(isPublicChecked == True){
-                    pubCompList = getRelatedPublicCompRecords(acc.Id,oldOwnerId);
-                    for(PublicComplaint pubComp : pubCompList){
+                if (isPublicChecked && mapPublicCompRecords.containsKey(accId)) {
+                    for (PublicComplaint pubComp : mapPublicCompRecords.get(accId)) {
                         pubComp.OwnerId = newOwnerId;
+                        publicCompRecordsToUpdate.add(pubComp);
                     }
-                    Database.update(pubCompList,FALSE) ;
                 }
                 
-                if(isCaseChecked == True){
-                    caseList = getRelatedCaseRecords(acc.Id,oldOwnerId);
-                    for(Case caseRec : caseList){
+                if (isCaseChecked && mapCaseRecords.containsKey(accId)) {
+                    for (Case caseRec : mapCaseRecords.get(accId)) {
                         caseRec.OwnerId = newOwnerId;
+                        caseRecordsToUpdate.add(caseRec);
                     }
-                    Database.update(caseList,FALSE) ;
                 }
                 
-                if(isInspectionChecked == True){
-                    visitList = getRelatedVisitRecords(acc.Id,oldOwnerId);
-                    for(Visit visit : visitList){
+                if (isInspectionChecked && mapVisitRecords.containsKey(accId)) {
+                    for (Visit visit : mapVisitRecords.get(accId)) {
                         visit.OwnerId = newOwnerId;
+                        visitRecordsToUpdate.add(visit);
                     }
-                    Database.update(visitList,FALSE) ; 
                 }
             }
-            Database.update(accList,FALSE) ; 
-        }
-        catch (Exception err) {
+            
+            
+            if (!accountsToUpdate.isEmpty()) {
+                update accountsToUpdate;
+            }
+            if (!blaRecordsToUpdate.isEmpty()) {
+                update blaRecordsToUpdate;
+            }
+            if (!publicCompRecordsToUpdate.isEmpty()) {
+                update publicCompRecordsToUpdate;
+            }
+            if (!caseRecordsToUpdate.isEmpty()) {
+                update caseRecordsToUpdate;
+            }
+            if (!visitRecordsToUpdate.isEmpty()) {
+                update visitRecordsToUpdate;
+            }
+        } catch (Exception err) {
             System.debug('Exception occurred: ' + err.getMessage());
         }
     }
-    public static List<BusinessLicenseApplication> getRelatedBlaRecords(Id accountId, Id oldOwnerId){
-        return [Select Id, OwnerId from BusinessLicenseApplication where AccountId =:accountId AND OwnerId=: oldOwnerId AND RecordType.Name='New License' AND Status !='Closed'];
+    
+    public static Map<Id, List<BusinessLicenseApplication>> getRelatedBlaRecords(List<Id> accountId) {
+        Map<Id, List<BusinessLicenseApplication>> resultMap = new Map<Id, List<BusinessLicenseApplication>>();
+        for (BusinessLicenseApplication bla : [SELECT Id, OwnerId, AccountId FROM BusinessLicenseApplication WHERE AccountId IN :accountId AND RecordType.Name='New License' AND Status !='Closed']) {
+            if (!resultMap.containsKey(bla.AccountId)) {
+                resultMap.put(bla.AccountId, new List<BusinessLicenseApplication>());
+            }
+            resultMap.get(bla.AccountId).add(bla);
+        }
+        return resultMap;
     }
     
-    public static List<PublicComplaint> getRelatedPublicCompRecords(Id accountId, Id oldOwnerId){
-        return [Select Id, OwnerId from PublicComplaint where AccountId =:accountId AND OwnerId=: oldOwnerId AND Status =: 'Needs Review'];
+    public static Map<Id, List<PublicComplaint>> getRelatedPublicCompRecords(List<Id> accountId) {
+        Map<Id, List<PublicComplaint>> resultMap = new Map<Id, List<PublicComplaint>>();
+        for (PublicComplaint pubComp : [SELECT Id, OwnerId, AccountId FROM PublicComplaint WHERE AccountId IN :accountId AND Status = 'Needs Review']) {
+            if (!resultMap.containsKey(pubComp.AccountId)) {
+                resultMap.put(pubComp.AccountId, new List<PublicComplaint>());
+            }
+            resultMap.get(pubComp.AccountId).add(pubComp);
+        }
+        return resultMap;
     }
     
-    public static List<Case> getRelatedCaseRecords(Id accountId, Id oldOwnerId){
-        return [Select Id, OwnerId from Case where AccountId =:accountId AND OwnerId =: oldOwnerId AND Status != 'Closed'];
+    public static Map<Id, List<Case>> getRelatedCaseRecords(List<Id> accountId) {
+        Map<Id, List<Case>> resultMap = new Map<Id, List<Case>>();
+        for (Case caseRec : [SELECT Id, OwnerId, AccountId FROM Case WHERE AccountId IN :accountId AND Status != 'Closed']) {
+            if (!resultMap.containsKey(caseRec.AccountId)) {
+                resultMap.put(caseRec.AccountId, new List<Case>());
+            }
+            resultMap.get(caseRec.AccountId).add(caseRec);
+        }
+        return resultMap;
     }
     
-    public static List<Visit> getRelatedVisitRecords(Id accountId, Id oldOwnerId){
-        return [Select Id, OwnerId from Visit where AccountId =:accountId AND OwnerId=: oldOwnerId AND Status != 'Completed'];
+    public static Map<Id, List<Visit>> getRelatedVisitRecords(List<Id> accountId) {
+        Map<Id, List<Visit>> resultMap = new Map<Id, List<Visit>>();
+        for (Visit visit : [SELECT Id, OwnerId, AccountId FROM Visit WHERE AccountId IN :accountId AND Status != 'Completed']) {
+            if (!resultMap.containsKey(visit.AccountId)) {
+                resultMap.put(visit.AccountId, new List<Visit>());
+            }
+            resultMap.get(visit.AccountId).add(visit);
+        }
+        return resultMap;
     }
-    
 }
