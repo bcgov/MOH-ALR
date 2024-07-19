@@ -123,7 +123,7 @@ public with sharing class ChangeAccountOwner {
     
     public static Map<Id, List<BusinessLicenseApplication>> getRelatedBlaRecords(List<Id> accountId) {
         Map<Id, List<BusinessLicenseApplication>> resultMap = new Map<Id, List<BusinessLicenseApplication>>();
-        for (BusinessLicenseApplication bla : [SELECT Id, OwnerId, AccountId FROM BusinessLicenseApplication WHERE AccountId IN :accountId AND RecordType.Name='New License' AND Status !='Closed']) {
+        for (BusinessLicenseApplication bla : [SELECT Id, OwnerId, AccountId FROM BusinessLicenseApplication WHERE AccountId IN :accountId AND RecordType.Name='New License' AND Status !='Closed' AND Status !='Pending Approval']) {
             if (!resultMap.containsKey(bla.AccountId)) {
                 resultMap.put(bla.AccountId, new List<BusinessLicenseApplication>());
             }
@@ -145,7 +145,7 @@ public with sharing class ChangeAccountOwner {
     
     public static Map<Id, List<Case>> getRelatedCaseRecords(List<Id> accountId) {
         Map<Id, List<Case>> resultMap = new Map<Id, List<Case>>();
-        for (Case caseRec : [SELECT Id, OwnerId, AccountId FROM Case WHERE AccountId IN :accountId AND Status != 'Closed']) {
+        for (Case caseRec : [SELECT Id, OwnerId, AccountId FROM Case WHERE AccountId IN :accountId AND Status != 'Closed' AND Status !='Pending Approval']) {
             if (!resultMap.containsKey(caseRec.AccountId)) {
                 resultMap.put(caseRec.AccountId, new List<Case>());
             }
