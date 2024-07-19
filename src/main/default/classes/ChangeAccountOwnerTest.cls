@@ -1,16 +1,15 @@
 /**
- * @Name              : AccountContactRelationController
- * @Description       : This Test class transfer Account and related records Owners.
- * @Author            : Keerthana (Accenture)
- * @StoryNo           : ALR-134
-  **/
+* @Name              : AccountContactRelationController
+* @Description       : This Test class transfer Account and related records Owners.
+* @Author            : Keerthana (Accenture)
+* @StoryNo           : ALR-134
+**/
 
 @isTest
 private class ChangeAccountOwnerTest {
     
     @isTest
     static void testTransferAccountOwnership() {
-        
         
         Id adminId =[Select Id From Profile where Name='System Administrator'].Id;
         
@@ -28,10 +27,9 @@ private class ChangeAccountOwnerTest {
             LanguageLocaleKey = 'en_US'
         );
         insert oldUser;
-        
-        
+       
         User newUser = new User(
-            FirstName = 'Test',
+            FirstName = 'Testone',
             LastName = 'User1',
             Username = 'test1user@test.com',
             Email = 'testuser@example.com',
@@ -52,13 +50,13 @@ private class ChangeAccountOwnerTest {
         insert loc;
         
         RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
-        Account acc = TestDataFactory.createResidence('Residence', 'Test Residence', regAuth.Id, true);
-        
+        String uniqueName = 'Residence_' + Datetime.now().getTime();
+        Account acc = TestDataFactory.createResidence('Residence', uniqueName, regAuth.Id, true);
         
         Case caseRec = new Case(AccountId=acc.Id, Status='Under Inspection',OwnerId=oldUser.Id);
         insert caseRec;
         
-        BusinessLicenseApplication bla = TestDataFactory.createRenewalBla(acc.LicenseType__c, acc.Id, true);  
+        BusinessLicenseApplication bla = TestDataFactory.createRenewalBla(acc.LicenseType__c, acc.Id, true);
         
         ChangeAccountOwner.FlowInputs flowInputs = new ChangeAccountOwner.FlowInputs();
         flowInputs.newOwnerId = newUser.Id;
@@ -73,8 +71,52 @@ private class ChangeAccountOwnerTest {
         Test.startTest();
         ChangeAccountOwner.transferAccountOwnership(inputs);
         Test.stopTest();
+                
+        List<Account> updatedAccount = [SELECT Id, OwnerId FROM Account WHERE Id = :acc.Id];
+        Assert.isNotNull(updatedAccount.size());
         
-        List<Account> updatedAccount = [SELECT Id FROM Account];
-        Assert.isNotNull(updatedAccount.size());  
-    }
+        List<Case> updatedCases = [SELECT Id, OwnerId FROM Case WHERE AccountId = :acc.Id];
+        Assert.isNotNull(updatedCases.size());
+        
+        Id stExam = Schema.SObjectType.BusinessLicenseApplication.getRecordTypeInfosByName().get('New License').getRecordTypeId();
+        
+        BusinessLicenseApplication updatedBlaRecords = new BusinessLicenseApplication();
+        updatedBlaRecords.AccountId = acc.Id;
+        updatedBlaRecords.RecordtypeId= stExam;
+        updatedBlaRecords.Status = 'Approved';
+        updatedBlaRecords.LicenseTypeId = acc.LicenseType__c;
+        updatedBlaRecords.AppliedDate = System.today();
+        insert updatedBlaRecords;
+        
+        System.assertNotEquals(null, updatedBlaRecords.Id);
+        
+        PublicComplaint publiccompliants = new PublicComplaint();
+        publiccompliants.AccountId = acc.Id;
+        publiccompliants.Status = 'Needs Review';
+        publiccompliants.IncidentDate = System.today();
+        publiccompliants.Category__c = 'ALR';
+        publiccompliants.NeedFeedbackonResolution__c = 'No';
+        publiccompliants.WishtoRemainAnonymous__c = 'No';
+        publiccompliants.ResidentAwareOfComplaint__c = 'Yes';
+        insert publiccompliants;
+        
+        System.assertNotEquals(null, publiccompliants.Id);
+         
+        Visit visits = new Visit();
+        visits.AccountId = acc.Id;
+        visits.Status = 'Planned';
+        visits.PlannedVisitEndTime = System.today();
+        visits.PlannedVisitStartTime = System.today();
+        visits.PlaceId = loc.Id;
+        insert visits;
+       
+        System.assertNotEquals(null, visits.Id);
+      
+        Map<Id, List<BusinessLicenseApplication>> blaRecordsMap = ChangeAccountOwner.getRelatedBlaRecords(new List<Id>{ acc.Id });
+        Map<Id, List<PublicComplaint>> publicCompRecordsMap = ChangeAccountOwner.getRelatedPublicCompRecords(new List<Id>{ acc.Id });
+        Map<Id, List<Case>> caseRecordsMap = ChangeAccountOwner.getRelatedCaseRecords(new List<Id>{ acc.Id });
+        Map<Id, List<Visit>> visitRecordsMap = ChangeAccountOwner.getRelatedVisitRecords(new List<Id>{ acc.Id });
+ 
+}
+    
 }
