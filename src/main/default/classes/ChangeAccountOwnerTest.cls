@@ -56,7 +56,7 @@ private class ChangeAccountOwnerTest {
         Case caseRec = new Case(AccountId=acc.Id, Status='Under Inspection',OwnerId=oldUser.Id);
         insert caseRec;
         
-        BusinessLicenseApplication bla = TestDataFactory.createRenewalBla(acc.LicenseType__c, acc.Id, true);  
+        BusinessLicenseApplication bla = TestDataFactory.createRenewalBla(acc.LicenseType__c, acc.Id, true);
         
         ChangeAccountOwner.FlowInputs flowInputs = new ChangeAccountOwner.FlowInputs();
         flowInputs.newOwnerId = newUser.Id;
@@ -76,22 +76,47 @@ private class ChangeAccountOwnerTest {
         Assert.isNotNull(updatedAccount.size());
         
         List<Case> updatedCases = [SELECT Id, OwnerId FROM Case WHERE AccountId = :acc.Id];
-        //for (Case c : updatedCases) {
-            Assert.isNotNull(updatedCases.size());
-        //}
+        Assert.isNotNull(updatedCases.size());
         
-        List<BusinessLicenseApplication> updatedBlaRecords = [SELECT Id, OwnerId FROM BusinessLicenseApplication WHERE AccountId = :acc.Id];
-       // for (BusinessLicenseApplication blaRecord : updatedBlaRecords) {
-            Assert.isNotNull(updatedBlaRecords.size());
-        //}
+        Id stExam = Schema.SObjectType.BusinessLicenseApplication.getRecordTypeInfosByName().get('New License').getRecordTypeId();
         
-        List<PublicComplaint> updatedPublicCompRecords = [SELECT Id, OwnerId FROM PublicComplaint WHERE AccountId = :acc.Id];
-       // for (PublicComplaint pc : updatedPublicCompRecords) {
-            Assert.isNotNull(updatedCases.size());
-        //}
+        BusinessLicenseApplication updatedBlaRecords = new BusinessLicenseApplication();
+        updatedBlaRecords.AccountId = acc.Id;
+        updatedBlaRecords.RecordtypeId= stExam;
+        updatedBlaRecords.Status = 'Approved';
+        updatedBlaRecords.LicenseTypeId = acc.LicenseType__c;
+        updatedBlaRecords.AppliedDate = System.today();
+        insert updatedBlaRecords;
         
-        List<Visit> updatedVisitRecords = [SELECT Id, OwnerId FROM Visit WHERE AccountId = :acc.Id];
-             Assert.isNotNull(updatedVisitRecords.size());
-   
+        System.assertNotEquals(null, updatedBlaRecords.Id);
+        
+        PublicComplaint publiccompliants = new PublicComplaint();
+        publiccompliants.AccountId = acc.Id;
+        publiccompliants.Status = 'Needs Review';
+        publiccompliants.IncidentDate = System.today();
+        publiccompliants.Category__c = 'ALR';
+        publiccompliants.NeedFeedbackonResolution__c = 'No';
+        publiccompliants.WishtoRemainAnonymous__c = 'No';
+        publiccompliants.ResidentAwareOfComplaint__c = 'Yes';
+        insert publiccompliants;
+        
+        System.assertNotEquals(null, publiccompliants.Id);
+         
+        Visit visits = new Visit();
+        visits.AccountId = acc.Id;
+        visits.Status = 'Planned';
+        visits.PlannedVisitEndTime = System.today();
+        visits.PlannedVisitStartTime = System.today();
+        visits.PlaceId = loc.Id;
+        insert visits;
+       
+        System.assertNotEquals(null, visits.Id);
+      
+        Map<Id, List<BusinessLicenseApplication>> blaRecordsMap = ChangeAccountOwner.getRelatedBlaRecords(new List<Id>{ acc.Id });
+        Map<Id, List<PublicComplaint>> publicCompRecordsMap = ChangeAccountOwner.getRelatedPublicCompRecords(new List<Id>{ acc.Id });
+        Map<Id, List<Case>> caseRecordsMap = ChangeAccountOwner.getRelatedCaseRecords(new List<Id>{ acc.Id });
+        Map<Id, List<Visit>> visitRecordsMap = ChangeAccountOwner.getRelatedVisitRecords(new List<Id>{ acc.Id });
+ 
 }
+    
 }
