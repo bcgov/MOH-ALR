@@ -42,6 +42,12 @@ public with sharing class ChangeAccountOwner {
             if (newOwnerId == null || accountId.isEmpty()) {
                 return;
             }
+
+            // Retrieve current owner IDs for the accounts
+            Map<Id, Id> currentOwnerIds = new Map<Id, Id>();
+            for (Account acc : [SELECT Id, OwnerId FROM Account WHERE Id IN :accountId]) {
+                currentOwnerIds.put(acc.Id, acc.OwnerId);
+            }
             
             Map<Id, List<BusinessLicenseApplication>> mapBlaRecords = new Map<Id, List<BusinessLicenseApplication>>();
             Map<Id, List<PublicComplaint>> mapPublicCompRecords = new Map<Id, List<PublicComplaint>>();
@@ -49,16 +55,16 @@ public with sharing class ChangeAccountOwner {
             Map<Id, List<Visit>> mapVisitRecords = new Map<Id, List<Visit>>();
             
             if (isBlaChecked) {
-                mapBlaRecords = getRelatedBlaRecords(accountId);
+                mapBlaRecords = getRelatedBlaRecords(accountId, currentOwnerIds);
             }
             if (isPublicChecked) {
-                mapPublicCompRecords = getRelatedPublicCompRecords(accountId);
+                mapPublicCompRecords = getRelatedPublicCompRecords(accountId, currentOwnerIds);
             }
             if (isCaseChecked) {
-                mapCaseRecords = getRelatedCaseRecords(accountId);
+                mapCaseRecords = getRelatedCaseRecords(accountId, currentOwnerIds);
             }
             if (isInspectionChecked) {
-                mapVisitRecords = getRelatedVisitRecords(accountId);
+                mapVisitRecords = getRelatedVisitRecords(accountId, currentOwnerIds);
             }
             
             List<Account> accountsToUpdate = new List<Account>();
@@ -121,9 +127,9 @@ public with sharing class ChangeAccountOwner {
         }
     }
     
-    public static Map<Id, List<BusinessLicenseApplication>> getRelatedBlaRecords(List<Id> accountId) {
+    public static Map<Id, List<BusinessLicenseApplication>> getRelatedBlaRecords(List<Id> accountId, Map<Id, Id> currentOwnerIds) {
         Map<Id, List<BusinessLicenseApplication>> resultMap = new Map<Id, List<BusinessLicenseApplication>>();
-        for (BusinessLicenseApplication bla : [SELECT Id, OwnerId, AccountId FROM BusinessLicenseApplication WHERE AccountId IN :accountId AND RecordType.Name='New License' AND Status !='Closed' AND Status !='Pending Approval']) {
+        for (BusinessLicenseApplication bla : [SELECT Id, OwnerId, AccountId FROM BusinessLicenseApplication WHERE AccountId IN :accountId AND OwnerId IN :currentOwnerIds.values() AND RecordType.Name='New License' AND Status !='Closed' AND Status !='Pending Approval']) {
             if (!resultMap.containsKey(bla.AccountId)) {
                 resultMap.put(bla.AccountId, new List<BusinessLicenseApplication>());
             }
@@ -132,9 +138,9 @@ public with sharing class ChangeAccountOwner {
         return resultMap;
     }
     
-    public static Map<Id, List<PublicComplaint>> getRelatedPublicCompRecords(List<Id> accountId) {
+    public static Map<Id, List<PublicComplaint>> getRelatedPublicCompRecords(List<Id> accountId, Map<Id, Id> currentOwnerIds) {
         Map<Id, List<PublicComplaint>> resultMap = new Map<Id, List<PublicComplaint>>();
-        for (PublicComplaint pubComp : [SELECT Id, OwnerId, AccountId FROM PublicComplaint WHERE AccountId IN :accountId AND Status = 'Needs Review']) {
+        for (PublicComplaint pubComp : [SELECT Id, OwnerId, AccountId FROM PublicComplaint WHERE AccountId IN :accountId AND OwnerId IN :currentOwnerIds.values() AND Status = 'Needs Review']) {
             if (!resultMap.containsKey(pubComp.AccountId)) {
                 resultMap.put(pubComp.AccountId, new List<PublicComplaint>());
             }
@@ -143,9 +149,9 @@ public with sharing class ChangeAccountOwner {
         return resultMap;
     }
     
-    public static Map<Id, List<Case>> getRelatedCaseRecords(List<Id> accountId) {
+    public static Map<Id, List<Case>> getRelatedCaseRecords(List<Id> accountId, Map<Id, Id> currentOwnerIds) {
         Map<Id, List<Case>> resultMap = new Map<Id, List<Case>>();
-        for (Case caseRec : [SELECT Id, OwnerId, AccountId FROM Case WHERE AccountId IN :accountId AND Status != 'Closed' AND Status !='Pending Approval']) {
+        for (Case caseRec : [SELECT Id, OwnerId, AccountId FROM Case WHERE AccountId IN :accountId AND OwnerId IN :currentOwnerIds.values() AND Status != 'Closed' AND Status !='Pending Approval']) {
             if (!resultMap.containsKey(caseRec.AccountId)) {
                 resultMap.put(caseRec.AccountId, new List<Case>());
             }
@@ -154,9 +160,9 @@ public with sharing class ChangeAccountOwner {
         return resultMap;
     }
     
-    public static Map<Id, List<Visit>> getRelatedVisitRecords(List<Id> accountId) {
+    public static Map<Id, List<Visit>> getRelatedVisitRecords(List<Id> accountId, Map<Id, Id> currentOwnerIds) {
         Map<Id, List<Visit>> resultMap = new Map<Id, List<Visit>>();
-        for (Visit visit : [SELECT Id, OwnerId, AccountId FROM Visit WHERE AccountId IN :accountId AND Status != 'Completed']) {
+        for (Visit visit : [SELECT Id, OwnerId, AccountId FROM Visit WHERE AccountId IN :accountId AND OwnerId IN :currentOwnerIds.values() AND Status != 'Completed']) {
             if (!resultMap.containsKey(visit.AccountId)) {
                 resultMap.put(visit.AccountId, new List<Visit>());
             }

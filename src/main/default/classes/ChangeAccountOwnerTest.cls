@@ -111,11 +111,16 @@ private class ChangeAccountOwnerTest {
         insert visits;
        
         System.assertNotEquals(null, visits.Id);
+        
+        Map<Id, Id> currentOwnerIds = new Map<Id, Id>();
+        for (Account a : [SELECT Id, OwnerId FROM Account WHERE Id = :acc.Id]) {
+            currentOwnerIds.put(a.Id, a.OwnerId);
+       }
       
-        Map<Id, List<BusinessLicenseApplication>> blaRecordsMap = ChangeAccountOwner.getRelatedBlaRecords(new List<Id>{ acc.Id });
-        Map<Id, List<PublicComplaint>> publicCompRecordsMap = ChangeAccountOwner.getRelatedPublicCompRecords(new List<Id>{ acc.Id });
-        Map<Id, List<Case>> caseRecordsMap = ChangeAccountOwner.getRelatedCaseRecords(new List<Id>{ acc.Id });
-        Map<Id, List<Visit>> visitRecordsMap = ChangeAccountOwner.getRelatedVisitRecords(new List<Id>{ acc.Id });
+        Map<Id, List<BusinessLicenseApplication>> blaRecordsMap = ChangeAccountOwner.getRelatedBlaRecords(new List<Id>{ acc.Id }, currentOwnerIds);
+        Map<Id, List<PublicComplaint>> publicCompRecordsMap = ChangeAccountOwner.getRelatedPublicCompRecords(new List<Id>{ acc.Id }, currentOwnerIds);
+        Map<Id, List<Case>> caseRecordsMap = ChangeAccountOwner.getRelatedCaseRecords(new List<Id>{ acc.Id }, currentOwnerIds);
+        Map<Id, List<Visit>> visitRecordsMap = ChangeAccountOwner.getRelatedVisitRecords(new List<Id>{ acc.Id }, currentOwnerIds);
  
 }
     
