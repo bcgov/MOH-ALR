@@ -12,7 +12,7 @@ public with sharing class FetchAndGenerateCSV {
     static String csvContent = '';
     static String ResID= '', Residence= '', HACode= '', Res_Address= '',Res_City= '',Res_PostalCode= '', Res_Phone= '', Res_Phone_Ext= '', Res_Fax= '', Website= '', Appl_LegalName= '', Registrant_Contact= '', RegNo= '', RegStatus= '', HospSvc_Meal= '', HospSvc_HouseKeep= '', HospSvc_Laundry= '', HospSvc_SocialRec= '', HospSvc_24HResp= '', ResCatCode= '', ADLS= '', Meds= '', Diets= '', Safekeeping= '', Psychosocial= '', Behaviour= '';
     static Integer Public_Units = 0, Private_Units = 0, Per_Diem_Units = 0, Number_of_AL_Units = 0;
-    static List<String> resFilterStatuses = new List<String> {'Registered Active', 'Registered Active with Conditions', 'Registered Active Progressive Enforcement'};
+    static List<String> resFilterStatuses = new List<String> {'Registered Active', 'Registered Active with Conditions', 'Registered Active Progressive Enforcement','Registered Active Pending Renewal'};
     static Map<String, String> healthAuthorityMap = new Map<String, String>{ 'Island Health - Island' => 'VIHA',
                                                                                  'Interior Health - IH' => 'IHA',
                                                                                  'Fraser Health - FH' => 'FHA',
