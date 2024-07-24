@@ -71,6 +71,8 @@ private class FetchAndGenerateCSVTest {
         insert Registrant;
               
         Account Residence = TestDataFactory.createResidence('Residence', 'residence1', regAuth.Id, true);
+        Residence.ExemptionofAddressPublication__c = true;
+        update Residence;
         
         Service__c ser = new Service__c(
             ServiceName__c = 'Assistance with daily living activities',
