@@ -12,7 +12,9 @@ private class FetchAndGenerateCSVTest {
 
     @isTest
     static void testGenerateCSV() {
-        
+        List<Account> accList = new List<Account>();
+        List<Account> accList1 = new List<Account>();
+        List<AssociatedLocation> accList2 = new List<AssociatedLocation>();
         // Create an instance of DMLOptions
         Database.DMLOptions dmlOptions = new Database.DMLOptions();
         dmlOptions.DuplicateRuleHeader.allowSave = true;
@@ -27,6 +29,32 @@ private class FetchAndGenerateCSVTest {
         insert Registrant;
               
         Account Residence = TestDataFactory.createResidence('Residence', 'residence1', regAuth.Id, true);
+        accList.add(Residence);
+        
+        Schema.Location loc = new Schema.Location();
+        loc.Name = 'U.S. 101N';
+		loc.Longitude = 28.635308;
+		loc.Latitude = 28.635308;
+		insert loc;
+        
+        //Address
+        Schema.Address addressRec = new Schema.Address(
+            City = 'bl',
+            Country = 'TT',
+            State = 'JK',
+            PostalCode = '885588',
+            ParentId = loc.Id,
+            LocationType = 'Residence'
+        );
+        Insert addressRec;
+        loc.VisitorAddressId = addressRec.Id;
+        update loc;
+        
+        //associate location
+        Schema.AssociatedLocation asLoc = new Schema.AssociatedLocation(
+        ParentRecordId = Residence.Id,
+        LocationId = loc.Id);
+        Insert asLoc;
         
         Service__c ser = new Service__c(
             ServiceName__c = 'Assistance with daily living activities',
@@ -35,14 +63,30 @@ private class FetchAndGenerateCSVTest {
             Account__c = Residence.id
         );
         insert ser;
+        
+        List<BusinessLicense> busiLicense = new List<BusinessLicense>();
 
         BusinessLicenseApplication blaRec = TestDataFactory.createRenewalBla(Residence.LicenseType__c, Residence.Id, true);
+        
+        BusinessLicense blRec = TestDataFactory.createBlRecord(regAuth.Id, Residence.Id, Residence.ParentId, '58659', 'BL RECORD 1', true);
+        busiLicense.add(blRec);
+        
+        Contact con = new Contact(LastName = 'Test Contact',Phone ='1234567890');
+        insert con;
+
+        AccountContactRelation acr = new AccountContactRelation(
+            AccountId = Residence.Id,
+            ContactId = con.Id,
+            Roles = 'Decision Maker',
+            PrimaryContact__c = true
+        );
         
         Asset unit1 = TestDataFactory.createUnit('1','Private',2,Residence.Id,true);
         
         Test.startTest();
         // Call the generateCSV method
         String generatedCSV = FetchAndGenerateCSV.generateCSV();
+        //String getRegistrationCertificate = FetchAndGenerateCSV.getRegistrationCertificates(busiLicense);
 
         // Log the generated CSV content for debugging
         System.debug('Generated CSV: ' + generatedCSV);
