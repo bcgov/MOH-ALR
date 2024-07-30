@@ -12,7 +12,7 @@ public with sharing class ScheduleSendEmail implements Schedulable {
     public void execute(SchedulableContext sc) {
         try {
             Map<Id, Set<Id>> accountIdToContactIdsMap = new Map<Id, Set<Id>>();
-            
+
             List<Account> accounts = [
                 SELECT Id ,ParentId
                 FROM Account
@@ -56,7 +56,7 @@ public with sharing class ScheduleSendEmail implements Schedulable {
             for (Set<Id> contactIds : accountIdToContactIdsMap.values()) {
                 contactIdsList.addAll(contactIds);
             }
-            
+
             if (!contactIdsList.isEmpty()) {
                 sendRenewalDueEmail(contactIdsList);
             }
@@ -84,6 +84,8 @@ public with sharing class ScheduleSendEmail implements Schedulable {
             
             List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
             Map<String, List<String>> processedEmails = new Map<String, List<String>>();
+            Integer currentyear = Date.today().year();
+            Integer previousyear = Date.today().year() - 1;
             
             for (AccountContactRelation acrList : AccountcontactRecList) {
                 if (acrList.contact.Email != null) {
@@ -96,6 +98,11 @@ public with sharing class ScheduleSendEmail implements Schedulable {
                         email.setTargetObjectId(acrList.contact.Id);
                         String emailBody = emailTemplate.HtmlValue;
                         String emailSubject = emailTemplate.Subject;
+                        emailBody = emailBody.Replace('{%%Account.Name%%}', acrList.Account.Name);
+                        emailBody = emailBody.Replace('{%%CurrentYear%%}', String.valueOf(currentyear));
+                        emailBody = emailBody.Replace('{%%PreviousYear%%}', String.valueOf(previousyear));
+                        emailSubject = emailSubject.Replace('{%%CurrentYear%%}', String.valueOf(currentyear));
+                        emailSubject = emailSubject.Replace('{%%PreviousYear%%}', String.valueOf(previousyear));
                         email.setSubject(emailSubject);
                         email.setHtmlBody(emailBody);
                         emails.add(email);
