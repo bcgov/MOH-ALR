@@ -19,7 +19,7 @@
                         <valueListItems>
                             <value>CustomButton.Visit.Start_Risk_Assessment</value>
                             <visibilityRule>
-                                <booleanFilter>1 AND 2 AND 3 AND 4</booleanFilter>
+                                <booleanFilter>1 AND 2 AND 3 AND (4 OR 5)</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.VisitType.Name}</leftValue>
                                     <operator>EQUAL</operator>
@@ -37,6 +37,11 @@
                                 </criteria>
                                 <criteria>
                                     <leftValue>{!$Permission.CustomPermission.EHISInvestigator}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>true</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!$Permission.CustomPermission.EHISLeadership}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>true</rightValue>
                                 </criteria>
