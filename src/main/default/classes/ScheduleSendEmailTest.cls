@@ -1,9 +1,9 @@
-/**
+/***
 * @Name              : ScheduledSendEmailTest
 * @Description       : Test Class for Sending Email on  Jan-15
 * @Author            : Keerthana Srinivasan (Accenture)
 * @StoryNo           : ALR-562
-**/
+***/
 
 @isTest
 private class ScheduleSendEmailTest {
