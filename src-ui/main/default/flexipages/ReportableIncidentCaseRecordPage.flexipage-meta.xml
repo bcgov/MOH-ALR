@@ -9,7 +9,7 @@
                         <valueListItems>
                             <value>Submit</value>
                             <visibilityRule>
-                                <booleanFilter>1 OR 2</booleanFilter>
+                                <booleanFilter>(1 OR 2) AND 3</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.Status}</leftValue>
                                     <operator>EQUAL</operator>
@@ -19,6 +19,11 @@
                                     <leftValue>{!Record.Status}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>Under Inspection</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!$Permission.CustomPermission.EHISAdminUser}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>false</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
@@ -1119,7 +1124,7 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.WitnessForIncident__c</fieldItem>
+                <fieldItem>Record.IncidentWitnessed__c</fieldItem>
                 <identifier>RecordWitnessForIncident_cField</identifier>
             </fieldInstance>
         </itemInstances>
@@ -1241,7 +1246,7 @@
                     <name>uiBehavior</name>
                     <value>readonly</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.WitnessForIncident__c</fieldItem>
+                <fieldItem>Record.IncidentWitnessed__c</fieldItem>
                 <identifier>RecordWitnessForIncident_cField2</identifier>
             </fieldInstance>
         </itemInstances>
