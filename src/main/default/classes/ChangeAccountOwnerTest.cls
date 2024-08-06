@@ -107,6 +107,7 @@ private class ChangeAccountOwnerTest {
         visits.Status = 'Planned';
         visits.PlannedVisitEndTime = System.today();
         visits.PlannedVisitStartTime = System.today();
+        visits.ActualVisitStartTime = System.today();
         visits.PlaceId = loc.Id;
         insert visits;
        

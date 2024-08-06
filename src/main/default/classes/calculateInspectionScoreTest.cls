@@ -34,6 +34,7 @@ public class calculateInspectionScoreTest {
         inspect.VisitTypeId = insType.Id;
         inspect.InspectionMethod__c = 'Unannounced on Site Inspection';
         inspect.PlannedVisitStartTime = System.today();
+        inspect.ActualVisitStartTime = System.today();
         inspect.PlaceId = loc.Id;
         //insert inspection;
         

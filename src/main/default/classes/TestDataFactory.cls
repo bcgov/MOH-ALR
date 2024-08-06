@@ -215,6 +215,7 @@ public class TestDataFactory {
             VisitTypeId = visittypeId,
             InspectionMethod__c = inspectionmethod,
             PlannedVisitStartTime = System.today(),
+            ActualVisitStartTime  = System.today(),
             PlaceId = placeid
                     );
         if (dmlOption) {

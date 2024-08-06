@@ -6,8 +6,8 @@
     <errorConditionFormula>AND(
 NOT($Permission.EHISBypassValidationRuleCustomPermission),
 RecordType.DeveloperName = &apos;Inspection&apos;,
-DATETIMEVALUE(PlannedVisitStartTime) &gt; NOW(),
+DATETIMEVALUE(ActualVisitStartTime) &gt; NOW(),
 ISPICKVAL(Status,&quot;Completed&quot;) 
 )</errorConditionFormula>
-    <errorMessage>Update Planned Start Time to a current or past date.</errorMessage>
+    <errorMessage>Update Actual Start Time to a current or past date.</errorMessage>
 </ValidationRule>

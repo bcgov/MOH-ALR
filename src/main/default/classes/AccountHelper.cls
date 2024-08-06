@@ -42,6 +42,7 @@ public with sharing class AccountHelper {
                     inspection.OwnerId = accObj.OwnerId;
                     inspection.PlaceId = accObj.AssociatedLocations[0].LocationId;
                     inspection.PlannedVisitStartTime = System.today().addMonths(noOfMonths);
+                    inspection.ActualVisitStartTime = System.today().addMonths(noOfMonths);
                     inspectList.add(inspection);
                 }
             }
