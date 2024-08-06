@@ -44,6 +44,7 @@ public class RCVCreationHelperTest {
         insp.AccountId =acc.id;
         insp.InspectionMethod__c ='Scheduled on Site Inspection';
         insp.PlannedVisitStartTime = System.today();
+        insp.ActualVisitStartTime = System.today();
         insp.PlaceId = loction[0].Id;
         insp.VisitTypeId =insType.Id;
         database.insert(insp);

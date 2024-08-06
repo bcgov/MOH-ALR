@@ -67,6 +67,7 @@ public class AccountTriggerTest {
                 inspect.VisitTypeId = mapInspectionType.get('InspectionType');
                 inspect.InspectionMethod__c = 'Unannounced on Site Inspection';
                 inspect.PlannedVisitStartTime = System.today().addMonths(12);
+                inspect.ActualVisitStartTime = System.today().addMonths(12);
                 inspect.PlaceId = loc.Id;
                 inspect.OwnerId = AcRec2.OwnerId;
                 inspect.VisitPriority = 'Medium';
@@ -136,6 +137,7 @@ public class AccountTriggerTest {
                 inspect.VisitTypeId = mapInspectionType.get('InspectionType');
                 inspect.InspectionMethod__c = 'Unannounced on Site Inspection';
                 inspect.PlannedVisitStartTime = System.today().addMonths(12);
+                inspect.ActualVisitStartTime = System.today().addMonths(12);
                 inspect.PlaceId = loc.Id;
                 inspect.OwnerId = AcRec2.OwnerId;
                 inspect.VisitPriority = 'Medium';
@@ -205,6 +207,7 @@ public class AccountTriggerTest {
                 inspect.VisitTypeId = mapInspectionType.get('InspectionType');
                 inspect.InspectionMethod__c = 'Unannounced on Site Inspection';
                 inspect.PlannedVisitStartTime = System.today().addMonths(12);
+                inspect.ActualVisitStartTime = System.today().addMonths(12);
                 inspect.PlaceId = loc.Id;
                 inspect.OwnerId = AcRec2.OwnerId;
                 inspect.VisitPriority = 'Medium';
