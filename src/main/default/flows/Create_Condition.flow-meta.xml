@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <apiVersion>61.0</apiVersion>
+    <decisions>
+        <name>ALRInvestigatorCheck</name>
+        <label>ALRInvestigatorCheck</label>
+        <locationX>182</locationX>
+        <locationY>134</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>CheckInvestigator</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Permission.EHISInvestigator</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>New_Condition</targetReference>
+            </connector>
+            <label>CheckInvestigator</label>
+        </rules>
+    </decisions>
     <dynamicChoiceSets>
         <name>ConiditionName</name>
         <dataType>Picklist</dataType>
@@ -34,8 +56,8 @@
     <recordCreates>
         <name>Create_Condition_Record</name>
         <label>Create Condition Record</label>
-        <locationX>176</locationX>
-        <locationY>242</locationY>
+        <locationX>50</locationX>
+        <locationY>350</locationY>
         <inputAssignments>
             <field>Account_Name__c</field>
             <value>
@@ -72,8 +94,8 @@
     <screens>
         <name>New_Condition</name>
         <label>New Condition</label>
-        <locationX>176</locationX>
-        <locationY>134</locationY>
+        <locationX>50</locationX>
+        <locationY>242</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -147,10 +169,10 @@
         <showHeader>true</showHeader>
     </screens>
     <start>
-        <locationX>50</locationX>
+        <locationX>56</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>New_Condition</targetReference>
+            <targetReference>ALRInvestigatorCheck</targetReference>
         </connector>
     </start>
     <status>Active</status>
