@@ -31,7 +31,7 @@ private class ChangeAccountOwnerTest {
         User newUser = new User(
             FirstName = 'Testone',
             LastName = 'User1',
-            Username = 'test1user@test.com',
+            Username = 'alrtest1user@test.com',
             Email = 'testuser@example.com',
             Alias = 'tuser',
             ProfileId = adminId,
