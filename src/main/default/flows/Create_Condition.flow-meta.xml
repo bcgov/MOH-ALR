@@ -32,6 +32,11 @@
         <picklistObject>Conditions__c</picklistObject>
     </dynamicChoiceSets>
     <environments>Default</environments>
+    <formulas>
+        <name>SuccessMsg</name>
+        <dataType>String</dataType>
+        <expression>&quot;Condition &quot;&amp;{!GetCurrentRecord.Name}&amp;&quot; is Successfully Created.&quot;</expression>
+    </formulas>
     <interviewLabel>Create Condition {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Create Condition</label>
     <processMetadataValues>
@@ -58,6 +63,9 @@
         <label>Create Condition Record</label>
         <locationX>50</locationX>
         <locationY>350</locationY>
+        <connector>
+            <targetReference>GetCurrentRecord</targetReference>
+        </connector>
         <inputAssignments>
             <field>Account_Name__c</field>
             <value>
@@ -91,6 +99,36 @@
         <object>Conditions__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
+    <recordLookups>
+        <name>GetCurrentRecord</name>
+        <label>GetCurrentRecord</label>
+        <locationX>50</locationX>
+        <locationY>458</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Success</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Account_Name__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>varCurrentACCId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Create_Condition_Record</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Conditions__c</object>
+        <sortField>Id</sortField>
+        <sortOrder>Asc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <screens>
         <name>New_Condition</name>
         <label>New Condition</label>
@@ -168,6 +206,22 @@
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
     </screens>
+    <screens>
+        <name>Success</name>
+        <label>Success</label>
+        <locationX>50</locationX>
+        <locationY>566</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>SuccessMessage</name>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;color: rgb(8, 153, 31);&quot;&gt;{!SuccessMsg}&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
     <start>
         <locationX>56</locationX>
         <locationY>0</locationY>
@@ -176,6 +230,13 @@
         </connector>
     </start>
     <status>Active</status>
+    <variables>
+        <name>Message</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
     <variables>
         <name>varCurrentACCId</name>
         <dataType>String</dataType>
