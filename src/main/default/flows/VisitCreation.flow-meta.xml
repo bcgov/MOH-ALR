@@ -4,7 +4,7 @@
         <name>Page_Redirection</name>
         <label>Page Redirection</label>
         <locationX>50</locationX>
-        <locationY>890</locationY>
+        <locationY>998</locationY>
         <actionName>c:OpenInspection</actionName>
         <actionType>component</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -21,7 +21,7 @@
     <actionCalls>
         <name>PageRedirection</name>
         <label>Page Redirection</label>
-        <locationX>842</locationX>
+        <locationX>1634</locationX>
         <locationY>890</locationY>
         <actionName>c:OpenInspection</actionName>
         <actionType>component</actionType>
@@ -39,8 +39,8 @@
     <actionCalls>
         <name>Redirect</name>
         <label>Page Redirection</label>
-        <locationX>578</locationX>
-        <locationY>890</locationY>
+        <locationX>1106</locationX>
+        <locationY>998</locationY>
         <actionName>c:OpenInspection</actionName>
         <actionType>component</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -57,8 +57,8 @@
     <actionCalls>
         <name>Redirection</name>
         <label>Redirection</label>
-        <locationX>314</locationX>
-        <locationY>890</locationY>
+        <locationX>578</locationX>
+        <locationY>998</locationY>
         <actionName>c:OpenInspection</actionName>
         <actionType>component</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -76,7 +76,7 @@
     <decisions>
         <name>Decision_Based_on_Context</name>
         <label>Decision Based on Context</label>
-        <locationX>446</locationX>
+        <locationX>908</locationX>
         <locationY>566</locationY>
         <defaultConnector>
             <targetReference>Inspection_Creation</targetReference>
@@ -128,6 +128,81 @@
             <label>Case</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>FollowUp_Inspection_Case</name>
+        <label>FollowUp Inspection Case</label>
+        <locationX>1238</locationX>
+        <locationY>782</locationY>
+        <defaultConnector>
+            <targetReference>CaseFinish</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Case_FollowUp_Inspection_Picklist</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Case_InspectionTypeId.recordName</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Follow-Up Inspection</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Case_Visit_Record_Creation</targetReference>
+            </connector>
+            <label>Case-FollowUp Inspection Picklist</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>FollowUp_InspectionBLA</name>
+        <label>FollowUp Inspection BLA</label>
+        <locationX>710</locationX>
+        <locationY>782</locationY>
+        <defaultConnector>
+            <targetReference>BLAFinish</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>BLA_FollowUp_Inspection_Picklist</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>BLA_InspectionTypeId.recordName</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Follow-Up Inspectipon</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>BLA_Visit_Record_Creation</targetReference>
+            </connector>
+            <label>BLA-FollowUp Inspection Picklist</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>IF_FollowUp_Inspection</name>
+        <label>IF FollowUp Inspection</label>
+        <locationX>182</locationX>
+        <locationY>782</locationY>
+        <defaultConnector>
+            <targetReference>Finish</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>If_FollowUpInspectionPicklist</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Acc_InspectionTypeId.recordName</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Follow-Up Inspection</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Acc_Visit_Record_Creation</targetReference>
+            </connector>
+            <label>If FollowUp Inspection Picklist</label>
+        </rules>
+    </decisions>
     <description>ALR-1217 v6 case check</description>
     <dynamicChoiceSets>
         <name>InspMethodChoices</name>
@@ -171,7 +246,7 @@
         <name>Acc_Visit_Record_Creation</name>
         <label>Acc Visit Record Creation</label>
         <locationX>50</locationX>
-        <locationY>782</locationY>
+        <locationY>890</locationY>
         <assignRecordIdToReference>visitId</assignRecordIdToReference>
         <connector>
             <targetReference>Page_Redirection</targetReference>
@@ -207,6 +282,12 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>ParentVisitId__NotFound</field>
+            <value>
+                <elementReference>ParentVisit.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>PlaceId</field>
             <value>
                 <elementReference>Acc_Location.recordId</elementReference>
@@ -235,8 +316,8 @@
     <recordCreates>
         <name>BLA_Visit_Record_Creation</name>
         <label>BLA Visit Record Creation</label>
-        <locationX>314</locationX>
-        <locationY>782</locationY>
+        <locationX>578</locationX>
+        <locationY>890</locationY>
         <assignRecordIdToReference>visitId</assignRecordIdToReference>
         <connector>
             <targetReference>Redirection</targetReference>
@@ -272,6 +353,12 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>ParentVisitId__NotFound</field>
+            <value>
+                <elementReference>BLA_ParentVisit.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>PlaceId</field>
             <value>
                 <elementReference>BLA_Location.recordId</elementReference>
@@ -300,8 +387,8 @@
     <recordCreates>
         <name>Case_Visit_Record_Creation</name>
         <label>Case Visit Record Creation</label>
-        <locationX>578</locationX>
-        <locationY>782</locationY>
+        <locationX>1106</locationX>
+        <locationY>890</locationY>
         <assignRecordIdToReference>visitId</assignRecordIdToReference>
         <connector>
             <targetReference>Redirect</targetReference>
@@ -337,6 +424,12 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>ParentVisitId__NotFound</field>
+            <value>
+                <elementReference>Case_ParentVisit.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>PlaceId</field>
             <value>
                 <elementReference>Case_Location.recordId</elementReference>
@@ -365,7 +458,7 @@
     <recordCreates>
         <name>Visit_Record_Creation</name>
         <label>Visit Record Creation</label>
-        <locationX>842</locationX>
+        <locationX>1634</locationX>
         <locationY>782</locationY>
         <assignRecordIdToReference>visitId</assignRecordIdToReference>
         <connector>
@@ -402,6 +495,12 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>ParentVisitId__NotFound</field>
+            <value>
+                <elementReference>ParentVisitId.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>PlaceId</field>
             <value>
                 <elementReference>Location.recordId</elementReference>
@@ -430,7 +529,7 @@
     <recordLookups>
         <name>Get_Account_Records</name>
         <label>Get Account Records</label>
-        <locationX>446</locationX>
+        <locationX>908</locationX>
         <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -451,7 +550,7 @@
     <recordLookups>
         <name>Get_Assosciated_Location</name>
         <label>Get Assosciated Location</label>
-        <locationX>446</locationX>
+        <locationX>908</locationX>
         <locationY>458</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -486,7 +585,7 @@
     <recordLookups>
         <name>Get_BLA_Record</name>
         <label>Get BLA Record</label>
-        <locationX>446</locationX>
+        <locationX>908</locationX>
         <locationY>242</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -507,7 +606,7 @@
     <recordLookups>
         <name>Get_Case_Record</name>
         <label>Get Case Record</label>
-        <locationX>446</locationX>
+        <locationX>908</locationX>
         <locationY>350</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -529,13 +628,13 @@
     <screens>
         <name>Acc_New_Inspection_Inspection</name>
         <label>New Inspection: Inspection</label>
-        <locationX>50</locationX>
+        <locationX>182</locationX>
         <locationY>674</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <connector>
-            <targetReference>Acc_Visit_Record_Creation</targetReference>
+            <targetReference>IF_FollowUp_Inspection</targetReference>
         </connector>
         <fields>
             <name>Acc_New_Inspection_Inspection_Section1</name>
@@ -680,6 +779,38 @@
                 <name>Acc_New_Inspection_Inspection_Section1_Column2</name>
                 <fieldType>Region</fieldType>
                 <fields>
+                    <name>ParentVisit</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>ParentVisitId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>ParentVisitId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                </fields>
+                <fields>
                     <name>Acc_ContextId</name>
                     <extensionName>flowruntime:lookup</extensionName>
                     <fieldType>ComponentInstance</fieldType>
@@ -748,13 +879,13 @@
     <screens>
         <name>BLA_New_Inspection_Inspection</name>
         <label>New Inspection: Inspection</label>
-        <locationX>314</locationX>
+        <locationX>710</locationX>
         <locationY>674</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <connector>
-            <targetReference>BLA_Visit_Record_Creation</targetReference>
+            <targetReference>FollowUp_InspectionBLA</targetReference>
         </connector>
         <fields>
             <name>BLA_New_Inspection_Inspection_Section1</name>
@@ -899,6 +1030,38 @@
                 <name>BLA_New_Inspection_Inspection_Section1_Column2</name>
                 <fieldType>Region</fieldType>
                 <fields>
+                    <name>BLA_ParentVisit</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>ParentVisitId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>ParentVisitId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                </fields>
+                <fields>
                     <name>BLA_ContextId</name>
                     <extensionName>flowruntime:lookup</extensionName>
                     <fieldType>ComponentInstance</fieldType>
@@ -971,15 +1134,31 @@
         <showHeader>true</showHeader>
     </screens>
     <screens>
+        <name>BLAFinish</name>
+        <label>BLA Finish</label>
+        <locationX>842</locationX>
+        <locationY>890</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>Copy_1_of_Confirmation</name>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;color: rgb(228, 13, 13); background-color: rgb(255, 255, 255);&quot;&gt;Follow-up Inspection can only be created from related Inspection record&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
         <name>Case_New_Inspection_Inspection</name>
         <label>New Inspection: Inspection</label>
-        <locationX>578</locationX>
+        <locationX>1238</locationX>
         <locationY>674</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <connector>
-            <targetReference>Case_Visit_Record_Creation</targetReference>
+            <targetReference>FollowUp_Inspection_Case</targetReference>
         </connector>
         <fields>
             <name>Case_New_Inspection_Inspection_Section1</name>
@@ -1124,6 +1303,38 @@
                 <name>Case_New_Inspection_Inspection_Section1_Column2</name>
                 <fieldType>Region</fieldType>
                 <fields>
+                    <name>Case_ParentVisit</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>ParentVisitId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>ParentVisitId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                </fields>
+                <fields>
                     <name>Case_ContextId</name>
                     <extensionName>flowruntime:lookup</extensionName>
                     <fieldType>ComponentInstance</fieldType>
@@ -1196,9 +1407,41 @@
         <showHeader>true</showHeader>
     </screens>
     <screens>
+        <name>CaseFinish</name>
+        <label>Case Finish</label>
+        <locationX>1370</locationX>
+        <locationY>890</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>Copy_1_of_Copy_1_of_Confirmation</name>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;color: rgb(228, 13, 13); background-color: rgb(255, 255, 255);&quot;&gt;Follow-up Inspection can only be created from related Inspection record&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>Finish</name>
+        <label>Finish</label>
+        <locationX>314</locationX>
+        <locationY>890</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>Confirmation</name>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;color: rgb(228, 13, 13); background-color: rgb(255, 255, 255);&quot;&gt;Follow-up Inspection can only be created from related Inspection record&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
         <name>Inspection_Creation</name>
         <label>New Inspection: Inspection</label>
-        <locationX>842</locationX>
+        <locationX>1634</locationX>
         <locationY>674</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
@@ -1337,6 +1580,38 @@
                 <name>Inspection_Creation_Section1_Column2</name>
                 <fieldType>Region</fieldType>
                 <fields>
+                    <name>ParentVisitId</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>ParentVisitId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>ParentVisitId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                </fields>
+                <fields>
                     <name>ContextId</name>
                     <extensionName>flowruntime:lookup</extensionName>
                     <fieldType>ComponentInstance</fieldType>
@@ -1403,7 +1678,7 @@
         <showHeader>true</showHeader>
     </screens>
     <start>
-        <locationX>320</locationX>
+        <locationX>782</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Account_Records</targetReference>
