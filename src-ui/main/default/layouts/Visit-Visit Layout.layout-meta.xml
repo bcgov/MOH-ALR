@@ -28,11 +28,19 @@
                 <field>VisitTypeId</field>
             </layoutItems>
             <layoutItems>
+                <behavior>Edit</behavior>
+                <field>FollowUpPurpose__c</field>
+            </layoutItems>
+            <layoutItems>
                 <behavior>Required</behavior>
                 <field>InspectionMethod__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>ParentVisitId</field>
+            </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>ContextId</field>
@@ -63,11 +71,15 @@
                 <field>ProjectedStartTime__c</field>
             </layoutItems>
             <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>ActualVisitStartTime</field>
+            </layoutItems>
+            <layoutItems>
                 <behavior>Required</behavior>
                 <field>PlannedVisitStartTime</field>
             </layoutItems>
         </layoutColumns>
-        
+        <layoutColumns/>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
     <layoutSections>
@@ -231,6 +243,13 @@
         <relatedList>InteractionSummary</relatedList>
         <sortField>CreatedDate</sortField>
         <sortOrder>Desc</sortOrder>
+    </relatedLists>
+    <relatedLists>
+        <fields>Name</fields>
+        <fields>ActionPlanState</fields>
+        <fields>Owner</fields>
+        <fields>StartDate</fields>
+        <relatedList>ActionPlan</relatedList>
     </relatedLists>
     <relatedLists>
         <relatedList>RelatedFileList</relatedList>
