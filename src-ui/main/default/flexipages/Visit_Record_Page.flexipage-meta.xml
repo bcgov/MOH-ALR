@@ -131,10 +131,17 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>required</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.FollowUpPurpose__c</fieldItem>
                 <identifier>RecordFollowUpPurpose_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.VisitType.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Follow-up Inspection</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
