@@ -169,7 +169,7 @@
                 <leftValueReference>BLA_InspectionTypeId.recordName</leftValueReference>
                 <operator>NotEqualTo</operator>
                 <rightValue>
-                    <stringValue>Follow-Up Inspectipon</stringValue>
+                    <stringValue>Follow-Up Inspection</stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -282,12 +282,6 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>ParentVisit</field>
-            <value>
-                <elementReference>ParentVisit.recordId</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
             <field>PlaceId</field>
             <value>
                 <elementReference>Acc_Location.recordId</elementReference>
@@ -353,12 +347,6 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>ParentVisit</field>
-            <value>
-                <elementReference>BLA_ParentVisit.recordId</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
             <field>PlaceId</field>
             <value>
                 <elementReference>BLA_Location.recordId</elementReference>
@@ -421,12 +409,6 @@
             <field>InstructionDescription</field>
             <value>
                 <elementReference>Case_Special_Instruction</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>ParentVisit</field>
-            <value>
-                <elementReference>Case_ParentVisit.recordId</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -497,7 +479,7 @@
         <inputAssignments>
             <field>ParentVisit</field>
             <value>
-                <elementReference>ParentVisit.recordId</elementReference>
+                <elementReference>ParentVisit_Insp.recordId</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -779,38 +761,6 @@
                 <name>Acc_New_Inspection_Inspection_Section1_Column2</name>
                 <fieldType>Region</fieldType>
                 <fields>
-                    <name>Acc_ParentVisit</name>
-                    <extensionName>flowruntime:lookup</extensionName>
-                    <fieldType>ComponentInstance</fieldType>
-                    <inputParameters>
-                        <name>fieldApiName</name>
-                        <value>
-                            <stringValue>ParentVisit</stringValue>
-                        </value>
-                    </inputParameters>
-                    <inputParameters>
-                        <name>objectApiName</name>
-                        <value>
-                            <stringValue>Visit</stringValue>
-                        </value>
-                    </inputParameters>
-                    <inputParameters>
-                        <name>label</name>
-                        <value>
-                            <stringValue>ParentVisit</stringValue>
-                        </value>
-                    </inputParameters>
-                    <inputParameters>
-                        <name>required</name>
-                        <value>
-                            <booleanValue>true</booleanValue>
-                        </value>
-                    </inputParameters>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                    <storeOutputAutomatically>true</storeOutputAutomatically>
-                </fields>
-                <fields>
                     <name>Acc_ContextId</name>
                     <extensionName>flowruntime:lookup</extensionName>
                     <fieldType>ComponentInstance</fieldType>
@@ -1029,38 +979,6 @@
             <fields>
                 <name>BLA_New_Inspection_Inspection_Section1_Column2</name>
                 <fieldType>Region</fieldType>
-                <fields>
-                    <name>BLA_ParentVisit</name>
-                    <extensionName>flowruntime:lookup</extensionName>
-                    <fieldType>ComponentInstance</fieldType>
-                    <inputParameters>
-                        <name>fieldApiName</name>
-                        <value>
-                            <stringValue>ParentVisit</stringValue>
-                        </value>
-                    </inputParameters>
-                    <inputParameters>
-                        <name>label</name>
-                        <value>
-                            <stringValue>ParentVisit</stringValue>
-                        </value>
-                    </inputParameters>
-                    <inputParameters>
-                        <name>objectApiName</name>
-                        <value>
-                            <stringValue>Visit</stringValue>
-                        </value>
-                    </inputParameters>
-                    <inputParameters>
-                        <name>required</name>
-                        <value>
-                            <booleanValue>true</booleanValue>
-                        </value>
-                    </inputParameters>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                    <storeOutputAutomatically>true</storeOutputAutomatically>
-                </fields>
                 <fields>
                     <name>BLA_ContextId</name>
                     <extensionName>flowruntime:lookup</extensionName>
@@ -1302,38 +1220,6 @@
             <fields>
                 <name>Case_New_Inspection_Inspection_Section1_Column2</name>
                 <fieldType>Region</fieldType>
-                <fields>
-                    <name>Case_ParentVisit</name>
-                    <extensionName>flowruntime:lookup</extensionName>
-                    <fieldType>ComponentInstance</fieldType>
-                    <inputParameters>
-                        <name>fieldApiName</name>
-                        <value>
-                            <stringValue>ParentVisit</stringValue>
-                        </value>
-                    </inputParameters>
-                    <inputParameters>
-                        <name>label</name>
-                        <value>
-                            <stringValue>ParentVisit</stringValue>
-                        </value>
-                    </inputParameters>
-                    <inputParameters>
-                        <name>objectApiName</name>
-                        <value>
-                            <stringValue>Visit</stringValue>
-                        </value>
-                    </inputParameters>
-                    <inputParameters>
-                        <name>required</name>
-                        <value>
-                            <booleanValue>true</booleanValue>
-                        </value>
-                    </inputParameters>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                    <storeOutputAutomatically>true</storeOutputAutomatically>
-                </fields>
                 <fields>
                     <name>Case_ContextId</name>
                     <extensionName>flowruntime:lookup</extensionName>
@@ -1580,19 +1466,19 @@
                 <name>Inspection_Creation_Section1_Column2</name>
                 <fieldType>Region</fieldType>
                 <fields>
-                    <name>ParentVisit</name>
+                    <name>ParentVisit_Insp</name>
                     <extensionName>flowruntime:lookup</extensionName>
                     <fieldType>ComponentInstance</fieldType>
                     <inputParameters>
                         <name>fieldApiName</name>
                         <value>
-                            <stringValue>ParentVisit</stringValue>
+                            <stringValue>ParentVisitId</stringValue>
                         </value>
                     </inputParameters>
                     <inputParameters>
                         <name>label</name>
                         <value>
-                            <stringValue>ParentVisit</stringValue>
+                            <stringValue>Parent Visit</stringValue>
                         </value>
                     </inputParameters>
                     <inputParameters>
@@ -1605,6 +1491,12 @@
                         <name>required</name>
                         <value>
                             <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>recordId</elementReference>
                         </value>
                     </inputParameters>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
