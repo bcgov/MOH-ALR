@@ -21,10 +21,12 @@ private class ScheduleSendEmailTest {
         Contact con = new Contact(
             FirstName = 'Test',
             LastName = 'Contact',
-            Email = 'test.contact@example.com'
+            Email = 'test.contact@example.com',
+            AccountId=accRec.Id
         );
         insert con;
- 
+        
+         
         AccountContactRelation acr = new AccountContactRelation(
             AccountId = acc.Id,
             ContactId = con.Id,
@@ -39,5 +41,5 @@ private class ScheduleSendEmailTest {
         List<EmailTemplate> emailTem = [SELECT Id FROM EmailTemplate];
           System.assertEquals(True, emailTem.size()>0, 'No Email is sent');
     }
- 
-   }
+      
+}
