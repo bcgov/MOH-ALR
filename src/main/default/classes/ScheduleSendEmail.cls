@@ -8,9 +8,10 @@
 public with sharing class ScheduleSendEmail implements Schedulable {
     
     List<AccountContactRelation> contacts =new List<AccountContactRelation>();
-    List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
     
      public void execute(SchedulableContext sc) {
+          List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
+   
         try {
             EmailTemplate emailTemplate = getEmailTemplate('Upcoming_Renewal_Email_Template');
             
