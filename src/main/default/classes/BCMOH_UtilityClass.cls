@@ -163,19 +163,11 @@ public with sharing class BCMOH_UtilityClass {
         OrgWideEmailAddress orgWideAddr = new OrgWideEmailAddress();
         String fromAddress = '';
         try {
-            if(Test.isRunningTest()) {
-                orgWideAddr = [SELECT Id FROM OrgWideEmailAddress WITH SECURITY_ENFORCED LIMIT 1];
+                orgWideAddr = [SELECT Id, DisplayName
+                FROM OrgWideEmailAddress 
+                WHERE DisplayName = 'ALR Support Email' WITH SECURITY_ENFORCED LIMIT 1];
             }
-            else {
-                //stores email addresses in custom setting
-                Notification__c notifDefault = Notification__c.getOrgDefaults();
-                //fetch org type
-                Boolean isSandbox = String.isEmpty(DomainParser.parse(DomainCreator.getOrgMyDomainHostname()).getSandboxName()) ? false : true;
-                //based on org type, fetch respective email as fromAddress
-                fromAddress = isSandbox ? notifDefault.TestSupportEmail__c : notifDefault.ProductionSupportEmail__c;
-                orgWideAddr = [SELECT Id FROM OrgWideEmailAddress WHERE Address =: fromAddress WITH SECURITY_ENFORCED LIMIT 1];
-            }
-        }
+        
         catch(Exception ex) {
             LogService.logAndPublish(className, 'getOrgWideEmailAddress', '', ex);
         }
