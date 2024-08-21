@@ -4,24 +4,29 @@
     <assignmentRulesUsed>false</assignmentRulesUsed>
     <deletedOnSuccess>false</deletedOnSuccess>
     <errorIgnored>false</errorIgnored>
+    <expectedInputJson>{
+  &quot;AccountName&quot; : &quot;Send Renewal Account&quot;,
+  &quot;conditions&quot; : &quot;Emergency Preparedness&quot;,
+  &quot;InspectionMethod&quot; : &quot;Unannounced on Site Inspection&quot;,
+  &quot;ConditionAndDescription&quot; : &quot;test&quot;,
+  &quot;MaxALUnitCapacity&quot; : 1296,
+  &quot;InsType&quot; : &quot;CURR Follow-up Inspection&quot;,
+  &quot;LicenseType&quot; : &quot;Supportive Recovery&quot;,
+  &quot;Name&quot; : &quot;00001845&quot;,
+  &quot;Date&quot; : &quot;2024-08-21&quot;,
+  &quot;TotalALUnits&quot; : 432,
+  &quot;PrimaryContact&quot; : &quot;john&quot;,
+  &quot;ParentAccount&quot; : &quot;Test_Email Registrant&quot;,
+  &quot;ActualStartDate&quot; : &quot;08/08/2024&quot;,
+  &quot;ConditionAndDescription1&quot; : &quot; &quot;,
+  &quot;CertificateId&quot; : &quot;SU2024-00002&quot;,
+  &quot;Address&quot; : &quot;kjqwdh 765 Turkey Point ON N0E 1W0 Canada&quot;,
+  &quot;Condition&quot; : &quot;No conditions indicated&quot;
+}</expectedInputJson>
     <fieldLevelSecurityEnabled>false</fieldLevelSecurityEnabled>
     <inputType>JSON</inputType>
     <name>TransformInspectionReport</name>
     <nullInputsIncludedInOutput>false</nullInputsIncludedInOutput>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem20</globalKey>
-        <inputFieldName>CertificateId</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>TransformInspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>CertificateId</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
@@ -32,6 +37,21 @@
         <name>TransformInspectionReport</name>
         <outputCreationSequence>1.0</outputCreationSequence>
         <outputFieldName>Insp:Description</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInspectionReportCustom2459</globalKey>
+        <inputFieldName>ConditionAndDescription</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>List&lt;String&gt;</outputFieldFormat>
+        <outputFieldName>ConditionAndDescription</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -56,20 +76,6 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem19</globalKey>
-        <inputFieldName>Insp:RegCodName</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>TransformInspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Insp:RegCodName</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
         <filterOperator>=</filterOperator>
         <filterValue>Loc:Id</filterValue>
         <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem17</globalKey>
@@ -87,13 +93,13 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem28</globalKey>
-        <inputFieldName>Condition</inputFieldName>
+        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem19</globalKey>
+        <inputFieldName>Insp:RegCodName</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>TransformInspectionReport</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Condition</outputFieldName>
+        <outputFieldName>Insp:RegCodName</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -115,13 +121,13 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem26</globalKey>
-        <inputFieldName>AccountName</inputFieldName>
+        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem28</globalKey>
+        <inputFieldName>Condition</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>TransformInspectionReport</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>AccountName</outputFieldName>
+        <outputFieldName>Condition</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -143,13 +149,13 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem24</globalKey>
-        <inputFieldName>InsType</inputFieldName>
+        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem26</globalKey>
+        <inputFieldName>AccountName</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>TransformInspectionReport</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>InsType</outputFieldName>
+        <outputFieldName>AccountName</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -165,272 +171,6 @@
         <outputCreationSequence>1.0</outputCreationSequence>
         <outputFieldFormat>Date(MM/dd/yyyy)</outputFieldFormat>
         <outputFieldName>ActualStartDate</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>TransformInspectionReportCustom7039</globalKey>
-        <inputFieldName>TotalALUnits</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>TransformInspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>TotalALUnits</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem22</globalKey>
-        <inputFieldName>Insp:DueDate</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>TransformInspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Insp:DueDate</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem23</globalKey>
-        <inputFieldName>Name</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>TransformInspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Name</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem36</globalKey>
-        <inputFieldName>Insp:Category</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>TransformInspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Insp:Category</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem34</globalKey>
-        <inputFieldName>Address</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>TransformInspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Address</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem35</globalKey>
-        <inputFieldName>Insp:RegCodeVioId</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>TransformInspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Insp:RegCodeVioId</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem32</globalKey>
-        <inputFieldName>Insp:DateResolved</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>TransformInspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Insp:DateResolved</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem33</globalKey>
-        <inputFieldName>Insp:CorrectiveActionDescription</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>TransformInspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Insp:CorrectiveActionDescription</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem30</globalKey>
-        <inputFieldName>ParentAccount</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>TransformInspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>ParentAccount</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem31</globalKey>
-        <inputFieldName>Phone</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>TransformInspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Phone</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>TransformInspectionReportCustom188</globalKey>
-        <inputFieldName>Date</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>TransformInspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Date</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>TransformInspectionReportCustom9160</globalKey>
-        <inputFieldName>PrimaryContact</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>TransformInspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>PrimaryContact</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>AssLoc:LocationId</filterValue>
-        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem2</globalKey>
-        <inputFieldName>Id</inputFieldName>
-        <inputObjectName>Location</inputObjectName>
-        <inputObjectQuerySequence>5.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>TransformInspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Loc</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>Id</filterValue>
-        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem3</globalKey>
-        <inputFieldName>Id</inputFieldName>
-        <inputObjectName>Visit</inputObjectName>
-        <inputObjectQuerySequence>1.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>TransformInspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Visit</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>LIMIT</filterOperator>
-        <filterValue>1</filterValue>
-        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem0</globalKey>
-        <inputObjectName>Address</inputObjectName>
-        <inputObjectQuerySequence>6.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>TransformInspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Address</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>TransformInspectionReportCustom468</globalKey>
-        <inputFieldName>MaxALUnitCapacity</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>TransformInspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>MaxALUnitCapacity</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>Id</filterValue>
-        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem10</globalKey>
-        <inputFieldName>InspectionId</inputFieldName>
-        <inputObjectName>RegulatoryCodeViolation</inputObjectName>
-        <inputObjectQuerySequence>8.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>TransformInspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>RegCodeVio</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>RegCodeVio:RegulatoryCodeId</filterValue>
-        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem11</globalKey>
-        <inputFieldName>Id</inputFieldName>
-        <inputObjectName>RegulatoryCode</inputObjectName>
-        <inputObjectQuerySequence>9.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>TransformInspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>RegCod</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -455,15 +195,75 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <filterOperator>LIMIT</filterOperator>
-        <filterValue>1</filterValue>
-        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem9</globalKey>
-        <inputObjectName>BusinessLicense</inputObjectName>
-        <inputObjectQuerySequence>7.0</inputObjectQuerySequence>
+        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem24</globalKey>
+        <inputFieldName>InsType</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>InsType</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>RegCodeVio:RegulatoryCodeId</filterValue>
+        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem11</globalKey>
+        <inputFieldName>Id</inputFieldName>
+        <inputObjectName>RegulatoryCode</inputObjectName>
+        <inputObjectQuerySequence>9.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>TransformInspectionReport</name>
         <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Certificate</outputFieldName>
+        <outputFieldName>RegCod</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem20</globalKey>
+        <inputFieldName>CertificateId</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>CertificateId</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>Id</filterValue>
+        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem10</globalKey>
+        <inputFieldName>InspectionId</inputFieldName>
+        <inputObjectName>RegulatoryCodeViolation</inputObjectName>
+        <inputObjectQuerySequence>8.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>RegCodeVio</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem22</globalKey>
+        <inputFieldName>Insp:DueDate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Insp:DueDate</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -488,16 +288,43 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>Account:Id</filterValue>
-        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem7</globalKey>
-        <inputFieldName>Account__c</inputFieldName>
+        <globalKey>TransformInspectionReportCustom7039</globalKey>
+        <inputFieldName>TotalALUnits</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TotalALUnits</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>LIMIT</filterOperator>
+        <filterValue>1</filterValue>
+        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem9</globalKey>
         <inputObjectName>BusinessLicense</inputObjectName>
         <inputObjectQuerySequence>7.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>TransformInspectionReport</name>
         <outputCreationSequence>0.0</outputCreationSequence>
         <outputFieldName>Certificate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem36</globalKey>
+        <inputFieldName>Insp:Category</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Insp:Category</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -522,15 +349,58 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <filterOperator>LIMIT</filterOperator>
-        <filterValue>1</filterValue>
-        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem16</globalKey>
-        <inputObjectName>Location</inputObjectName>
-        <inputObjectQuerySequence>5.0</inputObjectQuerySequence>
+        <globalKey>TransformInspectionReportCustom1768</globalKey>
+        <inputFieldName>ConditionAndDescription1</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>ConditionAndDescription1</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem23</globalKey>
+        <inputFieldName>Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Name</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>Account:Id</filterValue>
+        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem7</globalKey>
+        <inputFieldName>Account__c</inputFieldName>
+        <inputObjectName>BusinessLicense</inputObjectName>
+        <inputObjectQuerySequence>7.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>TransformInspectionReport</name>
         <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Loc</outputFieldName>
+        <outputFieldName>Certificate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem35</globalKey>
+        <inputFieldName>Insp:RegCodeVioId</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Insp:RegCodeVioId</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -555,15 +425,43 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem34</globalKey>
+        <inputFieldName>Address</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Address</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <filterOperator>LIMIT</filterOperator>
         <filterValue>1</filterValue>
-        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem15</globalKey>
-        <inputObjectName>AssociatedLocation</inputObjectName>
-        <inputObjectQuerySequence>4.0</inputObjectQuerySequence>
+        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem16</globalKey>
+        <inputObjectName>Location</inputObjectName>
+        <inputObjectQuerySequence>5.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>TransformInspectionReport</name>
         <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>AssLoc</outputFieldName>
+        <outputFieldName>Loc</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem33</globalKey>
+        <inputFieldName>Insp:CorrectiveActionDescription</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Insp:CorrectiveActionDescription</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -588,6 +486,140 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem32</globalKey>
+        <inputFieldName>Insp:DateResolved</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Insp:DateResolved</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>LIMIT</filterOperator>
+        <filterValue>1</filterValue>
+        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem15</globalKey>
+        <inputObjectName>AssociatedLocation</inputObjectName>
+        <inputObjectQuerySequence>4.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>AssLoc</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem31</globalKey>
+        <inputFieldName>Phone</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Phone</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem30</globalKey>
+        <inputFieldName>ParentAccount</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>ParentAccount</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInspectionReportCustom9160</globalKey>
+        <inputFieldName>PrimaryContact</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>PrimaryContact</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInspectionReportCustom188</globalKey>
+        <inputFieldName>Date</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Date</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>Id</filterValue>
+        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem3</globalKey>
+        <inputFieldName>Id</inputFieldName>
+        <inputObjectName>Visit</inputObjectName>
+        <inputObjectQuerySequence>1.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Visit</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>AssLoc:LocationId</filterValue>
+        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem2</globalKey>
+        <inputFieldName>Id</inputFieldName>
+        <inputObjectName>Location</inputObjectName>
+        <inputObjectQuerySequence>5.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Loc</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformInspectionReportCustom468</globalKey>
+        <inputFieldName>MaxALUnitCapacity</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>MaxALUnitCapacity</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <filterOperator>=</filterOperator>
         <filterValue>InspAssInd:AssessmentIndDefinitionId</filterValue>
         <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem13</globalKey>
@@ -602,10 +634,60 @@
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>LIMIT</filterOperator>
+        <filterValue>1</filterValue>
+        <globalKey>TransformInspectionReportCustom0jIAq0000002DfVMAUItem0</globalKey>
+        <inputObjectName>Address</inputObjectName>
+        <inputObjectQuerySequence>6.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformInspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Address</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
     <outputType>JSON</outputType>
-    <previewJsonData>{
-  &quot;Id&quot; : &quot;0Z5Aq00000019qrKAA&quot;
-}</previewJsonData>
+    <previewJsonData>[ {
+  &quot;AccountName&quot; : &quot;Send Renewal Account&quot;,
+  &quot;conditions&quot; : &quot;Emergency Preparedness&quot;,
+  &quot;InspectionMethod&quot; : &quot;Unannounced on Site Inspection&quot;,
+  &quot;ConditionAndDescription&quot; : &quot;test, hoih&quot;,
+  &quot;MaxALUnitCapacity&quot; : 1296,
+  &quot;InsType&quot; : &quot;CURR Follow-up Inspection&quot;,
+  &quot;LicenseType&quot; : &quot;Supportive Recovery&quot;,
+  &quot;Name&quot; : &quot;00001845&quot;,
+  &quot;Date&quot; : &quot;2024-08-21&quot;,
+  &quot;TotalALUnits&quot; : 432,
+  &quot;PrimaryContact&quot; : &quot;john&quot;,
+  &quot;ParentAccount&quot; : &quot;Test_Email Registrant&quot;,
+  &quot;ActualStartDate&quot; : &quot;08/08/2024&quot;,
+  &quot;ConditionAndDescription1&quot; : &quot; &quot;,
+  &quot;CertificateId&quot; : &quot;SU2024-00002&quot;,
+  &quot;Address&quot; : &quot;kjqwdh 765 Turkey Point ON N0E 1W0 Canada&quot;,
+  &quot;Condition&quot; : &quot;No conditions indicated&quot;
+}, {
+  &quot;AccountName&quot; : &quot;Send Renewal Account&quot;,
+  &quot;conditions&quot; : &quot;Assisted Living Services&quot;,
+  &quot;InspectionMethod&quot; : &quot;Unannounced on Site Inspection&quot;,
+  &quot;ConditionAndDescription&quot; : &quot;test, hoih&quot;,
+  &quot;MaxALUnitCapacity&quot; : 1296,
+  &quot;InsType&quot; : &quot;CURR Follow-up Inspection&quot;,
+  &quot;LicenseType&quot; : &quot;Supportive Recovery&quot;,
+  &quot;Name&quot; : &quot;00001845&quot;,
+  &quot;Date&quot; : &quot;2024-08-21&quot;,
+  &quot;TotalALUnits&quot; : 432,
+  &quot;PrimaryContact&quot; : &quot;john&quot;,
+  &quot;ParentAccount&quot; : &quot;Test_Email Registrant&quot;,
+  &quot;ActualStartDate&quot; : &quot;08/08/2024&quot;,
+  &quot;ConditionAndDescription1&quot; : &quot; &quot;,
+  &quot;CertificateId&quot; : &quot;SU2024-00002&quot;,
+  &quot;Address&quot; : &quot;kjqwdh 765 Turkey Point ON N0E 1W0 Canada&quot;,
+  &quot;Condition&quot; : &quot;No conditions indicated&quot;
+} ]</previewJsonData>
     <processSuperBulk>false</processSuperBulk>
     <responseCacheTtlMinutes>0.0</responseCacheTtlMinutes>
     <rollbackOnError>false</rollbackOnError>
