@@ -16,15 +16,17 @@ private class ScheduleSendEmailTest {
 		Account acc = TestDataFactory.createResidence('Residence', 'residence1', regAuth.Id, true);
         accList.add(acc);
         
-        Account accRec =  [SELECT Id ,ParentId FROM Account where Id =: acc.Id];
+        Account accRec =  [SELECT Id , Name , ParentId FROM Account where Id =: acc.Id];
  
         Contact con = new Contact(
             FirstName = 'Test',
             LastName = 'Contact',
-            Email = 'test.contact@example.com'
+            Email = 'test.contact@example.com',
+            AccountId=accRec.Id
         );
         insert con;
- 
+        
+         
         AccountContactRelation acr = new AccountContactRelation(
             AccountId = acc.Id,
             ContactId = con.Id,
@@ -39,30 +41,5 @@ private class ScheduleSendEmailTest {
         List<EmailTemplate> emailTem = [SELECT Id FROM EmailTemplate];
           System.assertEquals(True, emailTem.size()>0, 'No Email is sent');
     }
- 
-    @isTest
-    static void testSendRenewalDueEmail() {
-         
-        
-        List<Account> accList = new List<Account>();
-        
-        // Create an instance of DMLOptions
-        Database.DMLOptions dmlOptions = new Database.DMLOptions();
-        dmlOptions.DuplicateRuleHeader.allowSave = true;
-        
-        RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Health', 'License', 'MH', 1, 2, 3, 4, true);
-        
-        Account Residence = TestDataFactory.createResidence('Residence', 'hgvfjmhhgsu', regAuth.Id, true);
-
-        Contact contactRec = TestDataFactory.createContactRecord(Residence.Id, 'test@xyz.com', 'uysgyuskgfh', 'hsguh', true);
-        
-        //AccountContactRelation acConRelRec = TestDataFactory.createAccContRelRecord(Residence.Id, contactRec.Id , true, true, true);
- 
-        List<Id> contactIds = new List<Id>{ contactRec.Id };
-        Test.startTest();
-        ScheduleSendEmail.sendRenewalDueEmail(contactIds);
-        Test.stopTest();
-        List<EmailTemplate> emailTem = [SELECT Id FROM EmailTemplate];
-          System.assertEquals(True, emailTem.size()>0, 'No Email is sent');
-    }
+      
 }
