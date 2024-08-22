@@ -9,7 +9,7 @@ public with sharing class ScheduledEmailTrigger implements Schedulable {
     public Static Id emailTemplateId =NULL;
     public static Set<Id> accountIds = new Set<Id>();
     Id blaRecord = NULL;
-    List<AccountContactRelation> contacts =new List<AccountContactRelation>();
+    Map<Id, AccountContactRelation> contacts = new Map<Id, AccountContactRelation>();
     Public Static Map<Id, List<Id>> blaContactMap = new Map<Id, List<Id>>();
     Public Static List<Id> contactIdList = new List<Id>();
     Public Static Map<Id, BusinessLicenseApplication> blaMap = new Map<Id, BusinessLicenseApplication>();
@@ -68,7 +68,7 @@ public with sharing class ScheduledEmailTrigger implements Schedulable {
         Boolean isValidAcc;
         Id blaRecord = NULL;
         Map<Id, String> templateIdEntityMap = new Map<Id, String>();
-        List<AccountContactRelation> contacts =new List<AccountContactRelation>();
+        Map<Id, AccountContactRelation> contacts = new Map<Id, AccountContactRelation>();
         Map<String, List<String>> accDetails = new Map<String, List<String>>();
         try {
             //fetch acc status and rec type from metadata
@@ -128,7 +128,7 @@ public with sharing class ScheduledEmailTrigger implements Schedulable {
                                                    
                                                    blaContactMap.put(blaRecord,new List<Id>()); 
                                                }
-                                               for(AccountContactRelation cont : contacts)
+                                               for(AccountContactRelation cont : contacts.values())
                                                {
                                                    contactIdList.add(cont.ContactId);
                                                    if(blaContactMap.containsKey(blaRecord)) {
@@ -165,9 +165,13 @@ public with sharing class ScheduledEmailTrigger implements Schedulable {
         }
     }
     
-    public Static List<AccountContactRelation> getContacts(Id accountId, Id parentId){
-        return [Select Id,ContactId,AccountId,IsActive,Contact.Email from AccountContactRelation where (AccountId = :accountId OR AccountId =: parentId) AND IsActive =true AND Contact.Email != NULL];
-        
+    public Static Map<Id, AccountContactRelation> getContacts(Id accountId, Id parentId){
+        Map<Id, AccountContactRelation> acrMap = new Map<Id, AccountContactRelation>();
+        List<AccountContactRelation> acrListcontacts = [Select Id,ContactId,AccountId,IsActive,Contact.Email from AccountContactRelation where (AccountId = :accountId OR AccountId =: parentId) AND IsActive =true AND Contact.Email != NULL];
+        for(AccountContactRelation acr : acrListcontacts){
+            acrMap.put(acr.ContactId, acr);
+        }
+        return acrMap;
     }
     
     //send email method
