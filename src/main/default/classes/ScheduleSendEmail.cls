@@ -7,7 +7,7 @@
 
 public with sharing class ScheduleSendEmail implements Schedulable {
     
-    List<AccountContactRelation> contacts =new List<AccountContactRelation>();
+    Map<Id, AccountContactRelation> contacts = new Map<Id, AccountContactRelation>();
     
      public void execute(SchedulableContext sc) {
           List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
@@ -29,7 +29,7 @@ public with sharing class ScheduleSendEmail implements Schedulable {
                                        Integer currentyear = Date.today().year();
                                        Integer previousyear = Date.today().year() - 1;
                                        
-                                       for (AccountContactRelation acrList : contacts) {
+                                       for (AccountContactRelation acrList : contacts.values()) {
                                            if (acrList.contact.Email != null) {
                                                String key = acrList.AccountId + '_' + acrList.contact.Email.toLowerCase();
                                                Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
@@ -58,8 +58,13 @@ public with sharing class ScheduleSendEmail implements Schedulable {
         }
     }
     
-    public Static List<AccountContactRelation> getContacts(Id accountId, Id parentId){
-        return [Select Id,ContactId,AccountId,IsActive,Contact.Email from AccountContactRelation where (AccountId = :accountId OR AccountId =: parentId) AND IsActive =true AND Contact.Email != NULL];
+    public Static Map<Id, AccountContactRelation> getContacts(Id accountId, Id parentId){
+        Map<Id, AccountContactRelation> acrMap = new Map<Id, AccountContactRelation>();
+        List<AccountContactRelation> acrListcontacts = [Select Id,ContactId,AccountId,IsActive,Contact.Email from AccountContactRelation where (AccountId = :accountId OR AccountId =: parentId) AND IsActive =true AND Contact.Email != NULL];
+        for(AccountContactRelation acr : acrListcontacts){
+            acrMap.put(acr.ContactId, acr);
+        }
+        return acrMap;
     }
     
     
