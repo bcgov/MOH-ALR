@@ -109,6 +109,23 @@ Step 2 :- First Import all 3 certificate template Json files and then replace wi
 
 3.Import CertificateTemplateMH.json->select replace -> CertificateBackground_MH.pptx and click on save template details and activate the template
 
+5. [ ] ALR-1838 - Below mentioned templates is available in repository - under folder "DocgenTemplates"
+
+- Navigate to App launcher->search for omnistudio ->search for Document template designer delete below template
+  > "InspectionReport"
+
+- First Import Json file and then replace with word Document
+
+1.Import InspectionReport.json ->select replace - > select Inspection Report.doc and click on save template details and activate the template
+
+6. [x] ALR-1840
+
+- Setup → Scheduled Jobs → Delete the “Trigger Email on Jan-15“ Job
+- Job Name: Trigger Email on Jan-15
+- Apex Class: ScheduleSendEmail
+- Cron Expression: True
+- Cron Expression: 0 0 0 15 1 ?
+
 DevOps checklist:
 
 1. Make Sure "CertificateTemplateSN ,certificateTemplateSU ,CertificateTemplateMH" activated
