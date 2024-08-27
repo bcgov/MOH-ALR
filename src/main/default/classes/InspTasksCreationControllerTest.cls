@@ -49,6 +49,7 @@ public class InspTasksCreationControllerTest {
         insp.AccountId =acc.id;
         insp.InspectionMethod__c ='Scheduled on Site Inspection';
         insp.PlannedVisitStartTime = System.today();
+        insp.ActualVisitStartTime = System.today();
         insp.PlaceId = loction[0].Id;
         insp.VisitTypeId =insType.Id;
         Insert insp;

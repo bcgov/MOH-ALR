@@ -11,30 +11,13 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:Asset:PerDiemQuantityCount SUM</formulaConverted>
-        <formulaExpression>SUM(Asset:PerDiemQuantityCount)</formulaExpression>
-        <formulaResultPath>TotalPerDiemUnits</formulaResultPath>
-        <formulaSequence>9.0</formulaSequence>
-        <globalKey>InspectionReportCustom5161</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>InspectionReportCustom7078</globalKey>
-        <inputFieldName>Certificate:RegistrationCertificate__c</inputFieldName>
+        <globalKey>InspectionReportCustom9958</globalKey>
+        <inputFieldName>ConditionAndDescription</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>InspectionReport</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>CertificateId</outputFieldName>
+        <outputFieldName>ConditionAndDescription</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -42,30 +25,16 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:Asset:PublicQuanCap SUM</formulaConverted>
-        <formulaExpression>SUM(Asset:PublicQuanCap)</formulaExpression>
-        <formulaResultPath>TotalPublicUnitsQuantCap</formulaResultPath>
-        <formulaSequence>14.0</formulaSequence>
-        <globalKey>InspectionReportCustom7499</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <filterOperator>=</filterOperator>
+        <filterValue>Visit:AccountId</filterValue>
+        <globalKey>InspectionReportCustom8143</globalKey>
+        <inputFieldName>Account_Name__c</inputFieldName>
+        <inputObjectName>Conditions__c</inputObjectName>
+        <inputObjectQuerySequence>8.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>InspectionReport</name>
         <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>InspectionReportCustom2707</globalKey>
-        <inputFieldName>Date</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Date</outputFieldName>
+        <outputFieldName>Conditions</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -73,11 +42,25 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:Account:ExemptionofAddressPublication__c FALSE == var:Address:ResidenceAddress var:NULL IF</formulaConverted>
-        <formulaExpression>IF(Account:ExemptionofAddressPublication__c==FALSE,Address:ResidenceAddress,NULL)</formulaExpression>
-        <formulaResultPath>ResAddress</formulaResultPath>
-        <formulaSequence>20.0</formulaSequence>
-        <globalKey>InspectionReportCustom9708</globalKey>
+        <globalKey>InspectionReportCustom3976</globalKey>
+        <inputFieldName>ConditionAndDescription1</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>ConditionAndDescription1</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| | var:Conditions:Description__c ISBLANK &quot;No/\/\/conditions/\/\/indicated&quot; | var:Conditions:Description__c TOSTRING IF</formulaConverted>
+        <formulaExpression>IF(ISBLANK(Conditions:Description__c), &quot;No conditions indicated&quot;,TOSTRING(Conditions:Description__c))</formulaExpression>
+        <formulaResultPath>ConditionAndDescription</formulaResultPath>
+        <formulaSequence>21.0</formulaSequence>
+        <globalKey>InspectionReportCustom7593</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>InspectionReport</name>
@@ -105,15 +88,35 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>InspectionReportCustom6039</globalKey>
-        <inputFieldName>Condition</inputFieldName>
+        <formulaConverted>| var:Account:ExemptionofAddressPublication__c FALSE == var:Address:ResidenceAddress var:NULL IF</formulaConverted>
+        <formulaExpression>IF(Account:ExemptionofAddressPublication__c==FALSE,Address:ResidenceAddress,NULL)</formulaExpression>
+        <formulaResultPath>ResAddress</formulaResultPath>
+        <formulaSequence>20.0</formulaSequence>
+        <globalKey>InspectionReportCustom9708</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>true</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>InspectionReportCustom328</globalKey>
+        <inputFieldName>RegCod:Name</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>InspectionReport</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Condition</outputFieldName>
+        <outputFieldName>Insp:RegCodName</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{
+  &quot;&quot; : &quot;&quot;
+}</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -136,14 +139,34 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>InspectionReportCustom52</globalKey>
-        <inputFieldName>Account:Phone</inputFieldName>
+        <filterOperator>=</filterOperator>
+        <filterValue>AssLoc:LocationId</filterValue>
+        <globalKey>InspectionReportCustom0jIAq0000002DcHMAUItem4</globalKey>
+        <inputFieldName>Id</inputFieldName>
+        <inputObjectName>Location</inputObjectName>
+        <inputObjectQuerySequence>5.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Loc</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>true</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:Address:Street &quot;/\/\/&quot; var:Address:City &quot;/\/\/&quot; var:Address:State &quot;/\/\/&quot; var:Address:PostalCode &quot;/\/\/&quot; var:Address:Country CONCAT</formulaConverted>
+        <formulaExpression>CONCAT(%Address:Street%, &quot; &quot;,%Address:City%, &quot; &quot;,%Address:State%, &quot; &quot;,%Address:PostalCode%, &quot; &quot;,%Address:Country%)</formulaExpression>
+        <formulaResultPath>Place</formulaResultPath>
+        <formulaSequence>1.0</formulaSequence>
+        <globalKey>InspectionReportCustom0jIAq0000002DcHMAUItem3</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>InspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Phone</outputFieldName>
-        <outputObjectName>json</outputObjectName>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
@@ -167,13 +190,46 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>InspectionReportCustom8181</globalKey>
-        <inputFieldName>Contact:Name</inputFieldName>
+        <filterOperator>LIMIT</filterOperator>
+        <filterValue>1</filterValue>
+        <globalKey>InspectionReportCustom4005</globalKey>
+        <inputObjectName>AccountContactRelation</inputObjectName>
+        <inputObjectQuerySequence>14.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>ACR</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>InspectionReportCustom52</globalKey>
+        <inputFieldName>Account:Phone</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>InspectionReport</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>PrimaryContact</outputFieldName>
+        <outputFieldName>Phone</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>&quot;$Vlocity.NULL&quot;</filterValue>
+        <globalKey>InspectionReportCustom4400</globalKey>
+        <inputFieldName>ParentId</inputFieldName>
+        <inputObjectName>Asset</inputObjectName>
+        <inputObjectQuerySequence>13.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Asset</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -198,17 +254,45 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:Asset:PrivateQuanCap SUM</formulaConverted>
-        <formulaExpression>SUM(Asset:PrivateQuanCap)</formulaExpression>
-        <formulaResultPath>TotalPrivateUnitsQuantCap</formulaResultPath>
-        <formulaSequence>12.0</formulaSequence>
-        <globalKey>InspectionReportCustom6104</globalKey>
+        <globalKey>InspectionReportCustom766</globalKey>
+        <inputFieldName>RegCodeVio:Id</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>InspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Insp:Test</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>InspectionReportCustom8181</globalKey>
+        <inputFieldName>Contact:Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>PrimaryContact</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>Visit:AccountId</filterValue>
+        <globalKey>InspectionReportCustom0jIAq0000002DcHMAUItem2</globalKey>
+        <inputFieldName>Id</inputFieldName>
+        <inputObjectName>Account</inputObjectName>
+        <inputObjectQuerySequence>3.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
         <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
+        <outputFieldName>Account</outputFieldName>
+        <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
@@ -229,13 +313,297 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>InspectionReportCustom7988</globalKey>
-        <inputFieldName>Account:Name</inputFieldName>
+        <filterOperator>=</filterOperator>
+        <filterValue>&quot;$Vlocity.NULL&quot;</filterValue>
+        <globalKey>InspectionReportCustom8978</globalKey>
+        <inputFieldName>ActiveTo</inputFieldName>
+        <inputObjectName>AssociatedLocation</inputObjectName>
+        <inputObjectQuerySequence>4.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>AssLoc</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:Asset:PrivateQuanCap SUM</formulaConverted>
+        <formulaExpression>SUM(Asset:PrivateQuanCap)</formulaExpression>
+        <formulaResultPath>TotalPrivateUnitsQuantCap</formulaResultPath>
+        <formulaSequence>12.0</formulaSequence>
+        <globalKey>InspectionReportCustom6104</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>true</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>InspectionReportCustom7012</globalKey>
+        <inputFieldName>RegCodeVio:Id</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>InspectionReport</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>AccountName</outputFieldName>
+        <outputFieldName>Insp:RegCodeVioId</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>InspectionReportCustom9538</globalKey>
+        <inputFieldName>RegCodeVio:Description</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Insp:Description</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>InspectionReportCustom0jIAq0000002DcHMAUItem17</globalKey>
+        <inputFieldName>Visit:Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Name</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>true</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| &quot;yyyy-MM-dd&quot; FORMATDATETIME</formulaConverted>
+        <formulaExpression>FORMATDATETIME(&quot;yyyy-MM-dd&quot;)</formulaExpression>
+        <formulaResultPath>ActualStartDate</formulaResultPath>
+        <formulaSequence>18.0</formulaSequence>
+        <globalKey>InspectionReportCustom594</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>InspectionReportCustom6181</globalKey>
+        <inputFieldName>ResAddress</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Address</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>InspectionReportCustom0jIAq0000002DcHMAUItem20</globalKey>
+        <inputFieldName>Inspection:Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>InsType</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>InspectionReportCustom7078</globalKey>
+        <inputFieldName>Certificate:RegistrationCertificate__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>CertificateId</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>InspectionReportCustom9725</globalKey>
+        <inputFieldName>Account:LicenseType__r.Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>LicenseType</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:Asset:PerDiemQuantityCount SUM</formulaConverted>
+        <formulaExpression>SUM(Asset:PerDiemQuantityCount)</formulaExpression>
+        <formulaResultPath>TotalPerDiemUnits</formulaResultPath>
+        <formulaSequence>9.0</formulaSequence>
+        <globalKey>InspectionReportCustom5161</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:TotalPrivateUnitsQuantCap var:TotalPublicUnitsQuantCap var:TotalPerDiemUnitsQuanCap SUM</formulaConverted>
+        <formulaExpression>SUM(TotalPrivateUnitsQuantCap,TotalPublicUnitsQuantCap,TotalPerDiemUnitsQuanCap)</formulaExpression>
+        <formulaResultPath>TotalMaxALUnitCapacity</formulaResultPath>
+        <formulaSequence>17.0</formulaSequence>
+        <globalKey>InspectionReportCustom4330</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>InspectionReportCustom2707</globalKey>
+        <inputFieldName>Date</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Date</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:Asset:Type__c &apos;Private&apos; == var:Asset:Quantity var:NULL IF</formulaConverted>
+        <formulaExpression>IF(Asset:Type__c==&apos;Private&apos;,Asset:Quantity,NULL)</formulaExpression>
+        <formulaResultPath>Asset:PrivateQuantityCount</formulaResultPath>
+        <formulaSequence>4.0</formulaSequence>
+        <globalKey>InspectionReportCustom6814</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:Asset:PublicQuanCap SUM</formulaConverted>
+        <formulaExpression>SUM(Asset:PublicQuanCap)</formulaExpression>
+        <formulaResultPath>TotalPublicUnitsQuantCap</formulaResultPath>
+        <formulaSequence>14.0</formulaSequence>
+        <globalKey>InspectionReportCustom7499</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>RegCodeVio:InspectionAssmntIndId</filterValue>
+        <globalKey>InspectionReportCustom1461</globalKey>
+        <inputFieldName>Id</inputFieldName>
+        <inputObjectName>InspectionAssessmentInd</inputObjectName>
+        <inputObjectQuerySequence>11.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>InspAssInd</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>LIMIT</filterOperator>
+        <filterValue>1</filterValue>
+        <globalKey>InspectionReportCustom2379</globalKey>
+        <inputObjectName>Address</inputObjectName>
+        <inputObjectQuerySequence>6.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Address</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:Asset:Type__c &apos;Public&apos; == var:Asset:Quantity &apos;&apos; != &amp;&amp; var:Asset:Capacity__c &apos;&apos; != &amp;&amp; var:Asset:Quantity var:Asset:Capacity__c * var:NULL IF</formulaConverted>
+        <formulaExpression>IF(Asset:Type__c==&apos;Public&apos; &amp;&amp; Asset:Quantity!=&apos;&apos; &amp;&amp; Asset:Capacity__c!=&apos;&apos;,Asset:Quantity*Asset:Capacity__c,NULL)</formulaExpression>
+        <formulaResultPath>Asset:PublicQuanCap</formulaResultPath>
+        <formulaSequence>13.0</formulaSequence>
+        <globalKey>InspectionReportCustom9333</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>ACR:ContactId</filterValue>
+        <globalKey>InspectionReportCustom2069</globalKey>
+        <inputFieldName>Id</inputFieldName>
+        <inputObjectName>Contact</inputObjectName>
+        <inputObjectQuerySequence>15.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Contact</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -260,6 +628,86 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>Id</filterValue>
+        <globalKey>InspectionReportCustom0jIAq0000002DcHMAUItem7</globalKey>
+        <inputFieldName>Id</inputFieldName>
+        <inputObjectName>Visit</inputObjectName>
+        <inputObjectQuerySequence>1.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Visit</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>InspectionReportCustom7988</globalKey>
+        <inputFieldName>Account:Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>AccountName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>Account:Id</filterValue>
+        <globalKey>InspectionReportCustom1049</globalKey>
+        <inputFieldName>AccountId</inputFieldName>
+        <inputObjectName>AccountContactRelation</inputObjectName>
+        <inputObjectQuerySequence>14.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>ACR</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>Visit:Id</filterValue>
+        <globalKey>InspectionReportCustom7640</globalKey>
+        <inputFieldName>InspectionId</inputFieldName>
+        <inputObjectName>RegulatoryCodeViolation</inputObjectName>
+        <inputObjectQuerySequence>9.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>RegCodeVio</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>InspectionReportCustom6454</globalKey>
+        <inputFieldName>RegCodeVio:ComplianceDueDate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Date(MM/dd/yyyy)</outputFieldFormat>
+        <outputFieldName>Insp:DueDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <filterOperator>LIMIT</filterOperator>
         <filterValue>1</filterValue>
         <globalKey>InspectionReportCustom7250</globalKey>
@@ -277,15 +725,46 @@
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <filterOperator>=</filterOperator>
-        <filterValue>Visit:Id</filterValue>
-        <globalKey>InspectionReportCustom7640</globalKey>
-        <inputFieldName>InspectionId</inputFieldName>
-        <inputObjectName>RegulatoryCodeViolation</inputObjectName>
-        <inputObjectQuerySequence>8.0</inputObjectQuerySequence>
+        <filterValue>Visit:VisitTypeId</filterValue>
+        <globalKey>InspectionReportCustom0jIAq0000002DcHMAUItem8</globalKey>
+        <inputFieldName>Id</inputFieldName>
+        <inputObjectName>InspectionType</inputObjectName>
+        <inputObjectQuerySequence>2.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>InspectionReport</name>
         <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>RegCodeVio</outputFieldName>
+        <outputFieldName>Inspection</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>InspAssInd:AssessmentIndDefinitionId</filterValue>
+        <globalKey>InspectionReportCustom3578</globalKey>
+        <inputFieldName>Id</inputFieldName>
+        <inputObjectName>AssessmentIndicatorDefinition</inputObjectName>
+        <inputObjectQuerySequence>12.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>AssIndDef</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>InspectionReportCustom37</globalKey>
+        <inputFieldName>TotalAssistedLivingUnits</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TotalALUnits</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -310,16 +789,41 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>InspAssInd:AssessmentIndDefinitionId</filterValue>
-        <globalKey>InspectionReportCustom3578</globalKey>
-        <inputFieldName>Id</inputFieldName>
-        <inputObjectName>AssessmentIndicatorDefinition</inputObjectName>
-        <inputObjectQuerySequence>11.0</inputObjectQuerySequence>
+        <globalKey>InspectionReportCustom1220</globalKey>
+        <inputFieldName>Visit:InspectionMethod__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>InspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>AssIndDef</outputFieldName>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>InspectionMethod</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>InspectionReportCustom927</globalKey>
+        <inputFieldName>RegCodeVio:CorrectiveActionDescription</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Insp:CorrectiveActionDescription</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>InspectionReportCustom5019</globalKey>
+        <inputFieldName>Account:Parent.Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>ParentAccount</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -344,25 +848,11 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>InspectionReportCustom927</globalKey>
-        <inputFieldName>RegCodeVio:CorrectiveActionDescription</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Insp:CorrectiveActionDescription</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:Asset:PrivateQuantityCount SUM</formulaConverted>
-        <formulaExpression>SUM(Asset:PrivateQuantityCount)</formulaExpression>
-        <formulaResultPath>TotalPrivateUnits</formulaResultPath>
-        <formulaSequence>5.0</formulaSequence>
-        <globalKey>InspectionReportCustom9731</globalKey>
+        <formulaConverted>| var:Asset:Type__c &apos;Public&apos; == var:Asset:Quantity var:NULL IF</formulaConverted>
+        <formulaExpression>IF(Asset:Type__c==&apos;Public&apos;,Asset:Quantity,NULL)</formulaExpression>
+        <formulaResultPath>Asset:PublicQuantityCount</formulaResultPath>
+        <formulaSequence>6.0</formulaSequence>
+        <globalKey>InspectionReportCustom5</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>InspectionReport</name>
@@ -392,6 +882,90 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>Account:Id</filterValue>
+        <globalKey>InspectionReportCustom8661</globalKey>
+        <inputFieldName>Account__c</inputFieldName>
+        <inputObjectName>BusinessLicense</inputObjectName>
+        <inputObjectQuerySequence>7.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Certificate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:Asset:PrivateQuantityCount SUM</formulaConverted>
+        <formulaExpression>SUM(Asset:PrivateQuantityCount)</formulaExpression>
+        <formulaResultPath>TotalPrivateUnits</formulaResultPath>
+        <formulaSequence>5.0</formulaSequence>
+        <globalKey>InspectionReportCustom9731</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>LIMIT</filterOperator>
+        <filterValue>1</filterValue>
+        <globalKey>InspectionReportCustom3153</globalKey>
+        <inputObjectName>Location</inputObjectName>
+        <inputObjectQuerySequence>5.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Loc</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>RegCodeVio:RegulatoryCodeId</filterValue>
+        <globalKey>InspectionReportCustom5668</globalKey>
+        <inputFieldName>Id</inputFieldName>
+        <inputObjectName>RegulatoryCode</inputObjectName>
+        <inputObjectQuerySequence>10.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>RegCod</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>Loc:Id</filterValue>
+        <globalKey>InspectionReportCustom2998</globalKey>
+        <inputFieldName>ParentId</inputFieldName>
+        <inputObjectName>Address</inputObjectName>
+        <inputObjectQuerySequence>6.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Address</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <formulaConverted>| var:Account:Conditions__c var:NULL == &quot;No/\/\/conditions/\/\/indicated&quot; var:Account:Conditions__c IF</formulaConverted>
         <formulaExpression>IF(Account:Conditions__c==NULL,&quot;No conditions indicated&quot;,Account:Conditions__c)</formulaExpression>
         <formulaResultPath>Condition</formulaResultPath>
@@ -409,28 +983,11 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>RegCodeVio:RegulatoryCodeId</filterValue>
-        <globalKey>InspectionReportCustom5668</globalKey>
-        <inputFieldName>Id</inputFieldName>
-        <inputObjectName>RegulatoryCode</inputObjectName>
-        <inputObjectQuerySequence>9.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>RegCod</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| TODAY</formulaConverted>
-        <formulaExpression>TODAY()</formulaExpression>
-        <formulaResultPath>Date</formulaResultPath>
-        <formulaSequence>3.0</formulaSequence>
-        <globalKey>InspectionReportCustom2864</globalKey>
+        <formulaConverted>| var:Asset:Type__c &apos;Private&apos; == var:Asset:Quantity &apos;&apos; != &amp;&amp; var:Asset:Capacity__c &apos;&apos; != &amp;&amp; var:Asset:Quantity var:Asset:Capacity__c * var:NULL IF</formulaConverted>
+        <formulaExpression>IF(Asset:Type__c==&apos;Private&apos; &amp;&amp; Asset:Quantity!=&apos;&apos; &amp;&amp; Asset:Capacity__c!=&apos;&apos;,Asset:Quantity*Asset:Capacity__c,NULL)</formulaExpression>
+        <formulaResultPath>Asset:PrivateQuanCap</formulaResultPath>
+        <formulaSequence>11.0</formulaSequence>
+        <globalKey>InspectionReportCustom3191</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>InspectionReport</name>
@@ -460,15 +1017,67 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <filterOperator>LIMIT</filterOperator>
-        <filterValue>1</filterValue>
-        <globalKey>InspectionReportCustom552</globalKey>
-        <inputObjectName>BusinessLicense</inputObjectName>
-        <inputObjectQuerySequence>7.0</inputObjectQuerySequence>
+        <filterOperator>=</filterOperator>
+        <filterValue>Account:Id</filterValue>
+        <globalKey>InspectionReportCustom2396</globalKey>
+        <inputFieldName>AccountId</inputFieldName>
+        <inputObjectName>Asset</inputObjectName>
+        <inputObjectQuerySequence>13.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>InspectionReport</name>
         <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Certificate</outputFieldName>
+        <outputFieldName>Asset</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| TODAY</formulaConverted>
+        <formulaExpression>TODAY()</formulaExpression>
+        <formulaResultPath>Date</formulaResultPath>
+        <formulaSequence>3.0</formulaSequence>
+        <globalKey>InspectionReportCustom2864</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>&apos;True&apos;</filterValue>
+        <globalKey>InspectionReportCustom9071</globalKey>
+        <inputFieldName>PrimaryContact__c</inputFieldName>
+        <inputObjectName>AccountContactRelation</inputObjectName>
+        <inputObjectQuerySequence>14.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>ACR</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>&quot;Active&quot;</filterValue>
+        <globalKey>InspectionReportCustom2111</globalKey>
+        <inputFieldName>Condition_Status__c</inputFieldName>
+        <inputObjectName>Conditions__c</inputObjectName>
+        <inputObjectQuerySequence>8.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>InspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Conditions</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -490,460 +1099,17 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:Asset:Type__c &apos;Public&apos; == var:Asset:Quantity &apos;&apos; != &amp;&amp; var:Asset:Capacity__c &apos;&apos; != &amp;&amp; var:Asset:Quantity var:Asset:Capacity__c * var:NULL IF</formulaConverted>
-        <formulaExpression>IF(Asset:Type__c==&apos;Public&apos; &amp;&amp; Asset:Quantity!=&apos;&apos; &amp;&amp; Asset:Capacity__c!=&apos;&apos;,Asset:Quantity*Asset:Capacity__c,NULL)</formulaExpression>
-        <formulaResultPath>Asset:PublicQuanCap</formulaResultPath>
-        <formulaSequence>13.0</formulaSequence>
-        <globalKey>InspectionReportCustom9333</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>LIMIT</filterOperator>
-        <filterValue>1</filterValue>
-        <globalKey>InspectionReportCustom2379</globalKey>
-        <inputObjectName>Address</inputObjectName>
-        <inputObjectQuerySequence>6.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Address</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>ACR:ContactId</filterValue>
-        <globalKey>InspectionReportCustom2069</globalKey>
-        <inputFieldName>Id</inputFieldName>
-        <inputObjectName>Contact</inputObjectName>
-        <inputObjectQuerySequence>14.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Contact</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>InspectionReportCustom9538</globalKey>
-        <inputFieldName>RegCodeVio:Description</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Insp:Description</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>true</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| &quot;yyyy-MM-dd&quot; FORMATDATETIME</formulaConverted>
-        <formulaExpression>FORMATDATETIME(&quot;yyyy-MM-dd&quot;)</formulaExpression>
-        <formulaResultPath>ActualStartDate</formulaResultPath>
-        <formulaSequence>18.0</formulaSequence>
-        <globalKey>InspectionReportCustom594</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>InspectionReportCustom0jIAq0000002DcHMAUItem17</globalKey>
-        <inputFieldName>Visit:Name</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Name</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>InspectionReportCustom0jIAq0000002DcHMAUItem20</globalKey>
-        <inputFieldName>Inspection:Name</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>InsType</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>InspectionReportCustom6181</globalKey>
-        <inputFieldName>ResAddress</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Address</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:TotalPrivateUnitsQuantCap var:TotalPublicUnitsQuantCap var:TotalPerDiemUnitsQuanCap SUM</formulaConverted>
-        <formulaExpression>SUM(TotalPrivateUnitsQuantCap,TotalPublicUnitsQuantCap,TotalPerDiemUnitsQuanCap)</formulaExpression>
-        <formulaResultPath>TotalMaxALUnitCapacity</formulaResultPath>
-        <formulaSequence>17.0</formulaSequence>
-        <globalKey>InspectionReportCustom4330</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>InspectionReportCustom9725</globalKey>
-        <inputFieldName>Account:LicenseType__r.Name</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>LicenseType</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>RegCodeVio:InspectionAssmntIndId</filterValue>
-        <globalKey>InspectionReportCustom1461</globalKey>
-        <inputFieldName>Id</inputFieldName>
-        <inputObjectName>InspectionAssessmentInd</inputObjectName>
-        <inputObjectQuerySequence>10.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>InspAssInd</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:Asset:Type__c &apos;Private&apos; == var:Asset:Quantity var:NULL IF</formulaConverted>
-        <formulaExpression>IF(Asset:Type__c==&apos;Private&apos;,Asset:Quantity,NULL)</formulaExpression>
-        <formulaResultPath>Asset:PrivateQuantityCount</formulaResultPath>
-        <formulaSequence>4.0</formulaSequence>
-        <globalKey>InspectionReportCustom6814</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>true</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>InspectionReportCustom328</globalKey>
-        <inputFieldName>RegCod:Name</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Insp:RegCodName</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{
-  &quot;&quot; : &quot;&quot;
-}</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>true</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:Address:Street &quot;/\/\/&quot; var:Address:City &quot;/\/\/&quot; var:Address:State &quot;/\/\/&quot; var:Address:PostalCode &quot;/\/\/&quot; var:Address:Country CONCAT</formulaConverted>
-        <formulaExpression>CONCAT(%Address:Street%, &quot; &quot;,%Address:City%, &quot; &quot;,%Address:State%, &quot; &quot;,%Address:PostalCode%, &quot; &quot;,%Address:Country%)</formulaExpression>
-        <formulaResultPath>Place</formulaResultPath>
-        <formulaSequence>1.0</formulaSequence>
-        <globalKey>InspectionReportCustom0jIAq0000002DcHMAUItem3</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>AssLoc:LocationId</filterValue>
-        <globalKey>InspectionReportCustom0jIAq0000002DcHMAUItem4</globalKey>
-        <inputFieldName>Id</inputFieldName>
-        <inputObjectName>Location</inputObjectName>
-        <inputObjectQuerySequence>5.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Loc</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>&quot;$Vlocity.NULL&quot;</filterValue>
-        <globalKey>InspectionReportCustom4400</globalKey>
-        <inputFieldName>ParentId</inputFieldName>
-        <inputObjectName>Asset</inputObjectName>
-        <inputObjectQuerySequence>12.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Asset</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>LIMIT</filterOperator>
-        <filterValue>1</filterValue>
-        <globalKey>InspectionReportCustom4005</globalKey>
-        <inputObjectName>AccountContactRelation</inputObjectName>
-        <inputObjectQuerySequence>13.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>ACR</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>Visit:AccountId</filterValue>
-        <globalKey>InspectionReportCustom0jIAq0000002DcHMAUItem2</globalKey>
-        <inputFieldName>Id</inputFieldName>
-        <inputObjectName>Account</inputObjectName>
-        <inputObjectQuerySequence>3.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Account</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>InspectionReportCustom766</globalKey>
-        <inputFieldName>RegCodeVio:Id</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Insp:Test</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>true</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>InspectionReportCustom7012</globalKey>
-        <inputFieldName>RegCodeVio:Id</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Insp:RegCodeVioId</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>&quot;$Vlocity.NULL&quot;</filterValue>
-        <globalKey>InspectionReportCustom8978</globalKey>
-        <inputFieldName>ActiveTo</inputFieldName>
-        <inputObjectName>AssociatedLocation</inputObjectName>
-        <inputObjectQuerySequence>4.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>AssLoc</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>Account:Id</filterValue>
-        <globalKey>InspectionReportCustom1049</globalKey>
-        <inputFieldName>AccountId</inputFieldName>
-        <inputObjectName>AccountContactRelation</inputObjectName>
-        <inputObjectQuerySequence>13.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>ACR</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>Id</filterValue>
-        <globalKey>InspectionReportCustom0jIAq0000002DcHMAUItem7</globalKey>
-        <inputFieldName>Id</inputFieldName>
-        <inputObjectName>Visit</inputObjectName>
-        <inputObjectQuerySequence>1.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Visit</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>Visit:VisitTypeId</filterValue>
-        <globalKey>InspectionReportCustom0jIAq0000002DcHMAUItem8</globalKey>
-        <inputFieldName>Id</inputFieldName>
-        <inputObjectName>InspectionType</inputObjectName>
-        <inputObjectQuerySequence>2.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Inspection</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>InspectionReportCustom6454</globalKey>
-        <inputFieldName>RegCodeVio:ComplianceDueDate</inputFieldName>
+        <globalKey>InspectionReportCustom4636</globalKey>
+        <inputFieldName>Visit:ActualVisitStartTime</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>InspectionReport</name>
         <outputCreationSequence>1.0</outputCreationSequence>
         <outputFieldFormat>Date(MM/dd/yyyy)</outputFieldFormat>
-        <outputFieldName>Insp:DueDate</outputFieldName>
+        <outputFieldName>ActualStartDate</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>InspectionReportCustom1220</globalKey>
-        <inputFieldName>Visit:InspectionMethod__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>InspectionMethod</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>InspectionReportCustom37</globalKey>
-        <inputFieldName>TotalAssistedLivingUnits</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>TotalALUnits</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:Asset:Type__c &apos;Public&apos; == var:Asset:Quantity var:NULL IF</formulaConverted>
-        <formulaExpression>IF(Asset:Type__c==&apos;Public&apos;,Asset:Quantity,NULL)</formulaExpression>
-        <formulaResultPath>Asset:PublicQuantityCount</formulaResultPath>
-        <formulaSequence>6.0</formulaSequence>
-        <globalKey>InspectionReportCustom5</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>InspectionReportCustom5019</globalKey>
-        <inputFieldName>Account:Parent.Name</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>ParentAccount</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -951,98 +1117,13 @@
         <filterGroup>0.0</filterGroup>
         <filterOperator>LIMIT</filterOperator>
         <filterValue>1</filterValue>
-        <globalKey>InspectionReportCustom3153</globalKey>
-        <inputObjectName>Location</inputObjectName>
-        <inputObjectQuerySequence>5.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Loc</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>Account:Id</filterValue>
-        <globalKey>InspectionReportCustom8661</globalKey>
-        <inputFieldName>Account__c</inputFieldName>
+        <globalKey>InspectionReportCustom552</globalKey>
         <inputObjectName>BusinessLicense</inputObjectName>
         <inputObjectQuerySequence>7.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>InspectionReport</name>
         <outputCreationSequence>0.0</outputCreationSequence>
         <outputFieldName>Certificate</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:Asset:Type__c &apos;Private&apos; == var:Asset:Quantity &apos;&apos; != &amp;&amp; var:Asset:Capacity__c &apos;&apos; != &amp;&amp; var:Asset:Quantity var:Asset:Capacity__c * var:NULL IF</formulaConverted>
-        <formulaExpression>IF(Asset:Type__c==&apos;Private&apos; &amp;&amp; Asset:Quantity!=&apos;&apos; &amp;&amp; Asset:Capacity__c!=&apos;&apos;,Asset:Quantity*Asset:Capacity__c,NULL)</formulaExpression>
-        <formulaResultPath>Asset:PrivateQuanCap</formulaResultPath>
-        <formulaSequence>11.0</formulaSequence>
-        <globalKey>InspectionReportCustom3191</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>Loc:Id</filterValue>
-        <globalKey>InspectionReportCustom2998</globalKey>
-        <inputFieldName>ParentId</inputFieldName>
-        <inputObjectName>Address</inputObjectName>
-        <inputObjectQuerySequence>6.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Address</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>&apos;True&apos;</filterValue>
-        <globalKey>InspectionReportCustom9071</globalKey>
-        <inputFieldName>PrimaryContact__c</inputFieldName>
-        <inputObjectName>AccountContactRelation</inputObjectName>
-        <inputObjectQuerySequence>13.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>ACR</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>Account:Id</filterValue>
-        <globalKey>InspectionReportCustom2396</globalKey>
-        <inputFieldName>AccountId</inputFieldName>
-        <inputObjectName>Asset</inputObjectName>
-        <inputObjectQuerySequence>12.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Asset</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -1061,25 +1142,9 @@
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>InspectionReportCustom4636</globalKey>
-        <inputFieldName>Visit:ActualVisitStartTime</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>InspectionReport</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldFormat>Date(MM/dd/yyyy)</outputFieldFormat>
-        <outputFieldName>ActualStartDate</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
     <outputType>JSON</outputType>
     <previewJsonData>{
-  &quot;Id&quot; : &quot;0Z5Aq0000001EAbKAM&quot;
+  &quot;Id&quot; : &quot;0Z5bZ0000000b4PSAQ&quot;
 }</previewJsonData>
     <processSuperBulk>false</processSuperBulk>
     <responseCacheTtlMinutes>0.0</responseCacheTtlMinutes>

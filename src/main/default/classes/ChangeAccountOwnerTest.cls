@@ -31,7 +31,7 @@ private class ChangeAccountOwnerTest {
         User newUser = new User(
             FirstName = 'Testone',
             LastName = 'User1',
-            Username = 'test1user@test.com',
+            Username = 'alrtest1user@test.com',
             Email = 'testuser@example.com',
             Alias = 'tuser',
             ProfileId = adminId,
@@ -107,6 +107,7 @@ private class ChangeAccountOwnerTest {
         visits.Status = 'Planned';
         visits.PlannedVisitEndTime = System.today();
         visits.PlannedVisitStartTime = System.today();
+        visits.ActualVisitStartTime = System.today();
         visits.PlaceId = loc.Id;
         insert visits;
        

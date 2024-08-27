@@ -19,7 +19,7 @@
                         <valueListItems>
                             <value>CustomButton.Visit.Start_Risk_Assessment</value>
                             <visibilityRule>
-                                <booleanFilter>1 AND 2 AND 3 AND 4</booleanFilter>
+                                <booleanFilter>1 AND 2 AND 3 AND (4 OR 5)</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.VisitType.Name}</leftValue>
                                     <operator>EQUAL</operator>
@@ -40,6 +40,11 @@
                                     <operator>EQUAL</operator>
                                     <rightValue>true</rightValue>
                                 </criteria>
+                                <criteria>
+                                    <leftValue>{!$Permission.CustomPermission.EHISLeadership}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>true</rightValue>
+                                </criteria>
                             </visibilityRule>
                         </valueListItems>
                         <valueListItems>
@@ -57,6 +62,22 @@
                         </valueListItems>
                         <valueListItems>
                             <value>ChangeOwnerOne</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Visit.New_Inspection</value>
+                            <visibilityRule>
+                                <booleanFilter>1 OR 2</booleanFilter>
+                                <criteria>
+                                    <leftValue>{!$Permission.CustomPermission.EHISInvestigator}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>true</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!$Permission.CustomPermission.EHISLeadership}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>true</rightValue>
+                                </criteria>
+                            </visibilityRule>
                         </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
@@ -125,6 +146,23 @@
                     <name>uiBehavior</name>
                     <value>required</value>
                 </fieldInstanceProperties>
+                <fieldItem>Record.FollowUpPurpose__c</fieldItem>
+                <identifier>RecordFollowUpPurpose_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.VisitType.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Follow-up Inspection</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>required</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.InspectionMethod__c</fieldItem>
                 <identifier>RecordInspectionMethod_cField</identifier>
             </fieldInstance>
@@ -143,16 +181,26 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>required</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.PlannedVisitStartTime</fieldItem>
-                <identifier>RecordPlannedVisitStartTimeField</identifier>
+                <fieldItem>Record.ActualVisitStartTime</fieldItem>
+                <identifier>RecordActualVisitStartTimeField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-23d55b42-59c2-40c3-9a3d-d2d20604cd0e</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ParentVisitId</fieldItem>
+                <identifier>RecordParentVisitIdField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
@@ -480,6 +528,28 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
+                    <name>flowArguments</name>
+                    <value>[{&quot;label&quot;:&quot;recordId&quot;,&quot;dataType&quot;:&quot;String&quot;,&quot;supportsRecordId&quot;:true,&quot;value&quot;:&quot;{!Record.Id}&quot;}]</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>flowLayout</name>
+                    <value>oneColumn</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>flowName</name>
+                    <value>Related_tab_for_Visit_Object</value>
+                </componentInstanceProperties>
+                <componentName>flowruntime:interview</componentName>
+                <identifier>flowruntime_interview</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-302364ac-1b6d-46d1-a9d9-674bfe29e883</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
                     <name>parentFieldApiName</name>
                     <value>Visit.Id</value>
                 </componentInstanceProperties>
@@ -537,6 +607,20 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:tab</componentName>
                 <identifier>flexipage_tab</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-302364ac-1b6d-46d1-a9d9-674bfe29e883</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>title</name>
+                    <value>Related Inspections</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:tab</componentName>
+                <identifier>flexipage_tab3</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>

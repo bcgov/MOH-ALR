@@ -25,8 +25,14 @@
                         <valueListItems>
                             <value>Case.New_Inspection</value>
                             <visibilityRule>
+                                <booleanFilter>1 OR 2</booleanFilter>
                                 <criteria>
                                     <leftValue>{!$Permission.CustomPermission.EHISInvestigator}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>true</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!$Permission.CustomPermission.EHISLeadership}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>true</rightValue>
                                 </criteria>
