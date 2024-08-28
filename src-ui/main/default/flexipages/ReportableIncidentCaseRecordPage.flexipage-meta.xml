@@ -9,7 +9,7 @@
                         <valueListItems>
                             <value>Submit</value>
                             <visibilityRule>
-                                <booleanFilter>1 OR 2</booleanFilter>
+                                <booleanFilter>(1 OR 2) AND 3</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.Status}</leftValue>
                                     <operator>EQUAL</operator>
@@ -20,13 +20,24 @@
                                     <operator>EQUAL</operator>
                                     <rightValue>Under Inspection</rightValue>
                                 </criteria>
+                                <criteria>
+                                    <leftValue>{!$Permission.CustomPermission.EHISAdminUser}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>false</rightValue>
+                                </criteria>
                             </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>Case.New_Inspection</value>
                             <visibilityRule>
+                                <booleanFilter>1 OR 2</booleanFilter>
                                 <criteria>
                                     <leftValue>{!$Permission.CustomPermission.EHISInvestigator}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>true</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!$Permission.CustomPermission.EHISLeadership}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>true</rightValue>
                                 </criteria>
@@ -92,6 +103,33 @@
                     </criteria>
                     <criteria>
                         <leftValue>{!$Permission.CustomPermission.EHIS_SDPR_User}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>false</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>decorate</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>richTextValue</name>
+                    <value>&lt;p&gt;&lt;strong style=&quot;font-size: 14px; color: rgb(208, 20, 20);&quot;&gt;This case is Closed and cannot be edited.&lt;/strong&gt;&lt;/p&gt;</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:richText</componentName>
+                <identifier>flexipage_richText</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.IsClosed}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>true</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!$Permission.CustomPermission.EHISDataAnalystUser}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>false</rightValue>
                     </criteria>
@@ -466,6 +504,366 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.CaseNumber</fieldItem>
+                <identifier>RecordCaseNumberField2</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.AccountId</fieldItem>
+                <identifier>RecordAccountIdField3</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ContactId</fieldItem>
+                <identifier>RecordContactIdField3</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Subject</fieldItem>
+                <identifier>RecordSubjectField3</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ResidentTypeInvolved__c</fieldItem>
+                <identifier>RecordResidentTypeInvolved_cField3</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.CreatedDate</fieldItem>
+                <identifier>RecordCreatedDateField2</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-64897682-250c-44c3-9828-88f646a4931b</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.OwnerId</fieldItem>
+                <identifier>RecordOwnerIdField2</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>required</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Status</fieldItem>
+                <identifier>RecordStatusField3</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Priority</fieldItem>
+                <identifier>RecordPriorityField3</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Origin</fieldItem>
+                <identifier>RecordOriginField3</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.IsApprovalRequired__c</fieldItem>
+                <identifier>RecordIsApprovalRequired_cField2</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 OR 2 OR 3 OR 4 OR 5</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Investigator Review</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Under Inspection</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Pending Approval</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Approved</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Closed</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.RegistrarApprovalNeeded__c</fieldItem>
+                <identifier>RecordRegistrarApprovalNeeded_cField2</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 OR 2 OR 3 OR 4 OR 5</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Investigator Review</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Under Inspection</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Pending Approval</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Approved</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Closed</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ApprovedDate__c</fieldItem>
+                <identifier>RecordApprovedDate_cField2</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 OR 2 OR 3 OR 4 OR 5</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Investigator Review</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Under Inspection</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Pending Approval</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Approved</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Closed</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ClosedDate</fieldItem>
+                <identifier>RecordClosedDateField2</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 OR 2 OR 3 OR 4 OR 5</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Investigator Review</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Under Inspection</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Pending Approval</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Approved</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Closed</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ClosureReason__c</fieldItem>
+                <identifier>RecordClosureReason_cField2</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 OR 2 OR 3 OR 4 OR 5</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Investigator Review</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Under Inspection</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Pending Approval</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Approved</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Closed</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ClosureReasonDescription__c</fieldItem>
+                <identifier>RecordClosureReasonDescription_cField2</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 OR 2 OR 3 OR 4 OR 5</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Investigator Review</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Under Inspection</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Pending Approval</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Approved</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Closed</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-55e78440-9309-4d9d-86d9-dcf78dcd3499</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-64897682-250c-44c3-9828-88f646a4931b</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column11</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-55e78440-9309-4d9d-86d9-dcf78dcd3499</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column12</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-697e5de1-d2d5-4988-9ede-7450f71ea92f</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.AccountId</fieldItem>
@@ -568,6 +966,108 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.AccountId</fieldItem>
+                <identifier>RecordAccountIdField4</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ContactId</fieldItem>
+                <identifier>RecordContactIdField4</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Subject</fieldItem>
+                <identifier>RecordSubjectField4</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ResidentTypeInvolved__c</fieldItem>
+                <identifier>RecordResidentTypeInvolved_cField4</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-0285f130-c4d0-4713-89d0-042480e9590e</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>required</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Status</fieldItem>
+                <identifier>RecordStatusField4</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Priority</fieldItem>
+                <identifier>RecordPriorityField4</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Origin</fieldItem>
+                <identifier>RecordOriginField4</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-aa996024-c926-4bdf-b8b3-98d66aa73943</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-0285f130-c4d0-4713-89d0-042480e9590e</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column13</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-aa996024-c926-4bdf-b8b3-98d66aa73943</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column14</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-ee907132-198d-4aff-b1f4-f053accc2346</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
                     <value>required</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.IncidentDate__c</fieldItem>
@@ -624,7 +1124,7 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.WitnessForIncident__c</fieldItem>
+                <fieldItem>Record.IncidentWitnessed__c</fieldItem>
                 <identifier>RecordWitnessForIncident_cField</identifier>
             </fieldInstance>
         </itemInstances>
@@ -690,6 +1190,128 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.IncidentDate__c</fieldItem>
+                <identifier>RecordIncidentDate_cField2</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.PlaceOfIncident__c</fieldItem>
+                <identifier>RecordPlaceOfIncident_cField2</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.TypeOfIncident__c</fieldItem>
+                <identifier>RecordTypeOfIncident_cField2</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.OtherDetails__c</fieldItem>
+                <identifier>RecordOtherDetails_cField2</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-cc520099-550e-4bc2-83c5-ac3683b68580</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.TransferToHospital__c</fieldItem>
+                <identifier>RecordTransferToHospital_cField2</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.IncidentWitnessed__c</fieldItem>
+                <identifier>RecordWitnessForIncident_cField2</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.NotifiedFamily__c</fieldItem>
+                <identifier>RecordNotifiedFamily_cField2</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.NotificationToResidentsContact__c</fieldItem>
+                <identifier>RecordNotificationToResidentsContact_cField2</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.NotificationToFundingProgram__c</fieldItem>
+                <identifier>RecordNotificationToFundingProgram_cField2</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-9abc0ec4-d6bb-4400-8ae2-66e71b05d249</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-cc520099-550e-4bc2-83c5-ac3683b68580</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column15</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-9abc0ec4-d6bb-4400-8ae2-66e71b05d249</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column16</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-24c2ed2b-1a95-4673-90ad-4bfa2196851a</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Description</fieldItem>
@@ -735,6 +1357,58 @@
             </componentInstance>
         </itemInstances>
         <name>Facet-5962b0c1-700f-4ab7-a380-a6b64679af1c</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Description</fieldItem>
+                <identifier>RecordDescriptionField2</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ActionsTaken__c</fieldItem>
+                <identifier>RecordActionsTaken_cField2</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-fd42f0f7-be0c-4cbd-b994-bd3dc1f0e326</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <name>Facet-fdfe1e63-bbf3-401f-b6f0-8db4beb8cd57</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-fd42f0f7-be0c-4cbd-b994-bd3dc1f0e326</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column17</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-fdfe1e63-bbf3-401f-b6f0-8db4beb8cd57</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column18</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-91a207e4-9b78-41d6-bea0-d7f3b62af68a</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -807,6 +1481,52 @@
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection</identifier>
                 <visibilityRule>
+                    <booleanFilter>1 AND ( 2 OR 3 )</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.CaseNumber}</leftValue>
+                        <operator>NE</operator>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.IsClosed}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>false</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!$Permission.CustomPermission.EHISDataAnalystUser}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>true</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>columns</name>
+                    <value>Facet-697e5de1-d2d5-4988-9ede-7450f71ea92f</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>horizontalAlignment</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Case Information</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:fieldSection</componentName>
+                <identifier>flexipage_fieldSection6</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 AND 2 AND 3</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.IsClosed}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>true</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!$Permission.CustomPermission.EHISDataAnalystUser}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>false</rightValue>
+                    </criteria>
                     <criteria>
                         <leftValue>{!Record.CaseNumber}</leftValue>
                         <operator>NE</operator>
@@ -831,9 +1551,55 @@
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection2</identifier>
                 <visibilityRule>
+                    <booleanFilter>1 AND ( 2 OR 3)</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.CaseNumber}</leftValue>
                         <operator>EQUAL</operator>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.IsClosed}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>false</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!$Permission.CustomPermission.EHISDataAnalystUser}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>true</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>columns</name>
+                    <value>Facet-ee907132-198d-4aff-b1f4-f053accc2346</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>horizontalAlignment</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Case Details</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:fieldSection</componentName>
+                <identifier>flexipage_fieldSection7</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 AND 2 AND 3</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.CaseNumber}</leftValue>
+                        <operator>EQUAL</operator>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.IsClosed}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>true</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!$Permission.CustomPermission.EHISDataAnalystUser}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>false</rightValue>
                     </criteria>
                 </visibilityRule>
             </componentInstance>
@@ -854,6 +1620,50 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection3</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 OR 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.IsClosed}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>false</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!$Permission.CustomPermission.EHISDataAnalystUser}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>true</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>columns</name>
+                    <value>Facet-24c2ed2b-1a95-4673-90ad-4bfa2196851a</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>horizontalAlignment</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Reportable Incident Details</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:fieldSection</componentName>
+                <identifier>flexipage_fieldSection8</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.IsClosed}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>true</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!$Permission.CustomPermission.EHISDataAnalystUser}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>false</rightValue>
+                    </criteria>
+                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -872,6 +1682,50 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection4</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 OR 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.IsClosed}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>false</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!$Permission.CustomPermission.EHISDataAnalystUser}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>true</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>columns</name>
+                    <value>Facet-91a207e4-9b78-41d6-bea0-d7f3b62af68a</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>horizontalAlignment</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Reportable Incident Description</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:fieldSection</componentName>
+                <identifier>flexipage_fieldSection9</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.IsClosed}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>true</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!$Permission.CustomPermission.EHISDataAnalystUser}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>false</rightValue>
+                    </criteria>
+                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <itemInstances>

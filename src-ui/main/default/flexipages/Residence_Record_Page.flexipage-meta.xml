@@ -22,8 +22,14 @@
                         <valueListItems>
                             <value>Account.New_Inspection</value>
                             <visibilityRule>
+                                <booleanFilter>1 OR 2</booleanFilter>
                                 <criteria>
                                     <leftValue>{!$Permission.CustomPermission.EHISInvestigator}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>true</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!$Permission.CustomPermission.EHISLeadership}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>true</rightValue>
                                 </criteria>
@@ -223,6 +229,58 @@
                     <name>uiBehavior</name>
                     <value>required</value>
                 </fieldInstanceProperties>
+                <fieldItem>Record.Physical_Address__c</fieldItem>
+                <identifier>RecordPhysical_Address_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.PhysicalDrivingDirections__c</fieldItem>
+                <identifier>RecordPhysicalDrivingDirections_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-fff467b3-70a7-4ac9-86dd-100497de536a</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <name>Facet-23beae95-aaef-48cb-a54f-1ac8f4eecb0e</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-fff467b3-70a7-4ac9-86dd-100497de536a</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column11</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-23beae95-aaef-48cb-a54f-1ac8f4eecb0e</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column12</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-a33a817d-96e6-48e1-8ffe-62254f4eff5c</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>required</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.ParentId</fieldItem>
                 <identifier>RecordParentIdField2</identifier>
             </fieldInstance>
@@ -323,30 +381,10 @@
                 <identifier>RecordLastInspectionDate_cField</identifier>
             </fieldInstance>
         </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.ResidenceGender__c</fieldItem>
-                <identifier>RecordResidenceGender_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
         <name>Facet-5d8b29b4-e4e0-44eb-b883-68315a57e294</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Conditions__c</fieldItem>
-                <identifier>RecordConditions_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
@@ -375,6 +413,16 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.AllowsChildren__c</fieldItem>
                 <identifier>RecordAllowsChildren_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ResidenceGender__c</fieldItem>
+                <identifier>RecordResidenceGender_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-40f55033-cb66-48b0-b7f5-b8f647b7f95b</name>
@@ -595,6 +643,24 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>columns</name>
+                    <value>Facet-a33a817d-96e6-48e1-8ffe-62254f4eff5c</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>horizontalAlignment</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Address Information</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:fieldSection</componentName>
+                <identifier>flexipage_fieldSection6</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -947,6 +1013,163 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
+                    <name>actionNames</name>
+                    <valueList>
+                        <valueListItems>
+                            <value>CustomButton.Conditions__c.New</value>
+                        </valueListItems>
+                    </valueList>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>adminFilters</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>maxRecordsToDisplay</name>
+                    <value>10</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>parentFieldApiName</name>
+                    <value>Account.Id</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListApiName</name>
+                    <value>Conditions__r</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListDisplayType</name>
+                    <value>ADVGRID</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListFieldAliases</name>
+                    <valueList>
+                        <valueListItems>
+                            <value>NAME</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Condition_Name__c</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Description__c</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Condition_Status__c</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Effective_From__c</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Effective_To__c</value>
+                        </valueListItems>
+                    </valueList>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListLabel</name>
+                    <value>Conditions</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>showActionBar</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>sortFieldAlias</name>
+                    <value>__DEFAULT__</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>sortFieldOrder</name>
+                    <value>Default</value>
+                </componentInstanceProperties>
+                <componentName>lst:dynamicRelatedList</componentName>
+                <identifier>lst_dynamicRelatedList4</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!$Permission.CustomPermission.EHISInvestigator}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>false</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>actionNames</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>adminFilters</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>maxRecordsToDisplay</name>
+                    <value>10</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>parentFieldApiName</name>
+                    <value>Account.Id</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListApiName</name>
+                    <value>Conditions__r</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListDisplayType</name>
+                    <value>ADVGRID</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListFieldAliases</name>
+                    <valueList>
+                        <valueListItems>
+                            <value>NAME</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Condition_Name__c</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Description__c</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Condition_Status__c</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Effective_From__c</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Effective_To__c</value>
+                        </valueListItems>
+                    </valueList>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListLabel</name>
+                    <value>Conditions</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>showActionBar</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>sortFieldAlias</name>
+                    <value>__DEFAULT__</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>sortFieldOrder</name>
+                    <value>Default</value>
+                </componentInstanceProperties>
+                <componentName>lst:dynamicRelatedList</componentName>
+                <identifier>lst_dynamicRelatedList5</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!$Permission.CustomPermission.EHISInvestigator}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>true</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-907ccd55-470d-4865-992a-36503174ed4c</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
                     <name>parentFieldApiName</name>
                     <value>Account.Id</value>
                 </componentInstanceProperties>
@@ -1211,6 +1434,20 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
+                    <value>Facet-907ccd55-470d-4865-992a-36503174ed4c</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>title</name>
+                    <value>Conditions</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:tab</componentName>
+                <identifier>flexipage_tab11</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
                     <value>Facet-19b26dcc-814b-472a-85f9-5d2950c586dd</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
@@ -1335,29 +1572,6 @@
             <componentInstance>
                 <componentName>accountContactRelatedList</componentName>
                 <identifier>c_accountContactRelatedList</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>flexcardName</name>
-                    <value>DisplayAddressInformationParent</value>
-                </componentInstanceProperties>
-                <componentName>runtime_omnistudio:flexcard</componentName>
-                <identifier>runtime_omnistudio_flexcard</identifier>
-                <visibilityRule>
-                    <booleanFilter>1 AND 2</booleanFilter>
-                    <criteria>
-                        <leftValue>{!$Permission.CustomPermission.EHIS_MMHA_User}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>false</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!$Permission.CustomPermission.EHIS_SDPR_User}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>false</rightValue>
-                    </criteria>
-                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <itemInstances>

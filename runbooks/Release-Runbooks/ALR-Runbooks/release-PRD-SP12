@@ -1,0 +1,63 @@
+# Sprint 12 Deployment Runbook
+
+|Sandbox|`PRD Deployment runbook for ALR-SP12'|
+|-|-|
+|Runbook Created|`2024-08-1`|
+|Runbook Last Modified|`2024-08-1`|
+
+## Pre-Requisites [5 min ]
+
+1. [ ] Deployment User has assigned Permission Sets
+
+> PERMISSION SET'S
+   1.EHIS Data Migration PS
+   2.EHIS Enable MFA PS
+   3.Action Plans PS
+   4.Document checklist PS
+   5.DocGen Designer PS ,DocGen Designer PS ,Docgen Designer Standard User PS
+   6.EHIS Admin User PS
+   7.Business Milestones and Life Events Access PS
+
+> Public Group
+   1.ALR All Users PG
+   2.ALR Data Analyst Users PG
+
+> Permission Set Group
+   1.EHIS ALR Admin PSG
+   2.EHIS ALR Data Analyst PSG
+   3.EHIS ALR Data Migration PSG
+   4.EHIS System Administrator PSG
+
+2. [ ] Checkout to `release-ALR-SP12` branch
+
+## Assumptions
+
+1. Total excecution time ~ > 30 mins
+
+## Open Items
+
+## Deployment Steps - verify deployment username added in commands
+
+1.[ ] Deploy OmniStudio components and its dependencies (5 min)
+   > sfdx force:source:deploy --sourcepath "ehis-source\core\main\default\omniScripts,ehis-source\core\main\default\omniDataTransforms,src\main\default\omniDataTransforms,src\main\default\omniIntegrationProcedures,src\main\default\omniUiCard,src\main\default\omniScripts" --wait 30 --targetusername deployment.user@gov.bc.ca.alrprod
+
+
+2.[ ]  Deploy full repository (~10 min)
+
+> [ ] Deploy
+
+- sfdx force:source:deploy --sourcepath "ehis-source,src-access-mgmt\main\default,src-ui\main\default,src\main\default" --wait 30 -u deployment.user@gov.bc.ca.alrprod -l RunLocalTests
+
+3 [ ] Re-activate Omnistudio components 
+      1. App Launcher -> OmniStudio -> Omnistudio **Integration Procedures**
+      2. Locate all active custom **Integration Procedures** -> deactivate them -> activate them back.
+      3. App Launcher -> Omniflex cards -> **Omnistudio Flex Cards**
+      4. Locate all active custom **Flex Cards** -> open each Fle[  ] Card -> deactivate -> activate back.
+      5. App Launcher -> OmniStudio -> **OmniScripts**
+      6. Locate all active custom **OmniScripts** -> open each omni script -> deactivate -> activate back
+
+4.[ ] ALR-1199 Go to Omniscript “RiskAssessment“ → Open active version → Click on dropdown and select “Select Deploy Standard Runtime Compatible LWC “ → Done.
+
+DevOps checklist:
+
+1. Make sure flow is activated " UpdateAssessmentTaskStatus " templates 

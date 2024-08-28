@@ -1,13 +1,13 @@
-#Sprint 10/12 Deployment Runbook
+#Sprint 10/11 Deployment Runbook
 
-|Sandbox|`Post refresh runbook for ALR-SP10/11'|
+|Sandbox|`Release runbook for ALR-SP10/11'|
 |-|-|
 |Runbook Created|`2024-06-20`|
 |Runbook Last Modified|`2024-07-10`|
 
 ## Pre-Requisites [5 min ]
 
-1. [ ] Deployment User has assigned Permission Sets
+1. [x] Deployment User has assigned Permission Sets
 
 > PERMISSION SET'S
    1.EHIS Data Migration PS
@@ -28,7 +28,7 @@
    3.EHIS ALR Data Migration PSG
    4.EHIS System Administrator PSG
 
-2. [ ] Checkout to `release-ALR-SP10/11` branch
+2. [x] Checkout to `release-ALR-SP10/11` branch
 
 ## Assumptions
 
@@ -38,58 +38,56 @@
 
 ## Pre-Deployment Steps (1-2 hrs)
 
-1.[ ] ALR-1263
+1.[x] ALR-1263
 
 - Go to Setup → search for User Interface → Enable “Use custom address fields" → Save.
 
-2.[ ] ALR -1646 change display name
+2.[x] ALR -1646 change display name
 
 - Setup -> Organization-Wide Addresses- Change Display Name from "Test" to "ALR Support Email"
    > Provide the below details:
    1. Display Name: Change Display Name to "ALR Support Email" and save it
 
-3. [ ] In this step we are removing PS from PSG
+3. [x] In this step we are removing PS from PSG
 
-- Go to Setup → search for Permission Set Group → Open below mentioned PSGs one after other
+- Go to Setup → search for Permission Set Group → select "Permission Sets in Group" - Open below mentioned PSGs one after other
 
-1.EHIS_Water_Business_Admin_PSG - "Remove EHIS_CRE_Group_Membership_PS permission set - click on done"
+1.EHIS_Water_Business_Admin_PSG - "select and Remove EHIS_CRE_Group_Membership_PS permission set - click on done"
 2.EHIS_Water_Public_Health_Engineer_PSG - "Remove EHIS_Read_Group_Membership_PS - click on done"
 3.EHIS_Water_Officer_PSG - "Remove EHIS_Read_Group_Membership_PS - click on done"
     
-4. [ ] ALR-1688 download excel from Jira
+4. [x] ALR-1688 download excel from Jira
 
    1. Go to app launcher
-   2. Select Salesforce Inspector->Data Export->Execute the below Query.
-      Select FolderId from EmailTemplate where Name ='Renewal Late Fee Notification Letter'
+   2. Select " Salesforce Inspector" ->Data Export->Execute the below Query. OR Go to  "Developer Console" → Query Editor → Execute the below Query.
    3. Copy the FolderId of Name “Renewal Late Fee Notification Letter” from the export.
    4. Replace the folderId Column in Email Template-upcoming Renewal.csv to the copied Id from data export-> Save the file
-   5. Select Salesforce Inspector->Data Import - Select the below:
-      Action->Insert
-   6. Object->Email Template , Copy and paste the content in Data Space and Import
+   5. Select Salesforce Inspector-> Data Import. OR Data Loader-Select the below:
+      "Action-> Insert"
+      " Object-> Email Template" -> Copy and paste the content in Data Space and Import
 
-5.[ ] ALR-1710
+5.[x] ALR-1710
 
 1. Go to SetUp->Search Deployment Settings->Enable “Allow deployments of components when corresponding Apex jobs are pending or in progress.
 
 Caution: Enabling this option may cause Apex jobs to fail.” in Deployment Option
 ->Save" 
 
-6.[ ] Destructive deployment -
+6.[x] Destructive deployment -
 
 1."Delete Physical_address__c from all the orgs.
 2. Delete EHIS_CRE_Group_Membership_PS ,EHIS_Read_Group_Membership_PS
 
-> sfdx force:source:deploy --manifest "destructive\destructive-post-refresh\package.xml" --postdestructivechanges "destructive\destructive-post-refresh\destructiveChanges.xml" --wait 30 -u gandloju.vishwantha@accenture.com.alr.devops
+> sfdx force:source:deploy --manifest "destructive\destructive-post-refresh\package.xml" --postdestructivechanges "destructive\destructive-post-refresh\destructiveChanges.xml" --wait 30 -u deployment.user@gov.bc.ca.alrprod
 
 ## Deployment Steps (20 mins)
 
-1.[ ] Deploy OmniStudio components and its dependencies (5 min)
-   > sfdx force:source:deploy --sourcepath "src\main\default\omniDataTransforms,src\main\default\omniIntegrationProcedures,src\main\default\omniUiCard,src\main\default\omniScripts,ehis-source\core\main\default\omniDataTransforms,ehis-source\core\main\default\omniScripts" --wait 30 -u gandloju.vishwantha@accenture.com.alr.devops
+1.[x] Deploy OmniStudio components and its dependencies (5 min)
+   > sfdx force:source:deploy --sourcepath "src\main\default\omniDataTransforms,src\main\default\omniIntegrationProcedures,src\main\default\omniUiCard,src\main\default\omniScripts,ehis-source\core\main\default\omniDataTransforms,ehis-source\core\main\default\omniScripts" --wait 30 -u deployment.user@gov.bc.ca.alrprod
 
+3.[x]  Deploy full repository (~20 min)
 
-3.[ ]  Deploy full repository (~20 min)
-
-> [ ] Verify folders
+> [x] Verify folders
       |Folder|Path|
       |-|-|
       |`src`|`src\main\default`|
@@ -97,11 +95,11 @@ Caution: Enabling this option may cause Apex jobs to fail.” in Deployment Opti
       |`src-ui`|`src-ui\main\default`|
       |'Ehis-source'|
 
-> [ ] Deploy
+> [x] Deploy
 
-- sfdx force:source:deploy --sourcepath "ehis-source,src-access-mgmt\main\default,src-ui\main\default,src\main\default" --wait 30 -u gandloju.vishwantha@accenture.com.alr.devops -l RunLocalTests
+- sfdx force:source:deploy --sourcepath "ehis-source,src-access-mgmt\main\default,src-ui\main\default,src\main\default" --wait 30 -u deployment.user@gov.bc.ca.alrprod -l RunLocalTests
 
->[ ] Re-activate Omnistudio components
+>[x] Re-activate Omnistudio components
       1. App Launcher -> OmniStudio -> Omnistudio **Integration Procedures**
       2. Locate all active custom **Integration Procedures** -> deactivate them -> activate them back.
       3. App Launcher -> OmniStudio -> **Omnistudio FlexCards**
@@ -109,11 +107,11 @@ Caution: Enabling this option may cause Apex jobs to fail.” in Deployment Opti
       5. App Launcher -> OmniStudio -> **OmniScripts**
       6. Locate all active custom **OmniScripts** -> open each omni script -> deactivate -> activate back
 
-4.[ ] ALR-1199 Go to Omniscript “RiskAssessment“ → Open active version → deactivate and Click on dropdown and select “Select Deploy Standard Runtime Compatible LWC “ → Done
+4.[x] ALR-1199 Go to Omniscript “RiskAssessment“ → Open active version → deactivate and Click on dropdown and select “Select Deploy Standard Runtime Compatible LWC “ → Done
 
 ## Post-Deployment Steps (30 mins)
 
-[ ] Create two records with EHIS Admin user
+[x] Create two records with EHIS Admin user
 
 - "Login as EHIS Admin User and create 2 records mentioned below:
 
@@ -132,20 +130,19 @@ Caution: Enabling this option may cause Apex jobs to fail.” in Deployment Opti
 - Related Role Name = “Downstream”
 - Create Inverse Role Automatically = "False"
 
-2. [ ] ALR-1729 download excel from Jira
+2. [x] ALR-1729 download excel from Jira
 
-- STEP 1: Go to app launcher
-- STEP 2: Select Salesforce Inspector->Data Export->Execute the below Query.
-  Select Id,FolderId from EmailTemplate where Name ='Renewal Late Fee Notification Letter'
-- STEP 3 : Copy the Id,FolderId of Name “Renewal Late Fee Notification Letter” from the export.
-- STEP 4 : Replace the folderId , ID Column in Email Template-upcoming Renewal.csv file 1 column to the copied Id from data export->Save the file
-- STEP 5 : :Select Salesforce Inspector->Data Import.-Select the below:Select the below:
+- 1.Go to app launcher
+- 2.Select Salesforce Inspector->Data Export->Execute the below Query. OR Go to  Developer Console → Query Editor → Execute the below Query.
+- 3.Copy the Id,FolderId of Name “Renewal Late Fee Notification Letter” from the export.
+- 4.Replace the folderId , ID Column in New Email Template-Subject-Dataload file 1 column to the copied Id from data export->Save the file
+- 5.Select Salesforce Inspector->Data Import. OR Data Loader-Select the below:
 
 - Action->update
 - Object->Email Template
 - Copy and paste the content in Data Space and Import.
 
-3. [ ] ALR-1700
+3. [x] ALR-1700
 - Log in to Salesforce.
 - Go to Setup->Search “Scheduled Jobs”->Scheduled Apex.
 - Provide the below details:
@@ -154,7 +151,7 @@ Caution: Enabling this option may cause Apex jobs to fail.” in Deployment Opti
   > Select Cron Expression->”0 0 0 15 3 ?”
 - Save
 
-4. [ ] ALR-1701
+4. [x] ALR-1701
 
 - Log in to Salesforce.
 - Go to Setup->Search “Scheduled Jobs”->Scheduled Apex.
@@ -162,7 +159,7 @@ Caution: Enabling this option may cause Apex jobs to fail.” in Deployment Opti
 - Job Name->Trigger Email on Jan-15
 - Apex Class-> search and select “ScheduleSendEmail” - Select Cron Expression->”0 0 0 15 1 ?” - Save
 
-[ ] ALR-1712
+[x] ALR-1712
 - Schedule Jobs1:
 1.Log in to Salesforce.
 2.Go to Setup->Search “Scheduled Jobs”->Scheduled Apex.
@@ -181,14 +178,37 @@ Apex Class-> search and select “AccountStatusUpdateOnMay”
 Select Cron Expression->0 0 0 1 5 ?
 4.Save
 
-5. [ ] EHIS-1344
+5. [x] EHIS-1344
 
 1. Login as System Administrator and click on setup icon
 2. In Quick FInd section search for  State and Country/Territory Picklists
 3. Open it and click on Configure States, Countries, and Territories
 4. Change the Default Country/Territory to None "
 
+6. [x] ALR-1745
+
+- Description
+> Go to Setup → Object Manager → Account Contact Relationship → Fields & Relationship → Roles → Deactivate the EHIS roles mentioned below:
+
+1. Owner                      16. Contractor
+2. Operator                   17. Water Purveyor
+3. Licensee                   18. Emergency Contact (Primary)
+4. Billing Contact            19. Emergency Contact (Secondary)
+5. Other Contact              20. Emergency Contact (Tertiary)
+6. Manager                    21. Operator (Primary)
+7. Authorized Person          22. Operator (Secondary)
+8. Chef                       23. Operator (Tertiary)
+9. Owner Contact              24. Sampler
+10. Agent
+11. Applicant/Developer
+12. Installer
+13. Development
+14. Referral Agency
+15. Engineering Firm
+
+Sampler
+
 DevOps checklist:
 
-1. Validate the flows in org with Repo make sure active versions in branch which are deployed by devops should match in org
-2. Email templates fieldS from csv uploaded properly
+1. Task_Created_on_Account_Record.flow-meta.xml verify this flow is active in PRD
+2. Email templates fieldS from csv uploaded properly in PRD

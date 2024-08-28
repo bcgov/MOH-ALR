@@ -1,0 +1,43 @@
+|Sandbox|`Post refresh runbook for EHIS-SP2'|
+|-|-|
+|Runbook Created|`2024-07-8`|
+|Runbook Last Modified|`2024-07-8`|
+
+## Pre-Requisites [5 min ]
+
+[ ] Checkout to `QA.362' code and create release branch out of it 'release-SP2-ehis'
+
+## Deployment Steps (20 mins)
+
+1.[ ] Deploy OmniStudio components and its dependencies (5 min)
+
+  > sfdx force:source:deploy --sourcepath "src\main\default\omniDataTransforms,src\main\default\omniIntegrationProcedures,src\main\default\omniUiCard,src\main\default\omniScripts,ehis-source\core\main\default\omniDataTransforms,ehis-source\core\main\default\omniScripts" --wait 30 -u gandloju.vishwantha@accenture.com.alr.uat
+
+2.[ ]  Deploy full repository (~20 min)
+
+> [ ] Verify folders
+      |Folder|Path|
+      |-|-|
+      |`src`|`src\main\default`|
+      |`src-access-mgmt`|`src-access-mgmt\main\default`|
+      |`src-ui`|`src-ui\main\default`|
+      |'Ehis-source'|
+
+> [ ] Deploy
+
+> sfdx force:source:deploy --sourcepath "ehis-source,src-access-mgmt\main\default,src-ui\main\default,src\main\default" --wait 30 -u gandloju.vishwantha@accenture.com.alr.uat -l RunLocalTests
+
+## Post-Deployment Steps (30 mins)
+
+[ ] ALR-1729
+
+Description : 
+- STEP 1: Go to app launcher
+- STEP 2: Select Salesforce Inspector->Data Export->Execute the below Query.
+- Select Id,FolderId from EmailTemplate where Name ='Renewal Late Fee Notification Letter'
+- STEP 3 : Copy the Id,FolderId of Name “Renewal Late Fee Notification Letter” from the export.
+- STEP 4 : Replace the folderId Column in Email Template-upcoming Renewal.csv for 1 column to the copied Id from data export->Save the file
+- STEP 5:Select Salesforce Inspector->Data Import.-Select the below:
+- Action->update
+- Object->Email Template
+- Copy and paste the content in Data Space and Import.

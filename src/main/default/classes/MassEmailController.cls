@@ -54,7 +54,7 @@ public with sharing class MassEmailController {
         Id orgWideAddrId = NULL;
         Id blaRecord = NULL;
         Map<Id, Set<Id>> contactContentVerMap = new Map<Id, Set<Id>>();
-        List<AccountContactRelation> contacts =new List<AccountContactRelation>();
+        Map<Id, AccountContactRelation> contacts = new Map<Id, AccountContactRelation>();
         
         try {
             //fetch acc status and rec type from metadata
@@ -114,7 +114,7 @@ public with sharing class MassEmailController {
                                                    
                                                    blaContactMap.put(blaRecord,new List<Id>()); 
                                                }
-                                               for(AccountContactRelation cont : contacts)
+                                               for(AccountContactRelation cont : contacts.values())
                                                {
                                                    contactIdList.add(cont.ContactId);
                                                    if(blaContactMap.containsKey(blaRecord)) {
@@ -151,9 +151,13 @@ public with sharing class MassEmailController {
             LogService.logAndPublish(className, 'doSendRenewals', '', err);
         }
     }
-    public Static List<AccountContactRelation> getContacts(Id accountId, Id parentId){
-        return [Select Id,ContactId,AccountId,IsActive,Contact.Email from AccountContactRelation where (AccountId = :accountId OR AccountId =: parentId) AND IsActive =true AND Contact.Email != NULL];
-        
+    public Static Map<Id, AccountContactRelation> getContacts(Id accountId, Id parentId){
+        Map<Id, AccountContactRelation> acrMap = new Map<Id, AccountContactRelation>();
+        List<AccountContactRelation> acrListcontacts = [Select Id,ContactId,AccountId,IsActive,Contact.Email from AccountContactRelation where (AccountId = :accountId OR AccountId =: parentId) AND IsActive =true AND Contact.Email != NULL];
+        for(AccountContactRelation acr : acrListcontacts){
+            acrMap.put(acr.ContactId, acr);
+        }
+        return acrMap;
     }
     //method to to send email to records-ALR-1000
     @AuraEnabled
@@ -164,7 +168,7 @@ public with sharing class MassEmailController {
         Id orgWideAddrId = NULL;
         Id blaRecord = NULL;
         Map<Id, Set<Id>> contactContentVerMap = new Map<Id, Set<Id>>();
-        List<AccountContactRelation> contacts =new List<AccountContactRelation>();
+        Map<Id, AccountContactRelation> contacts = new Map<Id, AccountContactRelation>();
         try {
             //fetch acc status and rec type from metadata
             accDetails = BCMOH_UtilityClass.getAccRenewals(BCMOH_Constants.renewalName);
@@ -223,7 +227,7 @@ public with sharing class MassEmailController {
                                                    
                                                    blaContactMap.put(blaRecord,new List<Id>()); 
                                                }
-                                               for(AccountContactRelation cont : contacts)
+                                               for(AccountContactRelation cont : contacts.values())
                                                {
                                                    contactIdList.add(cont.ContactId);
                                                    if(blaContactMap.containsKey(blaRecord)) {
@@ -468,8 +472,9 @@ public with sharing class MassEmailController {
         try {
             if(sendEmailValid) {
                 orgWideAddr = BCMOH_UtilityClass.getOrgWideEmailAddress();
-                if(orgWideAddr != NULL) {
+                 if(orgWideAddr != NULL) {
                     orgWideAddrId = orgWideAddr.Id;
+                       
                 }
                 else {
                     errMessage = BCMOH_Constants.noOrgWideAddr;
@@ -510,30 +515,31 @@ public with sharing class MassEmailController {
     //update bla success and error maps after sending email
     public static void getEmailStatus(Messaging.SendEmailResult[] emailResultList, 
                                       List<Messaging.SingleEmailMessage> singleEmailMsgList, Map<Id, List<Id>> whatIdTargetMap) {
-                                          Map<List<Id>, String> targetIdErrorMap = new Map<List<Id>, String>();
-                                          try {
-                                              for(Messaging.SendEmailResult eResRec : emailResultList) {
-                                                  if(!eResRec.isSuccess()) {
-                                                      for(Messaging.SendEmailError err : eResRec.getErrors()) {
-                                                          //targetIdErrorMap.put(err.getTargetObjectId(), err.getMessage());
-                                                      }
-                                                  }
-                                              }
-                                              for(Messaging.SingleEmailMessage msgRec : singleEmailMsgList) {
+    Map<List<Id>, String> targetIdErrorMap = new Map<List<Id>, String>();
+    try {
+        for(Messaging.SendEmailResult eResRec : emailResultList) {
+            if(!eResRec.isSuccess()) {
+                for(Messaging.SendEmailError err : eResRec.getErrors()) {
+                    //targetIdErrorMap.put(err.getTargetObjectId(), err.getMessage());
+                }
+            } 
+        }
+        for(Messaging.SingleEmailMessage msgRec : singleEmailMsgList) {
                                                   if(targetIdErrorMap.containsKey(whatIdTargetMap.get(msgRec.whatId))) {
                                                       blaErrMap.put(msgRec.whatId, targetIdErrorMap.get(whatIdTargetMap.get(msgRec.whatId)));
                                                   }
                                                   else {
                                                       String sentDetails = BCMOH_Constants.emailSentToId+' '+accContactMap.get(msgRec.whatId).Contact.Email+
                                                           '. '+BCMOH_Constants.emailSentTo+' '+accContactMap.get(msgRec.whatId).Contact.Name+'. '+BCMOH_Constants.sentTime+' '+datetime.now().format();//add to const
-                                                      blaSuccessMap.put(msgRec.whatId, sentDetails);
-                                                  }
-                                              }
-                                          }
+                    blaSuccessMap.put(msgRec.whatId, sentDetails);
+                }
+            }
+        }
                                           catch(exception err) {
-                                              LogService.logAndPublish(className, 'updateTargetRecsStatus', '', err);
-                                          }
-                                      }
+        LogService.logAndPublish(className, 'updateTargetRecsStatus', '', err);
+    }
+}
+
     
     public static void updateBlaStatus() {
         Set<Id> blaIds = new Set<Id>();
