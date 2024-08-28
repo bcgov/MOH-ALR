@@ -1,0 +1,245 @@
+## Manditory refresh steps after every refresh in DEV,CI,ST,QA,UAT,DAT01 Deployment Runbook
+
+## Pre-Requisites [5 min ]
+
+1. [ ] Deployment User has assigned Permission Sets
+
+PERMISSION SET'S
+   1.EHIS Data Migration PS
+   2.EHIS Enable MFA PS
+   3.Action Plans PS
+   4.Document checklist PS
+   5.DocGen Designer PS ,DocGen Designer PS ,Docgen Designer Standard User PS
+   6.EHIS Admin User PS , Omnistudio, Omnistudioadmin
+   7.Business Milestones and Life Events Access PS
+
+> Public Group
+   1.ALR All Users PG
+   2.ALR Data Analyst Users PG
+
+> Permission Set Group
+   1.EHIS ALR Admin PSG
+   2.EHIS ALR Data Analyst PSG
+   3.EHIS ALR Data Migration PSG
+   4.EHIS System Administrator PSG
+
+## Pre-Deployment Steps (1-2 hrs)
+
+1.[ ]  Setup -> Organization-Wide Addresses- Change Display Name from Test to ALR Support Email
+   > Provide the below details:
+   1. Email Address: hlth.assistedlivingregistry.test@hlthpss.gov.bc.ca-> Save
+   2. from setup search for email - deliveribility - all email save it
+
+2.[ ] ALR-818 creating Auth Provider and also search for Identity verification and check enable MFA option
+
+3.[ ] Fix the OmniStudio package omnistudio:DML currently not allowed error (1 min)
+
+- Switch to Classic Mode. Click on the + sign from the Tab Panel. Search Documents.
+- Go to Documents.
+- In the Document folders section, click the dropdown list and select Vlocity Document Uploads
+- Click New Document.
+- Name and Unique Name = VlocityLogoDocumentUploads.
+- Attach the sample file [any image file will do] and click Save
+
+4.[ ] Destructive deployment -
+
+1. Action Plan Template path  - "src\main\default\actionPlanTemplates\Application_Document_Checklist_Updated_Vers_7ed25cd9_b55f_11ee_baf3_8b08e788e277.apt-meta.xml"
+
+> sfdx force:source:deploy --manifest "destructive\destructive-post-refresh\package.xml" --postdestructivechanges "destructive\destructive-post-refresh\destructiveChanges.xml" -w 30 --targetusername gandloju.vishwantha@accenture.com.alr.dev
+
+5.[ ] Data Loading ALR-1180, ALR-1123 upload the objects in below sequence using workbench or dataloader
+
+1.Regulatory Authority
+2.Regulatory Authorization Type
+3.Regulatory Code
+4.Assessment Indicator Definition
+5.Regulatory Code Assessment Indicator
+6.Assessment Task Definition
+7.Assessment Task Indicator Definition
+8.Inspection Type
+9.Assessment Indicator Defined Value
+
+- 2. [ ] ALR-1123 After creating data for above objects verify ALR-1123, if not linked  excecute it manually  
+
+- 3. [ ] Create Action plan templates from Jira ALR-1268
+
+- Load action plan templates through Work bench 
+- Now perform ALR-1268 LINK Assessment task definition to Action plan template Item
+
+6.[ ]  Delete DecisionMatrixversions , DecisionMatrixDefinitions
+   -Query and delete
+      > select Id , DeveloperName from DecisionMatrixDefinitionVersion 
+      > select Id , DeveloperName from DecisionMatrixDefinition 
+
+> while deleting decision matrix definitions it will through error
+delete the flow
+> InspectionAssessmentTaskCreation and deploy it back during deployment
+
+## Deployment Steps (20 mins)
+
+1. [ ] Deploy Decision Matrix (5 min)
+   - Deploy decisionMatrix Definition folder
+   > sfdx force:source:deploy --sourcepath "src-bre\main\default\decisionMatrixDefinition" --wait 30 --targetusername gandloju.vishwantha@accenture.com.alr.hotfixci
+
+> [ALR-1250] App launcher → Business Rules Engine → Lookup Table Navigation Tab
+   > Open one by one below matrix :
+      - Action Plan Template Decision Matrix
+      - Risk Score Decision Matrix 
+      - Assigned Score Decision Matrix 
+      - Total Compliance Score Decision Matrix
+   > Open - Open the Matrix version - edit - uncheck the Active checkbox - >  Upload the csv for the required decision Matrix -> activate the template again 
+
+> [ ] Deploy custom metadata env specific folder 
+
+- sfdx force:source:deploy --sourcepath 
+"src-env-specific\hotfixqa\main\default\customMetadata" --wait 30 --targetusername gandloju.vishwantha@accenture.com.alr.dev
+
+4.[ ] ALR-1199 - this step should be performed when there is a new version of risk assessment
+- Go to Omniscript “RiskAssessment“ → Open active version → Click on dropdown and select “Select Deploy Standard Runtime Compatible LWC “ → Done.
+
+## Post-Deployment Steps (30 mins)
+
+1.[ ] ALR-792 Residence ID will be starting at 000XX
+    1. Go to Object Manager and select the Account object
+    2. Click Fields & Relationships, select the UniqueAccountNumber__c field, then click Edit
+    3. Click Change Field Type. Select 'Te[  ] t' for the Data Type, then click Ne[  ] t - > Click Save on the ne[  ] t screen.
+    4. Repeat Step 2–4. For step 3, select 'Auto-Number' for the Data Type.
+    5. Set the Start Number as 10000
+
+2.[ ] Import Templates: ALR-1540,1014,932,899,1018,1085,1178 
+        Path to find the below templates and their jsons and ppt's " DocgenTemplates" folder 
+
+      - App Launcher -> OMNISTUDIO - Document Template Designer
+      - Select import on right top and First Import all Json files 
+
+         - App launcher-> OMNISTUDIO -> Document template designer ->Import Jsonfile->deactivate-> replace file->select ppt (from below ppt)->save ->activate-> Save template 
+         |`CertificateTemplateSU`|
+         |`CertificateTemplateMH`|
+         |`CertificateTemplateSN`|
+
+         - App launcher->OMNISTUDIO -> Document template designer ->Import Jsonfile ->deactivate-> replace file->select Word doc->save ->activate->Save template.
+         |`InvoiceTemplate`|
+         |'RenewalReceiptTemplate'|
+         |'UnitReceiptTemplate'|
+         |'ApplicationFeeTemplate'|
+         |'RenewalInvoiceTemplate'|
+         |'RenewalInvoice_Templates'|
+         |`ReceiptTemplate`|
+         |`RenewalApplicationForm`|
+         |'GenerateInspectionPlan'|
+         |'LateFeeTemplate'|
+         |LateFee_Template|
+         |'InspectionReport'|
+
+3.[X] Update Sharing on Action Plan Template `Application Document Checklist template` record (1 min) ALR-793 ,853, 948
+
+   1. App Launcher -> Action Plan Templates -> **navigate** to `Application Document Checklist template updated version` record
+
+   [X] ALR-793 - As part of post deployment steps, after the creation of “Application Document Checklist template“, the status of this template is ‘Read only’, it's not visible to the users while adding a template on Action plan creation.
+   -So please do the following steps to activate the template, 
+   -Note: Login as Data Analyst
+   -Step 1: Clone the e[  ] isting Template and edit the Name as  “Application Document Checklist Template" 
+   -Step 2: After cloning the Original Action Plan Template
+   Before Publishing the template in the items section of Document checklist items
+   Click on reorder button present on the right side of the page and manually rearrange the items in the sorted order(01,02,03,04,05,….) and then publish it 
+   -Step 3: **Add** Sharing 
+
+      |Item Type|Item Name|Access Level|
+      |-|-|-|
+      |Public Group|`ALR Leadership Users PG`|Read/Write|
+      |Public Group|`ALR Registrar Users PG`|Read/Write|
+      |Public Group|`ALR Admin Users PG`|Read/Write|
+      |Public Group|`ALR Data Analyst Users PG`|Read/Write|
+      |Public Group|`ALR Investigator Users PG`|Read Only|
+
+   3. Click **Save**
+
+4. [ ] ALR-1700
+- Log in to Salesforce.
+- Go to Setup->Search “Scheduled Jobs”->Scheduled Apex .
+- Provide the below details:
+  > Job Name->Trigger Email on March-15
+- Apex Class-> search and select “ScheduledEmailTrigger”
+  > Select Cron Expression->”0 0 0 15 3 ?”
+- Save
+
+5. [ ] ALR-1701
+
+- Log in to Salesforce.
+- Go to Setup->Search “Scheduled Jobs”->Scheduled Apex .
+- Provide the below details:
+- Job Name->Trigger Email on Jan-15
+- Apex Class-> search and select “ScheduleSendEmail” - Select Cron Expression->”0 0 0 15 1 ?” - Save
+
+6. [ ] ALR-1712
+- Schedule Jobs1:
+1.Log in to Salesforce.
+2.Go to Setup->Search “Scheduled Jobs”->Scheduled Apex.
+3.Provide the below details:
+Job Name->AccountStatusUpdateOnApril
+Apex Class-> search and select “AccountStatusUpdate”
+Select Cron Expression->0 0 0 1 4 ?
+4.Save
+
+- Schedule Jobs 2:
+1.Log in to Salesforce.
+2.Go to Setup->Search “Scheduled Jobs”->Scheduled Apex.
+3.Provide the below details:
+Job Name->AccountStatusUpdateOnMay
+Apex Class-> search and select “AccountStatusUpdateOnMay”
+Select Cron Expression->0 0 0 1 5 ?
+4.Save
+
+6.[ ] ALR-1073 This step needs to be done after creating Admin person in ORG
+
+- Login as ALR Admin User
+Verify if you’re in EHIS App (if not change the app to EHIS)
+Click on the Navigation Dropdown Icon and click on edit at the bottom of dropdown.
+add Renewal Management - Click on Save
+
+7.[ ] ALR-1206,ALR-1387,1386,1577 - This step to be performed after creating all users
+
+- Step 1 - search for EHIS app - Go To Dashboards - Search ALRLeadership Dashboard- Click Edit
+Got to Properties (cog icon) - Select Another Person - 
+For lower environments select any leadership user - > Click Save
+
+- Step 2,3 
+Please create SDPR ,MMHA Test User's same like other personas we had. 
+
+Go To Setup - Search Users - Create New User, email can be devops - after creating MMHA user 
+Assign MMHA User to Public Group
+1. Go To Setup
+2. Search Public Groups
+3. Edit ALR MMHA Users PG
+4. Assign the user you created in step 1 to Selected Members and click Save
+Assign Permission Set Group to MMHA User
+1. Go To Setup
+2. Search Users
+3. Open the MMHA User you created 
+4. Go to Permission Set Group Section and Add EHIS ALR MMHA PSG
+
+
+Create SDPR User
+Assign SDPR User to Public Group
+1.Go To Setup
+2.Search Public Groups
+3.Edit ALR SDPR Users PG
+4. Assign the user you created in step 1 to Selected Members and click Save
+
+Assign Permission Set Group to SDPR User
+1.Go To Setup - > Search Users -> Open the SDPR User you created-> Go to Permission Set Group Section and Add EHIS ALR SDPR PSG
+
+step 4
+- Log in as System Administrator
+- Assign the following Permission Set to all ALR Active Users (Business+Onshore+offshore) the necessary users 
+- Permission Set - Business Milestones and Life Events Access
+- This has to done in all the higher orgs till production
+
+DevOps checklist:
+
+1. Make sure you activated the all docugen templates 
+2. Validate the flows in org with Repo make sure active/inactive versions in branch which are deployed by devops should match in org
+3. Email templates access and check body is present,html for templates 
+4. Decision matrix csv data uploaded, activated back
+5. deploy env specific folder org wise
+6. Email to dawn to verify the owd email address
