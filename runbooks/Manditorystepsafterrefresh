@@ -89,6 +89,20 @@ delete the flow
       - Total Compliance Score Decision Matrix
    > Open - Open the Matrix version - edit - uncheck the Active checkbox - >  Upload the csv for the required decision Matrix -> activate the template again 
 
+2.[x] Deploy OmniStudio components and its dependencies (5 min)
+
+sfdx force:source:deploy --sourcepath "ehis-source\core\main\default\omniScripts,ehis-source\core\main\default\omniDataTransforms,src\main\default\omniDataTransforms,src\main\default\omniIntegrationProcedures,src\main\default\omniUiCard,src\main\default\omniScripts" --wait 30 --targetusername gandloju.vishwantha@accenture.com.alr.hotfixci
+
+3.[X] Deploy full repository (~20 min)
+
+[X] Verify folders |Folder|Path| |-|-| |src|src\main\default| |src-access-mgmt|src-access-mgmt\main\default| |src-ui|src-ui\main\default| |'Ehis-source'|
+
+[x] Deploy
+
+sfdx force:source:deploy --sourcepath "ehis-source,src-access-mgmt\main\default,src-ui\main\default,src\main\default" --wait 30 -u gandloju.vishwantha@accenture.com.alr.hotfixci -l RunLocalTests
+
+[x] Re-activate Omnistudio components 1. App Launcher -> OmniStudio -> Omnistudio Integration Procedures 2. Locate all active custom Integration Procedures -> deactivate them -> activate them back. 3. App Launcher -> Omnifle[ ] cards -> Omnistudio Fle[ ] Cards 4. Locate all active custom Fle[ ] Cards -> open each Fle[ ] Card -> deactivate -> activate back. 5. App Launcher -> OmniStudio -> OmniScripts 6. Locate all active custom OmniScripts -> open each omni script -> deactivate -> activate back
+
 > [ ] Deploy custom metadata env specific folder 
 
 - sfdx force:source:deploy --sourcepath 
