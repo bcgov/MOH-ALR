@@ -38,12 +38,7 @@ public with sharing class ChangeAccountOwner {
             Boolean isPublicChecked = input.isPublicChecked != null ? input.isPublicChecked : false;
             Boolean isCaseChecked = input.isCaseChecked != null ? input.isCaseChecked : false;
             Boolean isInspectionChecked = input.isInspectionChecked != null ? input.isInspectionChecked : false;
-
-            system.debug(isBlaChecked);
-            system.debug(isPublicChecked);
-            system.debug(isCaseChecked);
-            system.debug(isInspectionChecked);
-            
+  
             if (newOwnerId == null || accountId.isEmpty()) {
                 return;
             }
