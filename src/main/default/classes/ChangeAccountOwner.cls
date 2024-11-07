@@ -34,24 +34,11 @@ public with sharing class ChangeAccountOwner {
             
             Id newOwnerId = input.newOwnerId;
             List<Id> accountId = input.accountId;
-            Boolean isBlaChecked = input.isBlaChecked;
-            Boolean isPublicChecked = input.isPublicChecked;
-            Boolean isCaseChecked = input.isCaseChecked;
-            Boolean isInspectionChecked = input.isInspectionChecked;
-            
-            if(isBlaChecked != null || isPublicChecked != null || isCaseChecked != null || isInspectionChecked != null){
-                isBlaChecked = TRUE;
-                isPublicChecked = TRUE;
-                isCaseChecked = TRUE;
-                isInspectionChecked = TRUE;
-            }
-            else{
-                isBlaChecked = FALSE;
-                isPublicChecked = FALSE;
-                isCaseChecked = FALSE;
-                isInspectionChecked = FALSE;
-            }
-            
+            Boolean isBlaChecked = input.isBlaChecked != null ? input.isBlaChecked : false;
+            Boolean isPublicChecked = input.isPublicChecked != null ? input.isPublicChecked : false;
+            Boolean isCaseChecked = input.isCaseChecked != null ? input.isCaseChecked : false;
+            Boolean isInspectionChecked = input.isInspectionChecked != null ? input.isInspectionChecked : false;
+  
             if (newOwnerId == null || accountId.isEmpty()) {
                 return;
             }
@@ -91,28 +78,28 @@ public with sharing class ChangeAccountOwner {
                 Account acc = new Account(Id = accId.Id, OwnerId = newOwnerId);
                 accountsToUpdate.add(acc);
                 
-                if ((isBlaChecked && mapBlaRecords.containsKey(accId.Id)) || (accId.RecordType.DeveloperName != 'Registrant' && isBlaChecked == FALSE))  {
+                if ((isBlaChecked && mapBlaRecords.containsKey(accId.Id)))  {
                     for (BusinessLicenseApplication bla : mapBlaRecords.get(accId.Id)) {
                         bla.OwnerId = newOwnerId;
                         blaRecordsToUpdate.add(bla);
                     }
                 }
                 
-                if ((isPublicChecked && mapPublicCompRecords.containsKey(accId.Id)) || (accId.RecordType.DeveloperName != 'Registrant' && isPublicChecked == FALSE)){
+                if ((isPublicChecked && mapPublicCompRecords.containsKey(accId.Id))) {
                     for (PublicComplaint pubComp : mapPublicCompRecords.get(accId.Id)) {
                         pubComp.OwnerId = newOwnerId;
                         publicCompRecordsToUpdate.add(pubComp);
                     }
                 }
                 
-                if ((isCaseChecked && mapCaseRecords.containsKey(accId.Id)) || (accId.RecordType.DeveloperName != 'Registrant' && isCaseChecked == FALSE)) {
+                if ((isCaseChecked && mapCaseRecords.containsKey(accId.Id))) {
                     for (Case caseRec : mapCaseRecords.get(accId.Id)) {
                         caseRec.OwnerId = newOwnerId;
                         caseRecordsToUpdate.add(caseRec);
                     }
                 }
                 
-                if ((isInspectionChecked && mapVisitRecords.containsKey(accId.Id)) || (accId.RecordType.DeveloperName != 'Registrant' && isInspectionChecked == FALSE)) {
+                if ((isInspectionChecked && mapVisitRecords.containsKey(accId.Id))) {
                     for (Visit visit : mapVisitRecords.get(accId.Id)) {
                         visit.OwnerId = newOwnerId;
                         visitRecordsToUpdate.add(visit);
