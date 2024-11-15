@@ -37,7 +37,7 @@ public with sharing class FetchAndGenerateCSV {
       List<Account> accounts = [SELECT Id, RegId__c, Name, HealthAuthority__c, ExemptionofAddressPublication__c, Phone, Extension__c, Fax, Website, Status__c, Parent.Name,
                                (SELECT ContactId, PrimaryContact__c, Contact.Name FROM AccountContactRelations WHERE PrimaryContact__c = true LIMIT 1),
                                (SELECT RegistrationCertificate__c FROM AccountBusinessLicenses__r WHERE Status = 'Active' LIMIT 1),
-                               (SELECT ServiceName__c FROM Services__r WHERE ServiceName__c IN: serviceNameList LIMIT 50),
+                               (SELECT ServiceName__c, Status__c FROM Services__r WHERE ServiceName__c IN: serviceNameList LIMIT 50),
                                (SELECT Id, Location.VisitorAddress.Address FROM AssociatedLocations WHERE ActiveTo = NULL LIMIT 1),
                                Account.LicenseType__r.RegulatoryAuthorizationCode__c,
                                (SELECT Quantity, Type__c FROM Assets WHERE Type__c IN: typeList AND ParentId = NULL AND Quantity > 0.00)
@@ -140,7 +140,7 @@ public with sharing class FetchAndGenerateCSV {
     // Helper method to get the service flag
     private static String getServiceFlag(List<Service__c> services, String serviceName){
         for(Service__c service : services){
-            if(!String.isEmpty(serviceName) && serviceName.containsIgnoreCase(service.ServiceName__c)){
+            if(service.Status__c == 'Active' && service.ServiceName__c == serviceName){
                 return '-1'; // Flag '-1' if service name is found
             }
         }
