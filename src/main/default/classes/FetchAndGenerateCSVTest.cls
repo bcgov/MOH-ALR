@@ -60,6 +60,7 @@ private class FetchAndGenerateCSVTest {
             ServiceName__c = 'Assistance with daily living activities',
             ServiceType__c = 'Assisted Living Service',
             ProvidedBy__c = 'Registrant',
+            Status__c = 'Active',
             Account__c = Residence.id
         );
         insert ser;
@@ -122,6 +123,7 @@ private class FetchAndGenerateCSVTest {
             ServiceName__c = 'Assistance with daily living activities',
             ServiceType__c = 'Assisted Living Service',
             ProvidedBy__c = 'Registrant',
+            Status__c = 'Active',
             Account__c = Residence.id
         );
         insert ser;
