@@ -45,7 +45,7 @@ const columns = [
 
 export default class ShowRegulatoryViolationRecords extends OmniscriptBaseMixin(NavigationMixin(LightningElement)) {
     @api recordId;
-    @api Questions1JSON;
+    @api questions1json;
     @track error;
     showSpinner = false;
     columns = columns;
@@ -95,8 +95,8 @@ export default class ShowRegulatoryViolationRecords extends OmniscriptBaseMixin(
     @wire(getRecords, { recordId: '$recordId', pickList: '$pickListOptions', pickList: '$severityOptions' } )
     wiredCallback(result) {
         this._wiredResult = result;
-        if(this.Questions1JSON) {
-            const data = this.Questions1JSON;  
+        if(this.questions1json) {
+            const data = this.questions1json;  
             let rcvParsedData = JSON.parse(JSON.stringify(data));
             if(rcvParsedData.length > 0) {
                 rcvParsedData.forEach(rcv => {
