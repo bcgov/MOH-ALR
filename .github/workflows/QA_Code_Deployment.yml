@@ -24,7 +24,7 @@ on:
 # Jobs to be executed
 jobs:
   Code-Deploy-Run-QA:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: ${{ github.event.inputs.QA == 'true' }}
     environment: QA
     env:
@@ -83,7 +83,7 @@ jobs:
 
   Git-Tag-Run:
     needs: Code-Deploy-Run-QA
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: ${{ github.event.inputs.create-tag == 'true' }}
     steps:
       - name: 'Checkout source code'
