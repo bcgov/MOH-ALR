@@ -31,7 +31,7 @@ const columns = [
 
 export default class operationAssessmentRecords extends OmniscriptBaseMixin(NavigationMixin(LightningElement)) {
     @api recordId;
-    @api catassessmentjson;
+    @api CATAssessmentJSON;
     @track error;
     showSpinner = false;
     columns = columns;
@@ -61,8 +61,8 @@ export default class operationAssessmentRecords extends OmniscriptBaseMixin(Navi
             sMethodName: "inspection_AssessmentQuestions",
             options: JSON.stringify(options)
         };
-        if(this.catassessmentjson) {
-            const data = this.catassessmentjson;
+        if(this.CATAssessmentJSON) {
+            const data = this.CATAssessmentJSON;  
             let rcvParsedData = JSON.parse(JSON.stringify(data));
         this._actionUtil
             .executeAction(params, null, this, null, null)
