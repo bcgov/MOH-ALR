@@ -3,11 +3,10 @@
 * @Description       : Class for Sending Email on  Jan-15
 * @Author            : Keerthana Srinivasan (Accenture)
 * @StoryNo           : ALR-562
+* @Updated by        : Liliane Nassar (CGi) -BCMOHAM-22405
 **/
 
 public with sharing class ScheduleSendEmail implements Schedulable {
-    
-    Map<Id, AccountContactRelation> contacts = new Map<Id, AccountContactRelation>();
     
      public void execute(SchedulableContext sc) {
           List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
@@ -21,52 +20,85 @@ public with sharing class ScheduleSendEmail implements Schedulable {
                 WHERE DisplayName = 'ALR Support Email'
             ];
             
-            for(Account accounts : [SELECT Id ,Name,ParentId FROM Account
-                                    WHERE Status__c IN ('Registered Active', 'Registered Active with Conditions', 'Registered Active Progressive Enforcement')
-                                   ]){
-                                       contacts = getContacts(accounts.Id,accounts.ParentId);
-                                       Map<String, List<String>> processedEmails = new Map<String, List<String>>();
-                                       Integer currentyear = Date.today().year();
-                                       Integer previousyear = Date.today().year() - 1;
-                                       
-                                       for (AccountContactRelation acrList : contacts.values()) {
-                                           if (acrList.contact.Email != null) {
-                                               String key = acrList.AccountId + '_' + acrList.contact.Email.toLowerCase();
-                                               Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
-                                               email.setTemplateId(emailTemplate.Id);
-                                               email.setOrgWideEmailAddressId(orgWideAddr.Id);
-                                               email.setToAddresses(new String[]{acrList.contact.Email});
-                                               email.setTargetObjectId(acrList.contact.Id);
-                                               String emailBody = emailTemplate.HtmlValue;
-                                               String emailSubject = emailTemplate.Subject;
-                                               emailBody = emailBody.Replace('{%%Account.Name%%}', accounts.Name);
-                                               emailBody = emailBody.Replace('{%%CurrentYear%%}', String.valueOf(currentyear));
-                                               emailBody = emailBody.Replace('{%%PreviousYear%%}', String.valueOf(previousyear));
-                                               emailSubject = emailSubject.Replace('{%%CurrentYear%%}', String.valueOf(currentyear));
-                                               emailSubject = emailSubject.Replace('{%%PreviousYear%%}', String.valueOf(previousyear));
-                                               email.setSubject(emailSubject);
-                                               email.setHtmlBody(emailBody);
-                                               emails.add(email);
-                                           }
-                                       }
-                                   }
-            if (!emails.isEmpty()) {
-                sendEmailBatch(emails);
-            }
-        } catch (Exception e) {
-            System.debug('Exception occurred in execute method: ' + e.getMessage());
-        }
-    }
-    
-    public Static Map<Id, AccountContactRelation> getContacts(Id accountId, Id parentId){
-        Map<Id, AccountContactRelation> acrMap = new Map<Id, AccountContactRelation>();
-        List<AccountContactRelation> acrListcontacts = [Select Id,ContactId,AccountId,IsActive,Contact.Email from AccountContactRelation where (AccountId = :accountId OR AccountId =: parentId) AND IsActive =true AND Contact.Email != NULL];
-        for(AccountContactRelation acr : acrListcontacts){
-            acrMap.put(acr.ContactId, acr);
-        }
-        return acrMap;
-    }
-    
+              // Fetch all relevant accounts in one query
+              List<Account> accountList = [SELECT Id, Name, ParentId FROM Account
+                WHERE Status__c IN ('Registered Active', 'Registered Active with Conditions', 'Registered Active Progressive Enforcement')];
+              
+             Map<Id, Account> accountMap = new Map<Id, Account>();
+                // Extract Account Ids for bulk querying contacts
+                Set<Id> accountIds = new Set<Id>();
+                for (Account acc : accountList) {
+                    accountIds.add(acc.Id);
+                    if (!accountMap.containsKey(acc.Id)) {    
+                        accountMap.put(acc.Id, acc);
+                    }
+                    if (acc.ParentId != null) {
+                        accountIds.add(acc.ParentId);
+                        if (!accountMap.containsKey(acc.ParentId)) {    
+                            accountMap.put(acc.ParentId, acc);
+                        }
+                   }
+                }
+
+                // Fetch all related contacts in one query
+                Map<Id, List<AccountContactRelation>> accountContactMap = new Map<Id, List<AccountContactRelation>>();
+                for (AccountContactRelation acr : [
+                    SELECT Id, ContactId, AccountId, IsActive, Contact.Email 
+                    FROM AccountContactRelation 
+                    WHERE AccountId IN :accountIds AND IsActive = true AND Contact.Email != NULL
+                ]) {
+                    if (!accountContactMap.containsKey(acr.AccountId)) {  
+                       accountContactMap.put(acr.AccountId, new List<AccountContactRelation>());
+                    } 
+                    accountContactMap.get(acr.AccountId).add(acr);
+                   }
+                   
+                // Process each account
+                Integer currentyear = Date.today().year();
+                Integer previousyear = Date.today().year() - 1;
+                Map<String, Boolean> processedEmails = new Map<String, Boolean>();
+
+                for (Id acc : accountIds) {
+                    List<AccountContactRelation> contacts = accountContactMap.get(acc);
+                    if (contacts != null) {
+                        for (AccountContactRelation acr : contacts) {
+                            if (acr.Contact.Email != null) {
+                            String emailKey = acc + '_' + acr.Contact.Email.toLowerCase();  
+                                if (!processedEmails.containsKey(emailKey)) {
+                                    Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
+                                    email.setTemplateId(emailTemplate.Id);
+                                    email.setOrgWideEmailAddressId(orgWideAddr.Id);
+                                    email.setToAddresses(new String[]{acr.Contact.Email});
+                                    email.setTargetObjectId(acr.Contact.Id);
+                                    
+                                    String emailBody = emailTemplate.HtmlValue;
+                                    String emailSubject = emailTemplate.Subject;
+                                    emailBody = emailBody.replace('{%%Account.Name%%}', accountMap.get(acc).Name);
+                                    
+                                    emailBody = emailBody.replace('{%%CurrentYear%%}', String.valueOf(currentYear));
+                                    emailBody = emailBody.replace('{%%PreviousYear%%}', String.valueOf(previousYear));
+                                    emailSubject = emailSubject.replace('{%%CurrentYear%%}', String.valueOf(currentYear));
+                                    emailSubject = emailSubject.replace('{%%PreviousYear%%}', String.valueOf(previousYear));
+
+                                    email.setSubject(emailSubject);
+                                    email.setHtmlBody(emailBody);
+                                    emails.add(email);
+   
+                                    processedEmails.put(emailKey, true); // Mark as processed
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (!emails.isEmpty()) {
+                     sendEmailBatch(emails);
+                }
+            } catch (Exception e) {
+                System.debug('Exception occurred in execute method: ' + e.getMessage());
+              }
+}
+       
     
     public static void sendEmailBatch(List<Messaging.SingleEmailMessage> emailBatch) {
         List<Messaging.SingleEmailMessage> singleEmailList = new List<Messaging.SingleEmailMessage>();
