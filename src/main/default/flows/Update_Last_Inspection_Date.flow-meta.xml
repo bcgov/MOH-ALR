@@ -13,7 +13,7 @@
     <processMetadataValues>
         <name>CanvasMode</name>
         <value>
-            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
         </value>
     </processMetadataValues>
     <processMetadataValues>
@@ -24,10 +24,31 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordLookups>
+        <name>Get_Inspection_Type_Id</name>
+        <label>Get Inspection Type Id</label>
+        <locationX>677</locationX>
+        <locationY>363</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>GetLatestInspectionRecord</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Non-Site Visit Assessment</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>InspectionType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>GetLatestInspectionRecord</name>
         <label>GetLatestInspectionRecord</label>
-        <locationX>176</locationX>
-        <locationY>323</locationY>
+        <locationX>677</locationX>
+        <locationY>517</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Update_Last_Inspection_Date</targetReference>
@@ -54,17 +75,24 @@
                 <stringValue>Completed</stringValue>
             </value>
         </filters>
+        <filters>
+            <field>VisitTypeId</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <elementReference>Get_Inspection_Type_Id.Id</elementReference>
+            </value>
+        </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>Visit</object>
-        <sortField>CreatedDate</sortField>
+        <sortField>ActualVisitStartTime</sortField>
         <sortOrder>Desc</sortOrder>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordUpdates>
         <name>Update_Last_Inspection_Date</name>
         <label>Update Last Inspection Date</label>
-        <locationX>176</locationX>
-        <locationY>431</locationY>
+        <locationX>683</locationX>
+        <locationY>634</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -82,10 +110,10 @@
         <object>Account</object>
     </recordUpdates>
     <start>
-        <locationX>50</locationX>
-        <locationY>0</locationY>
+        <locationX>543</locationX>
+        <locationY>48</locationY>
         <connector>
-            <targetReference>GetLatestInspectionRecord</targetReference>
+            <targetReference>Get_Inspection_Type_Id</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
