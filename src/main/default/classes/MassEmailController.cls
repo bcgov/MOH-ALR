@@ -59,7 +59,6 @@ public with sharing class MassEmailController {
 
         Set<Id> accountIds = new Set<Id>();
         Id tmpAccId ;
-       // Set<Id> parentIds = new Set<Id>();
         
         try {
             //fetch acc status and rec type from metadata
