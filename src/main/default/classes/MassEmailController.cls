@@ -92,63 +92,71 @@ public with sharing class MassEmailController {
 
             //Fetch all contacts in a single query
             Map<Id, List<AccountContactRelation>> allContacts = getAllContacts(accountIds);
-
+            Integer maxBlaToProcess = 100;
+            Integer blaCount=0;
             for(Account activeAccRec : activeAccounts){
-                                           isValidAcc = true;
-                                           
-                                           if(activeAccRec.BusinessLicenseApplicationAccount.size() == 0) {
-                                               isValidAcc = false;
-                                               continue;
-                                           }
-                                           
-                                           
-                                           if(activeAccRec.AccountBusinessLicenses__r.size() == 0) { 
-                                           }
-                                           else if(isValidAcc) {
-                                               blMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, activeAccRec.AccountBusinessLicenses__r[0]);
-                                           }
-                                           
-                                           //if account is valid then fetch the bla Ids associated with the account to fetch its files attached
-                                           if(isValidAcc) {
-                                               
-                                               accMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, activeAccRec);
-                                               
-                                               accContactMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, 
-                                                                 activeAccRec.AccountContactRelations[0]);
-                                               
-                                               if(activeAccRec.Assets.size() != 0) {
-                                                   Integer unitCounter = 0;
-                                                   for(Asset parentAsset : activeAccRec.Assets) {
-                                                       unitCounter = unitCounter + Integer.valueOf(parentAsset.Quantity);
-                                                   }
-                                                   blaTotalAlUnitsMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, unitCounter);
-                                               }
-                                               //bla map and blaId-contactId map for email targetIds
-                                               for(BusinessLicenseApplication blaRec : activeAccRec.BusinessLicenseApplicationAccount) {
-                                                   blaMap.put(blaRec.Id, blaRec);
-                                                   blaRecord = blaRec.Id;
-                                                   blaContactMap.put(blaRecord,new List<Id>());
-                                                   //contacts = getContacts(blaRec.AccountId,blaRec.Account.ParentId);
-                                                   if (allContacts.containsKey(blaRec.AccountId))
-                                                       tmpAccId = blaRec.AccountId;
-                                                    else {
-                                                       tmpAccId = blaRec.Account.ParentId;
-                                                    }
-                                                  
-                                                    for (AccountContactRelation cont : allContacts.get(tmpAccId)) {
-                                                        contactIdList.add(cont.ContactId);
-                                                        
-                                                        if (blaContactMap.containsKey(blaRecord)) {
-                                                            blaContactMap.get(blaRecord).add(cont.ContactId);
-                                                        } else {
-                                                            blaContactMap.put(blaRecord, new List<Id> { cont.ContactId });
-                                                        }
-                                                    }
-                                               }
-                                           }
-                                       }
-            
-            
+                isValidAcc = true;
+                
+                if(activeAccRec.BusinessLicenseApplicationAccount.size() == 0) {
+                    isValidAcc = false;
+                    continue;
+                }
+                
+                
+                if(activeAccRec.AccountBusinessLicenses__r.size() == 0) { 
+                }
+                else if(isValidAcc) {
+                    blMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, activeAccRec.AccountBusinessLicenses__r[0]);
+                }
+                
+                //if account is valid then fetch the bla Ids associated with the account to fetch its files attached
+                if(isValidAcc) {
+                    
+                    accMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, activeAccRec);
+                    
+                    accContactMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, 
+                                        activeAccRec.AccountContactRelations[0]);
+                    
+                    if(activeAccRec.Assets.size() != 0) {
+                        Integer unitCounter = 0;
+                        for(Asset parentAsset : activeAccRec.Assets) {
+                            unitCounter = unitCounter + Integer.valueOf(parentAsset.Quantity);
+                        }
+                        blaTotalAlUnitsMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, unitCounter);
+                    }
+                    //bla map and blaId-contactId map for email targetIds
+                    for(BusinessLicenseApplication blaRec : activeAccRec.BusinessLicenseApplicationAccount) {
+                        blaMap.put(blaRec.Id, blaRec);
+                        blaRecord = blaRec.Id;
+                        blaContactMap.put(blaRecord,new List<Id>());
+                        //contacts = getContacts(blaRec.AccountId,blaRec.Account.ParentId);
+                        if (allContacts.containsKey(blaRec.AccountId))
+                            tmpAccId = blaRec.AccountId;
+                        else {
+                            tmpAccId = blaRec.Account.ParentId;
+                        }
+                        
+                        for (AccountContactRelation cont : allContacts.get(tmpAccId)) {
+                            contactIdList.add(cont.ContactId);
+                            
+                            if (blaContactMap.containsKey(blaRecord)) {
+                                blaContactMap.get(blaRecord).add(cont.ContactId);
+                            } else {
+                                blaContactMap.put(blaRecord, new List<Id> { cont.ContactId });
+                            }
+                        }
+                    }
+                }
+
+                blaCount++;
+                System.debug('blaCount' + blaCount);
+                if (blaCount >= maxBlaToProcess) {
+                    break;  // Stop processing  once the limit is reached
+                }
+              
+            }
+
+
             
             //if valid blas are fetched
             if(!blaMap.isEmpty()) {
@@ -585,7 +593,6 @@ public with sharing class MassEmailController {
         LogService.logAndPublish(className, 'updateTargetRecsStatus', '', err);
     }
 }
-
     
     public static void updateBlaStatus() {
         Set<Id> blaIds = new Set<Id>();
