@@ -178,7 +178,7 @@ export default class RenewalBlaTable extends LightningElement {
     handleConfirm() {
         const event = new ShowToastEvent({
             title: "Success",
-            message: "A Max of 80 Renewals can be sent at once - Click again to process any remaining",
+            message: "A Max of 50 Renewals can be sent at once - Click again to process any remaining",
             variant: "success"
         });
         this.dispatchEvent(event);
