@@ -12,7 +12,7 @@ import STATUS_FIELD from '@salesforce/schema/BusinessLicenseApplication.Status';
 import { getPicklistValues, getObjectInfo } from 'lightning/uiObjectInfoApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
-const DELAY_BEFORE_REFRESH = 2000;
+const DELAY_BEFORE_REFRESH = 4000;
 
 const tableColumns = [
     { label: 'Application Id', fieldName: 'appId', type: 'url', sortable: true,
@@ -178,7 +178,7 @@ export default class RenewalBlaTable extends LightningElement {
     handleConfirm() {
         const event = new ShowToastEvent({
             title: "Success",
-            message: "Renewals Sent Successfully",
+            message: "A Max of 50 Renewals can be sent at once - Click again to process any remaining",
             variant: "success"
         });
         this.dispatchEvent(event);
