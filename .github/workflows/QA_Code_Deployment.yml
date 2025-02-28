@@ -24,7 +24,7 @@ on:
 # Jobs to be executed
 jobs:
   Code-Deploy-Run-QA:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: ${{ github.event.inputs.QA == 'true' }}
     environment: QA
     env:
@@ -83,7 +83,7 @@ jobs:
 
   Git-Tag-Run:
     needs: Code-Deploy-Run-QA
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: ${{ github.event.inputs.create-tag == 'true' }}
     steps:
       - name: 'Checkout source code'
@@ -101,7 +101,7 @@ jobs:
         run: |
           LATEST_TAG=${{ steps.latesttag.outputs.LATEST_TAG }}
           NUMBER=${LATEST_TAG#QA.}
-          NEW_NUMBER=$((NUMBER + 1))
+          NEW_NUMBER=$((NUMBER + 3))
           NEW_TAG=QA.${NEW_NUMBER}
           echo "NEW_TAG=$NEW_TAG" >> $GITHUB_OUTPUT
 
