@@ -27,6 +27,20 @@ private class ChangeAccountOwnerTest {
             LanguageLocaleKey = 'en_US'
         );
         insert oldUser;
+        
+        // Step 1: Query the Custom Permission
+        CustomPermission customPerm = [
+        SELECT Id FROM CustomPermission 
+        WHERE Id = '0CPJQ0000001n0I4AQ'
+        LIMIT 1
+        ];
+
+		// Step 2: Query the Permission Set that includes this Custom Permission	
+        PermissionSet permSet = [
+        SELECT Id FROM PermissionSet 
+        WHERE Id IN (SELECT ParentId FROM SetupEntityAccess WHERE SetupEntityId = :customPerm.Id) 
+        LIMIT 1
+        ];
        
         User newUser = new User(
             FirstName = 'Testone',
@@ -43,6 +57,13 @@ private class ChangeAccountOwnerTest {
         );
         insert newUser;
         
+        System.runAs(newUser) { // Separate Setup Object DML
+        PermissionSetAssignment psa = new PermissionSetAssignment(
+            AssigneeId = newUser.Id,
+            PermissionSetId = permSet.Id
+        );
+        insert psa;
+    	}
         Schema.Location loc = new Schema.Location();
         loc.Name = 'U.S. 101N';
         loc.Longitude = 28.635308;
