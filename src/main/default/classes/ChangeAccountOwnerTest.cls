@@ -227,6 +227,7 @@ private class ChangeAccountOwnerTest {
         updatedBlaRecords.LicenseTypeId = acc.LicenseType__c;
         updatedBlaRecords.AppliedDate = System.today();
         insert updatedBlaRecords;
+        System.assertNotEquals(null, updatedBlaRecords.Id);
         
         
         ChangeAccountOwner.FlowInputs flowInputs = new ChangeAccountOwner.FlowInputs();
@@ -324,6 +325,7 @@ private class ChangeAccountOwnerTest {
         updatedBlaRecords.LicenseTypeId = acc.LicenseType__c;
         updatedBlaRecords.AppliedDate = System.today();
         insert updatedBlaRecords;
+        System.assertNotEquals(null, updatedBlaRecords.Id);
         
         PublicComplaint publiccompliants = new PublicComplaint();
         publiccompliants.AccountId = acc.Id;
@@ -334,6 +336,7 @@ private class ChangeAccountOwnerTest {
         publiccompliants.WishtoRemainAnonymous__c = 'No';
         publiccompliants.ResidentAwareOfComplaint__c = 'Yes';
         insert publiccompliants;
+        System.assertNotEquals(null, publiccompliants.Id);
         
         
         ChangeAccountOwner.FlowInputs flowInputs = new ChangeAccountOwner.FlowInputs();
