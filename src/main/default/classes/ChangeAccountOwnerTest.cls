@@ -109,7 +109,11 @@ private class ChangeAccountOwnerTest {
         updatedBlaRecords.Status = 'Approved';
         updatedBlaRecords.LicenseTypeId = acc.LicenseType__c;
         updatedBlaRecords.AppliedDate = System.today();
+        try {
         insert updatedBlaRecords;
+            } catch (Exception err) {
+            System.debug('Exception occurred: ' + err.getMessage());
+        }
         
         System.assertNotEquals(null, updatedBlaRecords.Id);
         

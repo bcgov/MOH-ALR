@@ -29,7 +29,7 @@ public with sharing class ChangeAccountOwner {
     
     @InvocableMethod(label='Transfer Account Ownership' description='Transfers ownership of Accounts and related records.')
     public static void transferAccountOwnership(List<FlowInputs> inputs) {
-       // try {
+        try {
             FlowInputs input = inputs[0];
             
             Id newOwnerId = input.newOwnerId;
@@ -123,9 +123,9 @@ public with sharing class ChangeAccountOwner {
             if (!visitRecordsToUpdate.isEmpty()) {
                 update visitRecordsToUpdate;
             }
-     //   } //catch (Exception err) {
-            //System.debug('Exception occurred: ' + err.getMessage());
-       // }
+        } catch (Exception err) {
+            System.debug('Exception occurred: ' + err.getMessage());
+        }
     }
     
     public static Map<Id, List<BusinessLicenseApplication>> getRelatedBlaRecords(List<Id> accountId, Map<Id, Id> currentOwnerIds) {
@@ -163,7 +163,7 @@ public with sharing class ChangeAccountOwner {
     
     public static Map<Id, List<Visit>> getRelatedVisitRecords(List<Id> accountId, Map<Id, Id> currentOwnerIds) {
         Map<Id, List<Visit>> resultMap = new Map<Id, List<Visit>>();
-        for (Visit visit : [SELECT Id, OwnerId, AccountId FROM Visit WHERE AccountId IN :accountId AND OwnerId IN :currentOwnerIds.values() AND Status != 'Completed']) {
+         for (Visit visit : [SELECT Id, OwnerId, AccountId FROM Visit WHERE AccountId IN :accountId AND OwnerId IN :currentOwnerIds.values() AND Status != 'Completed']) {
             if (!resultMap.containsKey(visit.AccountId)) {
                 resultMap.put(visit.AccountId, new List<Visit>());
             }
