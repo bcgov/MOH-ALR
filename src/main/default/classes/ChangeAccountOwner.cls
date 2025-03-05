@@ -10,8 +10,8 @@ public with sharing class ChangeAccountOwner {
     public class FlowInputs {
         @InvocableVariable
         public Id newOwnerId;
-        
-        @InvocableVariable
+    
+      @InvocableVariable
         public List<Id> accountId;
         
         @InvocableVariable
@@ -29,7 +29,7 @@ public with sharing class ChangeAccountOwner {
     
     @InvocableMethod(label='Transfer Account Ownership' description='Transfers ownership of Accounts and related records.')
     public static void transferAccountOwnership(List<FlowInputs> inputs) {
-        try {
+       // try {
             FlowInputs input = inputs[0];
             
             Id newOwnerId = input.newOwnerId;
@@ -123,9 +123,9 @@ public with sharing class ChangeAccountOwner {
             if (!visitRecordsToUpdate.isEmpty()) {
                 update visitRecordsToUpdate;
             }
-        } catch (Exception err) {
-            System.debug('Exception occurred: ' + err.getMessage());
-        }
+     //   } //catch (Exception err) {
+            //System.debug('Exception occurred: ' + err.getMessage());
+       // }
     }
     
     public static Map<Id, List<BusinessLicenseApplication>> getRelatedBlaRecords(List<Id> accountId, Map<Id, Id> currentOwnerIds) {
