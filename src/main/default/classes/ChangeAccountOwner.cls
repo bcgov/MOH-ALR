@@ -10,8 +10,8 @@ public with sharing class ChangeAccountOwner {
     public class FlowInputs {
         @InvocableVariable
         public Id newOwnerId;
-        
-        @InvocableVariable
+    
+      @InvocableVariable
         public List<Id> accountId;
         
         @InvocableVariable
@@ -163,7 +163,7 @@ public with sharing class ChangeAccountOwner {
     
     public static Map<Id, List<Visit>> getRelatedVisitRecords(List<Id> accountId, Map<Id, Id> currentOwnerIds) {
         Map<Id, List<Visit>> resultMap = new Map<Id, List<Visit>>();
-        for (Visit visit : [SELECT Id, OwnerId, AccountId FROM Visit WHERE AccountId IN :accountId AND OwnerId IN :currentOwnerIds.values() AND Status != 'Completed']) {
+         for (Visit visit : [SELECT Id, OwnerId, AccountId FROM Visit WHERE AccountId IN :accountId AND OwnerId IN :currentOwnerIds.values() AND Status != 'Completed']) {
             if (!resultMap.containsKey(visit.AccountId)) {
                 resultMap.put(visit.AccountId, new List<Visit>());
             }
