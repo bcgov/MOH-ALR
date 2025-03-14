@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
-    <apiVersion>61.0</apiVersion>
-    <description>To Update Visit Record Investigator Id to Owner Id</description>
+    <apiVersion>63.0</apiVersion>
     <environments>Default</environments>
-    <interviewLabel>Update Visit Record Investigator Id to Owner Id {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>Update Visit Record Investigator Id to Owner Id</label>
+    <interviewLabel>Update Owner of Inspection task {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Update Inspection task Owner to Owner Id</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -14,7 +13,7 @@
     <processMetadataValues>
         <name>CanvasMode</name>
         <value>
-            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
         </value>
     </processMetadataValues>
     <processMetadataValues>
@@ -25,34 +24,25 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordUpdates>
-        <description>To Update Investigator Field</description>
-        <name>Update_Investigator_Field</name>
-        <label>Update Investigator Field</label>
-        <locationX>176</locationX>
-        <locationY>287</locationY>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>OwnerId</field>
-            <operator>IsNull</operator>
-            <value>
-                <booleanValue>false</booleanValue>
-            </value>
-        </filters>
+        <name>Update_Assessment_task</name>
+        <label>Update Assessment task</label>
+        <locationX>664</locationX>
+        <locationY>385</locationY>
         <inputAssignments>
-            <field>VisitorId</field>
+            <field>OwnerId</field>
             <value>
                 <elementReference>$Record.OwnerId</elementReference>
             </value>
         </inputAssignments>
-        <inputReference>$Record</inputReference>
+        <inputReference>$Record.AssessmentTasks</inputReference>
     </recordUpdates>
     <start>
-        <locationX>50</locationX>
-        <locationY>0</locationY>
+        <locationX>543</locationX>
+        <locationY>48</locationY>
         <connector>
-            <targetReference>Update_Investigator_Field</targetReference>
+            <targetReference>Update_Assessment_task</targetReference>
         </connector>
-        <filterLogic>or</filterLogic>
+        <filterLogic>and</filterLogic>
         <filters>
             <field>OwnerId</field>
             <operator>IsChanged</operator>
@@ -61,15 +51,22 @@
             </value>
         </filters>
         <filters>
-            <field>VisitorId</field>
+            <field>OwnerId</field>
             <operator>IsNull</operator>
             <value>
-                <booleanValue>true</booleanValue>
+                <booleanValue>false</booleanValue>
             </value>
         </filters>
         <object>Visit</object>
-        <recordTriggerType>CreateAndUpdate</recordTriggerType>
-        <triggerType>RecordBeforeSave</triggerType>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
 </Flow>
