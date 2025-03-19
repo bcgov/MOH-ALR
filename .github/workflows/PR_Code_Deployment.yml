@@ -10,11 +10,6 @@ on:
         - 'src/main/default/**'
         - 'src-access-mgmt/main/default/**'
         - 'src-ui/main/default/**'
-        - 'ehis-source/app-contactonboardinglifecycle/main/default/**'   
-        - 'ehis-source/app-datasecurity/main/default/**'  
-        - 'ehis-source/app-onboardinglifecycle/main/default/**'   
-        - 'ehis-source/app-programworkareaassignment/main/default/**'  
-        - 'ehis-source/app-segmentationterritories/main/default/**'
         - 'ehis-source/app-phocs/main/default/**'
         - 'ehis-source/core/main/default/**'
         - 'ehis-source/ehis-access-mgmt/main/default/**' 
@@ -50,4 +45,4 @@ jobs:
 
       # deploy code without running test classes
       - name: 'Deploy source code'
-        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --targetusername CI
+        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH_PHOCS }} --wait 60 --targetusername CI
