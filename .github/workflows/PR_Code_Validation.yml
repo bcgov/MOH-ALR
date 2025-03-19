@@ -7,12 +7,7 @@ on:
     paths:
       - 'src/main/default/**'
       - 'src-access-mgmt/main/default/**'
-      - 'src-ui/main/default/**' 
-      - 'ehis-source/app-contactonboardinglifecycle/main/default/**'   
-      - 'ehis-source/app-datasecurity/main/default/**'  
-      - 'ehis-source/app-onboardinglifecycle/main/default/**'   
-      - 'ehis-source/app-programworkareaassignment/main/default/**'  
-      - 'ehis-source/app-segmentationterritories/main/default/**' 
+      - 'src-ui/main/default/**'  
       - 'ehis-source/app-phocs/main/default/**' 
       - 'ehis-source/core/main/default/**'
       - 'ehis-source/ehis-access-mgmt/main/default/**' 
@@ -51,42 +46,42 @@ jobs:
       # === Attempt to execute static source apexunit validations ===
       - name: Run static apexunit source validations
         id: static_tests_apexunit
-        run: sfdx scanner:run --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH }}" --pmdconfig "ruleset/apexunit.xml" --format "table" --engine "pmd"  --normalize-severity 1 --severity-threshold 1
+        run: sfdx scanner:run --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH_PHOCS }}" --pmdconfig "ruleset/apexunit.xml" --format "table" --engine "pmd"  --normalize-severity 1 --severity-threshold 1
 
       # === Attempt to execute static source validations ===
       - name: Run static braces source validations
         id: static_tests_braces
-        run: sfdx scanner:run --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH }}" --format "table" --pmdconfig "ruleset/braces.xml"
+        run: sfdx scanner:run --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH_PHOCS }}" --format "table" --pmdconfig "ruleset/braces.xml"
 
       # === Attempt to execute static source validations ===
       - name: Run static complexity source validations
         id: static_tests_complexity
-        run: sfdx scanner:run --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH }}" --format "table" --pmdconfig "ruleset/complexity.xml"
+        run: sfdx scanner:run --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH_PHOCS }}" --format "table" --pmdconfig "ruleset/complexity.xml"
 
       # === Attempt to execute static source validations ===
       - name: Run static empty source validations
         id: static_tests_empty
-        run: sfdx scanner:run --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH }}" --format "table" --pmdconfig "ruleset/empty.xml"
+        run: sfdx scanner:run --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH_PHOCS }}" --format "table" --pmdconfig "ruleset/empty.xml"
 
       # === Attempt to execute static source validations ===
       - name: Run static complexity source validations
         id: static_tests_metrics
-        run: sfdx scanner:run --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH }}" --format "table" --pmdconfig "ruleset/metrics.xml"
+        run: sfdx scanner:run --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH_PHOCS }}" --format "table" --pmdconfig "ruleset/metrics.xml"
 
       # === Attempt to execute static source validations ===
       - name: Run static security source validations
         id: static_tests_security
-        run: sfdx scanner:run --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH }}" --format "table" --pmdconfig "ruleset/security.xml"
+        run: sfdx scanner:run --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH_PHOCS }}" --format "table" --pmdconfig "ruleset/security.xml"
 
       # === Attempt to execute static source validations ===
       - name: Run static style source validations
         id: static_tests_style
-        run: sfdx scanner:run --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH }}" --format "table" --pmdconfig "ruleset/style.xml"
+        run: sfdx scanner:run --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH_PHOCS }}" --format "table" --pmdconfig "ruleset/style.xml"
 
       # === Attempt to execute lint source validations ===
       - name: Run lint empty source validations
         id: lint_tests
-        run: sfdx scanner:run --engine eslint-lwc --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH }}"
+        run: sfdx scanner:run --engine eslint-lwc --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH_PHOCS }}"
 
       # Authenticate CI01 sandbox
       - name: 'Authenticate CI01 Sandbox'
@@ -96,4 +91,4 @@ jobs:
 
       - name: Validate Code
         id: run_code_validation
-        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --checkonly --testlevel RunLocalTests --targetusername CI01
+        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH_PHOCS }} --wait 60 --verbose --checkonly --testlevel RunLocalTests --targetusername CI01
