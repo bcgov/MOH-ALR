@@ -7,13 +7,9 @@ on:
     branches:
         - dev
     paths:
-        - 'src/main/default/**'
-        - 'src-access-mgmt/main/default/**'
-        - 'src-ui/main/default/**'
-        - 'ehis-source/app-phocs/main/default/**'
-        - 'ehis-source/core/main/default/**'
-        - 'ehis-source/ehis-access-mgmt/main/default/**' 
-        - 'ehis-source/ehis-ui/main/default/**'             
+        - 'bcgov-source/app-phocs/main/default**'
+        - 'bcgov-source/core/main/default**'
+        - 'bcgov-source/app-alr/main/default**'             
         - '.github/workflows/PR_Code_Deployment.yml'
         - '!sfdx-project.json'
 
@@ -45,4 +41,4 @@ jobs:
 
       # deploy code without running test classes
       - name: 'Deploy source code'
-        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH_PHOCS }} --wait 60 --targetusername CI
+        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --targetusername CI
