@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>FacilityHierarchy__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>“The level at which this Facility is associated within the Health Authority Hierarchy“</description>
+    <label>Facility Hierarchy</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>Account.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>HA Hierarchy</value>
+        </filterItems>
+        <filterItems>
+            <field>Account.Type</field>
+            <operation>equals</operation>
+            <value>4-CHSA</value>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>Account</referenceTo>
+    <relationshipLabel>Accounts</relationshipLabel>
+    <relationshipName>Accounts</relationshipName>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Lookup</type>
+</CustomField>
