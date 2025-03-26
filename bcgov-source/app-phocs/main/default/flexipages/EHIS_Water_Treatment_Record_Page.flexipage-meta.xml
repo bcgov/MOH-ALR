@@ -46,8 +46,8 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Maximum_Design_Flow_Rate_m3_day__c</fieldItem>
-                <identifier>RecordMaximum_Design_Flow_Rate_m3_day_cField</identifier>
+                <fieldItem>Record.WaterTreatmentFacility__c</fieldItem>
+                <identifier>RecordWater_Treatment_Facility__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -56,23 +56,13 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Community_Water_Fluoridation__c</fieldItem>
-                <identifier>RecordCommunity_Water_Fluoridation_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Target_Concentration_mg_L__c</fieldItem>
-                <identifier>RecordTarget_Concentration_mg_L_cField</identifier>
+                <fieldItem>Record.OtherTreatmentMethod__c</fieldItem>
+                <identifier>RecordOtherTreatmentMethod_cField</identifier>
                 <visibilityRule>
                     <criteria>
-                        <leftValue>{!Record.Community_Water_Fluoridation__c}</leftValue>
+                        <leftValue>{!Record.TreatmentMethod__c}</leftValue>
                         <operator>EQUAL</operator>
-                        <rightValue>Yes</rightValue>
+                        <rightValue>Other - Please Specify</rightValue>
                     </criteria>
                 </visibilityRule>
             </fieldInstance>
@@ -83,8 +73,180 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Description</fieldItem>
-                <identifier>RecordDescriptionField</identifier>
+                <fieldItem>Record.TreatmentMethodType__c</fieldItem>
+                <identifier>RecordTreatmentMethodType_cField</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 OR 2 OR 3 OR 4 OR 5 OR 6 OR 7 OR 8 OR 9 OR 10</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.TreatmentMethod__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Activated Carbon</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.TreatmentMethod__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Chlorination</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.TreatmentMethod__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Coagulant</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.TreatmentMethod__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Membrane Filtration</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.TreatmentMethod__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Membrane Filtration Validation</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.TreatmentMethod__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Membrane Filtration Integrity Testing</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.TreatmentMethod__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Multi-media Filter</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.TreatmentMethod__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Oxidation</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.TreatmentMethod__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>UV Disinfection</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.TreatmentMethod__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Water Softener</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.AnionTarget__c</fieldItem>
+                <identifier>RecordAnionTarget_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.TreatmentMethod__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Anion Exchange</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ContactTankVolume__c</fieldItem>
+                <identifier>RecordContactTankVolume_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.TreatmentMethod__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Chlorination</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.CoarsePrefilterValue__c</fieldItem>
+                <identifier>RecordCoarsePrefilterValue_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.TreatmentMethod__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Coarse Pre-filter (μm)</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.MembraneCartridgeFilters__c</fieldItem>
+                <identifier>RecordMembraneCartridgeFilters_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.TreatmentMethod__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Membrane Cartridge Filter (abs)</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.PointofEntryUse__c</fieldItem>
+                <identifier>RecordPointofEntryUse_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.TreatmentMethod__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Point-of-Entry</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.UVTDesignValue__c</fieldItem>
+                <identifier>RecordUVTDesignValue__cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.TreatmentMethod__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>UV Disinfection</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.UVDesignDose__c</fieldItem>
+                <identifier>RecordUV_Design_Dose_mJ_cm__cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.TreatmentMethod__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>UV Disinfection</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <name>Facet-6a7d3633-f9f9-4274-97a6-d3b9e306b546</name>
@@ -97,8 +259,8 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Status</fieldItem>
-                <identifier>RecordStatusField</identifier>
+                <fieldItem>Record.TreatmentMethod__c</fieldItem>
+                <identifier>RecordTreatmentMethod_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -107,61 +269,13 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.InstallDate</fieldItem>
-                <identifier>RecordInstallDateField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.SCADA_System__c</fieldItem>
-                <identifier>RecordSCADA_System_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.POE_POU_Treatment__c</fieldItem>
-                <identifier>RecordPOE_POU_Treatment_cField</identifier>
+                <fieldItem>Record.ContactTankVolume_UnitofMeasure__c</fieldItem>
+                <identifier>RecordContactTankVolume_UnitofMeasure_cField</identifier>
                 <visibilityRule>
                     <criteria>
-                        <leftValue>{!Record.Account.Type}</leftValue>
+                        <leftValue>{!Record.TreatmentMethod__c}</leftValue>
                         <operator>EQUAL</operator>
-                        <rightValue>Community Water System</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.POE_POU_Details__c</fieldItem>
-                <identifier>RecordPOE_POU_Details_cField</identifier>
-                <visibilityRule>
-                    <booleanFilter>1 OR 2 OR 3</booleanFilter>
-                    <criteria>
-                        <leftValue>{!Record.POE_POU_Treatment__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>POE</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.POE_POU_Treatment__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>POU</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.POE_POU_Treatment__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Both</rightValue>
+                        <rightValue>Chlorination</rightValue>
                     </criteria>
                 </visibilityRule>
             </fieldInstance>
@@ -200,11 +314,21 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Address</fieldItem>
-                <identifier>RecordAddressField</identifier>
+                <fieldItem>Record.CryptosporidiumCredits__c</fieldItem>
+                <identifier>RecordCryptosporidiumCredits_cField</identifier>
             </fieldInstance>
         </itemInstances>
-        <name>Facet-a88467cc-79d0-4f59-b856-c3f463c12643</name>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.VirusCredits__c</fieldItem>
+                <identifier>RecordVirusCredits_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-8d681e9f-6673-4c91-8ca0-36f61fdb5bbf</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -214,46 +338,8 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Location__c</fieldItem>
-                <identifier>RecordLocation_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-fab75126-cd25-40ed-8688-891f2390a8e3</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-a88467cc-79d0-4f59-b856-c3f463c12643</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column3</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-fab75126-cd25-40ed-8688-891f2390a8e3</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column4</identifier>
-            </componentInstance>
-        </itemInstances>
-        <name>Facet-6fa5c63b-9586-4e9d-8ad4-eaf2d8a9d436</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Chemical_Parameters__c</fieldItem>
-                <identifier>RecordChemical_Parameters_cField</identifier>
+                <fieldItem>Record.GiardiaCredits__c</fieldItem>
+                <identifier>RecordGiardiaCredits_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -262,25 +348,11 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Physical_Parameters__c</fieldItem>
-                <identifier>RecordPhysical_Parameters_cField</identifier>
+                <fieldItem>Record.Comments__c</fieldItem>
+                <identifier>RecordComments_cField</identifier>
             </fieldInstance>
         </itemInstances>
-        <name>Facet-da22ef8d-8deb-414f-a1ce-07931d72495a</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Other_Chemical_Physical_Parameters__c</fieldItem>
-                <identifier>RecordOther_Chemical_Physical_Parameters_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-e6b87590-c102-40ab-a248-289d3960829e</name>
+        <name>Facet-d651b520-9032-4cc5-8590-c39a31cff824</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -288,75 +360,23 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-da22ef8d-8deb-414f-a1ce-07931d72495a</value>
+                    <value>Facet-8d681e9f-6673-4c91-8ca0-36f61fdb5bbf</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column5</identifier>
+                <identifier>flexipage_column11</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-e6b87590-c102-40ab-a248-289d3960829e</value>
+                    <value>Facet-d651b520-9032-4cc5-8590-c39a31cff824</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column6</identifier>
+                <identifier>flexipage_column12</identifier>
             </componentInstance>
         </itemInstances>
-        <name>Facet-4ca8f4b9-066b-45e3-92b1-6e85dfab6d5c</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.EOCP_Number__c</fieldItem>
-                <identifier>RecordEOCP_Number_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-e36cb039-a2ac-4c52-8d86-3fe9948563ce</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.EOCP_Classification_Level__c</fieldItem>
-                <identifier>RecordEOCP_Classification_Level_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-c420ae97-65a4-42d3-9ae8-31fcbc40af9c</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-e36cb039-a2ac-4c52-8d86-3fe9948563ce</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column7</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-c420ae97-65a4-42d3-9ae8-31fcbc40af9c</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column8</identifier>
-            </componentInstance>
-        </itemInstances>
-        <name>Facet-a8263481-5544-42ff-b67d-640d57e42806</name>
+        <name>Facet-856dc81a-2245-4f35-96bd-a532b36df4b5</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -424,7 +444,7 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>label</name>
-                    <value>Treatment Information</value>
+                    <value>Treatment Method Information</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection</identifier>
@@ -434,7 +454,7 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>columns</name>
-                    <value>Facet-6fa5c63b-9586-4e9d-8ad4-eaf2d8a9d436</value>
+                    <value>Facet-856dc81a-2245-4f35-96bd-a532b36df4b5</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>horizontalAlignment</name>
@@ -442,46 +462,10 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>label</name>
-                    <value>Address Information</value>
+                    <value>Pathogen Log Reduction Credit Assignment</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
-                <identifier>flexipage_fieldSection2</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>columns</name>
-                    <value>Facet-4ca8f4b9-066b-45e3-92b1-6e85dfab6d5c</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>horizontalAlignment</name>
-                    <value>false</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>label</name>
-                    <value>Treatment Requirements for Chemical and Physical Parameters</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:fieldSection</componentName>
-                <identifier>flexipage_fieldSection3</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>columns</name>
-                    <value>Facet-a8263481-5544-42ff-b67d-640d57e42806</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>horizontalAlignment</name>
-                    <value>false</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>label</name>
-                    <value>EOCP Information</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:fieldSection</componentName>
-                <identifier>flexipage_fieldSection4</identifier>
+                <identifier>flexipage_fieldSection6</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -506,32 +490,6 @@
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>parentFieldApiName</name>
-                    <value>Asset.Id</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>relatedListApiName</name>
-                    <value>AttachedContentDocuments</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>relatedListComponentOverride</name>
-                    <value>NONE</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>rowsToDisplay</name>
-                    <value>10</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>showActionBar</name>
-                    <value>true</value>
-                </componentInstanceProperties>
-                <componentName>force:relatedListSingleContainer</componentName>
-                <identifier>force_relatedListSingleContainer2</identifier>
-            </componentInstance>
-        </itemInstances>
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
@@ -604,6 +562,10 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Tabs</value>
+                </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>tabs</name>
                     <value>Facet-efddadcd-d33e-4ccb-88bb-17a1ca0daee5</value>
