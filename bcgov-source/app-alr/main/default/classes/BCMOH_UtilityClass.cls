@@ -13,6 +13,7 @@ public with sharing class BCMOH_UtilityClass {
 * @description: The purpose of this method is to fetch renewal details FROM metadata
 * @return:  Map<String, List<String>>
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+* @Modification Log: [27/03/2025] - [BCMOHAM-23732] - [CGI] - [Need to pick the active template from the list of templates]
 */
     public static Map<String, List<String>> getAccRenewals(String renewalName) {
         Map<String, List<String>> accDetails = new Map<String, List<String>>();
@@ -204,7 +205,7 @@ public with sharing class BCMOH_UtilityClass {
         Map<String, DocumentTemplateContentDoc> templateNameDocMap = new Map<String, DocumentTemplateContentDoc>();
         for(DocumentTemplateContentDoc docTempRec : [SELECT DocumentTemplate.Name, ContentDocument.Title, LatestContentVersionId
                                                      FROM DocumentTemplateContentDoc
-                                                     WHERE DocumentTemplate.Name IN: templateNames WITH SECURITY_ENFORCED 
+                                                     WHERE DocumentTemplate.Name IN: templateNames  and  DocumentTemplate.isActive= true WITH SECURITY_ENFORCED  
                                                      LIMIT 5000]) {
                                                          templateNameDocMap.put(docTempRec.DocumentTemplate.Name, docTempRec);
                                                      }
