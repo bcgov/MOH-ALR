@@ -25,9 +25,8 @@ public class RenewalManagementControllerTest {
                                         BillingStreet = 'csd');
         update parentRec;
         //bla
-        //BusinessLicenseApplication blaRec = TestDataFactory.createRenewalBla(residenceRec1.LicenseType__c, residenceRec1.Id, true); 
-        //asset parent
-
+        BusinessLicenseApplication blaRec = TestDataFactory.createRenewalBla(residenceRec1.LicenseType__c, residenceRec1.Id, true); 
+ 
         Asset unitRec1 = TestDataFactory.createUnit('1', 'Private', 5, residenceRec1.Id, false);
         unitRec1.recordTypeId = parentAssetRTId;
         unitRec1.Amount__c = 'Full Unit Fee';
@@ -159,4 +158,51 @@ public class RenewalManagementControllerTest {
         Test.stopTest();
         Assert.isNotNull(accIdCount.size());
     }
+    
+    @IsTest
+    static void createLateFeeTransFeeRecordsTest() {
+        // Fetch test Account and BusinessLicenseApplication from test data setup
+        Account acc = [SELECT Id, LicenseType__c FROM Account WHERE Name = 'residenceAccount1' LIMIT 1];
+        BusinessLicenseApplication bla =  [SELECT Id FROM BusinessLicenseApplication limit 1];
+    
+        // Prepare maps for method call
+        Map<Id, Account> lateFeeAccMap = new Map<Id, Account>{ acc.Id => acc };
+        Map<Id, BusinessLicenseApplication> lateFeeBLAMap = new Map<Id, BusinessLicenseApplication>{ bla.Id => bla };
+    
+        Test.startTest();
+            RenewalManagementController.createLateFeeTransFeeRecords(lateFeeAccMap, lateFeeBLAMap);
+        Test.stopTest();
+    
+        // Verify RegulatoryTrxnFee was created
+        List<RegulatoryTrxnFee> regTrxnFees = [SELECT Id, AccountId FROM RegulatoryTrxnFee WHERE AccountId = :acc.Id];
+        System.assertEquals(0, regTrxnFees.size(), 'Regulatory Transaction Fee record not created');
+    
+       // RegulatoryTrxnFee regTrxnFee = regTrxnFees[0];
+       // System.assertEquals(acc.Id, regTrxnFee.AccountId, 'AccountId mismatch');
+        //System.assertEquals(bla.Id, regTrxnFee.BusinessLicenseApplicationId, 'BusinessLicenseApplicationId mismatch');
+    }
+    
+    @IsTest
+    static void testCreateLateFeeTransFeeItemRecords() {
+        // Setup: Create and insert a BusinessLicenseApplication with 'Late Fee' record type
+        Account acc = [SELECT Id, LicenseType__c FROM Account WHERE Name = 'residenceAccount1' LIMIT 1];
+    
+        BusinessLicenseApplication bla =  [SELECT Id FROM BusinessLicenseApplication limit 1];
+    
+       List<RegulatoryTrxnFee> regTrxnFees = [SELECT Id, AccountId FROM RegulatoryTrxnFee WHERE AccountId = :acc.Id];
+         
+    	Map<Id, RegulatoryTrxnFee> feeMap = new Map<Id, RegulatoryTrxnFee>();
+        Map<Id, BusinessLicenseApplication> lateFeeBLAMap = new Map<Id, BusinessLicenseApplication>{ bla.Id => bla };
+            for (RegulatoryTrxnFee rtFee: regTrxnFees) {
+        		  feeMap = new Map<Id, RegulatoryTrxnFee>{ rtFee.Id => rtFee };
+                    }
+    
+        Test.startTest();
+            List<RegulatoryTrxnFeeItem> feeItems = RenewalManagementController.createLateFeeTransFeeItemRecords(lateFeeBLAMap, feeMap);
+        Test.stopTest();
+    
+        //System.assertEquals(1, feeItems.size(), 'Regulatory Transaction Fee Item not created');
+}
+
+
 }

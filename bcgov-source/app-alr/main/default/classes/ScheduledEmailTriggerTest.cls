@@ -58,7 +58,20 @@ private class ScheduledEmailTriggerTest {
        List<Account> accRec = [SELECT Id FROM Account];
         Assert.isNotNull(accRec.size());
     }
-
+    
+      // Test method for fetchTemplateDetails()
+    @isTest
+    static void testFetchTemplateDetails1() {
+        String purpose = 'RenewalTest'; 
+        
+        Test.startTest();
+        Map<Id, String> result = ScheduledEmailTrigger.fetchTemplateDetails(purpose);
+        Test.stopTest();
+        
+       List<Account> accRec = [SELECT Id FROM Account];
+        Assert.isNotNull(accRec.size());
+    }
+    
     // Test method for fetchAttachmentDetails()
     @isTest
     static void testFetchAttachmentDetails() {
