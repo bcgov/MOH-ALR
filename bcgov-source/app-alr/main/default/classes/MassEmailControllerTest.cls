@@ -135,6 +135,16 @@ public class MassEmailControllerTest {
         List<Account> accRec = [SELECT Id FROM Account];
         Assert.isNotNull(accRec.size());
            }
+
+    @isTest
+    static void getEmailtemplatebyNameTest() {
+        Test.startTest();
+        BCMOH_UtilityClass.getEmailtemplatebyName(BCMOH_Constants.templatePurposeDetails);      
+        Test.stopTest();
+        List<Account> accRec = [SELECT Id FROM Account];
+        Assert.isNotNull(accRec.size());
+    }
+
     
     //getDocNameTitleLateFeeTest
      @isTest
