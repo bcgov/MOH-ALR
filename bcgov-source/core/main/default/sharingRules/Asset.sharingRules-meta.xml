@@ -76,17 +76,28 @@
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
-        <fullName>Asset_Sharing_Rules_PHOCS_Officer</fullName>
+        <fullName>AssetSharingRulesPHOCSOfficer</fullName>
         <accessLevel>Edit</accessLevel>
-        <label>Asset Sharing Rules - PHOCS Officer</label>
+        <label>Asset Sharing Rules - PHOCS Water</label>
         <sharedTo>
-            <group>EHIS_Officer_Users_PG</group>
+            <group>EHIS_Water_Admin_Users_PG</group>
         </sharedTo>
         <criteriaItems>
             <field>RecordTypeId</field>
             <operation>equals</operation>
             <value>Residential Care Service,Child care Service</value>
         </criteriaItems>
-        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
+    <sharingOwnerRules>
+        <fullName>AssetSharingRulesPHOCSOfficerUser</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>Asset Sharing Rules - PHOCS Officer User</label>
+        <sharedTo>
+            <group>EHIS_Officer_Users_PG</group>
+        </sharedTo>
+        <sharedFrom>
+            <group>EHIS_Water_Admin_Users_PG</group>
+        </sharedFrom>
+    </sharingOwnerRules>
 </SharingRules>
