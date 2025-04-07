@@ -88,6 +88,7 @@ private class ManageUnitOmniServiceTest {
         system.debug('ghh'+regTransFeeRec);
         regTransFeeRec.Status = BCMOH_Constants.feeStatus;
         Database.Update(regTransFeeRec);
+        Database.Delete(regTransFeeRec);
         Test.stopTest();
     }
 }

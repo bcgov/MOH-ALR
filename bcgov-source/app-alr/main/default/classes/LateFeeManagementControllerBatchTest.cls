@@ -13,7 +13,10 @@ public class LateFeeManagementControllerBatchTest {
         //fetch record type Ids
         Id parentAssetRTId = Schema.getGlobalDescribe().get('Asset').getDescribe().getRecordTypeInfosByDeveloperName().get('Units_Record_Type').getRecordTypeId();
         Id childAssetRTId = Schema.getGlobalDescribe().get('Asset').getDescribe().getRecordTypeInfosByDeveloperName().get('Unit_Request_Record_Type').getRecordTypeId();
-        
+        Id feeRecTypeId;
+        String transFeeRecTypeId = Schema.getGlobalDescribe().get('RegulatoryTrxnFee').getDescribe().getRecordTypeInfosByDeveloperName().get('TransactionFee').getRecordTypeId();
+    
+
         //RegulatoryAuthorizationType
         RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
 
@@ -28,6 +31,20 @@ public class LateFeeManagementControllerBatchTest {
         //asset parent
 
         BusinessLicenseApplication blaRec = TestDataFactory.createRenewalBla(residenceRec1.LicenseType__c, residenceRec1.Id, true); 
+        blaRec.Status='Sent';
+        update blaRec;
+
+        Asset unitRec1 = TestDataFactory.createUnit('1', 'Private', 2, residenceRec1.Id, true);
+        unitRec1.recordTypeId = parentAssetRTId;
+        update unitRec1;
+
+         //regTrans Fee renewal
+         RegulatoryTrxnFee regTransRec = TestDataFactory.createTransFeeRecord(transFeeRecTypeId, residenceRec1.Id, blaRec.Id, BCMOH_Constants.feeType, BCMOH_Constants.dueFeeStatus, true);
+         //regTrans Fee unit
+         RegulatoryTrxnFee regTransRec2 = TestDataFactory.createTransFeeRecord(transFeeRecTypeId, residenceRec1.Id, blaRec.Id, BCMOH_Constants.unitFeeType, BCMOH_Constants.dueFeeStatus, true);
+         //regTransFee Item renewal
+         RegulatoryTrxnFeeItem regTransItem = TestDataFactory.createTransFeeItemRecord(feeRecTypeId, regTransRec.Id, unitRec1.Id, unitRec1.Type__c, regAuth.UnitFee__c, unitRec1.Quantity, BCMOH_Constants.feeType, true);
+
         
         ContentVersion contentVersionRec = TestDataFactory.createContentVer('title value 1', residenceRec1.Id, true);
         Contact contactRec = TestDataFactory.createContactRecord(residenceRec1.Id, 'test@xyz.com', 'fname1', 'lname1', true);
