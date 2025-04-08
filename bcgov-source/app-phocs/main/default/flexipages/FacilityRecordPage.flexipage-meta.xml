@@ -638,7 +638,31 @@
                 <identifier>RecordTotal_Maximum_Capacity_cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.WasteDisposal__c</fieldItem>
+                <identifier>RecordWasteDisposal_cField2</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-bf42ca9b-6f58-4db2-8c9d-7844bf671477</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.WaterSupply__c</fieldItem>
+                <identifier>RecordWaterSupply_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-0ad000ba-9a2b-4523-9904-ac642959a17f</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -650,6 +674,16 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
                 <identifier>flexipage_column21</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-0ad000ba-9a2b-4523-9904-ac642959a17f</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column22</identifier>
             </componentInstance>
         </itemInstances>
         <name>Facet-c6da8c50-8695-4d64-a6ef-6a4fa9329b93</name>
@@ -706,6 +740,16 @@
                 <identifier>RecordSite_Of_Operation_If_Location_Is_Fixed_cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.WasteDisposal__c</fieldItem>
+                <identifier>RecordWasteDisposal_cField3</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-58039c4c-1bb2-4ebc-bbf9-dd4ddb20b8b1</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -758,6 +802,16 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.Service_s__c</fieldItem>
                 <identifier>RecordService_s_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.WaterSupply__c</fieldItem>
+                <identifier>RecordWaterSupply_cField2</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-036a46a5-4be2-4099-af6d-1625bc7f1c03</name>
@@ -986,14 +1040,48 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
+                <fieldItem>Record.WasteDisposal__c</fieldItem>
+                <identifier>RecordWasteDisposal_cField4</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-612d9603-f31f-4f42-a82c-54ffc0654d00</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.to__c</fieldItem>
                 <identifier>Recordto_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.WaterSupply__c</fieldItem>
+                <identifier>RecordWaterSupply_cField3</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-c282da52-6176-4a09-a32e-db1d76dc8736</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-612d9603-f31f-4f42-a82c-54ffc0654d00</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column27</identifier>
+            </componentInstance>
+        </itemInstances>
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
@@ -1119,6 +1207,16 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.OtherTypeDetails__c</fieldItem>
                 <identifier>RecordOther_Type_Details_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.WaterSupply__c</fieldItem>
+                <identifier>RecordWaterSupply_cField4</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-fd458d2f-0f18-47b0-9485-db3b48e53986</name>
@@ -1512,10 +1610,16 @@
                 <fieldItem>Record.POEPOUTreatment__c</fieldItem>
                 <identifier>RecordPOE_POU_Treatment_cField</identifier>
                 <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.CategoryL1__c}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>Drinking Water Treatment</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.ParentAccount__r.CategoryL1__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Community Water System</rightValue>
                     </criteria>
                 </visibilityRule>
             </fieldInstance>
@@ -1603,10 +1707,16 @@
                 <fieldItem>Record.Cisterns__c</fieldItem>
                 <identifier>RecordCisterns_cField</identifier>
                 <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.CategoryL1__c}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>Drinking Water Storage</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.CategoryL2__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Closed Storage</rightValue>
                     </criteria>
                 </visibilityRule>
             </fieldInstance>
@@ -1705,10 +1815,16 @@
                 <fieldItem>Record.DistributionDisinfection__c</fieldItem>
                 <identifier>RecordDistribution_Disinfection_cField</identifier>
                 <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.CategoryL1__c}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>Drinking Water Distribution</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.SecondaryDisinfectionRequired__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>true</rightValue>
                     </criteria>
                 </visibilityRule>
             </fieldInstance>
@@ -1824,10 +1940,16 @@
                 <fieldItem>Record.DualWaterSystemDetails__c</fieldItem>
                 <identifier>RecordDual_Water_System_Details_cField</identifier>
                 <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.CategoryL1__c}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>Drinking Water Treatment</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.NonPotableWaterSystem__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Dual</rightValue>
                     </criteria>
                 </visibilityRule>
             </fieldInstance>
@@ -3277,6 +3399,10 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Tabs</value>
+                </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>tabs</name>
                     <value>maintabs</value>
