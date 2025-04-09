@@ -99,6 +99,7 @@ public with sharing class MassEmailController {
                 
                 if(activeAccRec.BusinessLicenseApplicationAccount.size() == 0) {
                     isValidAcc = false;
+
                     continue;
                 }
                 
@@ -111,12 +112,13 @@ public with sharing class MassEmailController {
                 
                 //if account is valid then fetch the bla Ids associated with the account to fetch its files attached
                 if(isValidAcc) {
+                  
+                   
                     
                     accMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, activeAccRec);
                     
                     accContactMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, 
                                         activeAccRec.AccountContactRelations[0]);
-                    
                     if(activeAccRec.Assets.size() != 0) {
                         Integer unitCounter = 0;
                         for(Asset parentAsset : activeAccRec.Assets) {
@@ -157,7 +159,6 @@ public with sharing class MassEmailController {
             }
 
 
-            
             //if valid blas are fetched
             if(!blaMap.isEmpty()) {
                 //fetch template Id
@@ -258,7 +259,6 @@ public with sharing class MassEmailController {
                             accountIds.add(blaRec.Account.ParentId);
                     }
                 }
-
                 //Fetch all contacts in a single query
                 Map<Id, List<AccountContactRelation>> allContacts = getAllContacts(accountIds);
                 Integer maxBlaToProcess = 50;
@@ -280,12 +280,13 @@ public with sharing class MassEmailController {
                     
                     //if account is valid then fetch the bla Ids associated with the account to fetch its files attached
                     if(isValidAcc) {
-                        
                         accMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, activeAccRec);
-                        
-                        accContactMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, 
-                                            activeAccRec.AccountContactRelations[0]);
-                        
+                
+                        if(activeAccRec.AccountContactRelations.size() != 0) {
+                            accContactMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, 
+                                                activeAccRec.AccountContactRelations[0]);
+                        }
+                            
                         if(activeAccRec.Assets.size() != 0) {
                             Integer unitCounter = 0;
                             for(Asset parentAsset : activeAccRec.Assets) {
@@ -305,26 +306,29 @@ public with sharing class MassEmailController {
                                 tmpAccId = blaRec.Account.ParentId;
                             }
                             
-                            for (AccountContactRelation cont : allContacts.get(tmpAccId)) {
-                                contactIdList.add(cont.ContactId);
+                            List<AccountContactRelation> relContact = allContacts.get(tmpAccId);
+                            if (relContact != null) {
+                                for (AccountContactRelation cont : relContact) {
+                                    contactIdList.add(cont.ContactId);
+                                    
+                                    if (blaContactMap.containsKey(blaRecord)) {
+                                        blaContactMap.get(blaRecord).add(cont.ContactId);
+                                    } else {
+                                        blaContactMap.put(blaRecord, new List<Id> { cont.ContactId });
+                                    }
                                 
-                                if (blaContactMap.containsKey(blaRecord)) {
-                                    blaContactMap.get(blaRecord).add(cont.ContactId);
-                                } else {
-                                    blaContactMap.put(blaRecord, new List<Id> { cont.ContactId });
                                 }
                             }
                         }
                     }
 
                     blaCount++;
-                    System.debug('blaCount' + blaCount);
+                    System.debug('blaCount late fee' + blaCount);
                     if (blaCount >= maxBlaToProcess) {
                         break;  // Stop processing  once the limit is reached
                     }
                 
                 }
-
 
                 //if valid blas are fetched
                 if(!blaMap.isEmpty()) {
@@ -604,19 +608,26 @@ public with sharing class MassEmailController {
         for(Messaging.SendEmailResult eResRec : emailResultList) {
             if(!eResRec.isSuccess()) {
                 for(Messaging.SendEmailError err : eResRec.getErrors()) {
-                    //targetIdErrorMap.put(err.getTargetObjectId(), err.getMessage());
+                   //targetIdErrorMap.put(err.getTargetObjectId(), err.getMessage());
                 }
             } 
         }
         for(Messaging.SingleEmailMessage msgRec : singleEmailMsgList) {
-                                                  if(targetIdErrorMap.containsKey(whatIdTargetMap.get(msgRec.whatId))) {
-                                                      blaErrMap.put(msgRec.whatId, targetIdErrorMap.get(whatIdTargetMap.get(msgRec.whatId)));
-                                                  }
-                                                  else {
-                                                      String sentDetails = BCMOH_Constants.emailSentToId+' '+accContactMap.get(msgRec.whatId).Contact.Email+
-                                                          '. '+BCMOH_Constants.emailSentTo+' '+accContactMap.get(msgRec.whatId).Contact.Name+'. '+BCMOH_Constants.sentTime+' '+datetime.now().format();//add to const
-                    blaSuccessMap.put(msgRec.whatId, sentDetails);
+            String sentDetails;
+            if(targetIdErrorMap.containsKey(whatIdTargetMap.get(msgRec.whatId))) {
+                blaErrMap.put(msgRec.whatId, targetIdErrorMap.get(whatIdTargetMap.get(msgRec.whatId)));
+            }
+            else {
+                if (accContactMap.get(msgRec.whatId)==null){
+                sentDetails = BCMOH_Constants.emailSentToId+' '+
+                '. '+BCMOH_Constants.emailSentTo+' '+'. '+BCMOH_Constants.sentTime+' '+datetime.now().format();//add to const
                 }
+                else{
+                sentDetails = BCMOH_Constants.emailSentToId+' '+accContactMap.get(msgRec.whatId).Contact.Email+
+                    '. '+BCMOH_Constants.emailSentTo+' '+accContactMap.get(msgRec.whatId).Contact.Name+'. '+BCMOH_Constants.sentTime+' '+datetime.now().format();//add to const
+                }
+                blaSuccessMap.put(msgRec.whatId, sentDetails);
+            }
             }
         }
                                           catch(exception err) {
@@ -679,7 +690,7 @@ public with sharing class MassEmailController {
         List<Account> accToUpdate = new List<Account>();
         List<BusinessLicenseApplication> blaToUpdate = new List<BusinessLicenseApplication>();
         Set<Id> blaIds = new Set<Id>();
-        
+
         try {
             // Collect BLA IDs from both maps
             blaIds.addAll(blaErrMap.keySet());
