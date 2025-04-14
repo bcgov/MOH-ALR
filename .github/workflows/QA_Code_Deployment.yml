@@ -50,7 +50,7 @@ jobs:
 
       # deploy code with running test classes
       - name: 'Deploy source code'
-        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --targetusername QA
+        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --testlevel RunLocalTests --targetusername QA
 
   # Code-Deploy-Run-DEMO:
   #   runs-on: ubuntu-latest
