@@ -2,6 +2,7 @@
 <RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Evaluation</fullName>
     <active>true</active>
+    <compactLayoutAssignment>Evaluation_BLA_Compact_Layout</compactLayoutAssignment>
     <description>Water sources need to be assessed to identify and avoid potential contamination. Information collected is essential for supporting source protection efforts and proper treatment system design and operation</description>
     <label>Evaluation</label>
     <picklistValues>
@@ -38,10 +39,95 @@
         <picklist>Category</picklist>
         <values>
             <fullName>Evaluation</fullName>
+            <default>true</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>ClosureReason__c</picklist>
+        <values>
+            <fullName>Approved for potable water supply with proposed treatment %28attach proposal%29</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>Permit</fullName>
+            <fullName>Approved for potable water supply without treatment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cancelled</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Denied as potable water supply</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Withdrawn</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>GARPScreeningOutcome__c</picklist>
+        <values>
+            <fullName>GARP</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GARP - Low Risk of Pathogens</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GARP - Viruses Only</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not Assessed%2FUnknown</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>ReasonforApplying__c</picklist>
+        <values>
+            <fullName>Construction Permit Waiver</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Design Deviation to Existing Permit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Distribution System Extension</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Existing not Approved System</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Expiry Date Extension to Existing Permit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New Source</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New System Component</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New Water Supply System</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other %28Please specify%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Re-applying for Expired Permit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Replacement%2FAlteration Work</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -56,12 +142,8 @@
             <default>false</default>
         </values>
         <values>
-            <fullName>Completed</fullName>
-            <default>false</default>
-        </values>
-        <values>
             <fullName>Submitted</fullName>
-            <default>false</default>
+            <default>true</default>
         </values>
         <values>
             <fullName>Technical Review</fullName>

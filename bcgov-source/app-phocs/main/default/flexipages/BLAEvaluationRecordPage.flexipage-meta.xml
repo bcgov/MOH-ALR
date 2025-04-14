@@ -132,10 +132,17 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>required</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.OtherReasonForApplyingDetails__c</fieldItem>
                 <identifier>RecordOtherReasonForApplyingDetails_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.ReasonforApplying__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Other (Please specify)</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <name>Facet-8710ad56-d24c-4347-8244-4868f8f0d353</name>
@@ -180,7 +187,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>required</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.PrimaryOwnerId</fieldItem>
                 <identifier>RecordPrimaryOwnerIdField2</identifier>
