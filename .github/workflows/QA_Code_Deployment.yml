@@ -50,7 +50,7 @@ jobs:
 
       # deploy code with running test classes
       - name: 'Deploy source code'
-        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --targetusername QA
+        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --testlevel RunLocalTests --targetusername QA
 
   # Code-Deploy-Run-DEMO:
   #   runs-on: ubuntu-latest
@@ -101,7 +101,7 @@ jobs:
         run: |
           LATEST_TAG=${{ steps.latesttag.outputs.LATEST_TAG }}
           NUMBER=${LATEST_TAG#QA.}
-          NEW_NUMBER=$((NUMBER + 3))
+          NEW_NUMBER=$((NUMBER + 1))
           NEW_TAG=QA.${NEW_NUMBER}
           echo "NEW_TAG=$NEW_TAG" >> $GITHUB_OUTPUT
 
