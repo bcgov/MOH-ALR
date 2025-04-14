@@ -1,0 +1,44 @@
+name: PR Code Deployment
+
+# Definition when the workflow should run
+on:
+  workflow_dispatch:
+  push:
+    branches:
+        - phocs-sprint3
+    paths:
+        - 'bcgov-source/app-phocs/main/default**'
+        - 'bcgov-source/core/main/default**'
+        - 'bcgov-source/app-alr/main/default**'             
+        - '.github/workflows/PR_Code_DeploymentSP4.yml'
+        - '!sfdx-project.json'
+
+# Jobs to be executed
+jobs:
+  Code-Deploy-Run:
+    runs-on: ubuntu-latest
+    environment: CI
+    env:
+      SFDXAUTHURL: ${{ secrets.SFDXAUTHURL }}
+    steps:
+      # Install Salesforce CLI
+      - name: 'Install Salesforce CLI'
+        run: |
+          wget https://developer.salesforce.com/media/salesforce-cli/sfdx/channels/stable/sfdx-linux-x64.tar.xz
+          mkdir ~/sfdx
+          tar xJf sfdx-linux-x64.tar.xz -C ~/sfdx --strip-components 1
+          echo "$HOME/sfdx/bin" >> $GITHUB_PATH
+          ~/sfdx/bin/sfdx version
+      # Checkout the source code
+      - name: 'Checkout source code'
+        uses: actions/checkout@v4
+
+      # Authenticate sandbox
+      - name: 'Authenticate Sandbox'
+        run: |
+            echo "${{ env.SFDXAUTHURL }}" > ./authfile
+            sf org login sfdx-url -f authfile -a CI
+
+      # deploy code without running test classes
+      - name: 'Deploy source code'
+        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --targetusername CI
