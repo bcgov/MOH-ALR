@@ -24,31 +24,10 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordLookups>
-        <name>Get_Inspection_Type_Id</name>
-        <label>Get Inspection Type Id</label>
-        <locationX>677</locationX>
-        <locationY>363</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>GetLatestInspectionRecord</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Name</field>
-            <operator>EqualTo</operator>
-            <value>
-                <stringValue>Non-Site Visit Assessment</stringValue>
-            </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>InspectionType</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
-    <recordLookups>
         <name>GetLatestInspectionRecord</name>
         <label>GetLatestInspectionRecord</label>
-        <locationX>677</locationX>
-        <locationY>517</locationY>
+        <locationX>675</locationX>
+        <locationY>389</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Update_Last_Inspection_Date</targetReference>
@@ -76,10 +55,10 @@
             </value>
         </filters>
         <filters>
-            <field>VisitTypeId</field>
+            <field>InspectionMethod__c</field>
             <operator>NotEqualTo</operator>
             <value>
-                <elementReference>Get_Inspection_Type_Id.Id</elementReference>
+                <stringValue>Non Site Visit Inspection</stringValue>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
@@ -91,8 +70,8 @@
     <recordUpdates>
         <name>Update_Last_Inspection_Date</name>
         <label>Update Last Inspection Date</label>
-        <locationX>683</locationX>
-        <locationY>634</locationY>
+        <locationX>671</locationX>
+        <locationY>576</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -113,7 +92,7 @@
         <locationX>543</locationX>
         <locationY>48</locationY>
         <connector>
-            <targetReference>Get_Inspection_Type_Id</targetReference>
+            <targetReference>GetLatestInspectionRecord</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
