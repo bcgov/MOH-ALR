@@ -6,10 +6,10 @@ on:
   ## Deploy manually
   workflow_dispatch:
     inputs:
-      QA:
+      create-tag:
         type: boolean
         default: true
-        description: Deploy in ST
+        description: Create Git tag after successful deployment
 
 # Jobs to be executed
 jobs:
@@ -31,7 +31,7 @@ jobs:
       - name: 'Checkout source code'
         uses: actions/checkout@v4
         with:
-          ref: phocs-sprint4
+          ref: phocs-sprint3
           fetch-depth: 0
 
       # Authenticate sandbox
@@ -43,3 +43,32 @@ jobs:
       # deploy code with running test classes
       - name: 'Deploy source code'
         run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --testlevel RunLocalTests --targetusername ST
+
+Git-Tag-Run:
+    needs: Code-Deploy-Run
+    runs-on: ubuntu-24.04
+    if: ${{ github.event.inputs.create-tag == 'true' }}
+    steps:
+      - name: 'Checkout source code'
+        uses: actions/checkout@v4
+        with:
+          ref: phocs-sprint3
+          fetch-depth: 0
+
+      - name: 'Get latest tag'
+        id: latesttag
+        run: echo "LATEST_TAG=$(git describe --tags --match "STBugs*" --abbrev=0 HEAD)" >> $GITHUB_OUTPUT
+
+      - name: 'Increment Tag'
+        id: newtag
+        run: |
+          LATEST_TAG=${{ steps.latesttag.outputs.LATEST_TAG }}
+          NUMBER=${LATEST_TAG#STBugs.}
+          NEW_NUMBER=$((NUMBER + 1))
+          NEW_TAG=STBugs.${NEW_NUMBER}
+          echo "NEW_TAG=$NEW_TAG" >> $GITHUB_OUTPUT
+
+      - name: 'Push new tag'
+        run: |
+          git tag ${{ steps.newtag.outputs.NEW_TAG }}
+          git push origin ${{ steps.newtag.outputs.NEW_TAG }}
