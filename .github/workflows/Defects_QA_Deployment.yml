@@ -89,20 +89,20 @@ jobs:
       - name: 'Checkout source code'
         uses: actions/checkout@v4
         with:
-          ref: dev
+          ref: phocs-sprint3
           fetch-depth: 0
 
       - name: 'Get latest tag'
         id: latesttag
-        run: echo "LATEST_TAG=$(git describe --tags --match "QA*" --abbrev=0 HEAD)" >> $GITHUB_OUTPUT
+        run: echo "LATEST_TAG=$(git describe --tags --match "QABugs*" --abbrev=0 HEAD)" >> $GITHUB_OUTPUT
 
       - name: 'Increment Tag'
         id: newtag
         run: |
           LATEST_TAG=${{ steps.latesttag.outputs.LATEST_TAG }}
-          NUMBER=${LATEST_TAG#QA.}
+          NUMBER=${LATEST_TAG#QABugs.}
           NEW_NUMBER=$((NUMBER + 1))
-          NEW_TAG=QA.${NEW_NUMBER}
+          NEW_TAG=QABugs.${NEW_NUMBER}
           echo "NEW_TAG=$NEW_TAG" >> $GITHUB_OUTPUT
 
       - name: 'Push new tag'
