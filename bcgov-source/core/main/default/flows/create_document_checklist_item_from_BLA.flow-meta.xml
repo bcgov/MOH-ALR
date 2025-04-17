@@ -1,11 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Get_Checklist_Action_Plan_Template</name>
+        <label>Get Checklist Action Plan Template</label>
+        <locationX>380</locationX>
+        <locationY>431</locationY>
+        <actionName>PHOCS_Document_Checklists_Decision_Matrix</actionName>
+        <actionType>runDecisionMatrix</actionType>
+        <connector>
+            <targetReference>GetActionPlanTemplate</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>RegulatoryAuthorizationType</name>
+            <value>
+                <elementReference>GetBLARecords.LicenseType.Name</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>PHOCS_Document_Checklists_Decision_Matrix</nameSegment>
+        <offset>0</offset>
+        <outputParameters>
+            <assignToReference>ActionPlanTemplateName</assignToReference>
+            <name>DocumentChecklist</name>
+        </outputParameters>
+    </actionCalls>
     <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <decisions>
         <name>ActionPlanTemplateActivated</name>
         <label>Action Plan Template Activated</label>
         <locationX>182</locationX>
-        <locationY>755</locationY>
+        <locationY>863</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>ActionPlanTemplateIsActive</name>
@@ -27,7 +52,7 @@
         <name>ActionPlanTemplateIDcheck</name>
         <label>Action Plan Template ID check</label>
         <locationX>380</locationX>
-        <locationY>539</locationY>
+        <locationY>647</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>ActionPlanTemplateFound</name>
@@ -45,7 +70,7 @@
             <label>Action Plan Template Found</label>
         </rules>
     </decisions>
-    <description>ALR-1164</description>
+    <description>ALR-1164 &amp; EHIS-905</description>
     <environments>Default</environments>
     <interviewLabel>create document checklist item from BLA {!$Flow.CurrentDateTime}</interviewLabel>
     <label>create document checklist item from BLA</label>
@@ -72,7 +97,7 @@
         <name>Action_Plan_for_BLA</name>
         <label>Action Plan for BLA</label>
         <locationX>50</locationX>
-        <locationY>863</locationY>
+        <locationY>971</locationY>
         <inputAssignments>
             <field>ActionPlanTemplateVersionId</field>
             <value>
@@ -116,7 +141,7 @@
         <name>GetActionPlanTemplate</name>
         <label>Get Action Plan Template</label>
         <locationX>380</locationX>
-        <locationY>431</locationY>
+        <locationY>539</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>ActionPlanTemplateIDcheck</targetReference>
@@ -144,7 +169,7 @@
         <name>GetActionPlanTemplateVersion</name>
         <label>Get Action Plan Template Version</label>
         <locationX>182</locationX>
-        <locationY>647</locationY>
+        <locationY>755</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>ActionPlanTemplateActivated</targetReference>
@@ -175,7 +200,7 @@
         <locationY>323</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>GetActionPlanTemplate</targetReference>
+            <targetReference>Get_Checklist_Action_Plan_Template</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
