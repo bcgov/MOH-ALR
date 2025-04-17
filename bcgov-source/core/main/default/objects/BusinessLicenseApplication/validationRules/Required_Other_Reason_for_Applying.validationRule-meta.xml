@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Required_Other_Reason_for_Applying</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    ISPICKVAL(ReasonforApplying__c,&quot;Other (Please specify)&quot;),
+   ISBLANK(OtherReasonForApplyingDetails__c)
+)</errorConditionFormula>
+    <errorDisplayField>OtherReasonForApplyingDetails__c</errorDisplayField>
+    <errorMessage>Other Reason for Applying Details is Required</errorMessage>
+</ValidationRule>
