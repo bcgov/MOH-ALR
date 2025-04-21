@@ -37,30 +37,6 @@
         </outputParameters>
     </actionCalls>
     <actionCalls>
-        <name>Get_PHOCS_Action_Plan_Template</name>
-        <label>Get PHOCS Action Plan Template</label>
-        <locationX>479</locationX>
-        <locationY>539</locationY>
-        <actionName>PHOCS_Inspection_Action_Plan_Template_Decision_Matrix</actionName>
-        <actionType>runDecisionMatrix</actionType>
-        <connector>
-            <targetReference>ActionPlanTemplateCheck</targetReference>
-        </connector>
-        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
-        <inputParameters>
-            <name>InspectionAccountType</name>
-            <value>
-                <elementReference>accountType</elementReference>
-            </value>
-        </inputParameters>
-        <nameSegment>PHOCS_Inspection_Action_Plan_Template_Decision_Matrix</nameSegment>
-        <offset>0</offset>
-        <outputParameters>
-            <assignToReference>ActionPlanTemplateName</assignToReference>
-            <name>ActionPlanTemplate</name>
-        </outputParameters>
-    </actionCalls>
-    <actionCalls>
         <name>getActionPlanItemIds</name>
         <label>AssessmentTaskController</label>
         <locationX>50</locationX>
@@ -82,6 +58,30 @@
         </inputParameters>
         <nameSegment>InspTasksCreationController</nameSegment>
         <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>PHOCS_Inspection_Action_Plan_Template_Decision_Matrix</name>
+        <label>PHOCS Inspection Action Plan Template Decision Matrix</label>
+        <locationX>479</locationX>
+        <locationY>539</locationY>
+        <actionName>PHOCS_Inspection_Action_Plan_Template_Decision_Matrix</actionName>
+        <actionType>runDecisionMatrix</actionType>
+        <connector>
+            <targetReference>ActionPlanTemplateCheck</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>InspectionAccountType</name>
+            <value>
+                <elementReference>accountType</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>PHOCS_Inspection_Action_Plan_Template_Decision_Matrix</nameSegment>
+        <offset>0</offset>
+        <outputParameters>
+            <assignToReference>ActionPlanTemplateName</assignToReference>
+            <name>ActionPlanTemplate</name>
+        </outputParameters>
     </actionCalls>
     <apiVersion>60.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
@@ -235,13 +235,13 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Get_PHOCS_Action_Plan_Template</targetReference>
+                <targetReference>PHOCS_Inspection_Action_Plan_Template_Decision_Matrix</targetReference>
             </connector>
             <label>is PHOCS</label>
         </rules>
     </decisions>
     <description>ALR-1230 V2
-PHOCS - Updated Apex Action Name</description>
+EHIS:1363 PHOCS - Updated Apex Action Name</description>
     <environments>Default</environments>
     <formulas>
         <name>accountType</name>
