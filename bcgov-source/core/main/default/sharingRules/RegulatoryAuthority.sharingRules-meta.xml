@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingCriteriaRules>
+        <fullName>PHOCSAdminUsersPGSharingRule</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>PHOCS Admin Users PG Sharing Rule</label>
+        <sharedTo>
+            <group>EHIS_Water_Admin_Users_PG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Regulatory Authority</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSOfficerUsersPGSharingRule</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS Officer Users PG Sharing Rule</label>
+        <sharedTo>
+            <group>EHIS_Officer_Users_PG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Regulatory Authority</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingOwnerRules>
+        <fullName>RegulatoryAuthoritySharingRuleALRAllUsersPG</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>Read access to Regulatory Authority  to ALR All Users PG - ALR-352</description>
+        <label>Regulatory Authority Sharing Rule - ALR All Users PG</label>
+        <sharedTo>
+            <group>ALRAllUsersPG</group>
+        </sharedTo>
+        <sharedFrom>
+            <group>ALRAllUsersPG</group>
+        </sharedFrom>
+    </sharingOwnerRules>
+</SharingRules>
