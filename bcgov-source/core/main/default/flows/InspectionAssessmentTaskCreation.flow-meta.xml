@@ -1,33 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <name>AssessmentTaskController</name>
-        <label>AssessmentTaskController</label>
-        <locationX>50</locationX>
-        <locationY>1595</locationY>
-        <actionName>InspTasksCreationController</actionName>
-        <actionType>apex</actionType>
-        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
-        <inputParameters>
-            <name>ATIId</name>
-            <value>
-                <elementReference>ATIId</elementReference>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>InspId</name>
-            <value>
-                <elementReference>GetVisitRecord.Id</elementReference>
-            </value>
-        </inputParameters>
-        <nameSegment>InspTasksCreationController</nameSegment>
-        <versionSegment>1</versionSegment>
-    </actionCalls>
-    <actionCalls>
         <name>Get_Action_Plan_Template_Name</name>
         <label>Get Action Plan Template Name</label>
-        <locationX>611</locationX>
-        <locationY>431</locationY>
+        <locationX>743</locationX>
+        <locationY>539</locationY>
         <actionName>Action_Plan_Template_Decision_Matrix</actionName>
         <actionType>runDecisionMatrix</actionType>
         <connector>
@@ -53,18 +30,66 @@
             </value>
         </inputParameters>
         <nameSegment>Action_Plan_Template_Decision_Matrix</nameSegment>
+        <offset>0</offset>
         <outputParameters>
             <assignToReference>ActionPlanTemplateName</assignToReference>
             <name>Template</name>
         </outputParameters>
-        <versionSegment>1</versionSegment>
     </actionCalls>
-    <apiVersion>61.0</apiVersion>
+    <actionCalls>
+        <name>getActionPlanItemIds</name>
+        <label>AssessmentTaskController</label>
+        <locationX>50</locationX>
+        <locationY>1787</locationY>
+        <actionName>InspTasksCreationController</actionName>
+        <actionType>apex</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>ATIId</name>
+            <value>
+                <elementReference>ATIId</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>InspId</name>
+            <value>
+                <elementReference>GetVisitRecord.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>InspTasksCreationController</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>PHOCS_Inspection_Action_Plan_Template_Decision_Matrix</name>
+        <label>PHOCS Inspection Action Plan Template Decision Matrix</label>
+        <locationX>479</locationX>
+        <locationY>539</locationY>
+        <actionName>PHOCS_Inspection_Action_Plan_Template_Decision_Matrix</actionName>
+        <actionType>runDecisionMatrix</actionType>
+        <connector>
+            <targetReference>ActionPlanTemplateCheck</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>InspectionAccountType</name>
+            <value>
+                <elementReference>accountType</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>PHOCS_Inspection_Action_Plan_Template_Decision_Matrix</nameSegment>
+        <offset>0</offset>
+        <outputParameters>
+            <assignToReference>ActionPlanTemplateName</assignToReference>
+            <name>ActionPlanTemplate</name>
+        </outputParameters>
+    </actionCalls>
+    <apiVersion>60.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
         <name>ActionPlanItemIds</name>
         <label>ActionPlanItemIds</label>
         <locationX>138</locationX>
-        <locationY>1403</locationY>
+        <locationY>1595</locationY>
         <assignmentItems>
             <assignToReference>ATIId</assignToReference>
             <operator>Add</operator>
@@ -80,7 +105,7 @@
         <name>AssignActionPlanToVisit</name>
         <label>Assign Action Plan To Visit</label>
         <locationX>50</locationX>
-        <locationY>1079</locationY>
+        <locationY>1271</locationY>
         <assignmentItems>
             <assignToReference>NewActionPlan.ActionPlanTemplateVersionId</assignToReference>
             <operator>Assign</operator>
@@ -128,7 +153,7 @@
         <name>ActionPlanTemplateActivated</name>
         <label>Action Plan Template Activated</label>
         <locationX>182</locationX>
-        <locationY>971</locationY>
+        <locationY>1163</locationY>
         <defaultConnectorLabel>Action Plan Template Is  Not Active</defaultConnectorLabel>
         <rules>
             <name>ActionPlanTemplateIsActive</name>
@@ -150,7 +175,7 @@
         <name>ActionPlanTemplateCheck</name>
         <label>Action Plan Template Check</label>
         <locationX>611</locationX>
-        <locationY>539</locationY>
+        <locationY>731</locationY>
         <defaultConnectorLabel>Template Name Not Available</defaultConnectorLabel>
         <rules>
             <name>TemplateNameAvailable</name>
@@ -172,7 +197,7 @@
         <name>ActionPlanTemplateIDcheck</name>
         <label>Action Plan Template ID check</label>
         <locationX>380</locationX>
-        <locationY>755</locationY>
+        <locationY>947</locationY>
         <defaultConnectorLabel>Action Plan Template Not Found</defaultConnectorLabel>
         <rules>
             <name>ActionPlanTemplateFound</name>
@@ -190,22 +215,53 @@
             <label>Action Plan Template Found</label>
         </rules>
     </decisions>
-    <description>ALR-1230 V2</description>
+    <decisions>
+        <name>Check_PHOCS_Record_Type</name>
+        <label>Check PHOCS Record Type</label>
+        <locationX>611</locationX>
+        <locationY>431</locationY>
+        <defaultConnector>
+            <targetReference>Get_Action_Plan_Template_Name</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Is_PHOCS</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>GetVisitRecord.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>PHOCSInspection</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>PHOCS_Inspection_Action_Plan_Template_Decision_Matrix</targetReference>
+            </connector>
+            <label>is PHOCS</label>
+        </rules>
+    </decisions>
+    <description>ALR-1230 V2
+EHIS:1363 PHOCS - Updated Apex Action Name</description>
     <environments>Default</environments>
+    <formulas>
+        <name>accountType</name>
+        <dataType>String</dataType>
+        <expression>IF(ISBLANK(TEXT({!$Record.Account.Type})), &apos;Placeholder&apos;, TEXT({!$Record.Account.Type}))</expression>
+    </formulas>
     <interviewLabel>InspectionAssessmentTaskCreation {!$Flow.CurrentDateTime}</interviewLabel>
     <label>InspectionAssessmentTaskCreation</label>
     <loops>
         <name>ActionPlanItemValues</name>
         <label>ActionPlanItemValues</label>
         <locationX>50</locationX>
-        <locationY>1295</locationY>
+        <locationY>1487</locationY>
         <collectionReference>Actionplantempitem</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
             <targetReference>ActionPlanItemIds</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
-            <targetReference>AssessmentTaskController</targetReference>
+            <targetReference>getActionPlanItemIds</targetReference>
         </noMoreValuesConnector>
     </loops>
     <processMetadataValues>
@@ -231,7 +287,7 @@
         <name>Actionplantempitem</name>
         <label>Actionplantempitem</label>
         <locationX>50</locationX>
-        <locationY>1187</locationY>
+        <locationY>1379</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>ActionPlanItemValues</targetReference>
@@ -260,7 +316,7 @@
         <name>GetActionPlanTemplate</name>
         <label>Get Action Plan Template</label>
         <locationX>380</locationX>
-        <locationY>647</locationY>
+        <locationY>839</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>ActionPlanTemplateIDcheck</targetReference>
@@ -281,7 +337,7 @@
         <name>GetActionPlanTemplateVersion</name>
         <label>Get Action Plan Template Version</label>
         <locationX>182</locationX>
-        <locationY>863</locationY>
+        <locationY>1055</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>ActionPlanTemplateActivated</targetReference>
@@ -312,7 +368,7 @@
         <locationY>323</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Get_Action_Plan_Template_Name</targetReference>
+            <targetReference>Check_PHOCS_Record_Type</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
