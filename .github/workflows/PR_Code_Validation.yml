@@ -82,7 +82,7 @@ jobs:
       # Authenticate CI01 sandbox
       - name: 'Authenticate CI01 Sandbox'
         run: |
-            echo "${{ secrets.CI_SFDXAUTHURL }}" > ./authfile
+            echo "${{ secrets.CI01_SFDXAUTHURL }}" > ./authfile
             sf org login sfdx-url -f authfile -a CI01
 
       - name: Validate Code
