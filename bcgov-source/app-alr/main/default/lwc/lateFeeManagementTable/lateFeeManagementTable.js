@@ -13,7 +13,7 @@ import ascendingIcon from '@salesforce/resourceUrl/ascendingIcon';
 import descendingIcon from '@salesforce/resourceUrl/descendingIcon';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
-const DELAY_BEFORE_REFRESH = 2000;
+const DELAY_BEFORE_REFRESH = 4000;
 
 const tableColumns = [
     {label: 'Application Id', fieldName: 'appId', type: 'url',sortable: true,
@@ -169,7 +169,7 @@ export default class LateFeeManagementTable extends LightningElement {
     handleConfirmSendLateFee(){
         const event = new ShowToastEvent({
             title: "Success",
-            message: "Late Fees Sent Successfully",
+            message: "Late Fees are sent by batches - Click again to process any remaining",
             variant: "success"
         });
         this.dispatchEvent(event);
