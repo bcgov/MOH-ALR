@@ -119,7 +119,7 @@ public class BCMOH_Constants {
     public Final static List<String> AccountTypeStatuses = new List<String>{'Registered Active', 'Registered Active with Conditions', 'Registered Active Progressive Enforcement'};
 	public Final static List<String> LateFeeStatuses = new List<String>{'', 'Ready to Send'};  
     public final static String EXCEPMESSAGE = 'This is exception for testing and code coverage';
-    public final static String ItemEntityName = 'AssessmentTask.AssessmentTaskDefinitionId';
+    public final static String ItemEntityName = 'AssessmentTask.Name';
 	public final static String TaskType = 'InspectionChecklist';
     public final static String resultt = 'Non-compliant';
 	public final static String nulltest = 'null';

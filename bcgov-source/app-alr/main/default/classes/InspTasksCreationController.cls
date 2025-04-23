@@ -4,6 +4,7 @@
 * @Description: The purpose of this Controller class for Inspection Assessment Indicator Creation
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]    
                            ALR-1230             Anilkumar     Error while creating the inspection
+                           EHIS-1363            Vasanthi      Updated class to handle phocs inspection creation logic
 ***********************************************************************************************/
 public with sharing class InspTasksCreationController {
     public static String className = 'InspTasksCreationController';
@@ -22,7 +23,7 @@ public with sharing class InspTasksCreationController {
     public static void getActionPlanItemIds(List<FlowInputs> ATI ) {
         Set<String> aPTIds = new Set<String>();
         Set<Id> inspectionIds = new Set<Id>();
-        Set<Id> literalValues = new Set<Id>();
+        Set<String> literalValues = new Set<String>();
         List<AssessmentTaskDefinition> aTD = new List<AssessmentTaskDefinition>();
         List<AssessmentTaskIndDefinition> aTID = new List<AssessmentTaskIndDefinition>();
         Set<Id> aTDIds = new Set<Id>();
@@ -47,9 +48,9 @@ public with sharing class InspTasksCreationController {
                                                      AND ItemEntityFieldName = :BCMOH_Constants.ItemEntityName WITH SECURITY_ENFORCED]){
                literalValues.add(APTIV.ValueLiteral);   
             }
-                        if(literalValues.Size() !=0){
+            if(literalValues.Size() !=0){
                 aTD = [SELECT Id,Name,Category__c FROM AssessmentTaskDefinition 
-                        WHERE Id IN: literalValues WITH SECURITY_ENFORCED order by Name];
+                        WHERE Name IN: literalValues WITH SECURITY_ENFORCED order by Name];
                 for(AssessmentTaskDefinition ATDs : aTD){
                     aTDIds.add(ATDs.Id);
                 }            
