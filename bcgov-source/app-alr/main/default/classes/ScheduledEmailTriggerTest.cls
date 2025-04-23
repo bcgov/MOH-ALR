@@ -11,6 +11,8 @@ private class ScheduledEmailTriggerTest {
 
        //test data setup
     @testSetup public static void setupData() {
+        Id feeRecTypeId;
+        String transFeeRecTypeId = Schema.getGlobalDescribe().get('RegulatoryTrxnFee').getDescribe().getRecordTypeInfosByDeveloperName().get('TransactionFee').getRecordTypeId();
         Id parentAssetRTId = Schema.getGlobalDescribe().get('Asset').getDescribe().getRecordTypeInfosByDeveloperName().get('Units_Record_Type').getRecordTypeId();
         RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
         //account with asset and bla
@@ -25,10 +27,18 @@ private class ScheduledEmailTriggerTest {
         unitRec1.recordTypeId = parentAssetRTId;
           update unitRec1;
         BusinessLicenseApplication blaRec = TestDataFactory.createRenewalBla(residenceRec1.LicenseType__c, residenceRec1.Id, true);
+        blaRec.Status='Sent';
         blaRec.Late_Fee_Status__c='Ready to Send';
         blaRec.AccountId=residenceRec1.Id;
         update blaRec;
         BusinessLicense blRec = TestDataFactory.createBlRecord(regAuth.Id, residenceRec1.Id, residenceRec1.ParentId, '58659', 'BL RECORD 1', true);
+
+         //regTrans Fee renewal
+        RegulatoryTrxnFee regTransRec = TestDataFactory.createTransFeeRecord(transFeeRecTypeId, residenceRec1.Id, blaRec.Id, BCMOH_Constants.feeType, BCMOH_Constants.dueFeeStatus, true);
+        //regTrans Fee unit
+        RegulatoryTrxnFee regTransRec2 = TestDataFactory.createTransFeeRecord(transFeeRecTypeId, residenceRec1.Id, blaRec.Id, BCMOH_Constants.unitFeeType, BCMOH_Constants.dueFeeStatus, true);
+        //regTransFee Item renewal
+        RegulatoryTrxnFeeItem regTransItem = TestDataFactory.createTransFeeItemRecord(feeRecTypeId, regTransRec.Id, unitRec1.Id, unitRec1.Type__c, regAuth.UnitFee__c, unitRec1.Quantity, BCMOH_Constants.feeType, true);
         
         ContentVersion contentVersionRec = TestDataFactory.createContentVer('title value 1', blaRec.Id, true);
         //ContentVersion contentVersionRec1 = TestDataFactory.createContentVer('title value 2', blaRec.Id, true);

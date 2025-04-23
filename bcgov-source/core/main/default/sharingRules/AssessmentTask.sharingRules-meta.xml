@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingCriteriaRules>
+        <fullName>AssessmentTaskSharingRuleALRMMHAUser</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>Assessment Task SharingRule ALR MMHA User</label>
+        <sharedTo>
+            <group>ALR_MMHA_Users_PG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>notEqual</operation>
+            <value></value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Assessment_Task_SharingRule_ALR_SDPR_User</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>Assessment Task SharingRule ALR SDPR User</label>
+        <sharedTo>
+            <group>ALR_SDPR_User_PG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>notEqual</operation>
+            <value></value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Assessment_Task_Sharing_Rule_ALR_Data_Analyst_PG</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>ALR 1582</description>
+        <label>Assessment Task Sharing Rule-ALR  Data Analyst PG</label>
+        <sharedTo>
+            <group>ALRDataAnalystUsersPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>notEqual</operation>
+            <value></value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>SharePHOCSAssessmentTaskwithEHISUsers</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>Share PHOCS Assessment Task with EHIS Users</description>
+        <label>Share PHOCS Assessment Task with EHIS Users</label>
+        <sharedTo>
+            <group>EHISUsersPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Assessment Task</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingOwnerRules>
+        <fullName>ALR_Sharing_for_Owner</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>ALR Sharing for Owner</label>
+        <sharedTo>
+            <group>ALRAllUsersPG</group>
+        </sharedTo>
+        <sharedFrom>
+            <group>ALRAllUsersPG</group>
+        </sharedFrom>
+    </sharingOwnerRules>
+</SharingRules>

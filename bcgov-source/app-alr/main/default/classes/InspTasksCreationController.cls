@@ -4,6 +4,7 @@
 * @Description: The purpose of this Controller class for Inspection Assessment Indicator Creation
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]    
                            ALR-1230             Anilkumar     Error while creating the inspection
+                           EHIS-1363            Vasanthi      Updated class to handle phocs inspection creation logic
 ***********************************************************************************************/
 public with sharing class InspTasksCreationController {
     public static String className = 'InspTasksCreationController';
@@ -21,8 +22,8 @@ public with sharing class InspTasksCreationController {
     @InvocableMethod
     public static void getActionPlanItemIds(List<FlowInputs> ATI ) {
         Set<String> aPTIds = new Set<String>();
-        Set<Id> inspectionId = new Set<Id>();
-        Set<Id> literalValues = new Set<Id>();
+        Set<Id> inspectionIds = new Set<Id>();
+        Set<String> literalValues = new Set<String>();
         List<AssessmentTaskDefinition> aTD = new List<AssessmentTaskDefinition>();
         List<AssessmentTaskIndDefinition> aTID = new List<AssessmentTaskIndDefinition>();
         Set<Id> aTDIds = new Set<Id>();
@@ -35,9 +36,9 @@ public with sharing class InspTasksCreationController {
         try{
             for (FlowInputs input : ATI) {
                 aPTIds.addAll(input.aTIId);
-                inspectionId.add(input.inspId);   
+                inspectionIds.add(input.inspId);   
             }
-            for (string setElement :inspectionId ) {
+            for (string setElement :inspectionIds ) {
                 visitId = setElement; 
                 break; 
             }
@@ -45,21 +46,36 @@ public with sharing class InspTasksCreationController {
                                                      FROM ActionPlanTemplateItemValue
                                                      WHERE ActionPlanTemplateItemId IN :aPTIds
                                                      AND ItemEntityFieldName = :BCMOH_Constants.ItemEntityName WITH SECURITY_ENFORCED]){
-                                                         literalValues.add(APTIV.ValueLiteral);   
-                                                     }
+               literalValues.add(APTIV.ValueLiteral);   
+            }
             if(literalValues.Size() !=0){
                 aTD = [SELECT Id,Name,Category__c FROM AssessmentTaskDefinition 
-						WHERE Id IN: literalValues WITH SECURITY_ENFORCED order by Name];
+                        WHERE Name IN: literalValues WITH SECURITY_ENFORCED order by Name];
                 for(AssessmentTaskDefinition ATDs : aTD){
                     aTDIds.add(ATDs.Id);
                 }            
                 
+                Id assesmentTaskRecordTypeId;
+                Visit visit = [select Id, Account.RecordType.Name From Visit where Id=:visitId Limit 1];
+                if(visit?.AccountId != null){
+                   AssesmentTaskRecrdTypeMapping__mdt recordTypeMapping =  AssesmentTaskRecrdTypeMapping__mdt.getInstance(visit.Account?.RecordType.Name.deleteWhitespace());
+                   if(recordTypeMapping?.AssesmentTaskRecordType__c != null){
+                       assesmentTaskRecordTypeId = Schema.SObjectType.AssessmentTask.getRecordTypeInfosByName().get(recordTypeMapping.AssesmentTaskRecordType__c).getRecordTypeId(); 
+                   }
+                }
+                
                 for(AssessmentTaskDefinition ATDs :aTD){
                     AssessmentTask  newAssessmentTask = new AssessmentTask();
+                    if(String.isNotEmpty(ATDs.Category__c)){
                     newAssessmentTask.Name = ATDs.Category__c;
+                    }
+                    else{
+                        newAssessmentTask.Name  = ATDs.Name;
+                    }
                     newAssessmentTask.AssessmentTaskDefinitionId = ATDs.Id;
                     newAssessmentTask.ParentId = visitId;
                     newAssessmentTask.TaskType = BCMOH_Constants.TaskType;
+                    newAssessmentTask.RecordTypeId = assesmentTaskRecordTypeId;
                     aTstoInsert.add(newAssessmentTask);
                 }
                 if(!aTstoInsert.isEmpty()){
