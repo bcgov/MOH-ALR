@@ -5,19 +5,10 @@ on:
     branches:
       - dev
     paths:
-      - 'src/main/default/**'
-      - 'src-access-mgmt/main/default/**'
-      - 'src-ui/main/default/**' 
-      - 'ehis-source/app-contactonboardinglifecycle/main/default/**'   
-      - 'ehis-source/app-datasecurity/main/default/**'  
-      - 'ehis-source/app-onboardinglifecycle/main/default/**'   
-      - 'ehis-source/app-programworkareaassignment/main/default/**'  
-      - 'ehis-source/app-segmentationterritories/main/default/**' 
-      - 'ehis-source/core/main/default/**'
-      - 'ehis-source/ehis-access-mgmt/main/default/**' 
-      - 'ehis-source/ehis-ui/main/default/**'
-      - '.github/workflows/PR_Code_Validation.yml'           
-      - '.github/workflows/Code_Validation_Commondev_Pool.yml'
+      - 'bcgov-source/app-phocs/main/default**'
+      - 'bcgov-source/core/main/default**'
+      - 'bcgov-source/app-alr/main/default**'  
+      - '.github/workflows/PR_Code_Validation.yml'
       - '!sfdx-project.json'
 jobs:
   Code-Validation-Run:
@@ -91,7 +82,7 @@ jobs:
       # Authenticate CI01 sandbox
       - name: 'Authenticate CI01 Sandbox'
         run: |
-            echo "${{ secrets.CI01_SFDXAUTHURL }}" > ./authfile
+            echo "${{ secrets.CI_SFDXAUTHURL }}" > ./authfile
             sf org login sfdx-url -f authfile -a CI01
 
       - name: Validate Code
