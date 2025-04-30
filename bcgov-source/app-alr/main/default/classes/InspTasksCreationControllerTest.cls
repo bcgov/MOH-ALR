@@ -71,12 +71,12 @@ public class InspTasksCreationControllerTest {
         flowInputs.add(input);
               
         List<ActionPlanTemplateItemValue> aptiv = [SELECT id,ItemEntityFieldName, ValueLiteral, ActionPlanTemplateItemId FROM ActionPlanTemplateItemValue WHERE ActionPlanTemplateItemId =: apti[0].id AND ItemEntityFieldName = :BCMOH_Constants.ItemEntityName];
-        Set<Id> LiteralValues = new Set<Id>();
+        Set<String> LiteralValues = new Set<String>();
         for(ActionPlanTemplateItemValue aptiv3 : aptiv){
             LiteralValues.add(aptiv3.ValueLiteral);
         }
          If(LiteralValues.Size() !=0){
-            List<AssessmentTaskDefinition> atds= [SELECT Id,Category__c FROM AssessmentTaskDefinition WHERE Id IN: LiteralValues];
+            List<AssessmentTaskDefinition> atds= [SELECT Id,Name,Category__c FROM AssessmentTaskDefinition WHERE Name IN: LiteralValues];
 
         List<AssessmentTask> ATstoInsert = new List<AssessmentTask>();
         AssessmentTask  newAssessmentTask = new AssessmentTask();
