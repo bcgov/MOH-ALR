@@ -156,13 +156,4 @@ public class WorkAreaPublicGroupQueueable implements Queueable {
             Database.Insert(insertMembers, false);
         }
     }
-
-    public static void shareAccountWithUser(Id accountId, Id groupId) {
-        AccountShare share = new AccountShare();
-        share.AccountId = accountId;
-        share.UserOrGroupId = groupId;
-        share.AccountAccessLevel = 'Edit';
-        share.RowCause = AccountShare.RowCause.Manual;
-        insert share;
-    }
 }
