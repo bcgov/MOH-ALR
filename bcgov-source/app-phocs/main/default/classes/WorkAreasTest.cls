@@ -28,6 +28,9 @@ public with sharing class WorkAreasTest {
             WorkAreas wa = new WorkAreas(workAreaList);
             wa.onAfterInsert();
             Test.stopTest();
+
+            workAreaList = [Select Id From Work_Area__c];
+            System.assertNotEquals(0, workAreaList.size());
         }
     }
 
@@ -67,6 +70,9 @@ public with sharing class WorkAreasTest {
             WorkAreas wa = new WorkAreas(workAreaList);
             wa.onAfterUpdate(oldWAMap);
             Test.stopTest();
+
+            Work_Area__c wArea = [Select Id,Primary_Owner__c From Work_Area__c where Id=: workArea.Id Limit 1];
+            System.assertNotEquals(officerUser.Id, wArea.Primary_Owner__c);
         }
     }
 }

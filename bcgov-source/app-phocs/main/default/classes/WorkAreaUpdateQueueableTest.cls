@@ -30,6 +30,9 @@ public class WorkAreaUpdateQueueableTest {
             WorkAreaUpdateQueueable workAreaUpdateQueueable = new WorkAreaUpdateQueueable(workAreaList);
             workAreaUpdateQueueable.updateWorkArea();
             Test.stopTest();
+
+            workAreaList = [Select Id From Work_Area__c];
+            System.assertNotEquals(0, workAreaList.size());
         }
     }
 }

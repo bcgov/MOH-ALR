@@ -104,7 +104,6 @@ public class WorkAreaPublicGroupQueueable implements Queueable {
                 if(workArea.Name != oldWorkArea.Name){
                     Group publicGroup = new Group(Id= workArea.Public_Group_Id__c);
                     publicGroup.Name = 'WA-' + workArea.Name;
-                    //publicGroup.DeveloperName =  'WA-' + workArea.Name;
                     updateGroups.add(publicGroup);
                 }
                 if (oldWorkArea.Primary_Owner__c != workArea.Primary_Owner__c) {

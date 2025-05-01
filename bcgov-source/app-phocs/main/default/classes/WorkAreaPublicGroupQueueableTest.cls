@@ -19,7 +19,7 @@ public class WorkAreaPublicGroupQueueableTest {
             workArea.Supervisor__c = usr.Id;
             workArea.Public_Group_Id__c = grp.Id;
             insert workArea;
-
+          
             List<Work_Area__c> workAreaList = new List<Work_Area__c>();
             workAreaList.add(workArea);
 
@@ -27,6 +27,9 @@ public class WorkAreaPublicGroupQueueableTest {
             WorkAreaPublicGroupQueueable workAreaPublicGroupQueueable = new WorkAreaPublicGroupQueueable(workAreaList,null);
             workAreaPublicGroupQueueable.createPublicGroup();
             Test.stopTest();
+
+            Group[] groups = [SELECT Id, Name FROM Group where Name='WA-Test Work Area'];
+            System.assertNotEquals(0, groups.size());
         }
     }
 
@@ -66,6 +69,10 @@ public class WorkAreaPublicGroupQueueableTest {
             WorkAreaPublicGroupQueueable workAreaPublicGroupQueueable = new WorkAreaPublicGroupQueueable(workAreaList, oldWAMap);
             workAreaPublicGroupQueueable.updatePublicGroup();
             Test.stopTest();
+
+            string groupId = grp.Id;
+            GroupMember[] grpMembers = [SELECT UserOrGroupId, GroupId, Id FROM GroupMember WHERE GroupId= :groupId];
+            System.assertNotEquals(0, grpMembers.size());
         }
     }
 }
