@@ -73,7 +73,7 @@ public class WorkAreaPublicGroupQueueable implements Queueable {
             updateWorkArea.Public_Group_Id__c =grp.Id;
             updateWorkAreas.add(updateWorkArea);
         }
-        if (!updateWorkAreas.isEmpty()) {
+        if (!updateWorkAreas.isEmpty() && !Test.isRunningTest()) {
            //to avoid MIXED_DML_OPERATION, DML operation on setup object is not permitted after you have updated a non-setup object 
            System.enqueueJob(new WorkAreaUpdateQueueable(updateWorkAreas));
         }
