@@ -23,7 +23,7 @@ public class PHOCSApplication
 	// Configure and create the DomainFactory for this Application
 	public static final fflib_Application.DomainFactory Domain = 
 		new fflib_Application.DomainFactory(
-			Application.Selector,
+			PHOCSApplication.Selector,
 			new Map<SObjectType, Type> {
         });
 }
