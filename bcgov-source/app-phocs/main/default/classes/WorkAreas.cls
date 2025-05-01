@@ -1,7 +1,7 @@
 public without sharing class WorkAreas extends fflib_SObjectDomain{
     private static fflib_ISObjectUnitOfWork uow;
 
-    public WorkAreas(List<Log_Event__e> sObjectList) {
+    public WorkAreas(List<Work_Area__c> sObjectList) {
         super(sObjectList);
     }
 
