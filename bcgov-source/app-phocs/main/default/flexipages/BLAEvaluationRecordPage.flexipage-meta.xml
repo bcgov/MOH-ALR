@@ -12,6 +12,22 @@
                         <valueListItems>
                             <value>ChangeOwnerOne</value>
                         </valueListItems>
+                        <valueListItems>
+                            <value>BusinessLicenseApplication.IssuePermit</value>
+                            <visibilityRule>
+                                <booleanFilter>1 AND 2</booleanFilter>
+                                <criteria>
+                                    <leftValue>{!Record.Status}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Closed</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.ClosureReason__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Approved</rightValue>
+                                </criteria>
+                            </visibilityRule>
+                        </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
@@ -310,6 +326,16 @@
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.OwnerId</fieldItem>
+                <identifier>RecordOwnerIdField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
