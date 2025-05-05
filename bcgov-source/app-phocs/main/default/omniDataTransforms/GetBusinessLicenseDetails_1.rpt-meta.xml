@@ -45,7 +45,9 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaExpression>IF(${1:((%BLAccountWaterSourceIntakeWaterSourceCategory% == &apos;Groundwater - Single Source&apos;) OR (%BLAccountWaterSourceIntakeWaterSourceCategory% == &apos;Ground and Surface&apos;) AND (NOT(%BLAccountWaterSourceIntakeGARPScreeningOutcome%) == &apos;GARP - Low Risk of Pathogens&apos;))})</formulaExpression>
+        <formulaConverted>| var:BLAccountWaterSourceWaterSourceCategory &apos;Groundwater/\/\/-/\/\/Single/\/\/Source&apos; == var:BLAccountWaterSourceWaterSourceCategory &apos;Ground/\/\/and/\/\/Surface&apos; == var:BLAccountWaterSourceWaterSourceCategory &apos;Groundwater/\/\/-/\/\/Multiple/\/\/Sources&apos; == OR OR AND | var:BLAccountWaterSourceGARPScreeningOutcome &apos;GARP/\/\/-/\/\/Low/\/\/Risk/\/\/of/\/\/Pathogens&apos; == NOT IF</formulaConverted>
+        <formulaExpression>IF(AND(OR(%BLAccountWaterSourceWaterSourceCategory% == &apos;Groundwater - Single Source&apos;,OR(%BLAccountWaterSourceWaterSourceCategory% == &apos;Ground and Surface&apos;,%BLAccountWaterSourceWaterSourceCategory% == &apos;Groundwater - Multiple Sources&apos;))),NOT(%BLAccountWaterSourceGARPScreeningOutcome% == &apos;GARP - Low Risk of Pathogens&apos;))</formulaExpression>
+        <formulaResultPath>isSourceEvaluationWaterTreatmentCond1</formulaResultPath>
         <formulaSequence>9.0</formulaSequence>
         <globalKey>GetBusinessLicenseDetailsCustom2483</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
@@ -774,8 +776,8 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:${1: var:BLAccountWaterSourceIntakeCategoryL1 &apos;Surface/\/\/Water&apos; var:} == IF</formulaConverted>
-        <formulaExpression>IF(${1:%BLAccountWaterSourceIntakeCategoryL1% == &apos;Surface Water&apos;})</formulaExpression>
+        <formulaConverted>| var:BLAccountWaterSourceIntakeCategoryL1 &apos;Surface/\/\/Water&apos; == true false IF</formulaConverted>
+        <formulaExpression>IF(%BLAccountWaterSourceIntakeCategoryL1% == &apos;Surface Water&apos;,true,false)</formulaExpression>
         <formulaResultPath>isWSICatL1SurfaceWater</formulaResultPath>
         <formulaSequence>7.0</formulaSequence>
         <globalKey>GetBusinessLicenseDetailsCustom6748</globalKey>
@@ -1481,8 +1483,8 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:${1: var:BLAccountWaterSourceIntakeCategoryL1 &apos;Groundwater&apos; var:} == IF</formulaConverted>
-        <formulaExpression>IF(${1:%BLAccountWaterSourceIntakeCategoryL1% == &apos;Groundwater&apos;})</formulaExpression>
+        <formulaConverted>| var:BLAccountWaterSourceIntakeCategoryL1 &apos;Groundwater&apos; == true false IF</formulaConverted>
+        <formulaExpression>IF(%BLAccountWaterSourceIntakeCategoryL1% == &apos;Groundwater&apos;,true,false)</formulaExpression>
         <formulaResultPath>isWSICatL1GroundWater</formulaResultPath>
         <formulaSequence>6.0</formulaSequence>
         <globalKey>GetBusinessLicenseDetailsCustom2327</globalKey>
@@ -1889,6 +1891,20 @@
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
         <outputFieldName>BLAccountRelatedWaterSourceIntakeWaterLicenseNumber</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetBusinessLicenseDetailsCustom8332</globalKey>
+        <inputFieldName>isWaterSourceIntakeTreatmentCondition1</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>isWaterSourceIntakeTreatmentCondition1</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
