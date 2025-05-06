@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
     <sharingCriteriaRules>
+        <fullName>BLReportingUserRead</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>EHIS-188</description>
+        <label>BL - Reporting User Read</label>
+        <sharedTo>
+            <group>PHOCSReportingUserPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Permit/License</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
         <fullName>BusinessLicenseALRALLUSERPG</fullName>
         <accessLevel>Edit</accessLevel>
         <description>Read access as part of ALR-518</description>
