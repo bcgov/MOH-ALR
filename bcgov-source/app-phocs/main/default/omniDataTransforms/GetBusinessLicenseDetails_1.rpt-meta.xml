@@ -45,7 +45,9 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaExpression>IF(${1:((%BLAccountWaterSourceIntakeWaterSourceCategory% == &apos;Groundwater - Single Source&apos;) OR (%BLAccountWaterSourceIntakeWaterSourceCategory% == &apos;Ground and Surface&apos;) AND (NOT(%BLAccountWaterSourceIntakeGARPScreeningOutcome%) == &apos;GARP - Low Risk of Pathogens&apos;))})</formulaExpression>
+        <formulaConverted>| var:BLAccountWaterSourceWaterSourceCategory &apos;Groundwater/\/\/-/\/\/Single/\/\/Source&apos; == var:BLAccountWaterSourceWaterSourceCategory &apos;Ground/\/\/and/\/\/Surface&apos; == var:BLAccountWaterSourceWaterSourceCategory &apos;Groundwater/\/\/-/\/\/Multiple/\/\/Sources&apos; == OR OR AND | var:BLAccountWaterSourceGARPScreeningOutcome &apos;GARP/\/\/-/\/\/Low/\/\/Risk/\/\/of/\/\/Pathogens&apos; == NOT IF</formulaConverted>
+        <formulaExpression>IF(AND(OR(%BLAccountWaterSourceWaterSourceCategory% == &apos;Groundwater - Single Source&apos;,OR(%BLAccountWaterSourceWaterSourceCategory% == &apos;Ground and Surface&apos;,%BLAccountWaterSourceWaterSourceCategory% == &apos;Groundwater - Multiple Sources&apos;))),NOT(%BLAccountWaterSourceGARPScreeningOutcome% == &apos;GARP - Low Risk of Pathogens&apos;))</formulaExpression>
+        <formulaResultPath>isSourceEvaluationWaterTreatmentCond1</formulaResultPath>
         <formulaSequence>9.0</formulaSequence>
         <globalKey>GetBusinessLicenseDetailsCustom2483</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
@@ -774,8 +776,8 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:${1: var:BLAccountWaterSourceIntakeCategoryL1 &apos;Surface/\/\/Water&apos; var:} == IF</formulaConverted>
-        <formulaExpression>IF(${1:%BLAccountWaterSourceIntakeCategoryL1% == &apos;Surface Water&apos;})</formulaExpression>
+        <formulaConverted>| var:BLAccountWaterSourceIntakeCategoryL1 &apos;Surface/\/\/Water&apos; == true false IF</formulaConverted>
+        <formulaExpression>IF(%BLAccountWaterSourceIntakeCategoryL1% == &apos;Surface Water&apos;,true,false)</formulaExpression>
         <formulaResultPath>isWSICatL1SurfaceWater</formulaResultPath>
         <formulaSequence>7.0</formulaSequence>
         <globalKey>GetBusinessLicenseDetailsCustom6748</globalKey>
@@ -923,6 +925,23 @@
         <outputCreationSequence>1.0</outputCreationSequence>
         <outputFieldName>BLAOwnerNameTitle</outputFieldName>
         <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:BLA:EngineeringDesignFirmAddress__Street__s &quot;/\/\/&quot; var:BLA:EngineeringDesignFirmAddress__City__s &quot;/\/\/&quot; var:BLA:EngineeringDesignFirmAddress__StateCode__s &quot;/\/\/&quot; var:BLA:EngineeringDesignFirmAddress__PostalCode__s &quot;/\/\/&quot; var:BLA:EngineeringDesignFirmAddress__CountryCode__s CONCAT</formulaConverted>
+        <formulaExpression>CONCAT(%BLA:EngineeringDesignFirmAddress__Street__s%, &quot; &quot;,%BLA:EngineeringDesignFirmAddress__City__s%, &quot; &quot;,%BLA:EngineeringDesignFirmAddress__StateCode__s%, &quot; &quot;,%BLA:EngineeringDesignFirmAddress__PostalCode__s%, &quot; &quot;,%BLA:EngineeringDesignFirmAddress__CountryCode__s%)</formulaExpression>
+        <formulaResultPath>BLAEngineeringDesignFirmAddress</formulaResultPath>
+        <formulaSequence>10.0</formulaSequence>
+        <globalKey>GetBusinessLicenseDetailsCustom4094</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
@@ -1362,7 +1381,7 @@
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <globalKey>GetBusinessLicenseDetailsCustom0jIbZ0000001lbBUAQItem26</globalKey>
-        <inputFieldName>BLOrganization:BillingAddress</inputFieldName>
+        <inputFieldName>OrganizationBillingAddress</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
@@ -1481,8 +1500,8 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:${1: var:BLAccountWaterSourceIntakeCategoryL1 &apos;Groundwater&apos; var:} == IF</formulaConverted>
-        <formulaExpression>IF(${1:%BLAccountWaterSourceIntakeCategoryL1% == &apos;Groundwater&apos;})</formulaExpression>
+        <formulaConverted>| var:BLAccountWaterSourceIntakeCategoryL1 &apos;Groundwater&apos; == true false IF</formulaConverted>
+        <formulaExpression>IF(%BLAccountWaterSourceIntakeCategoryL1% == &apos;Groundwater&apos;,true,false)</formulaExpression>
         <formulaResultPath>isWSICatL1GroundWater</formulaResultPath>
         <formulaSequence>6.0</formulaSequence>
         <globalKey>GetBusinessLicenseDetailsCustom2327</globalKey>
@@ -1633,7 +1652,7 @@
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
-        <disabled>false</disabled>
+        <disabled>true</disabled>
         <filterGroup>0.0</filterGroup>
         <formulaConverted>| var:BLAccountDWS:Physical_Address__Street__s &quot;/\/\/&quot; var:BLAccountDWS:Physical_Address__City__s &quot;/\/\/&quot; var:BLAccountDWS:Physical_Address__StateCode__s &quot;/\/\/&quot; var:BLAccountDWS:Physical_Address__PostalCode__s &quot;/\/\/&quot; var:BLAccountDWS:Physical_Address__CountryCode__s CONCAT</formulaConverted>
         <formulaExpression>CONCAT(%BLAccountDWS:Physical_Address__Street__s%, &quot; &quot;,%BLAccountDWS:Physical_Address__City__s%, &quot; &quot;,%BLAccountDWS:Physical_Address__StateCode__s%, &quot; &quot;,%BLAccountDWS:Physical_Address__PostalCode__s%, &quot; &quot;,%BLAccountDWS:Physical_Address__CountryCode__s%)</formulaExpression>
@@ -1681,7 +1700,7 @@
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <globalKey>GetBusinessLicenseDetailsCustom3615</globalKey>
-        <inputFieldName>BLA:EngineeringDesignFirmAddress__c</inputFieldName>
+        <inputFieldName>BLAEngineeringDesignFirmAddress</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
@@ -1889,6 +1908,20 @@
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
         <outputFieldName>BLAccountRelatedWaterSourceIntakeWaterLicenseNumber</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetBusinessLicenseDetailsCustom8332</globalKey>
+        <inputFieldName>isWaterSourceIntakeTreatmentCondition1</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>isWaterSourceIntakeTreatmentCondition1</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -2368,7 +2401,7 @@
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
-        <disabled>true</disabled>
+        <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <formulaConverted>| var:BLOrganization:BillingStreet &quot;/\/\/&quot; var:BLOrganization:BillingCity &quot;/\/\/&quot; var:BLOrganization:BillingState &quot;/\/\/&quot; var:BLOrganization:BillingPostalCode &quot;/\/\/&quot; var:BLOrganization:BillingCountry CONCAT</formulaConverted>
         <formulaExpression>CONCAT(%BLOrganization:BillingStreet%, &quot; &quot;,%BLOrganization:BillingCity%, &quot; &quot;,%BLOrganization:BillingState%, &quot; &quot;,%BLOrganization:BillingPostalCode%, &quot; &quot;,%BLOrganization:BillingCountry%)</formulaExpression>
@@ -2446,7 +2479,7 @@
     </omniDataTransformItem>
     <outputType>JSON</outputType>
     <previewJsonData>{
-  &quot;Id&quot; : &quot;0cEbZ0000000ow5UAA&quot;
+  &quot;Id&quot; : &quot;0cEbZ0000000qBVUAY&quot;
 }</previewJsonData>
     <processSuperBulk>false</processSuperBulk>
     <responseCacheTtlMinutes>0.0</responseCacheTtlMinutes>
