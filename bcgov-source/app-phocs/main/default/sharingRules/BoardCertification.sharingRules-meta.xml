@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
     <sharingCriteriaRules>
+        <fullName>BoardCertificationReportingUserRead</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>EHIS-188</description>
+        <label>Board Certification - Reporting User Read</label>
+        <sharedTo>
+            <group>PHOCSReportingUserPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Contact Certifications</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
         <fullName>SharePHOCScertificationWithAdmin</fullName>
         <accessLevel>Edit</accessLevel>
         <description>EHIS-1455 share certification records with water admin</description>
