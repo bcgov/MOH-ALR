@@ -315,7 +315,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.LicensePermitNameId</fieldItem>
                 <identifier>RecordLicensePermitNameIdField</identifier>
@@ -454,16 +454,10 @@
                 <fieldItem>Record.EngineeringDesignFirmRegistrationNo__c</fieldItem>
                 <identifier>RecordEngineeringDesignFirmRegistrationNo_cField</identifier>
                 <visibilityRule>
-                    <booleanFilter>1 AND 2</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.LicenseType.Name}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>Drinking Water Construction Permit</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.LicenseType.Name}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Pool Construction Permit</rightValue>
                     </criteria>
                 </visibilityRule>
             </fieldInstance>
@@ -477,10 +471,16 @@
                 <fieldItem>Record.DeviationsFromBCDesignGuidelines__c</fieldItem>
                 <identifier>RecordDeviationsFromBCDesignGuidelines_cField</identifier>
                 <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.LicenseType.Name}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>Drinking Water Construction Permit</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.AccordanceWithBCDesignGuidelines__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>No</rightValue>
                     </criteria>
                 </visibilityRule>
             </fieldInstance>
@@ -511,10 +511,21 @@
                 <fieldItem>Record.WaterQuantitySufficient__c</fieldItem>
                 <identifier>RecordWaterQuantitySufficient_cField</identifier>
                 <visibilityRule>
+                    <booleanFilter>1 AND ( 2 OR 3 )</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.LicenseType.Name}</leftValue>
-                        <operator>CONTAINS</operator>
+                        <operator>EQUAL</operator>
                         <rightValue>Drinking Water Construction Permit</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.ReasonforApplying__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>New System/Facility Construction</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.ReasonforApplying__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>System Extension</rightValue>
                     </criteria>
                 </visibilityRule>
             </fieldInstance>
@@ -527,6 +538,23 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.EstimatedIncreaseInPopulationServed__c</fieldItem>
                 <identifier>RecordEstimatedIncreaseInPopulationServed_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.LicenseType.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Drinking Water Construction Permit</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.WaterMainExtension__c</fieldItem>
+                <identifier>RecordWaterMainExtension_cField</identifier>
                 <visibilityRule>
                     <criteria>
                         <leftValue>{!Record.LicenseType.Name}</leftValue>
@@ -730,6 +758,29 @@
             </fieldInstance>
         </itemInstances>
         <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.DescriptionOfProposedWorks__c</fieldItem>
+                <identifier>RecordDescriptionOfProposedWorks_cField</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 OR 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.LicenseType.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Drinking Water Construction Permit</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.LicenseType.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Pool Construction Permit</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
             <componentInstance>
                 <componentName>flexipage:blankSpace</componentName>
                 <identifier>flexipage_blankSpace4</identifier>
@@ -761,10 +812,16 @@
                 <fieldItem>Record.HoldingTankWillServeSpecify__c</fieldItem>
                 <identifier>RecordHoldingTankWillServeSpecify_cField</identifier>
                 <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.LicenseType.Name}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>Sewerage Holding Tank Permit to Construct</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.HoldingTankWillServe__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Other</rightValue>
                     </criteria>
                 </visibilityRule>
             </fieldInstance>
@@ -863,10 +920,16 @@
                 <fieldItem>Record.RestrictiveCovenantsDetails__c</fieldItem>
                 <identifier>RecordRestrictiveCovenantsDetails__cField</identifier>
                 <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.LicenseType.Name}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>Sewerage Holding Tank Permit to Construct</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.RestrictiveCovenants__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>No</rightValue>
                     </criteria>
                 </visibilityRule>
             </fieldInstance>
@@ -1003,10 +1066,16 @@
                 <fieldItem>Record.Length__c</fieldItem>
                 <identifier>RecordLength_cField</identifier>
                 <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.LicenseType.Name}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>Drinking Water Construction Permit</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.WaterMainExtension__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Yes</rightValue>
                     </criteria>
                 </visibilityRule>
             </fieldInstance>
@@ -1037,10 +1106,16 @@
                 <fieldItem>Record.ReasonForNoHorizontalSeperation__c</fieldItem>
                 <identifier>RecordReasonForNoHorizontalSeperation_cField</identifier>
                 <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.LicenseType.Name}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>Drinking Water Construction Permit</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.HorizontalSeperationFromSewers__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>No</rightValue>
                     </criteria>
                 </visibilityRule>
             </fieldInstance>
@@ -1185,10 +1260,16 @@
                 <fieldItem>Record.ResidentialNoOfBedrooms__c</fieldItem>
                 <identifier>RecordResidentialNoOfBedrooms_cField</identifier>
                 <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.LicenseType.Name}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>Sewerage Holding Tank Permit to Construct</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.HoldingTankWillServe__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Residential</rightValue>
                     </criteria>
                 </visibilityRule>
             </fieldInstance>
