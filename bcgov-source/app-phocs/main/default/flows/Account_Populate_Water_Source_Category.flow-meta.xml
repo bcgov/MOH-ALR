@@ -6,7 +6,7 @@
         <name>Assign_Bulk_supplied_Piped</name>
         <label>Assign Bulk supplied – Piped</label>
         <locationX>1898</locationX>
-        <locationY>1331</locationY>
+        <locationY>1547</locationY>
         <assignmentItems>
             <assignToReference>WaterSourceCategory</assignToReference>
             <operator>Assign</operator>
@@ -22,7 +22,7 @@
         <name>Assign_Bulk_Supplied_Trucked</name>
         <label>Assign Bulk Supplied - Trucked</label>
         <locationX>1634</locationX>
-        <locationY>1331</locationY>
+        <locationY>1547</locationY>
         <assignmentItems>
             <assignToReference>WaterSourceCategory</assignToReference>
             <operator>Assign</operator>
@@ -38,7 +38,7 @@
         <name>Assign_Ground_and_Surface</name>
         <label>Assign Ground and Surface</label>
         <locationX>1106</locationX>
-        <locationY>1331</locationY>
+        <locationY>1547</locationY>
         <assignmentItems>
             <assignToReference>WaterSourceCategory</assignToReference>
             <operator>Assign</operator>
@@ -54,7 +54,7 @@
         <name>Assign_Ground_Surface_and_Bulk</name>
         <label>Assign Ground/Surface and Bulk</label>
         <locationX>1370</locationX>
-        <locationY>1331</locationY>
+        <locationY>1547</locationY>
         <assignmentItems>
             <assignToReference>WaterSourceCategory</assignToReference>
             <operator>Assign</operator>
@@ -70,7 +70,7 @@
         <name>Assign_Groundwater_Multiple_Sources</name>
         <label>Assign Groundwater - Multiple Sources</label>
         <locationX>842</locationX>
-        <locationY>1331</locationY>
+        <locationY>1547</locationY>
         <assignmentItems>
             <assignToReference>WaterSourceCategory</assignToReference>
             <operator>Assign</operator>
@@ -86,7 +86,7 @@
         <name>Assign_Groundwater_Single_Source</name>
         <label>Assign Groundwater - Single Source</label>
         <locationX>578</locationX>
-        <locationY>1331</locationY>
+        <locationY>1547</locationY>
         <assignmentItems>
             <assignToReference>WaterSourceCategory</assignToReference>
             <operator>Assign</operator>
@@ -99,10 +99,43 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Assign_parent_Account</name>
+        <label>Assign parent Account</label>
+        <locationX>1106</locationX>
+        <locationY>431</locationY>
+        <assignmentItems>
+            <assignToReference>ParentAccount</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.ParentId</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_All_Water_Source_Intake</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Parent_Account_With_Prior_Account</name>
+        <label>Assign Parent Account With Prior Account</label>
+        <locationX>974</locationX>
+        <locationY>1955</locationY>
+        <assignmentItems>
+            <assignToReference>ParentAccount</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record__Prior.ParentId</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Get_All_Water_Source_Intake</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Assign_Surface_Water_Multiple_Sources</name>
         <label>Assign Surface Water - Multiple Sources</label>
         <locationX>314</locationX>
-        <locationY>1331</locationY>
+        <locationY>1547</locationY>
         <assignmentItems>
             <assignToReference>WaterSourceCategory</assignToReference>
             <operator>Assign</operator>
@@ -118,7 +151,7 @@
         <name>Assign_Surface_Water_Single_Source</name>
         <label>Assign Surface Water - Single Source</label>
         <locationX>50</locationX>
-        <locationY>1331</locationY>
+        <locationY>1547</locationY>
         <assignmentItems>
             <assignToReference>WaterSourceCategory</assignToReference>
             <operator>Assign</operator>
@@ -134,7 +167,7 @@
         <name>Increment_Bulk_Water_counter</name>
         <label>Increment Bulk Water counter</label>
         <locationX>1986</locationX>
-        <locationY>647</locationY>
+        <locationY>863</locationY>
         <assignmentItems>
             <assignToReference>BulkWaterCounter</assignToReference>
             <operator>Add</operator>
@@ -150,7 +183,7 @@
         <name>Increment_Bulk_Water_Piped</name>
         <label>Increment Bulk Water Piped</label>
         <locationX>1986</locationX>
-        <locationY>863</locationY>
+        <locationY>1079</locationY>
         <assignmentItems>
             <assignToReference>BulkSupplyPipedCounter</assignToReference>
             <operator>Add</operator>
@@ -166,7 +199,7 @@
         <name>Increment_Bulk_Water_Trucked</name>
         <label>Increment Bulk Water Trucked</label>
         <locationX>1722</locationX>
-        <locationY>863</locationY>
+        <locationY>1079</locationY>
         <assignmentItems>
             <assignToReference>BulkWaterTruckedCounter</assignToReference>
             <operator>Add</operator>
@@ -182,7 +215,7 @@
         <name>Increment_Counter</name>
         <label>Increment Counter</label>
         <locationX>1194</locationX>
-        <locationY>647</locationY>
+        <locationY>863</locationY>
         <assignmentItems>
             <assignToReference>SurfaceWaterCounter</assignToReference>
             <operator>Add</operator>
@@ -198,7 +231,7 @@
         <name>Increment_Ground_Water_Counter</name>
         <label>Increment Ground Water Counter</label>
         <locationX>1458</locationX>
-        <locationY>647</locationY>
+        <locationY>863</locationY>
         <assignmentItems>
             <assignToReference>GroundWaterCounter</assignToReference>
             <operator>Add</operator>
@@ -214,7 +247,7 @@
         <name>Check_Category_L1</name>
         <label>Check Category L1</label>
         <locationX>1810</locationX>
-        <locationY>539</locationY>
+        <locationY>755</locationY>
         <defaultConnector>
             <targetReference>All_Source_Intake_Records</targetReference>
         </defaultConnector>
@@ -269,7 +302,7 @@
         <name>Check_Category_L2</name>
         <label>Check Category L2</label>
         <locationX>1986</locationX>
-        <locationY>755</locationY>
+        <locationY>971</locationY>
         <defaultConnector>
             <targetReference>All_Source_Intake_Records</targetReference>
         </defaultConnector>
@@ -306,10 +339,67 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Check_For_entry_condition</name>
+        <label>Check For entry condition</label>
+        <locationX>1722</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>isCategory_Values_Updated</name>
+            <conditionLogic>1 AND (2 OR 3 OR 4 OR 5 OR 6)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>DrinkingWaterSourceIntake</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.CategoryL1__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.CategoryL2__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.CategoryL3__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.ParentId</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_parent_Account</targetReference>
+            </connector>
+            <label>isCategory Values Updated</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Evaluate_Water_Source_Category</name>
         <label>Evaluate Water Source Category</label>
         <locationX>1106</locationX>
-        <locationY>1223</locationY>
+        <locationY>1439</locationY>
         <defaultConnector>
             <targetReference>Update_Parent_Water_System</targetReference>
         </defaultConnector>
@@ -568,6 +658,35 @@
             <label>Bulk supplied – Piped</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>isAccount_Changed</name>
+        <label>isAccount Changed</label>
+        <locationX>1106</locationX>
+        <locationY>1847</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>AccountChanged</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.ParentId</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>ParentAccount</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>$Record__Prior.ParentId</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Parent_Account_With_Prior_Account</targetReference>
+            </connector>
+            <label>AccountChanged</label>
+        </rules>
+    </decisions>
     <environments>Default</environments>
     <interviewLabel>Account populate Water {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Account Populate Water Source Category</label>
@@ -575,7 +694,7 @@
         <name>All_Source_Intake_Records</name>
         <label>All Source Intake Records</label>
         <locationX>1106</locationX>
-        <locationY>431</locationY>
+        <locationY>647</locationY>
         <collectionReference>Get_All_Water_Source_Intake</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -608,12 +727,12 @@
         <name>Get_All_Water_Source_Intake</name>
         <label>Get All Water Source Intake</label>
         <locationX>1106</locationX>
-        <locationY>323</locationY>
+        <locationY>539</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>All_Source_Intake_Records</targetReference>
         </connector>
-        <filterLogic>and</filterLogic>
+        <filterLogic>1 AND 2 AND 3 AND 4</filterLogic>
         <filters>
             <field>RecordTypeName__c</field>
             <operator>EqualTo</operator>
@@ -625,7 +744,21 @@
             <field>ParentId</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>$Record.ParentId</elementReference>
+                <elementReference>ParentAccount</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Status__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Inactive</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Status__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Decommissioned</stringValue>
             </value>
         </filters>
         <getFirstRecordOnly>false</getFirstRecordOnly>
@@ -636,13 +769,16 @@
         <name>Update_Parent_Water_System</name>
         <label>Update Parent Water System</label>
         <locationX>1106</locationX>
-        <locationY>1523</locationY>
+        <locationY>1739</locationY>
+        <connector>
+            <targetReference>isAccount_Changed</targetReference>
+        </connector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>$Record.ParentId</elementReference>
+                <elementReference>ParentAccount</elementReference>
             </value>
         </filters>
         <inputAssignments>
@@ -654,19 +790,11 @@
         <object>Account</object>
     </recordUpdates>
     <start>
-        <locationX>980</locationX>
+        <locationX>1596</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Get_All_Water_Source_Intake</targetReference>
+            <targetReference>Check_For_entry_condition</targetReference>
         </connector>
-        <filterLogic>or</filterLogic>
-        <filters>
-            <field>RecordTypeName__c</field>
-            <operator>EqualTo</operator>
-            <value>
-                <stringValue>DrinkingWaterSourceIntake</stringValue>
-            </value>
-        </filters>
         <object>Account</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
@@ -715,6 +843,13 @@
         <value>
             <numberValue>0.0</numberValue>
         </value>
+    </variables>
+    <variables>
+        <name>ParentAccount</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
     </variables>
     <variables>
         <name>SurfaceWaterCounter</name>
