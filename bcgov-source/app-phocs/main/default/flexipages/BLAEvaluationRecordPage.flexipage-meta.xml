@@ -12,7 +12,7 @@
                         <valueListItems>
                             <value>BusinessLicenseApplication.IssuePermit</value>
                             <visibilityRule>
-                                <booleanFilter>1 AND 2</booleanFilter>
+                                <booleanFilter>1 AND (2 OR 3)</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.Status}</leftValue>
                                     <operator>EQUAL</operator>
@@ -21,7 +21,12 @@
                                 <criteria>
                                     <leftValue>{!Record.ClosureReason__c}</leftValue>
                                     <operator>EQUAL</operator>
-                                    <rightValue>Approved</rightValue>
+                                    <rightValue>Approved for potable water supply without treatment</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.ClosureReason__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Approved for potable water supply with proposed treatment (attach proposal)</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
