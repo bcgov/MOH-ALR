@@ -22,7 +22,7 @@ public with sharing class AccountHelper {
             String aCCRATINGMEDIUM = 'Medium'; 
             String aCCRATINGHIGH = 'High';        
            
-            Datetime edate=System.today().addMonths(12);
+            Datetime plannedDate=System.today().addMonths(12);
                     
             List<Account> accList1 = [SELECT Id, Name, Rating, OwnerId, 
                                       (SELECT Id, Location.VisitorAddress.Address, LocationId 
@@ -43,8 +43,8 @@ public with sharing class AccountHelper {
                 WHERE AccountId IN :accList1
                 AND VisitTypeId = :complianceMonitoringTypeId
                 AND Status= 'Planned'
-                AND  PlannedVisitStartTime >=:edate
-                AND  PlannedVisitStartTime <:edate.addDays(1)
+                AND  PlannedVisitStartTime >=:plannedDate
+                AND  PlannedVisitStartTime <:plannedDate.addDays(1)
              
             ]) {
                 if (!accountToExistingVisits.containsKey(v.AccountId)) {
