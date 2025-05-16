@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingCriteriaRules>
+        <fullName>Condition_Sharing_Rule_for_leadership</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Condition Sharing Rule for leadership</label>
+        <sharedTo>
+            <group>ALRAllUsersPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>notEqual</operation>
+            <value></value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCS_Conditions_Share_Admin</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>PHOCS Conditions Share Admin</label>
+        <sharedTo>
+            <group>EHIS_Water_Admin_Users_PG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS-Conditions</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCS_Conditions_Share_Officer</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>EHIS-327</description>
+        <label>PHOCS Conditions Share Officer</label>
+        <sharedTo>
+            <group>EHIS_Officer_Users_PG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS-Conditions</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCS_Conditions_Share_Reporting_User</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>EHIS-327</description>
+        <label>PHOCS Conditions Share Reporting User</label>
+        <sharedTo>
+            <group>PHOCSReportingUserPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS-Conditions</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+</SharingRules>
