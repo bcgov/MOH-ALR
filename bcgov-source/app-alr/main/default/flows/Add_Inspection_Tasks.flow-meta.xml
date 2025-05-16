@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
         <name>addNewlyCreatedTask</name>
         <label>addNewlyCreatedTaskToExistingTaskList</label>
-        <locationX>290</locationX>
-        <locationY>2498</locationY>
+        <locationX>356</locationX>
+        <locationY>3506</locationY>
         <assignmentItems>
             <assignToReference>fullAssessmentTaskList</assignToReference>
             <operator>Add</operator>
@@ -27,8 +28,8 @@
     <assignments>
         <name>addNewTaskToList</name>
         <label>addNewTaskToList</label>
-        <locationX>794</locationX>
-        <locationY>2030</locationY>
+        <locationX>1058</locationX>
+        <locationY>3038</locationY>
         <assignmentItems>
             <assignToReference>newAssessmentTaskList</assignToReference>
             <operator>Add</operator>
@@ -43,8 +44,8 @@
     <assignments>
         <name>Assign_All_Questions_To_Selected</name>
         <label>Assign All Questions To Selected</label>
-        <locationX>158</locationX>
-        <locationY>1190</locationY>
+        <locationX>224</locationX>
+        <locationY>1898</locationY>
         <assignmentItems>
             <assignToReference>SelectedInspectionTasks</assignToReference>
             <operator>Assign</operator>
@@ -57,10 +58,49 @@
         </connector>
     </assignments>
     <assignments>
+        <name>assignALRAssessmentIndicatorDefinitionIds</name>
+        <label>assignALRAssessmentIndicatorDefinitionIds</label>
+        <locationX>620</locationX>
+        <locationY>674</locationY>
+        <assignmentItems>
+            <assignToReference>ALRAssessmentIndicatorDefinitionIds</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>storeALRAssessmentIndicatorDefinitionIds.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>storeALRAssessmentIndicatorDefinitionIds</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>assignmentOfPHOCSRegCode</name>
+        <label>assignmentOfPHOCSRegCode</label>
+        <locationX>180</locationX>
+        <locationY>1082</locationY>
+        <assignmentItems>
+            <assignToReference>RegCodeAssessmentIndicatorList</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>getPHOCSRegCodeAssessmentInd</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>totalNumberofRegCodes</assignToReference>
+            <operator>AssignCount</operator>
+            <value>
+                <elementReference>getPHOCSRegCodeAssessmentInd</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>CollectionSortByCategory</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>assignmentOfRegCode</name>
         <label>assignmentOfRegCode</label>
-        <locationX>290</locationX>
-        <locationY>458</locationY>
+        <locationX>532</locationX>
+        <locationY>1082</locationY>
         <assignmentItems>
             <assignToReference>RegCodeAssessmentIndicatorList</assignToReference>
             <operator>Add</operator>
@@ -80,10 +120,26 @@
         </connector>
     </assignments>
     <assignments>
+        <name>assignPHOCSAssessmentIndicatorDefinitionIds</name>
+        <label>assignPHOCSAssessmentIndicatorDefinitionIds</label>
+        <locationX>268</locationX>
+        <locationY>674</locationY>
+        <assignmentItems>
+            <assignToReference>PHOCSAssessmentIndicatorDefinitionIds</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>storePHOCSAssessmentIndicatorDefinitionIds.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>storePHOCSAssessmentIndicatorDefinitionIds</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Copy_1_of_addNewTaskToList</name>
         <label>addNewTaskToList</label>
-        <locationX>138</locationX>
-        <locationY>1922</locationY>
+        <locationX>270</locationX>
+        <locationY>2930</locationY>
         <assignmentItems>
             <assignToReference>newAssessmentTaskList</assignToReference>
             <operator>Add</operator>
@@ -98,8 +154,8 @@
     <assignments>
         <name>createInspectionQuestionList</name>
         <label>createInspectionQuestionList</label>
-        <locationX>906</locationX>
-        <locationY>3146</locationY>
+        <locationX>972</locationX>
+        <locationY>4154</locationY>
         <assignmentItems>
             <assignToReference>InspectionQuestionList</assignToReference>
             <operator>Add</operator>
@@ -114,8 +170,8 @@
     <assignments>
         <name>Set_all_questions_to_Assessment_tasks</name>
         <label>Set all questions to Assessment tasks</label>
-        <locationX>158</locationX>
-        <locationY>890</locationY>
+        <locationX>224</locationX>
+        <locationY>1598</locationY>
         <assignmentItems>
             <assignToReference>SelectedInspectionTasks</assignToReference>
             <operator>Assign</operator>
@@ -130,20 +186,20 @@
     <assignments>
         <name>setAssessmentQuestionList</name>
         <label>setAssessmentQuestionList</label>
-        <locationX>290</locationX>
-        <locationY>242</locationY>
+        <locationX>532</locationX>
+        <locationY>866</locationY>
         <assignmentItems>
             <assignToReference>AssessmentIndicatorDefinitionList</assignToReference>
             <operator>Add</operator>
             <value>
-                <elementReference>get_Assessment_Indicator_Definition</elementReference>
+                <elementReference>getAssessmentIndicatorDefinitionALR</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>totalAssessmentIndicatorCount</assignToReference>
             <operator>AssignCount</operator>
             <value>
-                <elementReference>get_Assessment_Indicator_Definition</elementReference>
+                <elementReference>getAssessmentIndicatorDefinitionALR</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -151,10 +207,33 @@
         </connector>
     </assignments>
     <assignments>
+        <name>setAssessmentQuestionListEHIS</name>
+        <label>setAssessmentQuestionListEHIS</label>
+        <locationX>180</locationX>
+        <locationY>866</locationY>
+        <assignmentItems>
+            <assignToReference>AssessmentIndicatorDefinitionList</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>getPHOCSAssessmentIndicatorDefinition</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>totalAssessmentIndicatorCount</assignToReference>
+            <operator>AssignCount</operator>
+            <value>
+                <elementReference>getPHOCSAssessmentIndicatorDefinition</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>getPHOCSRegCodeAssessmentInd</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>setNewAssessmentTask</name>
         <label>setNewAssessmentTask</label>
-        <locationX>794</locationX>
-        <locationY>1922</locationY>
+        <locationX>1190</locationX>
+        <locationY>2738</locationY>
         <assignmentItems>
             <assignToReference>newAssessmentTask.Name</assignToReference>
             <operator>Assign</operator>
@@ -183,8 +262,8 @@
     <assignments>
         <name>setNewAssessmentTaskForEmptyList</name>
         <label>setNewAssessmentTask</label>
-        <locationX>138</locationX>
-        <locationY>1814</locationY>
+        <locationX>402</locationX>
+        <locationY>2630</locationY>
         <assignmentItems>
             <assignToReference>newAssessmentTask.Name</assignToReference>
             <operator>Assign</operator>
@@ -211,10 +290,84 @@
         </connector>
     </assignments>
     <assignments>
+        <name>setPHOCSNewAssessmentTask</name>
+        <label>setPHOCSNewAssessmentTask</label>
+        <locationX>138</locationX>
+        <locationY>2738</locationY>
+        <assignmentItems>
+            <assignToReference>newAssessmentTask.Name</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>loopingCategories</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>newAssessmentTask.ParentId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>newAssessmentTask.TaskType</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>InspectionChecklist</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>newAssessmentTask.RecordTypeId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>getPHOCSAssessmentTaskRecType.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Copy_1_of_addNewTaskToList</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>setPHOCSNewAssessmentTaskToUpdate</name>
+        <label>setPHOCSNewAssessmentTaskToUpdate</label>
+        <locationX>926</locationX>
+        <locationY>2846</locationY>
+        <assignmentItems>
+            <assignToReference>newAssessmentTask.Name</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>loopingCategoriesForExistingTask</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>newAssessmentTask.ParentId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>newAssessmentTask.TaskType</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>InspectionChecklist</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>newAssessmentTask.RecordTypeId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>getPHOCSAssessmentTaskRecTypeRecord.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>addNewTaskToList</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>updateInspectionQuestion</name>
         <label>updateInspectionQuestion</label>
-        <locationX>906</locationX>
-        <locationY>3038</locationY>
+        <locationX>972</locationX>
+        <locationY>4046</locationY>
         <assignmentItems>
             <assignToReference>InspectionQuestion.AssessmentIndDefinitionId</assignToReference>
             <operator>Assign</operator>
@@ -244,8 +397,8 @@
         <name>CollectionSortByCategory</name>
         <elementSubtype>SortCollectionProcessor</elementSubtype>
         <label>CollectionSortByCategory</label>
-        <locationX>290</locationX>
-        <locationY>566</locationY>
+        <locationX>356</locationX>
+        <locationY>1274</locationY>
         <collectionProcessorType>SortCollectionProcessor</collectionProcessorType>
         <collectionReference>RegCodeAssessmentIndicatorList</collectionReference>
         <connector>
@@ -271,8 +424,8 @@
         <name>filterQuestionsByCategory</name>
         <elementSubtype>FilterCollectionProcessor</elementSubtype>
         <label>filterQuestionsByCategory</label>
-        <locationX>642</locationX>
-        <locationY>2714</locationY>
+        <locationX>708</locationX>
+        <locationY>3722</locationY>
         <assignNextValueToReference>currentItem_filterQuestionsByCategory</assignNextValueToReference>
         <collectionProcessorType>FilterCollectionProcessor</collectionProcessorType>
         <collectionReference>SelectedInspectionTasks</collectionReference>
@@ -288,11 +441,53 @@
             <targetReference>createInspectionQuestion</targetReference>
         </connector>
     </collectionProcessors>
+    <collectionProcessors>
+        <name>getAssessmentIndicatorDefinitionALR</name>
+        <elementSubtype>FilterCollectionProcessor</elementSubtype>
+        <label>getAssessmentIndicatorDefinitionALR</label>
+        <locationX>532</locationX>
+        <locationY>458</locationY>
+        <assignNextValueToReference>currentItem_getAssessmentIndicatorDefinitionALR</assignNextValueToReference>
+        <collectionProcessorType>FilterCollectionProcessor</collectionProcessorType>
+        <collectionReference>get_Assessment_Indicator_Definition</collectionReference>
+        <conditionLogic>and</conditionLogic>
+        <conditions>
+            <leftValueReference>currentItem_getAssessmentIndicatorDefinitionALR.RecordTypeId</leftValueReference>
+            <operator>NotEqualTo</operator>
+            <rightValue>
+                <elementReference>getPHOCSAssessmentIndicatorDefinitionRecType.Id</elementReference>
+            </rightValue>
+        </conditions>
+        <connector>
+            <targetReference>storeALRAssessmentIndicatorDefinitionIds</targetReference>
+        </connector>
+    </collectionProcessors>
+    <collectionProcessors>
+        <name>getPHOCSAssessmentIndicatorDefinition</name>
+        <elementSubtype>FilterCollectionProcessor</elementSubtype>
+        <label>getPHOCSAssessmentIndicatorDefinition</label>
+        <locationX>180</locationX>
+        <locationY>458</locationY>
+        <assignNextValueToReference>currentItem_getAssessmentIndicatorDefinitionALR</assignNextValueToReference>
+        <collectionProcessorType>FilterCollectionProcessor</collectionProcessorType>
+        <collectionReference>get_Assessment_Indicator_Definition</collectionReference>
+        <conditionLogic>and</conditionLogic>
+        <conditions>
+            <leftValueReference>currentItem_getAssessmentIndicatorDefinitionALR.RecordTypeId</leftValueReference>
+            <operator>EqualTo</operator>
+            <rightValue>
+                <elementReference>getPHOCSAssessmentIndicatorDefinitionRecType.Id</elementReference>
+            </rightValue>
+        </conditions>
+        <connector>
+            <targetReference>storePHOCSAssessmentIndicatorDefinitionIds</targetReference>
+        </connector>
+    </collectionProcessors>
     <decisions>
         <name>check_if_All_tasks_are_selected</name>
         <label>check if All tasks are selected</label>
-        <locationX>290</locationX>
-        <locationY>782</locationY>
+        <locationX>356</locationX>
+        <locationY>1490</locationY>
         <defaultConnector>
             <targetReference>Check_if_All_Tasks_Has_To_Be_Created</targetReference>
         </defaultConnector>
@@ -316,8 +511,8 @@
     <decisions>
         <name>Check_if_All_Tasks_Has_To_Be_Created</name>
         <label>Check if All Tasks Has To Be Created</label>
-        <locationX>290</locationX>
-        <locationY>1082</locationY>
+        <locationX>356</locationX>
+        <locationY>1790</locationY>
         <defaultConnector>
             <targetReference>get_All_Assessment_Tasks_Questions</targetReference>
         </defaultConnector>
@@ -341,8 +536,8 @@
     <decisions>
         <name>CheckExistingAssessmentTask</name>
         <label>IsNewInspection</label>
-        <locationX>290</locationX>
-        <locationY>1598</locationY>
+        <locationX>356</locationX>
+        <locationY>2306</locationY>
         <defaultConnector>
             <targetReference>loopingCategoriesForExistingTask</targetReference>
         </defaultConnector>
@@ -366,8 +561,8 @@
     <decisions>
         <name>Is_Inspection_Question_Added</name>
         <label>Is New Inspection Question</label>
-        <locationX>818</locationX>
-        <locationY>2930</locationY>
+        <locationX>884</locationX>
+        <locationY>3938</locationY>
         <defaultConnector>
             <targetReference>updateInspectionQuestion</targetReference>
         </defaultConnector>
@@ -391,10 +586,10 @@
     <decisions>
         <name>IsCategoryAddedForExistingTask</name>
         <label>Is Task Created</label>
-        <locationX>706</locationX>
-        <locationY>1814</locationY>
+        <locationX>904</locationX>
+        <locationY>2522</locationY>
         <defaultConnector>
-            <targetReference>setNewAssessmentTask</targetReference>
+            <targetReference>processPHOCS_ALRRecordsUpdate</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Task Not Found</defaultConnectorLabel>
         <rules>
@@ -413,15 +608,92 @@
             <label>Task Found</label>
         </rules>
     </decisions>
-    <description>Added Fault Path. Updated this FLOW for ALR-1311</description>
+    <decisions>
+        <name>PHOCS_or_ALR</name>
+        <label>PHOCS or ALR</label>
+        <locationX>356</locationX>
+        <locationY>350</locationY>
+        <defaultConnector>
+            <targetReference>getAssessmentIndicatorDefinitionALR</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>ALR</defaultConnectorLabel>
+        <rules>
+            <name>PHOCS</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Profile.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>EHIS Standard User</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>getPHOCSAssessmentIndicatorDefinition</targetReference>
+            </connector>
+            <label>PHOCS</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>processPHOCS_ALRRecords</name>
+        <label>processPHOCS/ALRRecords</label>
+        <locationX>270</locationX>
+        <locationY>2522</locationY>
+        <defaultConnector>
+            <targetReference>setNewAssessmentTaskForEmptyList</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>ALR Records</defaultConnectorLabel>
+        <rules>
+            <name>PHOCS_Records</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Profile.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>EHIS Standard User</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>getPHOCSAssessmentTaskRecType</targetReference>
+            </connector>
+            <label>PHOCS Records</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>processPHOCS_ALRRecordsUpdate</name>
+        <label>processPHOCS/ALRRecordsUpdate</label>
+        <locationX>1058</locationX>
+        <locationY>2630</locationY>
+        <defaultConnector>
+            <targetReference>setNewAssessmentTask</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Update ALR Records</defaultConnectorLabel>
+        <rules>
+            <name>Update_PHOCS_Records</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Profile.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>EHIS Standard User</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>getPHOCSAssessmentTaskRecTypeRecord</targetReference>
+            </connector>
+            <label>Update PHOCS Records</label>
+        </rules>
+    </decisions>
+    <description>EHIS-357 V2 Updated Flow
+EHIS - Updated the Flow to work for EHIS-357
+Added Fault Path. Updated this FLOW for ALR-1311</description>
     <environments>Default</environments>
     <interviewLabel>Add Inspection Tasks {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Add Inspection Tasks</label>
     <loops>
         <name>createInspectionQuestion</name>
         <label>createInspectionQuestion</label>
-        <locationX>642</locationX>
-        <locationY>2822</locationY>
+        <locationX>708</locationX>
+        <locationY>3830</locationY>
         <collectionReference>filterQuestionsByCategory</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -434,8 +706,8 @@
     <loops>
         <name>LoopingAssessmentTask</name>
         <label>LoopingAssessmentTask</label>
-        <locationX>290</locationX>
-        <locationY>2606</locationY>
+        <locationX>356</locationX>
+        <locationY>3614</locationY>
         <collectionReference>fullAssessmentTaskList</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -449,11 +721,11 @@
         <name>loopingCategories</name>
         <label>loopingCategories</label>
         <locationX>50</locationX>
-        <locationY>1706</locationY>
+        <locationY>2414</locationY>
         <collectionReference>categoryList</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>setNewAssessmentTaskForEmptyList</targetReference>
+            <targetReference>processPHOCS_ALRRecords</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
             <targetReference>createNewAssessmentTask</targetReference>
@@ -462,8 +734,8 @@
     <loops>
         <name>loopingCategoriesForExistingTask</name>
         <label>loopingCategoriesForExistingTask</label>
-        <locationX>530</locationX>
-        <locationY>1706</locationY>
+        <locationX>662</locationX>
+        <locationY>2414</locationY>
         <collectionReference>categoryList</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -471,6 +743,36 @@
         </nextValueConnector>
         <noMoreValuesConnector>
             <targetReference>createNewAssessmentTask</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <description>To Store ALR filtered Assessment  Indicator Definition Id which will be used to fetch Regulatory Code Assessment Indicator for same.</description>
+        <name>storeALRAssessmentIndicatorDefinitionIds</name>
+        <label>storeALRAssessmentIndicatorDefinitionIds</label>
+        <locationX>532</locationX>
+        <locationY>566</locationY>
+        <collectionReference>getAssessmentIndicatorDefinitionALR</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>assignALRAssessmentIndicatorDefinitionIds</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>setAssessmentQuestionList</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <description>To Store PHOCS filtered Assessment  Indicator Definition Id which will be used to fetch Regulatory Code Assessment Indicator for same.</description>
+        <name>storePHOCSAssessmentIndicatorDefinitionIds</name>
+        <label>storePHOCSAssessmentIndicatorDefinitionIds</label>
+        <locationX>180</locationX>
+        <locationY>566</locationY>
+        <collectionReference>getPHOCSAssessmentIndicatorDefinition</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>assignPHOCSAssessmentIndicatorDefinitionIds</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>setAssessmentQuestionListEHIS</targetReference>
         </noMoreValuesConnector>
     </loops>
     <processMetadataValues>
@@ -495,8 +797,8 @@
     <recordCreates>
         <name>createInspectionQuestions</name>
         <label>createInspectionQuestions</label>
-        <locationX>290</locationX>
-        <locationY>3506</locationY>
+        <locationX>356</locationX>
+        <locationY>4514</locationY>
         <connector>
             <targetReference>display_success_message</targetReference>
         </connector>
@@ -508,8 +810,8 @@
     <recordCreates>
         <name>createNewAssessmentTask</name>
         <label>createNewAssessmentTask</label>
-        <locationX>290</locationX>
-        <locationY>2390</locationY>
+        <locationX>356</locationX>
+        <locationY>3398</locationY>
         <connector>
             <targetReference>addNewlyCreatedTask</targetReference>
         </connector>
@@ -521,11 +823,11 @@
     <recordLookups>
         <name>get_Assessment_Indicator_Definition</name>
         <label>getAssessmentIndicatorDefinition</label>
-        <locationX>290</locationX>
+        <locationX>356</locationX>
         <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>setAssessmentQuestionList</targetReference>
+            <targetReference>getPHOCSAssessmentIndicatorDefinitionRecType</targetReference>
         </connector>
         <faultConnector>
             <targetReference>AssessmentIndicatorError</targetReference>
@@ -537,14 +839,106 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
+        <name>getPHOCSAssessmentIndicatorDefinitionRecType</name>
+        <label>getPHOCSAssessmentIndicatorDefinitionRecType</label>
+        <locationX>356</locationX>
+        <locationY>242</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>PHOCS_or_ALR</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>PHOCSAssessmentIndicatorDefinition</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>RecordType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>getPHOCSAssessmentTaskRecType</name>
+        <label>getPHOCSAssessmentTaskRecType</label>
+        <locationX>138</locationX>
+        <locationY>2630</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>setPHOCSNewAssessmentTask</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>PHOCSAssessmentTask</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>RecordType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>getPHOCSAssessmentTaskRecTypeRecord</name>
+        <label>getPHOCSAssessmentTaskRecTypeRecord</label>
+        <locationX>926</locationX>
+        <locationY>2738</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>setPHOCSNewAssessmentTaskToUpdate</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>PHOCSAssessmentTask	</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>RecordType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>getPHOCSRegCodeAssessmentInd</name>
+        <label>getPHOCSRegCodeAssessmentInd</label>
+        <locationX>180</locationX>
+        <locationY>974</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>assignmentOfPHOCSRegCode</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>AssessmentIndDefinitionId</field>
+            <operator>In</operator>
+            <value>
+                <elementReference>PHOCSAssessmentIndicatorDefinitionIds</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>RegulatoryCodeAssessmentInd</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>getRegCodeAssessmentInd</name>
         <label>getRegCodeAssessmentInd</label>
-        <locationX>290</locationX>
-        <locationY>350</locationY>
+        <locationX>532</locationX>
+        <locationY>974</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>assignmentOfRegCode</targetReference>
         </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>AssessmentIndDefinitionId</field>
+            <operator>In</operator>
+            <value>
+                <elementReference>ALRAssessmentIndicatorDefinitionIds</elementReference>
+            </value>
+        </filters>
         <getFirstRecordOnly>false</getFirstRecordOnly>
         <object>RegulatoryCodeAssessmentInd</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
@@ -552,8 +946,8 @@
     <screens>
         <name>Assessment_Questions</name>
         <label>Select Assessment Questions</label>
-        <locationX>290</locationX>
-        <locationY>674</locationY>
+        <locationX>356</locationX>
+        <locationY>1382</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -566,12 +960,29 @@
             <dataType>Boolean</dataType>
             <fieldText>Add All Inspection Tasks</fieldText>
             <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
         </fields>
         <fields>
             <name>MessageOnSelectingAllTask</name>
             <fieldText>&lt;p&gt;Selected {!totalNumberofRegCodes} of {!totalNumberofRegCodes} items.&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
             <visibilityRule>
                 <conditionLogic>and</conditionLogic>
                 <conditions>
@@ -639,6 +1050,14 @@
                 <assignToReference>SelectedInspectionTasks</assignToReference>
                 <name>selectedRows</name>
             </outputParameters>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
             <visibilityRule>
                 <conditionLogic>and</conditionLogic>
                 <conditions>
@@ -657,7 +1076,7 @@
     <screens>
         <name>AssessmentIndicatorError</name>
         <label>AssessmentIndicatorError</label>
-        <locationX>1274</locationX>
+        <locationX>1538</locationX>
         <locationY>242</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
@@ -666,6 +1085,14 @@
             <name>assessmentIndicatorErrorMessage</name>
             <fieldText>&lt;p&gt;Not able to load Inspection Questions. Please try again later.&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
         </fields>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
@@ -673,8 +1100,8 @@
     <screens>
         <name>AssessmenttaskCreationErrorMessage</name>
         <label>AssessmenttaskCreationErrorMessage</label>
-        <locationX>1010</locationX>
-        <locationY>2498</locationY>
+        <locationX>1274</locationX>
+        <locationY>3506</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -682,6 +1109,14 @@
             <name>assessmentTaskCreationError</name>
             <fieldText>&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(68, 68, 68);&quot;&gt;Not able to create Assessment Tasks. Please try again later.&lt;/span&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
         </fields>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
@@ -689,8 +1124,8 @@
     <screens>
         <name>display_success_message</name>
         <label>display success message</label>
-        <locationX>290</locationX>
-        <locationY>3614</locationY>
+        <locationX>356</locationX>
+        <locationY>4622</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -698,6 +1133,14 @@
             <name>SucessMessage</name>
             <fieldText>&lt;p&gt;Assessment Task created&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
         </fields>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
@@ -705,8 +1148,8 @@
     <screens>
         <name>inspectionQuestionErrorMessageScreen</name>
         <label>inspectionQuestionErrorMessageScreen</label>
-        <locationX>746</locationX>
-        <locationY>3614</locationY>
+        <locationX>1010</locationX>
+        <locationY>4622</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -714,12 +1157,20 @@
             <name>inspectionQuestionCreationErrorMessage</name>
             <fieldText>&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(68, 68, 68);&quot;&gt;Not able to create Inspection Questions. Please try again later.&lt;/span&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
         </fields>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
     </screens>
     <start>
-        <locationX>164</locationX>
+        <locationX>230</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>get_Assessment_Indicator_Definition</targetReference>
@@ -729,8 +1180,8 @@
     <subflows>
         <name>get_All_Assessment_Tasks_Questions</name>
         <label>get All Assessment Tasks &amp; Questions</label>
-        <locationX>290</locationX>
-        <locationY>1382</locationY>
+        <locationX>356</locationX>
+        <locationY>2090</locationY>
         <connector>
             <targetReference>GetCategoryListForSelectedQuestions</targetReference>
         </connector>
@@ -765,8 +1216,8 @@
     <subflows>
         <name>GetCategoryListForSelectedQuestions</name>
         <label>GetCategoryListForSelectedQuestions</label>
-        <locationX>290</locationX>
-        <locationY>1490</locationY>
+        <locationX>356</locationX>
+        <locationY>2198</locationY>
         <connector>
             <targetReference>CheckExistingAssessmentTask</targetReference>
         </connector>
@@ -782,6 +1233,13 @@
             <name>categoryList</name>
         </outputAssignments>
     </subflows>
+    <variables>
+        <name>ALRAssessmentIndicatorDefinitionIds</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+    </variables>
     <variables>
         <name>AssessmentCategory</name>
         <dataType>String</dataType>
@@ -826,6 +1284,14 @@
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>RegulatoryCodeAssessmentInd</objectType>
+    </variables>
+    <variables>
+        <name>currentItem_getAssessmentIndicatorDefinitionALR</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>AssessmentIndicatorDefinition</objectType>
     </variables>
     <variables>
         <name>currentItemFromSourceCollection</name>
@@ -918,6 +1384,13 @@
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>PHOCSAssessmentIndicatorDefinitionIds</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
     </variables>
     <variables>
         <name>recordId</name>
