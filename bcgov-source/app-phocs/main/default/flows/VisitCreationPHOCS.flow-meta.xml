@@ -4,7 +4,7 @@
         <name>Page_Redirection</name>
         <label>Page Redirection</label>
         <locationX>50</locationX>
-        <locationY>1106</locationY>
+        <locationY>998</locationY>
         <actionName>c:OpenInspection</actionName>
         <actionType>component</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -22,7 +22,7 @@
         <name>PageRedirection</name>
         <label>Page Redirection</label>
         <locationX>842</locationX>
-        <locationY>1106</locationY>
+        <locationY>998</locationY>
         <actionName>c:OpenInspection</actionName>
         <actionType>component</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -40,7 +40,7 @@
         <name>Redirect</name>
         <label>Page Redirection</label>
         <locationX>578</locationX>
-        <locationY>1106</locationY>
+        <locationY>998</locationY>
         <actionName>c:OpenInspection</actionName>
         <actionType>component</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -58,7 +58,7 @@
         <name>Redirection</name>
         <label>Redirection</label>
         <locationX>314</locationX>
-        <locationY>1106</locationY>
+        <locationY>998</locationY>
         <actionName>c:OpenInspection</actionName>
         <actionType>component</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -102,7 +102,7 @@
         <name>Decision_Based_on_Context</name>
         <label>Decision Based on Context</label>
         <locationX>446</locationX>
-        <locationY>782</locationY>
+        <locationY>674</locationY>
         <defaultConnector>
             <targetReference>Inspection_Creation</targetReference>
         </defaultConnector>
@@ -171,11 +171,6 @@
         <picklistObject>Visit</picklistObject>
     </dynamicChoiceSets>
     <environments>Default</environments>
-    <formulas>
-        <name>BLAInspectionMethodFormula</name>
-        <dataType>String</dataType>
-        <expression>IF(ISBLANK({!BLAInspectionMethodPHOCS}), {!BLA_Inspection_Method}, {!BLAInspectionMethodPHOCS})</expression>
-    </formulas>
     <interviewLabel>VisitCreationPHOCS {!$Flow.CurrentDateTime}</interviewLabel>
     <label>VisitCreationPHOCS</label>
     <processMetadataValues>
@@ -201,7 +196,7 @@
         <name>Acc_Visit_Record_Creation</name>
         <label>Acc Visit Record Creation</label>
         <locationX>50</locationX>
-        <locationY>998</locationY>
+        <locationY>890</locationY>
         <assignRecordIdToReference>visitId</assignRecordIdToReference>
         <connector>
             <targetReference>Page_Redirection</targetReference>
@@ -266,7 +261,7 @@
         <name>BLA_Visit_Record_Creation</name>
         <label>BLA Visit Record Creation</label>
         <locationX>314</locationX>
-        <locationY>998</locationY>
+        <locationY>890</locationY>
         <assignRecordIdToReference>visitId</assignRecordIdToReference>
         <connector>
             <targetReference>Redirection</targetReference>
@@ -331,7 +326,7 @@
         <name>Case_Visit_Record_Creation</name>
         <label>Case Visit Record Creation</label>
         <locationX>578</locationX>
-        <locationY>998</locationY>
+        <locationY>890</locationY>
         <assignRecordIdToReference>visitId</assignRecordIdToReference>
         <connector>
             <targetReference>Redirect</targetReference>
@@ -396,7 +391,7 @@
         <name>Visit_Record_Creation</name>
         <label>Visit Record Creation</label>
         <locationX>842</locationX>
-        <locationY>998</locationY>
+        <locationY>890</locationY>
         <assignRecordIdToReference>visitId</assignRecordIdToReference>
         <connector>
             <targetReference>PageRedirection</targetReference>
@@ -467,7 +462,7 @@
         <name>Get_Account_Records</name>
         <label>Get Account Records</label>
         <locationX>446</locationX>
-        <locationY>242</locationY>
+        <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Get_BLA_Record</targetReference>
@@ -488,7 +483,7 @@
         <name>Get_Assosciated_Location</name>
         <label>Get Assosciated Location</label>
         <locationX>446</locationX>
-        <locationY>674</locationY>
+        <locationY>566</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Decision_Based_on_Context</targetReference>
@@ -530,7 +525,7 @@
         <name>Get_BLA_Record</name>
         <label>Get BLA Record</label>
         <locationX>446</locationX>
-        <locationY>350</locationY>
+        <locationY>242</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Get_Case_Record</targetReference>
@@ -551,7 +546,7 @@
         <name>Get_Case_Record</name>
         <label>Get Case Record</label>
         <locationX>446</locationX>
-        <locationY>458</locationY>
+        <locationY>350</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Get_Insp_Record</targetReference>
@@ -572,7 +567,7 @@
         <name>Get_Insp_Record</name>
         <label>Get Insp Record</label>
         <locationX>446</locationX>
-        <locationY>566</locationY>
+        <locationY>458</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Get_Assosciated_Location</targetReference>
@@ -589,35 +584,12 @@
         <object>Visit</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
-    <recordLookups>
-        <name>Get_User_Profile</name>
-        <label>Get User Profile</label>
-        <locationX>446</locationX>
-        <locationY>134</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Get_Account_Records</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>RunningUserProfileId</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>Profile</object>
-        <queriedFields>Id</queriedFields>
-        <queriedFields>Name</queriedFields>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
     <runInMode>DefaultMode</runInMode>
     <screens>
         <name>Acc_New_Inspection_Inspection</name>
         <label>New Inspection: Inspection</label>
         <locationX>50</locationX>
-        <locationY>890</locationY>
+        <locationY>782</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -838,7 +810,7 @@
         <name>BLA_New_Inspection_Inspection</name>
         <label>New Inspection: Inspection</label>
         <locationX>314</locationX>
-        <locationY>890</locationY>
+        <locationY>782</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -969,37 +941,6 @@
                     <fieldType>DropdownBox</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
-                    <visibilityRule>
-                        <conditionLogic>and</conditionLogic>
-                        <conditions>
-                            <leftValueReference>Get_User_Profile.Name</leftValueReference>
-                            <operator>NotEqualTo</operator>
-                            <rightValue>
-                                <stringValue>EHIS Standard User</stringValue>
-                            </rightValue>
-                        </conditions>
-                    </visibilityRule>
-                </fields>
-                <fields>
-                    <name>BLAInspectionMethodPHOCS</name>
-                    <choiceReferences>ScheduledonSiteInspection</choiceReferences>
-                    <choiceReferences>UnannouncedonSiteInspection</choiceReferences>
-                    <choiceReferences>VirtualSiteInspection</choiceReferences>
-                    <dataType>String</dataType>
-                    <fieldText>Inspection Method</fieldText>
-                    <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                    <visibilityRule>
-                        <conditionLogic>and</conditionLogic>
-                        <conditions>
-                            <leftValueReference>Get_User_Profile.Name</leftValueReference>
-                            <operator>EqualTo</operator>
-                            <rightValue>
-                                <stringValue>EHIS Standard User</stringValue>
-                            </rightValue>
-                        </conditions>
-                    </visibilityRule>
                 </fields>
                 <fields>
                     <name>BLA_Actual_Start_Time</name>
@@ -1096,7 +1037,7 @@
         <name>Case_New_Inspection_Inspection</name>
         <label>New Inspection: Inspection</label>
         <locationX>578</locationX>
-        <locationY>890</locationY>
+        <locationY>782</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -1323,7 +1264,7 @@
         <name>Inspection_Creation</name>
         <label>New Inspection: Inspection</label>
         <locationX>842</locationX>
-        <locationY>890</locationY>
+        <locationY>782</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -1582,7 +1523,7 @@
         <locationX>320</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Get_User_Profile</targetReference>
+            <targetReference>Get_Account_Records</targetReference>
         </connector>
     </start>
     <status>Active</status>
