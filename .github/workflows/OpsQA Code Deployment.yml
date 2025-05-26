@@ -1,5 +1,5 @@
 # Unique name for this workflow
-name: ST Code Deployment
+name: OpsQA Code Deployment
 
 # Definition when the workflow should run
 on:
@@ -15,7 +15,7 @@ on:
 jobs:
   Code-Deploy-Run:
     runs-on: ubuntu-24.04
-    environment: ST
+    environment: OpsQA
     env:
         SFDXAUTHURL: ${{ secrets.SFDXAUTHURL }}
     steps:
@@ -31,18 +31,18 @@ jobs:
       - name: 'Checkout source code'
         uses: actions/checkout@v4
         with:
-          ref: dev
+          ref: hotfixdev
           fetch-depth: 0
 
       # Authenticate sandbox
       - name: 'Authenticate Sandbox'
         run: |
             echo "${{ env.SFDXAUTHURL }}" > ./authfile
-            sf org login sfdx-url -f authfile -a ST
+            sf org login sfdx-url -f authfile -a OpsQA
 
-      # deploy code with running test classes
+      # deploy code without running test classes
       - name: 'Deploy source code'
-        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --testlevel RunLocalTests --targetusername ST
+        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --testlevel RunLocalTests --targetusername OpsQA
 
   Git-Tag-Run:
     needs: Code-Deploy-Run
@@ -52,20 +52,20 @@ jobs:
       - name: 'Checkout source code'
         uses: actions/checkout@v4
         with:
-          ref: dev
+          ref: hotfixdev
           fetch-depth: 0
 
       - name: 'Get latest tag'
         id: latesttag
-        run: echo "LATEST_TAG=$(git describe --tags --match "ST*" --abbrev=0 HEAD)" >> $GITHUB_OUTPUT
+        run: echo "LATEST_TAG=$(git describe --tags --match "OpsQA*" --abbrev=0 HEAD)" >> $GITHUB_OUTPUT
 
       - name: 'Increment Tag'
         id: newtag
         run: |
           LATEST_TAG=${{ steps.latesttag.outputs.LATEST_TAG }}
-          NUMBER=${LATEST_TAG#ST.}
+          NUMBER=${LATEST_TAG#OpsQA.}
           NEW_NUMBER=$((NUMBER + 1))
-          NEW_TAG=ST.${NEW_NUMBER}
+          NEW_TAG=OpsQA.${NEW_NUMBER}
           echo "NEW_TAG=$NEW_TAG" >> $GITHUB_OUTPUT
 
       - name: 'Push new tag'
