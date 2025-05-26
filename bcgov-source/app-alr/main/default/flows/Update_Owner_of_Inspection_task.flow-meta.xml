@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>Adding update to regulatory code ownerid</description>
     <environments>Default</environments>
     <interviewLabel>Update Owner of Inspection task {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Update Inspection task Owner to Owner Id</label>
@@ -28,6 +30,9 @@
         <label>Update Assessment task</label>
         <locationX>664</locationX>
         <locationY>385</locationY>
+        <connector>
+            <targetReference>Update_Regulatory_Code_Owner</targetReference>
+        </connector>
         <inputAssignments>
             <field>OwnerId</field>
             <value>
@@ -35,6 +40,19 @@
             </value>
         </inputAssignments>
         <inputReference>$Record.AssessmentTasks</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Regulatory_Code_Owner</name>
+        <label>Update Regulatory Code Owner</label>
+        <locationX>672</locationX>
+        <locationY>545</locationY>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$Record.OwnerId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.RegCodeInspection</inputReference>
     </recordUpdates>
     <start>
         <locationX>543</locationX>
