@@ -20,7 +20,10 @@ public with sharing class AccountHelper {
             Map<String, Id> mapInspectionType = new Map<String, Id>();
             String aCCRATINGLOW = 'Low'; 
             String aCCRATINGMEDIUM = 'Medium'; 
-            String aCCRATINGHIGH = 'High'; 
+            String aCCRATINGHIGH = 'High';        
+           
+            Datetime plannedDate=System.today().addMonths(12);
+                    
             List<Account> accList1 = [SELECT Id, Name, Rating, OwnerId, 
                                       (SELECT Id, Location.VisitorAddress.Address, LocationId 
                                        FROM AssociatedLocations LIMIT 1) 
@@ -28,12 +31,34 @@ public with sharing class AccountHelper {
             List<InspectionType> insTypeList = [SELECT Id, Name FROM InspectionType 
                                                 WHERE Name = 'Compliance Monitoring Inspection' WITH SECURITY_ENFORCED LIMIT 1];
             mapInspectionType.put('InspectionType', insTypeList.get(0).Id);
+
+            Id complianceMonitoringTypeId = insTypeList.isEmpty() ? null : insTypeList[0].Id;
+
+             // Query existing planned compliance monitoring visits within 12 months for the given accounts
+             // if found dont create new one
+            Map<Id, List<Visit>> accountToExistingVisits = new Map<Id, List<Visit>>();
+            for (Visit v : [
+                SELECT Id, AccountId, PlannedVisitStartTime ,name
+                FROM Visit 
+                WHERE AccountId IN :accList1
+                AND VisitTypeId = :complianceMonitoringTypeId
+                AND Status= 'Planned'
+                AND  PlannedVisitStartTime >=:plannedDate
+                AND  PlannedVisitStartTime <:plannedDate.addDays(1)
+             
+            ]) {
+                if (!accountToExistingVisits.containsKey(v.AccountId)) {
+                    accountToExistingVisits.put(v.AccountId, new List<Visit>());
+                }
+                accountToExistingVisits.get(v.AccountId).add(v);
+            }
+            
             
             for(Account accObj : accList1){
                 Integer noOfMonths = aCCRATINGLOW.containsIgnoreCase(accObj.Rating) ? 12 : 
                 aCCRATINGMEDIUM.containsIgnoreCase(accObj.Rating) ? 12 :
                 aCCRATINGHIGH.containsIgnoreCase(accObj.Rating) ? 12 : 0;
-                if(accObj.Rating != NULL){
+                if(accObj.Rating != NULL && !accountToExistingVisits.containsKey(accObj.Id)){
                     Visit inspection = new Visit();
                     inspection.AccountId = accObj.Id;
                     inspection.InspectionMethod__c = 'Unannounced on site inspection';
