@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <OmniDataTransform xmlns="http://soap.sforce.com/2006/04/metadata">
-    <active>true</active>
+    <active>false</active>
     <assignmentRulesUsed>false</assignmentRulesUsed>
     <deletedOnSuccess>false</deletedOnSuccess>
     <errorIgnored>false</errorIgnored>
@@ -30,6 +30,7 @@
 }</expectedOutputJson>
     <fieldLevelSecurityEnabled>false</fieldLevelSecurityEnabled>
     <inputType>JSON</inputType>
+    <isManagedUsingStdDesigner>false</isManagedUsingStdDesigner>
     <name>GetPCDetailsForCasePrepopulation</name>
     <nullInputsIncludedInOutput>false</nullInputsIncludedInOutput>
     <omniDataTransformItem>
@@ -52,13 +53,27 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>GetPCDetailsForCasePrepopulationCustom5016</globalKey>
-        <inputFieldName>PCCaseRecType:Id</inputFieldName>
+        <globalKey>GetPCDetailsForCasePrepopulationCustom9249</globalKey>
+        <inputFieldName>PCRec:ResidentAwareOfComplaint__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetPCDetailsForCasePrepopulation</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>RecordTypeId</outputFieldName>
+        <outputFieldName>ResidentAwareOfComplaint</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetPCDetailsForCasePrepopulationCustom4605</globalKey>
+        <inputFieldName>PCRec:Subject</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetPCDetailsForCasePrepopulation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>PCSubject</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -80,13 +95,27 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>GetPCDetailsForCasePrepopulationCustom6133</globalKey>
-        <inputFieldName>PCRec:AccountId</inputFieldName>
+        <globalKey>GetPCDetailsForCasePrepopulationCustom5016</globalKey>
+        <inputFieldName>PCCaseRecType:Id</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetPCDetailsForCasePrepopulation</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>PCAccountId</outputFieldName>
+        <outputFieldName>RecordTypeId</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetPCDetailsForCasePrepopulationCustom3195</globalKey>
+        <inputFieldName>PCRec:NeedFeedbackonResolution__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetPCDetailsForCasePrepopulation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>NeedFeedbackOnResolution</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -108,15 +137,92 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>GetPCDetailsForCasePrepopulationCustom3389</globalKey>
-        <inputFieldName>PCRec:WishtoRemainAnonymous__c</inputFieldName>
+        <globalKey>GetPCDetailsForCasePrepopulationCustom6133</globalKey>
+        <inputFieldName>PCRec:AccountId</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetPCDetailsForCasePrepopulation</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>WishToRemainAnonymous</outputFieldName>
+        <outputFieldName>PCAccountId</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>a9789984-6860-4b76-931e-9ec699e26c9a</globalKey>
+        <inputFieldName>PCRec:Description</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetPCDetailsForCasePrepopulation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>PHOCSPCRecDescription</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>59bb63a5-37d3-4d03-8183-5c8d05238577</globalKey>
+        <inputFieldName>PCRec:Topic__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetPCDetailsForCasePrepopulation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>PHOCSPCRecTopic</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>566d842b-3428-44eb-84fd-a85f297d93c4</globalKey>
+        <inputFieldName>PCRec:RecordTypeId</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetPCDetailsForCasePrepopulation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>PCRecRecordTypeId</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>PHOCSCaseRecTypeDevName</filterValue>
+        <globalKey>e309cce3-58f8-42f3-9d5c-965562545d1e</globalKey>
+        <inputFieldName>DeveloperName</inputFieldName>
+        <inputObjectName>RecordType</inputObjectName>
+        <inputObjectQuerySequence>4.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetPCDetailsForCasePrepopulation</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>PHOCSCaseRecType</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>56728f09-a2b1-4776-9840-1c31614ca3e1</globalKey>
+        <inputFieldName>PHOCSCaseRecType:Id</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetPCDetailsForCasePrepopulation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>PHOCSCaseRecTypeId</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -136,13 +242,13 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>GetPCDetailsForCasePrepopulationCustom9446</globalKey>
-        <inputFieldName>PCRec:ComplaintOrigin__c</inputFieldName>
+        <globalKey>GetPCDetailsForCasePrepopulationCustom3389</globalKey>
+        <inputFieldName>PCRec:WishtoRemainAnonymous__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetPCDetailsForCasePrepopulation</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>CaseDetails:NewCaseDetails:Origin</outputFieldName>
+        <outputFieldName>WishToRemainAnonymous</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -167,15 +273,47 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>GetPCDetailsForCasePrepopulationCustom8903</globalKey>
-        <inputFieldName>PCRec:FirstName</inputFieldName>
+        <filterOperator>=</filterOperator>
+        <filterValue>PCRec:RecordTypeId</filterValue>
+        <globalKey>bd393179-52c8-408f-84f0-9e64fbd00aea</globalKey>
+        <inputFieldName>Id</inputFieldName>
+        <inputObjectName>RecordType</inputObjectName>
+        <inputObjectQuerySequence>3.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetPCDetailsForCasePrepopulation</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>PHOCSPCRecordType</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>GetPCDetailsForCasePrepopulationCustom9446</globalKey>
+        <inputFieldName>PCRec:ComplaintOrigin__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetPCDetailsForCasePrepopulation</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>PCFirstName</outputFieldName>
+        <outputFieldName>CaseDetails:NewCaseDetails:Origin</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>291b4f20-147f-4d0c-9729-b0a68b2c6423</globalKey>
+        <inputFieldName>PCRec:ComplaintOrigin__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetPCDetailsForCasePrepopulation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>PHOCSPCRecComplainOrigin</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -195,41 +333,28 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>GetPCDetailsForCasePrepopulationCustom4605</globalKey>
-        <inputFieldName>PCRec:Subject</inputFieldName>
+        <globalKey>2c944f29-7ff6-41bf-b86c-1304ceec5a23</globalKey>
+        <inputFieldName>PHOCSPCRecordType:DeveloperName</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetPCDetailsForCasePrepopulation</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>PCSubject</outputFieldName>
+        <outputFieldName>PHOCSPCRecTypeDeveloperName</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>GetPCDetailsForCasePrepopulationCustom9249</globalKey>
-        <inputFieldName>PCRec:ResidentAwareOfComplaint__c</inputFieldName>
+        <globalKey>GetPCDetailsForCasePrepopulationCustom8903</globalKey>
+        <inputFieldName>PCRec:FirstName</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetPCDetailsForCasePrepopulation</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>ResidentAwareOfComplaint</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>GetPCDetailsForCasePrepopulationCustom3195</globalKey>
-        <inputFieldName>PCRec:NeedFeedbackonResolution__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetPCDetailsForCasePrepopulation</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>NeedFeedbackOnResolution</outputFieldName>
+        <outputFieldName>PCFirstName</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -237,7 +362,8 @@
     <outputType>JSON</outputType>
     <previewJsonData>{
   &quot;ContextId&quot; : &quot;0fhAs00000001SLIAY&quot;,
-  &quot;RecordTypeDeveloperName&quot; : &quot;PublicComplaintCase&quot;
+  &quot;RecordTypeDeveloperName&quot; : &quot;PublicComplaintCase&quot;,
+  &quot;PHOCSRecordTypeDeveloperName&quot; : &quot;PHOCSComplaint&quot;
 }</previewJsonData>
     <processSuperBulk>false</processSuperBulk>
     <responseCacheTtlMinutes>0.0</responseCacheTtlMinutes>
