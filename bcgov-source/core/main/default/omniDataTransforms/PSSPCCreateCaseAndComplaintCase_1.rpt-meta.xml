@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <OmniDataTransform xmlns="http://soap.sforce.com/2006/04/metadata">
-    <active>true</active>
+    <active>false</active>
     <assignmentRulesUsed>false</assignmentRulesUsed>
     <deletedOnSuccess>false</deletedOnSuccess>
     <errorIgnored>false</errorIgnored>
@@ -42,13 +42,29 @@
 }</expectedInputJson>
     <fieldLevelSecurityEnabled>false</fieldLevelSecurityEnabled>
     <inputType>JSON</inputType>
+    <isManagedUsingStdDesigner>false</isManagedUsingStdDesigner>
     <name>PSSPCCreateCaseAndComplaintCase</name>
     <nullInputsIncludedInOutput>true</nullInputsIncludedInOutput>
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>PSSPCCreateCaseAndComplaintCaseCustom0jIAs0000000RhlMAEItem0</globalKey>
-        <inputFieldName>CaseDetails:NewCaseDetails:Subject</inputFieldName>
+        <globalKey>cf93dd47-bffe-45b6-a04c-c434e33a4bc5</globalKey>
+        <inputFieldName>CaseDetails:PHOCSNewCaseDetails:PHOCSAccountName-Block:PHOCSPCRecAccountId</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PSSPCCreateCaseAndComplaintCase</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>AccountId</outputFieldName>
+        <outputObjectName>Case</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>99a0c3bf-6fc2-45da-9268-fade58f79b71</globalKey>
+        <inputFieldName>CaseDetails:PHOCSNewCaseDetails:PHOCSSubject</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>PSSPCCreateCaseAndComplaintCase</name>
@@ -62,15 +78,16 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>PSSPCCreateCaseAndComplaintCaseCustom8847</globalKey>
-        <inputFieldName>CaseDetails:NewCaseDetails:WishToRemainAnonymous</inputFieldName>
+        <globalKey>9460abd5-7c25-487e-9675-1f2ac6b3a8c8</globalKey>
+        <inputFieldName>caseDetails:PHOCSNewCaseDetails:PHOCSTopicTypeOther</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>PSSPCCreateCaseAndComplaintCase</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>WishtoRemainAnonymous__c</outputFieldName>
+        <outputFieldName>TopicTypeOtherSpecify__c</outputFieldName>
         <outputObjectName>Case</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -91,14 +108,13 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <globalKey>PSSPCCreateCaseAndComplaintCaseCustom0jIAs0000000RhlMAEItem1</globalKey>
+        <globalKey>PSSPCCreateCaseAndComplaintCaseCustom8847</globalKey>
+        <inputFieldName>CaseDetails:NewCaseDetails:WishToRemainAnonymous</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
-        <migrationValue>FAKEMAPPING</migrationValue>
         <name>PSSPCCreateCaseAndComplaintCase</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Id</outputFieldName>
+        <outputFieldName>WishtoRemainAnonymous__c</outputFieldName>
         <outputObjectName>Case</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -121,15 +137,14 @@
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <filterOperator>=</filterOperator>
-        <globalKey>PSSPCCreateCaseAndComplaintCaseCustom0jIAs0000000RhlMAEItem6</globalKey>
+        <globalKey>PSSPCCreateCaseAndComplaintCaseCustom0jIAs0000000RhlMAEItem1</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedFieldName>Id</linkedFieldName>
-        <linkedObjectSequence>1.0</linkedObjectSequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
         <migrationValue>FAKEMAPPING</migrationValue>
         <name>PSSPCCreateCaseAndComplaintCase</name>
-        <outputCreationSequence>2.0</outputCreationSequence>
-        <outputFieldName>CaseId</outputFieldName>
-        <outputObjectName>ComplaintCase</outputObjectName>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Id</outputFieldName>
+        <outputObjectName>Case</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
@@ -151,14 +166,16 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>PSSPCCreateCaseAndComplaintCaseCustom7073</globalKey>
-        <inputFieldName>CaseDetails:NewCaseDetails:NeedFeedbackOnResolution</inputFieldName>
+        <filterOperator>=</filterOperator>
+        <globalKey>PSSPCCreateCaseAndComplaintCaseCustom0jIAs0000000RhlMAEItem6</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <linkedFieldName>Id</linkedFieldName>
+        <linkedObjectSequence>1.0</linkedObjectSequence>
+        <migrationValue>FAKEMAPPING</migrationValue>
         <name>PSSPCCreateCaseAndComplaintCase</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>NeedFeedbackOnResolution__c</outputFieldName>
-        <outputObjectName>Case</outputObjectName>
+        <outputCreationSequence>2.0</outputCreationSequence>
+        <outputFieldName>CaseId</outputFieldName>
+        <outputObjectName>ComplaintCase</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
@@ -174,18 +191,19 @@
         <outputFieldName>PublicComplaintId</outputFieldName>
         <outputObjectName>ComplaintCase</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>PSSPCCreateCaseAndComplaintCaseCustom0jIAs0000000RhlMAEItem9</globalKey>
-        <inputFieldName>CaseDetails:NewCaseDetails:Origin</inputFieldName>
+        <globalKey>PSSPCCreateCaseAndComplaintCaseCustom7073</globalKey>
+        <inputFieldName>CaseDetails:NewCaseDetails:NeedFeedbackOnResolution</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>PSSPCCreateCaseAndComplaintCase</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Origin</outputFieldName>
+        <outputFieldName>NeedFeedbackOnResolution__c</outputFieldName>
         <outputObjectName>Case</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -207,13 +225,13 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>PSSPCCreateCaseAndComplaintCaseCustom0jIAs0000000RhlMAEItem11</globalKey>
-        <inputFieldName>CaseDetails:NewCaseDetails:Status</inputFieldName>
+        <globalKey>PSSPCCreateCaseAndComplaintCaseCustom0jIAs0000000RhlMAEItem9</globalKey>
+        <inputFieldName>CaseDetails:NewCaseDetails:Origin</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>PSSPCCreateCaseAndComplaintCase</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>Status</outputFieldName>
+        <outputFieldName>Origin</outputFieldName>
         <outputObjectName>Case</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -235,13 +253,13 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>PSSPCCreateCaseAndComplaintCaseCustom7370</globalKey>
-        <inputFieldName>CaseDetails:NewCaseDetails:ContactName-Block:ContactId</inputFieldName>
+        <globalKey>PSSPCCreateCaseAndComplaintCaseCustom0jIAs0000000RhlMAEItem11</globalKey>
+        <inputFieldName>CaseDetails:NewCaseDetails:Status</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>PSSPCCreateCaseAndComplaintCase</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>ContactId</outputFieldName>
+        <outputFieldName>Status</outputFieldName>
         <outputObjectName>Case</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -263,13 +281,13 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>PSSPCCreateCaseAndComplaintCaseCustom1282</globalKey>
-        <inputFieldName>CaseDetails:NewCaseDetails:IncidentDate</inputFieldName>
+        <globalKey>PSSPCCreateCaseAndComplaintCaseCustom7370</globalKey>
+        <inputFieldName>CaseDetails:NewCaseDetails:ContactName-Block:ContactId</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>PSSPCCreateCaseAndComplaintCase</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>IncidentDate__c</outputFieldName>
+        <outputFieldName>ContactId</outputFieldName>
         <outputObjectName>Case</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -288,9 +306,173 @@
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>8a9f7593-09ee-454c-b797-1c05c5e47e62</globalKey>
+        <inputFieldName>CaseDetails:PHOCSNewCaseDetails:PHOCSTopic</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PSSPCCreateCaseAndComplaintCase</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Topic__c</outputFieldName>
+        <outputObjectName>Case</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>PSSPCCreateCaseAndComplaintCaseCustom1282</globalKey>
+        <inputFieldName>CaseDetails:NewCaseDetails:IncidentDate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PSSPCCreateCaseAndComplaintCase</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>IncidentDate__c</outputFieldName>
+        <outputObjectName>Case</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>5c8ecb79-8c96-4dfc-8950-0477bd1a9e6f</globalKey>
+        <inputFieldName>CaseDetails:PHOCSNewCaseDetails:PHOCSStatus</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PSSPCCreateCaseAndComplaintCase</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Status</outputFieldName>
+        <outputObjectName>Case</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>1009f3fc-9110-4503-87ff-29fd1489be4b</globalKey>
+        <inputFieldName>CaseDetails:PHOCSNewCaseDetails:PHOCSTopicSubType</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PSSPCCreateCaseAndComplaintCase</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TopicSubtypes__c</outputFieldName>
+        <outputObjectName>Case</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>577e126e-b396-44e4-af70-bf87dad5374a</globalKey>
+        <inputFieldName>CaseDetails:PHOCSNewCaseDetails:PHOCSPriority</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PSSPCCreateCaseAndComplaintCase</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Priority</outputFieldName>
+        <outputObjectName>Case</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>PSSPCCreateCaseAndComplaintCaseCustom0jIAs0000000RhlMAEItem0</globalKey>
+        <inputFieldName>CaseDetails:NewCaseDetails:Subject</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PSSPCCreateCaseAndComplaintCase</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Subject</outputFieldName>
+        <outputObjectName>Case</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>bbd8ee5f-5171-46dc-94e8-11a7f6bca260</globalKey>
+        <inputFieldName>CaseDetails:PHOCSNewCaseDetails:PHOCSWishtoRemainAnonymous</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PSSPCCreateCaseAndComplaintCase</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>WishtoRemainAnonymous__c</outputFieldName>
+        <outputObjectName>Case</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>546c8239-109f-4444-9ae1-6776cec705fe</globalKey>
+        <inputFieldName>CaseDetails:PHOCSNewCaseDetails:PHOCSDescription</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PSSPCCreateCaseAndComplaintCase</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Description</outputFieldName>
+        <outputObjectName>Case</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>45f78723-7004-4fa1-acb3-b5dc728a4138</globalKey>
+        <inputFieldName>NewCaseRecTypeId</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PSSPCCreateCaseAndComplaintCase</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RecordTypeId</outputFieldName>
+        <outputObjectName>Case</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>7046642f-0c57-46df-b82a-650f52d4eecc</globalKey>
+        <inputFieldName>CaseDetails:PHOCSNewCaseDetails:PHOCSNeedFeedbackOnResolution</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PSSPCCreateCaseAndComplaintCase</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>NeedFeedbackOnResolution__c</outputFieldName>
+        <outputObjectName>Case</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>19ef5d3c-e61b-4cd8-9858-bb474c3137da</globalKey>
+        <inputFieldName>CaseDetails:PHOCSNewCaseDetails:PHOCSOrigin</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PSSPCCreateCaseAndComplaintCase</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Origin</outputFieldName>
+        <outputObjectName>Case</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
     <outputType>SObject</outputType>
     <previewJsonData>{
-  &quot;PublicComplaintID&quot; : &quot;&quot;,
+  &quot;PublicComplaintID&quot; : &quot;0fhbZ0000000iaXQAQ&quot;,
   &quot;Case Details&quot; : {
     &quot;NewCaseDetails&quot; : {
       &quot;Subject&quot; : &quot;&quot;,
@@ -317,7 +499,8 @@
         }
       }
     }
-  }
+  },
+  &quot;NewCaseRecTypeId&quot; : &quot;012bZ0000008Dw9QAE&quot;
 }</previewJsonData>
     <processSuperBulk>false</processSuperBulk>
     <responseCacheTtlMinutes>0.0</responseCacheTtlMinutes>
