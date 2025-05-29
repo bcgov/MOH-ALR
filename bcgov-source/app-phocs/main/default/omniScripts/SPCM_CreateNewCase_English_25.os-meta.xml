@@ -1162,7 +1162,7 @@
   &quot;label&quot; : &quot;LineBreak1&quot;,
   &quot;HTMLTemplateId&quot; : &quot;&quot;
 }</propertySetConfig>
-                <sequenceNumber>12.0</sequenceNumber>
+                <sequenceNumber>10.0</sequenceNumber>
                 <type>Line Break</type>
             </childElements>
             <childElements>
@@ -1177,7 +1177,7 @@
   &quot;label&quot; : &quot;LineBreak1&quot;,
   &quot;HTMLTemplateId&quot; : &quot;&quot;
 }</propertySetConfig>
-                <sequenceNumber>11.0</sequenceNumber>
+                <sequenceNumber>9.0</sequenceNumber>
                 <type>Line Break</type>
             </childElements>
             <childElements>
@@ -1324,7 +1324,7 @@
   &quot;enableLookup&quot; : false,
   &quot;inputWidth&quot; : 12,
   &quot;help&quot; : false,
-  &quot;typeAheadKey&quot; : &quot;AccountName&quot;,
+  &quot;typeAheadKey&quot; : &quot;PHOCSAccountName&quot;,
   &quot;dataProcessorFunction&quot; : &quot;&quot;,
   &quot;editMode&quot; : false,
   &quot;conditionType&quot; : &quot;Hide if False&quot;,
@@ -1381,7 +1381,7 @@
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;hide&quot; : false,
   &quot;disOnTplt&quot; : false,
-  &quot;clearValue&quot; : true,
+  &quot;clearValue&quot; : false,
   &quot;errorMessage&quot; : {
     &quot;custom&quot; : [ ],
     &quot;default&quot; : null
@@ -1550,7 +1550,7 @@
                 <propertySetConfig>{
   &quot;accessibleInFutureSteps&quot; : false,
   &quot;optionSource&quot; : {
-    &quot;type&quot; : &quot;SObject&quot;,
+    &quot;type&quot; : &quot;&quot;,
     &quot;source&quot; : &quot;Case.Origin&quot;
   },
   &quot;helpText&quot; : &quot;&quot;,
@@ -1579,6 +1579,18 @@
   }, {
     &quot;name&quot; : &quot;Web&quot;,
     &quot;value&quot; : &quot;Web&quot;
+  }, {
+    &quot;name&quot; : &quot;Mail&quot;,
+    &quot;value&quot; : &quot;Mail&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;In Person&quot;,
+    &quot;value&quot; : &quot;In Person&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Others&quot;,
+    &quot;value&quot; : &quot;Others&quot;,
+    &quot;autoAdv&quot; : null
   } ],
   &quot;disOnTplt&quot; : false,
   &quot;conditionType&quot; : &quot;Hide if False&quot;,
@@ -1736,33 +1748,77 @@
                 <name>PHOCSTopic</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
   &quot;controlWidth&quot; : 6,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;repeatClone&quot; : false,
-  &quot;show&quot; : null,
-  &quot;readOnly&quot; : false,
   &quot;label&quot; : &quot;Topic&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
   &quot;required&quot; : false,
-  &quot;help&quot; : false,
-  &quot;hide&quot; : false,
-  &quot;debounceValue&quot; : 0,
   &quot;repeat&quot; : false,
-  &quot;disOnTplt&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : null,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;options&quot; : [ {
+    &quot;name&quot; : &quot;Child Care&quot;,
+    &quot;value&quot; : &quot;Child Care&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Drinking Water&quot;,
+    &quot;value&quot; : &quot;Drinking Water&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Food Safety&quot;,
+    &quot;value&quot; : &quot;Food Safety&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Industrial Camps&quot;,
+    &quot;value&quot; : &quot;Industrial Camps&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Other&quot;,
+    &quot;value&quot; : &quot;Other&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Personal Services Establishments&quot;,
+    &quot;value&quot; : &quot;Personal Services Establishments&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Recreational Water&quot;,
+    &quot;value&quot; : &quot;Recreational Water&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Residential Care&quot;,
+    &quot;value&quot; : &quot;Residential Care&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Sewerage&quot;,
+    &quot;value&quot; : &quot;Sewerage&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Tobacco and Vapour&quot;,
+    &quot;value&quot; : &quot;Tobacco and Vapour&quot;,
+    &quot;autoAdv&quot; : null
+  } ],
+  &quot;optionSource&quot; : {
+    &quot;type&quot; : &quot;SObject&quot;,
+    &quot;source&quot; : &quot;Case.Topic__c&quot;
+  },
+  &quot;controllingField&quot; : {
+    &quot;element&quot; : &quot;&quot;,
+    &quot;type&quot; : &quot;&quot;,
+    &quot;source&quot; : &quot;&quot;
+  },
+  &quot;show&quot; : null,
   &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;maxLength&quot; : 255,
+  &quot;accessibleInFutureSteps&quot; : false,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;,
-  &quot;defaultValue&quot; : &quot;%PHOCSPCRecTopic%&quot;
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>7.0</sequenceNumber>
-                <type>Text</type>
+                <type>Select</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -1771,32 +1827,337 @@
                 <name>PHOCSTopicSubType</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;show&quot; : null,
-  &quot;showInputWidth&quot; : false,
-  &quot;required&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;,
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
   &quot;controlWidth&quot; : 6,
-  &quot;repeatClone&quot; : false,
-  &quot;readOnly&quot; : false,
   &quot;label&quot; : &quot;Topic Sub-Type&quot;,
+  &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : null,
   &quot;help&quot; : false,
-  &quot;hide&quot; : false,
-  &quot;disOnTplt&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;options&quot; : [ {
+    &quot;name&quot; : &quot;Abandoning camp improperly&quot;,
+    &quot;value&quot; : &quot;Abandoning camp improperly&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Absent employees&quot;,
+    &quot;value&quot; : &quot;Absent employees&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Absent licensees&quot;,
+    &quot;value&quot; : &quot;Absent licensees&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Absent manager&quot;,
+    &quot;value&quot; : &quot;Absent manager&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Access by others&quot;,
+    &quot;value&quot; : &quot;Access by others&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Access to PICs&quot;,
+    &quot;value&quot; : &quot;Access to PICs&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Accessibility&quot;,
+    &quot;value&quot; : &quot;Accessibility&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Add/Delete contact&quot;,
+    &quot;value&quot; : &quot;Add/Delete contact&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Additional criminal record checks&quot;,
+    &quot;value&quot; : &quot;Additional criminal record checks&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Additional play equipment&quot;,
+    &quot;value&quot; : &quot;Additional play equipment&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Administration of medication&quot;,
+    &quot;value&quot; : &quot;Administration of medication&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Admission screening&quot;,
+    &quot;value&quot; : &quot;Admission screening&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Advice on admission&quot;,
+    &quot;value&quot; : &quot;Advice on admission&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;AF meat inspection checklist&quot;,
+    &quot;value&quot; : &quot;AF meat inspection checklist&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Aggression between persons in care&quot;,
+    &quot;value&quot; : &quot;Aggression between persons in care&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Aggressive or unusual behaviour&quot;,
+    &quot;value&quot; : &quot;Aggressive or unusual behaviour&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Algae bloom&quot;,
+    &quot;value&quot; : &quot;Algae bloom&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Alteration&quot;,
+    &quot;value&quot; : &quot;Alteration&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Appeal&quot;,
+    &quot;value&quot; : &quot;Appeal&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Attempted suicide&quot;,
+    &quot;value&quot; : &quot;Attempted suicide&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Authorized person&quot;,
+    &quot;value&quot; : &quot;Authorized person&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Beach is not maintained in a sanitary condition&quot;,
+    &quot;value&quot; : &quot;Beach is not maintained in a sanitary condition&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Bedroom occupancy&quot;,
+    &quot;value&quot; : &quot;Bedroom occupancy&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Behavioural guidance&quot;,
+    &quot;value&quot; : &quot;Behavioural guidance&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Business license referral&quot;,
+    &quot;value&quot; : &quot;Business license referral&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Business type&quot;,
+    &quot;value&quot; : &quot;Business type&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Bylaw review&quot;,
+    &quot;value&quot; : &quot;Bylaw review&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Care and supervision RCR 52(1); BOR 2(b)&quot;,
+    &quot;value&quot; : &quot;Care and supervision RCR 52(1); BOR 2(b)&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Care and supervision RCR 57(2); BOR 2(e)&quot;,
+    &quot;value&quot; : &quot;Care and supervision RCR 57(2); BOR 2(e)&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Care and supervision RCR 81(2)(a); BOR 3(a)&quot;,
+    &quot;value&quot; : &quot;Care and supervision RCR 81(2)(a); BOR 3(a)&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Care and supervision RCR 81(2)(b); BOR 1(b)&quot;,
+    &quot;value&quot; : &quot;Care and supervision RCR 81(2)(b); BOR 1(b)&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Care and supervision RCR 59; BOR 3(b)&quot;,
+    &quot;value&quot; : &quot;Care and supervision RCR 59; BOR 3(b)&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Care and supervision RCR 59; BOR 3(c)&quot;,
+    &quot;value&quot; : &quot;Care and supervision RCR 59; BOR 3(c)&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Care plan&quot;,
+    &quot;value&quot; : &quot;Care plan&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Care plan needed if more than 30 day stay&quot;,
+    &quot;value&quot; : &quot;Care plan needed if more than 30 day stay&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Care program change&quot;,
+    &quot;value&quot; : &quot;Care program change&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;CCALA&quot;,
+    &quot;value&quot; : &quot;CCALA&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;CCALA 7(1)(b)(i); BOR 2(a)&quot;,
+    &quot;value&quot; : &quot;CCALA 7(1)(b)(i); BOR 2(a)&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Change of billing address&quot;,
+    &quot;value&quot; : &quot;Change of billing address&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Change of facility category/new application&quot;,
+    &quot;value&quot; : &quot;Change of facility category/new application&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Change of facility status&quot;,
+    &quot;value&quot; : &quot;Change of facility status&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Change of mailing address&quot;,
+    &quot;value&quot; : &quot;Change of mailing address&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Change of months of operation&quot;,
+    &quot;value&quot; : &quot;Change of months of operation&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Change of owner/new application&quot;,
+    &quot;value&quot; : &quot;Change of owner/new application&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Change of ownership&quot;,
+    &quot;value&quot; : &quot;Change of ownership&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Change of site address/new application&quot;,
+    &quot;value&quot; : &quot;Change of site address/new application&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Changes to directions for use of medication&quot;,
+    &quot;value&quot; : &quot;Changes to directions for use of medication&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Character and skill requirements&quot;,
+    &quot;value&quot; : &quot;Character and skill requirements&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Chemical hazard(s) present&quot;,
+    &quot;value&quot; : &quot;Chemical hazard(s) present&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Chemistry&quot;,
+    &quot;value&quot; : &quot;Chemistry&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Child who becomes ill&quot;,
+    &quot;value&quot; : &quot;Child who becomes ill&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Choking&quot;,
+    &quot;value&quot; : &quot;Choking&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Closure - permanent&quot;,
+    &quot;value&quot; : &quot;Closure - permanent&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Closure - temporary&quot;,
+    &quot;value&quot; : &quot;Closure - temporary&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Comfort letter&quot;,
+    &quot;value&quot; : &quot;Comfort letter&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Community care facility records&quot;,
+    &quot;value&quot; : &quot;Community care facility records&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Conducting other business prohibited&quot;,
+    &quot;value&quot; : &quot;Conducting other business prohibited&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Confidentiality&quot;,
+    &quot;value&quot; : &quot;Confidentiality&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Consultant&quot;,
+    &quot;value&quot; : &quot;Consultant&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Consultation&quot;,
+    &quot;value&quot; : &quot;Consultation&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Content restrictions - sale of products &gt; 2mL cartridge capacity&quot;,
+    &quot;value&quot; : &quot;Content restrictions - sale of products &gt; 2mL cartridge capacity&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Content restrictions - sale of products &gt; 20mg/ML nicotine&quot;,
+    &quot;value&quot; : &quot;Content restrictions - sale of products &gt; 20mg/ML nicotine&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Content restrictions - sale of products &gt; 30ml container capacity&quot;,
+    &quot;value&quot; : &quot;Content restrictions - sale of products &gt; 30ml container capacity&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Continuing accommodation&quot;,
+    &quot;value&quot; : &quot;Continuing accommodation&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Continuing accommodation for incapable persons&quot;,
+    &quot;value&quot; : &quot;Continuing accommodation for incapable persons&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Continuing duty to inform&quot;,
+    &quot;value&quot; : &quot;Continuing duty to inform&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Continuing health of employees&quot;,
+    &quot;value&quot; : &quot;Continuing health of employees&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Continuing health of licencees and employees&quot;,
+    &quot;value&quot; : &quot;Continuing health of licencees and employees&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Continuing monitoring of employees&quot;,
+    &quot;value&quot; : &quot;Continuing monitoring of employees&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Continuing to inform&quot;,
+    &quot;value&quot; : &quot;Continuing to inform&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Continuous supervision required&quot;,
+    &quot;value&quot; : &quot;Continuous supervision required&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Coordinator application&quot;,
+    &quot;value&quot; : &quot;Coordinator application&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;CP renewal&quot;,
+    &quot;value&quot; : &quot;CP renewal&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Customer illness&quot;,
+    &quot;value&quot; : &quot;Customer illness&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Death&quot;,
+    &quot;value&quot; : &quot;Death&quot;,
+    &quot;autoAdv&quot; : null
+  } ],
+  &quot;optionSource&quot; : {
+    &quot;type&quot; : &quot;SObject&quot;,
+    &quot;source&quot; : &quot;Case.TopicSubtypes__c&quot;
+  },
+  &quot;controllingField&quot; : {
+    &quot;element&quot; : &quot;&quot;,
+    &quot;type&quot; : &quot;&quot;,
+    &quot;source&quot; : &quot;&quot;
+  },
+  &quot;show&quot; : null,
   &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;maxLength&quot; : 255,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
-                <sequenceNumber>9.0</sequenceNumber>
-                <type>Text</type>
+                <sequenceNumber>12.0</sequenceNumber>
+                <type>Select</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -1805,32 +2166,421 @@
                 <name>PHOCSTopicType</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;show&quot; : null,
-  &quot;showInputWidth&quot; : false,
-  &quot;required&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;,
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
   &quot;controlWidth&quot; : 6,
-  &quot;repeatClone&quot; : false,
-  &quot;readOnly&quot; : false,
   &quot;label&quot; : &quot;Topic Type&quot;,
+  &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : null,
   &quot;help&quot; : false,
-  &quot;hide&quot; : false,
-  &quot;disOnTplt&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;options&quot; : [ {
+    &quot;name&quot; : &quot;Activities impacting the watershed or groundwater aquifer&quot;,
+    &quot;value&quot; : &quot;Activities impacting the watershed or groundwater aquifer&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Amendment&quot;,
+    &quot;value&quot; : &quot;Amendment&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Application&quot;,
+    &quot;value&quot; : &quot;Application&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Application (EPH)&quot;,
+    &quot;value&quot; : &quot;Application (EPH)&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Beach closure&quot;,
+    &quot;value&quot; : &quot;Beach closure&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Bill of rights&quot;,
+    &quot;value&quot; : &quot;Bill of rights&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Cannabis&quot;,
+    &quot;value&quot; : &quot;Cannabis&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Care and supervision&quot;,
+    &quot;value&quot; : &quot;Care and supervision&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;CD investigation&quot;,
+    &quot;value&quot; : &quot;CD investigation&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Chemical or physical water quality parameters in excess of acceptable concentrations&quot;,
+    &quot;value&quot; : &quot;Chemical or physical water quality parameters in excess of acceptable concentrations&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Comfort letter&quot;,
+    &quot;value&quot; : &quot;Comfort letter&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Concerns regarding public notices or operator communication&quot;,
+    &quot;value&quot; : &quot;Concerns regarding public notices or operator communication&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Construction permit application&quot;,
+    &quot;value&quot; : &quot;Construction permit application&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Construction/Maintenance&quot;,
+    &quot;value&quot; : &quot;Construction/Maintenance&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Construction/Maintenance/Sanitation&quot;,
+    &quot;value&quot; : &quot;Construction/Maintenance/Sanitation&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Contamination&quot;,
+    &quot;value&quot; : &quot;Contamination&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Death&quot;,
+    &quot;value&quot; : &quot;Death&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Disruption to operations &amp; maintenance (O&amp;M)&quot;,
+    &quot;value&quot; : &quot;Disruption to operations &amp; maintenance (O&amp;M)&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Distribution system integrity failure&quot;,
+    &quot;value&quot; : &quot;Distribution system integrity failure&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;E.coli detected in water sample&quot;,
+    &quot;value&quot; : &quot;E.coli detected in water sample&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;E-Substances&quot;,
+    &quot;value&quot; : &quot;E-Substances&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Equipment&quot;,
+    &quot;value&quot; : &quot;Equipment&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Excessive turbidity compromising treatment and water quality&quot;,
+    &quot;value&quot; : &quot;Excessive turbidity compromising treatment and water quality&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Facility detail change&quot;,
+    &quot;value&quot; : &quot;Facility detail change&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Farmers/Temporary market&quot;,
+    &quot;value&quot; : &quot;Farmers/Temporary market&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Firefighting flows&quot;,
+    &quot;value&quot; : &quot;Firefighting flows&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Food&quot;,
+    &quot;value&quot; : &quot;Food&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Food handler illness/hygiene/habits&quot;,
+    &quot;value&quot; : &quot;Food handler illness/hygiene/habits&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Food product concern&quot;,
+    &quot;value&quot; : &quot;Food product concern&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;FOODSAFE contacts change&quot;,
+    &quot;value&quot; : &quot;FOODSAFE contacts change&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;General&quot;,
+    &quot;value&quot; : &quot;General&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Health hazard&quot;,
+    &quot;value&quot; : &quot;Health hazard&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Hygiene&quot;,
+    &quot;value&quot; : &quot;Hygiene&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Hygiene and communicable disease control&quot;,
+    &quot;value&quot; : &quot;Hygiene and communicable disease control&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Hygiene and sanitation&quot;,
+    &quot;value&quot; : &quot;Hygiene and sanitation&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Incident report&quot;,
+    &quot;value&quot; : &quot;Incident report&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Information requested&quot;,
+    &quot;value&quot; : &quot;Information requested&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Insufficient disinfectant residual&quot;,
+    &quot;value&quot; : &quot;Insufficient disinfectant residual&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Licensing&quot;,
+    &quot;value&quot; : &quot;Licensing&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Long term camp&quot;,
+    &quot;value&quot; : &quot;Long term camp&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Low risk food&quot;,
+    &quot;value&quot; : &quot;Low risk food&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Medication&quot;,
+    &quot;value&quot; : &quot;Medication&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;New application&quot;,
+    &quot;value&quot; : &quot;New application&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Notifications&quot;,
+    &quot;value&quot; : &quot;Notifications&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Nutrition and food services&quot;,
+    &quot;value&quot; : &quot;Nutrition and food services&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Operation&quot;,
+    &quot;value&quot; : &quot;Operation&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Other&quot;,
+    &quot;value&quot; : &quot;Other&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Outbreak investigation&quot;,
+    &quot;value&quot; : &quot;Outbreak investigation&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Physical facility equipment and furnishings&quot;,
+    &quot;value&quot; : &quot;Physical facility equipment and furnishings&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Policies and procedures&quot;,
+    &quot;value&quot; : &quot;Policies and procedures&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Program&quot;,
+    &quot;value&quot; : &quot;Program&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Reconsideration/Appeal&quot;,
+    &quot;value&quot; : &quot;Reconsideration/Appeal&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Records and reporting&quot;,
+    &quot;value&quot; : &quot;Records and reporting&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Request for inspection&quot;,
+    &quot;value&quot; : &quot;Request for inspection&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Request for inspection/review&quot;,
+    &quot;value&quot; : &quot;Request for inspection/review&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Request information&quot;,
+    &quot;value&quot; : &quot;Request information&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Request information - Personal Services&quot;,
+    &quot;value&quot; : &quot;Request information - Personal Services&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Request information - Recreational Water&quot;,
+    &quot;value&quot; : &quot;Request information - Recreational Water&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Request information - Tobacco &amp; Vapour&quot;,
+    &quot;value&quot; : &quot;Request information - Tobacco &amp; Vapour&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Request information - Sewerage&quot;,
+    &quot;value&quot; : &quot;Request information - Sewerage&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Request technical review&quot;,
+    &quot;value&quot; : &quot;Request technical review&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Request to attend meeting&quot;,
+    &quot;value&quot; : &quot;Request to attend meeting&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Review/Request permit - Recreational Water&quot;,
+    &quot;value&quot; : &quot;Review/Request permit - Recreational Water&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Review/Request permit - Tobacco &amp; Vapour&quot;,
+    &quot;value&quot; : &quot;Review/Request permit - Tobacco &amp; Vapour&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Routine maintenance and planned works&quot;,
+    &quot;value&quot; : &quot;Routine maintenance and planned works&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Safety&quot;,
+    &quot;value&quot; : &quot;Safety&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Sewage&quot;,
+    &quot;value&quot; : &quot;Sewage&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Short term camp&quot;,
+    &quot;value&quot; : &quot;Short term camp&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Slaughter establishment food premises&quot;,
+    &quot;value&quot; : &quot;Slaughter establishment food premises&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Source water quality deterioration or contamination&quot;,
+    &quot;value&quot; : &quot;Source water quality deterioration or contamination&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Staffing&quot;,
+    &quot;value&quot; : &quot;Staffing&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Suspected human illness&quot;,
+    &quot;value&quot; : &quot;Suspected human illness&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Suspected illness&quot;,
+    &quot;value&quot; : &quot;Suspected illness&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Swimming advisory&quot;,
+    &quot;value&quot; : &quot;Swimming advisory&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;System&quot;,
+    &quot;value&quot; : &quot;System&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Tampering or vandalism&quot;,
+    &quot;value&quot; : &quot;Tampering or vandalism&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Technical assessment&quot;,
+    &quot;value&quot; : &quot;Technical assessment&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Temporary food service&quot;,
+    &quot;value&quot; : &quot;Temporary food service&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Threat to drinking water supply&quot;,
+    &quot;value&quot; : &quot;Threat to drinking water supply&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Tobacco products&quot;,
+    &quot;value&quot; : &quot;Tobacco products&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Type 1&quot;,
+    &quot;value&quot; : &quot;Type 1&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Type 2&quot;,
+    &quot;value&quot; : &quot;Type 2&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Type 3&quot;,
+    &quot;value&quot; : &quot;Type 3&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Unacceptable water quality results (microbiological)&quot;,
+    &quot;value&quot; : &quot;Unacceptable water quality results (microbiological)&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Unapproved construction&quot;,
+    &quot;value&quot; : &quot;Unapproved construction&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Unapproved food premises&quot;,
+    &quot;value&quot; : &quot;Unapproved food premises&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Unapproved system&quot;,
+    &quot;value&quot; : &quot;Unapproved system&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Unlawful&quot;,
+    &quot;value&quot; : &quot;Unlawful&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Vapour products&quot;,
+    &quot;value&quot; : &quot;Vapour products&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Waivers&quot;,
+    &quot;value&quot; : &quot;Waivers&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Waste disposal/sanitation&quot;,
+    &quot;value&quot; : &quot;Waste disposal/sanitation&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Water quality&quot;,
+    &quot;value&quot; : &quot;Water quality&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Water quality – odour, taste, appearance&quot;,
+    &quot;value&quot; : &quot;Water quality – odour, taste, appearance&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Water supply&quot;,
+    &quot;value&quot; : &quot;Water supply&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Water treatment equipment failure&quot;,
+    &quot;value&quot; : &quot;Water treatment equipment failure&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Well setback distances from potential source of&quot;,
+    &quot;value&quot; : &quot;Well setback distances from potential source of&quot;,
+    &quot;autoAdv&quot; : null
+  } ],
+  &quot;optionSource&quot; : {
+    &quot;type&quot; : &quot;SObject&quot;,
+    &quot;source&quot; : &quot;Case.TopicTypes__c&quot;
+  },
+  &quot;controllingField&quot; : {
+    &quot;element&quot; : &quot;&quot;,
+    &quot;type&quot; : &quot;&quot;,
+    &quot;source&quot; : &quot;&quot;
+  },
+  &quot;show&quot; : null,
   &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;maxLength&quot; : 255,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>8.0</sequenceNumber>
-                <type>Text</type>
+                <type>Select</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -1863,7 +2613,7 @@
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;mask&quot; : &quot;&quot;
 }</propertySetConfig>
-                <sequenceNumber>10.0</sequenceNumber>
+                <sequenceNumber>11.0</sequenceNumber>
                 <type>Text</type>
             </childElements>
             <childElements>
