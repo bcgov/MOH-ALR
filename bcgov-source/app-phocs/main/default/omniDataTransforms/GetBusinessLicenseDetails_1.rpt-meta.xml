@@ -155,6 +155,40 @@
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:BLAccountWaterSourceWaterSourceCategory &apos;Surface/\/\/Water/\/\/-/\/\/Single/\/\/Source&apos; == var:BLAccountWaterSourceWaterSourceCategory &apos;Ground/\/\/and/\/\/Surface&apos; == var:BLAccountWaterSourceWaterSourceCategory &apos;Surface/\/\/Water/\/\/-/\/\/Multiple/\/\/Sources&apos; == OR OR var:BLAccountWaterSourceIntakeCategoryL2 &apos;Rainwater&apos; == AND true false IF</formulaConverted>
+        <formulaExpression>IF(AND(OR(%BLAccountWaterSourceWaterSourceCategory% == &apos;Surface Water - Single Source&apos;,OR(%BLAccountWaterSourceWaterSourceCategory% == &apos;Ground and Surface&apos;,%BLAccountWaterSourceWaterSourceCategory% == &apos;Surface Water - Multiple Sources&apos;)),%BLAccountWaterSourceIntakeCategoryL2% == &apos;Rainwater&apos;),true,false)</formulaExpression>
+        <formulaResultPath>isSourceEvaluationWaterTreatmentCond3</formulaResultPath>
+        <formulaSequence>13.0</formulaSequence>
+        <globalKey>88edcaef-277c-49a8-9927-8d9c0fc07ed0</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:BLAccountWaterSourceWaterSourceCategory &apos;Surface/\/\/Water/\/\/-/\/\/Single/\/\/Source&apos; == var:BLAccountWaterSourceWaterSourceCategory &apos;Ground/\/\/and/\/\/Surface&apos; == var:BLAccountWaterSourceWaterSourceCategory &apos;Surface/\/\/Water/\/\/-/\/\/Multiple/\/\/Sources&apos; == OR OR true false IF</formulaConverted>
+        <formulaExpression>IF(OR(%BLAccountWaterSourceWaterSourceCategory% == &apos;Surface Water - Single Source&apos;,OR(%BLAccountWaterSourceWaterSourceCategory% == &apos;Ground and Surface&apos;,%BLAccountWaterSourceWaterSourceCategory% == &apos;Surface Water - Multiple Sources&apos;)),true,false)</formulaExpression>
+        <formulaResultPath>isSourceEvaluationWaterTreatmentCond2</formulaResultPath>
+        <formulaSequence>12.0</formulaSequence>
+        <globalKey>0b6d398a-5a6b-4fef-9d51-de21dc7013f9</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
         <disabled>true</disabled>
         <filterGroup>0.0</filterGroup>
         <globalKey>GetBusinessLicenseDetailsCustom0jIbZ0000001lbBUAQItem40</globalKey>
@@ -945,6 +979,21 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <globalKey>10a5a004-da95-4b9e-b817-5c209d346124</globalKey>
+        <inputFieldName>isSourceEvaluationWaterTreatmentCond3</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>isSourceEvaluationWaterTreatmentCond3</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <globalKey>6db9a52f-f8ae-4c59-a264-3ea664c4bea7</globalKey>
         <inputFieldName>BLAccountFacilityHAName</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
@@ -1047,6 +1096,21 @@
         <outputFieldName>DocChecklistSewerageSystem</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>cf9bd6e9-eb64-48e4-842f-7ce74bb5308d</globalKey>
+        <inputFieldName>isSourceEvaluationWaterTreatmentCond2</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>isSourceEvaluationWaterTreatmentCond2</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -1732,6 +1796,21 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <globalKey>9c3d896a-212e-4233-90a1-1c0377e304e0</globalKey>
+        <inputFieldName>BLAccount:WaterSourceCategory__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountWaterSourceCategory</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <globalKey>GetBusinessLicenseDetailsCustom1026</globalKey>
         <inputFieldName>FacilitiesDWT:Name</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
@@ -2297,8 +2376,8 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:BLAccountWaterSourceWaterSourceCategory &apos;Groundwater/\/\/-/\/\/Single/\/\/Source&apos; == var:BLAccountWaterSourceWaterSourceCategory &apos;Ground/\/\/and/\/\/Surface&apos; == var:BLAccountWaterSourceWaterSourceCategory &apos;Groundwater/\/\/-/\/\/Multiple/\/\/Sources&apos; == OR OR AND | var:BLAccountWaterSourceGARPScreeningOutcome &apos;GARP/\/\/-/\/\/Low/\/\/Risk/\/\/of/\/\/Pathogens&apos; == NOT IF</formulaConverted>
-        <formulaExpression>IF(AND(OR(%BLAccountWaterSourceWaterSourceCategory% == &apos;Groundwater - Single Source&apos;,OR(%BLAccountWaterSourceWaterSourceCategory% == &apos;Ground and Surface&apos;,%BLAccountWaterSourceWaterSourceCategory% == &apos;Groundwater - Multiple Sources&apos;))),NOT(%BLAccountWaterSourceGARPScreeningOutcome% == &apos;GARP - Low Risk of Pathogens&apos;))</formulaExpression>
+        <formulaConverted>| var:BLAccountWaterSourceWaterSourceCategory &apos;Groundwater/\/\/-/\/\/Single/\/\/Source&apos; == var:BLAccountWaterSourceWaterSourceCategory &apos;Ground/\/\/and/\/\/Surface&apos; == var:BLAccountWaterSourceWaterSourceCategory &apos;Groundwater/\/\/-/\/\/Multiple/\/\/Sources&apos; == OR OR AND | var:BLAccountWaterSourceGARPScreeningOutcome &apos;GARP/\/\/-/\/\/Low/\/\/Risk/\/\/of/\/\/Pathogens&apos; == NOT true false IF</formulaConverted>
+        <formulaExpression>IF(AND(OR(%BLAccountWaterSourceWaterSourceCategory% == &apos;Groundwater - Single Source&apos;,OR(%BLAccountWaterSourceWaterSourceCategory% == &apos;Ground and Surface&apos;,%BLAccountWaterSourceWaterSourceCategory% == &apos;Groundwater - Multiple Sources&apos;))),NOT(%BLAccountWaterSourceGARPScreeningOutcome% == &apos;GARP - Low Risk of Pathogens&apos;),true,false)</formulaExpression>
         <formulaResultPath>isSourceEvaluationWaterTreatmentCond1</formulaResultPath>
         <formulaSequence>9.0</formulaSequence>
         <globalKey>GetBusinessLicenseDetailsCustom2483</globalKey>

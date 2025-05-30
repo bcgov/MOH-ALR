@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
-    <apiVersion>61.0</apiVersion>
+    <apiVersion>60.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <customErrors>
         <name>PL_Associated_Location_Error</name>
         <label>PL Associated Location Error</label>
@@ -207,6 +208,13 @@
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Residence</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Facility</stringValue>
                 </rightValue>
             </conditions>
             <connector>
