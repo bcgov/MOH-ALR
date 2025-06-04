@@ -99,20 +99,6 @@
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
-        <fullName>ShareInspectionWithEHISadmin</fullName>
-        <accessLevel>Edit</accessLevel>
-        <label>Share Inspection with EHIS Admin</label>
-        <sharedTo>
-            <group>EHIS_Water_Admin_Users_PG</group>
-        </sharedTo>
-        <criteriaItems>
-            <field>RecordTypeId</field>
-            <operation>equals</operation>
-            <value>PHOCS Inspection</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
         <fullName>ShareInspectionWithEHISofficer</fullName>
         <accessLevel>Edit</accessLevel>
         <label>Share Inspection with EHIS Officer</label>
@@ -127,12 +113,85 @@
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
-        <fullName>Visit</fullName>
+        <fullName>ShareInspectionwithEHISAdmin</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Share Inspection with EHIS Admin</label>
+        <sharedTo>
+            <group>EHIS_Water_Admin_Users_PG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Inspection</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Share_visit_records_with_NHA_reporting_user</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>Share visit records with NHA reporting user</label>
+        <sharedTo>
+            <group>EHISNHAReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Inspection</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>SharevisitrecordswithFHAreportinguser</fullName>
         <accessLevel>Read</accessLevel>
         <description>EHIS-188</description>
-        <label>Visit - Reporting User</label>
+        <label>Share visit records with FHA reporting user</label>
         <sharedTo>
-            <group>PHOCSReportingUserPG</group>
+            <group>EHISFHAReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Inspection</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>VisitNHA</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>EHIS-188</description>
+        <label>Visit - NHA</label>
+        <sharedTo>
+            <group>EHISNHAReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Inspection</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>VisitVCH</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>EHIS-188</description>
+        <label>Visit - VCH</label>
+        <sharedTo>
+            <group>EHISVCHReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Inspection</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>VisitVCIS</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>EHIS-188</description>
+        <label>Visit - VCIS</label>
+        <sharedTo>
+            <group>EHISVCISReportingUser</group>
         </sharedTo>
         <criteriaItems>
             <field>RecordTypeId</field>
