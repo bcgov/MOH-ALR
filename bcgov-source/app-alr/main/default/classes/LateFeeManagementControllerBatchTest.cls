@@ -38,10 +38,7 @@ public class LateFeeManagementControllerBatchTest {
         unitRec1.recordTypeId = parentAssetRTId;
         update unitRec1;
 
-        Asset unitRec2 = TestDataFactory.createUnit('1', 'Per Diem', 2, residenceRec1.Id, true);
-        unitRec2.recordTypeId = parentAssetRTId;
-        update unitRec2;
-
+        
          //regTrans Fee renewal
          RegulatoryTrxnFee regTransRec = TestDataFactory.createTransFeeRecord(transFeeRecTypeId, residenceRec1.Id, blaRec.Id, BCMOH_Constants.feeType, BCMOH_Constants.dueFeeStatus, true);
          //regTrans Fee unit
