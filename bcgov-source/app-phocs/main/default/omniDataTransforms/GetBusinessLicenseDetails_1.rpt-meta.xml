@@ -64,7 +64,7 @@
         <globalKey>GetBusinessLicenseDetailsCustom5986</globalKey>
         <inputFieldName>RecordTypeName__c</inputFieldName>
         <inputObjectName>Account</inputObjectName>
-        <inputObjectQuerySequence>20.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>21.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -145,7 +145,7 @@
         <globalKey>GetBusinessLicenseDetailsCustom4095</globalKey>
         <inputFieldName>Id</inputFieldName>
         <inputObjectName>Contact</inputObjectName>
-        <inputObjectQuerySequence>7.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>8.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -157,8 +157,8 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:BLAccountWaterSourceWaterSourceCategory &apos;Surface/\/\/Water/\/\/-/\/\/Single/\/\/Source&apos; == var:BLAccountWaterSourceWaterSourceCategory &apos;Ground/\/\/and/\/\/Surface&apos; == var:BLAccountWaterSourceWaterSourceCategory &apos;Surface/\/\/Water/\/\/-/\/\/Multiple/\/\/Sources&apos; == OR OR var:BLAccountWaterSourceIntakeCategoryL2 &apos;Rainwater&apos; == AND true false IF</formulaConverted>
-        <formulaExpression>IF(AND(OR(%BLAccountWaterSourceWaterSourceCategory% == &apos;Surface Water - Single Source&apos;,OR(%BLAccountWaterSourceWaterSourceCategory% == &apos;Ground and Surface&apos;,%BLAccountWaterSourceWaterSourceCategory% == &apos;Surface Water - Multiple Sources&apos;)),%BLAccountWaterSourceIntakeCategoryL2% == &apos;Rainwater&apos;),true,false)</formulaExpression>
+        <formulaConverted>| var:BLAccount:WaterSourceCategory__c &quot;Surface/\/\/Water/\/\/-/\/\/Single/\/\/Source&quot; == var:BLAccount:WaterSourceCategory__c &quot;Surface/\/\/Water/\/\/-/\/\/Multiple/\/\/Sources&quot; == || var:BLAccount:WaterSourceCategory__c &quot;Ground/\/\/and/\/\/Surface&quot; == || var:BLAccount:CategoryL2__c &quot;Rainwater&quot; == &amp;&amp; true false IF</formulaConverted>
+        <formulaExpression>IF((%BLAccount:WaterSourceCategory__c% == &quot;Surface Water - Single Source&quot; || %BLAccount:WaterSourceCategory__c% ==  &quot;Surface Water - Multiple Sources&quot; || %BLAccount:WaterSourceCategory__c% ==  &quot;Ground and Surface&quot; ) &amp;&amp; (%BLAccount:CategoryL2__c% == &quot;Rainwater&quot;),true,false )</formulaExpression>
         <formulaResultPath>isSourceEvaluationWaterTreatmentCond3</formulaResultPath>
         <formulaSequence>13.0</formulaSequence>
         <globalKey>88edcaef-277c-49a8-9927-8d9c0fc07ed0</globalKey>
@@ -174,8 +174,8 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:BLAccountWaterSourceWaterSourceCategory &apos;Surface/\/\/Water/\/\/-/\/\/Single/\/\/Source&apos; == var:BLAccountWaterSourceWaterSourceCategory &apos;Ground/\/\/and/\/\/Surface&apos; == var:BLAccountWaterSourceWaterSourceCategory &apos;Surface/\/\/Water/\/\/-/\/\/Multiple/\/\/Sources&apos; == OR OR true false IF</formulaConverted>
-        <formulaExpression>IF(OR(%BLAccountWaterSourceWaterSourceCategory% == &apos;Surface Water - Single Source&apos;,OR(%BLAccountWaterSourceWaterSourceCategory% == &apos;Ground and Surface&apos;,%BLAccountWaterSourceWaterSourceCategory% == &apos;Surface Water - Multiple Sources&apos;)),true,false)</formulaExpression>
+        <formulaConverted>| var:BLAccount:WaterSourceCategory__c &quot;Surface/\/\/Water/\/\/-/\/\/Single/\/\/Source&quot; == var:BLAccount:WaterSourceCategory__c &quot;Surface/\/\/Water/\/\/-/\/\/Multiple/\/\/Sources&quot; == || var:BLAccount:WaterSourceCategory__c &quot;Ground/\/\/and/\/\/Surface&quot; == || true false IF</formulaConverted>
+        <formulaExpression>IF((%BLAccount:WaterSourceCategory__c% == &quot;Surface Water - Single Source&quot; || %BLAccount:WaterSourceCategory__c% ==  &quot;Surface Water - Multiple Sources&quot; || %BLAccount:WaterSourceCategory__c% ==  &quot;Ground and Surface&quot; ),true,false)</formulaExpression>
         <formulaResultPath>isSourceEvaluationWaterTreatmentCond2</formulaResultPath>
         <formulaSequence>12.0</formulaSequence>
         <globalKey>0b6d398a-5a6b-4fef-9d51-de21dc7013f9</globalKey>
@@ -186,6 +186,21 @@
         <outputFieldName>Formula</outputFieldName>
         <outputObjectName>Formula</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>b58371f5-5d5b-4036-a405-2e69ffbd1560</globalKey>
+        <inputFieldName>BLA:ClosureReason__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLASourceWaterEvaluationClosureReason</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -326,7 +341,7 @@
         <globalKey>GetBusinessLicenseDetailsCustom4964</globalKey>
         <inputFieldName>Id</inputFieldName>
         <inputObjectName>User</inputObjectName>
-        <inputObjectQuerySequence>6.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>7.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -371,7 +386,7 @@
         <globalKey>GetBusinessLicenseDetailsCustom3346</globalKey>
         <inputFieldName>ParentRecordId</inputFieldName>
         <inputObjectName>DocumentChecklistItem</inputObjectName>
-        <inputObjectQuerySequence>9.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>10.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -416,7 +431,7 @@
         <globalKey>GetBusinessLicenseDetailsCustom6301</globalKey>
         <inputFieldName>Id</inputFieldName>
         <inputObjectName>Account</inputObjectName>
-        <inputObjectQuerySequence>17.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>18.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -435,6 +450,23 @@
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
         <outputFieldName>BLAccountDWSDetails:FacilitiesDWDDetails:FacilityCatL1DWDSecondaryDisinfectionRequired</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>BLAccount:ParentId</filterValue>
+        <globalKey>dc5b2b2d-e52a-4f72-8fd1-5d8c667ac669</globalKey>
+        <inputFieldName>Id</inputFieldName>
+        <inputObjectName>Account</inputObjectName>
+        <inputObjectQuerySequence>6.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>BLAccountParentAccRec</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -479,6 +511,21 @@
         <outputFieldName>DocumentChecklistItems:DocumentChecklistItemsName</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>3cc28464-2d6e-465e-854f-bd86e50bdbef</globalKey>
+        <inputFieldName>isSourceEvaluationWaterTreatmentCond1</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>isSourceEvaluationWaterTreatmentCond1</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -588,7 +635,7 @@
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <globalKey>GetBusinessLicenseDetailsCustom2085</globalKey>
-        <inputFieldName>WaterSuppliers:WellIDPlateNumber__c</inputFieldName>
+        <inputFieldName>BLAccount:WellIDPlateNumber__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
@@ -596,6 +643,7 @@
         <outputFieldName>BLAccountWaterSourceIntakeWellIDPlateNumber</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -781,7 +829,7 @@
         <globalKey>GetBusinessLicenseDetailsCustom6655</globalKey>
         <inputFieldName>Name</inputFieldName>
         <inputObjectName>DocumentTemplate</inputObjectName>
-        <inputObjectQuerySequence>13.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>14.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -808,7 +856,7 @@
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <globalKey>GetBusinessLicenseDetailsCustom5492</globalKey>
-        <inputFieldName>WaterSuppliers:WaterLicenseNumber__c</inputFieldName>
+        <inputFieldName>BLAccount:WaterLicenseNumber__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
@@ -816,6 +864,7 @@
         <outputFieldName>BLAccountRelatedWaterSourceIntakeWaterLicenseNumber</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -872,7 +921,7 @@
         <globalKey>GetBusinessLicenseDetailsCustom5651</globalKey>
         <inputFieldName>RecordTypeName__c</inputFieldName>
         <inputObjectName>Account</inputObjectName>
-        <inputObjectQuerySequence>8.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>9.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -904,7 +953,7 @@
         <globalKey>GetBusinessLicenseDetailsCustom8367</globalKey>
         <inputFieldName>CategoryL1__c</inputFieldName>
         <inputObjectName>Account</inputObjectName>
-        <inputObjectQuerySequence>19.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>20.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -921,7 +970,7 @@
         <globalKey>GetBusinessLicenseDetailsCustom5344</globalKey>
         <inputFieldName>RecordTypeName__c</inputFieldName>
         <inputObjectName>Account</inputObjectName>
-        <inputObjectQuerySequence>21.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>22.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -1009,6 +1058,22 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <filterOperator>LIMIT</filterOperator>
+        <filterValue>1</filterValue>
+        <globalKey>59f59f18-6793-4ac7-8e3b-5a2a19cc8a37</globalKey>
+        <inputObjectName>DocumentChecklistItem</inputObjectName>
+        <inputObjectQuerySequence>16.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>DocumentChecklistItemERCP</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <globalKey>3d41ccaf-1956-4fe3-a821-573e49331351</globalKey>
         <inputFieldName>BLAccount:LegalLandDescription__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
@@ -1072,7 +1137,7 @@
         <globalKey>a53b3eeb-83cd-425d-991a-90994760d2fd</globalKey>
         <inputFieldName>Status</inputFieldName>
         <inputObjectName>DocumentChecklistItem</inputObjectName>
-        <inputObjectQuerySequence>22.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>23.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -1089,7 +1154,7 @@
         <globalKey>35d9f767-06e9-45fa-b3b4-3013093b7ef7</globalKey>
         <inputFieldName>ParentRecordId</inputFieldName>
         <inputObjectName>DocumentChecklistItem</inputObjectName>
-        <inputObjectQuerySequence>22.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>23.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -1107,7 +1172,23 @@
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Boolean</outputFieldFormat>
         <outputFieldName>isSourceEvaluationWaterTreatmentCond2</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>be5e0bd4-2311-4320-907f-367e1e7c0529</globalKey>
+        <inputFieldName>BLA:ClosureReasonDescription__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLASourceWaterEvaluationClosureReasonDescription</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -1131,6 +1212,7 @@
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
+        <defaultValue>False</defaultValue>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <globalKey>GetBusinessLicenseDetailsCustom7311</globalKey>
@@ -1139,25 +1221,11 @@
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Boolean</outputFieldFormat>
         <outputFieldName>isWSICatL1SurfaceWater</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>LIMIT</filterOperator>
-        <filterValue>1</filterValue>
-        <globalKey>GetBusinessLicenseDetailsCustom6419</globalKey>
-        <inputObjectName>DocumentChecklistItem</inputObjectName>
-        <inputObjectQuerySequence>15.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetBusinessLicenseDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>DocumentChecklistItemERCP</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -1196,7 +1264,7 @@
         <globalKey>GetBusinessLicenseDetailsCustom709</globalKey>
         <inputFieldName>ParentId</inputFieldName>
         <inputObjectName>Account</inputObjectName>
-        <inputObjectQuerySequence>19.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>20.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -1297,7 +1365,7 @@
         <globalKey>GetBusinessLicenseDetailsCustom8237</globalKey>
         <inputFieldName>ParentId</inputFieldName>
         <inputObjectName>Account</inputObjectName>
-        <inputObjectQuerySequence>8.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>9.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -1342,7 +1410,7 @@
         <globalKey>GetBusinessLicenseDetailsCustom1796</globalKey>
         <inputFieldName>RecordTypeName__c</inputFieldName>
         <inputObjectName>Account</inputObjectName>
-        <inputObjectQuerySequence>19.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>20.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -1354,8 +1422,8 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:BLAccountWaterSourceIntakeCategoryL1 &apos;Surface/\/\/Water&apos; == true false IF</formulaConverted>
-        <formulaExpression>IF(%BLAccountWaterSourceIntakeCategoryL1% == &apos;Surface Water&apos;,true,false)</formulaExpression>
+        <formulaConverted>| var:BLAccount:CategoryL1__c &quot;Surface/\/\/Water&quot; == true false IF</formulaConverted>
+        <formulaExpression>IF(%BLAccount:CategoryL1__c% == &quot;Surface Water&quot;,true,false)</formulaExpression>
         <formulaResultPath>isWSICatL1SurfaceWater</formulaResultPath>
         <formulaSequence>7.0</formulaSequence>
         <globalKey>GetBusinessLicenseDetailsCustom6748</globalKey>
@@ -1394,22 +1462,6 @@
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
         <outputFieldName>BLAccountFacilityHA</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>ORDER BY</filterOperator>
-        <filterValue>createddate desc</filterValue>
-        <globalKey>GetBusinessLicenseDetailsCustom3021</globalKey>
-        <inputObjectName>DocumentChecklistItem</inputObjectName>
-        <inputObjectQuerySequence>15.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetBusinessLicenseDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>DocumentChecklistItemERCP</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -1459,6 +1511,21 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <globalKey>71ffdf2a-44c0-4021-81b1-682f394ae03e</globalKey>
+        <inputFieldName>BLAccount:WaterSourceCategory__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountWaterSourceCategory</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <globalKey>GetBusinessLicenseDetailsCustom7075</globalKey>
         <inputFieldName>BLOrganization:Name</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
@@ -1478,7 +1545,7 @@
         <globalKey>GetBusinessLicenseDetailsCustom4697</globalKey>
         <inputFieldName>LinkedEntityId</inputFieldName>
         <inputObjectName>ContentDocumentLink</inputObjectName>
-        <inputObjectQuerySequence>10.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>11.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -1538,7 +1605,7 @@
         <globalKey>GetBusinessLicenseDetailsCustom9090</globalKey>
         <inputFieldName>RecordTypeName__c</inputFieldName>
         <inputObjectName>Account</inputObjectName>
-        <inputObjectQuerySequence>18.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>19.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -1610,7 +1677,7 @@
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <globalKey>GetBusinessLicenseDetailsCustom9170</globalKey>
-        <inputFieldName>WaterSuppliers:GARPScreeningOutcome__c</inputFieldName>
+        <inputFieldName>BLAccount:GARPScreeningOutcome__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
@@ -1618,6 +1685,7 @@
         <outputFieldName>BLAccountWaterSourceIntakeGARPScreeningOutcome</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -1686,11 +1754,11 @@
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <filterOperator>=</filterOperator>
-        <filterValue>DocChecklistERCPRecTypeId</filterValue>
+        <filterValue>DocChecklistERCPRecTypeId:Id</filterValue>
         <globalKey>GetBusinessLicenseDetailsCustom5943</globalKey>
         <inputFieldName>RecordTypeId</inputFieldName>
         <inputObjectName>DocumentChecklistItem</inputObjectName>
-        <inputObjectQuerySequence>15.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>16.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -1716,8 +1784,8 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:BLAccountWaterSourceIntakeCategoryL1 &apos;Groundwater&apos; == true false IF</formulaConverted>
-        <formulaExpression>IF(%BLAccountWaterSourceIntakeCategoryL1% == &apos;Groundwater&apos;,true,false)</formulaExpression>
+        <formulaConverted>| var:BLAccount:CategoryL1__c &quot;Groundwater&quot; == true false IF</formulaConverted>
+        <formulaExpression>IF(%BLAccount:CategoryL1__c% == &quot;Groundwater&quot;,true,false)</formulaExpression>
         <formulaResultPath>isWSICatL1GroundWater</formulaResultPath>
         <formulaSequence>6.0</formulaSequence>
         <globalKey>GetBusinessLicenseDetailsCustom2327</globalKey>
@@ -1752,11 +1820,27 @@
         <globalKey>GetBusinessLicenseDetailsCustom9072</globalKey>
         <inputFieldName>ParentId</inputFieldName>
         <inputObjectName>Account</inputObjectName>
-        <inputObjectQuerySequence>18.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>19.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
         <outputFieldName>WaterSuppliersDWS</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>ORDER BY</filterOperator>
+        <filterValue>createddate desc</filterValue>
+        <globalKey>d2f2a405-7f4b-4524-995d-1857dddac2e3</globalKey>
+        <inputObjectName>DocumentChecklistItem</inputObjectName>
+        <inputObjectQuerySequence>16.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>DocumentChecklistItemERCP</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -1791,21 +1875,6 @@
         <outputFieldName>AccountCategoryL3</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>9c3d896a-212e-4233-90a1-1c0377e304e0</globalKey>
-        <inputFieldName>BLAccount:WaterSourceCategory__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetBusinessLicenseDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>BLAccountWaterSourceCategory</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -1866,23 +1935,6 @@
     </omniDataTransformItem>
     <omniDataTransformItem>
         <disabled>false</disabled>
-        <filterGroup>1.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>&apos;OperatingPermitApplication&apos;</filterValue>
-        <globalKey>GetBusinessLicenseDetailsCustom6393</globalKey>
-        <inputFieldName>DeveloperName</inputFieldName>
-        <inputObjectName>RecordType</inputObjectName>
-        <inputObjectQuerySequence>2.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetBusinessLicenseDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>BLAConstructionPermitRecTypeId</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <globalKey>GetBusinessLicenseDetailsCustom6497</globalKey>
         <inputFieldName>BLAccount:AccountNumberRTPrefixed__c</inputFieldName>
@@ -1904,7 +1956,7 @@
         <globalKey>GetBusinessLicenseDetailsCustom6008</globalKey>
         <inputFieldName>RecordTypeId</inputFieldName>
         <inputObjectName>Account</inputObjectName>
-        <inputObjectQuerySequence>17.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>18.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -1921,7 +1973,7 @@
         <globalKey>GetBusinessLicenseDetailsCustom4905</globalKey>
         <inputFieldName>Id</inputFieldName>
         <inputObjectName>RegulatoryAuthorizationType</inputObjectName>
-        <inputObjectQuerySequence>12.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>13.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -1942,6 +1994,21 @@
         <outputFieldName>BLAccountDWSDetails:FacilitiesDWDDetails:FacilitiesCatL1DWDRadiologicalParameters</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>138a395c-166e-4c76-9fb7-da732b91d2f5</globalKey>
+        <inputFieldName>BLAccountParentAccRec:Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountParentAccName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -2019,7 +2086,7 @@
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <globalKey>GetBusinessLicenseDetailsCustom1101</globalKey>
-        <inputFieldName>WaterSuppliers:AquiferNumber__c</inputFieldName>
+        <inputFieldName>BLAccount:AquiferNumber__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
@@ -2027,6 +2094,7 @@
         <outputFieldName>BLAccountRelatedWaterSourceIntakeAquiferNumber</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -2094,7 +2162,7 @@
         <globalKey>GetBusinessLicenseDetailsCustom541</globalKey>
         <inputFieldName>ParentId</inputFieldName>
         <inputObjectName>Account</inputObjectName>
-        <inputObjectQuerySequence>21.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>22.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -2124,7 +2192,7 @@
         <filterValue>createdDate Desc</filterValue>
         <globalKey>GetBusinessLicenseDetailsCustom477</globalKey>
         <inputObjectName>Account</inputObjectName>
-        <inputObjectQuerySequence>8.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>9.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -2141,7 +2209,7 @@
         <globalKey>GetBusinessLicenseDetailsCustom9342</globalKey>
         <inputFieldName>DeveloperName</inputFieldName>
         <inputObjectName>RecordType</inputObjectName>
-        <inputObjectQuerySequence>14.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>15.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -2172,11 +2240,28 @@
         <globalKey>GetBusinessLicenseDetailsCustom7404</globalKey>
         <inputFieldName>ParentId</inputFieldName>
         <inputObjectName>Account</inputObjectName>
-        <inputObjectQuerySequence>20.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>21.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
         <outputFieldName>FacilitiesDWS</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>3.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>&apos;OperatingPermitApplication&apos;</filterValue>
+        <globalKey>41013e9c-7e4e-4de1-ba4e-64070a6314df</globalKey>
+        <inputFieldName>DeveloperName</inputFieldName>
+        <inputObjectName>RecordType</inputObjectName>
+        <inputObjectQuerySequence>2.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>BLAConstructionPermitRecTypeId</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -2231,7 +2316,7 @@
         <globalKey>GetBusinessLicenseDetailsCustom4144</globalKey>
         <inputFieldName>AccountId</inputFieldName>
         <inputObjectName>Asset</inputObjectName>
-        <inputObjectQuerySequence>11.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>12.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -2290,7 +2375,7 @@
         <globalKey>3a552a71-eaf0-47cf-af55-2bedc32d834e</globalKey>
         <inputFieldName>Name</inputFieldName>
         <inputObjectName>DocumentChecklistItem</inputObjectName>
-        <inputObjectQuerySequence>22.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>23.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -2350,7 +2435,7 @@
         <globalKey>GetBusinessLicenseDetailsCustom1168</globalKey>
         <inputFieldName>CategoryL1__c</inputFieldName>
         <inputObjectName>Account</inputObjectName>
-        <inputObjectQuerySequence>21.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>22.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -2376,8 +2461,8 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:BLAccountWaterSourceWaterSourceCategory &apos;Groundwater/\/\/-/\/\/Single/\/\/Source&apos; == var:BLAccountWaterSourceWaterSourceCategory &apos;Ground/\/\/and/\/\/Surface&apos; == var:BLAccountWaterSourceWaterSourceCategory &apos;Groundwater/\/\/-/\/\/Multiple/\/\/Sources&apos; == OR OR AND | var:BLAccountWaterSourceGARPScreeningOutcome &apos;GARP/\/\/-/\/\/Low/\/\/Risk/\/\/of/\/\/Pathogens&apos; == NOT true false IF</formulaConverted>
-        <formulaExpression>IF(AND(OR(%BLAccountWaterSourceWaterSourceCategory% == &apos;Groundwater - Single Source&apos;,OR(%BLAccountWaterSourceWaterSourceCategory% == &apos;Ground and Surface&apos;,%BLAccountWaterSourceWaterSourceCategory% == &apos;Groundwater - Multiple Sources&apos;))),NOT(%BLAccountWaterSourceGARPScreeningOutcome% == &apos;GARP - Low Risk of Pathogens&apos;),true,false)</formulaExpression>
+        <formulaConverted>| var:BLAccount:WaterSourceCategory__c &quot;Groundwater/\/\/-/\/\/Single/\/\/Source&quot; == var:BLAccount:WaterSourceCategory__c &quot;Ground/\/\/and/\/\/Surface&quot; == || var:BLAccount:GARPScreeningOutcome__c &quot;GARP/\/\/-/\/\/Low/\/\/Risk/\/\/of/\/\/Pathogens&quot; != &amp;&amp; true false IF</formulaConverted>
+        <formulaExpression>IF(((%BLAccount:WaterSourceCategory__c% == &quot;Groundwater - Single Source&quot; ) || (%BLAccount:WaterSourceCategory__c% ==  &quot;Ground and Surface&quot;)) &amp;&amp; (%BLAccount:GARPScreeningOutcome__c% != &quot;GARP - Low Risk of Pathogens&quot;),true,false)</formulaExpression>
         <formulaResultPath>isSourceEvaluationWaterTreatmentCond1</formulaResultPath>
         <formulaSequence>9.0</formulaSequence>
         <globalKey>GetBusinessLicenseDetailsCustom2483</globalKey>
@@ -2412,7 +2497,7 @@
         <globalKey>GetBusinessLicenseDetailsCustom1984</globalKey>
         <inputFieldName>AccountId</inputFieldName>
         <inputObjectName>DocumentChecklistItem</inputObjectName>
-        <inputObjectQuerySequence>15.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>16.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -2425,7 +2510,7 @@
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <globalKey>GetBusinessLicenseDetailsCustom6199</globalKey>
-        <inputFieldName>WaterSuppliers:Source_Water_Body__c</inputFieldName>
+        <inputFieldName>BLAccount:Source_Water_Body__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
@@ -2433,6 +2518,7 @@
         <outputFieldName>BLAccountWaterSourceIntakeSourceWaterBody</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -2443,7 +2529,7 @@
         <globalKey>GetBusinessLicenseDetailsCustom675</globalKey>
         <inputFieldName>CategoryL1__c</inputFieldName>
         <inputObjectName>Account</inputObjectName>
-        <inputObjectQuerySequence>20.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>21.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -2453,6 +2539,7 @@
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
+        <defaultValue>False</defaultValue>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <globalKey>GetBusinessLicenseDetailsCustom6167</globalKey>
@@ -2461,9 +2548,11 @@
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Boolean</outputFieldFormat>
         <outputFieldName>isWSICatL1GroundWater</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -2548,23 +2637,6 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>BLAConstructionPermitRecTypeId:Id</filterValue>
-        <globalKey>GetBusinessLicenseDetailsCustom4948</globalKey>
-        <inputFieldName>RecordTypeId</inputFieldName>
-        <inputObjectName>BusinessLicenseApplication</inputObjectName>
-        <inputObjectQuerySequence>3.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>GetBusinessLicenseDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>BLA</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
         <filterOperator>LIMIT</filterOperator>
         <filterValue>1</filterValue>
         <globalKey>GetBusinessLicenseDetailsCustom7417</globalKey>
@@ -2614,7 +2686,7 @@
         <globalKey>GetBusinessLicenseDetailsCustom1414</globalKey>
         <inputFieldName>DeveloperName</inputFieldName>
         <inputObjectName>RecordType</inputObjectName>
-        <inputObjectQuerySequence>16.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>17.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
@@ -2653,7 +2725,7 @@
     </omniDataTransformItem>
     <outputType>JSON</outputType>
     <previewJsonData>{
-  &quot;Id&quot; : &quot;0cEbZ0000000paPUAQ&quot;
+  &quot;Id&quot; : &quot;0cEbZ0000000ahpUAA&quot;
 }</previewJsonData>
     <processSuperBulk>false</processSuperBulk>
     <responseCacheTtlMinutes>0.0</responseCacheTtlMinutes>
