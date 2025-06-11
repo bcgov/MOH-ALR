@@ -1,81 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
     <sharingCriteriaRules>
-        <fullName>APFraserHA</fullName>
-        <accessLevel>Read</accessLevel>
-        <description>EHIS-188</description>
-        <label>AP - Fraser HA</label>
-        <sharedTo>
-            <group>EHISFHAReportingUser</group>
-        </sharedTo>
-        <criteriaItems>
-            <field>RecordTypeId</field>
-            <operation>equals</operation>
-            <value>Action Plan</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
-        <fullName>APInteriorHA</fullName>
-        <accessLevel>Read</accessLevel>
-        <description>EHIS-188</description>
-        <label>AP - Interior HA</label>
-        <sharedTo>
-            <group>EHISIHAReportingUser</group>
-        </sharedTo>
-        <criteriaItems>
-            <field>RecordTypeId</field>
-            <operation>equals</operation>
-            <value>Action Plan</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
-        <fullName>APNorthernHealth</fullName>
-        <accessLevel>Read</accessLevel>
-        <description>EHIS-188</description>
-        <label>AP - Northern Health</label>
-        <sharedTo>
-            <group>EHISNHAReportingUser</group>
-        </sharedTo>
-        <criteriaItems>
-            <field>RecordTypeId</field>
-            <operation>equals</operation>
-            <value>Action Plan</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
-        <fullName>APVancouverCoastalHealth</fullName>
-        <accessLevel>Read</accessLevel>
-        <description>EHIS-188</description>
-        <label>AP- VancouverCoastalHealth</label>
-        <sharedTo>
-            <group>EHISVCHReportingUser</group>
-        </sharedTo>
-        <criteriaItems>
-            <field>RecordTypeId</field>
-            <operation>equals</operation>
-            <value>Action Plan</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
-        <fullName>APVancouverIslandHealth</fullName>
-        <accessLevel>Read</accessLevel>
-        <description>EHIS-188</description>
-        <label>AP-Vancouver Island Health</label>
-        <sharedTo>
-            <group>EHISVCISReportingUser</group>
-        </sharedTo>
-        <criteriaItems>
-            <field>RecordTypeId</field>
-            <operation>equals</operation>
-            <value>Action Plan</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
         <fullName>ActionPlanSharingRuleALRAdmin</fullName>
         <accessLevel>Edit</accessLevel>
         <description>Read/Write Access to ALR Admin-as part of ALR-243</description>
@@ -151,12 +76,24 @@
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingOwnerRules>
-        <fullName>ActionPlanSharingRuleAdmin</fullName>
+        <fullName>PHOCSBusinessAdminOfficerPG</fullName>
         <accessLevel>Edit</accessLevel>
-        <description>EHIS-1847</description>
-        <label>ActionPlan Sharing Rule Admin</label>
+        <description>Generic PG to contain all EHIS PHOCS users</description>
+        <label>PHOCS Business Admin &amp; Officer PG</label>
         <sharedTo>
             <group>EHISUsersPG</group>
+        </sharedTo>
+        <sharedFrom>
+            <group>EHISUsersPG</group>
+        </sharedFrom>
+    </sharingOwnerRules>
+    <sharingOwnerRules>
+        <fullName>ReportingUser</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>EHIS-188</description>
+        <label>Reporting User</label>
+        <sharedTo>
+            <group>PHOCSReportingUserPG</group>
         </sharedTo>
         <sharedFrom>
             <group>EHISUsersPG</group>
