@@ -107,6 +107,37 @@ public class MassEmailControllerTest {
         Assert.isNotNull(accRec.size());
     }
     
+
+    //    updateBlaLateFeeStatus
+    @isTest
+    static void testUpdateBlaLateFeeStatus() {
+               
+     Account testAcc = [SELECT Id FROM Account where recordtype.developerName='Residence' limit 1];
+     RegulatoryAuthorizationType regAuth = [SELECT Id FROM RegulatoryAuthorizationType where Name='Mental Helath' limit 1];
+
+   // Create a Business License Application
+        BusinessLicenseApplication bla = new BusinessLicenseApplication(
+            RecordTypeId = Schema.SObjectType.BusinessLicenseApplication.getRecordTypeInfosByDeveloperName().get('Renewal').getRecordTypeId(),
+            AccountId = testAcc.Id,
+            LicenseTypeId = regAuth.Id,
+            Status = 'Ready for Renewal',
+            AppliedDate = DateTime.now(),
+            RenewalYear__c = String.valueOf(Date.today().year()),
+            RenewalDetail__c = 'Existing note'
+        );
+        insert bla;
+
+        Map<Id, String> blaIdDetailsMap = new Map<Id, String>{
+            bla.Id => 'Late fee applied due to delay'
+        };
+
+        String newStatus = 'Pending Payment';
+
+        Test.startTest();
+        List<BusinessLicenseApplication> updatedBlaList = BCMOH_UtilityClass.updateBlaLateFeeStatus(blaIdDetailsMap, newStatus);
+        Test.stopTest();
+        System.assertEquals(1, updatedBlaList.size(), 'One BLA record should be returned');
+    }
            
         //getDocGenProcRec
      @isTest
@@ -272,6 +303,22 @@ public class MassEmailControllerTest {
         Account acc = [SELECT Id, Status__c FROM Account WHERE Id = :residenceRec1.Id];
         System.assertEquals(BCMOH_Constants.accountStat, acc.Status__c);
         
+    }
+
+       @isTest
+    static void accountBlaQueryTest() {
+        BusinessLicenseApplication bla = [SELECT Id  FROM BusinessLicenseApplication  LIMIT 1];
+        Account testAcc = [SELECT Id FROM Account where recordtype.developerName='Residence' limit 1];
+        MassEmailController.getAccountId(bla.Id);
+        MassEmailController.updateAccountStatus(testAcc.Id);
+        MassEmailController.blaErrQuery(bla.Id);
+        MassEmailController.fetchTemplate('LateFee');
+    }
+
+    
+       @isTest
+    static void fetchTemplateTest() {
+        MassEmailController.fetchTemplate('LateFee');
     }
 
 }
