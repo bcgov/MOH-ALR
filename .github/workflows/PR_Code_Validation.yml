@@ -19,12 +19,15 @@ jobs:
     timeout-minutes: 60
     steps:
       # === Setup. We need to get the code, set up nodejs, and create the results directory. ===
+      
+      - name: Checkout code
       - uses: actions/checkout@v4
-      # ✅ Set correct Node.js version (required by scanner)
-      - name: Setup Node.js
+
+      # Set up Node.js v18      
+      - name: Use Node.js 18.18.0
         uses: actions/setup-node@v4
         with:
-          node-version: '20'  # Ensure Node.js v20 is used
+          node-version: '18.18.0'  # Ensure Node.js v20 is used
 
       # === Check Node.js version to ensure it is the correct version ===
       - name: Check Node.js version
