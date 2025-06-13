@@ -19,41 +19,13 @@ jobs:
     timeout-minutes: 60
     steps:
       # === Setup. We need to get the code, set up nodejs, and create the results directory. ===
-      
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Clear Node.js cache
-        run: |
-          rm -rf ~/.nvm
-          rm -rf ~/.npm
-          rm -rf ~/.cache
-
-      # Set up Node.js v18      
-      - name: Use Node.js 18.18.0
+      - uses: actions/checkout@v4
+     # ✅ Set correct Node.js version (required by scanner)
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18.18.0'  # Ensure Node.js v20 is used
-
-      # === Check Node.js version to ensure it is the correct version ===
-      - name: Check Node.js version
-        run: node --version  # This will output the Node version to verify if it's correctly set
-
-      # === Clear the npm cache to ensure no old versions cause issues ===
-      # - name: Clear npm cache
-      #  run: npm cache clean --force
-
-      # === Install dependencies to make sure everything is up-to-date ===
-      - name: Install dependencies
-        run: npm install
-
-       # Check installed npm packages to verify everything is installed correctly
-      - name: Check installed npm packages
-        run: npm list
-
-      # === Create the results directory for storing the results ===
+          node-version: '20'
       - run: mkdir smoke-test-results
-
       # === Make three attempts to install sfdx ===
       - name: 'Install Salesforce CLI'
         run: |
@@ -66,11 +38,11 @@ jobs:
       # === Attempt to install the scanner plugin ===
       - name: Install Scanner Plugin
         id: scanner_install
-        run: sf plugins:install @salesforce/sfdx-scanner
+        run: sfdx plugins:install @salesforce/sfdx-scanner@3.17.0
 
       # === Log the installed plugins for easier debugging ===
       - name: Log plugins
-        run: sf plugins
+        run: sfdx plugins
 
       # === Attempt to execute static source apexunit validations ===
       - name: Run static apexunit source validations
