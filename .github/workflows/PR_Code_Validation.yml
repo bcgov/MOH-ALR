@@ -20,7 +20,27 @@ jobs:
     steps:
       # === Setup. We need to get the code, set up nodejs, and create the results directory. ===
       - uses: actions/checkout@v4
+      # ✅ Set correct Node.js version (required by scanner)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'  # Ensure Node.js v20 is used
+
+      # === Check Node.js version to ensure it is the correct version ===
+      - name: Check Node.js version
+        run: node --version  # This will output the Node version to verify if it's correctly set
+
+      # === Clear the npm cache to ensure no old versions cause issues ===
+      - name: Clear npm cache
+        run: npm cache clean --force
+
+      # === Install dependencies to make sure everything is up-to-date ===
+      - name: Install dependencies
+        run: npm install
+
+      # === Create the results directory for storing the results ===
       - run: mkdir smoke-test-results
+
       # === Make three attempts to install sfdx ===
       - name: 'Install Salesforce CLI'
         run: |
