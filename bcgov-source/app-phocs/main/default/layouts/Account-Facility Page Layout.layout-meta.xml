@@ -362,7 +362,7 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>MobileFoodPremisesUnitType__c</field>
+                <field>LicencePlate__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -379,6 +379,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>SiteOfOperationIfLocationIsFixed__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>WasteDisposal__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -469,6 +473,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>NumberOfSeats__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>WaterSupply__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -673,9 +681,22 @@
     </relatedLists>
     <relatedLists>
         <fields>Name</fields>
+        <fields>Account</fields>
+        <fields>RegulatoryAuthorizationType</fields>
         <fields>Status</fields>
         <fields>PeriodStart</fields>
-        <relatedList>BusinessLicenses</relatedList>
+        <fields>PeriodEnd</fields>
+        <relatedList>BusinessLicense.Account__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>CASES.CASE_NUMBER</fields>
+        <fields>NAME</fields>
+        <fields>CASES.SUBJECT</fields>
+        <fields>CASES.PRIORITY</fields>
+        <fields>CASES.CREATED_DATE_DATE_ONLY</fields>
+        <fields>CASES.STATUS</fields>
+        <fields>OWNER_NAME</fields>
+        <relatedList>RelatedCaseList</relatedList>
     </relatedLists>
     <relatedLists>
         <relatedList>RelatedFileList</relatedList>
@@ -699,6 +720,15 @@
         <fields>EndDate</fields>
         <fields>IsActive</fields>
         <relatedList>RelatedAccountRelations</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>CONTACT.FULL_NAME</fields>
+        <fields>CONTACT.ACCOUNT_NAME</fields>
+        <fields>CONTACT.TITLE</fields>
+        <fields>CONTACT.EMAIL</fields>
+        <fields>CONTACT.PHONE1</fields>
+        <fields>ACCCONRELATION.ROLES</fields>
+        <relatedList>RelatedAccountContactRelationList</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>ASSET.NAME</fields>

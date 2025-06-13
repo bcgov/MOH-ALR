@@ -99,7 +99,21 @@
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
-        <fullName>ShareInspectionWithEHISadmin</fullName>
+        <fullName>ShareInspectionWithEHISofficer</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Share Inspection with EHIS Officer</label>
+        <sharedTo>
+            <group>EHIS_Officer_Users_PG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Inspection</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>ShareInspectionwithEHISAdmin</fullName>
         <accessLevel>Edit</accessLevel>
         <label>Share Inspection with EHIS Admin</label>
         <sharedTo>
@@ -113,11 +127,11 @@
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
-        <fullName>ShareInspectionWithEHISofficer</fullName>
-        <accessLevel>Edit</accessLevel>
-        <label>Share Inspection with EHIS Officer</label>
+        <fullName>Share_visit_records_with_NHA_reporting_user</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>Share visit records with NHA reporting user</label>
         <sharedTo>
-            <group>EHIS_Officer_Users_PG</group>
+            <group>EHISNHAReportingUser</group>
         </sharedTo>
         <criteriaItems>
             <field>RecordTypeId</field>
@@ -125,5 +139,65 @@
             <value>PHOCS Inspection</value>
         </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>SharevisitrecordswithFHAreportinguser</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>EHIS-188</description>
+        <label>Share visit records with FHA reporting user</label>
+        <sharedTo>
+            <group>EHISFHAReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Inspection</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>VisitNHA</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>EHIS-188</description>
+        <label>Visit - NHA</label>
+        <sharedTo>
+            <group>EHISNHAReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Inspection</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>VisitVCH</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>EHIS-188</description>
+        <label>Visit - VCH</label>
+        <sharedTo>
+            <group>EHISVCHReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Inspection</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>VisitVCIS</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>EHIS-188</description>
+        <label>Visit - VCIS</label>
+        <sharedTo>
+            <group>EHISVCISReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Inspection</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
 </SharingRules>

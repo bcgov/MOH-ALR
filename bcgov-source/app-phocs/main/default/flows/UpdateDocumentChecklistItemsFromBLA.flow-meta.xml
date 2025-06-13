@@ -56,9 +56,16 @@
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Name_contains_ERCP</name>
-            <conditionLogic>and</conditionLogic>
+            <conditionLogic>or</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.Name</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <elementReference>ERCP</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
                 <operator>Contains</operator>
                 <rightValue>
                     <elementReference>ERCP</elementReference>
@@ -67,7 +74,7 @@
             <connector>
                 <targetReference>Update_Document_Checklist_Items_ERCP</targetReference>
             </connector>
-            <label>Name contains ERCP</label>
+            <label>Name or Record Type Name contains ERCP</label>
         </rules>
     </decisions>
     <description>EHIS-905: Update DocumentChecklistItems record types based on PHOCS Business License Application record types</description>
@@ -94,7 +101,7 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordLookups>
-        <description>Get Business License Application records</description>
+        <description>Get Business License Application record</description>
         <name>Get_BLA</name>
         <label>Get BLA</label>
         <locationX>380</locationX>
