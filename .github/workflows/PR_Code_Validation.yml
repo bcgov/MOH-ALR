@@ -23,6 +23,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Clear Node.js cache
+        run: |
+          rm -rf ~/.nvm
+          rm -rf ~/.npm
+          rm -rf ~/.cache
+
       # Set up Node.js v18      
       - name: Use Node.js 18.18.0
         uses: actions/setup-node@v4
@@ -34,8 +40,8 @@ jobs:
         run: node --version  # This will output the Node version to verify if it's correctly set
 
       # === Clear the npm cache to ensure no old versions cause issues ===
-      - name: Clear npm cache
-        run: npm cache clean --force
+      # - name: Clear npm cache
+      #  run: npm cache clean --force
 
       # === Install dependencies to make sure everything is up-to-date ===
       - name: Install dependencies
