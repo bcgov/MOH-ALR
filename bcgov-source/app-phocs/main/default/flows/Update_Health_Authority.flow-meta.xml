@@ -4,12 +4,12 @@
         <description>Apex action to pass hyperlink and get Salesforce Id from hyperlink</description>
         <name>Extract_SF_ID_From_Hyperlink</name>
         <label>Extract SF ID From Hyperlink</label>
-        <locationX>1128</locationX>
+        <locationX>1172</locationX>
         <locationY>323</locationY>
         <actionName>PHOCSCustomConfiguration</actionName>
         <actionType>apex</actionType>
         <connector>
-            <targetReference>Check_Facility_HA_exists</targetReference>
+            <targetReference>Check_Facility_Hierarchy_exists</targetReference>
         </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
@@ -38,7 +38,7 @@
             <name>Interior</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Get_Facility_HA.Name</leftValueReference>
+                <leftValueReference>Get_Facility_Hierarchy.Name</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Interior</stringValue>
@@ -53,7 +53,7 @@
             <name>Fraser</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Get_Facility_HA.Name</leftValueReference>
+                <leftValueReference>Get_Facility_Hierarchy.Name</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Fraser</stringValue>
@@ -68,7 +68,7 @@
             <name>Vancouver_Coastal</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Get_Facility_HA.Name</leftValueReference>
+                <leftValueReference>Get_Facility_Hierarchy.Name</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Vancouver Coastal</stringValue>
@@ -83,7 +83,7 @@
             <name>Vancouver_Island</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Get_Facility_HA.Name</leftValueReference>
+                <leftValueReference>Get_Facility_Hierarchy.Name</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Vancouver Island</stringValue>
@@ -98,7 +98,7 @@
             <name>Northern</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Get_Facility_HA.Name</leftValueReference>
+                <leftValueReference>Get_Facility_Hierarchy.Name</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Northern</stringValue>
@@ -111,14 +111,14 @@
         </rules>
     </decisions>
     <decisions>
-        <description>To Check if Facility HA exists in Account</description>
-        <name>Check_Facility_HA_exists</name>
-        <label>Check Facility HA exists</label>
-        <locationX>1128</locationX>
+        <description>To Check if Facility Hierarchy exists in Account</description>
+        <name>Check_Facility_Hierarchy_exists</name>
+        <label>Check Facility Hierarchy exists</label>
+        <locationX>1172</locationX>
         <locationY>431</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
-            <name>Outcome_1_of_Check_Facility_HA_exists</name>
+            <name>Outcome_1_of_Check_Facility_Hierarchy_exists</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>getHyperlinkSFID</leftValueReference>
@@ -128,12 +128,12 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Get_Facility_HA</targetReference>
+                <targetReference>Get_Facility_Hierarchy</targetReference>
             </connector>
-            <label>Outcome 1 of Check Facility HA exists</label>
+            <label>Outcome 1 of Check Facility Hierarchy exists</label>
         </rules>
     </decisions>
-    <description>Flow to update Health Authority Field - EHIS-188</description>
+    <description>Flow to update Health Authority Field - EHIS-188 - Bug fix</description>
     <environments>Default</environments>
     <interviewLabel>Update Health Authority {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Update Health Authority</label>
@@ -157,9 +157,9 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordLookups>
-        <description>To extract facility HA account record</description>
-        <name>Get_Facility_HA</name>
-        <label>Get Facility HA</label>
+        <description>To extract facility Hierarchy account record</description>
+        <name>Get_Facility_Hierarchy</name>
+        <label>Get Facility Hierarchy</label>
         <locationX>710</locationX>
         <locationY>539</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
@@ -249,22 +249,22 @@
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <start>
-        <locationX>1002</locationX>
+        <locationX>1046</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Extract_SF_ID_From_Hyperlink</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
-            <field>FacilityHA__c</field>
+            <field>FacilityHierarchy__c</field>
             <operator>IsNull</operator>
             <value>
                 <booleanValue>false</booleanValue>
             </value>
         </filters>
         <filters>
-            <field>HealthAuthority__c</field>
-            <operator>IsNull</operator>
+            <field>FacilityHierarchy__c</field>
+            <operator>IsChanged</operator>
             <value>
                 <booleanValue>true</booleanValue>
             </value>
