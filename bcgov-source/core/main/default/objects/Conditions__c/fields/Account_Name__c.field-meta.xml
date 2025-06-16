@@ -2,14 +2,19 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Account_Name__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
-    <externalId>false</externalId>
     <label>Related Account</label>
     <lookupFilter>
         <active>true</active>
+        <booleanFilter>1 OR 2</booleanFilter>
         <filterItems>
             <field>Account.RecordType.DeveloperName</field>
             <operation>equals</operation>
             <value>Residence</value>
+        </filterItems>
+        <filterItems>
+            <field>$Source.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS-Conditions</value>
         </filterItems>
         <isOptional>false</isOptional>
     </lookupFilter>
