@@ -246,7 +246,7 @@ public class MassEmailControllerTest {
 
     
     
-     @isTest
+    @isTest
     static void updateBlaStatusTest() {
          RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
          Account residenceRec1 = TestDataFactory.createResidence('Residence', 'Test Residence', regAuth.Id, true);
@@ -275,7 +275,7 @@ public class MassEmailControllerTest {
         }
         
     }
-      @isTest
+    @isTest
     static void updateLateFeeBlaStatusTest() {
         RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
           Account residenceRec1 = TestDataFactory.createResidence('Residence', 'Test Residence', regAuth.Id, true);
@@ -305,20 +305,23 @@ public class MassEmailControllerTest {
         
     }
 
-       @isTest
+    @isTest
     static void accountBlaQueryTest() {
-        BusinessLicenseApplication bla = [SELECT Id  FROM BusinessLicenseApplication  LIMIT 1];
+        BusinessLicenseApplication bla = [SELECT Id ,AccountId FROM BusinessLicenseApplication  LIMIT 1];
         Account testAcc = [SELECT Id FROM Account where recordtype.developerName='Residence' limit 1];
-        MassEmailController.getAccountId(bla.Id);
+        Id returnId=MassEmailController.getAccountId(bla.Id);
         MassEmailController.updateAccountStatus(testAcc.Id);
         MassEmailController.blaErrQuery(bla.Id);
         MassEmailController.fetchTemplate('LateFee');
+        System.assertEquals(bla.AccountId, returnId);
     }
 
     
-       @isTest
+    @isTest
     static void fetchTemplateTest() {
-        MassEmailController.fetchTemplate('LateFee');
+        EmailTemplate emailTempRec =[Select Id, Name, DeveloperName, Description, Subject, HtmlValue, Body, RelatedEntityType from EmailTemplate where name='Renewal Late Fee Notification Letter'];
+        Map<Id, String> mapReturn= MassEmailController.fetchTemplate('LateFee');
+        System.assertEquals(emailTempRec.Id, mapReturn.keySet().iterator().next());
     }
 
 }
