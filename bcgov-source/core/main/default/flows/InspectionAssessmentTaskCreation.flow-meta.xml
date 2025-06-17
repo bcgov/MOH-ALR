@@ -43,6 +43,9 @@
         <locationY>1787</locationY>
         <actionName>InspTasksCreationController</actionName>
         <actionType>apex</actionType>
+        <connector>
+            <targetReference>Get_SignaturetaskActionPlanItem</targetReference>
+        </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>ATIId</name>
@@ -99,6 +102,36 @@
         </assignmentItems>
         <connector>
             <targetReference>ActionPlanItemValues</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>add_assessment_task</name>
+        <label>add assessment task</label>
+        <locationX>138</locationX>
+        <locationY>2111</locationY>
+        <assignmentItems>
+            <assignToReference>SignAssessmentTask.ParentId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>SignAssessmentTask.Name</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>signitem.Name</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>SignAssessmentTask.TaskType</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>SignatureTask</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>signitem</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -264,6 +297,20 @@ EHIS:1363 PHOCS - Updated Apex Action Name</description>
             <targetReference>getActionPlanItemIds</targetReference>
         </noMoreValuesConnector>
     </loops>
+    <loops>
+        <name>signitem</name>
+        <label>signitem</label>
+        <locationX>50</locationX>
+        <locationY>2003</locationY>
+        <collectionReference>Get_SignaturetaskActionPlanItem</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>add_assessment_task</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>CreateSignatureAssessment</targetReference>
+        </noMoreValuesConnector>
+    </loops>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -283,6 +330,58 @@ EHIS:1363 PHOCS - Updated Apex Action Name</description>
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>CreateSignatureAssessment</name>
+        <label>CreateSignatureAssessment</label>
+        <locationX>50</locationX>
+        <locationY>2303</locationY>
+        <assignRecordIdToReference>SignAssessmentID</assignRecordIdToReference>
+        <connector>
+            <targetReference>CreateSignatureTask</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>SignAssessmentTask.Name</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ParentId</field>
+            <value>
+                <elementReference>SignAssessmentTask.ParentId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>TaskType</field>
+            <value>
+                <stringValue>SignatureTask</stringValue>
+            </value>
+        </inputAssignments>
+        <object>AssessmentTask</object>
+    </recordCreates>
+    <recordCreates>
+        <name>CreateSignatureTask</name>
+        <label>CreateSignatureTask</label>
+        <locationX>50</locationX>
+        <locationY>2411</locationY>
+        <assignRecordIdToReference>SignatureTaskId</assignRecordIdToReference>
+        <connector>
+            <targetReference>UpdateAssessmentTask</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <stringValue>test</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ParentTaskId</field>
+            <value>
+                <elementReference>SignAssessmentID</elementReference>
+            </value>
+        </inputAssignments>
+        <object>SignatureTask</object>
+    </recordCreates>
     <recordLookups>
         <name>Actionplantempitem</name>
         <label>Actionplantempitem</label>
@@ -310,6 +409,34 @@ EHIS:1363 PHOCS - Updated Apex Action Name</description>
         <getFirstRecordOnly>false</getFirstRecordOnly>
         <object>ActionPlanTemplateItem</object>
         <queriedFields>Id</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_SignaturetaskActionPlanItem</name>
+        <label>Get SignaturetaskActionPlanItem</label>
+        <locationX>50</locationX>
+        <locationY>1895</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>signitem</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>ActionPlanTemplateVersionId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>NewActionPlan.ActionPlanTemplateVersionId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>ItemEntityType</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>SignatureTask</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>ActionPlanTemplateItem</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
@@ -389,6 +516,27 @@ EHIS:1363 PHOCS - Updated Apex Action Name</description>
         <object>Visit</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <recordUpdates>
+        <name>UpdateAssessmentTask</name>
+        <label>UpdateAssessmentTask</label>
+        <locationX>50</locationX>
+        <locationY>2519</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>SignAssessmentID</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>TaskDefinitionId</field>
+            <value>
+                <elementReference>SignatureTaskId</elementReference>
+            </value>
+        </inputAssignments>
+        <object>AssessmentTask</object>
+    </recordUpdates>
     <start>
         <locationX>485</locationX>
         <locationY>0</locationY>
@@ -545,6 +693,28 @@ EHIS:1363 PHOCS - Updated Apex Action Name</description>
         <isCollection>true</isCollection>
         <isInput>true</isInput>
         <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <name>SignAssessmentID</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>SignAssessmentTask</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>AssessmentTask</objectType>
+    </variables>
+    <variables>
+        <name>SignatureTaskId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
     </variables>
     <variables>
         <name>StoreLiteralValues</name>
