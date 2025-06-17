@@ -3021,7 +3021,7 @@
     &quot;element&quot; : &quot;PCAccountId&quot;,
     &quot;inputParam&quot; : &quot;AccountId&quot;
   }, {
-    &quot;element&quot; : &quot;RecordTypeDeveloperName&quot;,
+    &quot;element&quot; : &quot;setCaseRecTypeName&quot;,
     &quot;inputParam&quot; : &quot;CCRecordName&quot;
   } ],
   &quot;remoteTimeout&quot; : 30000,
@@ -3176,6 +3176,9 @@
   }, {
     &quot;element&quot; : &quot;PCAccountId&quot;,
     &quot;inputParam&quot; : &quot;AccountId&quot;
+  }, {
+    &quot;element&quot; : &quot;setCaseRecTypeName&quot;,
+    &quot;inputParam&quot; : &quot;caseRecTypeName&quot;
   } ],
   &quot;remoteTimeout&quot; : 30000,
   &quot;responseJSONPath&quot; : &quot;&quot;,
@@ -3311,6 +3314,9 @@
   &quot;dataRaptor Input Parameters&quot; : [ {
     &quot;element&quot; : &quot;CaseWithoutAccount&quot;,
     &quot;inputParam&quot; : &quot;LookupKey&quot;
+  }, {
+    &quot;element&quot; : &quot;setCaseRecTypeName&quot;,
+    &quot;inputParam&quot; : &quot;caseRecTypeName&quot;
   } ],
   &quot;ignoreCache&quot; : true,
   &quot;bundle&quot; : &quot;findCasesWithoutAcTA&quot;,
@@ -4025,7 +4031,8 @@
   &quot;controlWidth&quot; : 12,
   &quot;label&quot; : &quot;SetNewCaseRecordType&quot;,
   &quot;elementValueMap&quot; : {
-    &quot;NewCaseRecTypeId&quot; : &quot;=IF(%PHOCSPCRecTypeDeveloperName% == \&quot;PHOCSPublicComplaint\&quot;, %PHOCSCaseRecTypeId% , %RecordTypeId%)&quot;
+    &quot;NewCaseRecTypeId&quot; : &quot;=IF(%PHOCSPCRecTypeDeveloperName% == \&quot;PHOCSPublicComplaint\&quot;, %PHOCSCaseRecTypeId% , %RecordTypeId%)&quot;,
+    &quot;setCaseRecTypeName&quot; : &quot;=IF(%PHOCSPCRecTypeDeveloperName% == \&quot;PHOCSPublicComplaint\&quot;, %PHOCSCaseRecTypeDevName% , %RecordTypeDeveloperName%)&quot;
   },
   &quot;showPersistentComponent&quot; : [ true, false ],
   &quot;show&quot; : null,
