@@ -318,6 +318,12 @@ private class ChangeAccountOwnerTest {
         Case caseRec = new Case(AccountId=acc.Id, Status='Under Inspection',OwnerId=oldUser.Id);
         insert caseRec;
         
+
+        Account accCase=[Select id,ownerId from Account where id=:acc.Id];
+        
+        Case caseRec2 = new Case(AccountId=acc.Id, Status='Under Inspection',OwnerId=accCase.OwnerId);
+        insert caseRec2;
+        
         BusinessLicenseApplication bla = TestDataFactory.createRenewalBla(acc.LicenseType__c, acc.Id, true);
         
         Id stExam = Schema.SObjectType.BusinessLicenseApplication.getRecordTypeInfosByName().get('New License').getRecordTypeId();
