@@ -84,6 +84,7 @@
 }</expectedOutputJson>
     <fieldLevelSecurityEnabled>false</fieldLevelSecurityEnabled>
     <inputType>JSON</inputType>
+    <isManagedUsingStdDesigner>false</isManagedUsingStdDesigner>
     <name>TransformBLPoolConstructionPermit</name>
     <nullInputsIncludedInOutput>false</nullInputsIncludedInOutput>
     <omniDataTransformItem>
@@ -229,21 +230,6 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>62909712-5e3f-4dd2-aabe-c51521194bc8</globalKey>
-        <inputFieldName>DocumentChecklistItems:FileUploadDate</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>TransformBLPoolConstructionPermit</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>DocumentChecklistItems:FileUploadDate</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
         <globalKey>TransformBLPoolConstructionPermitCustom0jIbZ0000002JxpUAEItem19</globalKey>
         <inputFieldName>BLADescriptionofProposedWorks</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
@@ -329,14 +315,15 @@
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <globalKey>TransformBLPoolConstructionPermitCustom0jIbZ0000002JxpUAEItem25</globalKey>
-        <inputFieldName>DocumentChecklistItems:DocumentChecklistItemsName</inputFieldName>
+        <inputFieldName>MergedDocumentChecklistItems</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>TransformBLPoolConstructionPermit</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>DocumentChecklistItems:DocumentChecklistItemsName</outputFieldName>
+        <outputFieldName>MergedDocumentChecklistItems</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -363,20 +350,6 @@
         <name>TransformBLPoolConstructionPermit</name>
         <outputCreationSequence>1.0</outputCreationSequence>
         <outputFieldName>WaterSuppliers:WaterSuppliersName</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>TransformBLPoolConstructionPermitCustom0jIbZ0000002JxpUAEItem28</globalKey>
-        <inputFieldName>DocumentChecklistItems:DocumentDate</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>TransformBLPoolConstructionPermit</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>DocumentChecklistItems:DocumentDate</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -496,6 +469,9 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <formulaConverted>| &quot;Id&quot; | var:DocumentChecklistItems LIST | var:DocumentChecklistUploadedFiles LIST LISTMERGE</formulaConverted>
+        <formulaExpression>LISTMERGE(&quot;Id&quot;,LIST(DocumentChecklistItems),LIST(DocumentChecklistUploadedFiles))</formulaExpression>
+        <formulaResultPath>MergedDocumentChecklistItems</formulaResultPath>
         <formulaSequence>1.0</formulaSequence>
         <globalKey>TransformBLPoolConstructionPermitCustom0jIbZ0000002JxpUAEItem0</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
@@ -636,44 +612,65 @@
     </omniDataTransformItem>
     <outputType>JSON</outputType>
     <previewJsonData>{
-  &quot;BLIdentifier&quot; : &quot;2025-0000000017&quot;,
-  &quot;BLOrganizationBillingStreet&quot; : &quot;Owasso Billing Address&quot;,
-  &quot;BLPeriodStart&quot; : &quot;2025-04-16T19:00:00.000Z&quot;,
-  &quot;BLOrganizationId&quot; : &quot;001bZ0000081P7vQAE&quot;,
-  &quot;BLOrganizationBillingCity&quot; : &quot;Montreal&quot;,
-  &quot;WaterSuppliers&quot; : {
-    &quot;WaterSuppliersName&quot; : &quot;Test Water source Intake Account&quot;
+  &quot;BLOrganizationName&quot; : &quot;Test Business Entity&quot;,
+  &quot;isSourceEvaluationWaterTreatmentCond3&quot; : false,
+  &quot;isSourceEvaluationWaterTreatmentCond2&quot; : false,
+  &quot;BLAccountPHOWaterSourceCategory&quot; : &quot;Small Water System &lt;50&quot;,
+  &quot;BLAccountPHOWaterSystemSizeCategory&quot; : &quot;Small Water System &lt;50&quot;,
+  &quot;isSourceEvaluationWaterTreatmentCond1&quot; : false,
+  &quot;BLAEngineeringDesignFirmAddress&quot; : &quot;    &quot;,
+  &quot;CarePrograms&quot; : {
+    &quot;CareProgramToalCapacity&quot; : &quot;10.0&quot;
   },
-  &quot;BLAOwnerName&quot; : &quot;Rahul Patle&quot;,
-  &quot;BLOrganizationBillingCountry&quot; : &quot;Canada&quot;,
-  &quot;BLAccountBillingAddress&quot; : &quot;    &quot;,
+  &quot;BLOrganizationBillingState&quot; : &quot;BC&quot;,
+  &quot;BLOrganizationAccountName&quot; : &quot;Test Business Entity&quot;,
+  &quot;BLAccountFacilityHA&quot; : &quot;&lt;a href=\&quot;/001bZ000008XMq7QAG\&quot; target=\&quot;_self\&quot;&gt;Northern&lt;/a&gt;&quot;,
   &quot;DocumentChecklistItems&quot; : [ {
-    &quot;DocumentChecklistItemsName&quot; : &quot;2. Manufacturer’s Technical Specifications&quot;
+    &quot;DocumentChecklistItemsName&quot; : &quot;1. Stamped and sealed engineering drawings&quot;,
+    &quot;Id&quot; : &quot;0ddbZ000000VmRlQAK&quot;
   }, {
-    &quot;DocumentDate&quot; : &quot;2024-07-01&quot;,
-    &quot;DocumentChecklistItemsName&quot; : &quot;1. Cover Letter&quot;
-  }, {
-    &quot;DocumentChecklistItemsName&quot; : &quot;10. Additional Plans&quot;
-  }, {
-    &quot;DocumentChecklistItemsName&quot; : &quot;7. Engineered Plans&quot;
-  }, {
-    &quot;DocumentChecklistItemsName&quot; : &quot;6. Basic Plans iii. Schematic Diagram(s)&quot;
-  }, {
-    &quot;DocumentChecklistItemsName&quot; : &quot;9. Distribution System Map&quot;
-  }, {
-    &quot;DocumentChecklistItemsName&quot; : &quot;11. Process Schematic Diagram&quot;
-  }, {
-    &quot;DocumentChecklistItemsName&quot; : &quot;8. Source Approval&quot;
-  }, {
-    &quot;DocumentChecklistItemsName&quot; : &quot;3. Design Brief&quot;
-  }, {
-    &quot;DocumentChecklistItemsName&quot; : &quot;5. Basic Plans ii. Site Plan&quot;
-  }, {
-    &quot;DocumentChecklistItemsName&quot; : &quot;4. Basic Plans i. Location Map&quot;
+    &quot;DocumentChecklistItemsName&quot; : &quot;2. Pool Data Sheet (for each pool)&quot;,
+    &quot;Id&quot; : &quot;0ddbZ000000VmRmQAK&quot;
   } ],
-  &quot;BLOrganizationBillingState&quot; : &quot;QC&quot;,
-  &quot;BLOrganizationBillingPostalCode&quot; : &quot;74055&quot;,
-  &quot;BLOrganizationName&quot; : &quot;Montreal Water System&quot;
+  &quot;BLAccountBillingAddress&quot; : &quot;    &quot;,
+  &quot;AccountCategoryL1&quot; : &quot;Public&quot;,
+  &quot;AccountCategoryL2&quot; : &quot;Outdoor Pool&quot;,
+  &quot;BLAccountPhysicalAddress&quot; : &quot;346 Emerald Street Kingston ON K7P 3C9 CA&quot;,
+  &quot;BLOrganizationHA&quot; : &quot;&lt;a href=\&quot;/001bZ000008XMq7QAG\&quot; target=\&quot;_self\&quot;&gt;Northern&lt;/a&gt;&quot;,
+  &quot;ConstructionPermitDocumentTemplateName&quot; : &quot;ConstructionPermitforWaterSupplySystem&quot;,
+  &quot;ConstructionPermitDocumentTemplateId&quot; : &quot;2dtbZ00000013ALQAY&quot;,
+  &quot;BLAccountHealthAuthority&quot; : &quot;Northern Health - NH&quot;,
+  &quot;BLOrganizationBillingAddress&quot; : &quot;Test Vancouver BC V5X 3K4 CA&quot;,
+  &quot;BLOrganizationId&quot; : &quot;001bZ00000B1q4gQAB&quot;,
+  &quot;BLIdentifier&quot; : &quot;2025-0000000060&quot;,
+  &quot;CurrentDate&quot; : &quot;06/18/2025&quot;,
+  &quot;BLOrganizationBillingPostalCode&quot; : &quot;V5X 3K4&quot;,
+  &quot;BLAApplicantMailingAddress&quot; : &quot;    &quot;,
+  &quot;BLAccountName&quot; : &quot;Test Recreational Water3&quot;,
+  &quot;RegulatoryAuthorizationTypeName&quot; : &quot;Pool Construction Permit&quot;,
+  &quot;BLAccountNumber&quot; : &quot;FA-00499&quot;,
+  &quot;BLAccountId&quot; : &quot;FA-00499&quot;,
+  &quot;DocumentChecklistUploadedFiles&quot; : [ {
+    &quot;FileUploadDate&quot; : &quot;05/30/2025&quot;,
+    &quot;Id&quot; : &quot;0ddbZ000000VmRlQAK&quot;
+  }, {
+    &quot;FileUploadDate&quot; : &quot;06/18/2025&quot;,
+    &quot;Id&quot; : &quot;0ddbZ000000VmRmQAK&quot;
+  } ],
+  &quot;BLOrganizationBillingCountry&quot; : &quot;CA&quot;,
+  &quot;isWSICatL1GroundWater&quot; : false,
+  &quot;BLAccountPhysicalAddressCity&quot; : &quot;Kingston&quot;,
+  &quot;BLAccountFacilityHAName&quot; : &quot;Northern&quot;,
+  &quot;BLOrganizationBillingCity&quot; : &quot;Vancouver&quot;,
+  &quot;BLPeriodStart&quot; : &quot;05/30/2025&quot;,
+  &quot;BLAccountDWSDetails&quot; : {
+    &quot;FacilitiesDWTDetails&quot; : {
+      &quot;BLAccountPhysicalAddress&quot; : &quot;346 Emerald Street Kingston ON K7P 3C9 CA&quot;
+    }
+  },
+  &quot;BLOrganizationBillingStreet&quot; : &quot;Test&quot;,
+  &quot;BLAccountParentAccName&quot; : &quot;Test Business Entity&quot;,
+  &quot;isWSICatL1SurfaceWater&quot; : false
 }</previewJsonData>
     <processSuperBulk>false</processSuperBulk>
     <responseCacheTtlMinutes>0.0</responseCacheTtlMinutes>
