@@ -83,7 +83,7 @@
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
         <outputFieldFormat>Date(MM/dd/yyyy)</outputFieldFormat>
-        <outputFieldName>DocumentChecklistItems:FileUploadDate</outputFieldName>
+        <outputFieldName>DocumentChecklistUploadedFiles:FileUploadDate</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -201,6 +201,23 @@
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>FacilitiesDWT:Id</filterValue>
+        <globalKey>dca266b0-1b48-41fc-ad7f-eea4a8425878</globalKey>
+        <inputFieldName>WaterTreatmentFacility__c</inputFieldName>
+        <inputObjectName>Asset</inputObjectName>
+        <inputObjectQuerySequence>25.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>FacilitiesDWT:AssetDetails</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -396,7 +413,7 @@
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
-        <disabled>false</disabled>
+        <disabled>true</disabled>
         <filterGroup>0.0</filterGroup>
         <globalKey>GetBusinessLicenseDetailsCustom3218</globalKey>
         <inputFieldName>WaterSuppliers:WaterSourceCategory__c</inputFieldName>
@@ -407,6 +424,7 @@
         <outputFieldName>BLAccountWaterSourceIntakeWaterSourceCategory</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -486,7 +504,7 @@
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
-        <disabled>false</disabled>
+        <disabled>true</disabled>
         <filterGroup>0.0</filterGroup>
         <globalKey>GetBusinessLicenseDetailsCustom7484</globalKey>
         <inputFieldName>WaterSuppliers:CategoryL1__c</inputFieldName>
@@ -497,6 +515,22 @@
         <outputFieldName>BLAccountWaterSourceIntakeCategoryL1</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>d8a006fe-1543-4ac8-929e-e5dbb65da7d0</globalKey>
+        <inputFieldName>DocumentChecklistItems:Id</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>DocumentChecklistItems:Id</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -716,7 +750,7 @@
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>BLAccountDWS:FacilitiesDWTDetails:FacilityCatL1DWTTreatmentMethodType</outputFieldName>
+        <outputFieldName>BLAccountDWSDetails:FacilitiesDWTDetails:FacilityCatL1DWTTreatmentMethodType</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -1078,6 +1112,21 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <globalKey>1a24bf15-b6a6-44dd-9dbe-bc205c5c9cdd</globalKey>
+        <inputFieldName>FacilitiesDWT:AssetDetails:TreatmentMethod__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountDWSDetails:FacilitiesDWTDetails:AssetDetails:TreatmentMethod</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <globalKey>3d41ccaf-1956-4fe3-a821-573e49331351</globalKey>
         <inputFieldName>BLAccount:LegalLandDescription__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
@@ -1085,6 +1134,68 @@
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
         <outputFieldName>BLAccountLegalLandDescription</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>3ddd0690-06e2-4276-be3e-e9fe311239e9</globalKey>
+        <inputFieldName>FacilitiesDWT:AssetDetails:Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountDWSDetails:FacilitiesDWTDetails:AssetDetails:Name</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>AssetTreatmentMethodRecType:Id</filterValue>
+        <globalKey>4b37aa7a-78df-4474-8260-e26e67503cb6</globalKey>
+        <inputFieldName>RecordTypeId</inputFieldName>
+        <inputObjectName>Asset</inputObjectName>
+        <inputObjectQuerySequence>25.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>FacilitiesDWT:AssetDetails</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>4048ce0f-4e71-4642-8d1e-31b3f94077cc</globalKey>
+        <inputFieldName>FacilitiesDWT:AssetDetails:CryptosporidiumCredits__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountDWSDetails:FacilitiesDWTDetails:AssetDetails:CryptosporidiumCredits</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>e6060472-e6bb-4c60-82db-460d7b3176f6</globalKey>
+        <inputFieldName>DocumentChecklistUploadedFiles:LinkedEntityId</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>DocumentChecklistUploadedFiles:Id</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -1154,6 +1265,23 @@
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <filterOperator>=</filterOperator>
+        <filterValue>&apos;Treatment_Method&apos;</filterValue>
+        <globalKey>f3b433df-64f2-4108-93cc-22c0e82a2a5f</globalKey>
+        <inputFieldName>DeveloperName</inputFieldName>
+        <inputObjectName>RecordType</inputObjectName>
+        <inputObjectQuerySequence>24.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>AssetTreatmentMethodRecType</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
         <filterValue>BLA:Id</filterValue>
         <globalKey>35d9f767-06e9-45fa-b3b4-3013093b7ef7</globalKey>
         <inputFieldName>ParentRecordId</inputFieldName>
@@ -1165,6 +1293,21 @@
         <outputFieldName>DocChecklistSewerageSystem</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>987cf89f-d980-444f-be4e-de1563c1fd98</globalKey>
+        <inputFieldName>FacilitiesDWT:AssetDetails:TreatmentMethodType__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountDWSDetails:FacilitiesDWTDetails:AssetDetails:TreatmentMethodType</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -1579,6 +1722,21 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <globalKey>eb567a4f-3d62-4bb9-b6ad-838cf49880eb</globalKey>
+        <inputFieldName>FacilitiesDWT:AssetDetails:OtherTreatmentMethod__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountDWSDetails:FacilitiesDWTDetails:AssetDetails:OtherTreatmentMethod</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <globalKey>GetBusinessLicenseDetailsCustom668</globalKey>
         <inputFieldName>CarePrograms:TotalCapacity__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
@@ -1762,7 +1920,7 @@
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <filterOperator>=</filterOperator>
-        <filterValue>DocChecklistERCPRecTypeId:Id</filterValue>
+        <filterValue>DocChecklistERCPRecType:Id</filterValue>
         <globalKey>GetBusinessLicenseDetailsCustom5943</globalKey>
         <inputFieldName>RecordTypeId</inputFieldName>
         <inputObjectName>DocumentChecklistItem</inputObjectName>
@@ -1807,7 +1965,7 @@
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
-        <disabled>false</disabled>
+        <disabled>true</disabled>
         <filterGroup>0.0</filterGroup>
         <globalKey>GetBusinessLicenseDetailsCustom8700</globalKey>
         <inputFieldName>BLA:Name</inputFieldName>
@@ -1818,6 +1976,7 @@
         <outputFieldName>BLADetails:BLAName</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -2016,6 +2175,21 @@
         <name>GetBusinessLicenseDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
         <outputFieldName>BLAccountParentAccName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>7d18cad3-00ba-4a68-9ded-92a7149a182a</globalKey>
+        <inputFieldName>FacilitiesDWT:AssetDetails:GiardiaCredits__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountDWSDetails:FacilitiesDWTDetails:AssetDetails:GiardiaCredits</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -2275,6 +2449,21 @@
         <outputFieldName>BLAConstructionPermitRecTypeId</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>e7b52abb-c683-41b0-aea7-6daf2a386c5d</globalKey>
+        <inputFieldName>FacilitiesDWT:AssetDetails:VirusCredits__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountDWSDetails:FacilitiesDWTDetails:AssetDetails:VirusCredits</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -2663,7 +2852,7 @@
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
-        <disabled>false</disabled>
+        <disabled>true</disabled>
         <filterGroup>0.0</filterGroup>
         <globalKey>GetBusinessLicenseDetailsCustom8346</globalKey>
         <inputFieldName>WaterSuppliers:Name</inputFieldName>
@@ -2674,6 +2863,7 @@
         <outputFieldName>WaterSuppliers:WaterSuppliersName</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -2739,7 +2929,7 @@
     </omniDataTransformItem>
     <outputType>JSON</outputType>
     <previewJsonData>{
-  &quot;Id&quot; : &quot;0cEbZ0000000ahpUAA&quot;
+  &quot;Id&quot; : &quot;0cEbZ0000000aoHUAQ&quot;
 }</previewJsonData>
     <processSuperBulk>false</processSuperBulk>
     <responseCacheTtlMinutes>0.0</responseCacheTtlMinutes>
