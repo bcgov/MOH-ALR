@@ -107,6 +107,37 @@ public class MassEmailControllerTest {
         Assert.isNotNull(accRec.size());
     }
     
+
+    //    updateBlaLateFeeStatus
+    @isTest
+    static void testUpdateBlaLateFeeStatus() {
+               
+     Account testAcc = [SELECT Id FROM Account where recordtype.developerName='Residence' limit 1];
+     RegulatoryAuthorizationType regAuth = [SELECT Id FROM RegulatoryAuthorizationType where Name='Mental Helath' limit 1];
+
+   // Create a Business License Application
+        BusinessLicenseApplication bla = new BusinessLicenseApplication(
+            RecordTypeId = Schema.SObjectType.BusinessLicenseApplication.getRecordTypeInfosByDeveloperName().get('Renewal').getRecordTypeId(),
+            AccountId = testAcc.Id,
+            LicenseTypeId = regAuth.Id,
+            Status = 'Ready for Renewal',
+            AppliedDate = DateTime.now(),
+            RenewalYear__c = String.valueOf(Date.today().year()),
+            RenewalDetail__c = 'Existing note'
+        );
+        insert bla;
+
+        Map<Id, String> blaIdDetailsMap = new Map<Id, String>{
+            bla.Id => 'Late fee applied due to delay'
+        };
+
+        String newStatus = 'Pending Payment';
+
+        Test.startTest();
+        List<BusinessLicenseApplication> updatedBlaList = BCMOH_UtilityClass.updateBlaLateFeeStatus(blaIdDetailsMap, newStatus);
+        Test.stopTest();
+        System.assertEquals(1, updatedBlaList.size(), 'One BLA record should be returned');
+    }
            
         //getDocGenProcRec
      @isTest
@@ -215,7 +246,7 @@ public class MassEmailControllerTest {
 
     
     
-     @isTest
+    @isTest
     static void updateBlaStatusTest() {
          RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
          Account residenceRec1 = TestDataFactory.createResidence('Residence', 'Test Residence', regAuth.Id, true);
@@ -244,7 +275,7 @@ public class MassEmailControllerTest {
         }
         
     }
-      @isTest
+    @isTest
     static void updateLateFeeBlaStatusTest() {
         RegulatoryAuthorizationType regAuth = TestDataFactory.createRegAuth('Mental Helath', 'License', 'MH', 1, 2, 3, 4, true);
           Account residenceRec1 = TestDataFactory.createResidence('Residence', 'Test Residence', regAuth.Id, true);
@@ -272,6 +303,25 @@ public class MassEmailControllerTest {
         Account acc = [SELECT Id, Status__c FROM Account WHERE Id = :residenceRec1.Id];
         System.assertEquals(BCMOH_Constants.accountStat, acc.Status__c);
         
+    }
+
+    @isTest
+    static void accountBlaQueryTest() {
+        BusinessLicenseApplication bla = [SELECT Id ,AccountId FROM BusinessLicenseApplication  LIMIT 1];
+        Account testAcc = [SELECT Id FROM Account where recordtype.developerName='Residence' limit 1];
+        Id returnId=MassEmailController.getAccountId(bla.Id);
+        MassEmailController.updateAccountStatus(testAcc.Id);
+        MassEmailController.blaErrQuery(bla.Id);
+        MassEmailController.fetchTemplate('LateFee');
+        System.assertEquals(bla.AccountId, returnId);
+    }
+
+    
+    @isTest
+    static void fetchTemplateTest() {
+        EmailTemplate emailTempRec =[Select Id, Name, DeveloperName, Description, Subject, HtmlValue, Body, RelatedEntityType from EmailTemplate where name='Renewal Late Fee Notification Letter'];
+        Map<Id, String> mapReturn= MassEmailController.fetchTemplate('LateFee');
+        System.assertEquals(emailTempRec.Id, mapReturn.keySet().iterator().next());
     }
 
 }
