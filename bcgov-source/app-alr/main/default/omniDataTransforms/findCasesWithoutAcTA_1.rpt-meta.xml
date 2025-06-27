@@ -6,21 +6,37 @@
     <errorIgnored>false</errorIgnored>
     <fieldLevelSecurityEnabled>false</fieldLevelSecurityEnabled>
     <inputType>JSON</inputType>
+    <isManagedUsingStdDesigner>false</isManagedUsingStdDesigner>
     <name>findCasesWithoutAcTA</name>
     <nullInputsIncludedInOutput>false</nullInputsIncludedInOutput>
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>&apos;PublicComplaintCase&apos;</filterValue>
-        <globalKey>findCasesWithoutAcTACustom6176</globalKey>
-        <inputFieldName>RecordType.DeveloperName</inputFieldName>
+        <globalKey>9abdb17a-34b0-42b5-a038-a108596277c1</globalKey>
+        <inputFieldName>PHOCSCasesWithoutACTA:Id</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>findCasesWithoutAcTA</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>PHOCSCasesWithoutACTACaseId</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>LIKE</filterOperator>
+        <filterValue>LookupKey</filterValue>
+        <globalKey>8a8fbdf7-076f-45e9-a440-0b7fee1c6aed</globalKey>
+        <inputFieldName>CaseNumber</inputFieldName>
         <inputObjectName>Case</inputObjectName>
-        <inputObjectQuerySequence>1.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>2.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>findCasesWithoutAcTA</name>
         <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>CasesWithoutACTA</outputFieldName>
+        <outputFieldName>PHOCSCasesWithoutACTA</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -47,7 +63,39 @@
         <filterGroup>0.0</filterGroup>
         <filterOperator>LIMIT</filterOperator>
         <filterValue>10</filterValue>
-        <globalKey>findCasesWithoutAcTACustom4819</globalKey>
+        <globalKey>fd857c1c-6b03-4ce7-b960-66ecd23616eb</globalKey>
+        <inputObjectName>Case</inputObjectName>
+        <inputObjectQuerySequence>2.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>findCasesWithoutAcTA</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>PHOCSCasesWithoutACTA</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>7809f5d2-5d16-4235-b02f-92c9925a3c3a</globalKey>
+        <inputFieldName>PHOCSCasesWithoutACTA:CaseNumber</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>findCasesWithoutAcTA</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>PHOCSCasesWithoutACTACaseNumber</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>&apos;PublicComplaintCase&apos;</filterValue>
+        <globalKey>findCasesWithoutAcTACustom6176</globalKey>
+        <inputFieldName>RecordType.DeveloperName</inputFieldName>
         <inputObjectName>Case</inputObjectName>
         <inputObjectQuerySequence>1.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
@@ -75,6 +123,22 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <filterOperator>LIMIT</filterOperator>
+        <filterValue>10</filterValue>
+        <globalKey>findCasesWithoutAcTACustom4819</globalKey>
+        <inputObjectName>Case</inputObjectName>
+        <inputObjectQuerySequence>1.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>findCasesWithoutAcTA</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>CasesWithoutACTA</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <globalKey>findCasesWithoutAcTACustom3536</globalKey>
         <inputFieldName>CasesWithoutACTA:Id</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
@@ -88,7 +152,8 @@
     </omniDataTransformItem>
     <outputType>JSON</outputType>
     <previewJsonData>{
-  &quot;LookupKey&quot; : &quot;000&quot;
+  &quot;LookupKey&quot; : &quot;00033673&quot;,
+  &quot;caseRecTypeName&quot; : &quot;PublicComplaintCase&quot;
 }</previewJsonData>
     <processSuperBulk>false</processSuperBulk>
     <responseCacheTtlMinutes>0.0</responseCacheTtlMinutes>
