@@ -1422,7 +1422,7 @@
   &quot;maxLength&quot; : 255,
   &quot;HTMLTemplateId&quot; : &quot;&quot;
 }</propertySetConfig>
-                <sequenceNumber>14.0</sequenceNumber>
+                <sequenceNumber>13.0</sequenceNumber>
                 <type>Text</type>
             </childElements>
             <childElements>
@@ -1807,7 +1807,7 @@
   },
   &quot;controllingField&quot; : {
     &quot;element&quot; : &quot;&quot;,
-    &quot;type&quot; : &quot;Custom&quot;,
+    &quot;type&quot; : &quot;&quot;,
     &quot;source&quot; : &quot;&quot;
   },
   &quot;show&quot; : null,
@@ -2613,7 +2613,7 @@
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;mask&quot; : &quot;&quot;
 }</propertySetConfig>
-                <sequenceNumber>11.0</sequenceNumber>
+                <sequenceNumber>14.0</sequenceNumber>
                 <type>Text</type>
             </childElements>
             <childElements>
@@ -2677,7 +2677,7 @@
   &quot;textKey&quot; : &quot;&quot;,
   &quot;dataJSON&quot; : false
 }</propertySetConfig>
-                <sequenceNumber>13.0</sequenceNumber>
+                <sequenceNumber>11.0</sequenceNumber>
                 <type>Text Block</type>
             </childElements>
             <childElements>
@@ -2793,6 +2793,34 @@
             <isActive>true</isActive>
             <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
             <level>1.0</level>
+            <name>TextBlock11</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;field&quot; : &quot;PHOCSPCRecTypeDeveloperName&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;data&quot; : &quot;PHOCSPublicComplaint&quot;
+      } ]
+    }
+  },
+  &quot;text&quot; : &quot;&lt;p style=\&quot;text-align: center;\&quot;&gt;Case &lt;a href=\&quot;/lightning/r/Case/%case:Id%/view\&quot; target=\&quot;_blank\&quot; rel=\&quot;noopener\&quot;&gt;%case:CaseNumber%&lt;/a&gt; is Successfully linked.&lt;/p&gt;&quot;,
+  &quot;label&quot; : &quot;TextBlock4&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;sanitize&quot; : false,
+  &quot;textKey&quot; : &quot;&quot;,
+  &quot;dataJSON&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>2.0</sequenceNumber>
+            <type>Text Block</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
             <name>TextBlock4</name>
             <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
             <propertySetConfig>{
@@ -2806,6 +2834,10 @@
         &quot;data&quot; : &quot;NewCase&quot;,
         &quot;condition&quot; : &quot;=&quot;,
         &quot;field&quot; : &quot;CaseCreation:CaseConvertion&quot;
+      }, {
+        &quot;field&quot; : &quot;PHOCSPCRecTypeDeveloperName&quot;,
+        &quot;condition&quot; : &quot;&lt;&gt;&quot;,
+        &quot;data&quot; : &quot;PHOCSPublicComplaint&quot;
       } ]
     }
   },
@@ -2835,6 +2867,10 @@
         &quot;field&quot; : &quot;CaseCreation:CaseConvertion&quot;,
         &quot;condition&quot; : &quot;=&quot;,
         &quot;data&quot; : &quot;ExistingCase&quot;
+      }, {
+        &quot;field&quot; : &quot;PHOCSPCRecTypeDeveloperName&quot;,
+        &quot;condition&quot; : &quot;&lt;&gt;&quot;,
+        &quot;data&quot; : &quot;PHOCSPublicComplaint&quot;
       } ]
     }
   },
