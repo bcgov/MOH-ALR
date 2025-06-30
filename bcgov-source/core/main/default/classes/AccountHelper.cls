@@ -7,6 +7,7 @@
 ***********************************************************************************************/
 public with sharing class AccountHelper {
     static String className = 'AccountHelper';
+    public static Boolean hasRun = false;
 /**
 * @Author: Accenture_ALR Dev Team
 * @date: 
@@ -15,6 +16,8 @@ public with sharing class AccountHelper {
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static void createInspection(List<Account> accList){
+       		 if (hasRun) return; // Skip if already run
+             hasRun = true;
         try{
             List<Visit> inspectList = new List<Visit>();
             Map<String, Id> mapInspectionType = new Map<String, Id>();
