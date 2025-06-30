@@ -2930,7 +2930,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>23.0</sequenceNumber>
+        <sequenceNumber>24.0</sequenceNumber>
         <type>Step</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -3057,7 +3057,7 @@
     &quot;element&quot; : &quot;PCAccountId&quot;,
     &quot;inputParam&quot; : &quot;AccountId&quot;
   }, {
-    &quot;element&quot; : &quot;setCaseRecTypeName&quot;,
+    &quot;element&quot; : &quot;RecordTypeDeveloperName&quot;,
     &quot;inputParam&quot; : &quot;CCRecordName&quot;
   } ],
   &quot;remoteTimeout&quot; : 30000,
@@ -3084,6 +3084,10 @@
         &quot;data&quot; : &quot;ExistingCase&quot;,
         &quot;condition&quot; : &quot;=&quot;,
         &quot;field&quot; : &quot;CaseConvertion&quot;
+      }, {
+        &quot;field&quot; : &quot;PHOCSPCRecTypeDeveloperName&quot;,
+        &quot;condition&quot; : &quot;&lt;&gt;&quot;,
+        &quot;data&quot; : &quot;PHOCSPublicComplaint&quot;
       } ]
     }
   },
@@ -3194,7 +3198,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>11.0</sequenceNumber>
+        <sequenceNumber>12.0</sequenceNumber>
         <type>Step</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -3216,9 +3220,6 @@
   }, {
     &quot;element&quot; : &quot;PCAccountId&quot;,
     &quot;inputParam&quot; : &quot;AccountId&quot;
-  }, {
-    &quot;element&quot; : &quot;setCaseRecTypeName&quot;,
-    &quot;inputParam&quot; : &quot;caseRecTypeName&quot;
   } ],
   &quot;remoteTimeout&quot; : 30000,
   &quot;responseJSONPath&quot; : &quot;&quot;,
@@ -3643,7 +3644,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>10.0</sequenceNumber>
+        <sequenceNumber>11.0</sequenceNumber>
         <type>Step</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -3691,7 +3692,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>18.0</sequenceNumber>
+        <sequenceNumber>19.0</sequenceNumber>
         <type>DataRaptor Turbo Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -3739,7 +3740,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>19.0</sequenceNumber>
+        <sequenceNumber>20.0</sequenceNumber>
         <type>DataRaptor Turbo Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -3785,16 +3786,13 @@
   &quot;dataRaptor Input Parameters&quot; : [ {
     &quot;element&quot; : &quot;ExistingCase:CaseWithAccount-Block:CasesWithACTACaseId&quot;,
     &quot;inputParam&quot; : &quot;CCId&quot;
-  }, {
-    &quot;element&quot; : &quot;ExistingCase:PHOCSCaseWithAccount-Block:PHOCSCasesWithACTACaseId&quot;,
-    &quot;inputParam&quot; : &quot;CCId&quot;
   } ],
   &quot;ignoreCache&quot; : true,
   &quot;bundle&quot; : &quot;DRCasesWithAccount&quot;,
   &quot;label&quot; : &quot;GetPCDetailsWithAc&quot;,
   &quot;controlWidth&quot; : 12
 }</propertySetConfig>
-        <sequenceNumber>20.0</sequenceNumber>
+        <sequenceNumber>21.0</sequenceNumber>
         <type>DataRaptor Turbo Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -3849,7 +3847,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>21.0</sequenceNumber>
+        <sequenceNumber>22.0</sequenceNumber>
         <type>DataRaptor Turbo Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -3912,7 +3910,7 @@
   &quot;businessEvent&quot; : &quot;&quot;,
   &quot;targetName&quot; : &quot;Case&quot;
 }</propertySetConfig>
-        <sequenceNumber>24.0</sequenceNumber>
+        <sequenceNumber>25.0</sequenceNumber>
         <type>Navigate Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -4001,8 +3999,74 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>8.0</sequenceNumber>
+        <sequenceNumber>9.0</sequenceNumber>
         <type>Step</type>
+    </omniProcessElements>
+    <omniProcessElements>
+        <isActive>true</isActive>
+        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+        <level>0.0</level>
+        <name>PHOCSDRToFetchCases</name>
+        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+        <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;PHOCSDRToFetchCases&quot;,
+  &quot;bundle&quot; : &quot;PHOCSDRToFetchCases&quot;,
+  &quot;ignoreCache&quot; : true,
+  &quot;dataRaptor Input Parameters&quot; : [ {
+    &quot;element&quot; : &quot;PCAccountId&quot;,
+    &quot;inputParam&quot; : &quot;AccountId&quot;
+  }, {
+    &quot;element&quot; : &quot;PHOCSCaseRecTypeDevName&quot;,
+    &quot;inputParam&quot; : &quot;CCRecordName&quot;
+  } ],
+  &quot;remoteTimeout&quot; : 30000,
+  &quot;responseJSONPath&quot; : &quot;&quot;,
+  &quot;responseJSONNode&quot; : &quot;&quot;,
+  &quot;inProgressMessage&quot; : &quot;In Progress&quot;,
+  &quot;postMessage&quot; : &quot;Done&quot;,
+  &quot;failureNextLabel&quot; : &quot;Continue&quot;,
+  &quot;failureAbortLabel&quot; : &quot;Abort&quot;,
+  &quot;failureGoBackLabel&quot; : &quot;Go Back&quot;,
+  &quot;failureAbortMessage&quot; : &quot;Are you sure?&quot;,
+  &quot;validationRequired&quot; : &quot;Step&quot;,
+  &quot;redirectPageName&quot; : &quot;&quot;,
+  &quot;redirectTemplateUrl&quot; : &quot;vlcAcknowledge.html&quot;,
+  &quot;redirectNextLabel&quot; : &quot;Next&quot;,
+  &quot;redirectNextWidth&quot; : 3,
+  &quot;redirectPreviousLabel&quot; : &quot;Previous&quot;,
+  &quot;redirectPreviousWidth&quot; : 3,
+  &quot;showPersistentComponent&quot; : [ true, false ],
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;ExistingCase&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;field&quot; : &quot;CaseConvertion&quot;
+      }, {
+        &quot;field&quot; : &quot;PHOCSPCRecTypeDeveloperName&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;data&quot; : &quot;PHOCSPublicComplaint&quot;
+      } ]
+    }
+  },
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;wpm&quot; : false,
+  &quot;ssm&quot; : false,
+  &quot;message&quot; : { },
+  &quot;pubsub&quot; : false,
+  &quot;errorMessage&quot; : {
+    &quot;custom&quot; : [ ],
+    &quot;default&quot; : null
+  },
+  &quot;enableDefaultAbort&quot; : false,
+  &quot;enableActionMessage&quot; : false,
+  &quot;businessCategory&quot; : &quot;&quot;,
+  &quot;businessEvent&quot; : &quot;&quot;
+}</propertySetConfig>
+        <sequenceNumber>8.0</sequenceNumber>
+        <type>DataRaptor Extract Action</type>
     </omniProcessElements>
     <omniProcessElements>
         <childElements>
@@ -4062,7 +4126,7 @@
       &quot;rules&quot; : [ {
         &quot;data&quot; : null,
         &quot;condition&quot; : &quot;=&quot;,
-        &quot;field&quot; : &quot;ExistingCase:PHOCSCaseWithAccount-Block:PHOCSCasesWithACTACaseId&quot;
+        &quot;field&quot; : &quot;ExistingCase:CaseWithAccount-Block:CasesWithACTACaseId&quot;
       }, {
         &quot;field&quot; : &quot;PCAccountId&quot;,
         &quot;condition&quot; : &quot;&lt;&gt;&quot;,
@@ -4095,7 +4159,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>12.0</sequenceNumber>
+        <sequenceNumber>14.0</sequenceNumber>
         <type>Step</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -4154,7 +4218,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>16.0</sequenceNumber>
+        <sequenceNumber>17.0</sequenceNumber>
         <type>DataRaptor Post Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -4213,7 +4277,7 @@
   &quot;label&quot; : &quot;SaveExisiting&quot;,
   &quot;controlWidth&quot; : 2
 }</propertySetConfig>
-        <sequenceNumber>15.0</sequenceNumber>
+        <sequenceNumber>16.0</sequenceNumber>
         <type>DataRaptor Post Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -4268,7 +4332,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>17.0</sequenceNumber>
+        <sequenceNumber>18.0</sequenceNumber>
         <type>DataRaptor Post Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -4405,7 +4469,7 @@
   &quot;validationRequired&quot; : true,
   &quot;label&quot; : &quot;No Cases Found&quot;
 }</propertySetConfig>
-        <sequenceNumber>9.0</sequenceNumber>
+        <sequenceNumber>10.0</sequenceNumber>
         <type>Step</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -4509,7 +4573,7 @@
             <name>TextBlock10</name>
             <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
             <propertySetConfig>{
-  &quot;controlWidth&quot; : 12.0,
+  &quot;controlWidth&quot; : 12,
   &quot;text&quot; : &quot;&lt;p&gt;&lt;span style=\&quot;background-color: #ffffff;\&quot;&gt;&lt;strong&gt;&amp;nbsp;&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;\n&lt;h1&gt;&lt;span style=\&quot;color: #e03e2d;\&quot;&gt;&lt;em data-renderer-mark=\&quot;true\&quot;&gt;&lt;span style=\&quot;background-color: #ffffff;\&quot;&gt;&lt;span class=\&quot;ui-provider ee bet beu bev bew bex bey bez bfa bfb bfc bfd bfe bff bfg bfh bfi bfj bfk bfl bfm bfn bfo bfp bfq bfr bfs bft bfu bfv bfw bfx bfy bfz bga\&quot; dir=\&quot;ltr\&quot;&gt;Select a valid Existing Case to proceed&lt;/span&gt;&lt;/span&gt;&lt;/em&gt;&lt;/span&gt;&lt;/h1&gt;\n&lt;p&gt;&lt;span style=\&quot;background-color: #ffffff;\&quot;&gt;&lt;strong&gt;&amp;nbsp;&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&quot;,
   &quot;label&quot; : &quot;TextBlock1&quot;,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
@@ -4533,10 +4597,12 @@
       &quot;operator&quot; : &quot;AND&quot;,
       &quot;rules&quot; : [ {
         &quot;field&quot; : &quot;ExistingCase:PHOCSCaseWithoutAccount-Block:PHOCSCasesWithoutACTACaseId&quot;,
-        &quot;condition&quot; : &quot;=&quot;
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;data&quot; : &quot;$Vlocity.NULL&quot;
       }, {
         &quot;field&quot; : &quot;PCAccountId&quot;,
-        &quot;condition&quot; : &quot;=&quot;
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;data&quot; : &quot;$Vlocity.NULL&quot;
       }, {
         &quot;field&quot; : &quot;CaseConvertion&quot;,
         &quot;condition&quot; : &quot;=&quot;,
@@ -4586,7 +4652,7 @@
   &quot;conditionType&quot; : &quot;Hide if False&quot;,
   &quot;HTMLTemplateId&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>14.0</sequenceNumber>
+        <sequenceNumber>15.0</sequenceNumber>
         <type>Step</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -4641,7 +4707,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>22.0</sequenceNumber>
+        <sequenceNumber>23.0</sequenceNumber>
         <type>DataRaptor Post Action</type>
     </omniProcessElements>
     <omniProcessType>OmniScript</omniProcessType>
