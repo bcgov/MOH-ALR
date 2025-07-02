@@ -311,6 +311,23 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>BusinessLicense:Id</filterValue>
+        <globalKey>ef531f60-6e86-474e-a71a-5e7823d244b8</globalKey>
+        <inputFieldName>Related_BL__c</inputFieldName>
+        <inputObjectName>Conditions__c</inputObjectName>
+        <inputObjectQuerySequence>22.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>BusinessLicense:Conditions</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <globalKey>GetBusinessLicenseDetailsCustom1569</globalKey>
         <inputFieldName>BLAccount:OperatingMonths__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
@@ -919,6 +936,38 @@
         <outputCreationSequence>0.0</outputCreationSequence>
         <outputFieldName>Formula</outputFieldName>
         <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>357c5da7-80ab-4bd5-9fcc-bed3b7bd1fed</globalKey>
+        <inputFieldName>BusinessLicense:Conditions:Description__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BusinessLicense:Conditions:Description</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+     <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>&apos;Open&apos;</filterValue>
+        <globalKey>57841744-f081-4c06-aac8-0d123699a394</globalKey>
+        <inputFieldName>Condition_Status__c</inputFieldName>
+        <inputObjectName>Conditions__c</inputObjectName>
+        <inputObjectQuerySequence>22.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>BusinessLicense:Conditions</outputFieldName>
+        <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
@@ -2565,6 +2614,23 @@
         <outputCreationSequence>1.0</outputCreationSequence>
         <outputFieldName>AccountPopulationServedper24hrs</outputFieldName>
         <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:BusinessLicense:Conditions var:$Vlocity.Null == true false IF</formulaConverted>
+        <formulaExpression>IF(%BusinessLicense:Conditions% == $Vlocity.Null , true , false)</formulaExpression>
+        <formulaResultPath>isConditionNotPresent</formulaResultPath>
+        <formulaSequence>10.0</formulaSequence>
+        <globalKey>258af57c-24da-4d43-b240-262ebf5fcd92</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
