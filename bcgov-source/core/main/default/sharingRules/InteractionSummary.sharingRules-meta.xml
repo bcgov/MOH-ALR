@@ -76,10 +76,24 @@
     </sharingCriteriaRules>
     <sharingCriteriaRules>
         <fullName>ShareInteractionSummarywithPHOCSUsers</fullName>
-        <accessLevel>Read</accessLevel>
+        <accessLevel>Edit</accessLevel>
         <label>Share InteractionSummary with PHOCS Users</label>
         <sharedTo>
             <group>EHISUsersPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Interaction Summary</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>ShareInteractionSummarywithReportingUsers</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>Share InteractionSummary with Reporting Users</label>
+        <sharedTo>
+            <group>PHOCSReportingUserPG</group>
         </sharedTo>
         <criteriaItems>
             <field>RecordTypeId</field>
