@@ -5,7 +5,8 @@
     <label>Test</label>
     <lookupFilter>
         <active>true</active>
-        <booleanFilter>1 AND ((2 AND 3) OR (4 AND 5) OR (6 AND 7) OR (8 AND 9))</booleanFilter>
+        <booleanFilter>1 AND ((2 AND 3) OR (4 AND 5) OR (6 AND 7) OR (8 AND 9) OR (10 AND 2))</booleanFilter>
+        <errorMessage>Lab Test Master List does not exist or does not match filter criteria.</errorMessage>
         <filterItems>
             <field>LabTestMasterList__c.Active__c</field>
             <operation>equals</operation>
@@ -50,6 +51,11 @@
             <field>$Source.RecordTypeId</field>
             <operation>equals</operation>
             <value>PHOCS Air Quality Test</value>
+        </filterItems>
+        <filterItems>
+            <field>$Source.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Lead Water Test</value>
         </filterItems>
         <isOptional>false</isOptional>
     </lookupFilter>
