@@ -211,6 +211,21 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <globalKey>c72c5d33-c233-4d8e-b513-84fa54635ffc</globalKey>
+        <inputFieldName>DisPlayOneContact</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformInspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>DisPlayOneContact</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <globalKey>23603336-cd00-41dc-b41b-3d549d682731</globalKey>
         <inputFieldName>AccountCategoryL1</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
@@ -327,6 +342,23 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <formulaConverted>| | var:ContactLicensee ISNOTBLANK | var:ContactLicensee LISTSIZE 1 &gt; &amp;&amp; | var:ContactOpereator ISNOTBLANK | var:ContactOpereator LISTSIZE 1 &gt; &amp;&amp; || TRUE FALSE IF</formulaConverted>
+        <formulaExpression>IF((ISNOTBLANK(ContactLicensee)&amp;&amp;LISTSIZE(ContactLicensee)&gt;1)||(ISNOTBLANK(ContactOpereator)&amp;&amp;LISTSIZE(ContactOpereator)&gt;1),TRUE,FALSE)</formulaExpression>
+        <formulaResultPath>HasMoreLicenseeOperator</formulaResultPath>
+        <formulaSequence>2.0</formulaSequence>
+        <globalKey>065af086-7ce5-4e71-a744-b1e52324f4b6</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformInspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <formulaConverted>| | var:ContactLicensee:Name ISBLANK var:ContactOpereator:Name var:ContactLicensee:Name IF</formulaConverted>
         <formulaExpression>IF(ISBLANK(ContactLicensee:Name),ContactOpereator:Name,ContactLicensee:Name)</formulaExpression>
         <formulaResultPath>LicenseeUpdated</formulaResultPath>
@@ -430,6 +462,23 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:HasMoreLicenseeOperator FALSE TRUE IF</formulaConverted>
+        <formulaExpression>IF(HasMoreLicenseeOperator,FALSE,TRUE)</formulaExpression>
+        <formulaResultPath>DisPlayOneContact</formulaResultPath>
+        <formulaSequence>4.0</formulaSequence>
+        <globalKey>61995abd-c7a0-4628-907c-b0b23d865f3f</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformInspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <globalKey>13e37483-74a4-4488-a993-95c2b483ef5b</globalKey>
         <inputFieldName>Insp:Response</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
@@ -497,6 +546,21 @@
         <name>PHOCSTransformInspectionReport</name>
         <outputCreationSequence>1.0</outputCreationSequence>
         <outputFieldName>ContactLicensee:Name</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>de1cd356-6b43-4292-9130-3a5c590880e2</globalKey>
+        <inputFieldName>length</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformInspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>length</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -734,6 +798,21 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <globalKey>83a89076-0a0c-49ff-9112-00cf1d0d5534</globalKey>
+        <inputFieldName>HasMoreLicenseeOperator</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformInspectionReport</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>HasMoreLicenseeOperator</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <globalKey>6adf9561-67bc-4007-b44b-6ad5bcbee7df</globalKey>
         <inputFieldName>LicenseeUpdated</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
@@ -759,6 +838,23 @@
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:ContactOpereator LISTSIZE</formulaConverted>
+        <formulaExpression>LISTSIZE(ContactOpereator)</formulaExpression>
+        <formulaResultPath>length</formulaResultPath>
+        <formulaSequence>3.0</formulaSequence>
+        <globalKey>fed43e02-e93b-4890-b577-61b5df19b8d0</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformInspectionReport</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -1097,35 +1193,35 @@
   &quot;Account&quot; : {
     &quot;Physical_Address__City__s&quot; : &quot;Vancouver&quot;,
     &quot;Physical_Address__Street__s&quot; : &quot;5110 Cambie Street&quot;,
-    &quot;Physical_Address__CountryCode__s&quot; : &quot;CA&quot;,
     &quot;Physical_Address__StateCode__s&quot; : &quot;BC&quot;,
+    &quot;Physical_Address__CountryCode__s&quot; : &quot;CA&quot;,
     &quot;Physical_Address__PostalCode__s&quot; : &quot;V5Z 2Z7&quot;
   },
   &quot;OwnerName&quot; : &quot;EHIS Admin Test User&quot;,
   &quot;ActualStartDate&quot; : &quot;05/22/2025&quot;,
-  &quot;ContactOpereator&quot; : {
-    &quot;Name&quot; : &quot;Ron Test&quot;
-  },
+  &quot;ParentAccount&quot; : &quot;BE- S3Demo&quot;,
+  &quot;AccountType&quot; : &quot;Drinking Water&quot;,
+  &quot;ContactOpereator&quot; : [ {
+    &quot;Name&quot; : &quot;Test Manager 1 test&quot;
+  } ],
+  &quot;Date&quot; : &quot;2025-07-03&quot;,
   &quot;Name&quot; : &quot;00002039&quot;,
+  &quot;InsType&quot; : &quot;Other&quot;,
   &quot;AccountCategoryL1&quot; : &quot;Community Water System&quot;,
   &quot;AccountCategoryL2&quot; : &quot;Local Gov System&quot;,
   &quot;AccountCategoryL3&quot; : &quot;Municipality&quot;,
   &quot;OwnerId&quot; : &quot;005JQ000005izjFYAQ&quot;,
   &quot;VisitTypeId&quot; : &quot;0fJbZ00000003PZUAY&quot;,
-  &quot;Phone&quot; : &quot;6878786556&quot;,
-  &quot;TotalMaximumCapacity&quot; : 50,
-  &quot;Licensee&quot; : &quot;Test Manager 1 test&quot;,
-  &quot;BLIdentifier&quot; : &quot;2025-0000000050&quot;,
-  &quot;AccountType&quot; : &quot;Drinking Water&quot;,
-  &quot;Date&quot; : &quot;2025-05-26&quot;,
-  &quot;InsType&quot; : &quot;Other&quot;,
   &quot;InspectionTypeOther&quot; : &quot;testing other&quot;,
+  &quot;Phone&quot; : &quot;6878786556&quot;,
   &quot;ConditionAndDescription&quot; : &quot;No conditions indicated&quot;,
+  &quot;TotalMaximumCapacity&quot; : 50,
   &quot;InspectionMethod&quot; : &quot;Unannounced on Site Inspection&quot;,
   &quot;AccountPhysicalAddress&quot; : &quot; Vancouver BC V5Z 2Z7 CA&quot;,
   &quot;ManagerContactList&quot; : {
     &quot;Name&quot; : &quot;Ron Test&quot;
   },
+  &quot;BLIdentifier&quot; : &quot;2025-0000000050&quot;,
   &quot;AccountName&quot; : &quot;7thAprilwatersystem&quot;
 }</previewJsonData>
     <processSuperBulk>false</processSuperBulk>
