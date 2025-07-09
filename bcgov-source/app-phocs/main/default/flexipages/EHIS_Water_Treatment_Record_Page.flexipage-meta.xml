@@ -46,25 +46,8 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.WaterTreatmentFacility__c</fieldItem>
-                <identifier>RecordWater_Treatment_Facility__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.OtherTreatmentMethod__c</fieldItem>
-                <identifier>RecordOtherTreatmentMethod_cField</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.TreatmentMethod__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Other - Please Specify</rightValue>
-                    </criteria>
-                </visibilityRule>
+                <fieldItem>Record.AccountId</fieldItem>
+                <identifier>RecordAccountIdField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -130,6 +113,37 @@
                 </visibilityRule>
             </fieldInstance>
         </itemInstances>
+        <name>Facet-6a7d3633-f9f9-4274-97a6-d3b9e306b546</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.TreatmentMethod__c</fieldItem>
+                <identifier>RecordTreatmentMethod_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.OtherTreatmentMethod__c</fieldItem>
+                <identifier>RecordOtherTreatmentMethod_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.TreatmentMethod__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Other - Please Specify</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
@@ -155,6 +169,23 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.ContactTankVolume__c</fieldItem>
                 <identifier>RecordContactTankVolume_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.TreatmentMethod__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Chlorination</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ContactTankVolume_UnitofMeasure__c</fieldItem>
+                <identifier>RecordContactTankVolume_UnitofMeasure_cField</identifier>
                 <visibilityRule>
                     <criteria>
                         <leftValue>{!Record.TreatmentMethod__c}</leftValue>
@@ -245,37 +276,6 @@
                         <leftValue>{!Record.TreatmentMethod__c}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>UV Disinfection</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-6a7d3633-f9f9-4274-97a6-d3b9e306b546</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.TreatmentMethod__c</fieldItem>
-                <identifier>RecordTreatmentMethod_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.ContactTankVolume_UnitofMeasure__c</fieldItem>
-                <identifier>RecordContactTankVolume_UnitofMeasure_cField</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.TreatmentMethod__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Chlorination</rightValue>
                     </criteria>
                 </visibilityRule>
             </fieldInstance>
