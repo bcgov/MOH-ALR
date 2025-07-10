@@ -4,6 +4,20 @@
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Links the requisition to the IH-monitored facility (e.g., a restaurant or food processing plant).</description>
     <label>Establishment</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>$Source.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Food Lab Test Requisition</value>
+        </filterItems>
+        <filterItems>
+            <field>Account.RecordTypeName__c</field>
+            <operation>contains</operation>
+            <value>Facility,Drinking Water System,Drinking Water Source Intake</value>
+        </filterItems>
+        <isOptional>true</isOptional>
+    </lookupFilter>
     <referenceTo>Account</referenceTo>
     <relationshipLabel>Lab Test Requisitions (Establishment)</relationshipLabel>
     <relationshipName>Lab_Test_Requisitions</relationshipName>
