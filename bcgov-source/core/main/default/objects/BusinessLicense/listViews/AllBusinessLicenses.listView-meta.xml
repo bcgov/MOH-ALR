@@ -3,9 +3,18 @@
     <fullName>AllBusinessLicenses</fullName>
     <columns>Name</columns>
     <columns>Account</columns>
-    <columns>CreatedDate</columns>
+    <columns>Account__c</columns>
+    <columns>RegulatoryAuthorizationType</columns>
     <columns>Status</columns>
+    <columns>PeriodStart</columns>
+    <columns>PeriodEnd</columns>
+    <columns>RecordType</columns>
     <filterScope>Everything</filterScope>
+    <filters>
+        <field>RecordType</field>
+        <operation>equals</operation>
+        <value>BusinessLicense.PHOCSPermitLicense,BusinessLicense.Business_License,BusinessLicense.License</value>
+    </filters>
     <label>All Business Licenses</label>
     <sharedTo>
         <group>EHISFHAReportingUser</group>
@@ -16,7 +25,7 @@
         <group>EHISVCISReportingUser</group>
         <group>EHIS_Officer_Users_PG</group>
         <group>EHIS_PHE_Users_PG</group>
-        <group>PHOCSReportingUserPG</group>
         <group>EHIS_Water_Admin_Users_PG</group>
+        <group>PHOCSReportingUserPG</group>
     </sharedTo>
 </ListView>
