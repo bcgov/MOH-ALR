@@ -240,6 +240,34 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
+                <fieldItem>Record.RiskRating__c</fieldItem>
+                <identifier>RecordRiskRating_cField</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 AND 2 AND 3</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.CategoryL1__c}</leftValue>
+                        <operator>NE</operator>
+                        <rightValue>Drinking Water Storage</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.CategoryL1__c}</leftValue>
+                        <operator>NE</operator>
+                        <rightValue>Drinking Water Distribution</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.CategoryL1__c}</leftValue>
+                        <operator>NE</operator>
+                        <rightValue>Drinking Water Treatment</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.Description</fieldItem>
                 <identifier>RecordDescriptionField</identifier>
             </fieldInstance>
@@ -3260,6 +3288,14 @@
                     </valueList>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
+                    <name>adminFilters</name>
+                    <valueList>
+                        <valueListItems>
+                            <value>ASSET.RECORDTYPE|EQUALS|[&quot;Treatment_Method&quot;]</value>
+                        </valueListItems>
+                    </valueList>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
                     <name>maxRecordsToDisplay</name>
                     <value>10</value>
                 </componentInstanceProperties>
@@ -3269,7 +3305,7 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>relatedListApiName</name>
-                    <value>Treatment_Method__r</value>
+                    <value>Assets</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>relatedListDisplayType</name>
@@ -3278,6 +3314,9 @@
                 <componentInstanceProperties>
                     <name>relatedListFieldAliases</name>
                     <valueList>
+                        <valueListItems>
+                            <value>ASSET.NAME</value>
+                        </valueListItems>
                         <valueListItems>
                             <value>TreatmentMethod__c</value>
                         </valueListItems>
@@ -3294,7 +3333,7 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>relatedListLabel</name>
-                    <value>Treatment Method</value>
+                    <value>Treatment Methods</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>showActionBar</name>
@@ -3363,6 +3402,9 @@
                             <value>Type__c</value>
                         </valueListItems>
                         <valueListItems>
+                            <value>ASSET.QUANTITY</value>
+                        </valueListItems>
+                        <valueListItems>
                             <value>CapacityPerProgram__c</value>
                         </valueListItems>
                         <valueListItems>
@@ -3388,6 +3430,19 @@
                 </componentInstanceProperties>
                 <componentName>lst:dynamicRelatedList</componentName>
                 <identifier>lst_dynamicRelatedList12</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 OR 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.Type}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Child Care</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Type}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Residential Care</rightValue>
+                    </criteria>
+                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -3745,6 +3800,75 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
+                    <name>actionNames</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>adminFilters</name>
+                    <valueList>
+                        <valueListItems>
+                            <value>IsAccountMatched__c|EQUALS|true</value>
+                        </valueListItems>
+                    </valueList>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>maxRecordsToDisplay</name>
+                    <value>10</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>parentFieldApiName</name>
+                    <value>Account.Id</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListApiName</name>
+                    <value>InteractionSummaries</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListDisplayType</name>
+                    <value>ADVGRID</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListFieldAliases</name>
+                    <valueList>
+                        <valueListItems>
+                            <value>Name</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>LastModifiedDate</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>ActionTaken__c</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>RelatedRecord</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>LastModifiedBy</value>
+                        </valueListItems>
+                    </valueList>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListLabel</name>
+                    <value>Interaction Summaries</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>showActionBar</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>sortFieldAlias</name>
+                    <value>LastModifiedDate</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>sortFieldOrder</name>
+                    <value>Descending</value>
+                </componentInstanceProperties>
+                <componentName>lst:dynamicRelatedList</componentName>
+                <identifier>lst_dynamicRelatedList11</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
                     <name>parentFieldApiName</name>
                     <value>Account.Id</value>
                 </componentInstanceProperties>
@@ -3875,11 +3999,6 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>adminFilters</name>
-                    <valueList>
-                        <valueListItems>
-                            <value>IsAccountMatched__c|EQUALS|true</value>
-                        </valueListItems>
-                    </valueList>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>maxRecordsToDisplay</name>
@@ -3904,16 +4023,10 @@
                             <value>Name</value>
                         </valueListItems>
                         <valueListItems>
-                            <value>LastModifiedDate</value>
+                            <value>CreatedDate</value>
                         </valueListItems>
                         <valueListItems>
-                            <value>ActionTaken__c</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>RelatedRecord</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>LastModifiedBy</value>
+                            <value>CreatedBy</value>
                         </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
@@ -3927,14 +4040,14 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>sortFieldAlias</name>
-                    <value>LastModifiedDate</value>
+                    <value>__DEFAULT__</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>sortFieldOrder</name>
-                    <value>Descending</value>
+                    <value>Default</value>
                 </componentInstanceProperties>
                 <componentName>lst:dynamicRelatedList</componentName>
-                <identifier>lst_dynamicRelatedList11</identifier>
+                <identifier>lst_dynamicRelatedList6</identifier>
             </componentInstance>
         </itemInstances>
         <mode>Replace</mode>
