@@ -6,7 +6,7 @@
         <name>Check_BLA_Record_Type</name>
         <label>Check BLA Record Type</label>
         <locationX>578</locationX>
-        <locationY>827</locationY>
+        <locationY>719</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>PHOCS_BLA_Record_Types</name>
@@ -49,7 +49,7 @@
         <name>Check_Document_Checklist_Item</name>
         <label>Check Document Checklist Item</label>
         <locationX>314</locationX>
-        <locationY>935</locationY>
+        <locationY>827</locationY>
         <defaultConnector>
             <targetReference>Update_Document_Checklist_Items</targetReference>
         </defaultConnector>
@@ -77,13 +77,13 @@
             <label>Name or Record Type Name contains ERCP</label>
         </rules>
         <rules>
-            <name>IS_Retrieved_From_Custom_Metadata</name>
+            <name>Name_or_Record_Type_Name_contains_DrawingPlan</name>
             <conditionLogic>or</conditionLogic>
             <conditions>
-                <leftValueReference>RecordTypefromCustommetadata.RecordTypeName__c</leftValueReference>
-                <operator>IsBlank</operator>
+                <leftValueReference>$Record.Name</leftValueReference>
+                <operator>Contains</operator>
                 <rightValue>
-                    <booleanValue>false</booleanValue>
+                    <elementReference>DrawingPlan</elementReference>
                 </rightValue>
             </conditions>
             <conditions>
@@ -96,21 +96,11 @@
             <connector>
                 <targetReference>Update_Records_DrawingPlan</targetReference>
             </connector>
-            <label>IS Retrieved From Custom Metadata</label>
+            <label>Name or Record Type Name contains Drawing/Plan</label>
         </rules>
     </decisions>
     <description>EHIS-905: Update DocumentChecklistItems record types based on PHOCS Business License Application record types</description>
     <environments>Default</environments>
-    <formulas>
-        <name>DocumentchecklistName</name>
-        <dataType>String</dataType>
-        <expression>TRIM(
-  RIGHT(
-    {!$Record.Name},
-    LEN( {!$Record.Name}) - FIND(&quot;. &quot;,  {!$Record.Name})
-  )
-)</expression>
-    </formulas>
     <interviewLabel>Update Document Checklist Items from BLA {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Update Document Checklist Items from BLA</label>
     <processMetadataValues>
@@ -180,7 +170,7 @@
         <name>Get_Document_Checklist_Item_Record_Type_DrawingPlan</name>
         <label>Get Document Checklist Item Record Type - DrawingPlan</label>
         <locationX>578</locationX>
-        <locationY>719</locationY>
+        <locationY>611</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Check_BLA_Record_Type</targetReference>
@@ -190,7 +180,7 @@
             <field>DeveloperName</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>RecordTypefromCustommetadata.RecordTypeName__c</elementReference>
+                <elementReference>PHOCSDrawingPlanDocumentChecklist</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
@@ -205,7 +195,7 @@
         <locationY>503</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>RecordTypefromCustommetadata</targetReference>
+            <targetReference>Get_Document_Checklist_Item_Record_Type_DrawingPlan</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -220,34 +210,11 @@
         <queriedFields>Id</queriedFields>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
-    <recordLookups>
-        <name>RecordTypefromCustommetadata</name>
-        <label>RecordTypefromCustommetadata</label>
-        <locationX>578</locationX>
-        <locationY>611</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Get_Document_Checklist_Item_Record_Type_DrawingPlan</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>DocumentCheckListItem_Name__c</field>
-            <operator>Contains</operator>
-            <value>
-                <elementReference>DocumentchecklistName</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>DocumentChecklistItemRecordTypeMapping__mdt</object>
-        <queriedFields>Id</queriedFields>
-        <queriedFields>RecordTypeName__c</queriedFields>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
     <recordUpdates>
         <name>Update_Document_Checklist_Items</name>
         <label>Update Document Checklist Items</label>
         <locationX>578</locationX>
-        <locationY>1043</locationY>
+        <locationY>935</locationY>
         <inputAssignments>
             <field>RecordTypeId</field>
             <value>
@@ -260,7 +227,7 @@
         <name>Update_Document_Checklist_Items_ERCP</name>
         <label>Update Document Checklist Items ERCP</label>
         <locationX>50</locationX>
-        <locationY>1043</locationY>
+        <locationY>935</locationY>
         <inputAssignments>
             <field>RecordTypeId</field>
             <value>
@@ -273,7 +240,7 @@
         <name>Update_Records_DrawingPlan</name>
         <label>Update Document Checklist Items Drawing/Plan</label>
         <locationX>314</locationX>
-        <locationY>1043</locationY>
+        <locationY>935</locationY>
         <inputAssignments>
             <field>RecordTypeId</field>
             <value>
