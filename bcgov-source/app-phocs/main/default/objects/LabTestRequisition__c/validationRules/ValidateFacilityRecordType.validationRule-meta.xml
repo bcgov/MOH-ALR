@@ -3,18 +3,23 @@
     <fullName>ValidateFacilityRecordType</fullName>
     <active>true</active>
     <errorConditionFormula>OR(
-(RecordType.Name = &apos;Water Lab Test Requisition&apos;  &amp;&amp; 
-FacilityName__r.RecordTypeName__c != &apos;Facility&apos; &amp;&amp;
-FacilityName__r.RecordTypeName__c != &apos;Drinking Water System&apos; &amp;&amp;
-FacilityName__r.RecordTypeName__c != &apos;Drinking Water Source Intake&apos;),
+(RecordType.DeveloperName = &apos;PHOCSWaterLabTestRequisition&apos; &amp;&amp; 
+ FacilityName__r.RecordTypeName__c != &apos;Facility&apos; &amp;&amp;
+ FacilityName__r.RecordTypeName__c != &apos;DrinkingWaterSystem&apos; &amp;&amp;
+ FacilityName__r.RecordTypeName__c != &apos;DrinkingWaterSourceIntake&apos;),
 
-(RecordType.Name = &apos;Dye Test Requisition&apos;  &amp;&amp; 
+(RecordType.DeveloperName = &apos;PHOCSFoodLabTestRequisition&apos; &amp;&amp; 
+ FacilityName__r.RecordTypeName__c != &apos;Facility&apos; &amp;&amp;
+ FacilityName__r.RecordTypeName__c != &apos;DrinkingWaterSystem&apos; &amp;&amp;
+ FacilityName__r.RecordTypeName__c != &apos;DrinkingWaterSourceIntake&apos;),
+
+(RecordType.DeveloperName = &apos;PHOCSDyeTestRequisition&apos; &amp;&amp; 
  (FacilityName__r.RecordTypeName__c != &apos;Facility&apos; ||  NOT(ISPICKVAL(FacilityName__r.Type, &apos;Sewerage&apos;)))),
 
-(RecordType.Name = &apos;Lead Water Test Requisition&apos;  &amp;&amp; 
+(RecordType.DeveloperName = &apos;PHOCSLeadWaterTestRequisition&apos; &amp;&amp; 
  (FacilityName__r.RecordTypeName__c != &apos;Facility&apos; || NOT(ISPICKVAL(FacilityName__r.Type, &apos;Child Care&apos;)))),
 
-(RecordType.Name = &apos;Radon Test Requisition&apos;  &amp;&amp; 
+(RecordType.DeveloperName = &apos;PHOCSRadonTestRequisition&apos; &amp;&amp; 
  (FacilityName__r.RecordTypeName__c != &apos;Facility&apos; || NOT(ISPICKVAL(FacilityName__r.Type, &apos;Child Care&apos;))))
 )</errorConditionFormula>
     <errorDisplayField>FacilityName__c</errorDisplayField>
