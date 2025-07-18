@@ -7,9 +7,6 @@
                     <name>actionNames</name>
                     <valueList>
                         <valueListItems>
-                            <value>CustomButton.Visit.Inspection_Worksheet</value>
-                        </valueListItems>
-                        <valueListItems>
                             <value>ChangeOwnerOne</value>
                         </valueListItems>
                         <valueListItems>
@@ -17,6 +14,22 @@
                         </valueListItems>
                         <valueListItems>
                             <value>FeedItem.ContentNote</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Visit.Add_Inspection_Task</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>CustomButton.Visit.PHOCSInspectionWorksheet</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!Record.Status}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Completed</rightValue>
+                                </criteria>
+                            </visibilityRule>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Visit.EHISNewTaskOnInspection</value>
                         </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
@@ -623,7 +636,7 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>relatedListApiName</name>
-                    <value>Deals</value>
+                    <value>VisitVisitedParties</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>relatedListDisplayType</name>
@@ -636,16 +649,13 @@
                             <value>Name</value>
                         </valueListItems>
                         <valueListItems>
-                            <value>CreatedDate</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>CreatedBy</value>
+                            <value>Contact</value>
                         </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>relatedListLabel</name>
-                    <value>Interaction Summaries</value>
+                    <value>Visited Parties</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>showActionBar</name>
@@ -660,7 +670,7 @@
                     <value>Default</value>
                 </componentInstanceProperties>
                 <componentName>lst:dynamicRelatedList</componentName>
-                <identifier>lst_dynamicRelatedList2</identifier>
+                <identifier>lst_dynamicRelatedList</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
