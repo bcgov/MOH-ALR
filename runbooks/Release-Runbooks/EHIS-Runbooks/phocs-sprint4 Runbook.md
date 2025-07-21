@@ -72,15 +72,12 @@
     2. [ ] Deploy Action Plan Templates
    - sf project deploy start --source-dir ActionPlanTemplates-Phocs/main/default --wait 30 --target-org  
 
-   3. 4. [ ] Deploy Action Plan Templates
-   - sf project deploy start --source-dir ActionPlanTemplates-Phocs/main/default --wait 30 --target-org  
-
-   2. [ ] Deploy Omni studio components
+   3. [ ] Deploy Omni studio components
 
    - sf project deploy start --source-dir bcgov-source/app-phocs/main/default/omniDataTransforms --wait 30 --target-org 
    - sf project deploy start --source-dir bcgov-source/core/main/default/omniDataTransforms --wait 30 --target-org
    
-   3. [ ] Deploy 
+   4. [ ] Deploy 
    - sf project deploy start --target-org deployment.user@phocs.ci -m "bcgov-source"  -l RunLocalTests 
 
 ## Post-Deployment Steps (30 mins)
@@ -145,3 +142,4 @@ OR
 DevOps checklist:
 
 1.Ensure below steps are deployed - EHIS-1707
+2. Action plan templates are published and shared with phocs users
