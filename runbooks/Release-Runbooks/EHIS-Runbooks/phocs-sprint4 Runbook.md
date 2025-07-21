@@ -76,7 +76,10 @@
 
    - sf project deploy start --source-dir bcgov-source/app-phocs/main/default/omniDataTransforms --wait 30 --target-org 
    - sf project deploy start --source-dir bcgov-source/core/main/default/omniDataTransforms --wait 30 --target-org
-   
+
+  [ ] deploy decision matrix 
+  - sf project deploy start --source-dir src-bre\main\default\PhocsdecisionMatrixDefinition --wait 30 --target-or
+  
    4. [ ] Deploy 
    - sf project deploy start --target-org deployment.user@phocs.ci -m "bcgov-source"  -l RunLocalTests 
 
