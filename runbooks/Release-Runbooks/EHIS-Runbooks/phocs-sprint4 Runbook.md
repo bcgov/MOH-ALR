@@ -37,7 +37,7 @@
     - EHIS Business Admin PSG
     - PHOCS System Administrator PSG
 
-2. [ ] Checkout to `phocs-sprint3`code 
+2. [ ] Checkout to `phocs-sprint4`code 
  
 ## Assumptions
 
