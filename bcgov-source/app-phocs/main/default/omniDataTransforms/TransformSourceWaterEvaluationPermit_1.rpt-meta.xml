@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OmniDataTransform xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>false</active>
+    <assignmentRulesUsed>false</assignmentRulesUsed>
+    <deletedOnSuccess>false</deletedOnSuccess>
+    <errorIgnored>false</errorIgnored>
+    <fieldLevelSecurityEnabled>false</fieldLevelSecurityEnabled>
+    <inputType>JSON</inputType>
+    <isManagedUsingStdDesigner>false</isManagedUsingStdDesigner>
+    <name>TransformSourceWaterEvaluationPermit</name>
+    <nullInputsIncludedInOutput>false</nullInputsIncludedInOutput>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformSourceWaterEvaluationPermitCustom6374</globalKey>
+        <inputFieldName>BLAOwnerNameTitle</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAOwnerNameTitle</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformSourceWaterEvaluationPermitCustom2961</globalKey>
+        <inputFieldName>BLAccountName</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:BLAccountWaterSourceIntakeCategoryL1 &apos;Surface/\/\/Water&apos; = true false IF</formulaConverted>
+        <formulaExpression>IF(%BLAccountWaterSourceIntakeCategoryL1% = &apos;Surface Water&apos;,true,false)</formulaExpression>
+        <formulaResultPath>isWSICatL1SurfaceWater</formulaResultPath>
+        <formulaSequence>5.0</formulaSequence>
+        <globalKey>e3174c44-e026-4ba6-bd30-e40cbc398f7f</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformSourceWaterEvaluationPermitCustom5018</globalKey>
+        <inputFieldName>BLASourceWaterEvaluationClosureReason</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLASourceWaterEvaluationClosureReason</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>11e4ca3e-f3ca-46b4-8501-fdd11ed7b9ac</globalKey>
+        <inputFieldName>WaterSuppliersParentAccount</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>WaterSuppliersParentAccount</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformSourceWaterEvaluationPermitCustom4524</globalKey>
+        <inputFieldName>BLAccountWaterSourceIntakeWellIDPlateNumber</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountWaterSourceIntakeWellIDPlateNumber</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:BLAccountWaterSourceIntakeCategoryL1 &apos;Surface/\/\/Water&apos; = var:BLAccountWaterSourceIntakeCategoryL2 &apos;Rainwater&apos; = AND true false IF</formulaConverted>
+        <formulaExpression>IF(AND(%BLAccountWaterSourceIntakeCategoryL1% = &apos;Surface Water&apos;,%BLAccountWaterSourceIntakeCategoryL2% = &apos;Rainwater&apos;),true,false)</formulaExpression>
+        <formulaResultPath>isSourceEvaluationWaterTreatmentCond3</formulaResultPath>
+        <formulaSequence>3.0</formulaSequence>
+        <globalKey>5c0caa89-1f3c-42de-8382-f80f023d0365</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformSourceWaterEvaluationPermitCustom4957</globalKey>
+        <inputFieldName>CurrentDate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>CurrentDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformSourceWaterEvaluationPermitCustom2109</globalKey>
+        <inputFieldName>isWSICatL1SurfaceWater</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>IF_isWSICatL1SurfaceWater</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformSourceWaterEvaluationPermitCustom919</globalKey>
+        <inputFieldName>BLAccountWaterSourceIntakeSourceWaterBody</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountWaterSourceIntakeSourceWaterBody</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>e78f5c6d-6e83-4a1a-bba6-24866f76aef6</globalKey>
+        <inputFieldName>isSourceEvaluationWaterTreatmentCond1</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>IF_isSourceEvaluationWaterTreatmentCond1</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformSourceWaterEvaluationPermitCustom4049</globalKey>
+        <inputFieldName>BLASourceWaterEvaluationClosureReasonDescription</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLASourceWaterEvaluationClosureReasonDescription</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformSourceWaterEvaluationPermitCustom5498</globalKey>
+        <inputFieldName>BLAApplicantEmail</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAApplicantEmail</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformSourceWaterEvaluationPermitCustom6938</globalKey>
+        <inputFieldName>isWSICatL1GroundWater</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>IF_isWSICatL1GroundWater</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformSourceWaterEvaluationPermitCustom2355</globalKey>
+        <inputFieldName>BLIdentifier</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLIdentifier</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformSourceWaterEvaluationPermitCustom8699</globalKey>
+        <inputFieldName>BLAccountHealthAuthority</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountHealthAuthority</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformSourceWaterEvaluationPermitCustom5322</globalKey>
+        <inputFieldName>BLAccountRelatedWaterSourceIntakeWaterLicenseNumber</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountRelatedWaterSourceIntakeWaterLicenseNumber</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>68959fa5-f04d-43ce-a1d6-a646f087a4eb</globalKey>
+        <inputFieldName>isSourceEvaluationWaterTreatmentCond2</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>IF_isSourceEvaluationWaterTreatmentCond2</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>ab3a9a32-2e34-45a2-a061-83ae0993144c</globalKey>
+        <inputFieldName>BLAccountParentAccName</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountParentAccName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformSourceWaterEvaluationPermitCustom9295</globalKey>
+        <inputFieldName>BLAccountWaterSourceIntakeGARPScreeningOutcome</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountWaterSourceIntakeGARPScreeningOutcome</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:BLAccountWaterSourceIntakeCategoryL1 &apos;Groundwater&apos; = | var:BLAccountWaterSourceGARPScreeningOutcome &apos;GARP/\/\/-/\/\/Low/\/\/Risk/\/\/of/\/\/Pathogens&apos; = NOT AND true false IF</formulaConverted>
+        <formulaExpression>IF(AND(%BLAccountWaterSourceIntakeCategoryL1% = &apos;Groundwater&apos;,NOT(%BLAccountWaterSourceGARPScreeningOutcome% =&apos;GARP - Low Risk of Pathogens&apos;)),true,false)</formulaExpression>
+        <formulaResultPath>isSourceEvaluationWaterTreatmentCond1</formulaResultPath>
+        <formulaSequence>1.0</formulaSequence>
+        <globalKey>ebe0563b-21ed-4d15-b50d-8c997d8caf18</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:BLAccountWaterSourceIntakeCategoryL1 &apos;Groundwater&apos; = true false IF</formulaConverted>
+        <formulaExpression>IF(%BLAccountWaterSourceIntakeCategoryL1% =&apos;Groundwater&apos;,true,false)</formulaExpression>
+        <formulaResultPath>isWSICatL1GroundWater</formulaResultPath>
+        <formulaSequence>4.0</formulaSequence>
+        <globalKey>96705991-3997-4edf-9d3d-30229b4e297e</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformSourceWaterEvaluationPermitCustom185</globalKey>
+        <inputFieldName>BLAApplicantName</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAApplicantName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformSourceWaterEvaluationPermitCustom6949</globalKey>
+        <inputFieldName>BLAccountRelatedWaterSourceIntakeAquiferNumber</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountRelatedWaterSourceIntakeAquiferNumber</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>116e455c-6179-4713-b380-1ca0f9e4a67a</globalKey>
+        <inputFieldName>isSourceEvaluationWaterTreatmentCond3</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>IF_isSourceEvaluationWaterTreatmentCond3</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformSourceWaterEvaluationPermitCustom8076</globalKey>
+        <inputFieldName>BLAOwnerName</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAOwnerName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>27a97e72-858c-48c7-8696-39be4a406103</globalKey>
+        <inputFieldName>BLAccountWaterSourceIntakeCategoryL2</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountWaterSourceIntakeCategoryL2</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformSourceWaterEvaluationPermitCustom9024</globalKey>
+        <inputFieldName>BLAApplicantName</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAApplicantName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>TransformSourceWaterEvaluationPermitCustom8489</globalKey>
+        <inputFieldName>BLAApplicantMailingAddress</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAApplicantMailingAddress</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>73144ac4-5e9f-4f6d-807b-9b39d74c7c28</globalKey>
+        <inputFieldName>BLAccountWaterSourceIntakeCategoryL1</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountWaterSourceIntakeCategoryL1</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:BLAccountWaterSourceIntakeCategoryL1 &apos;Surface/\/\/Water&apos; = true false IF</formulaConverted>
+        <formulaExpression>IF(%BLAccountWaterSourceIntakeCategoryL1% = &apos;Surface Water&apos;,true,false)</formulaExpression>
+        <formulaResultPath>isSourceEvaluationWaterTreatmentCond2</formulaResultPath>
+        <formulaSequence>2.0</formulaSequence>
+        <globalKey>5e19f5a2-4d4b-437c-90ce-d302e00d9b58</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformSourceWaterEvaluationPermit</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <outputType>JSON</outputType>
+    <previewJsonData>{
+  &quot;BLAccountPHOWaterSourceCategory&quot; : &quot;Small Water System &lt;50&quot;,
+  &quot;BLAccountPHOWaterSystemSizeCategory&quot; : &quot;Small Water System &lt;50&quot;,
+  &quot;isConditionNotPresent&quot; : true,
+  &quot;DocumentChecklistItems&quot; : [ {
+    &quot;DocumentChecklistItemsName&quot; : &quot;7. GARP Assessment Report&quot;
+  }, {
+    &quot;DocumentChecklistItemsName&quot; : &quot;3. Water Quality Analysis Result&quot;
+  }, {
+    &quot;DocumentChecklistItemsName&quot; : &quot;6. GARP Screening&quot;
+  }, {
+    &quot;DocumentChecklistItemsName&quot; : &quot;4. Well Construction Report&quot;
+  }, {
+    &quot;DocumentChecklistItemsName&quot; : &quot;5. Hydrogeologist’s Report&quot;
+  }, {
+    &quot;DocumentChecklistItemsName&quot; : &quot;8. Treatment Proposal&quot;
+  }, {
+    &quot;DocumentChecklistItemsName&quot; : &quot;2. Location Map&quot;
+  }, {
+    &quot;DocumentChecklistItemsName&quot; : &quot;1. Site Assessment/Contaminant Survey&quot;
+  } ],
+  &quot;BLAccountRelatedWaterSourceIntakeAquiferNumber&quot; : 1456,
+  &quot;BLAccountBillingAddress&quot; : &quot;    &quot;,
+  &quot;AccountCategoryL1&quot; : &quot;Surface Water&quot;,
+  &quot;AccountCategoryL2&quot; : &quot;Rainwater&quot;,
+  &quot;BLAccountPhysicalAddress&quot; : &quot;    &quot;,
+  &quot;ConstructionPermitDocumentTemplateName&quot; : &quot;ConstructionPermitforWaterSupplySystem&quot;,
+  &quot;WaterSuppliersParentAccount&quot; : &quot;Test Drinking Water System&quot;,
+  &quot;BLAccountRelatedWaterSourceIntakeWaterLicenseNumber&quot; : &quot;567890&quot;,
+  &quot;BLAccountWaterSourceIntakeWellIDPlateNumber&quot; : 12345,
+  &quot;ConstructionPermitDocumentTemplateId&quot; : &quot;2dtbZ00000013ALQAY&quot;,
+  &quot;BLIdentifier&quot; : &quot;2025-0000000103&quot;,
+  &quot;CurrentDate&quot; : &quot;2025-07-20&quot;,
+  &quot;BLAApplicantMailingAddress&quot; : &quot;    &quot;,
+  &quot;BLAccountName&quot; : &quot;LM Water Source Intake A&quot;,
+  &quot;BLAccountWaterSourceIntakeCategoryL2&quot; : &quot;Rainwater&quot;,
+  &quot;BLAccountWaterSourceIntakeCategoryL1&quot; : &quot;Surface Water&quot;,
+  &quot;RegulatoryAuthorizationTypeName&quot; : &quot;Water Source Evaluation&quot;,
+  &quot;isWSICatL1GroundWater&quot; : false,
+  &quot;BLAOwnerName&quot; : &quot;Latifa Mnyusiwalla&quot;,
+  &quot;BLADetails&quot; : {
+    &quot;BLAName&quot; : &quot;BLA-0000001274&quot;
+  },
+  &quot;BLAccountWaterSourceIntakeGARPScreeningOutcome&quot; : &quot;GARP - Viruses Only&quot;,
+  &quot;WaterSuppliers&quot; : {
+    &quot;WaterSuppliersName&quot; : &quot;LM Water Source Intake A&quot;
+  },
+  &quot;BLAccountDWSDetails&quot; : {
+    &quot;FacilitiesDWTDetails&quot; : {
+      &quot;BLAccountPhysicalAddress&quot; : &quot;    &quot;
+    }
+  },
+  &quot;BLAccountWaterSourceIntakeSourceWaterBody&quot; : &quot;test 1234&quot;,
+  &quot;isWSICatL1SurfaceWater&quot; : false
+}</previewJsonData>
+    <processSuperBulk>false</processSuperBulk>
+    <responseCacheTtlMinutes>0.0</responseCacheTtlMinutes>
+    <rollbackOnError>false</rollbackOnError>
+    <sourceObject>json</sourceObject>
+    <sourceObjectDefault>false</sourceObjectDefault>
+    <synchronousProcessThreshold>0.0</synchronousProcessThreshold>
+    <targetOutputFileName>SourceWaterEvaluationTemplate(Version 1)</targetOutputFileName>
+    <type>Transform</type>
+    <uniqueName>TransformSourceWaterEvaluationPermit_1</uniqueName>
+    <versionNumber>1.0</versionNumber>
+    <xmlDeclarationRemoved>false</xmlDeclarationRemoved>
+</OmniDataTransform>

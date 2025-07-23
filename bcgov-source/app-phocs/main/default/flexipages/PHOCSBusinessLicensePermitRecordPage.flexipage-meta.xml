@@ -4,6 +4,92 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
+                    <name>actionNames</name>
+                    <valueList>
+                        <valueListItems>
+                            <value>CustomButton.BusinessLicense.View_Permit</value>
+                            <visibilityRule>
+                                <booleanFilter>1 OR 2 OR 3 OR 4 OR 5 OR 6 OR 7</booleanFilter>
+                                <criteria>
+                                    <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Pool Operating Permit</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
+                                    <operator>CONTAINS</operator>
+                                    <rightValue>Pool Construction Permit</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Drinking Water Construction Permit</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Drinking Water Operating Permit</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Food Premise Operating Permit</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Low Risk Temporary Food Service Operating Permit</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>High Risk Temporary Food Service Operating Permit</rightValue>
+                                </criteria>
+                            </visibilityRule>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>CustomButton.BusinessLicense.View_Letter</value>
+                            <visibilityRule>
+                                <booleanFilter>1 OR 2 OR 3</booleanFilter>
+                                <criteria>
+                                    <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Sewerage System Letter of Certification</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Water Source Evaluation</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Sewerage Holding Tank Permit to Construct</rightValue>
+                                </criteria>
+                            </visibilityRule>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>CustomButton.BusinessLicense.View_License</value>
+                            <visibilityRule>
+                                <booleanFilter>1 OR 2</booleanFilter>
+                                <criteria>
+                                    <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Child Care License</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Residential Care Facility License</rightValue>
+                                </criteria>
+                            </visibilityRule>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>BusinessLicense.EHISNewTaskOnBL</value>
+                        </valueListItems>
+                    </valueList>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
                     <name>collapsed</name>
                     <value>false</value>
                 </componentInstanceProperties>
@@ -45,7 +131,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.AccountId</fieldItem>
                 <identifier>RecordAccountIdField</identifier>
@@ -75,7 +161,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Status</fieldItem>
                 <identifier>RecordStatusField</identifier>
@@ -99,7 +185,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Account__c</fieldItem>
                 <identifier>RecordAccount_cField</identifier>
@@ -248,6 +334,22 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
+                    <name>actionNames</name>
+                    <valueList>
+                        <valueListItems>
+                            <value>New</value>
+                        </valueListItems>
+                    </valueList>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>adminFilters</name>
+                    <valueList>
+                        <valueListItems>
+                            <value>RecordType|EQUALS|[&quot;Evaluation&quot;,&quot;ConstructionPermitApplication&quot;,&quot;OperatingPermitApplication&quot;,&quot;PHOCSExemptions&quot;]</value>
+                        </valueListItems>
+                    </valueList>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
                     <name>maxRecordsToDisplay</name>
                     <value>10</value>
                 </componentInstanceProperties>
@@ -270,7 +372,7 @@
                             <value>Name</value>
                         </valueListItems>
                         <valueListItems>
-                            <value>Description</value>
+                            <value>Description__c</value>
                         </valueListItems>
                         <valueListItems>
                             <value>LicenseType</value>
@@ -300,13 +402,92 @@
                     <value>Default</value>
                 </componentInstanceProperties>
                 <componentName>lst:dynamicRelatedList</componentName>
-                <identifier>lst_dynamicRelatedList</identifier>
+                <identifier>lst_dynamicRelatedList2</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
+                    <name>actionNames</name>
+                    <valueList>
+                        <valueListItems>
+                            <value>New</value>
+                        </valueListItems>
+                    </valueList>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
                     <name>adminFilters</name>
+                    <valueList>
+                        <valueListItems>
+                            <value>RecordType|EQUALS|[&quot;PHOCSExemptions&quot;]</value>
+                        </valueListItems>
+                    </valueList>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>maxRecordsToDisplay</name>
+                    <value>10</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>parentFieldApiName</name>
+                    <value>BusinessLicense.Id</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListApiName</name>
+                    <value>BusinessLicenseApplicationPermit</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListDisplayType</name>
+                    <value>ADVGRID</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListFieldAliases</name>
+                    <valueList>
+                        <valueListItems>
+                            <value>Name</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Description__c</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>LicenseType</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>AppliedDate</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Status</value>
+                        </valueListItems>
+                    </valueList>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListLabel</name>
+                    <value>Exemptions</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>showActionBar</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>sortFieldAlias</name>
+                    <value>__DEFAULT__</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>sortFieldOrder</name>
+                    <value>Default</value>
+                </componentInstanceProperties>
+                <componentName>lst:dynamicRelatedList</componentName>
+                <identifier>lst_dynamicRelatedList3</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>actionNames</name>
+                    <valueList>
+                        <valueListItems>
+                            <value>New</value>
+                        </valueListItems>
+                    </valueList>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>maxRecordsToDisplay</name>
@@ -364,7 +545,7 @@
                     <value>Default</value>
                 </componentInstanceProperties>
                 <componentName>lst:dynamicRelatedList</componentName>
-                <identifier>lst_dynamicRelatedList2</identifier>
+                <identifier>lst_dynamicRelatedList</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>

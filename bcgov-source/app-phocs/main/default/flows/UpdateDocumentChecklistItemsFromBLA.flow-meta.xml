@@ -5,8 +5,8 @@
     <decisions>
         <name>Check_BLA_Record_Type</name>
         <label>Check BLA Record Type</label>
-        <locationX>380</locationX>
-        <locationY>611</locationY>
+        <locationX>578</locationX>
+        <locationY>827</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>PHOCS_BLA_Record_Types</name>
@@ -48,17 +48,24 @@
     <decisions>
         <name>Check_Document_Checklist_Item</name>
         <label>Check Document Checklist Item</label>
-        <locationX>182</locationX>
-        <locationY>719</locationY>
+        <locationX>314</locationX>
+        <locationY>935</locationY>
         <defaultConnector>
             <targetReference>Update_Document_Checklist_Items</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Name_contains_ERCP</name>
-            <conditionLogic>and</conditionLogic>
+            <conditionLogic>or</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.Name</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <elementReference>ERCP</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
                 <operator>Contains</operator>
                 <rightValue>
                     <elementReference>ERCP</elementReference>
@@ -67,11 +74,43 @@
             <connector>
                 <targetReference>Update_Document_Checklist_Items_ERCP</targetReference>
             </connector>
-            <label>Name contains ERCP</label>
+            <label>Name or Record Type Name contains ERCP</label>
+        </rules>
+        <rules>
+            <name>IS_Retrieved_From_Custom_Metadata</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>RecordTypefromCustommetadata.RecordTypeName__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <elementReference>DrawingPlan</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Records_DrawingPlan</targetReference>
+            </connector>
+            <label>IS Retrieved From Custom Metadata</label>
         </rules>
     </decisions>
     <description>EHIS-905: Update DocumentChecklistItems record types based on PHOCS Business License Application record types</description>
     <environments>Default</environments>
+    <formulas>
+        <name>DocumentchecklistName</name>
+        <dataType>String</dataType>
+        <expression>TRIM(
+  RIGHT(
+    {!$Record.Name},
+    LEN( {!$Record.Name}) - FIND(&quot;. &quot;,  {!$Record.Name})
+  )
+)</expression>
+    </formulas>
     <interviewLabel>Update Document Checklist Items from BLA {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Update Document Checklist Items from BLA</label>
     <processMetadataValues>
@@ -94,10 +133,10 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordLookups>
-        <description>Get Business License Application records</description>
+        <description>Get Business License Application record</description>
         <name>Get_BLA</name>
         <label>Get BLA</label>
-        <locationX>380</locationX>
+        <locationX>578</locationX>
         <locationY>287</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -118,7 +157,7 @@
     <recordLookups>
         <name>Get_Document_Checklist_Item_Record_Type</name>
         <label>Get Document Checklist Item Record Type - Non ERCP</label>
-        <locationX>380</locationX>
+        <locationX>578</locationX>
         <locationY>395</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -138,13 +177,35 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
-        <name>Get_Document_Checklist_Item_Record_Type_ERCP</name>
-        <label>Get Document Checklist Item Record Type - ERCP</label>
-        <locationX>380</locationX>
-        <locationY>503</locationY>
+        <name>Get_Document_Checklist_Item_Record_Type_DrawingPlan</name>
+        <label>Get Document Checklist Item Record Type - DrawingPlan</label>
+        <locationX>578</locationX>
+        <locationY>719</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Check_BLA_Record_Type</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>RecordTypefromCustommetadata.RecordTypeName__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>RecordType</object>
+        <queriedFields>Id</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Document_Checklist_Item_Record_Type_ERCP</name>
+        <label>Get Document Checklist Item Record Type - ERCP</label>
+        <locationX>578</locationX>
+        <locationY>503</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>RecordTypefromCustommetadata</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -159,11 +220,34 @@
         <queriedFields>Id</queriedFields>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <recordLookups>
+        <name>RecordTypefromCustommetadata</name>
+        <label>RecordTypefromCustommetadata</label>
+        <locationX>578</locationX>
+        <locationY>611</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Document_Checklist_Item_Record_Type_DrawingPlan</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DocumentCheckListItem_Name__c</field>
+            <operator>Contains</operator>
+            <value>
+                <elementReference>DocumentchecklistName</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>DocumentChecklistItemRecordTypeMapping__mdt</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>RecordTypeName__c</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <recordUpdates>
         <name>Update_Document_Checklist_Items</name>
         <label>Update Document Checklist Items</label>
-        <locationX>314</locationX>
-        <locationY>827</locationY>
+        <locationX>578</locationX>
+        <locationY>1043</locationY>
         <inputAssignments>
             <field>RecordTypeId</field>
             <value>
@@ -176,7 +260,7 @@
         <name>Update_Document_Checklist_Items_ERCP</name>
         <label>Update Document Checklist Items ERCP</label>
         <locationX>50</locationX>
-        <locationY>827</locationY>
+        <locationY>1043</locationY>
         <inputAssignments>
             <field>RecordTypeId</field>
             <value>
@@ -185,8 +269,21 @@
         </inputAssignments>
         <inputReference>$Record</inputReference>
     </recordUpdates>
+    <recordUpdates>
+        <name>Update_Records_DrawingPlan</name>
+        <label>Update Document Checklist Items Drawing/Plan</label>
+        <locationX>314</locationX>
+        <locationY>1043</locationY>
+        <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <elementReference>Get_Document_Checklist_Item_Record_Type_DrawingPlan.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
     <start>
-        <locationX>254</locationX>
+        <locationX>452</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_BLA</targetReference>
@@ -224,6 +321,16 @@
         <isOutput>false</isOutput>
         <value>
             <stringValue>OperatingPermitApplication</stringValue>
+        </value>
+    </variables>
+    <variables>
+        <name>DrawingPlan</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>DrawingPlan</stringValue>
         </value>
     </variables>
     <variables>
@@ -278,6 +385,16 @@
         <isOutput>false</isOutput>
         <value>
             <stringValue>PHOCSDocumentChecklist</stringValue>
+        </value>
+    </variables>
+    <variables>
+        <name>PHOCSDrawingPlanDocumentChecklist</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>PHOCSDrawingPlanDocumentChecklist</stringValue>
         </value>
     </variables>
     <variables>
