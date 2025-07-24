@@ -932,4 +932,24 @@
         </criteriaItems>
         <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
+    <sharingGuestRules>
+        <fullName>EHIS_Public_User_Account_Read_Sharing_Rule</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>Public/Guest Users must have read access to Facility and Water System - EHIS-957</description>
+        <label>EHIS Public User Account Read Sharing Rule</label>
+        <sharedTo>
+            <guestUser>phocsservices</guestUser>
+        </sharedTo>
+        <criteriaItems>
+            <field>Status__c</field>
+            <operation>equals</operation>
+            <value>Open</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Drinking Water System,PHOCS Facility</value>
+        </criteriaItems>
+        <includeHVUOwnedRecords>false</includeHVUOwnedRecords>
+    </sharingGuestRules>
 </SharingRules>
