@@ -1,0 +1,61 @@
+## UAT SP12 Deployment Runbook
+
+|Sandbo|`Post refresh runbook for Hotfixqa " ALR-SP-12"|
+|-|-|
+|Runbook Created|`2024-7-23`|
+|Runbook Last Modified|`2024-7-23`|
+
+## Pre-Requisites [5 min ]
+
+1. [x] Deployment User has assigned Permission Sets
+
+   1.EHIS Data Migration PS
+   2.EHIS Enable MFA PS
+   3.Action Plans PS
+   4.Document checklist PS
+   5.DocGen Designer PS
+   6.ALR All Users PG
+   7.ALR Data Analyst Users PG
+   8.Business Milestones and Life Events Access PS
+
+2. [x] Checkout to QA.378 create  release branch out of it `release-UAT-SP12` code 
+
+## Assumptions
+
+1. Total excecution time ~ > 30 mins
+
+## Open Items
+
+## Deployment Steps (20 mins)
+
+1.[x] Deploy OmniStudio components and its dependencies (5 min)
+   > sfdx force:source:deploy --sourcepath "ehis-source\core\main\default\omniScripts,ehis-source\core\main\default\omniDataTransforms,src\main\default\omniDataTransforms,src\main\default\omniIntegrationProcedures,src\main\default\omniUiCard,src\main\default\omniScripts" --wait 30 --targetusername gandloju.vishwantha@accenture.com.alr.uat
+
+
+2.[X]  Deploy full repository (~10 min)
+
+> [X] Verify folders
+      |Folder|Path|
+      |-|-|
+      |`src`|`src\main\default`|
+      |`src-access-mgmt`|`src-access-mgmt\main\default`|
+      |`src-ui`|`src-ui\main\default`|
+      |'Ehis-source'|
+
+> [x] Deploy
+
+- sfdx force:source:deploy --sourcepath "ehis-source,src-access-mgmt\main\default,src-ui\main\default,src\main\default" --wait 30 -u gandloju.vishwantha@accenture.com.alr.uat -l RunLocalTests
+
+3 [x] Re-activate Omnistudio components
+      1. App Launcher -> OmniStudio -> Omnistudio **Integration Procedures**
+      2. Locate all active custom **Integration Procedures** -> deactivate them -> activate them back.
+      3. App Launcher -> Omnifle[  ] cards -> **Omnistudio Fle[  ] Cards**
+      4. Locate all active custom **Fle[  ] Cards** -> open each Fle[  ] Card -> deactivate -> activate back.
+      5. App Launcher -> OmniStudio -> **OmniScripts**
+      6. Locate all active custom **OmniScripts** -> open each omni script -> deactivate -> activate back
+
+4.[x] ALR-1199 Go to Omniscript “RiskAssessment“ → Open active version → Click on dropdown and select “Select Deploy Standard Runtime Compatible LWC “ → Done.
+
+DevOps checklist:
+
+1. Make sure flow is activated " UpdateAssessmentTaskStatus " templates 

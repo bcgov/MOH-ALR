@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MyOpenCasesPHOCS</fullName>
+    <columns>CASES.CASE_NUMBER</columns>
+    <columns>ACCOUNT.NAME</columns>
+    <columns>CASES.RECORDTYPE</columns>
+    <columns>CASES.CREATED_DATE</columns>
+    <columns>CASES.STATUS</columns>
+    <columns>CASES.PRIORITY</columns>
+    <filterScope>Mine</filterScope>
+    <filters>
+        <field>CASES.STATUS</field>
+        <operation>equals</operation>
+        <value>Open</value>
+    </filters>
+    <label>My Open Cases</label>
+    <sharedTo>
+        <group>EHISUsersPG</group>
+        <group>PHOCSDataLoadUser</group>
+        <group>PHOCSReportingUserPG</group>
+    </sharedTo>
+</ListView>

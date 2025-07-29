@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RestrictServiceNameandTypeFieldEdit</fullName>
+    <active>true</active>
+    <description>Service Name and Type Fields Cannot be Edited - ALR-702</description>
+    <errorConditionFormula>AND(
+    NOT($Permission.EHISBypassValidationRuleCustomPermission), 
+    NOT(ISNEW()),  
+    OR(
+        ISCHANGED(ServiceName__c),
+        ISCHANGED(ServiceType__c)
+    )
+)</errorConditionFormula>
+    <errorMessage>Service Name and Service Type fields cannot be edited.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApprovalProcess xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <allowRecall>false</allowRecall>
+    <allowedSubmitters>
+        <type>owner</type>
+    </allowedSubmitters>
+    <approvalPageFields>
+        <field>CaseNumber</field>
+        <field>Owner</field>
+        <field>RegistrarApprovalNeeded__c</field>
+    </approvalPageFields>
+    <approvalStep>
+        <allowDelegate>false</allowDelegate>
+        <assignedApprover>
+            <approver>
+                <name>ApprovalQueue</name>
+                <type>queue</type>
+            </approver>
+            <whenMultipleApprovers>FirstResponse</whenMultipleApprovers>
+        </assignedApprover>
+        <description>Approval Step 1 assigned to approval queue for members to approve or reject Incident Cases - ALR-201</description>
+        <label>Incident Case Approval Step 1</label>
+        <name>IncidentCaseApprovalStep1</name>
+    </approvalStep>
+    <approvalStep>
+        <allowDelegate>false</allowDelegate>
+        <assignedApprover>
+            <approver>
+                <type>adhoc</type>
+            </approver>
+        </assignedApprover>
+        <description>Approval Step 2 where Approval Queue members decide if Registrar approval is needed - ALR-201</description>
+        <entryCriteria>
+            <booleanFilter>1</booleanFilter>
+            <criteriaItems>
+                <field>Case.RegistrarApprovalNeeded__c</field>
+                <operation>equals</operation>
+                <value>True</value>
+            </criteriaItems>
+        </entryCriteria>
+        <label>Incident Case Approval Step 2</label>
+        <name>IncidentCaseApprovalStep2</name>
+        <rejectBehavior>
+            <type>RejectRequest</type>
+        </rejectBehavior>
+    </approvalStep>
+    <description>Approval Process for Investigators to submit Reportable Incident Cases for approval - ALR-201</description>
+    <enableMobileDeviceAccess>false</enableMobileDeviceAccess>
+    <entryCriteria>
+        <booleanFilter>1 AND 2 AND 3</booleanFilter>
+        <criteriaItems>
+            <field>Case.IsApprovalRequired__c</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Case.Status</field>
+            <operation>equals</operation>
+            <value>Investigator Review,Under Inspection</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Case.ApprovedDate__c</field>
+            <operation>equals</operation>
+        </criteriaItems>
+    </entryCriteria>
+    <finalApprovalActions>
+        <action>
+            <name>ApprovalCaseApprovedDateFieldUpdate</name>
+            <type>FieldUpdate</type>
+        </action>
+        <action>
+            <name>ApprovalCaseStatusFieldUpdate</name>
+            <type>FieldUpdate</type>
+        </action>
+    </finalApprovalActions>
+    <finalApprovalRecordLock>false</finalApprovalRecordLock>
+    <finalRejectionActions>
+        <action>
+            <name>RejectionCaseStatusFieldUpdate</name>
+            <type>FieldUpdate</type>
+        </action>
+    </finalRejectionActions>
+    <finalRejectionRecordLock>false</finalRejectionRecordLock>
+    <initialSubmissionActions>
+        <action>
+            <name>OnSubmitCaseStatusFieldUpdate</name>
+            <type>FieldUpdate</type>
+        </action>
+    </initialSubmissionActions>
+    <label>Reportable Incident Case ApprovalProcess</label>
+    <processOrder>1</processOrder>
+    <recordEditability>AdminOrCurrentApprover</recordEditability>
+    <showApprovalHistory>true</showApprovalHistory>
+</ApprovalProcess>

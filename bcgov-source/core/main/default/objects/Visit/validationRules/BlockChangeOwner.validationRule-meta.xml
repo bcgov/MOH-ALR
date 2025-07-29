@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BlockChangeOwner</fullName>
+    <active>true</active>
+    <description>Apart from Investigator remaining personas cannot change owner of Inspection records - ALR-75</description>
+    <errorConditionFormula>AND(
+     NOT( $Permission.EHISBypassValidationRuleCustomPermission ) ,
+     RecordType.DeveloperName  = &apos;Inspection&apos;,
+     NOT($Permission.ChangeOwner)  ,
+     ISCHANGED(OwnerId) 
+)</errorConditionFormula>
+    <errorMessage>Cannot change Owner</errorMessage>
+</ValidationRule>

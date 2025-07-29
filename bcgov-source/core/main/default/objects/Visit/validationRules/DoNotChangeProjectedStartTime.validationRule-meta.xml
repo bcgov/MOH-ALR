@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DoNotChangeProjectedStartTime</fullName>
+    <active>false</active>
+    <errorConditionFormula>RecordType.DeveloperName = &apos;Inspection&apos; 
+&amp;&amp;  
+NOT( ISNEW() ) 
+&amp;&amp; 
+ISCHANGED( ProjectedStartTime__c )</errorConditionFormula>
+    <errorMessage>You cannot edit Projected Start Time</errorMessage>
+</ValidationRule>

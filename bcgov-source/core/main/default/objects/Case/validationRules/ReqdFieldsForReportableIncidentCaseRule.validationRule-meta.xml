@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ReqdFieldsForReportableIncidentCaseRule</fullName>
+    <active>true</active>
+    <description>Throws error when any of Incident Date, Type of Incident or Place of Incident are blank for Reportable Incident type Case - ALR-89</description>
+    <errorConditionFormula>RecordType.DeveloperName = &quot;ReportableIncident&quot; &amp;&amp; (ISBLANK(IncidentDate__c) || ISBLANK(TEXT(TypeOfIncident__c)) || ISBLANK(TEXT(PlaceOfIncident__c)))</errorConditionFormula>
+    <errorMessage>Incident Date, Type of Incident and Place of Incident fields are mandatory</errorMessage>
+</ValidationRule>

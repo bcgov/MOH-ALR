@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RestrictUserTo_EditClosedRecords</fullName>
+    <active>true</active>
+    <errorConditionFormula>NOT(($Permission.EHISDataAnalystUser) ||($Permission.EHISBypassValidationRuleCustomPermission)) &amp;&amp;
+  ISPICKVAL(Status, &quot;Closed&quot;) &amp;&amp;  ISPICKVAL(PRIORVALUE(Status), &quot;Closed&quot;) &amp;&amp;
+RecordType.DeveloperName = &apos;Public_Complaint&apos;</errorConditionFormula>
+    <errorMessage>This public complaint is Closed and cannot be edited</errorMessage>
+</ValidationRule>

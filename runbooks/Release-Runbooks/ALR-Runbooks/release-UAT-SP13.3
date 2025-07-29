@@ -1,0 +1,43 @@
+# Sprint 13 Deployment Runbook
+
+|Sandbox|`UAT 3rd round of Deployment runbook for ALR-SP13'|
+|-|-|
+|Runbook Created|`2024-08-23`|
+|Runbook Last Modified|`2024-08-23`|
+
+## Pre-Requisites [5 min ]
+
+1. [x] Deployment User has assigned Permission Sets
+
+> PERMISSION SET'S
+   1.EHIS Data Migration PS
+   2.EHIS Enable MFA PS
+   3.Action Plans PS
+   4.Document checklist PS
+   5.DocGen Designer PS ,DocGen Designer PS ,Docgen Designer Standard User PS
+   6.EHIS Admin User PS
+   7.Business Milestones and Life Events Access PS
+
+> Public Group
+   1.ALR All Users PG
+   2.ALR Data Analyst Users PG
+
+> Permission Set Group
+   1.EHIS ALR Admin PSG
+   2.EHIS ALR Data Analyst PSG
+   3.EHIS ALR Data Migration PSG
+   4.EHIS System Administrator PSG
+
+2. [x] Checkout to QA.407 tag and create a release branch out of it `release-ALR-SP13.2` branch
+
+## Assumptions
+
+1. Total excecution time ~ > 15 mins
+
+## Open Items
+
+## Deployment Steps - verify deployment username added in commands
+
+1. [ ] Deploy
+
+- sfdx force:source:deploy --sourcepath "ehis-source,src-access-mgmt\main\default,src-ui\main\default,src\main\default" --wait 30 -u gandloju.vishwantha@accenture.com.alr.uat -l RunLocalTests

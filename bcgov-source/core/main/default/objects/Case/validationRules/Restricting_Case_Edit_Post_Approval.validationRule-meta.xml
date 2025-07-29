@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Restricting_Case_Edit_Post_Approval</fullName>
+    <active>true</active>
+    <description>Restricting users not to change statuses manually from pending approval to approved or vice-versa</description>
+    <errorConditionFormula>AND(
+    ISPICKVAL(Status, &quot;Pending Approval&quot;),
+    NOT(ISPICKVAL(PRIORVALUE(Status), &quot;Pending Approval&quot;)),
+    OR(
+        RecordType.DeveloperName = &apos;PublicComplaintCase&apos;,
+        RecordType.DeveloperName = &apos;ReportableIncident&apos;
+    )
+) ||
+AND(
+    ISPICKVAL(Status, &quot;Approved&quot;),
+    NOT(ISPICKVAL(PRIORVALUE(Status), &quot;Approved&quot;)),
+    OR(
+        RecordType.DeveloperName = &apos;PublicComplaintCase&apos;,
+        RecordType.DeveloperName = &apos;ReportableIncident&apos;
+    )
+)</errorConditionFormula>
+    <errorMessage>Status cannot be changed. Use another Status.</errorMessage>
+</ValidationRule>

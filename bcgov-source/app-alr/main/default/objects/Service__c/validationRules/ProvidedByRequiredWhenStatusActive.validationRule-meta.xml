@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ProvidedByRequiredWhenStatusActive</fullName>
+    <active>true</active>
+    <description>ALR-1508</description>
+    <errorConditionFormula>AND(
+    ISPICKVAL(ServiceType__c, &quot;Assisted Living Service&quot;),
+    ISPICKVAL(Status__c, &quot;Active&quot;),
+    ISPICKVAL(ProvidedBy__c, &quot;&quot;)
+)</errorConditionFormula>
+    <errorMessage>Provided By is Mandatory when Status is Active.</errorMessage>
+</ValidationRule>

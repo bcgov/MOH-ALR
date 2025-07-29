@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>FacilityName__c</fullName>
+    <deleteConstraint>Restrict</deleteConstraint>
+    <label>Facility Name</label>
+    <lookupFilter>
+        <active>true</active>
+        <booleanFilter>((1 AND (5 OR 6)) OR (2 AND 5 AND 8) OR (3 AND 5 AND 7) OR (4 AND 5 AND 7))</booleanFilter>
+        <filterItems>
+            <field>$Source.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Water Lab Test Requisition</value>
+        </filterItems>
+        <filterItems>
+            <field>$Source.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Dye Test Requisition</value>
+        </filterItems>
+        <filterItems>
+            <field>$Source.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Lead Water Test Requisition</value>
+        </filterItems>
+        <filterItems>
+            <field>$Source.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Radon Test Requisition</value>
+        </filterItems>
+        <filterItems>
+            <field>Account.RecordTypeName__c</field>
+            <operation>equals</operation>
+            <value>Facility</value>
+        </filterItems>
+        <filterItems>
+            <field>Account.RecordTypeName__c</field>
+            <operation>contains</operation>
+            <value>Drinking Water System,Drinking Water Source Intake</value>
+        </filterItems>
+        <filterItems>
+            <field>Account.Type</field>
+            <operation>equals</operation>
+            <value>Child Care</value>
+        </filterItems>
+        <filterItems>
+            <field>Account.Type</field>
+            <operation>equals</operation>
+            <value>Sewerage</value>
+        </filterItems>
+        <isOptional>true</isOptional>
+    </lookupFilter>
+    <referenceTo>Account</referenceTo>
+    <relationshipLabel>Lab Test Requisitions</relationshipLabel>
+    <relationshipName>LabTestRequisitions</relationshipName>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

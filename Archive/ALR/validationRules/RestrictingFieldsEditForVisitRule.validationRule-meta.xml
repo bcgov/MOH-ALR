@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RestrictingFieldsEditForVisitRule</fullName>
+    <active>false</active>
+    <description>This Validation rule is created as part of User story ALR-983
+Only the ALR Admin and Data Analyst will be able to update WebsitePostConfirmed, DatePosted, PostingRemovalDate fields . All other users can view these fields</description>
+    <errorConditionFormula>NOT($Permission.EHISBypassValidationRuleCustomPermission)
+&amp;&amp;
+RecordType.DeveloperName = &apos;Inspection&apos; &amp;&amp;
+NOT(ISNEW())
+ &amp;&amp; 
+($Permission.EHISAdminUser || $Permission.EHISDataAnalystUser)
+
+&amp;&amp;
+NOT(
+	($Permission.EHISAdminUser || $Permission.EHISDataAnalystUser) &amp;&amp; 
+	(ISCHANGED(Website_Post_Confirmed__c) ||  ISCHANGED(Date_Posted__c) ||   ISCHANGED(Posting_Removal_Date__c))
+)</errorConditionFormula>
+    <errorMessage>This record cannot be edited.</errorMessage>
+</ValidationRule>

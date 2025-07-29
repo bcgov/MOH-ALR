@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ToMakeNameAndFeeAmountFieldsNonEditable</fullName>
+    <active>true</active>
+    <description>Name and Fee Amount Fields should not be edited by ALR Admin  - ALR-706</description>
+    <errorConditionFormula>AND( 
+    NOT($Permission.EHISBypassValidationRuleCustomPermission),
+    OR(                                       
+      ISCHANGED(Name),                                                
+      ISCHANGED(FeeAmount) 
+    )                              
+)</errorConditionFormula>
+    <errorMessage>Name and Fee Amount cannot be edited</errorMessage>
+</ValidationRule>
