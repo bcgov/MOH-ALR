@@ -10,7 +10,7 @@
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>PHOCS_BLA_Record_Types</name>
-            <conditionLogic>(1 OR 2 OR 3) AND 4</conditionLogic>
+            <conditionLogic>(1 OR 2 OR 3 OR 5) AND 4</conditionLogic>
             <conditions>
                 <leftValueReference>Get_BLA.RecordType.DeveloperName</leftValueReference>
                 <operator>EqualTo</operator>
@@ -37,6 +37,13 @@
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_BLA.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>PHOCSExemptions</stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -88,9 +95,9 @@
             </conditions>
             <conditions>
                 <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
-                <operator>Contains</operator>
+                <operator>EqualTo</operator>
                 <rightValue>
-                    <elementReference>DrawingPlan</elementReference>
+                    <stringValue>PHOCSDrawingPlanDocumentChecklist</stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -190,7 +197,7 @@
             <field>DeveloperName</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>RecordTypefromCustommetadata.RecordTypeName__c</elementReference>
+                <stringValue>PHOCSDrawingPlanDocumentChecklist</stringValue>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
