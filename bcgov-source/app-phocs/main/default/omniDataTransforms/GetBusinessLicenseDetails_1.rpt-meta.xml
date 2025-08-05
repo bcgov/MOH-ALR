@@ -1445,7 +1445,7 @@
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <globalKey>GetBusinessLicenseDetailsCustom0jIbZ0000001lbBUAQItem26</globalKey>
-        <inputFieldName>BLOrganization:BillingAddress</inputFieldName>
+        <inputFieldName>OrganizationBillingAddress</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
@@ -1453,6 +1453,7 @@
         <outputFieldName>BLOrganizationBillingAddress</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -1590,6 +1591,21 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <globalKey>78ad0db1-9c87-453b-bd0b-2225359453f5</globalKey>
+        <inputFieldName>WaterSuppliersDWS:Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountDWSDetails:WaterSuppliersDWSDetails:BLAccountDWSName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <globalKey>GetBusinessLicenseDetailsCustom6199</globalKey>
         <inputFieldName>WaterSuppliers:Source_Water_Body__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
@@ -1652,7 +1668,7 @@
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <globalKey>GetBusinessLicenseDetailsCustom6497</globalKey>
-        <inputFieldName>BLAccount:AccountNumber</inputFieldName>
+        <inputFieldName>BLAccount:AccountNumberRTPrefixed__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>GetBusinessLicenseDetails</name>
@@ -1660,6 +1676,7 @@
         <outputFieldName>BLAccountNumber</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -1970,7 +1987,7 @@
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
-        <disabled>true</disabled>
+        <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <formulaConverted>| var:BLOrganization:BillingStreet &quot;/\/\/&quot; var:BLOrganization:BillingCity &quot;/\/\/&quot; var:BLOrganization:BillingState &quot;/\/\/&quot; var:BLOrganization:BillingPostalCode &quot;/\/\/&quot; var:BLOrganization:BillingCountry CONCAT</formulaConverted>
         <formulaExpression>CONCAT(%BLOrganization:BillingStreet%, &quot; &quot;,%BLOrganization:BillingCity%, &quot; &quot;,%BLOrganization:BillingState%, &quot; &quot;,%BLOrganization:BillingPostalCode%, &quot; &quot;,%BLOrganization:BillingCountry%)</formulaExpression>
@@ -2046,7 +2063,7 @@
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <filterOperator>=</filterOperator>
-        <filterValue>DocChecklistERCPRecTypeId</filterValue>
+        <filterValue>DocChecklistERCPRecTypeId:Id</filterValue>
         <globalKey>GetBusinessLicenseDetailsCustom5943</globalKey>
         <inputFieldName>RecordTypeId</inputFieldName>
         <inputObjectName>DocumentChecklistItem</inputObjectName>
@@ -2091,7 +2108,7 @@
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <filterOperator>=</filterOperator>
-        <filterValue>PHOCSERCPDocumentChecklist</filterValue>
+        <filterValue>&apos;PHOCSERCPDocumentChecklist&apos;</filterValue>
         <globalKey>GetBusinessLicenseDetailsCustom9342</globalKey>
         <inputFieldName>DeveloperName</inputFieldName>
         <inputObjectName>RecordType</inputObjectName>
@@ -2664,7 +2681,7 @@
     </omniDataTransformItem>
     <outputType>JSON</outputType>
     <previewJsonData>{
-  &quot;Id&quot; : &quot;0cEbZ0000000zI1UAI&quot;
+  &quot;Id&quot; : &quot;0cEbZ0000000veDUAQ&quot;
 }</previewJsonData>
     <processSuperBulk>false</processSuperBulk>
     <responseCacheTtlMinutes>0.0</responseCacheTtlMinutes>
