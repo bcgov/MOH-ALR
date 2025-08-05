@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <customErrors>
         <name>Error</name>
         <label>Error</label>
@@ -40,7 +41,7 @@
             <label>Available</label>
         </rules>
     </decisions>
-    <description>ALR-1027 V8 update to status closed</description>
+    <description>BCMOHAD-29533 V4 - Updated the flow run criteria to prevent duplicate records.</description>
     <environments>Default</environments>
     <formulas>
         <name>Datefield</name>
@@ -175,6 +176,7 @@
         <connector>
             <targetReference>AscLocationData</targetReference>
         </connector>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Status</field>
