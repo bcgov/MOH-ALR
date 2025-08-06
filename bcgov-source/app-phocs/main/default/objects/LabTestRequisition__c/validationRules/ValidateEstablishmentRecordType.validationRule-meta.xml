@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ValidateEstablishmentRecordType</fullName>
+    <active>true</active>
+    <errorConditionFormula>RecordType.DeveloperName = &apos;PHOCSFoodLabTestRequisition&apos; &amp;&amp; 
+ Establishment__r.RecordTypeName__c != &apos;DrinkingWaterSystem&apos; &amp;&amp;
+ Establishment__r.RecordTypeName__c != &apos;DrinkingWaterSourceIntake&apos; &amp;&amp;
+(Establishment__r.RecordTypeName__c = &apos;Facility&apos; &amp;&amp;
+    (
+     ISPICKVAL(Establishment__r.Type, &apos;Sewerage&apos;) || ISPICKVAL(Establishment__r.Type, &apos;Child Care&apos;)
+    )
+  )</errorConditionFormula>
+    <errorMessage>Establishment is not eligible for this Lab Test Requisition</errorMessage>
+</ValidationRule>
