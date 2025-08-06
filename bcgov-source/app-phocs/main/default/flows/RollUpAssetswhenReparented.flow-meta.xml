@@ -27,10 +27,10 @@
             <label>Account is changed</label>
         </rules>
     </decisions>
-    <description>Roll up Assets when Re-parented or Total Capacity value change on Facility EHIS-1672</description>
+    <description>Roll up Assets when Re-parented, or Total Capacity or Status change on Facility</description>
     <environments>Default</environments>
     <interviewLabel>Roll Up Assets when Re-parented {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>Roll Up Assets when Re-parented or TotalCapacity Change</label>
+    <label>Roll Up Assets when Re-parented, TotalCapacity or Status Change</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -56,7 +56,7 @@
         <connector>
             <targetReference>Check_Account_Change_or_Not</targetReference>
         </connector>
-        <filterLogic>or</filterLogic>
+        <filterLogic>((1 OR 2) AND 3) OR 4</filterLogic>
         <filters>
             <field>AccountId</field>
             <operator>IsChanged</operator>
@@ -66,6 +66,20 @@
         </filters>
         <filters>
             <field>TotalCapacity__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Status</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Active</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Status</field>
             <operator>IsChanged</operator>
             <value>
                 <booleanValue>true</booleanValue>
