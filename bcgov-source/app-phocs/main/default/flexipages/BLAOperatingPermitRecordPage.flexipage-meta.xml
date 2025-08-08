@@ -231,18 +231,36 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.ApprovedDate</fieldItem>
-                <identifier>RecordApprovedDateField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
                 <fieldItem>Record.OtherServicesAtThisAddress__c</fieldItem>
                 <identifier>RecordOtherServicesAtThisAddress_cField</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 OR 2 OR 3 OR 4 OR 5</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.LicenseType.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Pool Operating Permit</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.LicenseType.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Industrial Camp Operating Permit</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.LicenseType.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Food Premise Operating Permit</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.LicenseType.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Child Care License</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.LicenseType.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Residential Care License</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <name>Facet-8710ad56-d24c-4347-8244-4868f8f0d353</name>
@@ -795,6 +813,16 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
+                <fieldItem>Record.ApprovedBy__c</fieldItem>
+                <identifier>RecordApprovedBy_cField3</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.SendInvoiceTo__c</fieldItem>
                 <identifier>RecordSendInvoiceTo_cField</identifier>
             </fieldInstance>
@@ -1057,6 +1085,13 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection5</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Closed</rightValue>
+                    </criteria>
+                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <itemInstances>
