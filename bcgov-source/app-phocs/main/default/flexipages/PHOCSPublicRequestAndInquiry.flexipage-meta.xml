@@ -150,6 +150,13 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.TopicOtherSpecify__c</fieldItem>
                 <identifier>RecordTopicOtherSpecify_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.Topic__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Other</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -276,13 +283,13 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>required</value>
+                    <value>readonly</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.NeedFeedbackonResolution__c</fieldItem>
-                <identifier>RecordNeedFeedbackonResolution_cField</identifier>
+                <fieldItem>Record.CreatedById</fieldItem>
+                <identifier>RecordCreatedByIdField</identifier>
             </fieldInstance>
         </itemInstances>
-        <name>Facet-5025a1d7-a8d0-49ba-b0fe-84285f82ce55</name>
+        <name>Facet-73f0283a-42a2-4cc9-97fe-9d4bfa411db0</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -290,13 +297,13 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>required</value>
+                    <value>readonly</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.WishtoRemainAnonymous__c</fieldItem>
-                <identifier>RecordWishtoRemainAnonymous_cField</identifier>
+                <fieldItem>Record.LastModifiedById</fieldItem>
+                <identifier>RecordLastModifiedByIdField</identifier>
             </fieldInstance>
         </itemInstances>
-        <name>Facet-1ed7836b-29b8-4afb-9f9a-c8058dce4650</name>
+        <name>Facet-140e2feb-426f-4eed-835a-6989caec7f9d</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -304,23 +311,23 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-5025a1d7-a8d0-49ba-b0fe-84285f82ce55</value>
+                    <value>Facet-73f0283a-42a2-4cc9-97fe-9d4bfa411db0</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column7</identifier>
+                <identifier>flexipage_column</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-1ed7836b-29b8-4afb-9f9a-c8058dce4650</value>
+                    <value>Facet-140e2feb-426f-4eed-835a-6989caec7f9d</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column8</identifier>
+                <identifier>flexipage_column2</identifier>
             </componentInstance>
         </itemInstances>
-        <name>Facet-394a8ac8-dcbd-42dc-ae33-43085dc742d0</name>
+        <name>Facet-cdd96f59-5b14-4d88-9557-94a4108d1bb0</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -364,7 +371,7 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>columns</name>
-                    <value>Facet-394a8ac8-dcbd-42dc-ae33-43085dc742d0</value>
+                    <value>Facet-cdd96f59-5b14-4d88-9557-94a4108d1bb0</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>horizontalAlignment</name>
@@ -372,10 +379,10 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>label</name>
-                    <value>Required</value>
+                    <value>System Information</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
-                <identifier>flexipage_fieldSection4</identifier>
+                <identifier>flexipage_fieldSection</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -386,10 +393,11 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>display</name>
-                    <value>Display OmniScript on page</value>
+                    <value>Display button to open OmniScript</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>inlineLabel</name>
+                    <value>Create Case</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>inlineVariant</name>
@@ -413,6 +421,24 @@
                 </componentInstanceProperties>
                 <componentName>runtime_omnistudio:omniscript</componentName>
                 <identifier>runtime_omnistudio_omniscript</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 AND (2 OR 3)</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>NE</operator>
+                        <rightValue>Converted</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!$Permission.CustomPermission.PHOCSOfficer}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>true</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!$Permission.CustomPermission.PHOCSAdmin}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>true</rightValue>
+                    </criteria>
+                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -639,7 +665,7 @@
         <name>sidebar</name>
         <type>Region</type>
     </flexiPageRegions>
-    <masterLabel>PHOCS Public Complaints, Requests &amp; Inquiries</masterLabel>
+    <masterLabel>PHOCS Public Request and Inquiry</masterLabel>
     <sobjectType>PublicComplaint</sobjectType>
     <template>
         <name>flexipage:recordHomeTemplateDesktop</name>
