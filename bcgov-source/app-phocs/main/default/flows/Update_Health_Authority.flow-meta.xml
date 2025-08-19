@@ -5,7 +5,7 @@
         <name>Extract_SF_ID_From_Hyperlink</name>
         <label>Extract SF ID From Hyperlink</label>
         <locationX>1172</locationX>
-        <locationY>323</locationY>
+        <locationY>431</locationY>
         <actionName>PHOCSCustomConfiguration</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -25,14 +25,14 @@
             <name>plainText</name>
         </outputParameters>
     </actionCalls>
-    <apiVersion>63.0</apiVersion>
+    <apiVersion>64.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <decisions>
         <description>Assign Health Authority based on Facility HA</description>
         <name>Assign_Health_Authority</name>
         <label>Assign Health Authority</label>
         <locationX>710</locationX>
-        <locationY>647</locationY>
+        <locationY>755</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Interior</name>
@@ -115,7 +115,7 @@
         <name>Check_Facility_Hierarchy_exists</name>
         <label>Check Facility Hierarchy exists</label>
         <locationX>1172</locationX>
-        <locationY>431</locationY>
+        <locationY>539</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Outcome_1_of_Check_Facility_Hierarchy_exists</name>
@@ -133,7 +133,52 @@
             <label>Outcome 1 of Check Facility Hierarchy exists</label>
         </rules>
     </decisions>
-    <description>Flow to update Health Authority Field - EHIS-188 - Bug fix</description>
+    <decisions>
+        <name>CheckFacilityHierarchy</name>
+        <label>Check Facility Hierarchy</label>
+        <locationX>1667</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>Default</defaultConnectorLabel>
+        <rules>
+            <name>FacilityHierarchyNotNull</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.FacilityHierarchy__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.FacilityHierarchy__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Extract_SF_ID_From_Hyperlink</targetReference>
+            </connector>
+            <label>Facility Hierarchy Not Null</label>
+        </rules>
+        <rules>
+            <name>FacilityHierarchyNull</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.FacilityHierarchy__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>UpdateHealthAuthorityToNull</targetReference>
+            </connector>
+            <label>Facility Hierarchy Null</label>
+        </rules>
+    </decisions>
+    <description>test -v8
+Flow to update Health Authority Field - EHIS-188 - Bug fix</description>
     <environments>Default</environments>
     <interviewLabel>Update Health Authority {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Update Health Authority</label>
@@ -161,7 +206,7 @@
         <name>Get_Facility_Hierarchy</name>
         <label>Get Facility Hierarchy</label>
         <locationX>710</locationX>
-        <locationY>539</locationY>
+        <locationY>647</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Assign_Health_Authority</targetReference>
@@ -183,7 +228,7 @@
         <name>Fraser_Health_FH</name>
         <label>Fraser Health - FH</label>
         <locationX>314</locationX>
-        <locationY>755</locationY>
+        <locationY>863</locationY>
         <inputAssignments>
             <field>HealthAuthority__c</field>
             <value>
@@ -197,7 +242,7 @@
         <name>Interior_Health_IH</name>
         <label>Interior Health - IH</label>
         <locationX>50</locationX>
-        <locationY>755</locationY>
+        <locationY>863</locationY>
         <inputAssignments>
             <field>HealthAuthority__c</field>
             <value>
@@ -211,7 +256,7 @@
         <name>Island_Health_Island</name>
         <label>Island Health - Island</label>
         <locationX>842</locationX>
-        <locationY>755</locationY>
+        <locationY>863</locationY>
         <inputAssignments>
             <field>HealthAuthority__c</field>
             <value>
@@ -225,7 +270,7 @@
         <name>Northern_Health_NH</name>
         <label>Northern Health - NH</label>
         <locationX>1106</locationX>
-        <locationY>755</locationY>
+        <locationY>863</locationY>
         <inputAssignments>
             <field>HealthAuthority__c</field>
             <value>
@@ -235,11 +280,29 @@
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <recordUpdates>
+        <name>UpdateHealthAuthorityToNull</name>
+        <label>Update Health Authority To Null</label>
+        <locationX>1898</locationX>
+        <locationY>431</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>HealthAuthority__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>HealthAuthority__c</field>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
         <description>Update Account Field  Health Authority to Vancouver Coastal Health - VCH</description>
         <name>Vancouver_Coastal_Health_VCH</name>
         <label>Vancouver Coastal Health - VCH</label>
         <locationX>578</locationX>
-        <locationY>755</locationY>
+        <locationY>863</locationY>
         <inputAssignments>
             <field>HealthAuthority__c</field>
             <value>
@@ -249,26 +312,11 @@
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <start>
-        <locationX>1046</locationX>
+        <locationX>1541</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Extract_SF_ID_From_Hyperlink</targetReference>
+            <targetReference>CheckFacilityHierarchy</targetReference>
         </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>FacilityHierarchy__c</field>
-            <operator>IsNull</operator>
-            <value>
-                <booleanValue>false</booleanValue>
-            </value>
-        </filters>
-        <filters>
-            <field>FacilityHierarchy__c</field>
-            <operator>IsChanged</operator>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </filters>
         <object>Account</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
