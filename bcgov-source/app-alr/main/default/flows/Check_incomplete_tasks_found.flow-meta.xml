@@ -13,7 +13,7 @@
     </customErrors>
     <decisions>
         <name>Check_User_Profile</name>
-        <label>Check User Profile</label>
+        <label>Check User Profile AND Inspection Record Type</label>
         <locationX>380</locationX>
         <locationY>323</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
@@ -25,6 +25,13 @@
                 <operator>NotEqualTo</operator>
                 <rightValue>
                     <stringValue>System Administrator</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>PHOCSInspection</elementReference>
                 </rightValue>
             </conditions>
             <connector>
@@ -131,4 +138,15 @@
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
+    <variables>
+        <description>PHOCSInspection Record Type</description>
+        <name>PHOCSInspection</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>PHOCSInspection</stringValue>
+        </value>
+    </variables>
 </Flow>
