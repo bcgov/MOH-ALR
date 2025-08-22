@@ -28,38 +28,15 @@
                 <elementReference>$Record.Id</elementReference>
             </value>
         </assignmentItems>
-        <connector>
-            <targetReference>EcoliLabTestRequiredLTR</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>EcoliLabTestRequiredLTR</name>
-        <label>Ecoli Lab Test Required LTR</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
         <assignmentItems>
-            <assignToReference>EcoliLabTestRequired.TestCategory__c</assignToReference>
+            <assignToReference>AerobicPlateCountLabTestRequiredRecord.RecordTypeId</assignToReference>
             <operator>Assign</operator>
             <value>
-                <stringValue>Food</stringValue>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>EcoliLabTestRequired.Test__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>GetEcoliLabTestMasterListRecord.Id</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>EcoliLabTestRequired.LabTestRequisition__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>$Record.Id</elementReference>
+                <elementReference>GetPHOCSFoodLabTestRequiredRT.Id</elementReference>
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>CheckForSampleReason</targetReference>
+            <targetReference>Add_records_to_collection</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -78,7 +55,7 @@
             <assignToReference>RoutineLabTestRequiredRecords</assignToReference>
             <operator>Add</operator>
             <value>
-                <elementReference>EcoliLabTestRequired</elementReference>
+                <elementReference>Add_records_to_collection</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -159,20 +136,69 @@
         <inputReference>RoutineLabTestRequiredRecords</inputReference>
     </recordCreates>
     <recordLookups>
+        <name>Get_Routine_Master_List_Record</name>
+        <label>Get Routine Master List Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>AerobicPlateCountLTR</targetReference>
+        </connector>
+        <filterLogic>1 AND 2 AND (3 OR 4 OR 5)</filterLogic>
+        <filters>
+            <field>TestCategory__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Food</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>SampleTestType__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>BCCDC food quality check program</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>E.coli MPN/g Test</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Total Coliform MPN/g Test</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Fecal Coliform MPN/g Test</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>LabTestMasterList__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>GetAerobicColonyCountLabTestMasterListRecord</name>
         <label>Get Aerobic Colony Count LabTestMaster List Record</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>GetEcoliLabTestMasterListRecord</targetReference>
+            <targetReference>Get_Routine_Master_List_Record</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Name</field>
             <operator>EqualTo</operator>
             <value>
-                <stringValue>Aerobic colony count - Bakery cereals rices</stringValue>
+                <stringValue>Aerobic Colony CFU/g Test</stringValue>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
@@ -180,31 +206,31 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
-        <name>GetEcoliLabTestMasterListRecord</name>
-        <label>Get Ecoli LabTestMaster List Record</label>
+        <name>GetPHOCSFoodLabTestRequiredRT</name>
+        <label>Get PHOCSFoodLabTestRequired RT</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>AerobicPlateCountLTR</targetReference>
+            <targetReference>GetAerobicColonyCountLabTestMasterListRecord</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
-            <field>Name</field>
+            <field>DeveloperName</field>
             <operator>EqualTo</operator>
             <value>
-                <stringValue>E. coli - Dairy goods outbreak</stringValue>
+                <stringValue>PHOCSFoodLabTestRequired</stringValue>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>LabTestMasterList__c</object>
+        <object>RecordType</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <start>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>GetAerobicColonyCountLabTestMasterListRecord</targetReference>
+            <targetReference>GetPHOCSFoodLabTestRequiredRT</targetReference>
         </connector>
         <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
         <filterLogic>or</filterLogic>
@@ -227,6 +253,50 @@
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
+    <transforms>
+        <name>Add_records_to_collection</name>
+        <label>Add records to collection</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>CheckForSampleReason</targetReference>
+        </connector>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <objectType>LabTestRequired__c</objectType>
+        <scale>0</scale>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <transformValues>
+            <transformValueActions>
+                <outputFieldApiName>TestCategory__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>Get_Routine_Master_List_Record[$EachItem].TestCategory__c</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>Test__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>Get_Routine_Master_List_Record[$EachItem].Id</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>RecordTypeId</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>GetPHOCSFoodLabTestRequiredRT.Id</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>LabTestRequisition__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>$Record.Id</elementReference>
+                </value>
+            </transformValueActions>
+        </transformValues>
+    </transforms>
     <variables>
         <name>AerobicPlateCountLabTestRequiredRecord</name>
         <dataType>SObject</dataType>
@@ -244,6 +314,14 @@
         <objectType>LabTestRequired__c</objectType>
     </variables>
     <variables>
+        <name>FecalColiformTestRequired</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>LabTestRequired__c</objectType>
+    </variables>
+    <variables>
         <name>RoutineLabTestRequiredRecords</name>
         <dataType>SObject</dataType>
         <isCollection>true</isCollection>
@@ -253,6 +331,14 @@
     </variables>
     <variables>
         <name>TotalAndFecalColiformsLabTestRequired</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>LabTestRequired__c</objectType>
+    </variables>
+    <variables>
+        <name>TotalColiformTestRequired</name>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
