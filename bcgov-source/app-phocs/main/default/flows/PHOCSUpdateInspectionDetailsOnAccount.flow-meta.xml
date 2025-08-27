@@ -59,7 +59,7 @@
         <assignNextValueToReference>currentItem_Last_Inspection_Date</assignNextValueToReference>
         <collectionProcessorType>FilterCollectionProcessor</collectionProcessorType>
         <collectionReference>Get_All_Inspection_Records</collectionReference>
-        <conditionLogic>and</conditionLogic>
+        <conditionLogic>or</conditionLogic>
         <conditions>
             <leftValueReference>currentItem_Last_Inspection_Date.Status</leftValueReference>
             <operator>EqualTo</operator>
@@ -101,7 +101,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <collectionReference>Last_Inspection_Date</collectionReference>
-        <iterationOrder>Desc</iterationOrder>
+        <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
             <targetReference>Assign_Actual_Start_Time</targetReference>
         </nextValueConnector>
@@ -159,6 +159,13 @@
                 <elementReference>$Record.AccountId</elementReference>
             </value>
         </filters>
+        <filters>
+            <field>PHOCS_IsBelongsToPHOCS__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
         <getFirstRecordOnly>false</getFirstRecordOnly>
         <object>Visit</object>
         <sortField>ActualVisitStartTime</sortField>
@@ -189,6 +196,13 @@
                 <stringValue>Open</stringValue>
             </value>
         </filters>
+        <filters>
+            <field>PHOCSIsBelongsToPHOCS__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
         <getFirstRecordOnly>false</getFirstRecordOnly>
         <object>RegulatoryCodeViolation</object>
         <sortField>CreatedDate</sortField>
@@ -201,19 +215,19 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <inputAssignments>
-            <field>LastInspectionDate__c</field>
+            <field>PHOCSLastInspectionDate__c</field>
             <value>
                 <elementReference>LatestInspectionDateTime</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>NumberOfInspections__c</field>
+            <field>PHOCSNumberOfInspections__c</field>
             <value>
                 <elementReference>InspectionCount</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>OutstandingViolations__c</field>
+            <field>PHOCSOutstandingViolations__c</field>
             <value>
                 <elementReference>OutstandingViolationCount</elementReference>
             </value>
@@ -232,6 +246,13 @@
             <operator>IsNull</operator>
             <value>
                 <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>PHOCS_IsBelongsToPHOCS__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
             </value>
         </filters>
         <object>Visit</object>
