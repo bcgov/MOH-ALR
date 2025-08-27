@@ -175,7 +175,7 @@ delete the flow
 5.[x] EHIS-2089
 - navigate to visited party object - go to list view - phocs visited party - open list view with fields contacts, visits - and delete this list view - redeploy the listview from branch
   
-6.[ ] EHIS-2098 , 2111 ,2292,2293,2125,2124,1968
+6.[x] EHIS-2098 , 2111 ,2292,2293,2125,2124,1968 - total 18 templates
 - Import PHOCSInvoiceTemplate and PHOCSReceiptTemplate in the target org .  (ST,QA,UAT & PROD) Save Template details and Activate 
 - Import PHOCSWaterBacteriologyRequisition.json ,PHOCS Water Bacteriology Requisition Template_V0.1.docx
 - Import PHOCSFoodSafetyRequisition.json,PHOCS Food safety Requisition Template_V1.docx,
@@ -217,7 +217,7 @@ delete the flow
 
 [x] EHIS-1713
 
-[ ] EHIS-1861
+[x] EHIS-1861
 - Give Viewer access to EHIS PHOCS Users PG Group .   Switch to Classic - > Goto libraries → Select  DocgenDocumentTemplateLibrary   → Select Add memebers to give access.
 - Upload  All PHOCS Doc Gen templates from phocs-DocgenTemplates Folder . 
 - After uploading go to Document template designer - > Select imported doc gen template → replace latest word file → save template details → Activate 
@@ -225,7 +225,7 @@ delete the flow
 [x] EHIS-2432
 
 
-[ ] EHIS-1967 create 5 test users
+[x] EHIS-1967 create 5 test users
 
 
 > Verification Steps 
@@ -239,7 +239,7 @@ delete the flow
 [x] EHIS-1815
 - Navigate to app launcher - search for regulatory authorization type object - select the list view with last modified date - go to list view filter - select the list view and delete
 
-[ ] EHIS-2258 
+[x] EHIS-2258 
 - Go to Quick find →All Sites → click on Builder for phocsservices → click on Blue menu tab present in top left corner (refer screenshot_--->Click on Administration -- > click on emai section --> provide David user meail in Sender Email Address.
 
 
