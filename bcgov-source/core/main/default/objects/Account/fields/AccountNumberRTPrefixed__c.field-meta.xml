@@ -3,10 +3,10 @@
     <fullName>AccountNumberRTPrefixed__c</fullName>
     <externalId>false</externalId>
     <formula>IF(
-    RecordType.Name == &quot;Business Entity&quot;, 
+    RecordType.DeveloperName == &quot;Business_Entity&quot;,    
     &quot;BE-&quot; &amp;  AccountNumberAuto__c,
     IF(
-      RecordType.Name == &quot;Facility&quot; || RecordType.Name == &quot;Drinking Water System&quot; || RecordType.Name == &quot;Drinking Water Source Intake&quot;, 
+      RecordType.DeveloperName == &quot;Facility&quot; || RecordType.DeveloperName == &quot;DrinkingWaterSystem&quot; || RecordType.DeveloperName == &quot;DrinkingWaterSourceIntake&quot;, 
       &quot;FA-&quot; &amp; AccountNumberAuto__c,
       &quot;&quot;
     )

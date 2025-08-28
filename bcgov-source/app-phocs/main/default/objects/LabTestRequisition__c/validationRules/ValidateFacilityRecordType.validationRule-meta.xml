@@ -4,14 +4,13 @@
     <active>true</active>
     <errorConditionFormula>OR(
 (RecordType.DeveloperName = &apos;PHOCSWaterLabTestRequisition&apos; &amp;&amp; 
- FacilityName__r.RecordTypeName__c != &apos;Facility&apos; &amp;&amp;
  FacilityName__r.RecordTypeName__c != &apos;DrinkingWaterSystem&apos; &amp;&amp;
- FacilityName__r.RecordTypeName__c != &apos;DrinkingWaterSourceIntake&apos;),
-
-(RecordType.DeveloperName = &apos;PHOCSFoodLabTestRequisition&apos; &amp;&amp; 
- FacilityName__r.RecordTypeName__c != &apos;Facility&apos; &amp;&amp;
- FacilityName__r.RecordTypeName__c != &apos;DrinkingWaterSystem&apos; &amp;&amp;
- FacilityName__r.RecordTypeName__c != &apos;DrinkingWaterSourceIntake&apos;),
+ FacilityName__r.RecordTypeName__c != &apos;DrinkingWaterSourceIntake&apos; &amp;&amp;
+ (FacilityName__r.RecordTypeName__c = &apos;Facility&apos; &amp;&amp;(
+     ISPICKVAL(FacilityName__r.Type, &apos;Sewerage&apos;) || ISPICKVAL(FacilityName__r.Type, &apos;Child Care&apos;)
+    )
+  )
+ ),
 
 (RecordType.DeveloperName = &apos;PHOCSDyeTestRequisition&apos; &amp;&amp; 
  (FacilityName__r.RecordTypeName__c != &apos;Facility&apos; ||  NOT(ISPICKVAL(FacilityName__r.Type, &apos;Sewerage&apos;)))),

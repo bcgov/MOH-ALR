@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
-    <description>EHIS-188</description>
+    <classAccesses>
+        <apexClass>AccountContactRelationController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <customPermissions>
+        <enabled>true</enabled>
+        <name>PHOCSReportingUser</name>
+    </customPermissions>
+    <description>Read access on PHOCS objects and custom permission for Reporting User</description>
     <fieldPermissions>
         <editable>false</editable>
         <field>Account.AccountNumber</field>
@@ -703,6 +711,61 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Account.PHOCSFacilityClassificationExpiryDate__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Account.PHOCSFacilityClassificationGrantedDate__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Account.PHOCSFacilityClassificationLevel__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Account.PHOCSFacilityClassificationNumber__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Account.PHOCSFacilityClassificationStatus__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Account.PHOCSFacilityClassificationType__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Account.PHOCSFacilityClassificationValidFlag__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Account.PHOCSLastInspectionDate__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Account.PHOCSNumberOfInspections__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Account.PHOCSOutstandingViolations__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Account.PHOCSRequiresOperatorFlag__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Account.PHOWaterSystemSizeCategory__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -1278,6 +1341,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Account.EOCPFacilityNumber__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Account.Website</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -1848,6 +1916,16 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>BoardCertification.CertificationLevel__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>BoardCertification.CertificationType</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>BoardCertification.TerminationDate</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -1968,7 +2046,7 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>BusinessLicenseApplication.ApprovedBy__c</field>
+        <field>BusinessLicenseApplication.ClosedBy__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -2359,6 +2437,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>BusinessLicenseApplication.RenewalYear__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>BusinessLicenseApplication.ResidentialCareProgram__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -3483,6 +3566,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>LabTestRequired__c.ReportedOn__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>LabTestRequired__c.ResultInterpretation__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -3499,6 +3587,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>LabTestRequired__c.Technician__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>LabTestRequired__c.TestCategory__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -3523,7 +3616,37 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>LabTestRequisition__c.BestBeforeBatchDate__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>LabTestRequisition__c.BoilAdvisory__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>LabTestRequisition__c.BrandName__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>LabTestRequisition__c.CollectedBy__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>LabTestRequisition__c.CollectionDateTime__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>LabTestRequisition__c.Comments__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>LabTestRequisition__c.CopyTo__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -3549,6 +3672,31 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>LabTestRequisition__c.DWOEHOPhoneNumber__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>LabTestRequisition__c.DateReceived__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>LabTestRequisition__c.DateReported__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>LabTestRequisition__c.Establishment__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>LabTestRequisition__c.FacilityName__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>LabTestRequisition__c.FoodCategory__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -3583,7 +3731,22 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>LabTestRequisition__c.OutbreakSample__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>LabTestRequisition__c.PHSALabNumber__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>LabTestRequisition__c.PlaceOfCollectionSpecify__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>LabTestRequisition__c.PlaceOfCollection__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -3594,6 +3757,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>LabTestRequisition__c.PrintedOn__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>LabTestRequisition__c.ProductName__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -3623,7 +3791,17 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>LabTestRequisition__c.ReportedOn__c</field>
+        <field>LabTestRequisition__c.RoutineID__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>LabTestRequisition__c.SampleNumber__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>LabTestRequisition__c.SampleReasonSpecify__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -3633,12 +3811,42 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>LabTestRequisition__c.SampleType__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>LabTestRequisition__c.SamplerEmail__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>LabTestRequisition__c.SamplerName__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>LabTestRequisition__c.SamplerPhoneNumber__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>LabTestRequisition__c.SamplingTemperatureOfFood__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>LabTestRequisition__c.SamplingSite__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>LabTestRequisition__c.ShippingDateTime__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>LabTestRequisition__c.SizeWeight__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -3653,102 +3861,22 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>LabTestRequisition__c.BrandName__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>LabTestRequisition__c.CollectedBy__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>LabTestRequisition__c.CollectionDateTime__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>LabTestRequisition__c.Comments__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>LabTestRequisition__c.CopyTo__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>LabTestRequisition__c.DateOfShipping__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>LabTestRequisition__c.DateReceived__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>LabTestRequisition__c.DateReported__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>LabTestRequisition__c.Establishment__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>LabTestRequisition__c.FoodCategory__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>LabTestRequisition__c.OutbreakSample__c</field>
-        <readable>true</readable>
-    </fieldPermissions>    
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>LabTestRequisition__c.PlaceOfCollection__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>LabTestRequisition__c.ProductName__c</field>
-        <readable>true</readable>
-    </fieldPermissions>    
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>LabTestRequisition__c.RoutineID__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>LabTestRequisition__c.SampleNumber__c</field>
-        <readable>true</readable>
-    </fieldPermissions>    
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>LabTestRequisition__c.SamplerName__c</field>
+        <field>LabTestRequisition__c.StorageTemperatureOfUnit__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
         <field>LabTestRequisition__c.SubmittedOn__c</field>
         <readable>true</readable>
-    </fieldPermissions>    
+    </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>LabTestRequisition__c.TimeOfShipping__c</field>
+        <field>LabTestRequisition__c.TestVolumeIfOvergrown__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
         <field>LabTestRequisition__c.ToLaboratory__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>LabTestRequisition__c.TestVolumeIfOvergrown__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -4064,6 +4192,16 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Visit.OperationalHistoryScore__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Visit.PHOCSIsBelongsToPHOCS__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Visit.PHOCSViolationCount__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -4696,6 +4834,10 @@
     </recordTypeVisibilities>
     <recordTypeVisibilities>
         <recordType>PublicComplaint.PHOCSPublicComplaint</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <recordType>PublicComplaint.PHOCSPublicRequestInquiry</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
