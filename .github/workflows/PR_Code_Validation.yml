@@ -28,8 +28,13 @@ jobs:
         with:
           node-version: '20.8.1'
       # === Make three attempts to install sfdx ===
-      - name: 'Install Salesforce CLI'
-        uses: salesforcecli/github-action@v1
+      - name: Install Salesforce CLI via npm
+        run: npm install --global sfdx-cli
+
+      - name: Confirm CLI & Node version
+        run: |
+          sfdx --version
+          node -v  # should print v20.8.1
 
       - name: Create results directory
         run: mkdir smoke-test-results
