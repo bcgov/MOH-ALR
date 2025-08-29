@@ -51,7 +51,7 @@ jobs:
       # === Attempt to execute static source apexunit validations ===
       - name: Run static apexunit source validations
         id: static_tests_apexunit
-        run: sfdx scanner:run --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH }}" --pmdconfig "ruleset/apexunit.xml" --format "table" --engine "pmd"  --normalize-severity 1 --severity-threshold 1
+        run: sf scanner run --target ${{ vars.RELEASE_Folder }} --pmdconfig ruleset/apexunit.xml --format table --engine pmd --normalize-severity --severity-threshold 1
 
       # === Attempt to execute static source validations ===
       - name: Run static braces source validations
