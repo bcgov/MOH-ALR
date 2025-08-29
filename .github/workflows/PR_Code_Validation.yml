@@ -29,12 +29,7 @@ jobs:
           node-version: '20.8.1'
       # === Make three attempts to install sfdx ===
       - name: 'Install Salesforce CLI'
-        run: |
-          wget https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/sf-linux-x64.tar.xz
-          mkdir ~/sfdx
-          tar xJf sf-linux-x64.tar.xz -C ~/sfdx --strip-components 1
-          echo "$HOME/sfdx/bin" >> $GITHUB_PATH
-          ~/sfdx/bin/sf version
+        uses: salesforcecli/github-action@v1
 
       - name: Create results directory
         run: mkdir smoke-test-results
