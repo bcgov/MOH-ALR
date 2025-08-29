@@ -20,11 +20,13 @@ jobs:
     steps:
       # === Setup. We need to get the code, set up nodejs, and create the results directory. ===
       - uses: actions/checkout@v4
-     # ✅ Set correct Node.js version (required by scanner)
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          fetch-depth: 0
+    #  ✅ Set correct Node.js version (required by scanner)
+    #   - name: Setup Node.js
+    #     uses: actions/setup-node@v4
+    #     with:
+    #       node-version: '20'
       - run: mkdir smoke-test-results
       # === Make three attempts to install sfdx ===
       - name: 'Install Salesforce CLI'
@@ -38,7 +40,7 @@ jobs:
       # === Attempt to install the scanner plugin ===
       - name: Install Scanner Plugin
         id: scanner_install
-        run: sfdx plugins:install @salesforce/sfdx-scanner@
+        run: sf plugins install @salesforce/sfdx-scanner
 
       # === Log the installed plugins for easier debugging ===
       - name: Log plugins
