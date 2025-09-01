@@ -101,9 +101,17 @@
             <targetReference>Loop_through_Open_Inspections</targetReference>
         </connector>
     </collectionProcessors>
+    <description>EHIS-2126, Trigger on Deletion of Inspection(Visit) record.
+Updating fields on Account object
+Field: Number of Inspections
+Logic: Summary count of all Regulatory Code Violation records (any status) tied to the Inspection through Regulatory Code Violation Inspection ID fields
+Field: Outstanding Violations
+Logic: Summary count of all open Regulatory Code Violation records (Status = Open) tied to the Account through Regulatory Code Violation Inspection ID fields → Inspection Account field
+Field: Last Inspection Date
+Logic: Populated with the latest Actual Start Time of all Inspection records with Status = In Progress OR Completed tied to the Account through the Inspection Account field</description>
     <environments>Default</environments>
-    <interviewLabel>PHOCS {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>PHOCS Update Inspection Details on Account</label>
+    <interviewLabel>PHOCS Deletion of Inspection Details on Account {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>PHOCS Deletion of Inspection Details on Account</label>
     <loops>
         <name>GetInspectionIds</name>
         <label>GetInspectionIds</label>
@@ -173,6 +181,13 @@
             <operator>EqualTo</operator>
             <value>
                 <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Id</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>false</getFirstRecordOnly>
@@ -258,8 +273,8 @@
             </value>
         </filters>
         <object>Visit</object>
-        <recordTriggerType>CreateAndUpdate</recordTriggerType>
-        <triggerType>RecordAfterSave</triggerType>
+        <recordTriggerType>Delete</recordTriggerType>
+        <triggerType>RecordBeforeDelete</triggerType>
     </start>
     <status>Active</status>
     <variables>
