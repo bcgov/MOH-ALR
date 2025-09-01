@@ -3,6 +3,7 @@
     <apiVersion>64.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
+        <description>Assigning all child RCV records to a variable</description>
         <name>CountRVC</name>
         <label>CountRVC</label>
         <locationX>0</locationX>
@@ -15,26 +16,15 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Loop_through_RCV</targetReference>
+            <targetReference>Updating_Inspection</targetReference>
         </connector>
     </assignments>
+    <description>EHIS-2126, Updating field &quot;Violation Count&quot; available on Inspection(Visit) object. 
+Trigger on Creation and Updation of Regulatory Code Violation.
+Logic: Summary count of all Regulatory Code Violation records (any status) tied to the Inspection through Regulatory Code Violation Inspection ID fields</description>
     <environments>Default</environments>
     <interviewLabel>PHOCS Update Violation Count on RCV {!$Flow.CurrentDateTime}</interviewLabel>
     <label>PHOCS Update Violation Count on RCV</label>
-    <loops>
-        <name>Loop_through_RCV</name>
-        <label>Loop through RCV</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <collectionReference>Get_All_Child_RCV_Records</collectionReference>
-        <iterationOrder>Asc</iterationOrder>
-        <nextValueConnector>
-            <targetReference>CountRVC</targetReference>
-        </nextValueConnector>
-        <noMoreValuesConnector>
-            <targetReference>Updating_Inspection</targetReference>
-        </noMoreValuesConnector>
-    </loops>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -55,13 +45,14 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordLookups>
+        <description>Retrieve all sibling RCV records</description>
         <name>Get_All_Child_RCV_Records</name>
         <label>Get All Child RCV Records</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Loop_through_RCV</targetReference>
+            <targetReference>CountRVC</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -85,10 +76,19 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordUpdates>
+        <description>Updating total count of RCV records to its parent record(Inspection).</description>
         <name>Updating_Inspection</name>
         <label>Updating Inspection</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>PHOCSIsBelongsToPHOCS__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
         <inputAssignments>
             <field>PHOCSViolationCount__c</field>
             <value>
