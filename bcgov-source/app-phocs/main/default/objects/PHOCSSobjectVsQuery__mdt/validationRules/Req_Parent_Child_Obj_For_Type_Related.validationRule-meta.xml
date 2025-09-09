@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Req_Parent_Child_Obj_For_Type_Related</fullName>
+    <active>true</active>
+    <description>For metadata record of type Related we need Parent Object and Child Object Name as mandatory</description>
+    <errorConditionFormula>AND(
+    ISPICKVAL(Type__c, &quot;Related&quot;),
+    OR(
+        ISBLANK(ParentSobjectAPIName__c),
+        ISBLANK(ChildSobjectAPIName__c)
+    )
+)</errorConditionFormula>
+    <errorMessage>Please Provide Parent SObject API Name and Child Object API Name</errorMessage>
+</ValidationRule>
