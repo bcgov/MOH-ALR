@@ -30,8 +30,15 @@
                 <elementReference>Get_All_Inspection_Records</elementReference>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>InspectionRecords</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_All_Inspection_Records</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
-            <targetReference>Loop_through_Inspection</targetReference>
+            <targetReference>Last_Inspection_Date</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -47,7 +54,23 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Loop_through_RCV</targetReference>
+            <targetReference>Update_Account</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>AssignInspectionIds</name>
+        <label>AssignInspectionIds</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>InspectionIDs</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>GetInspectionIds.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>GetInspectionIds</targetReference>
         </connector>
     </assignments>
     <collectionProcessors>
@@ -82,17 +105,17 @@
     <interviewLabel>PHOCS {!$Flow.CurrentDateTime}</interviewLabel>
     <label>PHOCS Update Inspection Details on Account</label>
     <loops>
-        <name>Loop_through_Inspection</name>
-        <label>Loop through Inspection</label>
+        <name>GetInspectionIds</name>
+        <label>GetInspectionIds</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <collectionReference>Get_All_Inspection_Records</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>Assign_Inspection_Count</targetReference>
+            <targetReference>AssignInspectionIds</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
-            <targetReference>Last_Inspection_Date</targetReference>
+            <targetReference>Assign_Inspection_Count</targetReference>
         </noMoreValuesConnector>
     </loops>
     <loops>
@@ -101,26 +124,12 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <collectionReference>Last_Inspection_Date</collectionReference>
-        <iterationOrder>Asc</iterationOrder>
+        <iterationOrder>Desc</iterationOrder>
         <nextValueConnector>
             <targetReference>Assign_Actual_Start_Time</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
-            <targetReference>Update_Account</targetReference>
-        </noMoreValuesConnector>
-    </loops>
-    <loops>
-        <name>Loop_through_RCV</name>
-        <label>Loop through RCV</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <collectionReference>Get_Child_RCV_Records</collectionReference>
-        <iterationOrder>Asc</iterationOrder>
-        <nextValueConnector>
-            <targetReference>Assign_Outstanding_RCV_Records</targetReference>
-        </nextValueConnector>
-        <noMoreValuesConnector>
-            <targetReference>Get_All_Inspection_Records</targetReference>
+            <targetReference>Get_Child_RCV_Records</targetReference>
         </noMoreValuesConnector>
     </loops>
     <processMetadataValues>
@@ -149,7 +158,7 @@
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Loop_through_Inspection</targetReference>
+            <targetReference>GetInspectionIds</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -179,16 +188,9 @@
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Loop_through_RCV</targetReference>
+            <targetReference>Assign_Outstanding_RCV_Records</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
-        <filters>
-            <field>InspectionId</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>$Record.Id</elementReference>
-            </value>
-        </filters>
         <filters>
             <field>Status</field>
             <operator>EqualTo</operator>
@@ -197,10 +199,10 @@
             </value>
         </filters>
         <filters>
-            <field>PHOCSIsBelongsToPHOCS__c</field>
-            <operator>EqualTo</operator>
+            <field>InspectionId</field>
+            <operator>In</operator>
             <value>
-                <booleanValue>true</booleanValue>
+                <elementReference>InspectionIDs</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>false</getFirstRecordOnly>
@@ -238,7 +240,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Get_Child_RCV_Records</targetReference>
+            <targetReference>Get_All_Inspection_Records</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -278,6 +280,22 @@
         <value>
             <numberValue>0.0</numberValue>
         </value>
+    </variables>
+    <variables>
+        <description>To store phocs inspection ids for account irrespective of inspection status</description>
+        <name>InspectionIDs</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <name>InspectionRecords</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Visit</objectType>
     </variables>
     <variables>
         <name>LatestInspectionDateTime</name>

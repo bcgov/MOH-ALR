@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CHSAText__c</fullName>
+    <description>This field is created to display Plain text Name for Facility CHSA  in Public Site as this field already exists but with hyperlink.</description>
+    <externalId>false</externalId>
+    <formula>IF(ISPICKVAL(Type, &quot;1-HA&quot;),
+&quot;&quot;,
+IF(ISPICKVAL(Type, &quot;2-HSDA&quot;),
+&quot;&quot;,
+IF(ISPICKVAL(Type, &quot;3-LHA&quot;),
+&quot;&quot;,
+IF(ISPICKVAL(Type, &quot;4-CHSA&quot;),
+Name,
+&quot;&quot;
+)
+)
+)
+)</formula>
+    <label>CHSA Text</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>
