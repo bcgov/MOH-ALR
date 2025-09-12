@@ -107,12 +107,13 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
          }
           //Violation Enforcement Actions Related List for Regulatory Code Violation
          if(parentSObjectName == 'RegulatoryCodeViolation' &&  childSobjectAPIName == 'ViolationEnforcementAction'){
-             soqlQuery = soqlQuery + ' AssessmentTask.ParentId	= :recordId';
+             soqlQuery = soqlQuery + ' WHERE violationId = :recordId ';
              
          }
          System.debug('query' + soqlQuery);
 
         List<SObject> results = Database.query(soqlQuery);
+         system.debug('Results-------------->'+results);
         return results;
     }
     
