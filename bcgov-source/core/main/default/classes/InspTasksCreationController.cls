@@ -56,9 +56,9 @@ public with sharing class InspTasksCreationController {
                 }            
                 
                 Id assesmentTaskRecordTypeId;
-                Visit visit = [select Id, Account.RecordType.Name From Visit where Id=:visitId Limit 1];
+                Visit visit = [select Id, Account.RecordType.DeveloperName From Visit where Id=:visitId Limit 1];
                 if(visit?.AccountId != null){
-                   AssesmentTaskRecrdTypeMapping__mdt recordTypeMapping =  AssesmentTaskRecrdTypeMapping__mdt.getInstance(visit.Account?.RecordType.Name.deleteWhitespace());
+                   AssesmentTaskRecrdTypeMapping__mdt recordTypeMapping =  AssesmentTaskRecrdTypeMapping__mdt.getInstance(visit.Account?.RecordType.DeveloperName.deleteWhitespace());
                    if(recordTypeMapping?.AssesmentTaskRecordType__c != null){
                        assesmentTaskRecordTypeId = Schema.SObjectType.AssessmentTask.getRecordTypeInfosByName().get(recordTypeMapping.AssesmentTaskRecordType__c).getRecordTypeId(); 
                    }
