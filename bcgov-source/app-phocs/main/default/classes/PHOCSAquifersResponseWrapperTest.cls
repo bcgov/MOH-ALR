@@ -89,8 +89,7 @@ public class PHOCSAquifersResponseWrapperTest {
         String jsonString = getResponse();        
         
         // Deserialize into wrapper
-        PHOCSAquifersResponseWrapper resp = 
-            (PHOCSAquifersResponseWrapper) JSON.deserialize(jsonString, PHOCSAquifersResponseWrapper.class);
+        PHOCSAquifersResponseWrapper resp = (PHOCSAquifersResponseWrapper) JSON.deserialize(jsonString, PHOCSAquifersResponseWrapper.class);
         
         // Assertions (ensures deserialization worked)
         System.assertEquals(658, resp.aquifer_id);

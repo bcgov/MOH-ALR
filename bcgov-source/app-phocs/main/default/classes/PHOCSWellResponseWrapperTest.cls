@@ -145,8 +145,7 @@ public class PHOCSWellResponseWrapperTest {
         String jsonString = getResponse();        
         
         // Act: Deserialize
-        PHOCSWellResponseWrapper resp = 
-            (PHOCSWellResponseWrapper) JSON.deserialize(jsonString, PHOCSWellResponseWrapper.class);
+        PHOCSWellResponseWrapper resp = (PHOCSWellResponseWrapper) JSON.deserialize(jsonString, PHOCSWellResponseWrapper.class);
         
         // Assert: main fields
         System.assertNotEquals(null, resp, 'Wrapper should not be null');
