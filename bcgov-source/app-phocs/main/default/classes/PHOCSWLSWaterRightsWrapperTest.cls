@@ -1,5 +1,5 @@
 @IsTest
-public class WLSWaterRightsWrapperTest {
+public class PHOCSWLSWaterRightsWrapperTest {
     
     public static String getResponse(){
         String jsonString = '{' +
@@ -119,14 +119,14 @@ public class WLSWaterRightsWrapperTest {
         String jsonString = getResponse();        
         
         // Deserialize JSON
-        WLSWaterRightsWrapper resp = (WLSWaterRightsWrapper) JSON.deserialize(jsonString, WLSWaterRightsWrapper.class);
+        PHOCSWLSWaterRightsWrapper resp = PHOCSWLSWaterRightsWrapper.parse(jsonString);
         
         // Debug wrapper object
         System.debug('Parsed Wrapper Type: ' + resp.type);
         System.debug('Total Features: ' + resp.features.size());
         
         // Loop through features and debug key properties
-        for (WLSWaterRightsWrapper.Feature f : resp.features) {
+        for (PHOCSWLSWaterRightsWrapper.Feature f : resp.features) {
             System.debug('Feature ID: ' + f.id);
             System.debug('Licence Number: ' + f.properties.LICENCE_NUMBER);
             System.debug('Well Tag Number: ' + f.properties.WELL_TAG_NUMBER);

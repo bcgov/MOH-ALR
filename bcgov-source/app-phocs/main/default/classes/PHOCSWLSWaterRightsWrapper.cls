@@ -1,5 +1,4 @@
-public class WLSWaterRightsWrapper {
-
+public class PHOCSWLSWaterRightsWrapper {
     public String type;
     public List<Feature> features;
     public Integer totalFeatures;
@@ -7,7 +6,7 @@ public class WLSWaterRightsWrapper {
     public Integer numberReturned;
     public String timeStamp;
     public CRS crs;
-
+    
     public class Feature {
         public String type;
         public String id;
@@ -15,12 +14,12 @@ public class WLSWaterRightsWrapper {
         public String geometry_name;
         public Properties properties;
     }
-
+    
     public class Geometry {
         public String type;
         public List<Double> coordinates;
     }
-
+    
     public class Properties {
         public Integer WLS_WRL_SYSID;
         public String POD_NUMBER;
@@ -59,18 +58,18 @@ public class WLSWaterRightsWrapper {
         public Integer OBJECTID;
         public String SE_ANNO_CAD_DATA;
     }
-
+    
     public class CRS {
         public String type;
         public CRSProperties properties;
     }
-
+    
     public class CRSProperties {
         public String name;
     }
-
+    
     // Method to deserialize JSON string into this wrapper
-    public static WLSWaterRightsWrapper parse(String jsonString) {
-        return (WLSWaterRightsWrapper) JSON.deserialize(jsonString, WLSWaterRightsWrapper.class);
+    public static PHOCSWLSWaterRightsWrapper parse(String jsonString) {
+        return (PHOCSWLSWaterRightsWrapper) JSON.deserialize(jsonString, PHOCSWLSWaterRightsWrapper.class);
     }
 }

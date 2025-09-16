@@ -1,5 +1,5 @@
 @IsTest
-public class WLSWaterApplicationsWrapperTest {
+public class PHOCSWLSWaterApplicationsWrapperTest {
     
     public Static String getResponse(){
         String jsonString = '{' +
@@ -85,14 +85,14 @@ public class WLSWaterApplicationsWrapperTest {
         String jsonString = getResponse();        
         
         // Deserialize JSON
-        WLSWaterApplicationsWrapper wrapper = (WLSWaterApplicationsWrapper) JSON.deserialize(jsonString, WLSWaterApplicationsWrapper.class);
+        PHOCSWLSWaterApplicationsWrapper wrapper = PHOCSWLSWaterApplicationsWrapper.parse(jsonString);
         
         // Debug wrapper properties
         System.debug('Wrapper Type: ' + wrapper.type);
         System.debug('Total Features: ' + wrapper.features.size());
         
         // Loop through features and debug key properties
-        for (WLSWaterApplicationsWrapper.Feature f : wrapper.features) {
+        for (PHOCSWLSWaterApplicationsWrapper.Feature f : wrapper.features) {
             System.debug('Feature ID: ' + f.id);
             System.debug('Application Job Number: ' + f.properties.APPLICATION_JOB_NUMBER);
             System.debug('Well Tag Number: ' + f.properties.WELL_TAG_NUMBER);

@@ -1,5 +1,5 @@
-public class WLSWaterApplicationsWrapper {
-    public String type;
+public class PHOCSWLSWaterApplicationsWrapper {
+	public String type;
     public List<Feature> features;
     public Integer totalFeatures;
     public Integer numberMatched;
@@ -57,7 +57,7 @@ public class WLSWaterApplicationsWrapper {
     }
 
     // Deserialize JSON string to wrapper
-    public static WLSWaterApplicationsWrapper parse(String json) {
-        return (WLSWaterApplicationsWrapper) System.JSON.deserialize(json, WLSWaterApplicationsWrapper.class);
+    public static PHOCSWLSWaterApplicationsWrapper parse(String json) {
+        return (PHOCSWLSWaterApplicationsWrapper) System.JSON.deserialize(json, PHOCSWLSWaterApplicationsWrapper.class);
     }
 }
