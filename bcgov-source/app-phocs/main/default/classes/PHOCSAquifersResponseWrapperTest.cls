@@ -1,8 +1,6 @@
 @IsTest
 public class PHOCSAquifersResponseWrapperTest {
-    
-    @IsTest
-    static void testDeserialization() {
+    public static String getResponse(){
         String jsonString = '{' +
             '"aquifer_id": 658,' +
             '"aquifer_name": "Houston Bedrock",' +
@@ -84,7 +82,11 @@ public class PHOCSAquifersResponseWrapperTest {
             '"hydraulically_connected": false' +
             '}' +
             '}';
-        
+        return jsonString;
+    }
+    @IsTest
+    static void testDeserialization() {
+        String jsonString = getResponse();        
         
         // Deserialize into wrapper
         PHOCSAquifersResponseWrapper resp = 
@@ -108,7 +110,7 @@ public class PHOCSAquifersResponseWrapperTest {
         System.debug('==== Material: ' + resp.material);
         System.debug('==== Subtype: ' + resp.subtype);
         System.debug('==== Vulnerability: ' + resp.vulnerability);
-
+        
         // Debug nested resources
         if (resp.resources != null && !resp.resources.isEmpty()) {
             for (PHOCSAquifersResponseWrapper.Resource res : resp.resources) {
@@ -117,7 +119,7 @@ public class PHOCSAquifersResponseWrapperTest {
                 System.debug('---- Resource URL: ' + res.url);
             }
         }
-
+        
         // Debug licence details
         if (resp.licence_details != null) {
             System.debug('==== Licence Count: ' + resp.licence_details.licence_count);
@@ -132,6 +134,6 @@ public class PHOCSAquifersResponseWrapperTest {
                 }
             }
         }
-
+        
     }
 }

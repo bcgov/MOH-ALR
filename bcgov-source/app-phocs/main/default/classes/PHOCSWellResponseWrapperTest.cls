@@ -1,9 +1,7 @@
 @isTest
-private class PHOCSWellResponseWrapperTest {
+public class PHOCSWellResponseWrapperTest {
     
-    @isTest
-    static void testWellResponseDeserialization() {
-        // Sample JSON payload (copied from your example)
+    public static String getResponse(){
         String jsonString = '{' +
             '"well_guid": "dbf618ed-9a8e-428f-89c1-3fc861a0721d",' +
             '"well": 129877,' +
@@ -139,7 +137,12 @@ private class PHOCSWellResponseWrapperTest {
             '],' +
             '"is_published": true' +
             '}';
-        
+        return jsonString;
+    }
+    @isTest
+    static void testWellResponseDeserialization() {
+        // Sample JSON payload (copied from your example)
+        String jsonString = getResponse();        
         
         // Act: Deserialize
         PHOCSWellResponseWrapper resp = 
