@@ -66,6 +66,11 @@ global with sharing class PHOCSWaterRightsService implements Callable {
                 outMap.put('StartDateofConstruction', response.construction_start_date);
                 outMap.put('EndDateofConstruction', response.construction_end_date);
                 outMap.put('WellLocationDescription', response.well_location_description);
+                outMap.put('ScreenType', response.other_screen_material);
+                outMap.put('ScreenMaterial', response.other_screen_material);
+                outMap.put('ScreenIntakeMethod', response.other_screen_material);
+                outMap.put('CasingDetails', response.submission_work_dates);
+                outMap.put('InstalledScreens', response.submission_work_dates);
             } else {
                 outMap.put('result', null);
             }
