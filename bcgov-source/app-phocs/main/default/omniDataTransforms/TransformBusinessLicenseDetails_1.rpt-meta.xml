@@ -214,6 +214,21 @@
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>cd6cd2b4-6097-4236-865c-c139520ae11b</globalKey>
+        <inputFieldName>DocumentChecklistItems:FormattedSealedDate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>TransformBusinessLicenseDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>DocumentChecklistItems:FormattedSealedDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
         <disabled>true</disabled>
         <filterGroup>0.0</filterGroup>
         <globalKey>TransformBusinessLicenseDetailsCustom6323</globalKey>
@@ -343,6 +358,9 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <formulaConverted>| | var:DocumentChecklistItems:SealedDate ISBLANK &quot;N/A&quot; var:DocumentChecklistItems:SealedDate IF</formulaConverted>
+        <formulaExpression>IF(ISBLANK(%DocumentChecklistItems:SealedDate%),&quot;N/A&quot;,%DocumentChecklistItems:SealedDate%)</formulaExpression>
+        <formulaResultPath>DocumentChecklistItems:FormattedSealedDate</formulaResultPath>
         <formulaSequence>1.0</formulaSequence>
         <globalKey>TransformBusinessLicenseDetailsCustom0jIbZ0000001lcnUAAItem0</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
@@ -713,21 +731,20 @@
     </omniDataTransformItem>
     <outputType>JSON</outputType>
     <previewJsonData>{
-  &quot;BLIdentifier&quot; : &quot;2025-0000000017&quot;,
-  &quot;BLOrganizationBillingStreet&quot; : &quot;Owasso Billing Address&quot;,
-  &quot;BLPeriodStart&quot; : &quot;2025-04-16T19:00:00.000Z&quot;,
-  &quot;BLOrganizationId&quot; : &quot;001bZ0000081P7vQAE&quot;,
-  &quot;BLOrganizationBillingCity&quot; : &quot;Montreal&quot;,
-  &quot;WaterSuppliers&quot; : {
-    &quot;WaterSuppliersName&quot; : &quot;Test Water source Intake Account&quot;
-  },
-  &quot;BLAOwnerName&quot; : &quot;Rahul Patle&quot;,
-  &quot;BLOrganizationBillingCountry&quot; : &quot;Canada&quot;,
-  &quot;BLAccountBillingAddress&quot; : &quot;    &quot;,
+  &quot;BLOrganizationName&quot; : &quot;test&quot;,
+  &quot;BLAccountPHOWaterSystemSizeCategory&quot; : &quot;Small Water System &lt;50&quot;,
+  &quot;BLAccountPHOWaterSourceCategory&quot; : &quot;Small Water System &lt;50&quot;,
+  &quot;isConditionNotPresent&quot; : false,
+  &quot;BLAEngineeringDesignFirmAddress&quot; : &quot;    &quot;,
+  &quot;BLASourceWaterEvaluationClosureReason&quot; : &quot;Approved&quot;,
+  &quot;BLOrganizationAccountName&quot; : &quot;test&quot;,
+  &quot;BLAccountFacilityHA&quot; : &quot;&lt;a href=\&quot;/001bZ000008XMq7QAG\&quot; target=\&quot;_self\&quot;&gt;Northern&lt;/a&gt;&quot;,
+  &quot;DocumentChecklistItems.SealedNew&quot; : &quot;2025-09-12&quot;,
   &quot;DocumentChecklistItems&quot; : [ {
-    &quot;DocumentChecklistItemsName&quot; : &quot;2. Manufacturer’s Technical Specifications&quot;
+    &quot;DocumentChecklistItemsName&quot; : &quot;2. Manufacturer’s Technical Specifications&quot;,
+    &quot;SealedDate&quot; : &quot;2025-09-12&quot;,
+    &quot;DocumentDate&quot; : &quot;2025-09-11&quot;
   }, {
-    &quot;DocumentDate&quot; : &quot;2024-07-01&quot;,
     &quot;DocumentChecklistItemsName&quot; : &quot;1. Cover Letter&quot;
   }, {
     &quot;DocumentChecklistItemsName&quot; : &quot;10. Additional Plans&quot;
@@ -748,9 +765,74 @@
   }, {
     &quot;DocumentChecklistItemsName&quot; : &quot;4. Basic Plans i. Location Map&quot;
   } ],
-  &quot;BLOrganizationBillingState&quot; : &quot;QC&quot;,
-  &quot;BLOrganizationBillingPostalCode&quot; : &quot;74055&quot;,
-  &quot;BLOrganizationName&quot; : &quot;Montreal Water System&quot;
+  &quot;BLAccountBillingAddress&quot; : &quot;test ACc Billing add Montreal  434333 &quot;,
+  &quot;AccountCategoryL1&quot; : &quot;Community Water System&quot;,
+  &quot;AccountCategoryL2&quot; : &quot;Local Gov System&quot;,
+  &quot;BLAccountPhysicalAddress&quot; : &quot;1015t Monetral BC V5X 3K4 CA&quot;,
+  &quot;AccountCategoryL3&quot; : &quot;Municipality&quot;,
+  &quot;BLOrganizationHA&quot; : &quot;&lt;a href=\&quot;/001bZ000008XMq7QAG\&quot; target=\&quot;_self\&quot;&gt;Northern&lt;/a&gt;&quot;,
+  &quot;BLAccountRelatedWaterSourceIntakeWaterLicenseNumber&quot; : &quot;213&quot;,
+  &quot;BLAccountHealthAuthority&quot; : &quot;Northern Health - NH&quot;,
+  &quot;BLOrganizationBillingAddress&quot; : &quot;    &quot;,
+  &quot;BLOrganizationId&quot; : &quot;001bZ00000BhL66QAF&quot;,
+  &quot;BLIdentifier&quot; : &quot;2025-0000000090&quot;,
+  &quot;CurrentDate&quot; : &quot;2025-09-16&quot;,
+  &quot;BLAApplicantMailingAddress&quot; : &quot;    &quot;,
+  &quot;BLAccountName&quot; : &quot;test drinking water system Demo&quot;,
+  &quot;BLAccountWaterSourceIntakeCategoryL2&quot; : &quot;Local Gov System&quot;,
+  &quot;RegulatoryAuthorizationTypeName&quot; : &quot;Drinking Water Construction Permit&quot;,
+  &quot;BLAccountWaterSourceIntakeWaterSourceCategory&quot; : &quot;Ground and Surface&quot;,
+  &quot;BLAccountNumber&quot; : &quot;FA-00411&quot;,
+  &quot;BLAccountId&quot; : &quot;FA-00411&quot;,
+  &quot;BusinessLicense&quot; : {
+    &quot;Conditions&quot; : {
+      &quot;Description&quot; : &quot;To  verify the generated document for BL-12345&quot;
+    }
+  },
+  &quot;isWSICatL1GroundWater&quot; : false,
+  &quot;BLAccountPhysicalAddressCity&quot; : &quot;Monetral&quot;,
+  &quot;BLAOwnerName&quot; : &quot;vishwantha&quot;,
+  &quot;BLADetails&quot; : {
+    &quot;BLAName&quot; : &quot;BLA-0000001243&quot;
+  },
+  &quot;WaterSuppliers&quot; : {
+    &quot;WaterSuppliersName&quot; : &quot;test drinking water system Demo&quot;
+  },
+  &quot;BLAccountFacilityHAName&quot; : &quot;Northern&quot;,
+  &quot;BLAccountDWSDetails&quot; : {
+    &quot;FacilitiesDWDDetails&quot; : {
+      &quot;FacilityCatL1DWDBLAccountName&quot; : &quot;Test Distribution system&quot;,
+      &quot;EOCPFacilityNumber&quot; : &quot;3453.0&quot;,
+      &quot;FacilityClassificationLevel&quot; : &quot;IV&quot;,
+      &quot;FacilityCatL1DWDSecondaryDisinfectionRequired&quot; : false
+    },
+    &quot;FacilitiesDWTDetails&quot; : [ {
+      &quot;FacilityCatL1DWTName&quot; : &quot;RPDWTTestTreatmethod&quot;,
+      &quot;BLAccountPhysicalAddress&quot; : &quot;1015t Monetral BC V5X 3K4 CA&quot;,
+      &quot;Id&quot; : &quot;001bZ00000DgZl4QAF&quot;,
+      &quot;BLAccountDWSName&quot; : &quot;test drinking water system Demo&quot;,
+      &quot;FacilitiesDWTPhysicalAddress&quot; : &quot;Boulevard ThimensBoulevard Thimens MontréalMontréal QCQC  CACA&quot;
+    }, {
+      &quot;FacilityCatL1DWTName&quot; : &quot;RPDWTTestTreatmethod 2&quot;,
+      &quot;BLAccountPhysicalAddress&quot; : &quot;1015t Monetral BC V5X 3K4 CA&quot;,
+      &quot;Id&quot; : &quot;001bZ00000DhBX1QAN&quot;,
+      &quot;BLAccountDWSName&quot; : &quot;test drinking water system Demo&quot;,
+      &quot;FacilitiesDWTPhysicalAddress&quot; : &quot;Boulevard ThimensBoulevard Thimens MontréalMontréal QCQC  CACA&quot;
+    } ],
+    &quot;WaterSuppliersDWSDetails&quot; : [ {
+      &quot;WaterSuppliersDWSWaterLicenseNumber&quot; : &quot;1&quot;,
+      &quot;BLAccountDWSName&quot; : &quot;Test Surface&quot;,
+      &quot;BLAccountDWSCategoryL1&quot; : &quot;Community Water System&quot;,
+      &quot;BLAccountWaterSourceIntakeCategoryL1&quot; : &quot;Surface Water&quot;,
+      &quot;WaterSourceIntakeWellTag&quot; : &quot;12345.0&quot;
+    }, {
+      &quot;BLAccountDWSName&quot; : &quot;12&quot;,
+      &quot;BLAccountDWSCategoryL1&quot; : &quot;Community Water System&quot;,
+      &quot;BLAccountWaterSourceIntakeCategoryL1&quot; : &quot;Groundwater&quot;,
+      &quot;WaterSourceIntakeWellTag&quot; : &quot;242423.0&quot;
+    } ]
+  },
+  &quot;isWSICatL1SurfaceWater&quot; : false
 }</previewJsonData>
     <processSuperBulk>false</processSuperBulk>
     <responseCacheTtlMinutes>0.0</responseCacheTtlMinutes>

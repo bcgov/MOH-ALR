@@ -5,7 +5,7 @@
         <name>Extract_SF_ID_From_Hyperlink</name>
         <label>Extract SF ID From Hyperlink</label>
         <locationX>1172</locationX>
-        <locationY>431</locationY>
+        <locationY>923</locationY>
         <actionName>PHOCSCustomConfiguration</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -25,14 +25,14 @@
             <name>plainText</name>
         </outputParameters>
     </actionCalls>
-    <apiVersion>64.0</apiVersion>
+    <apiVersion>63.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <decisions>
         <description>Assign Health Authority based on Facility HA</description>
         <name>Assign_Health_Authority</name>
         <label>Assign Health Authority</label>
         <locationX>710</locationX>
-        <locationY>755</locationY>
+        <locationY>1247</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Interior</name>
@@ -111,11 +111,34 @@
         </rules>
     </decisions>
     <decisions>
+        <description>Update Health Authority Only if Facility Hierarchy is changed</description>
+        <name>Check_Facility_Hierarchy_Changed</name>
+        <label>Check Facility Hierarchy Changed</label>
+        <locationX>1887</locationX>
+        <locationY>431</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Facility_Hierarchy_Changed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.FacilityHierarchy__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>CheckFacilityHierarchy</targetReference>
+            </connector>
+            <label>Facility Hierarchy Changed</label>
+        </rules>
+    </decisions>
+    <decisions>
         <description>To Check if Facility Hierarchy exists in Account</description>
         <name>Check_Facility_Hierarchy_exists</name>
         <label>Check Facility Hierarchy exists</label>
         <locationX>1172</locationX>
-        <locationY>539</locationY>
+        <locationY>1031</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Outcome_1_of_Check_Facility_Hierarchy_exists</name>
@@ -137,7 +160,7 @@
         <name>CheckFacilityHierarchy</name>
         <label>Check Facility Hierarchy</label>
         <locationX>1667</locationX>
-        <locationY>323</locationY>
+        <locationY>815</locationY>
         <defaultConnectorLabel>Default</defaultConnectorLabel>
         <rules>
             <name>FacilityHierarchyNotNull</name>
@@ -147,13 +170,6 @@
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.FacilityHierarchy__c</leftValueReference>
-                <operator>IsChanged</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -177,9 +193,66 @@
             <label>Facility Hierarchy Null</label>
         </rules>
     </decisions>
-    <description>test -v8
+    <decisions>
+        <description>Check if record is created</description>
+        <name>CheckIsNew</name>
+        <label>CheckIsNew</label>
+        <locationX>1667</locationX>
+        <locationY>323</locationY>
+        <defaultConnector>
+            <targetReference>Check_Facility_Hierarchy_Changed</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Record Update</defaultConnectorLabel>
+        <rules>
+            <name>NewRecord</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>checkIsNewRecord</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Is_Facility_Hierarchy_Present</targetReference>
+            </connector>
+            <label>New Record</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_Facility_Hierarchy_Present</name>
+        <label>Is Facility Hierarchy Present</label>
+        <locationX>1447</locationX>
+        <locationY>431</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Facility_Hierarchy_Present</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.FacilityHierarchy__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>CheckFacilityHierarchy</targetReference>
+            </connector>
+            <label>Facility Hierarchy Present</label>
+        </rules>
+    </decisions>
+    <description>Bug Fix - 2520 Update record fix 
+Bug Fix - For New Record and Update Record
+Bug fix - On creation Facility Hierarchy Updates
+test -v8
 Flow to update Health Authority Field - EHIS-188 - Bug fix</description>
     <environments>Default</environments>
+    <formulas>
+        <description>Check if record is created</description>
+        <name>checkIsNewRecord</name>
+        <dataType>Boolean</dataType>
+        <expression>ISNEW()</expression>
+    </formulas>
     <interviewLabel>Update Health Authority {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Update Health Authority</label>
     <processMetadataValues>
@@ -206,7 +279,7 @@ Flow to update Health Authority Field - EHIS-188 - Bug fix</description>
         <name>Get_Facility_Hierarchy</name>
         <label>Get Facility Hierarchy</label>
         <locationX>710</locationX>
-        <locationY>647</locationY>
+        <locationY>1139</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Assign_Health_Authority</targetReference>
@@ -228,7 +301,7 @@ Flow to update Health Authority Field - EHIS-188 - Bug fix</description>
         <name>Fraser_Health_FH</name>
         <label>Fraser Health - FH</label>
         <locationX>314</locationX>
-        <locationY>863</locationY>
+        <locationY>1355</locationY>
         <inputAssignments>
             <field>HealthAuthority__c</field>
             <value>
@@ -242,7 +315,7 @@ Flow to update Health Authority Field - EHIS-188 - Bug fix</description>
         <name>Interior_Health_IH</name>
         <label>Interior Health - IH</label>
         <locationX>50</locationX>
-        <locationY>863</locationY>
+        <locationY>1355</locationY>
         <inputAssignments>
             <field>HealthAuthority__c</field>
             <value>
@@ -256,7 +329,7 @@ Flow to update Health Authority Field - EHIS-188 - Bug fix</description>
         <name>Island_Health_Island</name>
         <label>Island Health - Island</label>
         <locationX>842</locationX>
-        <locationY>863</locationY>
+        <locationY>1355</locationY>
         <inputAssignments>
             <field>HealthAuthority__c</field>
             <value>
@@ -270,7 +343,7 @@ Flow to update Health Authority Field - EHIS-188 - Bug fix</description>
         <name>Northern_Health_NH</name>
         <label>Northern Health - NH</label>
         <locationX>1106</locationX>
-        <locationY>863</locationY>
+        <locationY>1355</locationY>
         <inputAssignments>
             <field>HealthAuthority__c</field>
             <value>
@@ -283,7 +356,7 @@ Flow to update Health Authority Field - EHIS-188 - Bug fix</description>
         <name>UpdateHealthAuthorityToNull</name>
         <label>Update Health Authority To Null</label>
         <locationX>1898</locationX>
-        <locationY>431</locationY>
+        <locationY>923</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>HealthAuthority__c</field>
@@ -302,7 +375,7 @@ Flow to update Health Authority Field - EHIS-188 - Bug fix</description>
         <name>Vancouver_Coastal_Health_VCH</name>
         <label>Vancouver Coastal Health - VCH</label>
         <locationX>578</locationX>
-        <locationY>863</locationY>
+        <locationY>1355</locationY>
         <inputAssignments>
             <field>HealthAuthority__c</field>
             <value>
@@ -315,7 +388,7 @@ Flow to update Health Authority Field - EHIS-188 - Bug fix</description>
         <locationX>1541</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>CheckFacilityHierarchy</targetReference>
+            <targetReference>CheckIsNew</targetReference>
         </connector>
         <object>Account</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
