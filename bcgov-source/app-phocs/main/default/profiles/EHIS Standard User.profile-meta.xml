@@ -2664,7 +2664,10 @@
     </layoutAssignments>
     <layoutAssignments>
         <layout>Contact-EHIS Contact Layout</layout>
-        <recordType>Contact.Contact</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Contact-EHIS Contact Layout</layout>
+        <recordType>Contact.PHOCSContact</recordType>
     </layoutAssignments>
     <layoutAssignments>
         <layout>Account-EHIS HA Hierarchy Page Layout</layout>
@@ -2760,8 +2763,14 @@
         <recordType>AssessmentTaskDefinition.PHOCSAssessmentTaskDefinition</recordType>
     </layoutAssignments>
     <layoutAssignments>
-        <layout>BusinessLicense-Business License Layout</layout>
-        <recordType>BusinessLicense.License</recordType>
+        <layout>AssessmentTask-Assessment Task Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>AssessmentTask-Assessment Task Layout</layout>
+        <recordType>AssessmentTask.PHOCSAssessmentTask</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>BusinessLicense-PHOCS Permit License Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
         <layout>BusinessLicense-PHOCS Permit License Layout</layout>
@@ -2811,10 +2820,7 @@
         <recordType>Case.PHOCFoodRecall</recordType>
     </layoutAssignments>
     <layoutAssignments>
-        <layout>Contact-Contact Layout</layout>
-    </layoutAssignments>
-    <layoutAssignments>
-        <layout>Conditions__c-Condition Layout</layout>
+        <layout>Conditions__c-PHOCS Condition Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
         <layout>Conditions__c-PHOCS Condition Layout</layout>
@@ -2841,6 +2847,9 @@
     </layoutAssignments>
     <layoutAssignments>
         <layout>EmailMessage-Email Message Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Event-Event Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
         <layout>Event-EHIS PHOCS Temporary Food Service</layout>
@@ -2905,7 +2914,13 @@
     </layoutAssignments>
     <layoutAssignments>
         <layout>RegulatoryTrxnFee-PHOCS Regulatory Transaction Fee Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RegulatoryTrxnFee-PHOCS Regulatory Transaction Fee Layout</layout>
         <recordType>RegulatoryTrxnFee.PHOCSTransactionFee</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RegulatoryTrxnFeeItem-PHOCS Regulatory Transaction Fee Item Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
         <layout>RegulatoryTrxnFeeItem-PHOCS Regulatory Transaction Fee Item Layout</layout>
@@ -2914,6 +2929,16 @@
     <layoutAssignments>
         <layout>VisitedParty-PHOCS Visited Party Layout</layout>
         <recordType>VisitedParty.PHOCSVisitedParty</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>VisitedParty-PHOCS Visited Party Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Work_Area__c-Work Area Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Work_Area__c-Work Area Layout</layout>
+        <recordType>Work_Area__c.PHOCSWorkArea</recordType>
     </layoutAssignments>
     <layoutAssignments>
          <layout>Task-PHOCS Task Layout</layout>
@@ -2984,6 +3009,18 @@
         <layout>LabTestRequisition__c-PHOCS Food Lab Test Requisition</layout>
         <recordType>LabTestRequisition__c.PHOCSFoodLabTestRequisition</recordType>
     </layoutAssignments>
+    <layoutAssignments>
+        <layout>LabTestMasterList__c-PHOCS Dye Test Master List Layout</layout>
+        <recordType>LabTestMasterList__c.PHOCSDyeTest</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>LabTestRequisition__c-PHOCS Dye Test Requisition Layout</layout>
+        <recordType>LabTestRequisition__c.PHOCSDyeTestRequisition</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>LabTestRequisition__c-PHOCS Lead Water Test Requisition Layout</layout>
+        <recordType>LabTestRequisition__c.PHOCSLeadWaterTestRequisition</recordType>
+    </layoutAssignments>
     <objectPermissions>
         <allowCreate>false</allowCreate>
         <allowDelete>false</allowDelete>
@@ -3037,26 +3074,41 @@
     <recordTypeVisibilities>
         <default>false</default>
         <recordType>Account.HA_Hierarchy</recordType>
-        <visible>true</visible>
+        <visible>false</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
         <default>false</default>
         <recordType>Account.DrinkingWaterSourceIntake</recordType>
-        <visible>true</visible>
+        <visible>false</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
         <default>false</default>
         <recordType>Account.DrinkingWaterSystem</recordType>
-        <visible>true</visible>
+        <visible>false</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
         <default>false</default>
         <recordType>Account.Facility</recordType>
-        <visible>true</visible>
+        <visible>false</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
         <default>true</default>
         <recordType>AccountAccountRelation.FacilityLinkage</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <default>true</default>
+        <recordType>Event.PHOCSEvent</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <default>false</default>
+        <recordType>Event.PHOCSTemporaryFoodService</recordType>
+        <visible>false</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <default>true</default>
+        <recordType>AssessmentTask.PHOCSAssessmentTask</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
@@ -3096,6 +3148,17 @@
     </recordTypeVisibilities>
     <recordTypeVisibilities>
         <default>true</default>
+        <recordType>Work_Area__c.PHOCSWorkArea</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <default>true</default>
+        <personAccountDefault>true</personAccountDefault>
+        <recordType>VisitedParty.PHOCSVisitedParty</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <default>true</default>
         <recordType>ActionPlanTemplate.PHOCSActionPlanTemplate</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
@@ -3130,12 +3193,12 @@
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
-        <default>true</default>
+        <default>false</default>
         <recordType>BusinessLicense.License</recordType>
-        <visible>true</visible>
+        <visible>false</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
-        <default>false</default>
+        <default>true</default>
         <recordType>BusinessLicense.PHOCSPermitLicense</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
@@ -3216,6 +3279,16 @@
     </recordTypeVisibilities>
     <recordTypeVisibilities>
         <default>true</default>
+        <recordType>RegulatoryTrxnFee.PHOCSTransactionFee</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <default>true</default>
+        <recordType>RegulatoryTrxnFeeItem.PHOCSRegulatoryTransactionFeeItem</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <default>true</default>
         <recordType>RegulatoryAuthority.PHOCSRegulatoryAuthority</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
@@ -3235,9 +3308,9 @@
         <visible>false</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
-        <default>false</default>
+        <default>true</default>
         <recordType>Task.Task</recordType>
-        <visible>false</visible>
+        <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
         <default>false</default>
