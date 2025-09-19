@@ -7,7 +7,6 @@
 */
 
 public class PHOCSWellResponseWrapper {
-
     public String well_guid;
     public Integer well;
     public Integer well_tag_number;
@@ -39,6 +38,8 @@ public class PHOCSWellResponseWrapper {
     public String decommission_end_date;
     public String person_responsible;
     public String driller_name;
+    public String drilling_company;
+    public String company_of_person_responsible;
     public String consultant_name;
     public String consultant_company;
     public String well_identification_plate_attached;
@@ -49,10 +50,12 @@ public class PHOCSWellResponseWrapper {
     public Double longitude;
     public String coordinate_acquisition_code;
     public String ground_elevation;
-
-    public List<DrillingMethods> drilling_methods;
+    public String ground_elevation_method;
+    public List<DrillingMethod> drilling_methods;
     public String well_orientation_status;
+    public String surface_seal_material;
     public String surface_seal_thickness;
+    public String surface_seal_method;
     public String surface_seal_depth;
     public String backfill_type;
     public String backfill_depth;
@@ -60,7 +63,12 @@ public class PHOCSWellResponseWrapper {
     public String liner_thickness;
     public String liner_from;
     public String liner_to;
+    public String screen_intake_method;
+    public String screen_type;
+    public String screen_material;
     public String other_screen_material;
+    public String screen_opening;
+    public String screen_bottom;
     public String other_screen_bottom;
     public String screen_information;
     public String filter_pack_from;
@@ -68,7 +76,7 @@ public class PHOCSWellResponseWrapper {
     public String filter_pack_thickness;
     public String filter_pack_material;
     public String filter_pack_material_size;
-    public List<String> development_methods;
+    public List<DevelopmentMethod> development_methods;
     public String development_hours;
     public String development_notes;
     public List<String> water_quality_characteristics;
@@ -116,6 +124,7 @@ public class PHOCSWellResponseWrapper {
     public String testing_duration;
     public String analytic_solution_type;
     public String boundary_effect;
+    public String yield_estimation_method;
     public String yield_estimation_rate;
     public String yield_estimation_duration;
     public String static_level_before_test;
@@ -124,29 +133,64 @@ public class PHOCSWellResponseWrapper {
     public String hydro_fracturing_yield_increase;
     public String recommended_pump_depth;
     public String recommended_pump_rate;
-
-    public List<Object> casing_set;
+    public List<CasingSetItem> casing_set;
     public List<Object> aquifer_parameters_set;
-    public List<Object> screen_set;
+    public List<ScreenSetItem> screen_set;
     public List<Object> linerperforation_set;
     public List<Object> decommission_description_set;
-    public List<Object> lithologydescription_set;
-
-    public List<SubmissionWorkDates> submission_work_dates;
+    public List<LithologyDescription> lithologydescription_set;
+    public List<SubmissionWorkDate> submission_work_dates;
     public Boolean is_published;
 
-    // Nested class: drilling methods
-    public class DrillingMethods {
+    // ---------- INNER CLASSES ----------
+    public class DrillingMethod {
         public String description;
     }
 
-    // Nested class: submission work dates
-    public class SubmissionWorkDates {
+    public class DevelopmentMethod {
+        public String description;
+    }
+
+    public class CasingSetItem {
+        public String start;
+        public String endVal; // renamed from 'end'
+        public String diameter;
+        public String casing_code;
+        public String casing_material;
+        public String drive_shoe_status;
+        public String wall_thickness;
+    }
+
+    public class ScreenSetItem {
+        public String start;
+        public String endVal; // renamed from 'end'
+        public String diameter;
+        public String assembly_type;
+        public String slot_size;
+    }
+
+    public class LithologyDescription {
+        public String start;
+        public String endVal; // renamed from 'end'
+        public String lithology_raw_data;
+        public String lithology_colour;
+        public String lithology_hardness;
+        public String lithology_moisture;
+        public String lithology_observation;
+        public String water_bearing_estimated_flow;
+    }
+
+    public class SubmissionWorkDate {
         public Integer well;
         public String create_date;
         public String well_activity_description;
         public String work_start_date;
         public String work_end_date;
+        public String drilling_company;
     }
 
+    // ---------- PARSER ----------
+    public static PHOCSWellResponseWrapper parse(String jsonString) {
+        return (PHOCSWellResponseWrapper) JSON.deserialize(jsonString, PHOCSWellResponseWrapper.class);
+    }
 }
