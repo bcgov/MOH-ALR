@@ -23,7 +23,7 @@ global with sharing class PHOCSWaterRightsService implements Callable {
                 outMap.put('PODSubtype', response.features[0].properties.POD_SUBTYPE);
                 outMap.put('SourceWaterBodyName', response.features[0].properties.SOURCE_NAME);
             } else {
-                outMap.put('result', null);
+                outMap.put('NoData', 'No water license details available.');
             }
         }
         if (methodName == 'getWaterLicenseApplicationDetails') {
@@ -40,11 +40,11 @@ global with sharing class PHOCSWaterRightsService implements Callable {
                 outMap.put('PODDiversionType', response.features[0].properties.POD_DIVERSION_TYPE);
                 outMap.put('PODSubtype', response.features[0].properties.POD_SUBTYPE);
             } else {
-                outMap.put('result', null);
+                outMap.put('NoData', 'No water license application details available.');
             }
         }
         if (methodName == 'getAquifersDetails') {
-            if (acc != null && String.isNotBlank(acc.AquiferNumber__c.toString())) {
+            if (acc != null && acc.AquiferNumber__c != null && String.isNotBlank(acc.AquiferNumber__c.toString())) {
                 PHOCSAquifersResponseWrapper response = getAquiferDetails(acc.AquiferNumber__c.toString());                
                 // Put the wrapper directly into the output map
                 outMap.put('aquifer_name', response.aquifer_name);
@@ -52,11 +52,11 @@ global with sharing class PHOCSWaterRightsService implements Callable {
                 outMap.put('material_type', response.geom.type);
                 outMap.put('size', response.area);
             } else {
-                outMap.put('result', null);
+                outMap.put('NoData', 'No aquifer details available.');
             }
         }
         if (methodName == 'getGWellDetails') {
-            if (acc != null && String.isNotBlank(acc.WellTagNumber__c.toString())) {
+            if (acc != null && acc.WellTagNumber__c != null && String.isNotBlank(acc.WellTagNumber__c.toString())) {
                 PHOCSWellResponseWrapper response = getGWellDetails(acc.WellTagNumber__c.toString());                
                 // Put the wrapper directly into the output map
                 outMap.put('WellIDPlateNumber', response.IDENTIFICATION_PLATE_NUMBER);
@@ -72,7 +72,7 @@ global with sharing class PHOCSWaterRightsService implements Callable {
                 outMap.put('CasingDetails', response.casing_set);
                 outMap.put('InstalledScreens', response.screen_set);
             } else {
-                outMap.put('result', null);
+                outMap.put('NoData', 'No well details available.');
             }
         }
         return outMap; // always return the whole map
