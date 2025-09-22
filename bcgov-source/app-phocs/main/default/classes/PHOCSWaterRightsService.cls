@@ -8,6 +8,7 @@ global with sharing class PHOCSWaterRightsService implements Callable {
     
     private Object invokeMethod(String methodName, Map<String, Object> inputMap, Map<String, Object> outMap, Map<String, Object> options) {
         Account acc = getAccountDetails(String.valueOf(inputMap.get('recordId')));
+        PHOCSWellResponseWrapper wellDetailsResponse;
         if (methodName == 'getWaterLicenseDetails') {
             if (acc != null && String.isNotBlank(acc.WaterLicenseNumber__c)) {
                 try{
@@ -70,20 +71,50 @@ global with sharing class PHOCSWaterRightsService implements Callable {
         if (methodName == 'getGWellDetails') {
             if (acc != null && acc.WellTagNumber__c != null && String.isNotBlank(acc.WellTagNumber__c.toString())) {
                 try{
-                    PHOCSWellResponseWrapper response = getGWellDetails(acc.WellTagNumber__c.toString());                
+                    if(wellDetailsResponse == null){
+                        wellDetailsResponse = getGWellDetails(acc.WellTagNumber__c.toString());
+                    }                                    
                     // Put the wrapper directly into the output map
-                    outMap.put('WellIDPlateNumber', response.IDENTIFICATION_PLATE_NUMBER);
-                    outMap.put('WellStatus', response.well_status);
-                    outMap.put('ArtesianCondition', response.artesian_conditions);
-                    outMap.put('AquiferNumber', response.aquifer);
-                    outMap.put('StartDateofConstruction', response.construction_start_date);
-                    outMap.put('EndDateofConstruction', response.construction_end_date);
-                    outMap.put('WellLocationDescription', response.well_location_description);
-                    outMap.put('ScreenType', response.screen_type);
-                    outMap.put('ScreenMaterial', response.screen_material);
-                    outMap.put('ScreenIntakeMethod', response.screen_intake_method);
-                    outMap.put('CasingDetails', response.casing_set);
-                    outMap.put('InstalledScreens', response.screen_set);
+                    outMap.put('WellIDPlateNumber', wellDetailsResponse.IDENTIFICATION_PLATE_NUMBER);
+                    outMap.put('WellStatus', wellDetailsResponse.well_status);
+                    outMap.put('ArtesianCondition', wellDetailsResponse.artesian_conditions);
+                    outMap.put('AquiferNumber', wellDetailsResponse.aquifer);
+                    outMap.put('StartDateofConstruction', wellDetailsResponse.construction_start_date);
+                    outMap.put('EndDateofConstruction', wellDetailsResponse.construction_end_date);
+                    outMap.put('WellLocationDescription', wellDetailsResponse.well_location_description);
+                    outMap.put('ScreenType', wellDetailsResponse.screen_type);
+                    outMap.put('ScreenMaterial', wellDetailsResponse.screen_material);
+                    outMap.put('ScreenIntakeMethod', wellDetailsResponse.screen_intake_method);
+                }catch(Exception ex){
+                    outMap.put('NoData', 'No well details available.');
+                }
+            } else {
+                outMap.put('NoData', 'No well details available.');
+            }            
+        }
+        if (methodName == 'getGWellCasingDetails') {
+            if (acc != null && acc.WellTagNumber__c != null && String.isNotBlank(acc.WellTagNumber__c.toString())) {
+                try{
+                    if(wellDetailsResponse == null){
+                        wellDetailsResponse = getGWellDetails(acc.WellTagNumber__c.toString());
+                    }                                    
+                    // Put the wrapper directly into the output map
+                    outMap.put('CasingDetails', wellDetailsResponse.casing_set);
+                }catch(Exception ex){
+                    outMap.put('NoData', 'No well details available.');
+                }
+            } else {
+                outMap.put('NoData', 'No well details available.');
+            }
+        }
+        if (methodName == 'getGWellInstalledDetails') {
+            if (acc != null && acc.WellTagNumber__c != null && String.isNotBlank(acc.WellTagNumber__c.toString())) {
+                try{
+                    if(wellDetailsResponse == null){
+                        wellDetailsResponse = getGWellDetails(acc.WellTagNumber__c.toString());
+                    }                                    
+                    // Put the wrapper directly into the output map
+                    outMap.put('InstalledScreens', wellDetailsResponse.screen_set);
                 }catch(Exception ex){
                     outMap.put('NoData', 'No well details available.');
                 }
