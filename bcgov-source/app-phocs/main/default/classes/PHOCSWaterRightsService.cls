@@ -115,6 +115,7 @@ global with sharing class PHOCSWaterRightsService implements Callable {
                     }                                    
                     // Put the wrapper directly into the output map
                     outMap.put('InstalledScreens', wellDetailsResponse.screen_set);
+                    //outMap.put('response', wellDetailsResponse);
                 }catch(Exception ex){
                     outMap.put('NoData', 'No well details available.');
                 }
