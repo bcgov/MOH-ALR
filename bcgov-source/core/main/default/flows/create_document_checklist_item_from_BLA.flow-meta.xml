@@ -3,12 +3,12 @@
     <actionCalls>
         <name>Get_Checklist_Action_Plan_Template</name>
         <label>Get Checklist Action Plan Template</label>
-        <locationX>512</locationX>
+        <locationX>446</locationX>
         <locationY>539</locationY>
         <actionName>PHOCS_Document_Checklists_Decision_Matrix</actionName>
         <actionType>runDecisionMatrix</actionType>
         <connector>
-            <targetReference>GetActionPlanTemplate</targetReference>
+            <targetReference>Check_ActionPlanTemplateName</targetReference>
         </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
@@ -27,7 +27,7 @@
     <actionCalls>
         <name>PHOCS_Document_Checklist_Exemption_Action_1</name>
         <label>PHOCS Document Checklist Exemption Action 1</label>
-        <locationX>248</locationX>
+        <locationX>50</locationX>
         <locationY>539</locationY>
         <actionName>PHOCS_Document_Checklists</actionName>
         <actionType>runDecisionMatrix</actionType>
@@ -50,11 +50,27 @@
     </actionCalls>
     <apiVersion>61.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_ActionPlanTemplate_for_ALR</name>
+        <label>Assign ActionPlanTemplate for ALR</label>
+        <locationX>754</locationX>
+        <locationY>539</locationY>
+        <assignmentItems>
+            <assignToReference>ActionPlanTemplateName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Application Document Checklist Template</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>GetActionPlanTemplate</targetReference>
+        </connector>
+    </assignments>
     <decisions>
         <name>ActionPlanTemplateActivated</name>
         <label>Action Plan Template Activated</label>
-        <locationX>182</locationX>
-        <locationY>1055</locationY>
+        <locationX>204</locationX>
+        <locationY>1355</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>ActionPlanTemplateIsActive</name>
@@ -75,8 +91,8 @@
     <decisions>
         <name>ActionPlanTemplateIDcheck</name>
         <label>Action Plan Template ID check</label>
-        <locationX>380</locationX>
-        <locationY>839</locationY>
+        <locationX>402</locationX>
+        <locationY>1139</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>ActionPlanTemplateFound</name>
@@ -95,12 +111,34 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Check_ActionPlanTemplateName</name>
+        <label>Check ActionPlanTemplateName</label>
+        <locationX>446</locationX>
+        <locationY>647</locationY>
+        <defaultConnector>
+            <targetReference>GetActionPlanTemplate</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Blank</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>ActionPlanTemplateName</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>Blank</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Check_Record_Type</name>
         <label>Check Record Type</label>
-        <locationX>380</locationX>
+        <locationX>402</locationX>
         <locationY>431</locationY>
         <defaultConnector>
-            <targetReference>Get_Checklist_Action_Plan_Template</targetReference>
+            <targetReference>Assign_ActionPlanTemplate_for_ALR</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -117,6 +155,35 @@
                 <targetReference>PHOCS_Document_Checklist_Exemption_Action_1</targetReference>
             </connector>
             <label>Is Exemption</label>
+        </rules>
+        <rules>
+            <name>is_PHOCS_RT</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>GetBLARecords.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>ConstructionPermitApplication</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>GetBLARecords.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>OperatingPermitApplication</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>GetBLARecords.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Evaluation</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Checklist_Action_Plan_Template</targetReference>
+            </connector>
+            <label>is PHOCS RT</label>
         </rules>
     </decisions>
     <description>ALR-1164 &amp; EHIS-905</description>
@@ -145,8 +212,8 @@
     <recordCreates>
         <name>Action_Plan_for_BLA</name>
         <label>Action Plan for BLA</label>
-        <locationX>50</locationX>
-        <locationY>1163</locationY>
+        <locationX>72</locationX>
+        <locationY>1463</locationY>
         <inputAssignments>
             <field>ActionPlanTemplateVersionId</field>
             <value>
@@ -189,8 +256,8 @@
     <recordLookups>
         <name>GetActionPlanTemplate</name>
         <label>Get Action Plan Template</label>
-        <locationX>380</locationX>
-        <locationY>731</locationY>
+        <locationX>402</locationX>
+        <locationY>1031</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>ActionPlanTemplateIDcheck</targetReference>
@@ -217,8 +284,8 @@
     <recordLookups>
         <name>GetActionPlanTemplateVersion</name>
         <label>Get Action Plan Template Version</label>
-        <locationX>182</locationX>
-        <locationY>947</locationY>
+        <locationX>204</locationX>
+        <locationY>1247</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>ActionPlanTemplateActivated</targetReference>
@@ -245,7 +312,7 @@
     <recordLookups>
         <name>GetBLARecords</name>
         <label>Get BLA Records</label>
-        <locationX>380</locationX>
+        <locationX>402</locationX>
         <locationY>323</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -264,7 +331,7 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <start>
-        <locationX>254</locationX>
+        <locationX>276</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>GetBLARecords</targetReference>
@@ -280,9 +347,6 @@
         <isCollection>false</isCollection>
         <isInput>true</isInput>
         <isOutput>true</isOutput>
-        <value>
-            <stringValue>Application Document Checklist Template</stringValue>
-        </value>
     </variables>
     <variables>
         <name>NewActionPlan</name>
