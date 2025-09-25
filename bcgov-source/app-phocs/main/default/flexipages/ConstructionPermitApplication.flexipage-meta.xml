@@ -1191,10 +1191,16 @@
                 <fieldItem>Record.ReasonForNoVerticalSeperation__c</fieldItem>
                 <identifier>RecordReasonForNoVerticalSeperation_cField</identifier>
                 <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.LicenseType.Name}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>Drinking Water Construction Permit</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.VerticalSeperation__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>No</rightValue>
                     </criteria>
                 </visibilityRule>
             </fieldInstance>
