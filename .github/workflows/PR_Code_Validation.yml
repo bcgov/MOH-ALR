@@ -93,4 +93,4 @@ jobs:
 
       - name: Validate Code
         id: run_code_validation
-        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --ignore-warnings --checkonly --testlevel RunLocalTests --targetusername CI01
+        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose -g --checkonly --testlevel RunLocalTests --targetusername CI01
