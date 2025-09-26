@@ -316,14 +316,14 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             LabTestRequisition__c lab = (LabTestRequisition__c) record;
             Map<String, Object> result = new Map<String, Object>{
                 'Name' => lab.Name,
-                'FacilityName' => lab.FacilityName__r?.Name ?? '',
+                'FacilityName' => lab.FacilityName__r?.Name,
                 'FacilityAccountId' => lab.FacilityName__c,
                 'PhysicalAddressStreet'=> lab.FacilityName__r?.Physical_Address__c?.getStreet(),
                 'PhysicalAddressCity'=> lab.FacilityName__r?.Physical_Address__c?.getCity(),
                 'PhysicalAddressState'=> lab.FacilityName__r?.Physical_Address__c?.getState(),
                 'PhysicalAddressCountry'=> lab.FacilityName__r?.Physical_Address__c?.getCountry(),
                 'PhysicalAddressPostalCode'=> lab.FacilityName__r?.Physical_Address__c?.getPostalCode(),
-                'SamplingSiteName' => lab.SamplingSite__r?.Name ?? '',
+                'SamplingSiteName' => lab.SamplingSite__r?.Name,
                 'CollectionDateTime' => lab.CollectionDateTime__c
             };
             return result;
@@ -338,7 +338,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 'UnitOfMeasure' => lab.UnitOfMeasure__c,
                 'ResultValue' => lab.ResultValue__c,
                 'TestId' => lab.Test__c,
-                'TestName' => lab.Test__r?.Name ?? ''
+                'TestName' => lab.Test__r?.Name
             };
             return result;
         }
