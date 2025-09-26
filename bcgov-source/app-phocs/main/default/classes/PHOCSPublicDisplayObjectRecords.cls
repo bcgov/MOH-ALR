@@ -56,7 +56,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             throw new QueryException('No SOQL query found for object: ' + objectName);
         }
 
-        String soqlQuery = queryConfig.ObjectQuery__c;
+        String soqlQuery = String.escapeSingleQuotes(queryConfig.ObjectQuery__c);
         List<SObject> results = Database.query(soqlQuery);
 
         return results;
@@ -85,7 +85,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         String query = soqlQuery + ' WHERE Id = :recordId LIMIT 1';
         System.debug('query' + query);
 
-        List<SObject> results = Database.query(query);
+        List<SObject> results = Database.query(String.escapeSingleQuotes(query));
         System.debug('results' + results);
         return results;
     }
@@ -122,7 +122,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
          }         
          System.debug('query' + soqlQuery);
 
-        List<SObject> results = Database.query(soqlQuery);
+        List<SObject> results = Database.query(String.escapeSingleQuotes(soqlQuery));
          system.debug('Results-------------->'+results);
         return results;
     }
@@ -205,7 +205,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
 		
         SObjectWrapper wrapper = wrapperRegistry.get(queryConfig.ChildSobjectAPIName__c);
         List<Object> results = new List<Object>();
-        for (SObject sObj : Database.query(soqlQuery)) {        
+        for (SObject sObj : Database.query(String.escapeSingleQuotes(soqlQuery))) {        
             if (wrapper != null) {
                 results.add(wrapper.wrap(sObj));
             } else {
