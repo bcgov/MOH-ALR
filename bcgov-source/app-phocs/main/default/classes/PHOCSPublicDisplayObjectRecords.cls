@@ -56,8 +56,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             throw new QueryException('No SOQL query found for object: ' + objectName);
         }
 
-        String soqlQuery = String.escapeSingleQuotes(queryConfig.ObjectQuery__c);
-        List<SObject> results = Database.query(soqlQuery);
+        List<SObject> results = Database.query(String.escapeSingleQuotes(queryConfig.ObjectQuery__c));
 
         return results;
     }
