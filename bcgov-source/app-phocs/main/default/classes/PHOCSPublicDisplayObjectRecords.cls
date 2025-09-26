@@ -1,9 +1,25 @@
 global without sharing class PHOCSPublicDisplayObjectRecords implements Callable{
+
     global Object call(String action, Map<String,Object> args){
         Map<String, Object> input = (Map<String, Object>)args.get('input');
         Map<String, Object> output = (Map<String, Object>)args.get('output');
         Map<String, Object> options = (Map<String, Object>)args.get('options');
         
+        if(action == 'getRecordsList'){
+            List<Object> lstSobjects =  getRecordsList(String.valueof(input.get('configName')));
+            output.put('result', lstSobjects);
+            return output;
+        }
+        if(action == 'getRelatedList'){
+            List<Object> lstSobjects =  getRelatedList(String.valueof(input.get('recordId')),String.valueof(input.get('configName')));
+            output.put('result',lstSobjects);
+            return output;
+        }
+        if(action == 'getRecordDetails'){
+            List<Object> lstSobjects =  getRecordDetails(String.valueof(input.get('recordId')), String.valueof(input.get('configName')));
+            output.put('result',lstSobjects);
+            return output;
+        }
         return invokeMethod(action, input, output, options);
         
     }
@@ -41,12 +57,11 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         }
 
         String soqlQuery = queryConfig.ObjectQuery__c;
-
         List<SObject> results = Database.query(soqlQuery);
-		//results = Security.stripInaccessible(AccessType.READABLE, results).getRecords();//To Enforce Read Access on fields.
 
         return results;
     }
+
      //Method to get Sobject record for record detail page
      public static List<SObject> getRecordById(Id recordId) {
         if (recordId == null) {
@@ -71,6 +86,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         System.debug('query' + query);
 
         List<SObject> results = Database.query(query);
+        System.debug('results' + results);
         return results;
     }
     //Method to get Sobject related list 
@@ -84,10 +100,12 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
          
          
          PHOCSSobjectVsQuery__mdt queryConfig = [
-                 SELECT ObjectQuery__c 
+                 SELECT ObjectQuery__c, ParentFieldAPIName__c 
                  FROM PHOCSSobjectVsQuery__mdt 
-                 WHERE Type__c = 'Related' AND ParentSobjectAPIName__c =:parentSObjectName AND ChildSobjectAPIName__c = :childSobjectAPIName AND SobjectAPIName__c = :childSobjectAPIName 
-             
+                 WHERE Type__c = 'Related' AND 
+                       ParentSobjectAPIName__c =:parentSObjectName AND 
+                       ChildSobjectAPIName__c = :childSobjectAPIName AND 
+                       SobjectAPIName__c = :childSobjectAPIName        
              ];
 
         if (queryConfig == null || String.isBlank(queryConfig.ObjectQuery__c)) {
@@ -95,26 +113,247 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         }
 
          String soqlQuery = queryConfig.ObjectQuery__c;
-         //RegulatoryCodeViolation Related List for Visit
-         if(parentSObjectName == 'Visit' &&  childSobjectAPIName == 'RegulatoryCodeViolation'){
-             soqlQuery = soqlQuery + ' WHERE InspectionId = :recordId';
-             
+
+         if(string.isNotBlank(queryConfig.ParentFieldAPIName__c)){
+            soqlQuery = soqlQuery + ' WHERE ' + queryConfig.ParentFieldAPIName__c + ' = :recordId';
          }
-		 //Inspection Related List for Account
-         if(parentSObjectName == 'Account' &&  childSobjectAPIName == 'Visit'){
-             soqlQuery = soqlQuery + ' AND AccountId = :recordId';
-             
-         }
-          //Violation Enforcement Actions Related List for Regulatory Code Violation
-         if(parentSObjectName == 'RegulatoryCodeViolation' &&  childSobjectAPIName == 'ViolationEnforcementAction'){
-             soqlQuery = soqlQuery + ' WHERE violationId = :recordId ';
-             
-         }
+         if(parentSObjectName == 'Account' &&  childSobjectAPIName == 'Visit'){  //Inspection Related List for Account
+            soqlQuery = soqlQuery + ' AND AccountId = :recordId';  
+         }         
          System.debug('query' + soqlQuery);
 
         List<SObject> results = Database.query(soqlQuery);
          system.debug('Results-------------->'+results);
         return results;
     }
+	
+     // === Record Details with Wrapper ==
+     public static List<Object> getRecordDetails(Id recordId, string configName) {
+        if (recordId == null) {
+            throw new AuraHandledException('Record ID is required.');
+        }
+        
+        List<Object> results = new List<Object>(); 
+        Map<String, SObjectWrapper> wrapperRegistry = new Map<String, SObjectWrapper>{
+            'Account' => new AccountDetailsWrapper(),
+            'LabTestRequisition__c' => new LabTestRequisitionDetailsWrapper(),
+            'Case' => new CaseDetailsWrapper()
+        };
+            
+         String objectName = recordId.getSObjectType().getDescribe().getName();
+         SObjectWrapper wrapper = wrapperRegistry.get(objectName);
+         system.debug('ObjectName'+objectName);
+         
+         PHOCSSobjectVsQuery__mdt queryConfig = [
+                 SELECT ObjectQuery__c 
+                 FROM PHOCSSobjectVsQuery__mdt 
+                 WHERE Type__c = 'Record' AND DeveloperName= :configName 
+                 LIMIT 1
+             ];
+
+        if (queryConfig == null || String.isBlank(queryConfig.ObjectQuery__c)) {
+            throw new QueryException('No SOQL query found for object: ' + objectName);
+        }
+
+        String soqlQuery = queryConfig.ObjectQuery__c;
+        String query = soqlQuery + ' WHERE Id = :recordId LIMIT 1';
+        System.debug('query' + query);
+
+        List<SObject> queryResults = Database.query(query);
+        if(!queryResults.isEmpty()){
+            if(wrapper != null){
+            	results.add(wrapper.wrap(queryResults[0]));
+            }else{
+                results.add(queryResults[0]);
+            }
+        }
+        System.debug('results' + results);
+        return results;
+    }
     
+    // === RELATED LIST QUERY WITH WRAPPER ===
+    public static List<Object> getRelatedList(Id recordId, string configName) {
+
+        Map<String, SObjectWrapper> wrapperRegistry = new Map<String, SObjectWrapper>{
+            'LabTestRequired__c' => new LabTestRequiredListWrapper(),
+            'InspectionAssessmentInd' => new InspectionAssessmentIndDetailsWrapper()
+        };
+
+        if (recordId == null) {
+            throw new AuraHandledException('Record ID required.');
+        }
+        
+        String parentSObjectName = recordId.getSObjectType().getDescribe().getName();
+        PHOCSSobjectVsQuery__mdt queryConfig = [
+            SELECT ObjectQuery__c, ParentFieldAPIName__c, ChildSobjectAPIName__c
+            FROM PHOCSSobjectVsQuery__mdt 
+            WHERE Type__c = 'Related'AND 
+                  DeveloperName= :configName
+            LIMIT 1
+        ];
+
+        if (queryConfig == null || String.isBlank(queryConfig.ObjectQuery__c)) {
+            throw new QueryException('No SOQL query found for related list object');
+        }
+
+        String soqlQuery = queryConfig.ObjectQuery__c;
+        if (String.isNotBlank(queryConfig.ParentFieldAPIName__c)) {
+            soqlQuery += soqlQuery.containsIgnoreCase('where') ? ' AND ' : ' WHERE '; 
+            soqlQuery += queryConfig.ParentFieldAPIName__c + ' = :recordId';
+        }
+        system.debug('soqlQuery : ' + soqlQuery);
+		
+        SObjectWrapper wrapper = wrapperRegistry.get(queryConfig.ChildSobjectAPIName__c);
+        List<Object> results = new List<Object>();
+        for (SObject sObj : Database.query(soqlQuery)) {        
+            if (wrapper != null) {
+                results.add(wrapper.wrap(sObj));
+            } else {
+                results.add(sObj);
+            }
+        }
+        system.debug('results : ' + results);
+        return results;
+    }
+	
+    // === RELATED LIST QUERY WITH WRAPPER ===
+    public static List<Object> getRecordsList(string configName) {
+
+        Map<String, SObjectWrapper> wrapperRegistry = new Map<String, SObjectWrapper>{
+            'FacilitiesList' => new FacilityWrapper()        
+        };
+        PHOCSSobjectVsQuery__mdt queryConfig = [
+            SELECT ObjectQuery__c, ParentFieldAPIName__c, ChildSobjectAPIName__c,SobjectAPIName__c,DeveloperName
+            FROM PHOCSSobjectVsQuery__mdt 
+            WHERE Type__c = 'List'AND 
+                  DeveloperName= :configName
+            LIMIT 1
+        ];
+        if (queryConfig == null || String.isBlank(queryConfig.ObjectQuery__c)) {
+            throw new QueryException('No SOQL query found for related list object');
+        }
+
+        system.debug('soqlQuery : ' + queryConfig.ObjectQuery__c);
+		
+        SObjectWrapper wrapper = wrapperRegistry.get(queryConfig.DeveloperName);
+        List<Object> results = new List<Object>();
+        for (SObject sObj : Database.query(queryConfig.ObjectQuery__c)) {        
+            if (wrapper != null) {
+                results.add(wrapper.wrap(sObj));
+            } else {
+                results.add(sObj);
+            }
+        }
+        system.debug('results : ' + results);
+        return results;
+    }
+
+    public interface SObjectWrapper {
+        Object wrap(SObject record);
+    }
+	
+   public class AccountDetailsWrapper implements SObjectWrapper {
+        public Object wrap(SObject record) {
+            Account accRecord = (Account) record;
+            Map<String, Object> result = new Map<String, Object>{
+                'Id' => accRecord.Id,
+                'Name' => accRecord.Name,
+                'Type'=> accRecord.Type,
+                'CategoryL1__c'=> accRecord.CategoryL1__c,
+                'CategoryL2__c'=> accRecord.CategoryL2__c,
+                'HealthAuthority__c'=> accRecord.HealthAuthority__c,
+                'Phone'=> accRecord.Phone,
+                'ParentAccount' => accRecord.ParentAccount__r.Name,
+                'PHOCSOutstandingViolations__c'=> accRecord.PHOCSOutstandingViolations__c,
+                'OperatingMonths__c'=> accRecord.OperatingMonths__c,
+                'FacilityCHSAText__c'=> accRecord.FacilityCHSAText__c
+            };
+            return result;
+        }
+    }
+    public class FacilityWrapper implements SObjectWrapper {
+        public Object wrap(SObject record) {
+            Account accRecord = (Account) record;
+            Map<String, Object> result = new Map<String, Object>{
+                'Id' => accRecord.Id,
+                'CategoryL1__c'=> accRecord.CategoryL1__c,
+                'CategoryL2__c'=> accRecord.CategoryL2__c,
+                'FacilityCHSAText__c'=> accRecord.FacilityCHSAText__c,
+                'HealthAuthority__c'=> accRecord.HealthAuthority__c, 
+                'LastInspectionDate__c ' => accRecord.LastInspectionDate__c,
+                'Name' => accRecord.Name,
+                'PHOCSNumberOfInspections__c' => accRecord.PHOCSNumberOfInspections__c,
+                'PHOCSOutstandingViolations__c'=> accRecord.PHOCSOutstandingViolations__c,
+                'PhysicalAddressStreet'=> accRecord.Physical_Address__c?.getStreet(),
+                'PhysicalAddressCity'=> accRecord.Physical_Address__c?.getCity(),
+                'PhysicalAddressState'=> accRecord.Physical_Address__c?.getState(),
+                'PhysicalAddressCountry'=> accRecord.Physical_Address__c?.getCountry(),
+                'PhysicalAddressPostalCode'=> accRecord.Physical_Address__c?.getPostalCode()
+            };
+            return result;
+        }
+    } 
+    
+    public class CaseDetailsWrapper implements SObjectWrapper {
+        public Object wrap(SObject record) {
+            Case caseRecord = (Case) record;
+            Map<String, Object> result = new Map<String, Object>{
+                'Id' => caseRecord.Id,
+                'TypeOfAdvisory' => caseRecord.TypeOfAdvisory__c,
+                'LastModifiedDate'=> caseRecord.LastModifiedDate,
+                'ReasonForAdvisory'=> caseRecord.ReasonForAdvisory__c,
+                'AccountId' => caseRecord.AccountId,
+                'AccountName'=> caseRecord.Account.Name,
+                'AccountPhone'=> caseRecord.Account.Phone,
+                'AccountWebsite'=> caseRecord.Account.Website,
+                'PopulationServedper24hrs' => caseRecord.Account.PopulationServedper24hrs__c 
+            };
+            return result;
+        }
+    } 
+    public class LabTestRequisitionDetailsWrapper implements SObjectWrapper {
+        public Object wrap(SObject record) {
+            LabTestRequisition__c lab = (LabTestRequisition__c) record;
+            Map<String, Object> result = new Map<String, Object>{
+                'Name' => lab.Name,
+                'FacilityName' => lab.FacilityName__r?.Name ?? '',
+                'FacilityAccountId' => lab.FacilityName__c,
+                'PhysicalAddressStreet'=> lab.FacilityName__r?.Physical_Address__c?.getStreet(),
+                'PhysicalAddressCity'=> lab.FacilityName__r?.Physical_Address__c?.getCity(),
+                'PhysicalAddressState'=> lab.FacilityName__r?.Physical_Address__c?.getState(),
+                'PhysicalAddressCountry'=> lab.FacilityName__r?.Physical_Address__c?.getCountry(),
+                'PhysicalAddressPostalCode'=> lab.FacilityName__r?.Physical_Address__c?.getPostalCode(),
+                'SamplingSiteName' => lab.SamplingSite__r?.Name ?? '',
+                'CollectionDateTime' => lab.CollectionDateTime__c
+            };
+            return result;
+        }
+    }
+    public class LabTestRequiredListWrapper implements SObjectWrapper {
+        public Object wrap(SObject record) {
+            LabTestRequired__c lab = (LabTestRequired__c) record;
+            Map<String, Object> result = new Map<String, Object>{
+                'Name' => lab.Name,
+                'TestCategory' => lab.TestCategory__c,
+                'UnitOfMeasure' => lab.UnitOfMeasure__c,
+                'ResultValue' => lab.ResultValue__c,
+                'TestId' => lab.Test__c,
+                'TestName' => lab.Test__r?.Name ?? ''
+            };
+            return result;
+        }
+    }
+     public class InspectionAssessmentIndDetailsWrapper implements SObjectWrapper {
+        public Object wrap(SObject record) {
+            InspectionAssessmentInd iaiRecord = (InspectionAssessmentInd) record;
+            Map<String, Object> result = new Map<String, Object>{
+                'Id' => iaiRecord.Id,
+                'AssessmentIndDefinitionCategory' => iaiRecord.AssessmentIndDefinition.Category__c,
+                'AssessmentIndDefinitionName'=> iaiRecord.AssessmentIndDefinition.Name,
+                'TextFieldResponse'=> iaiRecord.TextFieldResponse,
+                'Result'=> iaiRecord.Result
+            };
+            return result;
+        }
+    }
 }
