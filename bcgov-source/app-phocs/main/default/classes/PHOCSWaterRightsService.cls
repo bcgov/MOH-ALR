@@ -1,4 +1,15 @@
 global with sharing class PHOCSWaterRightsService implements Callable {
+    private static Account facility;
+    private static PHOCSWLSWaterRightsWrapper waterLicenseResponse;
+    private static PHOCSWLSWaterApplicationsWrapper waterLicenseAppResponse;
+    private static PHOCSWellResponseWrapper wellDetailsResponse;
+    private static PHOCSAquifersResponseWrapper aquiferDetailsResponse;
+    
+    private static Boolean exceptionInWLN;
+    private static Boolean exceptionInWLAN;
+    private static Boolean exceptionInWTN;
+    private static Boolean exceptionInAQN;
+    
     global Object call(String action, Map<String, Object> args) {
         Map<String, Object> input   = (Map<String, Object>) args.get('input');
         Map<String, Object> output  = (Map<String, Object>) args.get('output');
@@ -7,142 +18,206 @@ global with sharing class PHOCSWaterRightsService implements Callable {
     }
     
     private Object invokeMethod(String methodName, Map<String, Object> inputMap, Map<String, Object> outMap, Map<String, Object> options) {
+        system.debug('>>> Entered in invokeMethod method <<<');
         Account acc = getAccountDetails(String.valueOf(inputMap.get('recordId')));
-        PHOCSWellResponseWrapper wellDetailsResponse;
+        integrationFlow(acc);
+        
         if (methodName == 'getWaterLicenseDetails') {
-            if (acc != null && String.isNotBlank(acc.WaterLicenseNumber__c)) {
-                try{
-                    PHOCSWLSWaterRightsWrapper response = getWaterLicenseDetails(acc.WaterLicenseNumber__c);                
-                    // Put the wrapper directly into the output map
-                    outMap.put('WaterLicenceStatus', response.features[0].properties.LICENCE_STATUS);
-                    outMap.put('WellTagNumber', response.features[0].properties.WELL_TAG_NUMBER);
-                    outMap.put('WaterSourceIntakeUse', response.features[0].properties.PURPOSE_USE);
-                    outMap.put('WaterSourceIntakeUseCode', response.features[0].properties.PURPOSE_USE_CODE);
-                    outMap.put('MaximumDiversion', response.features[0].properties.QUANTITY);
-                    outMap.put('MaximumDiversionUnits', response.features[0].properties.QUANTITY_UNITS);
-                    outMap.put('PointofDiversionNumber', response.features[0].properties.POD_NUMBER);
-                    outMap.put('PODDiversionType', response.features[0].properties.POD_DIVERSION_TYPE);
-                    outMap.put('PODSubtype', response.features[0].properties.POD_SUBTYPE);
-                    outMap.put('SourceWaterBodyName', response.features[0].properties.SOURCE_NAME);                    
-                }catch(Exception ex){
-                    outMap.put('NoData', 'No water license details available.');
-                }
-            } else {
-                outMap.put('NoData', 'No water license details available.');
-            }
+            outMap.putAll(getWaterLicenseDetails());
         }
         if (methodName == 'getWaterLicenseApplicationDetails') {
-            if (acc != null && String.isNotBlank(acc.WaterLicenseApplicationNumber__c)) {
-                try{
-                    PHOCSWLSWaterApplicationsWrapper response = getWaterLicenseApplicationDetails(acc.WaterLicenseApplicationNumber__c);                
-                    // Put the wrapper directly into the output map
-                    outMap.put('WaterLicenceApplicationStatus', response.features[0].properties.APPLICATION_STATUS);
-                    outMap.put('WellTagNumber', response.features[0].properties.WELL_TAG_NUMBER);
-                    outMap.put('WaterSourceIntakeUse', response.features[0].properties.PURPOSE_USE);
-                    outMap.put('WaterSourceIntakeUseCode', response.features[0].properties.PURPOSE_USE_CODE);
-                    outMap.put('MaximumDiversion', response.features[0].properties.QTY_DIVERSION_MAX_RATE);
-                    outMap.put('MaximumDiversionUnits', response.features[0].properties.QTY_UNITS_DIVERSION_MAX_RATE);
-                    outMap.put('PointofDiversionNumber', response.features[0].properties.POD_NUMBER);
-                    outMap.put('PODDiversionType', response.features[0].properties.POD_DIVERSION_TYPE);
-                    outMap.put('PODSubtype', response.features[0].properties.POD_SUBTYPE);
-                }catch(Exception ex){
-                    outMap.put('NoData', 'No water license application details available.');
-                }
-            } else {
-                outMap.put('NoData', 'No water license application details available.');
-            }
+            outMap.putAll(getWaterLicenseApplicationDetails());
         }
         if (methodName == 'getAquifersDetails') {
-            if (acc != null && acc.AquiferNumber__c != null && String.isNotBlank(acc.AquiferNumber__c.toString())) {
-                try{
-                    PHOCSAquifersResponseWrapper response = getAquiferDetails(acc.AquiferNumber__c.toString());                
-                    // Put the wrapper directly into the output map
-                    outMap.put('aquifer_name', response.aquifer_name);
-                    outMap.put('subtype', response.subtype);
-                    outMap.put('material_type', response.geom.type);
-                    outMap.put('size', response.area);
-                }catch(Exception ex){
-                    outMap.put('NoData', 'No aquifer details available.');
-                }                
-            } else {
-                outMap.put('NoData', 'No aquifer details available.');
-            }
+            outMap.putAll(getAquiferDetails());
         }
         if (methodName == 'getGWellDetails') {
-            if (acc != null && acc.WellTagNumber__c != null && String.isNotBlank(acc.WellTagNumber__c.toString())) {
-                try{
-                    if(wellDetailsResponse == null){
-                        wellDetailsResponse = getGWellDetails(acc.WellTagNumber__c.toString());
-                    }                                    
-                    // Put the wrapper directly into the output map
-                    outMap.put('WellIDPlateNumber', wellDetailsResponse.IDENTIFICATION_PLATE_NUMBER);
-                    outMap.put('WellStatus', wellDetailsResponse.well_status);
-                    outMap.put('ArtesianCondition', wellDetailsResponse.artesian_conditions);
-                    outMap.put('AquiferNumber', wellDetailsResponse.aquifer);
-                    outMap.put('StartDateofConstruction', wellDetailsResponse.construction_start_date);
-                    outMap.put('EndDateofConstruction', wellDetailsResponse.construction_end_date);
-                    outMap.put('WellLocationDescription', wellDetailsResponse.well_location_description);
-                    outMap.put('ScreenType', wellDetailsResponse.screen_type);
-                    outMap.put('ScreenMaterial', wellDetailsResponse.screen_material);
-                    outMap.put('ScreenIntakeMethod', wellDetailsResponse.screen_intake_method);
-                }catch(Exception ex){
-                    outMap.put('NoData', 'No well details available.');
-                }
-            } else {
-                outMap.put('NoData', 'No well details available.');
-            }            
+            outMap.putAll(getGWellDetails());
         }
         if (methodName == 'getGWellCasingDetails') {
-            if (acc != null && acc.WellTagNumber__c != null && String.isNotBlank(acc.WellTagNumber__c.toString())) {
-                try{
-                    if(wellDetailsResponse == null){
-                        wellDetailsResponse = getGWellDetails(acc.WellTagNumber__c.toString());
-                    }                                    
-                    // Put the wrapper directly into the output map
-                    outMap.put('CasingDetails', wellDetailsResponse.casing_set);
-                }catch(Exception ex){
-                    outMap.put('NoData', 'No well details available.');
-                }
-            } else {
-                outMap.put('NoData', 'No well details available.');
+            if(getGWellDetails().containsKey('CasingDetails')){
+                outMap.put('CasingDetails', wellDetailsResponse.casing_set);
             }
         }
         if (methodName == 'getGWellInstalledDetails') {
-            if (acc != null && acc.WellTagNumber__c != null && String.isNotBlank(acc.WellTagNumber__c.toString())) {
-                try{
-                    if(wellDetailsResponse == null){
-                        wellDetailsResponse = getGWellDetails(acc.WellTagNumber__c.toString());
-                    }                                    
-                    // Put the wrapper directly into the output map
-                    outMap.put('InstalledScreens', wellDetailsResponse.screen_set);
-                    //outMap.put('response', wellDetailsResponse);
-                }catch(Exception ex){
-                    outMap.put('NoData', 'No well details available.');
-                }
-            } else {
-                outMap.put('NoData', 'No well details available.');
+            if(getGWellDetails().containsKey('InstalledScreens')){
+                outMap.put('InstalledScreens', wellDetailsResponse.casing_set);
             }
         }
+        system.debug('>>> Exist in invokeMethod method <<<');
         return outMap; // always return the whole map
     }
     
-    private PHOCSWLSWaterRightsWrapper getWaterLicenseDetails(String licenceNumber) {
-        return PHOCSWLSWaterService.getWaterRightsByLicence(licenceNumber);
+    private void integrationFlow(Account acc){
+        system.debug('>>> Entered in integrationFlow method <<<');
+        Integer wellTagNumber;
+        Integer aquiferNumber;
+        if (acc != null && String.isNotBlank(acc.WaterLicenseNumber__c)) {
+            getWaterLicenseDetailsRequest(acc.WaterLicenseNumber__c);
+            System.debug('Feature: ' + waterLicenseResponse.features);   
+            System.debug('Feature - properties: ' + waterLicenseResponse.features[0]?.properties);
+            System.debug('Well Tag Number: ' + waterLicenseResponse.features[0]?.properties.WELL_TAG_NUMBER);
+            wellTagNumber = waterLicenseResponse.features[0]?.properties.WELL_TAG_NUMBER;            
+            if(wellTagNumber != null){
+                getGWellDetailsRequest(waterLicenseResponse.features[0]?.properties.WELL_TAG_NUMBER.toString());
+                aquiferNumber = Integer.valueOf(wellDetailsResponse?.aquifer);
+                getAquiferDetailsRequest(wellDetailsResponse.aquifer);
+            }
+        }
+        if (acc != null && String.isNotBlank(acc.WaterLicenseApplicationNumber__c)) {
+            getWaterLicenseApplicationDetailsRequest(acc.WaterLicenseApplicationNumber__c);
+            if (acc != null && String.isBlank(acc.WaterLicenseNumber__c)) {
+                wellTagNumber = waterLicenseAppResponse.features[0]?.properties.WELL_TAG_NUMBER;
+                if(wellTagNumber != null){
+                    getGWellDetailsRequest(wellTagNumber.toString());
+                    aquiferNumber = Integer.valueOf(wellDetailsResponse?.aquifer);
+                    getAquiferDetailsRequest(wellDetailsResponse.aquifer);
+                }                
+            }            
+        }
+        updateFacility(wellTagNumber, aquiferNumber);
+        system.debug('>>> Exist in integrationFlow method <<<');
     }
     
-    private PHOCSWLSWaterApplicationsWrapper getWaterLicenseApplicationDetails(String waterApplicationNumber) {
-        return PHOCSWLSWaterService.getWaterApplicationsByJob(waterApplicationNumber);
+    private Map<String, Object> getWaterLicenseDetails() {
+        system.debug('>>> Entered in getWaterLicenseDetails method <<<');
+        Map<String, Object> outMap = new Map<String, Object>();
+        if (waterLicenseResponse != null || !exceptionInWLN) {
+            // Put the wrapper directly into the output map
+            outMap.put('WaterLicenceStatus', waterLicenseResponse.features[0].properties.LICENCE_STATUS);
+            outMap.put('WellTagNumber', waterLicenseResponse.features[0].properties.WELL_TAG_NUMBER);
+            outMap.put('WaterSourceIntakeUse', waterLicenseResponse.features[0].properties.PURPOSE_USE);
+            outMap.put('WaterSourceIntakeUseCode', waterLicenseResponse.features[0].properties.PURPOSE_USE_CODE);
+            outMap.put('MaximumDiversion', waterLicenseResponse.features[0].properties.QUANTITY);
+            outMap.put('MaximumDiversionUnits', waterLicenseResponse.features[0].properties.QUANTITY_UNITS);
+            outMap.put('PointofDiversionNumber', waterLicenseResponse.features[0].properties.POD_NUMBER);
+            outMap.put('PODDiversionType', waterLicenseResponse.features[0].properties.POD_DIVERSION_TYPE);
+            outMap.put('PODSubtype', waterLicenseResponse.features[0].properties.POD_SUBTYPE);
+            outMap.put('SourceWaterBodyName', waterLicenseResponse.features[0].properties.SOURCE_NAME);
+        } else {
+            outMap.put('NoData', 'No water license details available.');
+        }
+        system.debug('>>> Exist in getWaterLicenseDetails method <<<');
+        return outMap;
     }
     
-    private PHOCSAquifersResponseWrapper getAquiferDetails(String aquiferNumber){
-        return PHOCSGwellsService.getAquiferDetails(aquiferNumber);
+    private PHOCSWLSWaterRightsWrapper getWaterLicenseDetailsRequest(String licenceNumber) {
+        system.debug('>>> Entered in getWaterLicenseDetailsRequest method <<<');
+        try{
+            waterLicenseResponse = PHOCSWLSWaterService.getWaterRightsByLicence(licenceNumber);
+        }catch(Exception ex){
+            exceptionInWLN = true;
+        }
+        system.debug('>>> Exist in getWaterLicenseDetailsRequest method <<<');
+        return waterLicenseResponse;
     }
     
-    private PHOCSWellResponseWrapper getGWellDetails(String wellTagNumber){
-        return PHOCSGwellsService.getWellDetails(wellTagNumber);
+    private Map<String, Object> getWaterLicenseApplicationDetails() {
+        system.debug('>>> Entered in getWaterLicenseApplicationDetails method <<<');
+        Map<String, Object> outMap = new Map<String, Object>();
+        if (waterLicenseAppResponse != null || !exceptionInWLAN) {
+            outMap.put('WaterLicenceApplicationStatus', waterLicenseAppResponse.features[0].properties.APPLICATION_STATUS);
+            outMap.put('WellTagNumber', waterLicenseAppResponse.features[0].properties.WELL_TAG_NUMBER);
+            outMap.put('WaterSourceIntakeUse', waterLicenseAppResponse.features[0].properties.PURPOSE_USE);
+            outMap.put('WaterSourceIntakeUseCode', waterLicenseAppResponse.features[0].properties.PURPOSE_USE_CODE);
+            outMap.put('MaximumDiversion', waterLicenseAppResponse.features[0].properties.QTY_DIVERSION_MAX_RATE);
+            outMap.put('MaximumDiversionUnits', waterLicenseAppResponse.features[0].properties.QTY_UNITS_DIVERSION_MAX_RATE);
+            outMap.put('PointofDiversionNumber', waterLicenseAppResponse.features[0].properties.POD_NUMBER);
+            outMap.put('PODDiversionType', waterLicenseAppResponse.features[0].properties.POD_DIVERSION_TYPE);
+            outMap.put('PODSubtype', waterLicenseAppResponse.features[0].properties.POD_SUBTYPE);
+        } else {
+            outMap.put('NoData', 'No water license application details available.');
+        }
+        system.debug('>>> Exist in getWaterLicenseApplicationDetails method <<<');
+        return outMap;
+    }
+    
+    private PHOCSWLSWaterApplicationsWrapper getWaterLicenseApplicationDetailsRequest(String waterApplicationNumber) {
+        system.debug('>>> Entered in getWaterLicenseApplicationDetailsRequest method <<<');
+        try{
+            waterLicenseAppResponse = PHOCSWLSWaterService.getWaterApplicationsByJob(waterApplicationNumber);
+        }catch(Exception ex){
+            exceptionInWLAN = true;
+        }
+        system.debug('>>> Exist in getWaterLicenseApplicationDetailsRequest method <<<');
+        return waterLicenseAppResponse;
+    }
+    
+    private Map<String, Object> getAquiferDetails(){
+        system.debug('>>> Entered in getAquiferDetails method <<<');
+        Map<String, Object> outMap = new Map<String, Object>();
+        if (aquiferDetailsResponse != null || !exceptionInAQN) {
+            outMap.put('aquifer_name', aquiferDetailsResponse.aquifer_name);
+            outMap.put('subtype', aquiferDetailsResponse.subtype);
+            outMap.put('material_type', aquiferDetailsResponse.geom.type);
+            outMap.put('size', aquiferDetailsResponse.area);               
+        } else {
+            outMap.put('NoData', 'No aquifer details available.');
+        }
+        system.debug('>>> Exist in getAquiferDetails method <<<');
+        return outMap;
+    }
+    
+    private PHOCSAquifersResponseWrapper getAquiferDetailsRequest(String aquiferNumber){
+        system.debug('>>> Entered in getAquiferDetailsRequest method <<<');
+        try{
+            aquiferDetailsResponse = PHOCSGwellsService.getAquiferDetails(aquiferNumber);
+        }catch(Exception ex){
+            exceptionInAQN = true;
+        }
+        system.debug('>>> Exist in getAquiferDetailsRequest method <<<');
+        return aquiferDetailsResponse;
+    }
+    
+    private Map<String, Object> getGWellDetails(){
+        system.debug('>>> Entered in getGWellDetails method <<<');
+        Map<String, Object> outMap = new Map<String, Object>();
+        if (wellDetailsResponse != null || !exceptionInWTN) {
+            outMap.put('WellIDPlateNumber', wellDetailsResponse.IDENTIFICATION_PLATE_NUMBER);
+            outMap.put('WellStatus', wellDetailsResponse.well_status);
+            outMap.put('ArtesianCondition', wellDetailsResponse.artesian_conditions);
+            outMap.put('AquiferNumber', wellDetailsResponse.aquifer);
+            outMap.put('StartDateofConstruction', wellDetailsResponse.construction_start_date);
+            outMap.put('EndDateofConstruction', wellDetailsResponse.construction_end_date);
+            outMap.put('WellLocationDescription', wellDetailsResponse.well_location_description);
+            outMap.put('ScreenType', wellDetailsResponse.screen_type);
+            outMap.put('ScreenMaterial', wellDetailsResponse.screen_material);
+            outMap.put('ScreenIntakeMethod', wellDetailsResponse.screen_intake_method);
+            outMap.put('CasingDetails', wellDetailsResponse.casing_set);
+            
+            if(wellDetailsResponse.screen_set.size() > 0){
+                outMap.put('InstalledScreens', wellDetailsResponse.screen_set);
+            }else{
+                outMap.put('IsInstalledScreensEmpty', 'true');
+            }
+        } else {
+            outMap.put('NoData', 'No well details available.');
+        }
+        system.debug('>>> Exist in getGWellDetails method <<<');
+        return outMap;
+    }
+    
+    private PHOCSWellResponseWrapper getGWellDetailsRequest(String wellTagNumber){
+        system.debug('>>> Entered in getGWellDetailsRequest method <<<');
+        try{
+            wellDetailsResponse = PHOCSGwellsService.getWellDetails(wellTagNumber);
+        }catch(Exception ex){
+            exceptionInWTN = true;
+        }
+        system.debug('>>> Exist in getGWellDetailsRequest method <<<');
+        return wellDetailsResponse;
     }
     
     private Account getAccountDetails(String recordId) {
-        return [SELECT Id, WaterLicenseNumber__c, WaterLicenseApplicationNumber__c, WellTagNumber__c, AquiferNumber__c FROM Account WHERE Id = :recordId LIMIT 1];
+        if(facility == null){
+            facility = [SELECT Id, WaterLicenseNumber__c, WaterLicenseApplicationNumber__c, WellTagNumber__c, AquiferNumber__c FROM Account WHERE Id = :recordId LIMIT 1];
+        }
+        return facility;
+    }
+    
+    private void updateFacility(Integer WellTagNumber, Integer AquiferNumber){
+        facility.WellTagNumber__c = WellTagNumber;
+        facility.AquiferNumber__c = AquiferNumber;
+        update facility;
     }
 }
