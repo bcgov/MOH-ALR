@@ -175,13 +175,14 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
 
         Map<String, SObjectWrapper> wrapperRegistry = new Map<String, SObjectWrapper>{
             'LabTestRequired__c' => new LabTestRequiredListWrapper(),
-            'InspectionAssessmentInd' => new InspectionAssessmentIndDetailsWrapper()
+            'InspectionAssessmentInd' => new InspectionAssessmentIndDetailsWrapper(),
+            'Visit' => new InspectionListWrapper()
         };
-
+        
         if (recordId == null) {
             throw new AuraHandledException('Record ID required.');
         }
-        
+
         String parentSObjectName = recordId.getSObjectType().getDescribe().getName();
         PHOCSSobjectVsQuery__mdt queryConfig = [
             SELECT ObjectQuery__c, ParentFieldAPIName__c, ChildSobjectAPIName__c
@@ -190,21 +191,16 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                   DeveloperName= :configName
             LIMIT 1
         ];
-
         if (queryConfig == null || String.isBlank(queryConfig.ObjectQuery__c)) {
             throw new QueryException('No SOQL query found for related list object');
         }
 
-        String soqlQuery = queryConfig.ObjectQuery__c;
-        if (String.isNotBlank(queryConfig.ParentFieldAPIName__c)) {
-            soqlQuery += soqlQuery.containsIgnoreCase('where') ? ' AND ' : ' WHERE '; 
-            soqlQuery += queryConfig.ParentFieldAPIName__c + ' = :recordId';
-        }
-        system.debug('soqlQuery : ' + soqlQuery);
-		
         SObjectWrapper wrapper = wrapperRegistry.get(queryConfig.ChildSobjectAPIName__c);
         List<Object> results = new List<Object>();
-        for (SObject sObj : Database.query(String.escapeSingleQuotes(soqlQuery))) {        
+        
+        system.debug('soqlQuery : ' + queryConfig.ObjectQuery__c);
+        List<SObject> queryResults = Database.query(queryConfig.ObjectQuery__c);
+        for (SObject sObj : queryResults) {        
             if (wrapper != null) {
                 results.add(wrapper.wrap(sObj));
             } else {
@@ -212,6 +208,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             }
         }
         system.debug('results : ' + results);
+
         return results;
     }
 	
@@ -324,6 +321,20 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 'PhysicalAddressPostalCode'=> lab.FacilityName__r?.Physical_Address__c?.getPostalCode(),
                 'SamplingSiteName' => lab.SamplingSite__r?.Name,
                 'CollectionDateTime' => lab.CollectionDateTime__c
+            };
+            return result;
+        }
+    }
+
+    public class InspectionListWrapper implements SObjectWrapper {
+        public Object wrap(SObject record) {
+            Visit inspection = (Visit) record;
+            Map<String, Object> result = new Map<String, Object>{
+                'Name' => inspection.Name,
+                'AccountName' => inspection.Account.Name,
+                'ActualVisitStartTime' => inspection.ActualVisitStartTime,
+                'InspectionType' => inspection.VisitType.Name,
+                'PHOCSViolationCount' => inspection.PHOCSViolationCount__c
             };
             return result;
         }
