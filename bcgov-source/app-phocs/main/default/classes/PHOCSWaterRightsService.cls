@@ -50,9 +50,10 @@ global with sharing class PHOCSWaterRightsService implements Callable {
     
     private void integrationFlow(Account acc){
         system.debug('>>> Entered in integrationFlow method <<<');
-        Integer wellTagNumber;
-        Integer aquiferNumber;
+        Integer wellTagNumber = null;
+        Integer aquiferNumber = null;
         if (acc != null && String.isNotBlank(acc.WaterLicenseNumber__c)) {
+            System.debug('Water License Number: ' + acc.WaterLicenseNumber__c);
             getWaterLicenseDetailsRequest(acc.WaterLicenseNumber__c);
             System.debug('waterLicenseResponse : ' + waterLicenseResponse);
             if(waterLicenseResponse.features != null && waterLicenseResponse.features.size() > 0){
@@ -68,6 +69,7 @@ global with sharing class PHOCSWaterRightsService implements Callable {
             }            
         }
         if (acc != null && String.isNotBlank(acc.WaterLicenseApplicationNumber__c)) {
+            System.debug('Water License Application Number: ' + acc.WaterLicenseApplicationNumber__c);
             getWaterLicenseApplicationDetailsRequest(acc.WaterLicenseApplicationNumber__c);
             if (acc != null && String.isBlank(acc.WaterLicenseNumber__c)) {
                 if(waterLicenseAppResponse.features != null && waterLicenseAppResponse.features.size() > 0){
@@ -100,6 +102,7 @@ global with sharing class PHOCSWaterRightsService implements Callable {
                 outMap.put('PODDiversionType', waterLicenseResponse.features[0].properties.POD_DIVERSION_TYPE);
                 outMap.put('PODSubtype', waterLicenseResponse.features[0].properties.POD_SUBTYPE);
                 outMap.put('SourceWaterBodyName', waterLicenseResponse.features[0].properties.SOURCE_NAME);
+                outMap.put('AccountId', facility.Id);
             }
         } else {
             outMap.put('NoData', 'No water license details available.');
