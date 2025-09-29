@@ -178,11 +178,11 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             'InspectionAssessmentInd' => new InspectionAssessmentIndDetailsWrapper(),
             'Visit' => new InspectionListWrapper()
         };
-
+        
         if (recordId == null) {
             throw new AuraHandledException('Record ID required.');
         }
-        
+
         String parentSObjectName = recordId.getSObjectType().getDescribe().getName();
         PHOCSSobjectVsQuery__mdt queryConfig = [
             SELECT ObjectQuery__c, ParentFieldAPIName__c, ChildSobjectAPIName__c
@@ -196,6 +196,8 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             throw new QueryException('No SOQL query found for related list object');
         }
 
+        SObjectWrapper wrapper = wrapperRegistry.get(queryConfig.ChildSobjectAPIName__c);
+        List<Object> results = new List<Object>();
         String soqlQuery = queryConfig.ObjectQuery__c;
         if (String.isNotBlank(queryConfig.ParentFieldAPIName__c)) {
             soqlQuery += soqlQuery.containsIgnoreCase('where') ? ' AND ' : ' WHERE '; 
@@ -203,11 +205,9 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         }
         system.debug('soqlQuery : ' + soqlQuery);
 		
-        SObjectWrapper wrapper = wrapperRegistry.get(queryConfig.ChildSobjectAPIName__c);
-        List<Object> results = new List<Object>();
-       
-        // NOPMD ApexSOQLInjection - soqlQuery is constructed safely with no user input
-        for (SObject sObj : Database.query(soqlQuery)) {        
+        List<SObject> queryResults = Database.query(soqlQuery);
+
+        for (SObject sObj : queryResults) {        
             if (wrapper != null) {
                 results.add(wrapper.wrap(sObj));
             } else {
