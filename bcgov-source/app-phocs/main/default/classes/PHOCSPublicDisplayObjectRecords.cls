@@ -191,18 +191,20 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                   DeveloperName= :configName
             LIMIT 1
         ];
-
         if (queryConfig == null || String.isBlank(queryConfig.ObjectQuery__c)) {
             throw new QueryException('No SOQL query found for related list object');
         }
 
         SObjectWrapper wrapper = wrapperRegistry.get(queryConfig.ChildSobjectAPIName__c);
         List<Object> results = new List<Object>();
+        
         String soqlQuery = queryConfig.ObjectQuery__c;
         if (String.isNotBlank(queryConfig.ParentFieldAPIName__c)) {
-            soqlQuery += soqlQuery.containsIgnoreCase('where') ? ' AND ' : ' WHERE '; 
-            soqlQuery += queryConfig.ParentFieldAPIName__c + ' = :recordId';
+            Boolean hasWhereClause = soqlQuery.toLowerCase().contains(' where ');
+            String filterClause = (hasWhereClause ? ' AND ' : ' WHERE ') + string.escapeSingleQuotes(queryConfig.ParentFieldAPIName__c) + ' = :recordId';
+            soqlQuery += filterClause;
         }
+
         system.debug('soqlQuery : ' + soqlQuery);
 		
         List<SObject> queryResults = Database.query(soqlQuery);
