@@ -54,24 +54,29 @@ global with sharing class PHOCSWaterRightsService implements Callable {
         Integer aquiferNumber;
         if (acc != null && String.isNotBlank(acc.WaterLicenseNumber__c)) {
             getWaterLicenseDetailsRequest(acc.WaterLicenseNumber__c);
-            System.debug('Feature: ' + waterLicenseResponse.features);   
-            System.debug('Feature - properties: ' + waterLicenseResponse.features[0]?.properties);
-            System.debug('Well Tag Number: ' + waterLicenseResponse.features[0]?.properties.WELL_TAG_NUMBER);
-            wellTagNumber = waterLicenseResponse.features[0]?.properties.WELL_TAG_NUMBER;            
-            if(wellTagNumber != null){
-                getGWellDetailsRequest(waterLicenseResponse.features[0]?.properties.WELL_TAG_NUMBER.toString());
-                aquiferNumber = Integer.valueOf(wellDetailsResponse?.aquifer);
-                getAquiferDetailsRequest(wellDetailsResponse.aquifer);
-            }
+            System.debug('waterLicenseResponse : ' + waterLicenseResponse);
+            if(waterLicenseResponse.features != null && waterLicenseResponse.features.size() > 0){
+                System.debug('Feature: ' + waterLicenseResponse.features);
+                System.debug('Feature - properties: ' + waterLicenseResponse.features[0]?.properties);
+                System.debug('Well Tag Number: ' + waterLicenseResponse.features[0]?.properties.WELL_TAG_NUMBER);
+                wellTagNumber = waterLicenseResponse.features[0]?.properties.WELL_TAG_NUMBER;            
+                if(wellTagNumber != null){
+                    getGWellDetailsRequest(waterLicenseResponse.features[0]?.properties.WELL_TAG_NUMBER.toString());
+                    aquiferNumber = Integer.valueOf(wellDetailsResponse?.aquifer);
+                    getAquiferDetailsRequest(wellDetailsResponse.aquifer);
+                }
+            }            
         }
         if (acc != null && String.isNotBlank(acc.WaterLicenseApplicationNumber__c)) {
             getWaterLicenseApplicationDetailsRequest(acc.WaterLicenseApplicationNumber__c);
             if (acc != null && String.isBlank(acc.WaterLicenseNumber__c)) {
-                wellTagNumber = waterLicenseAppResponse.features[0]?.properties.WELL_TAG_NUMBER;
-                if(wellTagNumber != null){
-                    getGWellDetailsRequest(wellTagNumber.toString());
-                    aquiferNumber = Integer.valueOf(wellDetailsResponse?.aquifer);
-                    getAquiferDetailsRequest(wellDetailsResponse.aquifer);
+                if(waterLicenseAppResponse.features != null && waterLicenseAppResponse.features.size() > 0){
+                    wellTagNumber = waterLicenseAppResponse.features[0]?.properties.WELL_TAG_NUMBER;
+                    if(wellTagNumber != null){
+                        getGWellDetailsRequest(wellTagNumber.toString());
+                        aquiferNumber = Integer.valueOf(wellDetailsResponse?.aquifer);
+                        getAquiferDetailsRequest(wellDetailsResponse.aquifer);
+                    } 
                 }                
             }            
         }
@@ -84,16 +89,18 @@ global with sharing class PHOCSWaterRightsService implements Callable {
         Map<String, Object> outMap = new Map<String, Object>();
         if (waterLicenseResponse != null || !exceptionInWLN) {
             // Put the wrapper directly into the output map
-            outMap.put('WaterLicenceStatus', waterLicenseResponse.features[0].properties.LICENCE_STATUS);
-            outMap.put('WellTagNumber', waterLicenseResponse.features[0].properties.WELL_TAG_NUMBER);
-            outMap.put('WaterSourceIntakeUse', waterLicenseResponse.features[0].properties.PURPOSE_USE);
-            outMap.put('WaterSourceIntakeUseCode', waterLicenseResponse.features[0].properties.PURPOSE_USE_CODE);
-            outMap.put('MaximumDiversion', waterLicenseResponse.features[0].properties.QUANTITY);
-            outMap.put('MaximumDiversionUnits', waterLicenseResponse.features[0].properties.QUANTITY_UNITS);
-            outMap.put('PointofDiversionNumber', waterLicenseResponse.features[0].properties.POD_NUMBER);
-            outMap.put('PODDiversionType', waterLicenseResponse.features[0].properties.POD_DIVERSION_TYPE);
-            outMap.put('PODSubtype', waterLicenseResponse.features[0].properties.POD_SUBTYPE);
-            outMap.put('SourceWaterBodyName', waterLicenseResponse.features[0].properties.SOURCE_NAME);
+            if(waterLicenseResponse.features != null && waterLicenseResponse.features.size() > 0){
+                outMap.put('WaterLicenceStatus', waterLicenseResponse.features[0].properties.LICENCE_STATUS);
+                outMap.put('WellTagNumber', waterLicenseResponse.features[0].properties.WELL_TAG_NUMBER);
+                outMap.put('WaterSourceIntakeUse', waterLicenseResponse.features[0].properties.PURPOSE_USE);
+                outMap.put('WaterSourceIntakeUseCode', waterLicenseResponse.features[0].properties.PURPOSE_USE_CODE);
+                outMap.put('MaximumDiversion', waterLicenseResponse.features[0].properties.QUANTITY);
+                outMap.put('MaximumDiversionUnits', waterLicenseResponse.features[0].properties.QUANTITY_UNITS);
+                outMap.put('PointofDiversionNumber', waterLicenseResponse.features[0].properties.POD_NUMBER);
+                outMap.put('PODDiversionType', waterLicenseResponse.features[0].properties.POD_DIVERSION_TYPE);
+                outMap.put('PODSubtype', waterLicenseResponse.features[0].properties.POD_SUBTYPE);
+                outMap.put('SourceWaterBodyName', waterLicenseResponse.features[0].properties.SOURCE_NAME);
+            }
         } else {
             outMap.put('NoData', 'No water license details available.');
         }
@@ -116,15 +123,17 @@ global with sharing class PHOCSWaterRightsService implements Callable {
         system.debug('>>> Entered in getWaterLicenseApplicationDetails method <<<');
         Map<String, Object> outMap = new Map<String, Object>();
         if (waterLicenseAppResponse != null || !exceptionInWLAN) {
-            outMap.put('WaterLicenceApplicationStatus', waterLicenseAppResponse.features[0].properties.APPLICATION_STATUS);
-            outMap.put('WellTagNumber', waterLicenseAppResponse.features[0].properties.WELL_TAG_NUMBER);
-            outMap.put('WaterSourceIntakeUse', waterLicenseAppResponse.features[0].properties.PURPOSE_USE);
-            outMap.put('WaterSourceIntakeUseCode', waterLicenseAppResponse.features[0].properties.PURPOSE_USE_CODE);
-            outMap.put('MaximumDiversion', waterLicenseAppResponse.features[0].properties.QTY_DIVERSION_MAX_RATE);
-            outMap.put('MaximumDiversionUnits', waterLicenseAppResponse.features[0].properties.QTY_UNITS_DIVERSION_MAX_RATE);
-            outMap.put('PointofDiversionNumber', waterLicenseAppResponse.features[0].properties.POD_NUMBER);
-            outMap.put('PODDiversionType', waterLicenseAppResponse.features[0].properties.POD_DIVERSION_TYPE);
-            outMap.put('PODSubtype', waterLicenseAppResponse.features[0].properties.POD_SUBTYPE);
+            if(waterLicenseAppResponse.features != null && waterLicenseAppResponse.features.size() >0){
+                outMap.put('WaterLicenceApplicationStatus', waterLicenseAppResponse.features[0].properties.APPLICATION_STATUS);
+                outMap.put('WellTagNumber', waterLicenseAppResponse.features[0].properties.WELL_TAG_NUMBER);
+                outMap.put('WaterSourceIntakeUse', waterLicenseAppResponse.features[0].properties.PURPOSE_USE);
+                outMap.put('WaterSourceIntakeUseCode', waterLicenseAppResponse.features[0].properties.PURPOSE_USE_CODE);
+                outMap.put('MaximumDiversion', waterLicenseAppResponse.features[0].properties.QTY_DIVERSION_MAX_RATE);
+                outMap.put('MaximumDiversionUnits', waterLicenseAppResponse.features[0].properties.QTY_UNITS_DIVERSION_MAX_RATE);
+                outMap.put('PointofDiversionNumber', waterLicenseAppResponse.features[0].properties.POD_NUMBER);
+                outMap.put('PODDiversionType', waterLicenseAppResponse.features[0].properties.POD_DIVERSION_TYPE);
+                outMap.put('PODSubtype', waterLicenseAppResponse.features[0].properties.POD_SUBTYPE);
+            }
         } else {
             outMap.put('NoData', 'No water license application details available.');
         }
