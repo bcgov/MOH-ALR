@@ -1,6 +1,6 @@
 import { LightningElement } from 'lwc';
 import { loadStyle } from 'lightning/platformResourceLoader';
-import MY_CUSTOM_STYLES from '@salesforce/resourceUrl/PHOCS_flexCard_Global_CSS'; // Replace 'PHOCS_flexCard_Global_CSS' with your static resource name
+import MY_CUSTOM_STYLES from '@salesforce/resourceUrl/phocs_flexCard_Global_CSS'; // Replace 'PHOCS_flexCard_Global_CSS' with your static resource name
 export default class PHOCSCSSStylingForFlexCard extends LightningElement {
     connectedCallback() {
         Promise.all([
