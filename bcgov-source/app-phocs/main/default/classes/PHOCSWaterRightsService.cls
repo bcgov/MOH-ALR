@@ -227,7 +227,8 @@ global with sharing class PHOCSWaterRightsService implements Callable {
         return facility;
     }
     
-    private void updateFacility(Integer WellTagNumber, Integer AquiferNumber){
+    @future
+    private static void updateFacility(Integer WellTagNumber, Integer AquiferNumber){
         facility.WellTagNumber__c = WellTagNumber;
         facility.AquiferNumber__c = AquiferNumber;
         update facility;
