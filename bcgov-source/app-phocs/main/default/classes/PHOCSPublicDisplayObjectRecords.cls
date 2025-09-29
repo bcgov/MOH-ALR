@@ -198,17 +198,8 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         SObjectWrapper wrapper = wrapperRegistry.get(queryConfig.ChildSobjectAPIName__c);
         List<Object> results = new List<Object>();
         
-        String soqlQuery = queryConfig.ObjectQuery__c;
-        if (String.isNotBlank(queryConfig.ParentFieldAPIName__c)) {
-            Boolean hasWhereClause = soqlQuery.toLowerCase().contains(' where ');
-            String filterClause = (hasWhereClause ? ' AND ' : ' WHERE ') + string.escapeSingleQuotes(queryConfig.ParentFieldAPIName__c) + ' = :recordId';
-            soqlQuery += filterClause;
-        }
-
-        system.debug('soqlQuery : ' + soqlQuery);
-		
-        List<SObject> queryResults = Database.query(soqlQuery);
-
+        system.debug('soqlQuery : ' + queryConfig.ObjectQuery__c);
+        List<SObject> queryResults = Database.query(queryConfig.ObjectQuery__c);
         for (SObject sObj : queryResults) {        
             if (wrapper != null) {
                 results.add(wrapper.wrap(sObj));
@@ -217,6 +208,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             }
         }
         system.debug('results : ' + results);
+
         return results;
     }
 	
