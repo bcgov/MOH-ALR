@@ -205,6 +205,8 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
 		
         SObjectWrapper wrapper = wrapperRegistry.get(queryConfig.ChildSobjectAPIName__c);
         List<Object> results = new List<Object>();
+       
+        // NOPMD ApexSOQLInjection - soqlQuery is constructed safely with no user input
         for (SObject sObj : Database.query(soqlQuery)) {        
             if (wrapper != null) {
                 results.add(wrapper.wrap(sObj));
