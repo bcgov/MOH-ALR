@@ -330,6 +330,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         public Object wrap(SObject record) {
             Visit inspection = (Visit) record;
             Map<String, Object> result = new Map<String, Object>{
+                'Id' => inspection.Id,
                 'Name' => inspection.Name,
                 'AccountName' => inspection.Account.Name,
                 'ActualVisitStartTime' => inspection.ActualVisitStartTime,
