@@ -4,11 +4,13 @@ global class PHOCSGwellsServiceMock implements HttpCalloutMock {
         HttpResponse res = new HttpResponse();
         res.setHeader('Content-Type', 'application/json');
         
+        String endpoint = req.getEndpoint();
+        
         // Decide which mock response to return based on endpoint
-        if (req.getEndpoint().contains('/wells/')) {
+        if (endpoint.contains('/wells/')) {
             res.setBody(PHOCSWellResponseWrapperTest.getResponse());
             res.setStatusCode(200);
-        } else if (req.getEndpoint().contains('/aquifers/')) {
+        } else if (endpoint.contains('/aquifers/')) {
             res.setBody(PHOCSAquifersResponseWrapperTest.getResponse());
             res.setStatusCode(200);
         } else {

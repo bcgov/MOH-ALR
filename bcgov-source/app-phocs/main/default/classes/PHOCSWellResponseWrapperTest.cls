@@ -91,7 +91,7 @@ public class PHOCSWellResponseWrapperTest {
             '"observation_well_number": null,' +
             '"observation_well_status": null,' +
             '"ems": null,' +
-            '"aquifer": null,' +
+            '"aquifer": "658",' +
             '"utm_zone_code": "9",' +
             '"utm_northing": 6077913,' +
             '"utm_easting": 682236,' +

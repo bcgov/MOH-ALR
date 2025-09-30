@@ -20,13 +20,32 @@ private class PHOCSWaterRightsServiceTest {
         insert acc;
     }
     
+    static Account getAccount(){
+        return [Select Id, Name, WaterLicenseNumber__c, WaterLicenseApplicationNumber__c from Account where Name = 'Test Facility' limit 1];
+    }
+    
     @isTest
     static void testGWellWorking(){
         Test.setMock(HttpCalloutMock.class, new PHOCSGwellsServiceMock());
         
+        // Prepare input for FlexCard-style call
+        Map<String, Object> input   = new Map<String, Object>{ 'recordId' => getAccount().Id };
+        Map<String, Object> output  = new Map<String, Object>();
+        Map<String, Object> options = new Map<String, Object>();        
+        
         Test.startTest();
-        PHOCSWellResponseWrapper wellResp = PHOCSGwellsService.getWellDetails('129877');
+        // Call service
+        Object result = new PHOCSWaterRightsService().call(
+            'getGWellDetails',
+            new Map<String, Object>{
+                'input'   => input,
+                'output'  => output,
+                'options' => options
+            }
+        );
+        PHOCSWellResponseWrapper wellResp = PHOCSGwellsService.getWellDetails('129877');        
         Test.stopTest();
+        
         System.debug(wellResp);
         System.debug('Well GUID: ' + wellResp.well_guid);
         System.debug('Latitude: ' + wellResp.latitude);
@@ -39,7 +58,21 @@ private class PHOCSWaterRightsServiceTest {
     static void testAquifierWorking(){
         Test.setMock(HttpCalloutMock.class, new PHOCSGwellsServiceMock());
         
+        // Prepare input for FlexCard-style call
+        Map<String, Object> input   = new Map<String, Object>{ 'recordId' => getAccount().Id };
+        Map<String, Object> output  = new Map<String, Object>();
+        Map<String, Object> options = new Map<String, Object>();        
+        
         Test.startTest();
+        // Call service
+        Object result = new PHOCSWaterRightsService().call(
+            'getAquifersDetails',
+            new Map<String, Object>{
+                'input'   => input,
+                'output'  => output,
+                'options' => options
+            }
+        );
         PHOCSAquifersResponseWrapper aquiferResp = PHOCSGwellsService.getAquiferDetails('658');
         Test.stopTest();
         
@@ -53,7 +86,21 @@ private class PHOCSWaterRightsServiceTest {
     static void testWaterLicenseWorking(){
         Test.setMock(HttpCalloutMock.class, new PHOCSWLSWaterHttpMock());
         
+        // Prepare input for FlexCard-style call
+        Map<String, Object> input   = new Map<String, Object>{ 'recordId' => getAccount().Id };
+        Map<String, Object> output  = new Map<String, Object>();
+        Map<String, Object> options = new Map<String, Object>();        
+        
         Test.startTest();
+        // Call service
+        Object result = new PHOCSWaterRightsService().call(
+            'getWaterLicenseDetails',
+            new Map<String, Object>{
+                'input'   => input,
+                'output'  => output,
+                'options' => options
+            }
+        );
         PHOCSWLSWaterRightsWrapper rightsWrapper = PHOCSWLSWaterService.getWaterRightsByLicence('505833');
         Test.stopTest();
         
@@ -66,14 +113,28 @@ private class PHOCSWaterRightsServiceTest {
             System.debug('Quantity: ' + f.properties.QUANTITY);
             System.debug('Latitude / Longitude: ' + f.properties.LATITUDE + ' , ' + f.properties.LONGITUDE);
         }
-        System.assertEquals('18010', ''+ rightsWrapper.features[0].properties.WELL_TAG_NUMBER);
+        System.assertEquals('49566', ''+ rightsWrapper.features[0].properties.WELL_TAG_NUMBER);
     }
     
     @isTest
     static void testWaterLicenseApplicationWorking(){
         Test.setMock(HttpCalloutMock.class, new PHOCSWLSWaterHttpMock());
         
+        // Prepare input for FlexCard-style call
+        Map<String, Object> input   = new Map<String, Object>{ 'recordId' => getAccount().Id };
+        Map<String, Object> output  = new Map<String, Object>();
+        Map<String, Object> options = new Map<String, Object>();        
+        
         Test.startTest();
+        // Call service
+        Object result = new PHOCSWaterRightsService().call(
+            'getWaterLicenseApplicationDetails',
+            new Map<String, Object>{
+                'input'   => input,
+                'output'  => output,
+                'options' => options
+            }
+        );
         PHOCSWLSWaterApplicationsWrapper applicationsWrapper = PHOCSWLSWaterService.getWaterApplicationsByJob('128116');
         Test.stopTest();
         

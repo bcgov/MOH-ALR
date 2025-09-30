@@ -5,10 +5,10 @@ global with sharing class PHOCSWaterRightsService implements Callable {
     private static PHOCSWellResponseWrapper wellDetailsResponse;
     private static PHOCSAquifersResponseWrapper aquiferDetailsResponse;
     
-    private static Boolean exceptionInWLN;
-    private static Boolean exceptionInWLAN;
-    private static Boolean exceptionInWTN;
-    private static Boolean exceptionInAQN;
+    private static Boolean exceptionInWLN = false;
+    private static Boolean exceptionInWLAN = false;
+    private static Boolean exceptionInWTN = false;
+    private static Boolean exceptionInAQN = false;
     
     global Object call(String action, Map<String, Object> args) {
         Map<String, Object> input   = (Map<String, Object>) args.get('input');
@@ -56,15 +56,17 @@ global with sharing class PHOCSWaterRightsService implements Callable {
             System.debug('Water License Number: ' + acc.WaterLicenseNumber__c);
             getWaterLicenseDetailsRequest(acc.WaterLicenseNumber__c);
             System.debug('waterLicenseResponse : ' + waterLicenseResponse);
-            if(waterLicenseResponse.features != null && waterLicenseResponse.features.size() > 0){
+            if(waterLicenseResponse != null && waterLicenseResponse.features != null && waterLicenseResponse.features.size() > 0){
                 System.debug('Feature: ' + waterLicenseResponse.features);
                 System.debug('Feature - properties: ' + waterLicenseResponse.features[0]?.properties);
                 System.debug('Well Tag Number: ' + waterLicenseResponse.features[0]?.properties.WELL_TAG_NUMBER);
                 wellTagNumber = waterLicenseResponse.features[0]?.properties.WELL_TAG_NUMBER;            
                 if(wellTagNumber != null){
                     getGWellDetailsRequest(waterLicenseResponse.features[0]?.properties.WELL_TAG_NUMBER.toString());
-                    aquiferNumber = Integer.valueOf(wellDetailsResponse?.aquifer);
-                    getAquiferDetailsRequest(wellDetailsResponse.aquifer);
+                    if(wellDetailsResponse != null && wellDetailsResponse.aquifer != null){
+                        aquiferNumber = Integer.valueOf(wellDetailsResponse.aquifer);
+                        getAquiferDetailsRequest(wellDetailsResponse.aquifer);
+                    }                    
                 }
             }            
         }
@@ -159,10 +161,10 @@ global with sharing class PHOCSWaterRightsService implements Callable {
         system.debug('>>> Entered in getAquiferDetails method <<<');
         Map<String, Object> outMap = new Map<String, Object>();
         if (aquiferDetailsResponse != null || !exceptionInAQN) {
-            outMap.put('aquifer_name', aquiferDetailsResponse.aquifer_name);
-            outMap.put('subtype', aquiferDetailsResponse.subtype);
-            outMap.put('material_type', aquiferDetailsResponse.geom.type);
-            outMap.put('size', aquiferDetailsResponse.area);               
+            outMap.put('aquifer_name', aquiferDetailsResponse?.aquifer_name);
+            outMap.put('subtype', aquiferDetailsResponse?.subtype);
+            outMap.put('material_type', aquiferDetailsResponse?.geom?.type);
+            outMap.put('size', aquiferDetailsResponse?.area);               
         } else {
             outMap.put('NoData', 'No aquifer details available.');
         }
@@ -185,19 +187,19 @@ global with sharing class PHOCSWaterRightsService implements Callable {
         system.debug('>>> Entered in getGWellDetails method <<<');
         Map<String, Object> outMap = new Map<String, Object>();
         if (wellDetailsResponse != null || !exceptionInWTN) {
-            outMap.put('WellIDPlateNumber', wellDetailsResponse.IDENTIFICATION_PLATE_NUMBER);
-            outMap.put('WellStatus', wellDetailsResponse.well_status);
-            outMap.put('ArtesianCondition', wellDetailsResponse.artesian_conditions);
-            outMap.put('AquiferNumber', wellDetailsResponse.aquifer);
-            outMap.put('StartDateofConstruction', wellDetailsResponse.construction_start_date);
-            outMap.put('EndDateofConstruction', wellDetailsResponse.construction_end_date);
-            outMap.put('WellLocationDescription', wellDetailsResponse.well_location_description);
-            outMap.put('ScreenType', wellDetailsResponse.screen_type);
-            outMap.put('ScreenMaterial', wellDetailsResponse.screen_material);
-            outMap.put('ScreenIntakeMethod', wellDetailsResponse.screen_intake_method);
-            outMap.put('CasingDetails', wellDetailsResponse.casing_set);
+            outMap.put('WellIDPlateNumber', wellDetailsResponse?.IDENTIFICATION_PLATE_NUMBER);
+            outMap.put('WellStatus', wellDetailsResponse?.well_status);
+            outMap.put('ArtesianCondition', wellDetailsResponse?.artesian_conditions);
+            outMap.put('AquiferNumber', wellDetailsResponse?.aquifer);
+            outMap.put('StartDateofConstruction', wellDetailsResponse?.construction_start_date);
+            outMap.put('EndDateofConstruction', wellDetailsResponse?.construction_end_date);
+            outMap.put('WellLocationDescription', wellDetailsResponse?.well_location_description);
+            outMap.put('ScreenType', wellDetailsResponse?.screen_type);
+            outMap.put('ScreenMaterial', wellDetailsResponse?.screen_material);
+            outMap.put('ScreenIntakeMethod', wellDetailsResponse?.screen_intake_method);
+            outMap.put('CasingDetails', wellDetailsResponse?.casing_set);
             
-            if(wellDetailsResponse.screen_set.size() > 0){
+            if(wellDetailsResponse?.screen_set.size() > 0){
                 outMap.put('InstalledScreens', wellDetailsResponse.screen_set);
             }else{
                 outMap.put('IsInstalledScreensEmpty', 'true');

@@ -10,7 +10,7 @@ global class PHOCSWLSWaterHttpMock implements HttpCalloutMock {
 
         if(endpoint.contains('WLS_WATER_RIGHTS_LICENCES_SV')) {
             // Mock response for Water Rights
-            res.setBody(PHOCSWLSWaterApplicationsWrapperTest.getResponse());
+            res.setBody(PHOCSWLSWaterRightsWrapperTest.getResponse());
         } else if(endpoint.contains('WLS_WATER_RIGHTS_APPLICTNS_SV')) {
             // Mock response for Water Applications
             res.setBody(PHOCSWLSWaterApplicationsWrapperTest.getResponse());
