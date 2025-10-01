@@ -13,31 +13,54 @@ public class AccountTriggerHandler {
     }
 
     public static void handleAfterUpdate(List<Account> newList, Map<Id, Account> oldMap) {
-        List<Id> accountsToGeocode = new List<Id>();
 		if (skipGeocode) {
             return;
         }
-        for (Account acct : newList) {
+        executeGeocoder(newList,oldMap);
+    }
+    public static void handleAfterInsert(List<Account> newList) {
+    if (skipGeocode) {
+        return;
+    }
+     executeGeocoder(newList, null);
+  }
+  
+    
+   private static void executeGeocoder(List<Account> accounts, Map<Id, Account> oldMap) {
+    List<Id> accountsToGeocode = new List<Id>();
+
+    for (Account acct : accounts) {
+        if (acct.RecordTypeName__c != 'DrinkingWaterSourceIntake' &&
+            acct.RecordTypeName__c != 'DrinkingWaterSystem' &&
+            acct.RecordTypeName__c != 'Facility') {
+            continue;
+        }
+
+        Boolean shouldGeocode = false;
+
+        if (oldMap == null) {
+            shouldGeocode =
+                String.isNotBlank(acct.Physical_Address__Street__s) ||
+                String.isNotBlank(acct.Physical_Address__City__s) ||
+                String.isNotBlank(acct.Physical_Address__StateCode__s);
+        } else {
             Account oldAcct = oldMap.get(acct.Id);
-
-            if (acct.RecordTypeName__c != 'DrinkingWaterSourceIntake' &&
-                acct.RecordTypeName__c != 'DrinkingWaterSystem' &&  acct.RecordTypeName__c != 'Facility') {
-                continue;
-            }
-
-            Boolean addressChanged =
+            shouldGeocode =
                 acct.Physical_Address__Street__s != oldAcct.Physical_Address__Street__s ||
                 acct.Physical_Address__City__s != oldAcct.Physical_Address__City__s ||
                 acct.Physical_Address__StateCode__s != oldAcct.Physical_Address__StateCode__s;
-
-            if (addressChanged) {
-                accountsToGeocode.add(acct.Id);
-            }
         }
 
-        // Enqueue queueable job for each changed account
+        if (shouldGeocode) {
+            accountsToGeocode.add(acct.Id);
+        }
+    }
+
+    // Enqueue queueable job for each changed account
         for (Id acctId : accountsToGeocode) {
             System.enqueueJob(new GeocodeAddressQueueable(acctId));
         }
-    }
+
+   }
+
 }
