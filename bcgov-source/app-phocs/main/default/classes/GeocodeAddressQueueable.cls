@@ -136,7 +136,7 @@ public class GeocodeAddressQueueable implements Queueable, Database.AllowsCallou
         try {
             notification.send(recipientsIds);
         } catch (Exception e) {
-            System.debug('Notification error: ' + e.getMessage());
+             System.debug('Notification error: ' + e.getMessage());
         }
     }
         
