@@ -1,10 +1,10 @@
 public with sharing class MonerisCheckoutService {
 
-    private static final String STORE_ID = 'store1';
-    private static final String API_TOKEN = 'yesguy';
-    private static final String CHECKOUT_ID = 'chkt1';
+    private static final String STORE_ID = 'monca12327';
+    private static final String API_TOKEN = 'E3IIALskJsDtsIT76CVG';
+    private static final String CHECKOUT_ID = 'chktA5DVS12327';
     private static final String NAMED_CREDENTIAL = 'Moneris_QA';
-    private static final String ENDPOINT = 'callout:' + NAMED_CREDENTIAL + '/chktv2/request/request.php';
+    private static final String ENDPOINT = 'https://gatewayt.moneris.com/chktv2/request/request.php';
 
     @AuraEnabled(cacheable=false)
     public static String generateTicket(Decimal amount, String orderNo) {
@@ -18,6 +18,7 @@ public with sharing class MonerisCheckoutService {
             'order_no'    => orderNo
         };
 
+        System.debug('ENDPOINT :: ' + ENDPOINT);
         HttpRequest req = new HttpRequest();
         req.setMethod('POST');
         req.setEndpoint(ENDPOINT);

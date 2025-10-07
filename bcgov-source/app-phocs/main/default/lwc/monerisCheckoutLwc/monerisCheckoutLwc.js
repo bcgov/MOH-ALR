@@ -7,7 +7,21 @@ export default class MonerisCheckoutLwc extends LightningElement {
     @track orderNo = 'ORDER-' + Date.now();
     @track isLoading = false;
     monerisLoaded = false;
+    containerReady = false;
     ticket = null;
+
+    renderedCallback() {
+        // Run once: mark container as ready
+        if (!this.containerReady) {
+            const container = this.template.querySelector('#monerisContainer');
+            if (container) {
+                this.containerReady = true;
+                console.log(' Moneris container ready');
+            } else {
+                console.warn(' Moneris container not yet available');
+            }
+        }
+    }
 
     handleAmountChange(event) {
         this.amount = parseFloat(event.target.value);
@@ -19,24 +33,31 @@ export default class MonerisCheckoutLwc extends LightningElement {
 
     async startPayment() {
         this.isLoading = true;
-
         try {
-            // 1️⃣ Generate ticket from Apex
+            // 1️ Generate ticket
             const ticketResponse = await generateTicket({ amount: this.amount, orderNo: this.orderNo });
             const parsed = JSON.parse(ticketResponse);
             this.ticket = parsed.ticket;
 
-            // 2️⃣ Load Moneris script if not loaded
+            // 2️ Load Moneris script if not loaded
             if (!this.monerisLoaded) {
                 await this.loadMonerisScript();
                 this.monerisLoaded = true;
             }
 
-            // 3️⃣ Start Moneris checkout
-            this.launchCheckout(this.ticket);
+            // 3️ Wait for container to exist
+            const container = this.template.querySelector('#monerisContainer');
+            if (!container) {
+                console.error('Moneris container not found even after render.');
+                return;
+            }
+
+            // 4️ Launch checkout
+            this.launchCheckout(container, this.ticket);
+
         } catch (err) {
             console.error('Moneris Error:', err);
-            alert('Error: ' + err.body?.message || err.message);
+            alert('Error: ' + (err.body?.message || err.message));
         } finally {
             this.isLoading = false;
         }
@@ -52,16 +73,15 @@ export default class MonerisCheckoutLwc extends LightningElement {
         });
     }
 
-    launchCheckout(ticket) {
-        const container = this.template.querySelector('#monerisContainer');
-        container.innerHTML = ''; // reset
+    launchCheckout(container, ticket) {
+        container.innerHTML = ''; // clear old form
 
         const checkout = new window.monerisCheckout();
-        checkout.setMode('qa'); // prod later
+        checkout.setMode('qa');
+
         checkout.setCallback((data) => {
             console.log('Payment Response:', data);
-
-            if (data.response?.success === true) {
+            if (data.response?.success) {
                 this.handleReceipt(ticket);
             } else {
                 alert('Payment failed or cancelled.');
