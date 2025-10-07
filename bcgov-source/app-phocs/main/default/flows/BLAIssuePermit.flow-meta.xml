@@ -14,6 +14,28 @@
         <dataType>String</dataType>
         <expression>  {!recordId.Account.Name} + &apos; &apos; +  {!recordId.LicenseType.Name}</expression>
     </formulas>
+    <formulas>
+        <name>businessEntityAccount</name>
+        <dataType>String</dataType>
+        <expression>IF(
+  NOT(ISBLANK({!recordId.Account.ParentAccount__c})) &amp;&amp;
+  {!recordId.Account.ParentAccount__r.RecordType.DeveloperName} = &quot;Business_Entity&quot;,
+  {!recordId.Account.ParentAccount__c},
+
+  IF(
+     NOT(ISBLANK({!recordId.Account.ParentAccount__r.ParentAccount__c})) &amp;&amp;
+     {!recordId.Account.ParentAccount__r.ParentAccount__r.RecordType.DeveloperName} = &quot;Business_Entity&quot;,
+     {!recordId.Account.ParentAccount__r.ParentAccount__c},
+
+    IF(
+       NOT(ISBLANK({!recordId.Account.ParentAccount__r.ParentAccount__r.ParentAccount__c})) &amp;&amp;
+       {!recordId.Account.ParentAccount__r.ParentAccount__r.ParentAccount__r.RecordType.DeveloperName} = &quot;Business_Entity&quot;,
+       {!recordId.Account.ParentAccount__r.ParentAccount__r.ParentAccount__c},
+        NULL
+    )
+  )
+)</expression>
+    </formulas>
     <interviewLabel>BLA Issue Permit {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Issue Permit</label>
     <processMetadataValues>
@@ -49,7 +71,7 @@
         <inputAssignments>
             <field>AccountId</field>
             <value>
-                <elementReference>recordId.Account.Parent.Id</elementReference>
+                <elementReference>businessEntityAccount</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -148,8 +170,16 @@
         <allowPause>true</allowPause>
         <fields>
             <name>ErrorMessage</name>
-            <fieldText>&lt;p&gt;&lt;span style=&quot;font-size: 13px; color: rgb(237, 0, 0);&quot;&gt;Error Generating Permit.&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;color: rgb(237, 0, 0); font-size: 13px;&quot;&gt;Error Generating Permit.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;{!$Flow.FaultMessage}&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
         </fields>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
@@ -170,6 +200,14 @@
             <name>confirmationMessage</name>
             <fieldText>&lt;p&gt;Are you sure you want to issue a new permit&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
         </fields>
         <nextOrFinishButtonLabel>Confirm</nextOrFinishButtonLabel>
         <showFooter>true</showFooter>
