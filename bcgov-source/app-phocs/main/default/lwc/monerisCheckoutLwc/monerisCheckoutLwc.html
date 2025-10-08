@@ -1,11 +1,12 @@
 <template>
-    <lightning-card title="Moneris Checkout">
-        <div class="slds-p-around_medium">
-            <lightning-input label="Order No" value={orderNo} onchange={handleOrderChange}></lightning-input>
-            <lightning-input label="Amount" type="number" value={amount} onchange={handleAmountChange}></lightning-input>
-            <lightning-button label="Pay Now" variant="brand" onclick={startPayment}></lightning-button>
-        </div>
+    <div class="slds-p-around_medium">
+        <div data-id="monerisCheckout"></div>
 
-        <div lwc:dom="manual" id="monerisContainer"></div>
-    </lightning-card>
+        <lightning-button 
+            label="Start Moneris Checkout (QA)"
+            variant="brand"
+            class="slds-m-top_medium"
+            onclick={handleMonerisCheckout}>
+        </lightning-button>
+    </div>
 </template>

@@ -1,104 +1,184 @@
-import { LightningElement, track } from 'lwc';
-import generateTicket from '@salesforce/apex/MonerisCheckoutService.generateTicket';
-import getReceipt from '@salesforce/apex/MonerisCheckoutService.getReceipt';
+import { LightningElement } from 'lwc';
+import createCheckoutTicket from '@salesforce/apex/MonerisCheckoutServiceQA.createCheckoutTicket';
 
 export default class MonerisCheckoutLwc extends LightningElement {
-    @track amount = 10.00;
-    @track orderNo = 'ORDER-' + Date.now();
-    @track isLoading = false;
-    monerisLoaded = false;
-    containerReady = false;
-    ticket = null;
+    ticket;
+    monerisInstance;
 
-    renderedCallback() {
-        // Run once: mark container as ready
-        if (!this.containerReady) {
-            const container = this.template.querySelector('#monerisContainer');
-            if (container) {
-                this.containerReady = true;
-                console.log(' Moneris container ready');
-            } else {
-                console.warn(' Moneris container not yet available');
-            }
+    // === User clicks Start Checkout ===
+    handleMonerisCheckout() {
+        createCheckoutTicket({ amount: 10.00 })
+            .then(result => {
+                this.ticket = result;
+                console.log('✅ Moneris QA Ticket:', this.ticket);
+
+                this.initializeMonerisCheckout();
+            })
+            .catch(error => {
+                console.error('❌ Error getting Moneris ticket:', error);
+                alert(error.body?.message || 'Error initializing Moneris Checkout.');
+            });
+    }
+
+    // === Initialize Moneris Checkout ===
+    initializeMonerisCheckout() {
+        console.log('🚀 Starting Moneris QA Checkout...');
+
+        this.monerisInstance = new MonerisCheckout(this.template);
+        this.monerisInstance.setMode('qa');
+        this.monerisInstance.setCheckoutDiv('monerisCheckout');
+
+        // === Register Callbacks ===
+        this.monerisInstance.setCallback('page_loaded', this.onPageLoaded);
+        this.monerisInstance.setCallback('cancel_transaction', this.onCancelTransaction);
+        this.monerisInstance.setCallback('payment_receipt', this.onPaymentReceipt);
+        this.monerisInstance.setCallback('payment_complete', this.onPaymentComplete);
+        this.monerisInstance.setCallback('error_event', this.onErrorEvent);
+
+        // === Start checkout ===
+        this.monerisInstance.startCheckout(this.ticket);
+    }
+
+    // === CALLBACK IMPLEMENTATIONS ===
+    onPageLoaded() {
+        console.log('🟢 Page loaded successfully.');
+    }
+
+    onCancelTransaction() {
+        console.log('🟡 Transaction cancelled.');
+        alert('Transaction cancelled by user.');
+    }
+
+    onPaymentReceipt(receipt) {
+        console.log('🧾 Payment receipt received:', receipt);
+    }
+
+    onPaymentComplete(response) {
+        console.log('🎉 Payment complete:', response);
+        alert('Payment completed successfully!');
+    }
+
+    onErrorEvent(error) {
+        console.error('🔴 Moneris error:', error);
+        alert('Error during payment: ' + JSON.stringify(error));
+    }
+}
+
+/* ============================================================
+   Embedded Moneris Checkout Implementation (Locker Safe)
+   ============================================================ */
+class MonerisCheckout {
+    constructor(templateRef) {
+        this.mode = '';
+        this.request_url = '';
+        this.checkout_div = 'moneris-checkout';
+        this.fullscreen = 'T';
+        this.templateRef = templateRef; // ✅ Reference to LWC template
+        this.callbacks = {
+            page_loaded: '',
+            cancel_transaction: '',
+            payment_receipt: '',
+            payment_complete: '',
+            error_event: '',
+        };
+        this.registerMessageListener();
+    }
+
+    registerMessageListener() {
+        const eventMethod = window.addEventListener ? 'addEventListener' : 'attachEvent';
+        const messageEvent = eventMethod === 'attachEvent' ? 'onmessage' : 'message';
+        window[eventMethod](messageEvent, this.receivePostMessage.bind(this), false);
+    }
+
+    logConfig() {
+        console.log(`request_url: ${this.request_url}, checkout_div: ${this.checkout_div}`);
+    }
+
+    setCheckoutDiv(name) {
+        this.checkout_div = name;
+    }
+
+    setMode(mode) {
+        this.mode = mode;
+        if (mode === 'qa') {
+            this.request_url = 'https://gatewayt.moneris.com/chkt/display/index.php';
+        } else if (mode === 'prod') {
+            this.request_url = 'https://gateway.moneris.com/chkt/display/index.php';
+        } else if (mode === 'dev') {
+            this.request_url = 'https://gatewaydev.moneris.com/chkt/display/index.php';
+        } else {
+            this.request_url = 'https://gatewayqa.moneris.com/chkt/display/index.php';
         }
     }
 
-    handleAmountChange(event) {
-        this.amount = parseFloat(event.target.value);
+    setCallback(name, func) {
+        if (this.callbacks.hasOwnProperty(name)) {
+            this.callbacks[name] = func;
+        } else {
+            console.warn(`Invalid callback: ${name}`);
+        }
     }
 
-    handleOrderChange(event) {
-        this.orderNo = event.target.value;
+    // === Start Checkout ===
+    startCheckout(ticket) {
+        this.fullscreen = ticket.slice(-1);
+        console.log('fullscreen:', this.fullscreen);
+
+        // ✅ Access the div via data-id (safe in LWC DOM)
+        const targetDiv = this.templateRef.querySelector('[data-id="monerisCheckout"]');
+        if (!targetDiv) {
+            console.error(`❌ Target div "monerisCheckout" not found in LWC DOM`);
+            return;
+        }
+
+        targetDiv.innerHTML = ''; // safe clear
+
+        const checkoutUrl = `${this.request_url}?tck=${ticket}`;
+        console.log('🧾 Checkout URL:', checkoutUrl);
+
+        const iframe = document.createElement('iframe');
+        iframe.setAttribute('src', checkoutUrl);
+        iframe.setAttribute('allowpaymentrequest', 'true');
+        iframe.setAttribute('title', 'Payment Details');
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.border = 'none';
+        targetDiv.appendChild(iframe);
+
+        if (typeof this.callbacks.page_loaded === 'function') {
+            this.callbacks.page_loaded();
+        }
     }
 
-    async startPayment() {
-        this.isLoading = true;
+
+    receivePostMessage(resp) {
         try {
-            // 1️ Generate ticket
-            const ticketResponse = await generateTicket({ amount: this.amount, orderNo: this.orderNo });
-            const parsed = JSON.parse(ticketResponse);
-            this.ticket = parsed.ticket;
+            const data = JSON.parse(resp.data);
+            const handler = data.handler;
 
-            // 2️ Load Moneris script if not loaded
-            if (!this.monerisLoaded) {
-                await this.loadMonerisScript();
-                this.monerisLoaded = true;
-            }
-
-            // 3️ Wait for container to exist
-            const container = this.template.querySelector('#monerisContainer');
-            if (!container) {
-                console.error('Moneris container not found even after render.');
-                return;
-            }
-
-            // 4️ Launch checkout
-            this.launchCheckout(container, this.ticket);
-
-        } catch (err) {
-            console.error('Moneris Error:', err);
-            alert('Error: ' + (err.body?.message || err.message));
-        } finally {
-            this.isLoading = false;
-        }
-    }
-
-    async loadMonerisScript() {
-        return new Promise((resolve, reject) => {
-            const script = document.createElement('script');
-            script.src = 'https://gatewayt.moneris.com/chktv2/js/chkt_v2.00.js';
-            script.onload = resolve;
-            script.onerror = reject;
-            document.body.appendChild(script);
-        });
-    }
-
-    launchCheckout(container, ticket) {
-        container.innerHTML = ''; // clear old form
-
-        const checkout = new window.monerisCheckout();
-        checkout.setMode('qa');
-
-        checkout.setCallback((data) => {
-            console.log('Payment Response:', data);
-            if (data.response?.success) {
-                this.handleReceipt(ticket);
+            if (handler && typeof this.callbacks[handler] === 'function') {
+                this.callbacks[handler](data);
             } else {
-                alert('Payment failed or cancelled.');
+                console.log('📨 Received message:', data);
             }
-        });
-
-        checkout.startCheckout(ticket, container);
+        } catch (err) {
+            console.error('⚠️ Invalid postMessage data', err);
+        }
     }
 
-    async handleReceipt(ticket) {
-        try {
-            const receiptResponse = await getReceipt({ ticket });
-            const receipt = JSON.parse(receiptResponse);
-            alert(`Payment Successful\nTransaction ID: ${receipt.response?.transaction?.id}`);
-        } catch (err) {
-            console.error('Receipt error:', err);
-            alert('Could not fetch payment receipt.');
+    sendFrameMessage(action) {
+        const frame = this.templateRef.querySelector(`#${this.checkout_div}-Frame`)?.contentWindow;
+        if (frame) {
+            const req = JSON.stringify({ action });
+            frame.postMessage(req, this.request_url);
         }
+    }
+
+    closeCheckout() {
+        this.sendFrameMessage('close_request');
+    }
+
+    startTransaction() {
+        this.sendFrameMessage('start_transaction');
     }
 }
