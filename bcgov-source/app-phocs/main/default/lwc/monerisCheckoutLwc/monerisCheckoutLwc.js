@@ -5,6 +5,11 @@ export default class MonerisCheckoutLwc extends LightningElement {
     ticket;
     monerisInstance;
 
+    connectedCallback() {
+        // ✅ Trigger Moneris checkout automatically on component load
+        this.handleMonerisCheckout();
+    }
+
     // === User clicks Start Checkout ===
     handleMonerisCheckout() {
         createCheckoutTicket({ amount: 10.00 })
