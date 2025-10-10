@@ -1,4 +1,5 @@
 import { LightningElement, wire } from 'lwc';
+import { CurrentPageReference } from 'lightning/navigation';
 import createCheckoutTicket from '@salesforce/apex/MonerisCheckoutServiceQA.createCheckoutTicket';
 
 export default class MonerisCheckoutLwc extends LightningElement {
@@ -24,6 +25,7 @@ export default class MonerisCheckoutLwc extends LightningElement {
 
     connectedCallback() {
         // ✅ Trigger Moneris checkout automatically on component load
+        this.getStateParameters(this.pageReference);
         this.handleMonerisCheckout();
     }
 
