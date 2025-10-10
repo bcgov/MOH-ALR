@@ -1,9 +1,26 @@
-import { LightningElement } from 'lwc';
+import { LightningElement, wire } from 'lwc';
 import createCheckoutTicket from '@salesforce/apex/MonerisCheckoutServiceQA.createCheckoutTicket';
 
 export default class MonerisCheckoutLwc extends LightningElement {
     ticket;
     monerisInstance;
+
+    recordId;
+    amount;
+    customerId;
+
+    @wire(CurrentPageReference)
+    getStateParameters(currentPageReference) {
+        if (currentPageReference) {
+            this.recordId = currentPageReference.state.recordId;
+            this.amount = currentPageReference.state.Amount;
+            this.customerId = currentPageReference.state.CustomerId;
+
+            console.log('Record Id:', this.recordId);
+            console.log('Amount:', this.amount);
+            console.log('Customer Id:', this.customerId);
+        }
+    }
 
     connectedCallback() {
         // ✅ Trigger Moneris checkout automatically on component load
