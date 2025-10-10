@@ -23,6 +23,9 @@ public with sharing class MonerisCheckoutService {
         req.setHeader('Content-Type', 'application/json');
         req.setBody(JSON.serialize(payload));
         
+        System.debug('Payload: ' + payload);
+        System.debug('Request: ' + req);
+        
         try {
             Http http = new Http();
             HttpResponse res = http.send(req);

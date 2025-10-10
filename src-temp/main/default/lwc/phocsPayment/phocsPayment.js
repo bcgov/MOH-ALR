@@ -1,91 +1,119 @@
-import { LightningElement, wire } from 'lwc';
-import { CurrentPageReference } from 'lightning/navigation';
+import { LightningElement,api } from 'lwc';
+import getPaymentLinkUrl from '@salesforce/apex/PaymentController.getPaymentLinkUrl';    
+import { NavigationMixin } from 'lightning/navigation';
 import createCheckoutTicket from '@salesforce/apex/MonerisCheckoutServiceQA.createCheckoutTicket';
+import getPaymentSystemRedirectInfo from '@salesforce/apex/PHOCSPaymentController.getPaymentSystemRedirectInfo';
 
-export default class MonerisCheckoutLwc extends LightningElement {
+
+export default class PhocsPayment extends NavigationMixin(LightningElement) {
+    @api regulatoryTransactionFeeId;
+    error;
+
     ticket;
     monerisInstance;
 
-    recordId;
-    amount;
-    customerId;
-
-    @wire(CurrentPageReference)
-    getStateParameters(currentPageReference) {
-        if (currentPageReference) {
-            this.recordId = currentPageReference.state.recordId;
-            this.amount = currentPageReference.state.Amount;
-            this.customerId = currentPageReference.state.CustomerId;
-
-            console.log('Record Id:', this.recordId);
-            console.log('Amount:', this.amount);
-            console.log('Customer Id:', this.customerId);
-        }
+    connectedCallback() {
+        this.redirectPaymentGateway();
     }
 
-    connectedCallback() {
-        // ✅ Trigger Moneris checkout automatically on component load
-        this.getStateParameters(this.pageReference);
+    redirectPaymentGateway(){
+        getPaymentSystemRedirectInfo({regulatoryTransactionFeeId:this.regulatoryTransactionFeeId})
+            .then(result => {
+                if(result && result.useMoneris){
+                    this.MonerisPayHandler();
+                }
+                if(result && result.useGlobalPay){
+                    this.globalPayHandler();
+                }
+            })
+    }
+
+    /* ============================================================
+        GLOBAL PAY
+    ============================================================ */
+    globalPayHandler(){
+        this.redirectUserGlobalPayPaymentPage();
+    }
+    MonerisPayHandler(){
         this.handleMonerisCheckout();
     }
 
-    // === User clicks Start Checkout ===
-    handleMonerisCheckout() {
-        createCheckoutTicket({ recordId: this.recordId, amount: this.amount })
+    redirectUserGlobalPayPaymentPage() {
+        getPaymentLinkUrl()
             .then(result => {
-                this.ticket = result;
-                console.log('✅ Moneris QA Ticket:', this.ticket);
-
-                this.initializeMonerisCheckout();
+               if(result)
+               this.redirectToPaymentPage(result);
             })
             .catch(error => {
-                console.error('❌ Error getting Moneris ticket:', error);
-                alert(error.body?.message || 'Error initializing Moneris Checkout.');
+                this.error = error;
             });
     }
 
-    // === Initialize Moneris Checkout ===
-    initializeMonerisCheckout() {
-        console.log('🚀 Starting Moneris QA Checkout...');
-
-        this.monerisInstance = new MonerisCheckout(this.template);
-        this.monerisInstance.setMode('qa');
-        this.monerisInstance.setCheckoutDiv('monerisCheckout');
-
-        // === Register Callbacks ===
-        this.monerisInstance.setCallback('page_loaded', this.onPageLoaded);
-        this.monerisInstance.setCallback('cancel_transaction', this.onCancelTransaction);
-        this.monerisInstance.setCallback('payment_receipt', this.onPaymentReceipt);
-        this.monerisInstance.setCallback('payment_complete', this.onPaymentComplete);
-        this.monerisInstance.setCallback('error_event', this.onErrorEvent);
-
-        // === Start checkout ===
-        this.monerisInstance.startCheckout(this.ticket);
+     redirectToPaymentPage(paymentPageUrl) {
+        window.open(paymentPageUrl,"_self")
     }
 
-    // === CALLBACK IMPLEMENTATIONS ===
-    onPageLoaded() {
-        console.log('🟢 Page loaded successfully.');
-    }
+    /* ============================================================
+         Moneris PAY
+    ============================================================ */
 
-    onCancelTransaction() {
-        console.log('🟡 Transaction cancelled.');
-        alert('Transaction cancelled by user.');
-    }
-
-    onPaymentReceipt(receipt) {
-        console.log('🧾 Payment receipt received:', receipt);
-    }
-
-    onPaymentComplete(response) {
-        console.log('🎉 Payment complete:', response);
-        alert('Payment completed successfully!');
-    }
-
-    onErrorEvent(error) {
-        console.error('🔴 Moneris error:', error);
-        alert('Error during payment: ' + JSON.stringify(error));
-    }
+     // === User clicks Start Checkout ===
+        handleMonerisCheckout() {
+            createCheckoutTicket({ amount: 10.00 })
+                .then(result => {
+                    this.ticket = result;
+                    console.log('✅ Moneris QA Ticket:', this.ticket);
+    
+                    this.initializeMonerisCheckout();
+                })
+                .catch(error => {
+                    console.error('❌ Error getting Moneris ticket:', error);
+                    alert(error.body?.message || 'Error initializing Moneris Checkout.');
+                });
+        }
+    
+        // === Initialize Moneris Checkout ===
+        initializeMonerisCheckout() {
+            console.log('🚀 Starting Moneris QA Checkout...');
+    
+            this.monerisInstance = new MonerisCheckout(this.template);
+            this.monerisInstance.setMode('qa');
+            this.monerisInstance.setCheckoutDiv('monerisCheckout');
+    
+            // === Register Callbacks ===
+            this.monerisInstance.setCallback('page_loaded', this.onPageLoaded);
+            this.monerisInstance.setCallback('cancel_transaction', this.onCancelTransaction);
+            this.monerisInstance.setCallback('payment_receipt', this.onPaymentReceipt);
+            this.monerisInstance.setCallback('payment_complete', this.onPaymentComplete);
+            this.monerisInstance.setCallback('error_event', this.onErrorEvent);
+    
+            // === Start checkout ===
+            this.monerisInstance.startCheckout(this.ticket);
+        }
+    
+        // === CALLBACK IMPLEMENTATIONS ===
+        onPageLoaded() {
+            console.log('🟢 Page loaded successfully.');
+        }
+    
+        onCancelTransaction() {
+            console.log('🟡 Transaction cancelled.');
+            alert('Transaction cancelled by user.');
+        }
+    
+        onPaymentReceipt(receipt) {
+            console.log('🧾 Payment receipt received:', receipt);
+        }
+    
+        onPaymentComplete(response) {
+            console.log('🎉 Payment complete:', response);
+            alert('Payment completed successfully!');
+        }
+    
+        onErrorEvent(error) {
+            console.error('🔴 Moneris error:', error);
+            alert('Error during payment: ' + JSON.stringify(error));
+        }
 }
 
 /* ============================================================
