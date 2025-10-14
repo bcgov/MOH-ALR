@@ -1,6 +1,32 @@
-/*
-
-*/
+/**
+ * ================================================================================================
+ *  CLASS NAME      : MonerisReceiptWrapper
+ *  DESCRIPTION     : 
+ *      This Apex wrapper class is designed to deserialize the JSON response returned 
+ *      from the Moneris Payment Gateway's "receipt" API call. It encapsulates both 
+ *      the request and receipt details including transaction, card, fraud, and 
+ *      approval information.
+ *
+ *      It provides a static helper method "parse(String jsonResponse)" to easily 
+ *      convert the Moneris API JSON response into an Apex object structure for use 
+ *      within Salesforce (for example, when capturing payment status or updating 
+ *      transaction records such as RegulatoryTrxnFee).
+ *
+ *  FUNCTIONALITY   :
+ *      - Parses Moneris payment receipt JSON responses
+ *      - Provides typed access to receipt fields (e.g., reference_no, transaction_no)
+ *      - Used by Apex service classes like MonerisCheckoutServiceQA for processing 
+ *        payment confirmations
+ *
+ *  EXAMPLE USAGE   :
+ *      MonerisReceiptWrapper receipt = MonerisReceiptWrapper.parse(jsonResponse);
+ *      String refNo = receipt.response.receipt.cc.reference_no;
+ *
+ *  IMPLEMENTED BY  : Pawan Atri
+ *  IMPLEMENTED ON  : 14-Oct-2025
+ *  RELATED TICKET  : EHIS-248
+ * ================================================================================================
+ */
 public class MonerisReceiptWrapper {
     public Response response;
 
@@ -132,7 +158,12 @@ public class MonerisReceiptWrapper {
         public String details;
     }
     
-    public static MonerisReceiptWrapper parse(String jsonResponse){
+    /**
+     * Helper method to deserialize Moneris JSON response
+     * @param jsonResponse - JSON string returned by Moneris API
+     * @return MonerisReceiptWrapper - fully parsed Apex object
+     */
+    public static MonerisReceiptWrapper parse(String jsonResponse) {
         return (MonerisReceiptWrapper) JSON.deserialize(jsonResponse, MonerisReceiptWrapper.class);
     }
 }
