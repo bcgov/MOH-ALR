@@ -131,12 +131,19 @@ public class PHOCSMonerisService {
             status
         );
 
-        if (receiptWrapper != null) {
+        if (receiptWrapper != null && receiptWrapper.response.receipt != null) {
+            String receiptStatus;
+            if(receiptWrapper.response.receipt.result == 'a'){
+                receiptStatus = 'Paid';
+            }
+            if(receiptWrapper.response.receipt.result == 'd'){
+                receiptStatus = 'Canceled';
+            }
             updateRegulatoryTransFee(
                 recordId,
                 transFee.PHOCSMonerisTicketNumber__c,
                 receiptWrapper.response.receipt.cc.reference_no,
-                status
+                receiptStatus
             );
         }
     }

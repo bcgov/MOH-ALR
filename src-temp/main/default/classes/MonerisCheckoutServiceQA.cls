@@ -127,8 +127,8 @@ public with sharing class MonerisCheckoutServiceQA {
                 'action'      => 'receipt',
                 'ticket'      => transFee.PHOCSMonerisTicketNumber__c
                 };
-        
-        HttpRequest req = new HttpRequest();
+                    
+                    HttpRequest req = new HttpRequest();
         req.setEndpoint('https://gatewayt.moneris.com/chkt/request/request.php');
         req.setMethod('POST');
         req.setHeader('Content-Type', 'application/json');
@@ -138,11 +138,17 @@ public with sharing class MonerisCheckoutServiceQA {
         
         res = http.send(req);
         MonerisReceiptWrapper wrapper = MonerisReceiptWrapper.parse(res.getBody());
-        
-        transFee.PaymentDate__c = Date.today();
-        transFee.Status = status;
-        transFee.ReferenceNumber__c = wrapper.response.receipt.cc.reference_no;
-        transFees.add(transFee);
+        if(wrapper != null && wrapper.response.receipt != null){
+            transFee.PaymentDate__c = Date.today();
+            if(wrapper.response.receipt.result == 'a'){
+                transFee.Status = 'Paid';
+            }
+            if(wrapper.response.receipt.result == 'd'){
+                transFee.Status = 'Canceled';
+            }        
+            transFee.ReferenceNumber__c = wrapper.response.receipt.cc.reference_no;
+            transFees.add(transFee);
+        }
         if(transFees!= null && transFees.size() > 0){
             try{
                 update transFees; 
