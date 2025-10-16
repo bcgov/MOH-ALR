@@ -5,12 +5,12 @@
     <errorConditionFormula>OR(
    AND(
         NOT(ISBLANK(POEPOUTreatment__c)),
-        ISBLANK(Parent.Id)
+        ISBLANK(ParentAccount__c)
    ),
    AND(
         NOT(ISBLANK(POEPOUTreatment__c)),
-        NOT(ISBLANK(Parent.Id)),
-        NOT(ISPICKVAL(Parent.CategoryL1__c, &apos;Community Water System&apos;))
+        NOT(ISBLANK(ParentAccount__c)),
+        NOT(ISPICKVAL(ParentAccount__r.CategoryL1__c, &apos;Community Water System&apos;))
    )
 )</errorConditionFormula>
     <errorMessage>POE/POU Treatment should be populated only if the Parent Account is Community Water System</errorMessage>
