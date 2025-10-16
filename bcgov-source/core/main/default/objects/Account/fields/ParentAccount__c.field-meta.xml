@@ -3,7 +3,63 @@
     <fullName>ParentAccount__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Creating this field to show the child accounts on related list as Hierarchy doesn&apos;t support the related list</description>
-    <label>Parent Account</label>
+    <label>Parent</label>
+    <lookupFilter>
+        <active>true</active>
+        <booleanFilter>(1 AND 2) OR (3 AND 4) OR (5 AND 6) OR (7 AND 8) OR (9 AND 10)</booleanFilter>
+        <errorMessage>Sorry, that is an invalid selection. Please use the lookup to select a valid Account.</errorMessage>
+        <filterItems>
+            <field>$Source.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS HA Hierarchy</value>
+        </filterItems>
+        <filterItems>
+            <field>$Source.RecordTypeId</field>
+            <operation>equals</operation>
+            <valueField>Account.RecordTypeId</valueField>
+        </filterItems>
+        <filterItems>
+            <field>$Source.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Drinking Water Source Intake</value>
+        </filterItems>
+        <filterItems>
+            <field>Account.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Business Entity, PHOCS Drinking Water System</value>
+        </filterItems>
+        <filterItems>
+            <field>$Source.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Residence</value>
+        </filterItems>
+        <filterItems>
+            <field>Account.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Registrant</value>
+        </filterItems>
+        <filterItems>
+            <field>$Source.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Drinking Water System</value>
+        </filterItems>
+        <filterItems>
+            <field>Account.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Business Entity</value>
+        </filterItems>
+        <filterItems>
+            <field>$Source.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Facility</value>
+        </filterItems>
+        <filterItems>
+            <field>Account.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Business Entity, PHOCS Drinking Water System</value>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
     <referenceTo>Account</referenceTo>
     <relationshipLabel>Accounts (Parent Account)</relationshipLabel>
     <relationshipName>ChildAccounts</relationshipName>
