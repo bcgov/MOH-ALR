@@ -83,9 +83,7 @@ public class PHOCSMonerisReceipts {
             MonerisReceiptWrapper wrapper = MonerisReceiptWrapper.parse(res.getBody());
             return wrapper;
         } catch (Exception parseErr) {
-            throw new AuraHandledException(
-                'Response parse error: ' + parseErr.getMessage() + ' Body: ' + res.getBody()
-            );
+            throw new AuraHandledException('Response parse error: ' + parseErr.getMessage() + ' Body: ' + res.getBody());
         }
     }    
 }

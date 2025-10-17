@@ -43,7 +43,7 @@
  * ================================================================================================
  */
 public class PHOCSMonerisService {
-    static Map<String, PHOCSMonerisConfiguration__mdt> monerisConfig;
+    public static Map<String, PHOCSMonerisConfiguration__mdt> monerisConfig;
     
     static {
         if (monerisConfig == null) {
@@ -139,12 +139,7 @@ public class PHOCSMonerisService {
             if(receiptWrapper.response.receipt.result == 'd'){
                 receiptStatus = 'Canceled';
             }
-            updateRegulatoryTransFee(
-                recordId,
-                transFee.PHOCSMonerisTicketNumber__c,
-                receiptWrapper.response.receipt.cc.reference_no,
-                receiptStatus
-            );
+            updateRegulatoryTransFee(recordId, transFee.PHOCSMonerisTicketNumber__c, receiptWrapper.response.receipt.cc.reference_no, receiptStatus);
         }
     }
     

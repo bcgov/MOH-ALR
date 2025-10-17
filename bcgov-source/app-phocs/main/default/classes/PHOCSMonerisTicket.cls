@@ -55,12 +55,16 @@ public class PHOCSMonerisTicket {
         
         try {
             res = http.send(req);
+            System.debug(res);
             System.debug('Moneris Response: ' + res.getBody());
         } catch (Exception e) {
+            //System.debug(e);
+            //System.debug('Callout failed: ' + e.getMessage());
             throw new AuraHandledException('Callout failed: ' + e.getMessage());
         }
         
         if (res.getStatusCode() != 200) {
+            //System.debug('Moneris returned HTTP ' + res.getStatusCode() + ' ' + res.getStatus());
             throw new AuraHandledException('Moneris returned HTTP ' + res.getStatusCode() + ' ' + res.getStatus());
         }
         
@@ -72,12 +76,15 @@ public class PHOCSMonerisTicket {
                     ticket = (String) resp.get('ticket');
                     return ticket;
                 } else {
+                    //System.debug('Moneris did not return a ticket: ' + JSON.serialize(resp));
                     throw new AuraHandledException('Moneris did not return a ticket: ' + JSON.serialize(resp));
                 }
             } else {
+                //System.debug('Unexpected Moneris response: ' + res.getBody());
                 throw new AuraHandledException('Unexpected Moneris response: ' + res.getBody());
             }
         } catch (Exception parseErr) {
+            //System.debug('Response parse error: ' + parseErr.getMessage() + ' Body: ' + res.getBody());
             throw new AuraHandledException('Response parse error: ' + parseErr.getMessage() + ' Body: ' + res.getBody());
         }
     }

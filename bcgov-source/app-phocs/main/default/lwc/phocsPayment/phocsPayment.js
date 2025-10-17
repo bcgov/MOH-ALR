@@ -1,6 +1,6 @@
-import { LightningElement,api } from 'lwc';
+import { LightningElement, wire, track, api } from 'lwc';
 import getPaymentLinkUrl from '@salesforce/apex/PaymentController.getPaymentLinkUrl';    
-import { NavigationMixin } from 'lightning/navigation';
+import { CurrentPageReference, NavigationMixin } from 'lightning/navigation';
 import createCheckoutTicket from '@salesforce/apex/MonerisCheckoutServiceQA.createCheckoutTicket';
 import getPaymentSystemRedirectInfo from '@salesforce/apex/PHOCSPaymentController.getPaymentSystemRedirectInfo';
 
@@ -11,6 +11,23 @@ export default class PhocsPayment extends NavigationMixin(LightningElement) {
 
     ticket;
     monerisInstance;
+    
+    @api recordId;
+    @api amount;
+    @api customerId;
+
+    // === Get URL parameters ===
+    @wire(CurrentPageReference)
+    getStateParameters(currentPageReference) {
+        if (currentPageReference) {
+            this.recordId = currentPageReference.state.recordId;
+            this.amount = currentPageReference.state.Amount;
+            this.customerId = currentPageReference.state.CustomerId;
+            console.log('Record Id:', this.recordId);
+            console.log('Amount:', this.amount);
+            console.log('Customer Id:', this.customerId);
+        }
+    }
 
     connectedCallback() {
         this.redirectPaymentGateway();
@@ -35,7 +52,7 @@ export default class PhocsPayment extends NavigationMixin(LightningElement) {
         this.redirectUserGlobalPayPaymentPage();
     }
     MonerisPayHandler(){
-        this.handleMonerisCheckout();
+        this.redirectToRegulatoryPage();
     }
 
     redirectUserGlobalPayPaymentPage() {
@@ -58,6 +75,15 @@ export default class PhocsPayment extends NavigationMixin(LightningElement) {
     ============================================================ */
 
      // === User clicks Start Checkout ===
+
+     redirectToRegulatoryPage() {
+        const url = `/phocsmonerispayment?recordId=${this.recordId}&Amount=${this.amount}&CustomerId=${this.customerId}`;
+        console.log('🌐 Redirecting to:', url);
+        this[NavigationMixin.Navigate]({
+            type: 'standard__webPage',
+            attributes: { url }
+        });
+    }
         handleMonerisCheckout() {
             createCheckoutTicket({ amount: 10.00 })
                 .then(result => {
