@@ -1,7 +1,7 @@
 import { LightningElement, wire, track, api } from 'lwc';
 import { CurrentPageReference, NavigationMixin } from 'lightning/navigation';
-import createCheckoutTicket from '@salesforce/apex/MonerisCheckoutServiceQA.createCheckoutTicket';
-import capturePaymentStatus from '@salesforce/apex/MonerisCheckoutServiceQA.capturePaymentStatus';
+import createCheckoutTicket from '@salesforce/apex/PHOCSMonerisService.generateTicket';
+import capturePaymentStatus from '@salesforce/apex/PHOCSMonerisService.checkReceiptStatus';
 
 export default class MonerisCheckoutLwc extends NavigationMixin(LightningElement) {
     @track countdown = 30;
@@ -31,7 +31,7 @@ export default class MonerisCheckoutLwc extends NavigationMixin(LightningElement
 
     // === Start Checkout ===
     handleMonerisCheckout() {
-        createCheckoutTicket({ recordId: this.recordId, amount: this.amount })
+        createCheckoutTicket({ recordId: this.recordId })
             .then(result => {
                 this.ticket = result;
                 console.log('✅ Moneris QA Ticket:', this.ticket);
