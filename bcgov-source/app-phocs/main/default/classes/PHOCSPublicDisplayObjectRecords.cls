@@ -95,7 +95,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         
         System.debug('query' + query);
 
-        List<SObject> results = Database.query(query);
+        List<SObject> results = Database.query(String.escapeSingleQuotes(query));
         System.debug('results' + results);
         return results;
     }
@@ -169,7 +169,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
          }
         System.debug('query' + soqlQuery);
 
-        List<SObject> queryResults = Database.query(soqlQuery);
+        List<SObject> queryResults = Database.query(String.escapeSingleQuotes(soqlQuery));
         if(!queryResults.isEmpty()){
             if(wrapper != null){
             	results.add(wrapper.wrap(queryResults[0]));
@@ -283,7 +283,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
 
         query += getFacilitiesFilter(programArea);
         system.debug('query : ' + query);
-        for (Account sObj : Database.query(query)) {        
+        for (Account sObj : Database.query(String.escapeSingleQuotes(query))) {        
            results.add(wrapper.wrap(sObj));
         }
         system.debug('results : ' + results);
