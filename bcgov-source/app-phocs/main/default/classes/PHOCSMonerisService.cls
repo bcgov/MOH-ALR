@@ -64,6 +64,7 @@ public class PHOCSMonerisService {
      * @param recordId - RegulatoryTrxnFee record Id
      * @return String  - Generated Moneris checkout ticket
      */
+    @AuraEnabled(cacheable=false)
     public static String generateTicket(String recordId) {
         PHOCSMonerisConfiguration__mdt moneris;
         String ticket;
@@ -72,10 +73,17 @@ public class PHOCSMonerisService {
         if (transFee == null || transFee.Account == null || transFee.Account.HealthAuthority__c == '') {
             throw new AuraHandledException('Please provide a valid transaction ID');
         }
+        
+        //For-Testing only
+        String randomSuffix = String.valueOf(Math.abs(Crypto.getRandomInteger())).substring(0,5);
+        String orderNo = 'ORDER-' + DateTime.now().format('yyyyMMdd-HHmmss') + '-' + randomSuffix;
 
         ticket = PHOCSMonerisTicket.generateTicket(
             monerisConfig.get(transFee.Account.HealthAuthority__c),
-            transFee.Id,
+            //For Testing only
+            orderNo,
+            //For actual use: uncomment this below "transFee.Id"
+            //transFee.Id,
             transFee.TotalFeeAmount
         );
 
@@ -111,6 +119,7 @@ public class PHOCSMonerisService {
      * @param recordId - RegulatoryTrxnFee Id
      * @param status   - Payment status (e.g., 'Paid', 'Failed', 'Pending')
      */
+    @AuraEnabled(cacheable=false)
     public static void checkReceiptStatus(String recordId, String status) {
         PHOCSMonerisConfiguration__mdt moneris;
         List<RegulatoryTrxnFee> transFees = new List<RegulatoryTrxnFee>();
