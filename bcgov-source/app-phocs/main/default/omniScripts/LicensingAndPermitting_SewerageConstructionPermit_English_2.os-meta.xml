@@ -2446,8 +2446,42 @@
   &quot;dataJsonPath&quot; : &quot;&quot;,
   &quot;HTMLTemplateId&quot; : &quot;&quot;
 }</propertySetConfig>
-            <sequenceNumber>2.0</sequenceNumber>
+            <sequenceNumber>3.0</sequenceNumber>
             <type>Type Ahead Block</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>accFacilityType</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;defaultValue&quot; : &quot;%FacilityType%&quot;,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;required&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;repeat&quot; : false,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 12,
+  &quot;repeatClone&quot; : false,
+  &quot;readOnly&quot; : true,
+  &quot;label&quot; : &quot;Facility Type&quot;,
+  &quot;inputWidth&quot; : 12,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : true,
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;maxLength&quot; : 255,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;
+}</propertySetConfig>
+            <sequenceNumber>0.0</sequenceNumber>
+            <type>Text</type>
         </childElements>
         <childElements>
             <isActive>true</isActive>
@@ -2475,9 +2509,12 @@
   &quot;customAttributes&quot; : [ {
     &quot;name&quot; : &quot;record-id&quot;,
     &quot;source&quot; : &quot;%BusinessEntityAccountId%&quot;
+  }, {
+    &quot;name&quot; : &quot;parent-attribute&quot;,
+    &quot;source&quot; : &quot;%PHOCSReasonforApplying%&quot;
   } ]
 }</propertySetConfig>
-            <sequenceNumber>1.0</sequenceNumber>
+            <sequenceNumber>2.0</sequenceNumber>
             <type>Custom Lightning Web Component</type>
         </childElements>
         <childElements>
@@ -2509,6 +2546,13 @@
         &quot;FilterValue__c&quot; : &quot;SearchBusinessEntityAccountId&quot;,
         &quot;InterfaceObjectLookupOrder__c&quot; : 1,
         &quot;DomainObjectFieldAPIName__c&quot; : &quot;facilityAccObj&quot;
+      }, {
+        &quot;InterfaceObjectName__c&quot; : &quot;Account&quot;,
+        &quot;InterfaceFieldAPIName__c&quot; : &quot;Type&quot;,
+        &quot;FilterOperator__c&quot; : &quot;=&quot;,
+        &quot;FilterValue__c&quot; : &quot;SearchFacilityType&quot;,
+        &quot;InterfaceObjectLookupOrder__c&quot; : 1,
+        &quot;DomainObjectFieldAPIName__c&quot; : &quot;facilityAccObj&quot;
       } ],
       &quot;phase2MapItems&quot; : [ {
         &quot;DomainObjectFieldAPIName__c&quot; : &quot;name&quot;,
@@ -2524,6 +2568,9 @@
       &quot;inputParameters&quot; : [ {
         &quot;element&quot; : &quot;BusinessEntityAccountId&quot;,
         &quot;inputParam&quot; : &quot;SearchBusinessEntityAccountId&quot;
+      }, {
+        &quot;element&quot; : &quot;FacilityType&quot;,
+        &quot;inputParam&quot; : &quot;SearchFacilityType&quot;
       } ]
     }
   },
@@ -2553,7 +2600,7 @@
     &quot;default&quot; : null
   }
 }</propertySetConfig>
-            <sequenceNumber>3.0</sequenceNumber>
+            <sequenceNumber>4.0</sequenceNumber>
             <type>Lookup</type>
         </childElements>
         <childElements>
@@ -2603,7 +2650,7 @@
   &quot;optionWidth&quot; : 100,
   &quot;HTMLTemplateId&quot; : &quot;&quot;
 }</propertySetConfig>
-            <sequenceNumber>0.0</sequenceNumber>
+            <sequenceNumber>1.0</sequenceNumber>
             <type>Radio</type>
         </childElements>
         <isActive>true</isActive>
@@ -3152,7 +3199,7 @@
   &quot;conditionType&quot; : &quot;Hide if False&quot;,
   &quot;maxLength&quot; : 255,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;defaultValue&quot; : &quot;%Structure Name%&quot;
+  &quot;defaultValue&quot; : &quot;%StructureName%&quot;
 }</propertySetConfig>
                 <sequenceNumber>0.0</sequenceNumber>
                 <type>Text</type>
@@ -3686,7 +3733,7 @@
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;defaultValue&quot; : &quot;%PHOCSDescriptionOfProposedWorks%&quot;
 }</propertySetConfig>
-                <sequenceNumber>5.0</sequenceNumber>
+                <sequenceNumber>4.0</sequenceNumber>
                 <type>Text Area</type>
             </childElements>
             <childElements>
@@ -3722,7 +3769,7 @@
   &quot;hide&quot; : false,
   &quot;disOnTplt&quot; : false
 }</propertySetConfig>
-                <sequenceNumber>4.0</sequenceNumber>
+                <sequenceNumber>3.0</sequenceNumber>
                 <type>Text</type>
             </childElements>
             <childElements>
@@ -3757,7 +3804,7 @@
     }
   }
 }</propertySetConfig>
-                <sequenceNumber>2.0</sequenceNumber>
+                <sequenceNumber>1.0</sequenceNumber>
                 <type>Checkbox</type>
             </childElements>
             <childElements>
@@ -3792,7 +3839,7 @@
     }
   }
 }</propertySetConfig>
-                <sequenceNumber>3.0</sequenceNumber>
+                <sequenceNumber>2.0</sequenceNumber>
                 <type>Checkbox</type>
             </childElements>
             <childElements>
@@ -3855,14 +3902,14 @@
   &quot;label&quot; : &quot;Applicant&quot;,
   &quot;inputWidth&quot; : 12,
   &quot;help&quot; : false,
-  &quot;hide&quot; : false,
+  &quot;hide&quot; : true,
   &quot;disOnTplt&quot; : false,
   &quot;conditionType&quot; : &quot;Hide if False&quot;,
   &quot;maxLength&quot; : 255,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;defaultValue&quot; : &quot;%LogInUserContactId%&quot;
 }</propertySetConfig>
-                <sequenceNumber>1.0</sequenceNumber>
+                <sequenceNumber>5.0</sequenceNumber>
                 <type>Text</type>
             </childElements>
             <isActive>true</isActive>
@@ -5819,7 +5866,8 @@
   &quot;wpm&quot; : false,
   &quot;elementValueMap&quot; : {
     &quot;LicenseTypeNameForBLApplication&quot; : &quot;Sewerage Holding Tank Permit to Construct&quot;,
-    &quot;RecordtypeForBLApplication&quot; : &quot;ConstructionPermitApplication&quot;
+    &quot;RecordtypeForBLApplication&quot; : &quot;ConstructionPermitApplication&quot;,
+    &quot;FacilityType&quot; : &quot;Sewerage&quot;
   },
   &quot;showPersistentComponent&quot; : [ true, false ],
   &quot;label&quot; : &quot;SetValuesforBLALicenseType&quot;,
