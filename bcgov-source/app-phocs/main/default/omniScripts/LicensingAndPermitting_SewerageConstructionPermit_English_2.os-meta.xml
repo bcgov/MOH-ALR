@@ -1171,7 +1171,7 @@
                 <isActive>true</isActive>
                 <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
                 <level>2.0</level>
-                <name>PHOCSBillingAddress</name>
+                <name>PHOCSBillingAddressCity</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
   &quot;accessibleInFutureSteps&quot; : false,
@@ -1182,7 +1182,7 @@
   &quot;pattern&quot; : &quot;&quot;,
   &quot;repeatClone&quot; : false,
   &quot;readOnly&quot; : false,
-  &quot;label&quot; : &quot;Billing Address&quot;,
+  &quot;label&quot; : &quot;Billing Address (City)&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
   &quot;required&quot; : false,
@@ -1196,7 +1196,391 @@
   &quot;maxLength&quot; : 255,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;mask&quot; : &quot;&quot;,
-  &quot;defaultValue&quot; : &quot;%facilityAccBillingAddress%&quot;
+  &quot;defaultValue&quot; : &quot;%facilityAccBillingAddressCity%&quot;
+}</propertySetConfig>
+                <sequenceNumber>16.0</sequenceNumber>
+                <type>Text</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSBillingAddressCountry</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;optionSource&quot; : {
+    &quot;type&quot; : &quot;SObject&quot;,
+    &quot;source&quot; : &quot;Account.Physical_Address__CountryCode__s&quot;
+  },
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;repeatClone&quot; : false,
+  &quot;controllingField&quot; : {
+    &quot;element&quot; : &quot;&quot;,
+    &quot;type&quot; : &quot;&quot;,
+    &quot;source&quot; : &quot;&quot;
+  },
+  &quot;readOnly&quot; : false,
+  &quot;label&quot; : &quot;Billing Address (Country)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;options&quot; : [ ],
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;
+}</propertySetConfig>
+                <sequenceNumber>14.0</sequenceNumber>
+                <type>Select</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSBillingAddressPostalCode</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;repeatClone&quot; : false,
+  &quot;readOnly&quot; : false,
+  &quot;label&quot; : &quot;Billing Address (ZIP/Postal Code)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;repeat&quot; : false,
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;maxLength&quot; : 255,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;defaultValue&quot; : &quot;%facilityAccBillingAddressPostalCode%&quot;
+}</propertySetConfig>
+                <sequenceNumber>17.0</sequenceNumber>
+                <type>Text</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSBillingAddressState</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;optionSource&quot; : {
+    &quot;type&quot; : &quot;SObject&quot;,
+    &quot;source&quot; : &quot;Account.Physical_Address__StateCode__s&quot;
+  },
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;repeatClone&quot; : false,
+  &quot;controllingField&quot; : {
+    &quot;element&quot; : &quot;PHOCSBillingAddressCountry&quot;,
+    &quot;type&quot; : &quot;SObject&quot;,
+    &quot;source&quot; : &quot;Account.Physical_Address__CountryCode__s&quot;
+  },
+  &quot;readOnly&quot; : false,
+  &quot;label&quot; : &quot;Billing Address (State/Province)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;options&quot; : [ ],
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;
+}</propertySetConfig>
+                <sequenceNumber>15.0</sequenceNumber>
+                <type>Select</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSBillingAddressStreet</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 12,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;repeatClone&quot; : false,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;readOnly&quot; : false,
+  &quot;label&quot; : &quot;Billing Address (Street)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;repeat&quot; : false,
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;maxLength&quot; : 255,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;defaultValue&quot; : &quot;%facilityAccBillingAddressStreet%&quot;
+}</propertySetConfig>
+                <sequenceNumber>13.0</sequenceNumber>
+                <type>Text Area</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSDrivingDirections</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;Driving Directions&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : &quot;%facilityAccPhysicalAddressDrivingDirections%&quot;,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;maxLength&quot; : 255,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+                <sequenceNumber>8.0</sequenceNumber>
+                <type>Text</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSMailingAddressCity</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;required&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;repeat&quot; : false,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;repeatClone&quot; : false,
+  &quot;readOnly&quot; : false,
+  &quot;label&quot; : &quot;Mailing Address (City)&quot;,
+  &quot;inputWidth&quot; : 12,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;maxLength&quot; : 255,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;defaultValue&quot; : &quot;%facilityAccMailingAddressCity%&quot;
+}</propertySetConfig>
+                <sequenceNumber>10.0</sequenceNumber>
+                <type>Text</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSMailingAddressCountry</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;optionSource&quot; : {
+    &quot;type&quot; : &quot;SObject&quot;,
+    &quot;source&quot; : &quot;Account.Physical_Address__CountryCode__s&quot;
+  },
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;repeatClone&quot; : false,
+  &quot;controllingField&quot; : {
+    &quot;element&quot; : &quot;&quot;,
+    &quot;type&quot; : &quot;&quot;,
+    &quot;source&quot; : &quot;&quot;
+  },
+  &quot;readOnly&quot; : false,
+  &quot;label&quot; : &quot;Mailing Address (Country)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;options&quot; : [ ],
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;
+}</propertySetConfig>
+                <sequenceNumber>7.0</sequenceNumber>
+                <type>Select</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSMailingAddressPostalCode</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;required&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;repeat&quot; : false,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;repeatClone&quot; : false,
+  &quot;readOnly&quot; : false,
+  &quot;label&quot; : &quot;Mailing Address (ZIP/Postal Code)&quot;,
+  &quot;inputWidth&quot; : 12,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;maxLength&quot; : 255,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;defaultValue&quot; : &quot;%facilityAccMailingAddressPostalCode%&quot;
+}</propertySetConfig>
+                <sequenceNumber>11.0</sequenceNumber>
+                <type>Text</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSMailingAddressState</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;optionSource&quot; : {
+    &quot;type&quot; : &quot;SObject&quot;,
+    &quot;source&quot; : &quot;Account.Physical_Address__StateCode__s&quot;
+  },
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;repeatClone&quot; : false,
+  &quot;controllingField&quot; : {
+    &quot;element&quot; : &quot;PHOCSMailingAddressCountry&quot;,
+    &quot;type&quot; : &quot;SObject&quot;,
+    &quot;source&quot; : &quot;Account.Physical_Address__CountryCode__s&quot;
+  },
+  &quot;readOnly&quot; : false,
+  &quot;label&quot; : &quot;Mailing Address (State/Province)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;options&quot; : [ ],
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;
+}</propertySetConfig>
+                <sequenceNumber>9.0</sequenceNumber>
+                <type>Select</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSMailingAddressStreet</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 12,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;repeatClone&quot; : false,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;readOnly&quot; : false,
+  &quot;label&quot; : &quot;Mailing Address (Street)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;repeat&quot; : false,
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;maxLength&quot; : 255,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;defaultValue&quot; : &quot;%facilityAccMailingAddressStreet%&quot;
+}</propertySetConfig>
+                <sequenceNumber>6.0</sequenceNumber>
+                <type>Text Area</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSPhysicalAddressCity</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Physical Address (City)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : &quot;%facilityAccPhysicalAddressCity%&quot;,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;maxLength&quot; : 255,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>2.0</sequenceNumber>
                 <type>Text</type>
@@ -1205,69 +1589,187 @@
                 <isActive>true</isActive>
                 <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
                 <level>2.0</level>
-                <name>PHOCSMailingAddress</name>
+                <name>PHOCSPhysicalAddressCountry</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
   &quot;controlWidth&quot; : 6,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;repeatClone&quot; : false,
-  &quot;readOnly&quot; : false,
-  &quot;label&quot; : &quot;Mailing Address&quot;,
+  &quot;label&quot; : &quot;Physical Address (Country)&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
   &quot;required&quot; : false,
-  &quot;help&quot; : false,
-  &quot;hide&quot; : false,
-  &quot;debounceValue&quot; : 0,
   &quot;repeat&quot; : false,
-  &quot;disOnTplt&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : null,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;options&quot; : [ ],
+  &quot;optionSource&quot; : {
+    &quot;type&quot; : &quot;SObject&quot;,
+    &quot;source&quot; : &quot;Account.Physical_Address__CountryCode__s&quot;
+  },
+  &quot;controllingField&quot; : {
+    &quot;element&quot; : &quot;&quot;,
+    &quot;type&quot; : &quot;&quot;,
+    &quot;source&quot; : &quot;&quot;
+  },
+  &quot;show&quot; : null,
   &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;maxLength&quot; : 255,
+  &quot;accessibleInFutureSteps&quot; : false,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;,
-  &quot;defaultValue&quot; : &quot;%facilityAccMailingAddress%&quot;
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>1.0</sequenceNumber>
+                <type>Select</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSPhysicalAddressPostalCode</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Physical Address (ZIP/Postal Code)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : &quot;%facilityAccPhysicalAddressPostalCode%&quot;,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;maxLength&quot; : 255,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+                <sequenceNumber>4.0</sequenceNumber>
                 <type>Text</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
                 <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
                 <level>2.0</level>
-                <name>PHOCSPhysicalAddress</name>
+                <name>PHOCSPhysicalAddressState</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Physical Address (State/Province)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : null,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;options&quot; : [ ],
+  &quot;optionSource&quot; : {
+    &quot;type&quot; : &quot;SObject&quot;,
+    &quot;source&quot; : &quot;Account.Physical_Address__StateCode__s&quot;
+  },
+  &quot;controllingField&quot; : {
+    &quot;element&quot; : &quot;PHOCSPhysicalAddressCountry&quot;,
+    &quot;type&quot; : &quot;SObject&quot;,
+    &quot;source&quot; : &quot;Account.Physical_Address__CountryCode__s&quot;
+  },
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+                <sequenceNumber>3.0</sequenceNumber>
+                <type>Select</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSPhysicalAddressStreet</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;Physical Address (Street)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : &quot;%facilityAccPhysicalAddressStreet%&quot;,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;pattern&quot; : &quot;&quot;,
   &quot;ptrnErrText&quot; : &quot;&quot;,
   &quot;minLength&quot; : 0,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;showInputWidth&quot; : false,
-  &quot;required&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;,
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
-  &quot;controlWidth&quot; : 12,
-  &quot;repeatClone&quot; : false,
-  &quot;readOnly&quot; : false,
-  &quot;label&quot; : &quot;Physical Address&quot;,
-  &quot;inputWidth&quot; : 12,
-  &quot;help&quot; : false,
-  &quot;hide&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
   &quot;maxLength&quot; : 255,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;debounceValue&quot; : 0,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;defaultValue&quot; : &quot;%AccFacilitySearch-Block:facilityAccPhysicalAddress%&quot;
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>0.0</sequenceNumber>
-                <type>Text</type>
+                <type>Text Area</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>TextBlock3</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;TextBlock3&quot;,
+  &quot;text&quot; : &quot;&quot;,
+  &quot;show&quot; : null,
+  &quot;dataJSON&quot; : false,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;textKey&quot; : &quot;&quot;,
+  &quot;sanitize&quot; : false
+}</propertySetConfig>
+                <sequenceNumber>5.0</sequenceNumber>
+                <type>Text Block</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>TextBlock4</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;controlWidth&quot; : 12.0,
+  &quot;label&quot; : &quot;TextBlock3&quot;,
+  &quot;text&quot; : &quot;&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;dataJSON&quot; : false,
+  &quot;textKey&quot; : &quot;&quot;,
+  &quot;sanitize&quot; : false
+}</propertySetConfig>
+                <sequenceNumber>12.0</sequenceNumber>
+                <type>Text Block</type>
             </childElements>
             <isActive>true</isActive>
             <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
@@ -3301,129 +3803,6 @@
                 <isActive>true</isActive>
                 <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
                 <level>2.0</level>
-                <name>PHOCSBillingAddressReview</name>
-                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-                <propertySetConfig>{
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
-  &quot;controlWidth&quot; : 6,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;defaultValue&quot; : &quot;%PHOCSBillingAddress%&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;repeatClone&quot; : false,
-  &quot;readOnly&quot; : true,
-  &quot;label&quot; : &quot;Billing Address&quot;,
-  &quot;showInputWidth&quot; : false,
-  &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;help&quot; : false,
-  &quot;hide&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;maxLength&quot; : 255,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;
-}</propertySetConfig>
-                <sequenceNumber>2.0</sequenceNumber>
-                <type>Text</type>
-            </childElements>
-            <childElements>
-                <isActive>true</isActive>
-                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-                <level>2.0</level>
-                <name>PHOCSMailingAddressReview</name>
-                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-                <propertySetConfig>{
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
-  &quot;controlWidth&quot; : 6,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;defaultValue&quot; : &quot;%PHOCSMailingAddress%&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;repeatClone&quot; : false,
-  &quot;readOnly&quot; : true,
-  &quot;label&quot; : &quot;Mailing Address&quot;,
-  &quot;showInputWidth&quot; : false,
-  &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;help&quot; : false,
-  &quot;hide&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;maxLength&quot; : 255,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;
-}</propertySetConfig>
-                <sequenceNumber>1.0</sequenceNumber>
-                <type>Text</type>
-            </childElements>
-            <childElements>
-                <isActive>true</isActive>
-                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-                <level>2.0</level>
-                <name>PHOCSPhysicalAddressReview</name>
-                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-                <propertySetConfig>{
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
-  &quot;controlWidth&quot; : 12,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;defaultValue&quot; : &quot;%PHOCSPhysicalAddress%&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;repeatClone&quot; : false,
-  &quot;readOnly&quot; : true,
-  &quot;label&quot; : &quot;Physical Address&quot;,
-  &quot;showInputWidth&quot; : false,
-  &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;help&quot; : false,
-  &quot;hide&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;maxLength&quot; : 255,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;
-}</propertySetConfig>
-                <sequenceNumber>0.0</sequenceNumber>
-                <type>Text</type>
-            </childElements>
-            <isActive>true</isActive>
-            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-            <level>1.0</level>
-            <name>AddressInformationReview</name>
-            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-            <propertySetConfig>{
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;hide&quot; : false,
-  &quot;controlWidth&quot; : 12.0,
-  &quot;repeat&quot; : false,
-  &quot;repeatClone&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;label&quot; : &quot;Address Information&quot;,
-  &quot;ariaLevel&quot; : 3.0,
-  &quot;collapse&quot; : false,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;
-}</propertySetConfig>
-            <sequenceNumber>3.0</sequenceNumber>
-            <type>Block</type>
-        </childElements>
-        <childElements>
-            <childElements>
-                <isActive>true</isActive>
-                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-                <level>2.0</level>
                 <name>PHOCSAccountNameReview</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
@@ -3930,6 +4309,616 @@
   &quot;HTMLTemplateId&quot; : &quot;&quot;
 }</propertySetConfig>
             <sequenceNumber>7.0</sequenceNumber>
+            <type>Block</type>
+        </childElements>
+        <childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSBillingAddressCityReview</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;repeatClone&quot; : false,
+  &quot;readOnly&quot; : true,
+  &quot;label&quot; : &quot;Billing Address (City)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;repeat&quot; : false,
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;maxLength&quot; : 255,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;defaultValue&quot; : &quot;%PHOCSBillingAddressCity%&quot;
+}</propertySetConfig>
+                <sequenceNumber>16.0</sequenceNumber>
+                <type>Text</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSBillingAddressCountryReview</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Billing Address (Country)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : true,
+  &quot;defaultValue&quot; : &quot;%PHOCSBillingAddressCountry%&quot;,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;maxLength&quot; : 255,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+                <sequenceNumber>14.0</sequenceNumber>
+                <type>Text</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSBillingAddressPostalCodeReview</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;repeatClone&quot; : false,
+  &quot;readOnly&quot; : true,
+  &quot;label&quot; : &quot;Billing Address (ZIP/Postal Code)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;repeat&quot; : false,
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;maxLength&quot; : 255,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;defaultValue&quot; : &quot;%PHOCSBillingAddressPostalCode%&quot;
+}</propertySetConfig>
+                <sequenceNumber>17.0</sequenceNumber>
+                <type>Text</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSBillingAddressStateReview</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Billing Address (State/Province)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : true,
+  &quot;defaultValue&quot; : &quot;%PHOCSBillingAddressState%&quot;,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;maxLength&quot; : 255,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+                <sequenceNumber>15.0</sequenceNumber>
+                <type>Text</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSBillingAddressStreetReview</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 12,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;repeatClone&quot; : false,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;readOnly&quot; : true,
+  &quot;label&quot; : &quot;Billing Address (Street)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;repeat&quot; : false,
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;maxLength&quot; : 255,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;defaultValue&quot; : &quot;%PHOCSBillingAddressStreet%&quot;
+}</propertySetConfig>
+                <sequenceNumber>13.0</sequenceNumber>
+                <type>Text Area</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSDrivingDirectionsReview</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;required&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;repeat&quot; : false,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 12,
+  &quot;repeatClone&quot; : false,
+  &quot;readOnly&quot; : true,
+  &quot;label&quot; : &quot;Driving Directions&quot;,
+  &quot;inputWidth&quot; : 12,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;maxLength&quot; : 255,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;defaultValue&quot; : &quot;%PHOCSDrivingDirections%&quot;
+}</propertySetConfig>
+                <sequenceNumber>6.0</sequenceNumber>
+                <type>Text</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSMailingAddressCityReview</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;repeatClone&quot; : false,
+  &quot;readOnly&quot; : true,
+  &quot;label&quot; : &quot;Mailing Address (City)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;repeat&quot; : false,
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;maxLength&quot; : 255,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;defaultValue&quot; : &quot;%PHOCSMailingAddressCity%&quot;
+}</propertySetConfig>
+                <sequenceNumber>10.0</sequenceNumber>
+                <type>Text</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSMailingAddressCountryReview</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Mailing Address (Country)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : true,
+  &quot;defaultValue&quot; : &quot;%PHOCSMailingAddressCountry%&quot;,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;maxLength&quot; : 255,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+                <sequenceNumber>8.0</sequenceNumber>
+                <type>Text</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSMailingAddressPostalCodeReview</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;repeatClone&quot; : false,
+  &quot;readOnly&quot; : true,
+  &quot;label&quot; : &quot;Mailing Address (ZIP/Postal Code)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;repeat&quot; : false,
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;maxLength&quot; : 255,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;defaultValue&quot; : &quot;%PHOCSMailingAddressPostalCode%&quot;
+}</propertySetConfig>
+                <sequenceNumber>11.0</sequenceNumber>
+                <type>Text</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSMailingAddressStateReview</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Mailing Address (State/Province)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : true,
+  &quot;defaultValue&quot; : &quot;%PHOCSMailingAddressState%&quot;,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;maxLength&quot; : 255,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+                <sequenceNumber>9.0</sequenceNumber>
+                <type>Text</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSMailingAddressStreetReview</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 12,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;repeatClone&quot; : false,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;readOnly&quot; : true,
+  &quot;label&quot; : &quot;Mailing Address (Street)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;repeat&quot; : false,
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;maxLength&quot; : 255,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;defaultValue&quot; : &quot;%PHOCSMailingAddressStreet%&quot;
+}</propertySetConfig>
+                <sequenceNumber>7.0</sequenceNumber>
+                <type>Text Area</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSPhysicalAddressCityReview</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Physical Address (City)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : true,
+  &quot;defaultValue&quot; : &quot;%PHOCSPhysicalAddressCity%&quot;,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;maxLength&quot; : 255,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+                <sequenceNumber>3.0</sequenceNumber>
+                <type>Text</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSPhysicalAddressCountryReview</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Physical Address (Country)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : true,
+  &quot;defaultValue&quot; : &quot;%PHOCSPhysicalAddressCountry%&quot;,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;maxLength&quot; : 255,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+                <sequenceNumber>1.0</sequenceNumber>
+                <type>Text</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSPhysicalAddressPostalCodeReview</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;required&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;repeat&quot; : false,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;repeatClone&quot; : false,
+  &quot;readOnly&quot; : true,
+  &quot;label&quot; : &quot;Physical Address (ZIP/Postal Code)&quot;,
+  &quot;inputWidth&quot; : 12,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;maxLength&quot; : 255,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;defaultValue&quot; : &quot;%PHOCSPhysicalAddressPostalCode%&quot;
+}</propertySetConfig>
+                <sequenceNumber>4.0</sequenceNumber>
+                <type>Text</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSPhysicalAddressStateReview</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;required&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;repeat&quot; : false,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;repeatClone&quot; : false,
+  &quot;readOnly&quot; : true,
+  &quot;label&quot; : &quot;Physical Address (State/Province)&quot;,
+  &quot;inputWidth&quot; : 12,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;maxLength&quot; : 255,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;defaultValue&quot; : &quot;%PHOCSPhysicalAddressState%&quot;
+}</propertySetConfig>
+                <sequenceNumber>2.0</sequenceNumber>
+                <type>Text</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSPhysicalAddressStreetReview</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 12,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;repeatClone&quot; : false,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;readOnly&quot; : true,
+  &quot;label&quot; : &quot;Physical Address (Street)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;repeat&quot; : false,
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;maxLength&quot; : 255,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;defaultValue&quot; : &quot;%PHOCSPhysicalAddressStreet%&quot;
+}</propertySetConfig>
+                <sequenceNumber>0.0</sequenceNumber>
+                <type>Text Area</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>TextBlock5</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;controlWidth&quot; : 12.0,
+  &quot;label&quot; : &quot;TextBlock3&quot;,
+  &quot;text&quot; : &quot;&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;dataJSON&quot; : false,
+  &quot;textKey&quot; : &quot;&quot;,
+  &quot;sanitize&quot; : false
+}</propertySetConfig>
+                <sequenceNumber>12.0</sequenceNumber>
+                <type>Text Block</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>TextBlock6</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;controlWidth&quot; : 12.0,
+  &quot;label&quot; : &quot;TextBlock3&quot;,
+  &quot;text&quot; : &quot;&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;dataJSON&quot; : false,
+  &quot;textKey&quot; : &quot;&quot;,
+  &quot;sanitize&quot; : false
+}</propertySetConfig>
+                <sequenceNumber>5.0</sequenceNumber>
+                <type>Text Block</type>
+            </childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>Block2</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;controlWidth&quot; : 12,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;label&quot; : &quot;Address Information&quot;,
+  &quot;ariaLevel&quot; : 3,
+  &quot;collapse&quot; : false,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;
+}</propertySetConfig>
+            <sequenceNumber>3.0</sequenceNumber>
             <type>Block</type>
         </childElements>
         <childElements>
