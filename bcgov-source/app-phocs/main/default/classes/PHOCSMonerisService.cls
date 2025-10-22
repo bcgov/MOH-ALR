@@ -65,7 +65,9 @@ public class PHOCSMonerisService {
      * @return String  - Generated Moneris checkout ticket
      */
     @AuraEnabled(cacheable=false)
-    public static String generateTicket(String recordId) {
+    public static Map<String, String> generateTicket(String recordId) {
+        Map<String, String> response = new Map<String, String>();
+
         PHOCSMonerisConfiguration__mdt moneris;
         String ticket;
         RegulatoryTrxnFee transFee = getRegulatoryTransFee(recordId);
@@ -73,25 +75,29 @@ public class PHOCSMonerisService {
         if (transFee == null || transFee.Account == null || transFee.Account.HealthAuthority__c == '') {
             throw new AuraHandledException('Please provide a valid transaction ID');
         }
+        moneris = monerisConfig.get(transFee.Account.HealthAuthority__c);
         
         //For-Testing only
-        String randomSuffix = String.valueOf(Math.abs(Crypto.getRandomInteger())).substring(0,5);
-        String orderNo = 'ORDER-' + DateTime.now().format('yyyyMMdd-HHmmss') + '-' + randomSuffix;
-
+        String orderNo = 'ORDER-' + DateTime.now().format('yyyyMMdd-HHmmss') + '-' + transFee.Name;
+		System.debug('Endpoint: ' + 'callout:Moneris/chktv2/request/request.php');
+        
         ticket = PHOCSMonerisTicket.generateTicket(
-            monerisConfig.get(transFee.Account.HealthAuthority__c),
+            moneris,
             //For Testing only
             orderNo,
-            //For actual use: uncomment this below "transFee.Id"
-            //transFee.Id,
+            //For actual use: uncomment this below "transFee.Name"
+            //transFee.Name,
             transFee.TotalFeeAmount
         );
 
         if (ticket != null && ticket != '') {
             updateRegulatoryTransFee(recordId, ticket, null, null);
+            response.put('ticket', ticket);
         }
+        response.put('environment', moneris.Environment__c);
+        response.put('baseUrl', moneris.Endpoints__c);
 
-        return ticket;
+        return response;
     }
     
     /**
@@ -102,7 +108,7 @@ public class PHOCSMonerisService {
      */
     public static RegulatoryTrxnFee getRegulatoryTransFee(Id recordId) {
         return [
-            SELECT Id, Status, AccountId, Account.HealthAuthority__c, 
+            SELECT Id, Name, Status, AccountId, Account.HealthAuthority__c, 
                    Account.AccountNumberRTPrefixed__c, Account.AccountNumber, 
                    Account.AccountNumberAuto__c, TotalFeeAmount, ReferenceNumber__c, 
                    PHOCSMonerisTicketNumber__c
