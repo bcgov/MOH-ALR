@@ -31,18 +31,12 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
     private Object invokeMethod(String methodName, Map<String, Object> inputMap, Map<String, Object> outMap, Map<String, Object> options) {
          List<SObject> lstSobject = new List<SObject>();
         if(methodName == 'getInspectionDetails'){
-            system.debug('options'+options);
-			system.debug('InputMAP'+inputMap);
             lstSobject =  getDynamicQueryResults(String.valueof(inputMap.get('objectAPIName')));
         }
         if(methodName == 'getRecordById'){
-            system.debug('options'+options);
-			system.debug('InputMAP'+inputMap);
             lstSobject =  getRecordById(String.valueof(inputMap.get('recordId')));
         }
          if(methodName == 'getRelatedListById'){
-            system.debug('options'+options);
-			system.debug('InputMAP'+inputMap);
             lstSobject =  getRelatedListById(String.valueof(inputMap.get('recordId')),String.valueof(inputMap.get('childSobjectAPIName')));
         }
         return outMap.put('result',lstSobject);
@@ -72,7 +66,6 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             throw new AuraHandledException('Record ID is required.');
         }
          String objectName = recordId.getSObjectType().getDescribe().getName();
-         system.debug('ObjectName'+objectName);
          
          PHOCSSobjectVsQuery__mdt queryConfig = [
                  SELECT ObjectQuery__c ,ParentFieldAPIName__c
@@ -86,17 +79,16 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         }
 
         String soqlQuery = queryConfig.ObjectQuery__c;
-          String query ;
-         if(string.isNotBlank(queryConfig.ParentFieldAPIName__c)){
-             query = soqlQuery + ' AND ' + queryConfig.ParentFieldAPIName__c + ' = :recordId';
-         }else{
-              query = soqlQuery + ' WHERE Id = :recordId LIMIT 1';
-         }
-        
-        System.debug('query' + query);
+        String query = soqlQuery;
+        if(soqlQuery.indexOf('LIMIT') == -1){
+            if(string.isNotBlank(queryConfig.ParentFieldAPIName__c)){
+                 query = soqlQuery + ' AND ' + queryConfig.ParentFieldAPIName__c + ' = :recordId';
+            }else if(soqlQuery.indexOf('WHERE') == -1){
+                  query = soqlQuery + ' WHERE Id = :recordId LIMIT 1';
+            }
+        }
 
-        List<SObject> results = Database.query(String.escapeSingleQuotes(query));
-        System.debug('results' + results);
+        List<SObject> results = Database.query(query);
         return results;
     }
     //Method to get Sobject related list 
@@ -105,17 +97,15 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             throw new AuraHandledException('Record ID is required.');
         }
          String parentSObjectName = recordId.getSObjectType().getDescribe().getName();
-         system.debug('ParentObjectName'+parentSObjectName);
-         system.debug('ChildObjectName'+childSobjectAPIName);
-         
-         
+
          PHOCSSobjectVsQuery__mdt queryConfig = [
                  SELECT ObjectQuery__c, ParentFieldAPIName__c 
                  FROM PHOCSSobjectVsQuery__mdt 
                  WHERE Type__c = 'Related' AND 
                        ParentSobjectAPIName__c =:parentSObjectName AND 
                        ChildSobjectAPIName__c = :childSobjectAPIName AND 
-                       SobjectAPIName__c = :childSobjectAPIName        
+                       SobjectAPIName__c = :childSobjectAPIName 
+                LIMIT 1
              ];
 
         if (queryConfig == null || String.isBlank(queryConfig.ObjectQuery__c)) {
@@ -130,10 +120,8 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
          if(parentSObjectName == 'Account' &&  childSobjectAPIName == 'Visit'){  //Inspection Related List for Account
             soqlQuery = soqlQuery + ' AND AccountId = :recordId';  
          }         
-         System.debug('query' + soqlQuery);
 
-        List<SObject> results = Database.query(String.escapeSingleQuotes(soqlQuery));
-         system.debug('Results-------------->'+results);
+        List<SObject> results = Database.query(soqlQuery);
         return results;
     }
 	
@@ -153,7 +141,6 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             
          String objectName = recordId.getSObjectType().getDescribe().getName();
          SObjectWrapper wrapper = wrapperRegistry.get(objectName);
-         system.debug('ObjectName'+objectName);
          
          String soqlQuery;        
          if(string.isNotBlank(configName)){
@@ -167,9 +154,8 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
          }else{
              soqlQuery = getRecordDetailsQuery(recordId);
          }
-        System.debug('query' + soqlQuery);
 
-        List<SObject> queryResults = Database.query(String.escapeSingleQuotes(soqlQuery));
+        List<SObject> queryResults = Database.query(soqlQuery);
         if(!queryResults.isEmpty()){
             if(wrapper != null){
             	results.add(wrapper.wrap(queryResults[0]));
@@ -177,7 +163,6 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 results.add(queryResults[0]);
             }
         }
-        System.debug('results' + results);
         return results;
     }
     
@@ -209,7 +194,6 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         SObjectWrapper wrapper = wrapperRegistry.get(queryConfig.ChildSobjectAPIName__c);
         List<Object> results = new List<Object>();
         
-        system.debug('soqlQuery : ' + queryConfig.ObjectQuery__c);
         List<SObject> queryResults = Database.query(queryConfig.ObjectQuery__c);
         for (SObject sObj : queryResults) {        
             if (wrapper != null) {
@@ -218,8 +202,6 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 results.add(sObj);
             }
         }
-        system.debug('results : ' + results);
-
         return results;
     }
 	
@@ -240,8 +222,6 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             throw new QueryException('No SOQL query found for related list object');
         }
 
-        system.debug('soqlQuery : ' + queryConfig.ObjectQuery__c);
-		
         SObjectWrapper wrapper = wrapperRegistry.get(queryConfig.DeveloperName);
         List<Object> results = new List<Object>();
         for (SObject sObj : Database.query(queryConfig.ObjectQuery__c)) {        
@@ -251,7 +231,6 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 results.add(sObj);
             }
         }
-        system.debug('results : ' + results);
         return results;
     }
     
@@ -275,18 +254,15 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
     public static List<Object> getFacilityList(string programArea) {
         List<Object> results = new List<Object>();
         FacilityWrapper wrapper = new FacilityWrapper();
-        system.debug('programArea : ' + programArea);
         string query = 'SELECT Id,Name,Type, CategoryL1__c,CategoryL2__c,HealthAuthority__c,Phone,ParentAccount__r.Name,' +
                               'FacilityCHSAText__c,Physical_Address__c, PHOCSNumberOfInspections__c,' +
                               'PHOCSOutstandingViolations__c, LastInspectionDate__c ' +
                         'FROM Account';
 
         query += getFacilitiesFilter(programArea);
-        system.debug('query : ' + query);
-        for (Account sObj : Database.query(String.escapeSingleQuotes(query))) {        
+        for (Account sObj : Database.query(query)) {        
            results.add(wrapper.wrap(sObj));
         }
-        system.debug('results : ' + results);
         return results;
     }
                                                                 
@@ -310,7 +286,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             when 'personal-services' {
                return ' Where RecordType.DeveloperName=\'Facility\' AND Type=\'Personal Services\'';
             }	
-            when 'tobacco-vapour ' {		
+            when 'tobacco-vapour' {		
                return ' Where RecordType.DeveloperName=\'Facility\' AND Type=\'Tobacco and Vapour\'';
             }
             when 'recreational-water' {
