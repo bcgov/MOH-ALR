@@ -48,7 +48,8 @@ private class PHOCSMonerisServiceTest {
 
         // Replace real method calls with mocks using Stub API
         Test.startTest();
-        String generatedTicket = PHOCSMonerisService.generateTicket(fee.Id);
+        Map<String, String> results = PHOCSMonerisService.generateTicket(fee.Id);
+        String generatedTicket = results.get('ticket');
         Test.stopTest();
 
         // Assert
