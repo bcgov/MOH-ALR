@@ -20,6 +20,11 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             output.put('result',lstSobjects);
             return output;
         }
+        if(action == 'getFacilityList'){
+            List<Object> lstSobjects =  getFacilityList(String.valueof(input.get('programArea')));
+            output.put('result', lstSobjects);
+            return output;
+        }
         return invokeMethod(action, input, output, options);
         
     }
@@ -70,7 +75,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
          system.debug('ObjectName'+objectName);
          
          PHOCSSobjectVsQuery__mdt queryConfig = [
-                 SELECT ObjectQuery__c 
+                 SELECT ObjectQuery__c ,ParentFieldAPIName__c
                  FROM PHOCSSobjectVsQuery__mdt 
                  WHERE Type__c = 'Record' AND SobjectAPIName__c = :objectName 
                  LIMIT 1
@@ -81,7 +86,13 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         }
 
         String soqlQuery = queryConfig.ObjectQuery__c;
-        String query = soqlQuery + ' WHERE Id = :recordId LIMIT 1';
+          String query ;
+         if(string.isNotBlank(queryConfig.ParentFieldAPIName__c)){
+             query = soqlQuery + ' AND ' + queryConfig.ParentFieldAPIName__c + ' = :recordId';
+         }else{
+              query = soqlQuery + ' WHERE Id = :recordId LIMIT 1';
+         }
+        
         System.debug('query' + query);
 
         List<SObject> results = Database.query(String.escapeSingleQuotes(query));
@@ -136,29 +147,29 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         Map<String, SObjectWrapper> wrapperRegistry = new Map<String, SObjectWrapper>{
             'Account' => new AccountDetailsWrapper(),
             'LabTestRequisition__c' => new LabTestRequisitionDetailsWrapper(),
-            'Case' => new CaseDetailsWrapper()
+            'Case' => new CaseDetailsWrapper(),
+            'RegulatoryTrxnFeeItem' => new RegulatoryTrxnFeeItemDetailsWrapper()
         };
             
          String objectName = recordId.getSObjectType().getDescribe().getName();
          SObjectWrapper wrapper = wrapperRegistry.get(objectName);
          system.debug('ObjectName'+objectName);
          
-         PHOCSSobjectVsQuery__mdt queryConfig = [
+         String soqlQuery;        
+         if(string.isNotBlank(configName)){
+         	PHOCSSobjectVsQuery__mdt queryConfig = [
                  SELECT ObjectQuery__c 
                  FROM PHOCSSobjectVsQuery__mdt 
                  WHERE Type__c = 'Record' AND DeveloperName= :configName 
                  LIMIT 1
              ];
+             soqlQuery = queryConfig.ObjectQuery__c;
+         }else{
+             soqlQuery = getRecordDetailsQuery(recordId);
+         }
+        System.debug('query' + soqlQuery);
 
-        if (queryConfig == null || String.isBlank(queryConfig.ObjectQuery__c)) {
-            throw new QueryException('No SOQL query found for object: ' + objectName);
-        }
-
-        String soqlQuery = queryConfig.ObjectQuery__c;
-        String query = soqlQuery + ' WHERE Id = :recordId LIMIT 1';
-        System.debug('query' + query);
-
-        List<SObject> queryResults = Database.query(query);
+        List<SObject> queryResults = Database.query(String.escapeSingleQuotes(soqlQuery));
         if(!queryResults.isEmpty()){
             if(wrapper != null){
             	results.add(wrapper.wrap(queryResults[0]));
@@ -243,11 +254,104 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         system.debug('results : ' + results);
         return results;
     }
+    
+     public static String getRecordDetailsQuery(Id recordId) {
+        SObjectType objType = recordId.getSObjectType();
+        DescribeSObjectResult describeResult = objType.getDescribe();
+        String objectName = describeResult.getName();
 
+        Map<String, Schema.SObjectField> fieldsMap = describeResult.fields.getMap();
+
+        List<String> fieldNames = new List<String>();
+        for (String fieldName : fieldsMap.keySet()) {
+            fieldNames.add(fieldName);
+        }
+
+        String query = 'SELECT ' + String.join(fieldNames, ', ') + ' FROM ' + objectName + ' WHERE Id = \'' + recordId + '\'';
+        return query;
+    }
+    
+    
+    public static List<Object> getFacilityList(string programArea) {
+        List<Object> results = new List<Object>();
+        FacilityWrapper wrapper = new FacilityWrapper();
+        system.debug('programArea : ' + programArea);
+        string query = 'SELECT Id,Name,Type, CategoryL1__c,CategoryL2__c,HealthAuthority__c,Phone,ParentAccount__r.Name,' +
+                              'FacilityCHSAText__c,Physical_Address__c, PHOCSNumberOfInspections__c,' +
+                              'PHOCSOutstandingViolations__c, LastInspectionDate__c ' +
+                        'FROM Account';
+
+        query += getFacilitiesFilter(programArea);
+        system.debug('query : ' + query);
+        for (Account sObj : Database.query(String.escapeSingleQuotes(query))) {        
+           results.add(wrapper.wrap(sObj));
+        }
+        system.debug('results : ' + results);
+        return results;
+    }
+                                                                
+    private static string getFacilitiesFilter(string programArea){
+        switch on programArea {
+            when 'food' {
+               return ' Where RecordType.DeveloperName=\'Facility\' AND Type=\'Food\'';
+            }	
+            when 'drinking-water-system' {	
+               return ' Where RecordType.DeveloperName=\'DrinkingWaterSystem\'';
+            }
+            when 'residential-care' {
+               return ' Where RecordType.DeveloperName=\'Facility\' AND Type=\'Residential Care\' AND CategoryL1__c IN (\'Licensing - Residential\',\'Unlawful – Residential Licensing\')';
+            }
+            when 'hospital' {
+               return ' Where RecordType.DeveloperName=\'Facility\' AND Type=\'Residential Care\' AND CategoryL1__c=\'Hospital Act\'';
+            }
+            when 'child-care' {
+               return ' Where RecordType.DeveloperName=\'Facility\' AND Type=\'Child Care\'';
+            }
+            when 'personal-services' {
+               return ' Where RecordType.DeveloperName=\'Facility\' AND Type=\'Personal Services\'';
+            }	
+            when 'tobacco-vapour ' {		
+               return ' Where RecordType.DeveloperName=\'Facility\' AND Type=\'Tobacco and Vapour\'';
+            }
+            when 'recreational-water' {
+               return ' Where RecordType.DeveloperName=\'Facility\' AND Type=\'Recreational Water\'';
+            }
+            when 'industrial-camps' {
+               return ' Where RecordType.DeveloperName=\'Facility\' AND Type=\'Industrial Camps\'';
+            }
+            when 'sewerage-facilities' {
+               return ' Where RecordType.DeveloperName=\'Facility\' AND Type=\'Sewerage\'';
+            }
+        }
+        return '';
+    }
+	
+    private static string getAddress(Address physicalAddress){
+        string[] returnAddress = new string[]{};
+        if(physicalAddress != null){
+            if(string.isNotBlank(physicalAddress.getStreet())){
+                returnAddress.add(physicalAddress.getStreet()); 
+            }
+            if(string.isNotBlank(physicalAddress.getCity())){
+                returnAddress.add(physicalAddress.getCity()); 
+            }
+            if(string.isNotBlank(physicalAddress.getState())){
+                returnAddress.add(physicalAddress.getState()); 
+            }
+            if(string.isNotBlank(physicalAddress.getCountry())){
+                returnAddress.add(physicalAddress.getCountry()); 
+            }
+            if(string.isNotBlank(physicalAddress.getPostalCode())){
+                returnAddress.add(physicalAddress.getPostalCode()); 
+            }
+            return String.join(returnAddress, ',');
+        }
+        return '';
+    }
     public interface SObjectWrapper {
         Object wrap(SObject record);
     }
-	
+
    public class AccountDetailsWrapper implements SObjectWrapper {
         public Object wrap(SObject record) {
             Account accRecord = (Account) record;
@@ -262,7 +366,15 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 'ParentAccount' => accRecord.ParentAccount__r.Name,
                 'PHOCSOutstandingViolations__c'=> accRecord.PHOCSOutstandingViolations__c,
                 'OperatingMonths__c'=> accRecord.OperatingMonths__c,
-                'FacilityCHSAText__c'=> accRecord.FacilityCHSAText__c
+                'FacilityCHSAText__c'=> accRecord.FacilityCHSAText__c,
+                'PhysicalAddress' => getAddress(accRecord.Physical_Address__c),
+                'PhysicalAddressStreet'=> accRecord.Physical_Address__c?.getStreet(),
+                'PhysicalAddressPostalCode'=> accRecord.Physical_Address__c?.getPostalCode(),
+                'PhysicalAddressCity'=> accRecord.Physical_Address__c?.getCity(),
+                'PhysicalAddressState'=> accRecord.Physical_Address__c?.getState(),
+                'PhysicalAddressStateCode'=> accRecord.Physical_Address__c?.getStateCode(),
+                'PhysicalAddressCountry'=> accRecord.Physical_Address__c?.getCountry(),
+                'PhysicalAddressCountryCode'=> accRecord.Physical_Address__c?.getCountryCode()
             };
             return result;
         }
@@ -295,6 +407,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             Case caseRecord = (Case) record;
             Map<String, Object> result = new Map<String, Object>{
                 'Id' => caseRecord.Id,
+                'CaseNumber' => caseRecord.CaseNumber,
                 'TypeOfAdvisory' => caseRecord.TypeOfAdvisory__c,
                 'LastModifiedDate'=> caseRecord.LastModifiedDate,
                 'ReasonForAdvisory'=> caseRecord.ReasonForAdvisory__c,
@@ -321,6 +434,21 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 'PhysicalAddressPostalCode'=> lab.FacilityName__r?.Physical_Address__c?.getPostalCode(),
                 'SamplingSiteName' => lab.SamplingSite__r?.Name,
                 'CollectionDateTime' => lab.CollectionDateTime__c
+            };
+            return result;
+        }
+    }
+    
+     public class RegulatoryTrxnFeeItemDetailsWrapper implements SObjectWrapper {
+        public Object wrap(SObject record) {
+            RegulatoryTrxnFeeItem regulatoryTrxnFeeItemRecord = (RegulatoryTrxnFeeItem) record;
+            Map<String, Object> result = new Map<String, Object>{
+                'Id' => regulatoryTrxnFeeItemRecord.Id,
+                'Name' => regulatoryTrxnFeeItemRecord.Name,
+                'FeeAmount'=> regulatoryTrxnFeeItemRecord.FeeAmount,
+                'RegulatoryTrxnFeeId'=> regulatoryTrxnFeeItemRecord.RegulatoryTrxnFee.Id,
+                'RegulatoryTrxnFeeName'=> regulatoryTrxnFeeItemRecord.RegulatoryTrxnFee.Name,
+                'Comments'=> regulatoryTrxnFeeItemRecord.Comments
             };
             return result;
         }
