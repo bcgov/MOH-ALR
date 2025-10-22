@@ -88,7 +88,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             }
         }
 
-        List<SObject> results = Database.query(query);
+        List<SObject> results = Database.query(String.escapeSingleQuotes(query));
         return results;
     }
     //Method to get Sobject related list 
@@ -121,7 +121,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             soqlQuery = soqlQuery + ' AND AccountId = :recordId';  
          }         
 
-        List<SObject> results = Database.query(soqlQuery);
+        List<SObject> results = Database.query(String.escapeSingleQuotes(soqlQuery));
         return results;
     }
 	
@@ -155,7 +155,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
              soqlQuery = getRecordDetailsQuery(recordId);
          }
 
-        List<SObject> queryResults = Database.query(soqlQuery);
+        List<SObject> queryResults = Database.query(String.escapeSingleQuotes(soqlQuery));
         if(!queryResults.isEmpty()){
             if(wrapper != null){
             	results.add(wrapper.wrap(queryResults[0]));
@@ -260,7 +260,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                         'FROM Account';
 
         query += getFacilitiesFilter(programArea);
-        for (Account sObj : Database.query(query)) {        
+        for (Account sObj : Database.query(String.escapeSingleQuotes(query))) {        
            results.add(wrapper.wrap(sObj));
         }
         return results;
