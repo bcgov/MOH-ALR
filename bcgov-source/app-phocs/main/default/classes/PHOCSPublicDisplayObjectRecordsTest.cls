@@ -42,7 +42,16 @@ private class PHOCSPublicDisplayObjectRecordsTest {
         };
 		Test.stopTest();
         
-        runTestCallMethod('getRecordsList', input);
+        PHOCSPublicDisplayObjectRecords handler = new PHOCSPublicDisplayObjectRecords();
+        Map<String, Object> args = new Map<String, Object>{
+            'input' => input,
+            'output' => new Map<String, Object>(),
+            'options' => new Map<String, Object>()
+        };
+
+        handler.call('getRecordsList', args);
+        System.assert(args.get('output') != null);
+        System.assert(((Map<String, Object>)args.get('output')).containsKey('result'), 'Missing result in output for action: getRecordsList');
     }
 
     @isTest
@@ -104,8 +113,17 @@ private class PHOCSPublicDisplayObjectRecordsTest {
         input = new Map<String, Object>{
             'recordId' => req.Id,
             'configName' => 'FacilityWaterSampleDetail'
-        };     
-        runTestCallMethod('getRecordDetails', input);
+        }; 
+        PHOCSPublicDisplayObjectRecords handler = new PHOCSPublicDisplayObjectRecords();
+        Map<String, Object> args = new Map<String, Object>{
+            'input' => input,
+            'output' => new Map<String, Object>(),
+            'options' => new Map<String, Object>()
+        };
+
+        handler.call('getRecordDetails', args);
+        System.assert(args.get('output') != null);
+        System.assert(((Map<String, Object>)args.get('output')).containsKey('result'), 'Missing result in output for action: getRecordDetails');
     }
 
     @isTest
@@ -149,7 +167,16 @@ private class PHOCSPublicDisplayObjectRecordsTest {
             'recordId' => req.Id,
             'configName' => 'FacilityWaterSampleDetailTestResults'
         };
-        runTestCallMethod('getRelatedList', input);
+        PHOCSPublicDisplayObjectRecords handler = new PHOCSPublicDisplayObjectRecords();
+        Map<String, Object> args = new Map<String, Object>{
+            'input' => input,
+            'output' => new Map<String, Object>(),
+            'options' => new Map<String, Object>()
+        };
+
+        handler.call('getRelatedList', args);
+        System.assert(args.get('output') != null);
+        System.assert(((Map<String, Object>)args.get('output')).containsKey('result'), 'Missing result in output for action: getRelatedList');
     }
 
     @isTest
@@ -213,10 +240,19 @@ private class PHOCSPublicDisplayObjectRecordsTest {
         };
         runTestCallMethod('getFacilityList', input);
         
+        
         input = new Map<String, Object>{
             'programArea' => ''
         };
-        runTestCallMethod('getFacilityList', input);
+        PHOCSPublicDisplayObjectRecords handler = new PHOCSPublicDisplayObjectRecords();
+        Map<String, Object> args = new Map<String, Object>{
+            'input' => input,
+            'output' => new Map<String, Object>(),
+            'options' => new Map<String, Object>()
+        };
+        handler.call('getFacilityList', args);
+        System.assert(args.get('output') != null);
+        System.assert(((Map<String, Object>)args.get('output')).containsKey('result'), 'Missing result in output for action: getFacilityList');
     }
 
     @isTest
