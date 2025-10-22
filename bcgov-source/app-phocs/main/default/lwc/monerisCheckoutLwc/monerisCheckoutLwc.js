@@ -48,8 +48,7 @@ export default class MonerisCheckoutLwc extends NavigationMixin(LightningElement
     /** === Step 2: Initialize Moneris Checkout === */
     initializeMonerisCheckout() {
         this.monerisInstance = new MonerisCheckout(this.template);
-        this.monerisInstance.setMode(this.environment);
-        //this.monerisInstance.setBaseUrl(this.baseUrl);
+        this.monerisInstance.request_url = this.baseUrl + '/chkt/display/index.php'; // Custom URL if needed
         this.monerisInstance.setCheckoutDiv('monerisCheckout');
 
         this.monerisInstance.setCallback('page_loaded', () => {});
@@ -112,15 +111,6 @@ class MonerisCheckout {
 
     registerMessageListener() {
         window.addEventListener('message', this.receivePostMessage.bind(this), false);
-    }
-
-    setMode(mode) {
-        const urls = {
-            qa: 'https://gatewayt.moneris.com/chkt/display/index.php',
-            prod: 'https://gateway.moneris.com/chkt/display/index.php',
-            dev: 'https://gatewaydev.moneris.com/chkt/display/index.php'
-        };
-        this.request_url = urls[mode] || urls.qa;
     }
 
     setCheckoutDiv(name) {
