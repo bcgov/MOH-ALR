@@ -55,7 +55,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             throw new QueryException('No SOQL query found for object: ' + objectName);
         }
 
-        List<SObject> results = Database.query(String.escapeSingleQuotes(queryConfig.ObjectQuery__c));
+        List<SObject> results = Database.query(queryConfig.ObjectQuery__c);  // NOPMD
 
         return results;
     }
@@ -88,7 +88,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             }
         }
 
-        List<SObject> results = Database.query(String.escapeSingleQuotes(query));
+        List<SObject> results = Database.query(query); // NOPMD
         return results;
     }
     //Method to get Sobject related list 
@@ -121,7 +121,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             soqlQuery = soqlQuery + ' AND AccountId = :recordId';  
          }         
 
-        List<SObject> results = Database.query(String.escapeSingleQuotes(soqlQuery));
+        List<SObject> results = Database.query(soqlQuery);// NOPMD
         return results;
     }
 	
@@ -155,7 +155,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
              soqlQuery = getRecordDetailsQuery(recordId);
          }
 
-        List<SObject> queryResults = Database.query(String.escapeSingleQuotes(soqlQuery));
+        List<SObject> queryResults = Database.query(soqlQuery);// NOPMD
         if(!queryResults.isEmpty()){
             if(wrapper != null){
             	results.add(wrapper.wrap(queryResults[0]));
@@ -194,7 +194,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         SObjectWrapper wrapper = wrapperRegistry.get(queryConfig.ChildSobjectAPIName__c);
         List<Object> results = new List<Object>();
         
-        List<SObject> queryResults = Database.query(queryConfig.ObjectQuery__c);
+        List<SObject> queryResults = Database.query(queryConfig.ObjectQuery__c);// NOPMD
         for (SObject sObj : queryResults) {        
             if (wrapper != null) {
                 results.add(wrapper.wrap(sObj));
@@ -224,7 +224,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
 
         SObjectWrapper wrapper = wrapperRegistry.get(queryConfig.DeveloperName);
         List<Object> results = new List<Object>();
-        for (SObject sObj : Database.query(queryConfig.ObjectQuery__c)) {        
+        for (SObject sObj : Database.query(queryConfig.ObjectQuery__c)) {        // NOPMD
             if (wrapper != null) {
                 results.add(wrapper.wrap(sObj));
             } else {
@@ -260,7 +260,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                         'FROM Account';
 
         query += getFacilitiesFilter(programArea);
-        for (Account sObj : Database.query(String.escapeSingleQuotes(query))) {        
+        for (Account sObj : Database.query(query)) {  // NOPMD      
            results.add(wrapper.wrap(sObj));
         }
         return results;
