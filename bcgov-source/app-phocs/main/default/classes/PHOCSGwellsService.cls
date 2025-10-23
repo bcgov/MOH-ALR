@@ -8,7 +8,7 @@
 
 public with sharing class PHOCSGwellsService {
     
-    private static final String BASE_URL = 'https://apps.nrs.gov.bc.ca/gwells/api/v2';
+    private static final String BASE_URL = System.Label.PHOCSGwellsBaseURL;
     
     /**
      * Get Well details by Well Tag Number
