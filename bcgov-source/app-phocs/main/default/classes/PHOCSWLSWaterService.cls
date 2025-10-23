@@ -1,11 +1,10 @@
 public class PHOCSWLSWaterService {
     // Fetch Water Rights by Licence Number
     public static PHOCSWLSWaterRightsWrapper getWaterRightsByLicence(String licenceNumber) {
-        String endpoint = 'https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.WLS_WATER_RIGHTS_LICENCES_SV/ows' +
-            '?service=WFS&version=2.0.0&request=GetFeature' +
-            '&typeNames=pub:WHSE_WATER_MANAGEMENT.WLS_WATER_RIGHTS_LICENCES_SV' +
-            '&outputFormat=application/json' +
-            '&CQL_FILTER=LICENCE_NUMBER=%27' + licenceNumber + '%27';
+        // Get URL from Custom Label
+		String baseUrl = System.Label.PHOCSWaterRightLicenseNumberURL;
+        // Replace placeholder with actual value
+        String endpoint = baseUrl.replace('{LicenseNumber}', licenceNumber);
         HttpRequest req = new HttpRequest();
         req.setEndpoint(endpoint);
         req.setMethod('GET');
@@ -22,11 +21,11 @@ public class PHOCSWLSWaterService {
     
     // Fetch Water Applications by Application Job Number
     public static PHOCSWLSWaterApplicationsWrapper getWaterApplicationsByJob(String applicationJobNumber) {
-        String endpoint = 'https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.WLS_WATER_RIGHTS_APPLICTNS_SV/ows' +
-            '?service=WFS&version=2.0.0&request=GetFeature' +
-            '&outputFormat=application/json' +
-            '&CQL_FILTER=APPLICATION_JOB_NUMBER=%27' + applicationJobNumber + '%27' +
-            '&typeNames=pub:WHSE_WATER_MANAGEMENT.WLS_WATER_RIGHTS_APPLICTNS_SV';
+        // Get URL from Custom Label
+		String baseUrl = System.Label.PHOCSWaterRightApplicationNumberURL;
+        // Replace placeholder with actual value
+        String endpoint = baseUrl.replace('{ApplicationNumber}', applicationJobNumber);
+        
         HttpRequest req = new HttpRequest();
         req.setEndpoint(endpoint);
         req.setMethod('GET');
