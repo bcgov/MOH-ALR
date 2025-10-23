@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <OmniScript xmlns="http://soap.sforce.com/2006/04/metadata">
-    <description>Omniscript to capture Child Care License from operator portal.</description>
+    <description>Omniscript to capture Residential Care Facility License from operator portal.</description>
     <elementTypeComponentMapping>{&quot;ElementTypeToHTMLTemplateList&quot;:[]}</elementTypeComponentMapping>
     <isActive>true</isActive>
     <isIntegrationProcedure>false</isIntegrationProcedure>
@@ -10,7 +10,7 @@
     <isTestProcedure>false</isTestProcedure>
     <isWebCompEnabled>true</isWebCompEnabled>
     <language>English</language>
-    <name>PHOCS Child Care License Permit</name>
+    <name>PHOCS Residential Care Facility License</name>
     <omniProcessElements>
         <isActive>true</isActive>
         <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
@@ -155,7 +155,7 @@
         <propertySetConfig>{
   &quot;controlWidth&quot; : 12,
   &quot;label&quot; : &quot;IntegrationProcedureUpsertAccNInsertingBLAAction&quot;,
-  &quot;integrationProcedureKey&quot; : &quot;LicensingAndPermitting_ChildCareLicense&quot;,
+  &quot;integrationProcedureKey&quot; : &quot;LicensingAndPermitting_ResidentialCareLicense&quot;,
   &quot;useContinuation&quot; : false,
   &quot;remoteOptions&quot; : {
     &quot;useFuture&quot; : false,
@@ -419,7 +419,7 @@
   &quot;repeatClone&quot; : false,
   &quot;repeatLimit&quot; : null,
   &quot;readOnly&quot; : true,
-  &quot;defaultValue&quot; : &quot;Child Care License&quot;,
+  &quot;defaultValue&quot; : &quot;Residential Care Facility License&quot;,
   &quot;help&quot; : false,
   &quot;helpText&quot; : &quot;&quot;,
   &quot;mask&quot; : &quot;&quot;,
@@ -1800,12 +1800,40 @@
   &quot;help&quot; : false,
   &quot;helpText&quot; : &quot;&quot;,
   &quot;options&quot; : [ {
-    &quot;name&quot; : &quot;Operating with a licence&quot;,
-    &quot;value&quot; : &quot;Operating with a licence&quot;,
+    &quot;name&quot; : &quot;Acquired injury&quot;,
+    &quot;value&quot; : &quot;Acquired injury&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Child and youth residential&quot;,
+    &quot;value&quot; : &quot;Child and youth residential&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Community living&quot;,
+    &quot;value&quot; : &quot;Community living&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Hospice&quot;,
+    &quot;value&quot; : &quot;Hospice&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Hospital Act&quot;,
+    &quot;value&quot; : &quot;Hospital Act&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Long-term care&quot;,
+    &quot;value&quot; : &quot;Long-term care&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Mental health&quot;,
+    &quot;value&quot; : &quot;Mental health&quot;,
     &quot;autoAdv&quot; : null
   }, {
     &quot;name&quot; : &quot;Operating without a licence&quot;,
     &quot;value&quot; : &quot;Operating without a licence&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Substance use&quot;,
+    &quot;value&quot; : &quot;Substance use&quot;,
     &quot;autoAdv&quot; : null
   } ],
   &quot;optionSource&quot; : {
@@ -1904,7 +1932,7 @@
   &quot;inputWidth&quot; : 12,
   &quot;required&quot; : false,
   &quot;help&quot; : false,
-  &quot;hide&quot; : true,
+  &quot;hide&quot; : false,
   &quot;repeat&quot; : false,
   &quot;options&quot; : [ {
     &quot;name&quot; : &quot;Lagoon&quot;,
@@ -1952,7 +1980,7 @@
   &quot;repeatClone&quot; : false,
   &quot;repeatLimit&quot; : null,
   &quot;readOnly&quot; : true,
-  &quot;defaultValue&quot; : &quot;Child Care&quot;,
+  &quot;defaultValue&quot; : &quot;Residential Care&quot;,
   &quot;help&quot; : false,
   &quot;helpText&quot; : &quot;&quot;,
   &quot;mask&quot; : &quot;&quot;,
@@ -2071,7 +2099,7 @@
   },
   &quot;conditionType&quot; : &quot;Hide if False&quot;,
   &quot;hide&quot; : false,
-  &quot;lwcName&quot; : &quot;cfPHOCSDisplayFacilityAccountAssetsForOperator&quot;,
+  &quot;lwcName&quot; : &quot;cfPHOCSDisplayResidentialCareFacilityAccountAssetsForOperator&quot;,
   &quot;bStandalone&quot; : true,
   &quot;customAttributes&quot; : [ {
     &quot;name&quot; : &quot;record-id&quot;,
@@ -2277,52 +2305,40 @@
   &quot;help&quot; : false,
   &quot;helpText&quot; : &quot;&quot;,
   &quot;options&quot; : [ {
-    &quot;name&quot; : &quot;Group Child Care – School Age&quot;,
-    &quot;value&quot; : &quot;Group Child Care – School Age&quot;,
+    &quot;name&quot; : &quot;Child &amp; Youth Residential&quot;,
+    &quot;value&quot; : &quot;Child &amp; Youth Residential&quot;,
     &quot;autoAdv&quot; : null
   }, {
-    &quot;name&quot; : &quot;Group Child Care - Under 36m&quot;,
-    &quot;value&quot; : &quot;Group Child Care - Under 36m&quot;,
+    &quot;name&quot; : &quot;Hospice&quot;,
+    &quot;value&quot; : &quot;Hospice&quot;,
     &quot;autoAdv&quot; : null
   }, {
-    &quot;name&quot; : &quot;Group Child Care - 30m to School Age&quot;,
-    &quot;value&quot; : &quot;Group Child Care - 30m to School Age&quot;,
+    &quot;name&quot; : &quot;Mental Health&quot;,
+    &quot;value&quot; : &quot;Mental Health&quot;,
     &quot;autoAdv&quot; : null
   }, {
-    &quot;name&quot; : &quot;Child Minding&quot;,
-    &quot;value&quot; : &quot;Child Minding&quot;,
+    &quot;name&quot; : &quot;Substance Use&quot;,
+    &quot;value&quot; : &quot;Substance Use&quot;,
     &quot;autoAdv&quot; : null
   }, {
-    &quot;name&quot; : &quot;Occasional Child Care&quot;,
-    &quot;value&quot; : &quot;Occasional Child Care&quot;,
+    &quot;name&quot; : &quot;Mental Health &amp; Substance Use&quot;,
+    &quot;value&quot; : &quot;Mental Health &amp; Substance Use&quot;,
     &quot;autoAdv&quot; : null
   }, {
-    &quot;name&quot; : &quot;Preschool&quot;,
-    &quot;value&quot; : &quot;Preschool&quot;,
+    &quot;name&quot; : &quot;Long Term Care&quot;,
+    &quot;value&quot; : &quot;Long Term Care&quot;,
     &quot;autoAdv&quot; : null
   }, {
-    &quot;name&quot; : &quot;Family Child Care&quot;,
-    &quot;value&quot; : &quot;Family Child Care&quot;,
+    &quot;name&quot; : &quot;Community Living&quot;,
+    &quot;value&quot; : &quot;Community Living&quot;,
     &quot;autoAdv&quot; : null
   }, {
-    &quot;name&quot; : &quot;Multi Age Child Care&quot;,
-    &quot;value&quot; : &quot;Multi Age Child Care&quot;,
+    &quot;name&quot; : &quot;Acquired Injury&quot;,
+    &quot;value&quot; : &quot;Acquired Injury&quot;,
     &quot;autoAdv&quot; : null
   }, {
-    &quot;name&quot; : &quot;In Home Multi Age Child Care&quot;,
-    &quot;value&quot; : &quot;In Home Multi Age Child Care&quot;,
-    &quot;autoAdv&quot; : null
-  }, {
-    &quot;name&quot; : &quot;School Age Care on School Grounds&quot;,
-    &quot;value&quot; : &quot;School Age Care on School Grounds&quot;,
-    &quot;autoAdv&quot; : null
-  }, {
-    &quot;name&quot; : &quot;Recreational Care&quot;,
-    &quot;value&quot; : &quot;Recreational Care&quot;,
-    &quot;autoAdv&quot; : null
-  }, {
-    &quot;name&quot; : &quot;Unlawful-Childcare&quot;,
-    &quot;value&quot; : &quot;Unlawful-Childcare&quot;,
+    &quot;name&quot; : &quot;Unlawful-Residential Care&quot;,
+    &quot;value&quot; : &quot;Unlawful-Residential Care&quot;,
     &quot;autoAdv&quot; : null
   } ],
   &quot;optionSource&quot; : {
@@ -2427,7 +2443,7 @@
   &quot;collapse&quot; : false,
   &quot;repeat&quot; : true,
   &quot;repeatClone&quot; : false,
-  &quot;repeatLimit&quot; : 10,
+  &quot;repeatLimit&quot; : 9,
   &quot;show&quot; : null,
   &quot;conditionType&quot; : &quot;Hide if False&quot;,
   &quot;accessibleInFutureSteps&quot; : false,
@@ -4316,9 +4332,9 @@
   &quot;controlWidth&quot; : 12,
   &quot;wpm&quot; : false,
   &quot;elementValueMap&quot; : {
-    &quot;LicenseTypeNameForBLApplication&quot; : &quot;Child Care License&quot;,
+    &quot;LicenseTypeNameForBLApplication&quot; : &quot;Residential Care Facility License&quot;,
     &quot;RecordtypeForBLApplication&quot; : &quot;OperatingPermitApplication&quot;,
-    &quot;FacilityType&quot; : &quot;Child Care&quot;
+    &quot;FacilityType&quot; : &quot;Residential Care&quot;
   },
   &quot;showPersistentComponent&quot; : [ true, false ],
   &quot;label&quot; : &quot;SetValuesforBLALicenseType&quot;,
@@ -4332,8 +4348,8 @@
     </omniProcessElements>
     <omniProcessType>OmniScript</omniProcessType>
     <propertySetConfig>{&quot;persistentComponent&quot;:[{&quot;render&quot;:false,&quot;label&quot;:&quot;&quot;,&quot;remoteClass&quot;:&quot;&quot;,&quot;remoteMethod&quot;:&quot;&quot;,&quot;remoteTimeout&quot;:30000,&quot;remoteOptions&quot;:{&quot;preTransformBundle&quot;:&quot;&quot;,&quot;postTransformBundle&quot;:&quot;&quot;},&quot;preTransformBundle&quot;:&quot;&quot;,&quot;postTransformBundle&quot;:&quot;&quot;,&quot;sendJSONPath&quot;:&quot;&quot;,&quot;sendJSONNode&quot;:&quot;&quot;,&quot;responseJSONPath&quot;:&quot;&quot;,&quot;responseJSONNode&quot;:&quot;&quot;,&quot;id&quot;:&quot;vlcCart&quot;,&quot;itemsKey&quot;:&quot;cartItems&quot;,&quot;modalConfigurationSetting&quot;:{&quot;modalHTMLTemplateId&quot;:&quot;vlcProductConfig.html&quot;,&quot;modalController&quot;:&quot;ModalProductCtrl&quot;,&quot;modalSize&quot;:&quot;lg&quot;}},{&quot;render&quot;:false,&quot;dispOutsideOmni&quot;:false,&quot;label&quot;:&quot;&quot;,&quot;remoteClass&quot;:&quot;&quot;,&quot;remoteMethod&quot;:&quot;&quot;,&quot;remoteTimeout&quot;:30000,&quot;remoteOptions&quot;:{&quot;preTransformBundle&quot;:&quot;&quot;,&quot;postTransformBundle&quot;:&quot;&quot;},&quot;preTransformBundle&quot;:&quot;&quot;,&quot;postTransformBundle&quot;:&quot;&quot;,&quot;id&quot;:&quot;vlcKnowledge&quot;,&quot;itemsKey&quot;:&quot;knowledgeItems&quot;,&quot;modalConfigurationSetting&quot;:{&quot;modalHTMLTemplateId&quot;:&quot;&quot;,&quot;modalController&quot;:&quot;&quot;,&quot;modalSize&quot;:&quot;lg&quot;}}],&quot;accessibilityToggle&quot;:true,&quot;allowSaveForLater&quot;:false,&quot;allowSaveChanges&quot;:false,&quot;saveNameTemplate&quot;:null,&quot;saveExpireInDays&quot;:null,&quot;saveForLaterRedirectPageName&quot;:&quot;sflRedirect&quot;,&quot;saveForLaterRedirectTemplateUrl&quot;:&quot;vlcSaveForLaterAcknowledge.html&quot;,&quot;saveContentEncoded&quot;:false,&quot;saveObjectId&quot;:&quot;%ContextId%&quot;,&quot;saveURLPatterns&quot;:{},&quot;autoSaveOnStepNext&quot;:false,&quot;elementTypeToHTMLTemplateMapping&quot;:{},&quot;seedDataJSON&quot;:{},&quot;trackingCustomData&quot;:{},&quot;enableKnowledge&quot;:false,&quot;bLK&quot;:false,&quot;lkObjName&quot;:null,&quot;knowledgeArticleTypeQueryFieldsMap&quot;:{},&quot;timeTracking&quot;:false,&quot;hideStepChart&quot;:false,&quot;mergeSavedData&quot;:false,&quot;visualforcePagesAvailableInPreview&quot;:{},&quot;cancelType&quot;:&quot;SObject&quot;,&quot;allowCancel&quot;:true,&quot;cancelSource&quot;:&quot;%ContextId%&quot;,&quot;cancelRedirectPageName&quot;:&quot;OmniScriptCancelled&quot;,&quot;cancelRedirectTemplateUrl&quot;:&quot;vlcCancelled.html&quot;,&quot;consoleTabLabel&quot;:&quot;&quot;,&quot;wpm&quot;:false,&quot;ssm&quot;:false,&quot;message&quot;:{},&quot;pubsub&quot;:false,&quot;autoFocus&quot;:false,&quot;currencyCode&quot;:&quot;&quot;,&quot;showInputWidth&quot;:false,&quot;rtpSeed&quot;:false,&quot;consoleTabTitle&quot;:null,&quot;consoleTabIcon&quot;:&quot;custom:custom18&quot;,&quot;errorMessage&quot;:{&quot;custom&quot;:[]},&quot;stylesheet&quot;:{&quot;newport&quot;:&quot;&quot;,&quot;lightning&quot;:&quot;&quot;,&quot;newportRtl&quot;:&quot;&quot;,&quot;lightningRtl&quot;:&quot;&quot;},&quot;stepChartPlacement&quot;:&quot;right&quot;,&quot;disableUnloadWarn&quot;:true,&quot;scrollBehavior&quot;:&quot;auto&quot;,&quot;currentLanguage&quot;:&quot;en_US&quot;}</propertySetConfig>
-    <subType>ChildCareLicense</subType>
+    <subType>ResidentialCareFacilityLicense</subType>
     <type>LicensingAndPermitting</type>
-    <uniqueName>LicensingAndPermitting_ChildCareLicense_English_1</uniqueName>
+    <uniqueName>LicensingAndPermitting_ResidentialCareFacilityLicense_English_1</uniqueName>
     <versionNumber>1.0</versionNumber>
 </OmniScript>
