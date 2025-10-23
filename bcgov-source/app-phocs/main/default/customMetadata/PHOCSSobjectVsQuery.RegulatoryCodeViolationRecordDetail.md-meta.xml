@@ -8,7 +8,11 @@
     </values>
     <values>
         <field>ObjectQuery__c</field>
-        <value xsi:type="xsd:string">select Name, RegulatoryCode.Name, DateCreated, DateResolved, Status, Inspection.Name, Inspection.ActualVisitStartTime, Inspection.VisitType.Name, Inspection.PHOCSViolationCount__c from RegulatoryCodeViolation</value>
+        <value xsi:type="xsd:string">select Name, RegulatoryCode.Name, DateCreated, DateResolved, Status, Inspection.Name, Inspection.ActualVisitStartTime, Inspection.VisitType.Name, Inspection.PHOCSViolationCount__c from RegulatoryCodeViolation  WHERE Id = :recordId LIMIT 1</value>
+    </values>
+    <values>
+        <field>ParentFieldAPIName__c</field>
+        <value xsi:nil="true"/>
     </values>
     <values>
         <field>ParentSobjectAPIName__c</field>

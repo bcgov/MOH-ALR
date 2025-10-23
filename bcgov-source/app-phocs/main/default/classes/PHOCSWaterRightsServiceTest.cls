@@ -14,6 +14,7 @@ private class PHOCSWaterRightsServiceTest {
             Name = 'Test Facility',
             WaterLicenseNumber__c = '502581',
             ParentId = accParent.Id,
+            ParentAccount__c = accParent.Id,
             RecordtypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('DrinkingWaterSourceIntake').getRecordTypeId(),
             WaterLicenseApplicationNumber__c = 'WLA20160113-0001'
         );

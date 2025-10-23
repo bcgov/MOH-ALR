@@ -1,0 +1,908 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OmniDataTransform xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>false</active>
+    <assignmentRulesUsed>false</assignmentRulesUsed>
+    <deletedOnSuccess>false</deletedOnSuccess>
+    <errorIgnored>false</errorIgnored>
+    <expectedInputJson>{
+  &quot;PHOCSApplicationDetails&quot; : {
+    &quot;Specifications&quot; : {
+      &quot;PHOCSProposedConstructionStartDate&quot; : null,
+      &quot;PHOCSProposedConstructionEndDate&quot; : null,
+      &quot;PHOCSWaterslide&quot; : null
+    },
+    &quot;ApplicationDetails&quot; : {
+      &quot;PHOCSPrimaryOwner&quot; : null,
+      &quot;PHOCSLegalAgentOfOwner&quot; : null,
+      &quot;PHOCSEngineeringDesignFirmAddress&quot; : null,
+      &quot;PHOCSEngineeringDesignFirmRegistrationNo&quot; : null,
+      &quot;PHOCSEngineeringDesignFirmName&quot; : null,
+      &quot;PHOCSDesignEngineerOfRecord&quot; : null,
+      &quot;PHOCSEngineeringDesignFirmPhoneNumber&quot; : null,
+      &quot;PHOCSDescriptionOfProposedWorks&quot; : null,
+      &quot;PHOCSEstimatedConstructionCost&quot; : null,
+      &quot;PHOCSApplicant&quot; : null
+    }
+  },
+  &quot;vlcTimeTracking&quot; : {
+    &quot;PHOCSApplicationDetails&quot; : null,
+    &quot;PHOCSFacilityInformation&quot; : null,
+    &quot;PHOCSReasonforApplying&quot; : null,
+    &quot;CreateBLA&quot; : null,
+    &quot;PHOCSDocumentChecklistItems&quot; : null,
+    &quot;PHOCSReview&quot; : null,
+    &quot;PHOCSAcknowledgement&quot; : null
+  },
+  &quot;vlcPersistentComponent&quot; : { },
+  &quot;CreateBLA&quot; : { },
+  &quot;PHOCSDocumentChecklistItems&quot; : { },
+  &quot;userName&quot; : null,
+  &quot;userId&quot; : null,
+  &quot;userProfile&quot; : null,
+  &quot;userTimeZone&quot; : null,
+  &quot;timeStamp&quot; : null,
+  &quot;PHOCSFacilityInformation&quot; : {
+    &quot;Category&quot; : {
+      &quot;PHOCSType&quot; : null,
+      &quot;PHOCSCategoryL3&quot; : null,
+      &quot;PHOCSCategoryL1&quot; : null,
+      &quot;PHOCSCategoryL2&quot; : null
+    },
+    &quot;AddressInformation&quot; : {
+      &quot;PHOCSMailingAddress&quot; : null,
+      &quot;PHOCSPhysicalLocation&quot; : null,
+      &quot;PHOCSBillingAddress&quot; : null,
+      &quot;PHOCSPhysicalAddress&quot; : null
+    },
+    &quot;AdditionalFacilityInformation&quot; : {
+      &quot;PHOCSOpenTo&quot; : null,
+      &quot;PHOCSMonthsOfOperation&quot; : null,
+      &quot;PHOCSWaterSupply&quot; : null,
+      &quot;PHOCSWasteDisposal&quot; : null,
+      &quot;PHOCSOpenFrom&quot; : null
+    },
+    &quot;BasicInformation&quot; : {
+      &quot;PHOCSFacilityEmail&quot; : null,
+      &quot;PHOCSFax&quot; : null,
+      &quot;PHOCSAccountName&quot; : null,
+      &quot;PHOCSPhoneExtension&quot; : null,
+      &quot;PHOCSWebsite&quot; : null,
+      &quot;PHOCSDescription&quot; : null,
+      &quot;PHOCSPhone&quot; : null,
+      &quot;PHOCSStartDate&quot; : null
+    }
+  },
+  &quot;PHOCSReasonforApplying&quot; : {
+    &quot;AccountName-Block&quot; : {
+      &quot;AccountId&quot; : null,
+      &quot;PHOCSDRAccountExtract&quot; : null,
+      &quot;AccountName1&quot; : null,
+      &quot;AccountName&quot; : null
+    },
+    &quot;PhocsPoolConstReasonforApplyRadio&quot; : null
+  },
+  &quot;ContextId&quot; : null,
+  &quot;PHOCSReview&quot; : { },
+  &quot;PHOCSAcknowledgement&quot; : { }
+}</expectedInputJson>
+    <fieldLevelSecurityEnabled>true</fieldLevelSecurityEnabled>
+    <inputType>JSON</inputType>
+    <isManagedUsingStdDesigner>false</isManagedUsingStdDesigner>
+    <name>PHOCSPortalCreateBLAevaluation</name>
+    <nullInputsIncludedInOutput>false</nullInputsIncludedInOutput>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>bea6bada-5114-418b-a055-1bfac90f69f7</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:AddressInformation:PhysicalAddressZipcodeText</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Physical_Address__PostalCode__s</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>c2cce5a9-cfe8-4180-a7a6-868f013d336e</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:GroundwaterInformation:AquiferNumber</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>AquiferNumber__c</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <defaultValue>DrinkingWaterSourceIntake</defaultValue>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>b8d80da5-d084-4d29-a640-3e8bd81f4625</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <lookupByFieldName>DeveloperName</lookupByFieldName>
+        <lookupObjectName>RecordType</lookupObjectName>
+        <lookupReturnedFieldName>Id</lookupReturnedFieldName>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RecordTypeId</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>2a1bd893-92a5-4ebf-b456-5b82df9e8782</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:AddressInformation:DrivingDirectionsText</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>PhysicalDrivingDirections__c</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>8be88b21-5e2f-49b9-9909-9724666c35b6</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>2.0</outputCreationSequence>
+        <outputFieldName>AccountId</outputFieldName>
+        <outputObjectName>BusinessLicenseApplication</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>c0de10f3-80de-4fd4-a109-6fb03133f2b8</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:BasicInformation:TypeText</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Type</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>true</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <globalKey>f68c7f76-abd4-4700-93ea-4b750758f94b</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <migrationValue>FAKEMAPPING</migrationValue>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Id</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>5e9d5cb1-4c71-4c25-a9fd-68171e933e6f</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:AddressInformation:BillingAddressStreetText</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BillingStreet</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>a1603f4a-ace6-40e8-a859-1bc7816d64da</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:GroundwaterInformation:SourceAcceptedAdditionalConditionsTextArea</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>SourceAcceptedAdditionalConditions__c</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>98e97d23-4613-4061-b676-3ecc406a0236</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:AddressInformation:MailingAddressStateSelect</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>ShippingState</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>c2409c5d-8fa3-400f-87d4-93307595b016</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:AddressInformation:PhysicalAddressCityText</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Physical_Address__City__s</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>4f158bb3-ffa6-43cf-b1f9-929d5dbf4816</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:AddressInformation:PhysicalAddressStreetText</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Physical_Address__Street__s</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>4c1d0ab8-59b6-4975-b3c9-5210525d01ab</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:AdditionalInformation:DepthofIntakeNumber</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Depth_of_Intake_m__c</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>a3b3b63f-3890-47a8-9349-b2d3e2dfaa89</globalKey>
+        <inputFieldName>PHOCSBLADetails:ApplicationDetails:DescriptionTextArea</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>2.0</outputCreationSequence>
+        <outputFieldName>Description__c</outputFieldName>
+        <outputObjectName>BusinessLicenseApplication</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>55901e1c-ee86-40e3-b34e-e3de65d54c05</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:AdditionalInformation:WaterSupplierNameText</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>WaterSupplierName__c</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>3d99ec01-f6a8-481a-a464-fa2128edceb0</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:GroundwaterInformation:GARPScreeningOutcomeSelect</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>GARPScreeningOutcome__c</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>92288be4-4347-4efa-a6b1-ae61a40da9e1</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:GroundwaterInformation:SourceAssessmentCompletedSelect</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>SourceAssessmentCompleted__c</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <defaultValue>Submitted</defaultValue>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>d0b0441a-ec8d-44fb-bd5e-bc5c177afa98</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>2.0</outputCreationSequence>
+        <outputFieldName>Status</outputFieldName>
+        <outputObjectName>BusinessLicenseApplication</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>d01f208f-6a79-417a-aaea-2e22d6d6acaa</globalKey>
+        <inputFieldName>PHOCSBLADetails:ApplicationDetails:LegalAgentOfOwnerCheckbox</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>2.0</outputCreationSequence>
+        <outputFieldName>LegalAgentOfOwner__c</outputFieldName>
+        <outputObjectName>BusinessLicenseApplication</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <globalKey>04d13dac-38a4-4da2-82e1-39a8c3212e06</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedFieldName>Id</linkedFieldName>
+        <linkedObjectSequence>1.0</linkedObjectSequence>
+        <migrationValue>FAKEMAPPING</migrationValue>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>2.0</outputCreationSequence>
+        <outputFieldName>AccountId</outputFieldName>
+        <outputObjectName>BusinessLicenseApplication</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>6ee3ea5f-1d6c-4561-86bd-7f4005c74d8a</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:AddressInformation:BillingAddressStateSelect</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BillingState</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| NOW</formulaConverted>
+        <formulaExpression>NOW()</formulaExpression>
+        <formulaResultPath>TodayAppliedDate</formulaResultPath>
+        <formulaSequence>1.0</formulaSequence>
+        <globalKey>de4ebbf7-1cb7-42e5-b2e8-075ccb2d5402</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>0e895f8e-7ec4-4651-a7e0-f747a8ff19f4</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:AddressInformation:MailingAddressStreetText</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>ShippingStreet</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <defaultValue>Evaluation</defaultValue>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>62004cd2-91b8-43a2-831c-83004469ebb5</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>2.0</outputCreationSequence>
+        <outputFieldName>Category</outputFieldName>
+        <outputObjectName>BusinessLicenseApplication</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>ac0e3262-b81b-4516-9a0f-22e55a7d2d8f</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:AddressInformation:PhysicalAddressStateSelect</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Physical_Address__StateCode__s</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>035ff686-5ba7-4407-9634-9a8b8cb4a566</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:AddressInformation:MailingAddressCountrySelect</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>ShippingCountry</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <defaultValue>Water Source Evaluation</defaultValue>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>84602b9e-f339-40bf-ad33-c319af28b5a3</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <lookupByFieldName>Name</lookupByFieldName>
+        <lookupObjectName>RegulatoryAuthorizationType</lookupObjectName>
+        <lookupReturnedFieldName>Id</lookupReturnedFieldName>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>2.0</outputCreationSequence>
+        <outputFieldName>LicenseTypeId</outputFieldName>
+        <outputObjectName>BusinessLicenseApplication</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>82b11192-7bfb-4eea-a851-c0d729f21825</globalKey>
+        <inputFieldName>PHOCSBLADetails:ApplicationDetails:PrimaryOwnerLookup</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>2.0</outputCreationSequence>
+        <outputFieldName>PrimaryOwnerId</outputFieldName>
+        <outputObjectName>BusinessLicenseApplication</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>c0566879-e5bd-43b2-a438-c4bc9f500c12</globalKey>
+        <inputFieldName>DRId_Account</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>ParentAccount__c</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>f4fd93f7-b3a2-41fd-8b2d-5243ed582b70</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:Category:CategoryL2Select</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>CategoryL2__c</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>889bf1e4-fec7-46cb-b92a-64d1ef96e58a</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:Category:CategoryL1Select</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>CategoryL1__c</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>32f03f97-e341-453e-ae7f-d98babc9064c</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:GroundwaterInformation:WaterLicenseApplicationNumberText</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>WaterLicenseApplicationNumber__c</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>2e05e890-d6f7-4782-a3ef-8c11dd791869</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:AddressInformation:BillingAddressZipodeText</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BillingPostalCode</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>dda4e241-9cf7-4601-ba63-5286765004b6</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:GroundwaterInformation:WellTagNumber</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>WellTagNumber__c</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <defaultValue>Evaluation</defaultValue>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>9d9fcf09-b48a-4ae9-a342-7f7a92f5415b</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <lookupByFieldName>DeveloperName</lookupByFieldName>
+        <lookupObjectName>RecordType</lookupObjectName>
+        <lookupReturnedFieldName>Id</lookupReturnedFieldName>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>2.0</outputCreationSequence>
+        <outputFieldName>RecordTypeId</outputFieldName>
+        <outputObjectName>BusinessLicenseApplication</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>7a35af8d-df4a-4be0-8bca-afc81060c6a0</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:AddressInformation:MailingAddressZipcodeText</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>ShippingPostalCode</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>58c1b1ba-82b0-4593-bfbd-7fd80a7d7687</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:GroundwaterInformation:GARPAssessmentDetailsSelect</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>GARPAssessmentDetails__c</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>cee71316-e341-44a2-90f2-e8e4ce790f71</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:AddressInformation:BillingAddressCountrySelect</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BillingCountry</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>17f60f15-92b2-4d3c-9760-14c2884cbfcc</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:AddressInformation:MailingAddressCityText</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>ShippingCity</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>02f2387a-abb7-4593-ab4d-69da4a251f45</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:AddressInformation:PhysicalAddressCountrySelect</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Physical_Address__CountryCode__s</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>2022f42c-6f52-415a-90a1-ee2a37c5a0c7</globalKey>
+        <inputFieldName>PHOCSBLADetails:ApplicationDetails:ApplicantText</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>2.0</outputCreationSequence>
+        <outputFieldName>ApplicantId</outputFieldName>
+        <outputObjectName>BusinessLicenseApplication</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>true</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <globalKey>652df3cd-e417-4831-8b1d-3a8a186316bc</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <migrationValue>FAKEMAPPING</migrationValue>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>2.0</outputCreationSequence>
+        <outputFieldName>Id</outputFieldName>
+        <outputObjectName>BusinessLicenseApplication</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>47997d05-4bb1-474f-bbb6-feabc2cbbe33</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:AdditionalInformation:UseDescriptionSelect</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>UseDescription__c</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>f36f765f-17c9-459c-841e-d16718e01182</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:GroundwaterInformation:GARPAssessmentCompletedSelect</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>GARPAssessmentCompleted__c</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>14799d45-539b-4a77-a202-e8f5c63af448</globalKey>
+        <inputFieldName>TodayAppliedDate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>2.0</outputCreationSequence>
+        <outputFieldName>AppliedDate</outputFieldName>
+        <outputObjectName>BusinessLicenseApplication</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>1b20991a-7541-4a68-947d-ddf228ca8cab</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:BasicInformation:AccountNameText</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Name</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>caf41716-9a6e-4213-a814-5adf916b7300</globalKey>
+        <inputFieldName>PHOCSWaterSourceIntakeInformation:AddressInformation:BillingAddressCityText</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSPortalCreateBLAevaluation</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BillingCity</outputFieldName>
+        <outputObjectName>Account</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <outputType>SObject</outputType>
+    <previewJsonData>{
+  &quot;omniscriptId&quot; : &quot;0jNbZ000000P8onUAC&quot;,
+  &quot;language&quot; : &quot;English&quot;,
+  &quot;type&quot; : &quot;LicensingAndPermitting&quot;,
+  &quot;subType&quot; : &quot;WaterSourceEvaluation&quot;,
+  &quot;sId&quot; : &quot;0jNbZ000000P8onUAC&quot;,
+  &quot;runMode&quot; : &quot;preview&quot;,
+  &quot;theme&quot; : &quot;lightning&quot;,
+  &quot;LanguageCode&quot; : &quot;en_US&quot;,
+  &quot;userProfile&quot; : &quot;System Administrator&quot;,
+  &quot;timeStamp&quot; : &quot;2025-10-16T19:35:00.494Z&quot;,
+  &quot;userTimeZoneName&quot; : &quot;America/Vancouver&quot;,
+  &quot;userTimeZone&quot; : &quot;-420&quot;,
+  &quot;userCurrencyCode&quot; : &quot;CAD&quot;,
+  &quot;userName&quot; : &quot;w.a.cai@accenture.com.phocs.dev&quot;,
+  &quot;userId&quot; : &quot;005bZ000005cbN3QAI&quot;,
+  &quot;omniProcessId&quot; : &quot;0jNbZ000000P8onUAC&quot;,
+  &quot;localTimeZoneName&quot; : &quot;America/Toronto&quot;,
+  &quot;DrinkingWaterSystemStep&quot; : {
+    &quot;WaterSystemNameText&quot; : &quot;Water System 1016 0335PM&quot;,
+    &quot;PhocsDrinkingWaterSystemRadio&quot; : &quot;No&quot;
+  },
+  &quot;PHOCSWaterSourceIntakeInformation&quot; : {
+    &quot;AdditionalInformation&quot; : {
+      &quot;DepthofIntakeNumber&quot; : null,
+      &quot;WaterSupplierNameText&quot; : null,
+      &quot;UseDescriptionSelect&quot; : &quot;Secondary&quot;
+    },
+    &quot;GroundwaterInformation&quot; : {
+      &quot;WellTagNumber&quot; : 123,
+      &quot;AquiferNumber&quot; : 123,
+      &quot;GARPAssessmentCompletedSelect&quot; : &quot;No&quot;,
+      &quot;GARPAssessmentDetailsSelect&quot; : &quot;Professional Assessment Declined&quot;
+    },
+    &quot;BasicInformation&quot; : {
+      &quot;TypeText&quot; : &quot;Drinking Water&quot;,
+      &quot;AccountNameText&quot; : &quot;Water Source Intake 1016 0335PM&quot;
+    },
+    &quot;Category&quot; : {
+      &quot;CategoryL1Select&quot; : &quot;Groundwater&quot;,
+      &quot;CategoryL2Select&quot; : &quot;GARP Low Risk of Pathogens&quot;
+    }
+  },
+  &quot;PHOCSBLADetails&quot; : {
+    &quot;ApplicationDetails&quot; : {
+      &quot;LegalAgentOfOwnerCheckbox&quot; : false,
+      &quot;DescriptionTextArea&quot; : &quot;test&quot;
+    }
+  },
+  &quot;PHOCSReview&quot; : {
+    &quot;WaterSystemNameFormula&quot; : &quot;Water System 1016 0335PM&quot;,
+    &quot;BasicInfoBlock&quot; : {
+      &quot;AccountNameFormula&quot; : &quot;Water Source Intake 1016 0335PM&quot;,
+      &quot;TypeFormula&quot; : &quot;Drinking Water&quot;
+    },
+    &quot;CategoryBlock&quot; : {
+      &quot;CategoryL1Formula&quot; : &quot;Groundwater&quot;,
+      &quot;CategoryL2Formula&quot; : &quot;GARP Low Risk of Pathogens&quot;
+    },
+    &quot;AddressBlock&quot; : {
+      &quot;PhysicalAddressFormula&quot; : null,
+      &quot;DrivingDirectionsFormula&quot; : null,
+      &quot;MailingAddressFormula&quot; : null,
+      &quot;BillingAddressFormula&quot; : null
+    },
+    &quot;AdditionalInfoBlock&quot; : {
+      &quot;UseDescriptionFormula&quot; : null,
+      &quot;DepthOfIntakeFormula&quot; : null,
+      &quot;WaterSupplierNameFormula&quot; : null
+    },
+    &quot;GroundwaterInfoBlock&quot; : {
+      &quot;WellTagNumberFormula&quot; : 123,
+      &quot;AquiferNumberFormula&quot; : 123,
+      &quot;WaterLicenseApplicationNumberFormula&quot; : null,
+      &quot;SourceAssessmentCompletedFormula&quot; : null,
+      &quot;GARPAssessmentCompletedFormula&quot; : &quot;No&quot;,
+      &quot;GARPScreeningOutcomeFormula&quot; : null,
+      &quot;GARPAssessmentDetailsFormula&quot; : &quot;Professional Assessment Declined&quot;,
+      &quot;SourceAcceptedAdditionalConditionsFormula&quot; : null
+    },
+    &quot;PrimaryOwnerFormula&quot; : null,
+    &quot;ApplicantFormula&quot; : null,
+    &quot;DescriptionFormula&quot; : &quot;test&quot;,
+    &quot;LegalAgentOfOwnerFormula&quot; : false,
+    &quot;TodayAppliedDateFormula&quot; : &quot;2025-10-16T19:36:13.000Z&quot;
+  },
+  &quot;DRId_Account&quot; : &quot;001bZ00000HyOCDQA3&quot;
+}</previewJsonData>
+    <processSuperBulk>false</processSuperBulk>
+    <responseCacheTtlMinutes>0.0</responseCacheTtlMinutes>
+    <rollbackOnError>false</rollbackOnError>
+    <sourceObject>json</sourceObject>
+    <sourceObjectDefault>false</sourceObjectDefault>
+    <synchronousProcessThreshold>0.0</synchronousProcessThreshold>
+    <type>Load</type>
+    <uniqueName>PHOCSPortalCreateBLAevaluation_1</uniqueName>
+    <versionNumber>1.0</versionNumber>
+    <xmlDeclarationRemoved>false</xmlDeclarationRemoved>
+</OmniDataTransform>
