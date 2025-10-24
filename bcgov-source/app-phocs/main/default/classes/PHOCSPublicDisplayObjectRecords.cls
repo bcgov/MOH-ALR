@@ -275,7 +275,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                return ' Where RecordType.DeveloperName=\'DrinkingWaterSystem\'';
             }
             when 'residential-care' {
-               return ' Where RecordType.DeveloperName=\'Facility\' AND Type=\'Residential Care\' AND CategoryL1__c IN (\'Licensing - Residential\',\'Unlawful – Residential Licensing\')';
+               return ' Where RecordType.DeveloperName=\'Facility\' AND Type=\'Residential Care\' AND CategoryL1__c IN (\'Mental health\',\'Hospice\',\'Substance use\',\'Long term care\',\'Community living\',\'Acquired injury\',\'Child and youth residential\',\'Operating without a licence\')';
             }
             when 'hospital' {
                return ' Where RecordType.DeveloperName=\'Facility\' AND Type=\'Residential Care\' AND CategoryL1__c=\'Hospital Act\'';
