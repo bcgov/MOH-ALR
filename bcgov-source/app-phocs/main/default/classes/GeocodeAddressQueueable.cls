@@ -35,7 +35,7 @@ public class GeocodeAddressQueueable implements Queueable, Database.AllowsCallou
         if (String.isNotBlank(acct.Physical_Address__City__s)) addressParts.add(acct.Physical_Address__City__s);
         if (String.isNotBlank(acct.Physical_Address__StateCode__s)) addressParts.add(acct.Physical_Address__StateCode__s);
         //if (String.isNotBlank(acct.Physical_Address__PostalCode__s)) addressParts.add(acct.Physical_Address__PostalCode__s);
-        if (String.isNotBlank(acct.Physical_Address__CountryCode__s)) addressParts.add(acct.Physical_Address__CountryCode__s);
+        //if (String.isNotBlank(acct.Physical_Address__CountryCode__s)) addressParts.add(acct.Physical_Address__CountryCode__s);
 
         String fullAddress = String.join(addressParts, ', ');
         String encodedAddress = EncodingUtil.urlEncode(fullAddress, 'UTF-8');
