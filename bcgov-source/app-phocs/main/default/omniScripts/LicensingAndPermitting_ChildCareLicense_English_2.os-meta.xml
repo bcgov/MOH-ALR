@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <OmniScript xmlns="http://soap.sforce.com/2006/04/metadata">
-    <description>Omniscript to capture Residential Care Facility License from operator portal.</description>
+    <description>Omniscript to capture Child Care License from operator portal.</description>
     <elementTypeComponentMapping>{&quot;ElementTypeToHTMLTemplateList&quot;:[]}</elementTypeComponentMapping>
-    <isActive>false</isActive>
+    <isActive>true</isActive>
     <isIntegrationProcedure>false</isIntegrationProcedure>
     <isManagedUsingStdDesigner>false</isManagedUsingStdDesigner>
     <isMetadataCacheDisabled>false</isMetadataCacheDisabled>
-    <isOmniScriptEmbeddable>true</isOmniScriptEmbeddable>
+    <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
     <isTestProcedure>false</isTestProcedure>
     <isWebCompEnabled>true</isWebCompEnabled>
     <language>English</language>
-    <name>PHOCS Residential Care Facility License</name>
+    <name>PHOCS Child Care License Permit</name>
     <omniProcessElements>
         <isActive>true</isActive>
         <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
@@ -108,7 +108,7 @@
   &quot;bundle&quot; : &quot;PHOCSExtractFacilityAcc&quot;,
   &quot;ignoreCache&quot; : true,
   &quot;dataRaptor Input Parameters&quot; : [ {
-    &quot;element&quot; : &quot;facilityAccLookup&quot;,
+    &quot;element&quot; : &quot;facilityAccId&quot;,
     &quot;inputParam&quot; : &quot;facilityAccName&quot;
   } ],
   &quot;remoteTimeout&quot; : 30000,
@@ -155,7 +155,7 @@
         <propertySetConfig>{
   &quot;controlWidth&quot; : 12,
   &quot;label&quot; : &quot;IntegrationProcedureUpsertAccNInsertingBLAAction&quot;,
-  &quot;integrationProcedureKey&quot; : &quot;LicensingAndPermitting_ResidentialCareLicense&quot;,
+  &quot;integrationProcedureKey&quot; : &quot;LicensingAndPermitting_ChildCareLicense&quot;,
   &quot;useContinuation&quot; : false,
   &quot;remoteOptions&quot; : {
     &quot;useFuture&quot; : false,
@@ -419,7 +419,7 @@
   &quot;repeatClone&quot; : false,
   &quot;repeatLimit&quot; : null,
   &quot;readOnly&quot; : true,
-  &quot;defaultValue&quot; : &quot;Residential Care Facility License&quot;,
+  &quot;defaultValue&quot; : &quot;Child Care License&quot;,
   &quot;help&quot; : false,
   &quot;helpText&quot; : &quot;&quot;,
   &quot;mask&quot; : &quot;&quot;,
@@ -765,7 +765,7 @@
                 <isActive>true</isActive>
                 <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
                 <level>2.0</level>
-                <name>PHOCSWasteDisposal</name>
+                <name>facilityAccWasteDisposal</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
   &quot;controlWidth&quot; : 6,
@@ -804,7 +804,7 @@
                 <isActive>true</isActive>
                 <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
                 <level>2.0</level>
-                <name>PHOCSWaterSupply</name>
+                <name>facilityAccWaterSupply</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
   &quot;controlWidth&quot; : 6,
@@ -864,41 +864,7 @@
                 <isActive>true</isActive>
                 <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
                 <level>2.0</level>
-                <name>PHOCSBillingAddressCity</name>
-                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-                <propertySetConfig>{
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
-  &quot;controlWidth&quot; : 6,
-  &quot;defaultValue&quot; : &quot;%facilityAccBillingAddressCity%&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;repeatClone&quot; : false,
-  &quot;readOnly&quot; : false,
-  &quot;label&quot; : &quot;Billing Address (City)&quot;,
-  &quot;showInputWidth&quot; : false,
-  &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;help&quot; : false,
-  &quot;hide&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;maxLength&quot; : 255,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;
-}</propertySetConfig>
-                <sequenceNumber>16.0</sequenceNumber>
-                <type>Text</type>
-            </childElements>
-            <childElements>
-                <isActive>true</isActive>
-                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-                <level>2.0</level>
-                <name>PHOCSBillingAddressCountry</name>
+                <name>facilityAccBillingAddressCountry</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
   &quot;accessibleInFutureSteps&quot; : false,
@@ -934,41 +900,7 @@
                 <isActive>true</isActive>
                 <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
                 <level>2.0</level>
-                <name>PHOCSBillingAddressPostalCode</name>
-                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-                <propertySetConfig>{
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
-  &quot;controlWidth&quot; : 6,
-  &quot;defaultValue&quot; : &quot;%facilityAccBillingAddressPostalCode%&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;repeatClone&quot; : false,
-  &quot;readOnly&quot; : false,
-  &quot;label&quot; : &quot;Billing Address (ZIP/Postal Code)&quot;,
-  &quot;showInputWidth&quot; : false,
-  &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;help&quot; : false,
-  &quot;hide&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;maxLength&quot; : 255,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;
-}</propertySetConfig>
-                <sequenceNumber>17.0</sequenceNumber>
-                <type>Text</type>
-            </childElements>
-            <childElements>
-                <isActive>true</isActive>
-                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-                <level>2.0</level>
-                <name>PHOCSBillingAddressState</name>
+                <name>facilityAccBillingAddressState</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
   &quot;accessibleInFutureSteps&quot; : false,
@@ -999,6 +931,224 @@
 }</propertySetConfig>
                 <sequenceNumber>15.0</sequenceNumber>
                 <type>Select</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>facilityAccMailingAddressCountry</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;optionSource&quot; : {
+    &quot;type&quot; : &quot;SObject&quot;,
+    &quot;source&quot; : &quot;Account.Physical_Address__CountryCode__s&quot;
+  },
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;repeatClone&quot; : false,
+  &quot;controllingField&quot; : {
+    &quot;element&quot; : &quot;&quot;,
+    &quot;type&quot; : &quot;&quot;,
+    &quot;source&quot; : &quot;&quot;
+  },
+  &quot;readOnly&quot; : false,
+  &quot;label&quot; : &quot;Mailing Address (Country)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;options&quot; : [ ],
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;
+}</propertySetConfig>
+                <sequenceNumber>8.0</sequenceNumber>
+                <type>Select</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>facilityAccMailingAddressState</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;optionSource&quot; : {
+    &quot;type&quot; : &quot;SObject&quot;,
+    &quot;source&quot; : &quot;Account.Physical_Address__StateCode__s&quot;
+  },
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;repeatClone&quot; : false,
+  &quot;controllingField&quot; : {
+    &quot;element&quot; : &quot;PHOCSMailingAddressCountry&quot;,
+    &quot;type&quot; : &quot;SObject&quot;,
+    &quot;source&quot; : &quot;Account.Physical_Address__CountryCode__s&quot;
+  },
+  &quot;readOnly&quot; : false,
+  &quot;label&quot; : &quot;Mailing Address (State/Province)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;options&quot; : [ ],
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;
+}</propertySetConfig>
+                <sequenceNumber>9.0</sequenceNumber>
+                <type>Select</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>facilityAccPhysicalAddressCountry</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Physical Address (Country)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : null,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;options&quot; : [ ],
+  &quot;optionSource&quot; : {
+    &quot;type&quot; : &quot;SObject&quot;,
+    &quot;source&quot; : &quot;Account.Physical_Address__CountryCode__s&quot;
+  },
+  &quot;controllingField&quot; : {
+    &quot;element&quot; : &quot;&quot;,
+    &quot;type&quot; : &quot;&quot;,
+    &quot;source&quot; : &quot;&quot;
+  },
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+                <sequenceNumber>1.0</sequenceNumber>
+                <type>Select</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>facilityAccPhysicalAddressState</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Physical Address (State/Province)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : null,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;options&quot; : [ ],
+  &quot;optionSource&quot; : {
+    &quot;type&quot; : &quot;SObject&quot;,
+    &quot;source&quot; : &quot;Account.Physical_Address__StateCode__s&quot;
+  },
+  &quot;controllingField&quot; : {
+    &quot;element&quot; : &quot;PHOCSPhysicalAddressCountry&quot;,
+    &quot;type&quot; : &quot;SObject&quot;,
+    &quot;source&quot; : &quot;Account.Physical_Address__CountryCode__s&quot;
+  },
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+                <sequenceNumber>2.0</sequenceNumber>
+                <type>Select</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSBillingAddressCity</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;defaultValue&quot; : &quot;%facilityAccBillingAddressCity%&quot;,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;repeatClone&quot; : false,
+  &quot;readOnly&quot; : false,
+  &quot;label&quot; : &quot;Billing Address (City)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;repeat&quot; : false,
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;maxLength&quot; : 255,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;
+}</propertySetConfig>
+                <sequenceNumber>16.0</sequenceNumber>
+                <type>Text</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSBillingAddressPostalCode</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;defaultValue&quot; : &quot;%facilityAccBillingAddressPostalCode%&quot;,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;repeatClone&quot; : false,
+  &quot;readOnly&quot; : false,
+  &quot;label&quot; : &quot;Billing Address (ZIP/Postal Code)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;repeat&quot; : false,
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;maxLength&quot; : 255,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;
+}</propertySetConfig>
+                <sequenceNumber>17.0</sequenceNumber>
+                <type>Text</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -1107,42 +1257,6 @@
                 <isActive>true</isActive>
                 <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
                 <level>2.0</level>
-                <name>PHOCSMailingAddressCountry</name>
-                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-                <propertySetConfig>{
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;optionSource&quot; : {
-    &quot;type&quot; : &quot;SObject&quot;,
-    &quot;source&quot; : &quot;Account.Physical_Address__CountryCode__s&quot;
-  },
-  &quot;helpText&quot; : &quot;&quot;,
-  &quot;controlWidth&quot; : 6,
-  &quot;repeatClone&quot; : false,
-  &quot;controllingField&quot; : {
-    &quot;element&quot; : &quot;&quot;,
-    &quot;type&quot; : &quot;&quot;,
-    &quot;source&quot; : &quot;&quot;
-  },
-  &quot;readOnly&quot; : false,
-  &quot;label&quot; : &quot;Mailing Address (Country)&quot;,
-  &quot;showInputWidth&quot; : false,
-  &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;help&quot; : false,
-  &quot;hide&quot; : false,
-  &quot;repeat&quot; : false,
-  &quot;options&quot; : [ ],
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;
-}</propertySetConfig>
-                <sequenceNumber>8.0</sequenceNumber>
-                <type>Select</type>
-            </childElements>
-            <childElements>
-                <isActive>true</isActive>
-                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-                <level>2.0</level>
                 <name>PHOCSMailingAddressPostalCode</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
@@ -1172,42 +1286,6 @@
 }</propertySetConfig>
                 <sequenceNumber>11.0</sequenceNumber>
                 <type>Text</type>
-            </childElements>
-            <childElements>
-                <isActive>true</isActive>
-                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-                <level>2.0</level>
-                <name>PHOCSMailingAddressState</name>
-                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-                <propertySetConfig>{
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;optionSource&quot; : {
-    &quot;type&quot; : &quot;SObject&quot;,
-    &quot;source&quot; : &quot;Account.Physical_Address__StateCode__s&quot;
-  },
-  &quot;helpText&quot; : &quot;&quot;,
-  &quot;controlWidth&quot; : 6,
-  &quot;repeatClone&quot; : false,
-  &quot;controllingField&quot; : {
-    &quot;element&quot; : &quot;PHOCSMailingAddressCountry&quot;,
-    &quot;type&quot; : &quot;SObject&quot;,
-    &quot;source&quot; : &quot;Account.Physical_Address__CountryCode__s&quot;
-  },
-  &quot;readOnly&quot; : false,
-  &quot;label&quot; : &quot;Mailing Address (State/Province)&quot;,
-  &quot;showInputWidth&quot; : false,
-  &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;help&quot; : false,
-  &quot;hide&quot; : false,
-  &quot;repeat&quot; : false,
-  &quot;options&quot; : [ ],
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;
-}</propertySetConfig>
-                <sequenceNumber>9.0</sequenceNumber>
-                <type>Select</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -1282,45 +1360,6 @@
                 <isActive>true</isActive>
                 <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
                 <level>2.0</level>
-                <name>PHOCSPhysicalAddressCountry</name>
-                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-                <propertySetConfig>{
-  &quot;controlWidth&quot; : 6,
-  &quot;label&quot; : &quot;Physical Address (Country)&quot;,
-  &quot;showInputWidth&quot; : false,
-  &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;repeat&quot; : false,
-  &quot;repeatClone&quot; : false,
-  &quot;repeatLimit&quot; : null,
-  &quot;readOnly&quot; : false,
-  &quot;defaultValue&quot; : null,
-  &quot;help&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
-  &quot;options&quot; : [ ],
-  &quot;optionSource&quot; : {
-    &quot;type&quot; : &quot;SObject&quot;,
-    &quot;source&quot; : &quot;Account.Physical_Address__CountryCode__s&quot;
-  },
-  &quot;controllingField&quot; : {
-    &quot;element&quot; : &quot;&quot;,
-    &quot;type&quot; : &quot;&quot;,
-    &quot;source&quot; : &quot;&quot;
-  },
-  &quot;show&quot; : null,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;hide&quot; : false,
-  &quot;disOnTplt&quot; : false
-}</propertySetConfig>
-                <sequenceNumber>1.0</sequenceNumber>
-                <type>Select</type>
-            </childElements>
-            <childElements>
-                <isActive>true</isActive>
-                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-                <level>2.0</level>
                 <name>PHOCSPhysicalAddressPostalCode</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
@@ -1352,45 +1391,6 @@
 }</propertySetConfig>
                 <sequenceNumber>4.0</sequenceNumber>
                 <type>Text</type>
-            </childElements>
-            <childElements>
-                <isActive>true</isActive>
-                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-                <level>2.0</level>
-                <name>PHOCSPhysicalAddressState</name>
-                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-                <propertySetConfig>{
-  &quot;controlWidth&quot; : 6,
-  &quot;label&quot; : &quot;Physical Address (State/Province)&quot;,
-  &quot;showInputWidth&quot; : false,
-  &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;repeat&quot; : false,
-  &quot;repeatClone&quot; : false,
-  &quot;repeatLimit&quot; : null,
-  &quot;readOnly&quot; : false,
-  &quot;defaultValue&quot; : null,
-  &quot;help&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
-  &quot;options&quot; : [ ],
-  &quot;optionSource&quot; : {
-    &quot;type&quot; : &quot;SObject&quot;,
-    &quot;source&quot; : &quot;Account.Physical_Address__StateCode__s&quot;
-  },
-  &quot;controllingField&quot; : {
-    &quot;element&quot; : &quot;PHOCSPhysicalAddressCountry&quot;,
-    &quot;type&quot; : &quot;SObject&quot;,
-    &quot;source&quot; : &quot;Account.Physical_Address__CountryCode__s&quot;
-  },
-  &quot;show&quot; : null,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;hide&quot; : false,
-  &quot;disOnTplt&quot; : false
-}</propertySetConfig>
-                <sequenceNumber>2.0</sequenceNumber>
-                <type>Select</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -1784,7 +1784,7 @@
                 <isActive>true</isActive>
                 <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
                 <level>2.0</level>
-                <name>PHOCSCategoryL1</name>
+                <name>facilityAccCategoryL1</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
   &quot;controlWidth&quot; : 6,
@@ -1800,40 +1800,12 @@
   &quot;help&quot; : false,
   &quot;helpText&quot; : &quot;&quot;,
   &quot;options&quot; : [ {
-    &quot;name&quot; : &quot;Acquired injury&quot;,
-    &quot;value&quot; : &quot;Acquired injury&quot;,
-    &quot;autoAdv&quot; : null
-  }, {
-    &quot;name&quot; : &quot;Child and youth residential&quot;,
-    &quot;value&quot; : &quot;Child and youth residential&quot;,
-    &quot;autoAdv&quot; : null
-  }, {
-    &quot;name&quot; : &quot;Community living&quot;,
-    &quot;value&quot; : &quot;Community living&quot;,
-    &quot;autoAdv&quot; : null
-  }, {
-    &quot;name&quot; : &quot;Hospice&quot;,
-    &quot;value&quot; : &quot;Hospice&quot;,
-    &quot;autoAdv&quot; : null
-  }, {
-    &quot;name&quot; : &quot;Hospital Act&quot;,
-    &quot;value&quot; : &quot;Hospital Act&quot;,
-    &quot;autoAdv&quot; : null
-  }, {
-    &quot;name&quot; : &quot;Long-term care&quot;,
-    &quot;value&quot; : &quot;Long-term care&quot;,
-    &quot;autoAdv&quot; : null
-  }, {
-    &quot;name&quot; : &quot;Mental health&quot;,
-    &quot;value&quot; : &quot;Mental health&quot;,
+    &quot;name&quot; : &quot;Operating with a licence&quot;,
+    &quot;value&quot; : &quot;Operating with a licence&quot;,
     &quot;autoAdv&quot; : null
   }, {
     &quot;name&quot; : &quot;Operating without a licence&quot;,
     &quot;value&quot; : &quot;Operating without a licence&quot;,
-    &quot;autoAdv&quot; : null
-  }, {
-    &quot;name&quot; : &quot;Substance use&quot;,
-    &quot;value&quot; : &quot;Substance use&quot;,
     &quot;autoAdv&quot; : null
   } ],
   &quot;optionSource&quot; : {
@@ -1859,7 +1831,7 @@
                 <isActive>true</isActive>
                 <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
                 <level>2.0</level>
-                <name>PHOCSCategoryL2</name>
+                <name>facilityAccCategoryL2</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
   &quot;accessibleInFutureSteps&quot; : false,
@@ -1910,7 +1882,7 @@
                 <isActive>true</isActive>
                 <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
                 <level>2.0</level>
-                <name>PHOCSCategoryL3</name>
+                <name>facilityAccCategoryL3</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
   &quot;accessibleInFutureSteps&quot; : false,
@@ -1932,7 +1904,7 @@
   &quot;inputWidth&quot; : 12,
   &quot;required&quot; : false,
   &quot;help&quot; : false,
-  &quot;hide&quot; : false,
+  &quot;hide&quot; : true,
   &quot;repeat&quot; : false,
   &quot;options&quot; : [ {
     &quot;name&quot; : &quot;Lagoon&quot;,
@@ -1980,7 +1952,7 @@
   &quot;repeatClone&quot; : false,
   &quot;repeatLimit&quot; : null,
   &quot;readOnly&quot; : true,
-  &quot;defaultValue&quot; : &quot;Residential Care&quot;,
+  &quot;defaultValue&quot; : &quot;Child Care&quot;,
   &quot;help&quot; : false,
   &quot;helpText&quot; : &quot;&quot;,
   &quot;mask&quot; : &quot;&quot;,
@@ -2093,13 +2065,13 @@
       &quot;rules&quot; : [ {
         &quot;data&quot; : null,
         &quot;condition&quot; : &quot;&lt;&gt;&quot;,
-        &quot;field&quot; : &quot;facilityAccLookup&quot;
+        &quot;field&quot; : &quot;facilityAccountId&quot;
       } ]
     }
   },
   &quot;conditionType&quot; : &quot;Hide if False&quot;,
   &quot;hide&quot; : false,
-  &quot;lwcName&quot; : &quot;cfPHOCSDisplayResidentialCareFacilityAccountAssetsForOperator&quot;,
+  &quot;lwcName&quot; : &quot;cfPHOCSDisplayFacilityAccountAssetsForOperator&quot;,
   &quot;bStandalone&quot; : true,
   &quot;customAttributes&quot; : [ {
     &quot;name&quot; : &quot;record-id&quot;,
@@ -2305,40 +2277,52 @@
   &quot;help&quot; : false,
   &quot;helpText&quot; : &quot;&quot;,
   &quot;options&quot; : [ {
-    &quot;name&quot; : &quot;Child &amp; Youth Residential&quot;,
-    &quot;value&quot; : &quot;Child &amp; Youth Residential&quot;,
+    &quot;name&quot; : &quot;Group Child Care – School Age&quot;,
+    &quot;value&quot; : &quot;Group Child Care – School Age&quot;,
     &quot;autoAdv&quot; : null
   }, {
-    &quot;name&quot; : &quot;Hospice&quot;,
-    &quot;value&quot; : &quot;Hospice&quot;,
+    &quot;name&quot; : &quot;Group Child Care - Under 36m&quot;,
+    &quot;value&quot; : &quot;Group Child Care - Under 36m&quot;,
     &quot;autoAdv&quot; : null
   }, {
-    &quot;name&quot; : &quot;Mental Health&quot;,
-    &quot;value&quot; : &quot;Mental Health&quot;,
+    &quot;name&quot; : &quot;Group Child Care - 30m to School Age&quot;,
+    &quot;value&quot; : &quot;Group Child Care - 30m to School Age&quot;,
     &quot;autoAdv&quot; : null
   }, {
-    &quot;name&quot; : &quot;Substance Use&quot;,
-    &quot;value&quot; : &quot;Substance Use&quot;,
+    &quot;name&quot; : &quot;Child Minding&quot;,
+    &quot;value&quot; : &quot;Child Minding&quot;,
     &quot;autoAdv&quot; : null
   }, {
-    &quot;name&quot; : &quot;Mental Health &amp; Substance Use&quot;,
-    &quot;value&quot; : &quot;Mental Health &amp; Substance Use&quot;,
+    &quot;name&quot; : &quot;Occasional Child Care&quot;,
+    &quot;value&quot; : &quot;Occasional Child Care&quot;,
     &quot;autoAdv&quot; : null
   }, {
-    &quot;name&quot; : &quot;Long Term Care&quot;,
-    &quot;value&quot; : &quot;Long Term Care&quot;,
+    &quot;name&quot; : &quot;Preschool&quot;,
+    &quot;value&quot; : &quot;Preschool&quot;,
     &quot;autoAdv&quot; : null
   }, {
-    &quot;name&quot; : &quot;Community Living&quot;,
-    &quot;value&quot; : &quot;Community Living&quot;,
+    &quot;name&quot; : &quot;Family Child Care&quot;,
+    &quot;value&quot; : &quot;Family Child Care&quot;,
     &quot;autoAdv&quot; : null
   }, {
-    &quot;name&quot; : &quot;Acquired Injury&quot;,
-    &quot;value&quot; : &quot;Acquired Injury&quot;,
+    &quot;name&quot; : &quot;Multi Age Child Care&quot;,
+    &quot;value&quot; : &quot;Multi Age Child Care&quot;,
     &quot;autoAdv&quot; : null
   }, {
-    &quot;name&quot; : &quot;Unlawful-Residential Care&quot;,
-    &quot;value&quot; : &quot;Unlawful-Residential Care&quot;,
+    &quot;name&quot; : &quot;In Home Multi Age Child Care&quot;,
+    &quot;value&quot; : &quot;In Home Multi Age Child Care&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;School Age Care on School Grounds&quot;,
+    &quot;value&quot; : &quot;School Age Care on School Grounds&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Recreational Care&quot;,
+    &quot;value&quot; : &quot;Recreational Care&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;Unlawful-Childcare&quot;,
+    &quot;value&quot; : &quot;Unlawful-Childcare&quot;,
     &quot;autoAdv&quot; : null
   } ],
   &quot;optionSource&quot; : {
@@ -2443,7 +2427,7 @@
   &quot;collapse&quot; : false,
   &quot;repeat&quot; : true,
   &quot;repeatClone&quot; : false,
-  &quot;repeatLimit&quot; : 9,
+  &quot;repeatLimit&quot; : 10,
   &quot;show&quot; : null,
   &quot;conditionType&quot; : &quot;Hide if False&quot;,
   &quot;accessibleInFutureSteps&quot; : false,
@@ -2530,6 +2514,146 @@
     </omniProcessElements>
     <omniProcessElements>
         <childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>facilityAccId</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;controlWidth&quot; : 5,
+  &quot;label&quot; : &quot;Account Id&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : &quot;%facilityAccId%&quot;,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;maxLength&quot; : 255,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : true,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+                <sequenceNumber>1.0</sequenceNumber>
+                <type>Text</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>PHOCSFacilityAccExtractAction</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;controlWidth&quot; : 7,
+  &quot;label&quot; : &quot;PHOCSFacilityAccExtractAction&quot;,
+  &quot;bundle&quot; : &quot;PHOCSFacilityAccExtract&quot;,
+  &quot;ignoreCache&quot; : true,
+  &quot;dataRaptor Input Parameters&quot; : [ {
+    &quot;element&quot; : &quot;AccFacilitySearch&quot;,
+    &quot;inputParam&quot; : &quot;facilityAccName&quot;
+  }, {
+    &quot;element&quot; : &quot;BusinessEntityAccountId&quot;,
+    &quot;inputParam&quot; : &quot;BusinessEntityAcctId&quot;
+  }, {
+    &quot;element&quot; : &quot;FacilityType&quot;,
+    &quot;inputParam&quot; : &quot;FacilityType&quot;
+  } ],
+  &quot;remoteTimeout&quot; : 30000,
+  &quot;responseJSONPath&quot; : &quot;&quot;,
+  &quot;responseJSONNode&quot; : &quot;&quot;,
+  &quot;inProgressMessage&quot; : &quot;In Progress&quot;,
+  &quot;postMessage&quot; : &quot;Done&quot;,
+  &quot;failureNextLabel&quot; : &quot;Continue&quot;,
+  &quot;failureAbortLabel&quot; : &quot;Abort&quot;,
+  &quot;failureGoBackLabel&quot; : &quot;Go Back&quot;,
+  &quot;failureAbortMessage&quot; : &quot;Are you sure?&quot;,
+  &quot;validationRequired&quot; : &quot;Step&quot;,
+  &quot;redirectPageName&quot; : &quot;&quot;,
+  &quot;redirectTemplateUrl&quot; : &quot;vlcAcknowledge.html&quot;,
+  &quot;redirectNextLabel&quot; : &quot;Next&quot;,
+  &quot;redirectNextWidth&quot; : 3,
+  &quot;redirectPreviousLabel&quot; : &quot;Previous&quot;,
+  &quot;redirectPreviousWidth&quot; : 3,
+  &quot;showPersistentComponent&quot; : [ true, false ],
+  &quot;show&quot; : null,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;wpm&quot; : false,
+  &quot;ssm&quot; : false,
+  &quot;message&quot; : { },
+  &quot;pubsub&quot; : false,
+  &quot;errorMessage&quot; : {
+    &quot;custom&quot; : [ ],
+    &quot;default&quot; : null
+  },
+  &quot;enableDefaultAbort&quot; : false,
+  &quot;enableActionMessage&quot; : false,
+  &quot;businessCategory&quot; : &quot;&quot;,
+  &quot;businessEvent&quot; : &quot;&quot;
+}</propertySetConfig>
+                <sequenceNumber>0.0</sequenceNumber>
+                <type>DataRaptor Extract Action</type>
+            </childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>AccFacilitySearch</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;Facility Search&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;googleTransformation&quot; : {
+    &quot;street&quot; : &quot;&quot;,
+    &quot;locality&quot; : &quot;&quot;,
+    &quot;administrative_area_level_1&quot; : &quot;&quot;,
+    &quot;administrative_area_level_2&quot; : &quot;&quot;,
+    &quot;country&quot; : &quot;&quot;,
+    &quot;postal_code&quot; : &quot;&quot;
+  },
+  &quot;required&quot; : false,
+  &quot;readOnly&quot; : false,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;maxLength&quot; : 255,
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;typeAheadKey&quot; : &quot;facilityAccName&quot;,
+  &quot;dataProcessorFunction&quot; : &quot;&quot;,
+  &quot;callFrequency&quot; : 300,
+  &quot;editMode&quot; : false,
+  &quot;newItemLabel&quot; : &quot;&quot;,
+  &quot;hideEditButton&quot; : true,
+  &quot;enableGoogleMapsAutocomplete&quot; : false,
+  &quot;enableLookup&quot; : false,
+  &quot;disableDataFilter&quot; : false,
+  &quot;googleMapsAPIKey&quot; : &quot;&quot;,
+  &quot;hideMap&quot; : true,
+  &quot;googleAddressCountry&quot; : &quot;all&quot;,
+  &quot;useDataJson&quot; : false,
+  &quot;dataJsonPath&quot; : &quot;&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;
+}</propertySetConfig>
+            <sequenceNumber>2.0</sequenceNumber>
+            <type>Type Ahead Block</type>
+        </childElements>
+        <childElements>
             <isActive>true</isActive>
             <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
             <level>1.0</level>
@@ -2587,7 +2711,16 @@
     }
   },
   &quot;placeholder&quot; : &quot;&quot;,
-  &quot;show&quot; : null,
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : null,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;field&quot; : &quot;PhocsPoolConstReasonforApplyRadio&quot;
+      } ]
+    }
+  },
   &quot;conditionType&quot; : &quot;Hide if False&quot;,
   &quot;accessibleInFutureSteps&quot; : false,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
@@ -2646,6 +2779,25 @@
 }</propertySetConfig>
             <sequenceNumber>0.0</sequenceNumber>
             <type>Radio</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>TextBlock8</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;TextBlock8&quot;,
+  &quot;text&quot; : &quot;&lt;p&gt;&lt;span data-teams=\&quot;true\&quot;&gt;If you do not find the facility or system from the dropdown search, please click \&quot;Next\&quot; button to create it.&lt;/span&gt;&lt;/p&gt;&quot;,
+  &quot;show&quot; : null,
+  &quot;dataJSON&quot; : false,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;textKey&quot; : &quot;&quot;,
+  &quot;sanitize&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>3.0</sequenceNumber>
+            <type>Text Block</type>
         </childElements>
         <isActive>true</isActive>
         <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
@@ -2781,32 +2933,22 @@
                 <name>ProgramAffiliationFundingAgencyReview</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;showInputWidth&quot; : false,
-  &quot;required&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;,
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
   &quot;controlWidth&quot; : 6,
-  &quot;repeatClone&quot; : false,
-  &quot;readOnly&quot; : true,
   &quot;label&quot; : &quot;Program Affiliation/Funding Agency&quot;,
+  &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;help&quot; : false,
+  &quot;expression&quot; : &quot;%ProgramAffiliationFundingAgency%&quot;,
   &quot;hide&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;maxLength&quot; : 255,
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;defaultValue&quot; : &quot;%ProgramAffiliationFundingAgency%&quot;
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>0.0</sequenceNumber>
-                <type>Text</type>
+                <type>Formula</type>
             </childElements>
             <isActive>true</isActive>
             <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
@@ -2840,30 +2982,18 @@
   &quot;label&quot; : &quot;Waste Disposal&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;repeat&quot; : false,
-  &quot;repeatClone&quot; : false,
-  &quot;repeatLimit&quot; : null,
-  &quot;readOnly&quot; : true,
-  &quot;defaultValue&quot; : &quot;%PHOCSWasteDisposal%&quot;,
-  &quot;help&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;maxLength&quot; : 255,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;show&quot; : null,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;expression&quot; : &quot;%facilityAccWasteDisposal%&quot;,
   &quot;hide&quot; : false,
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>1.0</sequenceNumber>
-                <type>Text</type>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -2872,32 +3002,22 @@
                 <name>PHOCSWaterSupplyReview</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;showInputWidth&quot; : false,
-  &quot;required&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;,
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
   &quot;controlWidth&quot; : 6,
-  &quot;repeatClone&quot; : false,
-  &quot;readOnly&quot; : true,
   &quot;label&quot; : &quot;Water Supply&quot;,
+  &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;help&quot; : false,
+  &quot;expression&quot; : &quot;%facilityAccWaterSupply%&quot;,
   &quot;hide&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;maxLength&quot; : 255,
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;defaultValue&quot; : &quot;%PHOCSWaterSupply%&quot;
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>0.0</sequenceNumber>
-                <type>Text</type>
+                <type>Formula</type>
             </childElements>
             <isActive>true</isActive>
             <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
@@ -2927,32 +3047,22 @@
                 <name>PHOCSBillingAddressCityReview</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
   &quot;controlWidth&quot; : 6,
-  &quot;defaultValue&quot; : &quot;%PHOCSBillingAddressCity%&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;repeatClone&quot; : false,
-  &quot;readOnly&quot; : true,
   &quot;label&quot; : &quot;Billing Address (City)&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;help&quot; : false,
+  &quot;expression&quot; : &quot;%PHOCSBillingAddressCity%&quot;,
   &quot;hide&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;maxLength&quot; : 255,
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>16.0</sequenceNumber>
-                <type>Text</type>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -2965,30 +3075,18 @@
   &quot;label&quot; : &quot;Billing Address (Country)&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;repeat&quot; : false,
-  &quot;repeatClone&quot; : false,
-  &quot;repeatLimit&quot; : null,
-  &quot;readOnly&quot; : true,
-  &quot;defaultValue&quot; : &quot;%PHOCSBillingAddressCountry%&quot;,
-  &quot;help&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;maxLength&quot; : 255,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;show&quot; : null,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;expression&quot; : &quot;%facilityAccBillingAddressCountry%&quot;,
   &quot;hide&quot; : false,
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>14.0</sequenceNumber>
-                <type>Text</type>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -2997,32 +3095,22 @@
                 <name>PHOCSBillingAddressPostalCodeReview</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
   &quot;controlWidth&quot; : 6,
-  &quot;defaultValue&quot; : &quot;%PHOCSBillingAddressPostalCode%&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;repeatClone&quot; : false,
-  &quot;readOnly&quot; : true,
   &quot;label&quot; : &quot;Billing Address (ZIP/Postal Code)&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;help&quot; : false,
+  &quot;expression&quot; : &quot;%PHOCSBillingAddressPostalCode%&quot;,
   &quot;hide&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;maxLength&quot; : 255,
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>17.0</sequenceNumber>
-                <type>Text</type>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -3035,30 +3123,18 @@
   &quot;label&quot; : &quot;Billing Address (State/Province)&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;repeat&quot; : false,
-  &quot;repeatClone&quot; : false,
-  &quot;repeatLimit&quot; : null,
-  &quot;readOnly&quot; : true,
-  &quot;defaultValue&quot; : &quot;%PHOCSBillingAddressState%&quot;,
-  &quot;help&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;maxLength&quot; : 255,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;show&quot; : null,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;expression&quot; : &quot;%facilityAccBillingAddressState%&quot;,
   &quot;hide&quot; : false,
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>15.0</sequenceNumber>
-                <type>Text</type>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -3067,31 +3143,22 @@
                 <name>PHOCSBillingAddressStreetReview</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
   &quot;controlWidth&quot; : 12,
-  &quot;defaultValue&quot; : &quot;%PHOCSBillingAddressStreet%&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;repeatClone&quot; : false,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;readOnly&quot; : true,
   &quot;label&quot; : &quot;Billing Address (Street)&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;help&quot; : false,
+  &quot;expression&quot; : &quot;%PHOCSBillingAddressStreet%&quot;,
   &quot;hide&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;maxLength&quot; : 255,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>13.0</sequenceNumber>
-                <type>Text Area</type>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -3100,32 +3167,22 @@
                 <name>PHOCSDrivingDirectionsReview</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;defaultValue&quot; : &quot;%PHOCSDrivingDirections%&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;showInputWidth&quot; : false,
-  &quot;required&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;,
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
   &quot;controlWidth&quot; : 12,
-  &quot;repeatClone&quot; : false,
-  &quot;readOnly&quot; : true,
   &quot;label&quot; : &quot;Driving Directions&quot;,
+  &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;help&quot; : false,
+  &quot;expression&quot; : &quot;%PHOCSDrivingDirections%&quot;,
   &quot;hide&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;maxLength&quot; : 255,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
-                <sequenceNumber>5.0</sequenceNumber>
-                <type>Text</type>
+                <sequenceNumber>6.0</sequenceNumber>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -3134,32 +3191,22 @@
                 <name>PHOCSMailingAddressCityReview</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
   &quot;controlWidth&quot; : 6,
-  &quot;defaultValue&quot; : &quot;%PHOCSMailingAddressCity%&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;repeatClone&quot; : false,
-  &quot;readOnly&quot; : true,
   &quot;label&quot; : &quot;Mailing Address (City)&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;help&quot; : false,
+  &quot;expression&quot; : &quot;%PHOCSMailingAddressCity%&quot;,
   &quot;hide&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;maxLength&quot; : 255,
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
-                <sequenceNumber>10.0</sequenceNumber>
-                <type>Text</type>
+                <sequenceNumber>11.0</sequenceNumber>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -3172,30 +3219,18 @@
   &quot;label&quot; : &quot;Mailing Address (Country)&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;repeat&quot; : false,
-  &quot;repeatClone&quot; : false,
-  &quot;repeatLimit&quot; : null,
-  &quot;readOnly&quot; : true,
-  &quot;defaultValue&quot; : &quot;%PHOCSMailingAddressCountry%&quot;,
-  &quot;help&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;maxLength&quot; : 255,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;show&quot; : null,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;expression&quot; : &quot;%facilityAccMailingAddressCountry%&quot;,
   &quot;hide&quot; : false,
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;disOnTplt&quot; : false
 }</propertySetConfig>
-                <sequenceNumber>8.0</sequenceNumber>
-                <type>Text</type>
+                <sequenceNumber>9.0</sequenceNumber>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -3204,32 +3239,22 @@
                 <name>PHOCSMailingAddressPostalCodeReview</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
   &quot;controlWidth&quot; : 6,
-  &quot;defaultValue&quot; : &quot;%PHOCSMailingAddressPostalCode%&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;repeatClone&quot; : false,
-  &quot;readOnly&quot; : true,
   &quot;label&quot; : &quot;Mailing Address (ZIP/Postal Code)&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;help&quot; : false,
+  &quot;expression&quot; : &quot;%PHOCSMailingAddressPostalCode%&quot;,
   &quot;hide&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;maxLength&quot; : 255,
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
-                <sequenceNumber>11.0</sequenceNumber>
-                <type>Text</type>
+                <sequenceNumber>12.0</sequenceNumber>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -3242,30 +3267,18 @@
   &quot;label&quot; : &quot;Mailing Address (State/Province)&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;repeat&quot; : false,
-  &quot;repeatClone&quot; : false,
-  &quot;repeatLimit&quot; : null,
-  &quot;readOnly&quot; : true,
-  &quot;defaultValue&quot; : &quot;%PHOCSMailingAddressState%&quot;,
-  &quot;help&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;maxLength&quot; : 255,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;show&quot; : null,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;expression&quot; : &quot;%facilityAccMailingAddressState%&quot;,
   &quot;hide&quot; : false,
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;disOnTplt&quot; : false
 }</propertySetConfig>
-                <sequenceNumber>9.0</sequenceNumber>
-                <type>Text</type>
+                <sequenceNumber>10.0</sequenceNumber>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -3274,31 +3287,22 @@
                 <name>PHOCSMailingAddressStreetReview</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
   &quot;controlWidth&quot; : 12,
-  &quot;defaultValue&quot; : &quot;%PHOCSMailingAddressStreet%&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;repeatClone&quot; : false,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;readOnly&quot; : true,
   &quot;label&quot; : &quot;Mailing Address (Street)&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;help&quot; : false,
+  &quot;expression&quot; : &quot;%PHOCSMailingAddressStreet%&quot;,
   &quot;hide&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;maxLength&quot; : 255,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
-                <sequenceNumber>7.0</sequenceNumber>
-                <type>Text Area</type>
+                <sequenceNumber>8.0</sequenceNumber>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -3307,32 +3311,22 @@
                 <name>PHOCSPhysicalAddressCityReview</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;defaultValue&quot; : &quot;%PHOCSPhysicalAddressCity%&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;showInputWidth&quot; : false,
-  &quot;required&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;,
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
   &quot;controlWidth&quot; : 6,
-  &quot;repeatClone&quot; : false,
-  &quot;readOnly&quot; : true,
   &quot;label&quot; : &quot;Physical Address (City)&quot;,
+  &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;help&quot; : false,
+  &quot;expression&quot; : &quot;%PHOCSPhysicalAddressCity%&quot;,
   &quot;hide&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;maxLength&quot; : 255,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>3.0</sequenceNumber>
-                <type>Text</type>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -3345,30 +3339,18 @@
   &quot;label&quot; : &quot;Physical Address (Country)&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;repeat&quot; : false,
-  &quot;repeatClone&quot; : false,
-  &quot;repeatLimit&quot; : null,
-  &quot;readOnly&quot; : true,
-  &quot;defaultValue&quot; : &quot;%PHOCSPhysicalAddressCountry%&quot;,
-  &quot;help&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;maxLength&quot; : 255,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;show&quot; : null,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;expression&quot; : &quot;%facilityAccPhysicalAddressCountry%&quot;,
   &quot;hide&quot; : false,
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>1.0</sequenceNumber>
-                <type>Text</type>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -3377,32 +3359,22 @@
                 <name>PHOCSPhysicalAddressPostalCodeReview</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;defaultValue&quot; : &quot;%PHOCSPhysicalAddressPostalCode%&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;showInputWidth&quot; : false,
-  &quot;required&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;,
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
   &quot;controlWidth&quot; : 6,
-  &quot;repeatClone&quot; : false,
-  &quot;readOnly&quot; : true,
   &quot;label&quot; : &quot;Physical Address (ZIP/Postal Code)&quot;,
+  &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;help&quot; : false,
+  &quot;expression&quot; : &quot;%PHOCSPhysicalAddressPostalCode%&quot;,
   &quot;hide&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;maxLength&quot; : 255,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
-                <sequenceNumber>4.0</sequenceNumber>
-                <type>Text</type>
+                <sequenceNumber>5.0</sequenceNumber>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -3415,30 +3387,18 @@
   &quot;label&quot; : &quot;Physical Address (State/Province)&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;repeat&quot; : false,
-  &quot;repeatClone&quot; : false,
-  &quot;repeatLimit&quot; : null,
-  &quot;readOnly&quot; : true,
-  &quot;defaultValue&quot; : &quot;%PHOCSPhysicalAddressState%&quot;,
-  &quot;help&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;maxLength&quot; : 255,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;show&quot; : null,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;expression&quot; : &quot;%facilityAccPhysicalAddressState%&quot;,
   &quot;hide&quot; : false,
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>2.0</sequenceNumber>
-                <type>Text</type>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -3447,31 +3407,22 @@
                 <name>PHOCSPhysicalAddressStreetReview</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
   &quot;controlWidth&quot; : 12,
-  &quot;defaultValue&quot; : &quot;%PHOCSPhysicalAddressStreet%&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;repeatClone&quot; : false,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;readOnly&quot; : true,
   &quot;label&quot; : &quot;Physical Address (Street)&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;help&quot; : false,
+  &quot;expression&quot; : &quot;%PHOCSPhysicalAddressStreet%&quot;,
   &quot;hide&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;maxLength&quot; : 255,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>0.0</sequenceNumber>
-                <type>Text Area</type>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -3488,7 +3439,7 @@
   &quot;textKey&quot; : &quot;&quot;,
   &quot;sanitize&quot; : false
 }</propertySetConfig>
-                <sequenceNumber>12.0</sequenceNumber>
+                <sequenceNumber>7.0</sequenceNumber>
                 <type>Text Block</type>
             </childElements>
             <childElements>
@@ -3506,7 +3457,7 @@
   &quot;textKey&quot; : &quot;&quot;,
   &quot;sanitize&quot; : false
 }</propertySetConfig>
-                <sequenceNumber>6.0</sequenceNumber>
+                <sequenceNumber>4.0</sequenceNumber>
                 <type>Text Block</type>
             </childElements>
             <isActive>true</isActive>
@@ -3537,32 +3488,22 @@
                 <name>PHOCSAccountNameReview</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;defaultValue&quot; : &quot;%PHOCSAccountName%&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;showInputWidth&quot; : false,
-  &quot;required&quot; : true,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;,
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
   &quot;controlWidth&quot; : 6,
-  &quot;repeatClone&quot; : false,
-  &quot;readOnly&quot; : true,
   &quot;label&quot; : &quot;Account Name&quot;,
+  &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;help&quot; : false,
+  &quot;expression&quot; : &quot;%PHOCSAccountName%&quot;,
   &quot;hide&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;maxLength&quot; : 255,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>0.0</sequenceNumber>
-                <type>Text</type>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -3571,31 +3512,22 @@
                 <name>PHOCSDescriptionReview</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
   &quot;controlWidth&quot; : 12,
-  &quot;defaultValue&quot; : &quot;%PHOCSDescription%&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;repeatClone&quot; : false,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;readOnly&quot; : true,
   &quot;label&quot; : &quot;Description&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;help&quot; : false,
+  &quot;expression&quot; : &quot;%PHOCSDescription%&quot;,
   &quot;hide&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;maxLength&quot; : 255,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>7.0</sequenceNumber>
-                <type>Text Area</type>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -3604,29 +3536,22 @@
                 <name>PHOCSFacilityEmailReview</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
   &quot;controlWidth&quot; : 6,
-  &quot;defaultValue&quot; : &quot;%PHOCSFacilityEmail%&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;repeatClone&quot; : false,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;readOnly&quot; : true,
   &quot;label&quot; : &quot;Facility Email&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;help&quot; : false,
+  &quot;expression&quot; : &quot;%PHOCSFacilityEmail%&quot;,
   &quot;hide&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>3.0</sequenceNumber>
-                <type>Email</type>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -3635,32 +3560,22 @@
                 <name>PHOCSFaxReview</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
   &quot;controlWidth&quot; : 6,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;defaultValue&quot; : &quot;%PHOCSFax%&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;repeatClone&quot; : false,
-  &quot;readOnly&quot; : true,
   &quot;label&quot; : &quot;Fax&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;help&quot; : false,
+  &quot;expression&quot; : &quot;%PHOCSFax%&quot;,
   &quot;hide&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;maxLength&quot; : 255,
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>4.0</sequenceNumber>
-                <type>Text</type>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -3669,32 +3584,22 @@
                 <name>PHOCSPhoneExtensionReview</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
   &quot;controlWidth&quot; : 6,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;defaultValue&quot; : &quot;%PHOCSPhoneExtension%&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;repeatClone&quot; : false,
-  &quot;readOnly&quot; : true,
   &quot;label&quot; : &quot;Phone Extension&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;help&quot; : false,
+  &quot;expression&quot; : &quot;%PHOCSPhoneExtension%&quot;,
   &quot;hide&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;maxLength&quot; : 255,
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>2.0</sequenceNumber>
-                <type>Text</type>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -3703,32 +3608,22 @@
                 <name>PHOCSPhoneReview</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
   &quot;controlWidth&quot; : 6,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;defaultValue&quot; : &quot;%PHOCSPhone%&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;repeatClone&quot; : false,
-  &quot;readOnly&quot; : true,
   &quot;label&quot; : &quot;Phone&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;help&quot; : false,
+  &quot;expression&quot; : &quot;%PHOCSPhone%&quot;,
   &quot;hide&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;maxLength&quot; : 255,
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>1.0</sequenceNumber>
-                <type>Text</type>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -3737,30 +3632,22 @@
                 <name>PHOCSStartDateReview</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;minDate&quot; : &quot;&quot;,
-  &quot;helpText&quot; : &quot;&quot;,
   &quot;controlWidth&quot; : 6,
-  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
-  &quot;defaultValue&quot; : &quot;%PHOCSStartDate%&quot;,
-  &quot;modelDateFormat&quot; : &quot;yyyy-MM-dd&quot;,
-  &quot;repeatClone&quot; : false,
-  &quot;readOnly&quot; : true,
   &quot;label&quot; : &quot;Operation Start Date&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;help&quot; : false,
+  &quot;expression&quot; : &quot;%PHOCSStartDate%&quot;,
   &quot;hide&quot; : false,
-  &quot;dateType&quot; : &quot;string&quot;,
-  &quot;repeat&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;maxDate&quot; : &quot;&quot;,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>6.0</sequenceNumber>
-                <type>Date</type>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -3769,28 +3656,22 @@
                 <name>PHOCSWebsiteReview</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
   &quot;controlWidth&quot; : 6,
-  &quot;defaultValue&quot; : &quot;%PHOCSWebsite%&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;repeatClone&quot; : false,
-  &quot;readOnly&quot; : true,
   &quot;label&quot; : &quot;Website&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;help&quot; : false,
+  &quot;expression&quot; : &quot;%PHOCSWebsite%&quot;,
   &quot;hide&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>5.0</sequenceNumber>
-                <type>URL</type>
+                <type>Formula</type>
             </childElements>
             <isActive>true</isActive>
             <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
@@ -3820,31 +3701,22 @@
                 <name>PHOCSBLADescriptionReview</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
   &quot;controlWidth&quot; : 12,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;repeatClone&quot; : false,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;readOnly&quot; : true,
   &quot;label&quot; : &quot;Description&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;help&quot; : false,
+  &quot;expression&quot; : &quot;%PHOCSBLADescription%&quot;,
   &quot;hide&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;maxLength&quot; : 255,
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;defaultValue&quot; : &quot;%PHOCSBLADescription%&quot;
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
-                <sequenceNumber>2.0</sequenceNumber>
-                <type>Text Area</type>
+                <sequenceNumber>4.0</sequenceNumber>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -3857,30 +3729,18 @@
   &quot;label&quot; : &quot;Name Of Community Water Supply&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;repeat&quot; : false,
-  &quot;repeatClone&quot; : false,
-  &quot;repeatLimit&quot; : null,
-  &quot;readOnly&quot; : true,
-  &quot;defaultValue&quot; : &quot;%PHOCSNameOfCommunityWaterSupply%&quot;,
-  &quot;help&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;maxLength&quot; : 255,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;show&quot; : null,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;expression&quot; : &quot;%PHOCSNameOfCommunityWaterSupply%&quot;,
   &quot;hide&quot; : false,
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>1.0</sequenceNumber>
-                <type>Text</type>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -3893,30 +3753,18 @@
   &quot;label&quot; : &quot;Other Services at this Address&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;repeat&quot; : false,
-  &quot;repeatClone&quot; : false,
-  &quot;repeatLimit&quot; : null,
-  &quot;readOnly&quot; : true,
-  &quot;defaultValue&quot; : &quot;%PHOCSOtherServicesatthisAddress%&quot;,
-  &quot;help&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;maxLength&quot; : 255,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;show&quot; : null,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;expression&quot; : &quot;%PHOCSOtherServicesatthisAddress%&quot;,
   &quot;hide&quot; : false,
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>3.0</sequenceNumber>
-                <type>Text</type>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -3929,30 +3777,18 @@
   &quot;label&quot; : &quot;Primary Owner&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;repeat&quot; : false,
-  &quot;repeatClone&quot; : false,
-  &quot;repeatLimit&quot; : null,
-  &quot;readOnly&quot; : true,
-  &quot;defaultValue&quot; : &quot;%PHOCSPrimaryOwnerReview%&quot;,
-  &quot;help&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;maxLength&quot; : 255,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;show&quot; : null,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;expression&quot; : &quot;%PHOCSPrimaryOwnerReview%&quot;,
   &quot;hide&quot; : false,
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>0.0</sequenceNumber>
-                <type>Text</type>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -3985,7 +3821,7 @@
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;defaultValue&quot; : &quot;%LogInUserContactId%&quot;
 }</propertySetConfig>
-                <sequenceNumber>4.0</sequenceNumber>
+                <sequenceNumber>2.0</sequenceNumber>
                 <type>Text</type>
             </childElements>
             <isActive>true</isActive>
@@ -4020,30 +3856,18 @@
   &quot;label&quot; : &quot;Category L1&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;repeat&quot; : false,
-  &quot;repeatClone&quot; : false,
-  &quot;repeatLimit&quot; : null,
-  &quot;readOnly&quot; : true,
-  &quot;defaultValue&quot; : &quot;%PHOCSCategoryL1%&quot;,
-  &quot;help&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;maxLength&quot; : 255,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;show&quot; : null,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;expression&quot; : &quot;%facilityAccCategoryL1%&quot;,
   &quot;hide&quot; : false,
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>1.0</sequenceNumber>
-                <type>Text</type>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -4056,30 +3880,18 @@
   &quot;label&quot; : &quot;Category L2&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;repeat&quot; : false,
-  &quot;repeatClone&quot; : false,
-  &quot;repeatLimit&quot; : null,
-  &quot;readOnly&quot; : true,
-  &quot;defaultValue&quot; : &quot;%PHOCSCategoryL2%&quot;,
-  &quot;help&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;maxLength&quot; : 255,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;show&quot; : null,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;expression&quot; : &quot;%facilityAccCategoryL2%&quot;,
   &quot;hide&quot; : false,
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>2.0</sequenceNumber>
-                <type>Text</type>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -4092,30 +3904,18 @@
   &quot;label&quot; : &quot;Category L3&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;repeat&quot; : false,
-  &quot;repeatClone&quot; : false,
-  &quot;repeatLimit&quot; : null,
-  &quot;readOnly&quot; : true,
-  &quot;defaultValue&quot; : &quot;%PHOCSCategoryL3%&quot;,
-  &quot;help&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;maxLength&quot; : 255,
-  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;expression&quot; : &quot;%facilityAccCategoryL3%&quot;,
+  &quot;hide&quot; : false,
   &quot;show&quot; : null,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;debounceValue&quot; : 0,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;hide&quot; : true,
   &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>3.0</sequenceNumber>
-                <type>Text</type>
+                <type>Formula</type>
             </childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -4332,9 +4132,9 @@
   &quot;controlWidth&quot; : 12,
   &quot;wpm&quot; : false,
   &quot;elementValueMap&quot; : {
-    &quot;LicenseTypeNameForBLApplication&quot; : &quot;Residential Care Facility License&quot;,
+    &quot;LicenseTypeNameForBLApplication&quot; : &quot;Child Care License&quot;,
     &quot;RecordtypeForBLApplication&quot; : &quot;OperatingPermitApplication&quot;,
-    &quot;FacilityType&quot; : &quot;Residential Care&quot;
+    &quot;FacilityType&quot; : &quot;Child Care&quot;
   },
   &quot;showPersistentComponent&quot; : [ true, false ],
   &quot;label&quot; : &quot;SetValuesforBLALicenseType&quot;,
@@ -4348,8 +4148,8 @@
     </omniProcessElements>
     <omniProcessType>OmniScript</omniProcessType>
     <propertySetConfig>{&quot;persistentComponent&quot;:[{&quot;render&quot;:false,&quot;label&quot;:&quot;&quot;,&quot;remoteClass&quot;:&quot;&quot;,&quot;remoteMethod&quot;:&quot;&quot;,&quot;remoteTimeout&quot;:30000,&quot;remoteOptions&quot;:{&quot;preTransformBundle&quot;:&quot;&quot;,&quot;postTransformBundle&quot;:&quot;&quot;},&quot;preTransformBundle&quot;:&quot;&quot;,&quot;postTransformBundle&quot;:&quot;&quot;,&quot;sendJSONPath&quot;:&quot;&quot;,&quot;sendJSONNode&quot;:&quot;&quot;,&quot;responseJSONPath&quot;:&quot;&quot;,&quot;responseJSONNode&quot;:&quot;&quot;,&quot;id&quot;:&quot;vlcCart&quot;,&quot;itemsKey&quot;:&quot;cartItems&quot;,&quot;modalConfigurationSetting&quot;:{&quot;modalHTMLTemplateId&quot;:&quot;vlcProductConfig.html&quot;,&quot;modalController&quot;:&quot;ModalProductCtrl&quot;,&quot;modalSize&quot;:&quot;lg&quot;}},{&quot;render&quot;:false,&quot;dispOutsideOmni&quot;:false,&quot;label&quot;:&quot;&quot;,&quot;remoteClass&quot;:&quot;&quot;,&quot;remoteMethod&quot;:&quot;&quot;,&quot;remoteTimeout&quot;:30000,&quot;remoteOptions&quot;:{&quot;preTransformBundle&quot;:&quot;&quot;,&quot;postTransformBundle&quot;:&quot;&quot;},&quot;preTransformBundle&quot;:&quot;&quot;,&quot;postTransformBundle&quot;:&quot;&quot;,&quot;id&quot;:&quot;vlcKnowledge&quot;,&quot;itemsKey&quot;:&quot;knowledgeItems&quot;,&quot;modalConfigurationSetting&quot;:{&quot;modalHTMLTemplateId&quot;:&quot;&quot;,&quot;modalController&quot;:&quot;&quot;,&quot;modalSize&quot;:&quot;lg&quot;}}],&quot;accessibilityToggle&quot;:true,&quot;allowSaveForLater&quot;:false,&quot;allowSaveChanges&quot;:false,&quot;saveNameTemplate&quot;:null,&quot;saveExpireInDays&quot;:null,&quot;saveForLaterRedirectPageName&quot;:&quot;sflRedirect&quot;,&quot;saveForLaterRedirectTemplateUrl&quot;:&quot;vlcSaveForLaterAcknowledge.html&quot;,&quot;saveContentEncoded&quot;:false,&quot;saveObjectId&quot;:&quot;%ContextId%&quot;,&quot;saveURLPatterns&quot;:{},&quot;autoSaveOnStepNext&quot;:false,&quot;elementTypeToHTMLTemplateMapping&quot;:{},&quot;seedDataJSON&quot;:{},&quot;trackingCustomData&quot;:{},&quot;enableKnowledge&quot;:false,&quot;bLK&quot;:false,&quot;lkObjName&quot;:null,&quot;knowledgeArticleTypeQueryFieldsMap&quot;:{},&quot;timeTracking&quot;:false,&quot;hideStepChart&quot;:false,&quot;mergeSavedData&quot;:false,&quot;visualforcePagesAvailableInPreview&quot;:{},&quot;cancelType&quot;:&quot;SObject&quot;,&quot;allowCancel&quot;:true,&quot;cancelSource&quot;:&quot;%ContextId%&quot;,&quot;cancelRedirectPageName&quot;:&quot;OmniScriptCancelled&quot;,&quot;cancelRedirectTemplateUrl&quot;:&quot;vlcCancelled.html&quot;,&quot;consoleTabLabel&quot;:&quot;&quot;,&quot;wpm&quot;:false,&quot;ssm&quot;:false,&quot;message&quot;:{},&quot;pubsub&quot;:false,&quot;autoFocus&quot;:false,&quot;currencyCode&quot;:&quot;&quot;,&quot;showInputWidth&quot;:false,&quot;rtpSeed&quot;:false,&quot;consoleTabTitle&quot;:null,&quot;consoleTabIcon&quot;:&quot;custom:custom18&quot;,&quot;errorMessage&quot;:{&quot;custom&quot;:[]},&quot;stylesheet&quot;:{&quot;newport&quot;:&quot;&quot;,&quot;lightning&quot;:&quot;&quot;,&quot;newportRtl&quot;:&quot;&quot;,&quot;lightningRtl&quot;:&quot;&quot;},&quot;stepChartPlacement&quot;:&quot;right&quot;,&quot;disableUnloadWarn&quot;:true,&quot;scrollBehavior&quot;:&quot;auto&quot;,&quot;currentLanguage&quot;:&quot;en_US&quot;}</propertySetConfig>
-    <subType>ResidentialCareFacilityLicense</subType>
+    <subType>ChildCareLicense</subType>
     <type>LicensingAndPermitting</type>
-    <uniqueName>LicensingAndPermitting_ResidentialCareFacilityLicense_English_1</uniqueName>
-    <versionNumber>1.0</versionNumber>
+    <uniqueName>LicensingAndPermitting_ChildCareLicense_English_2</uniqueName>
+    <versionNumber>2.0</versionNumber>
 </OmniScript>
