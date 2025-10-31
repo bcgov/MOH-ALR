@@ -7,6 +7,6 @@
 ***********************************************************************************************/
 trigger PublicComplaintTrigger on PublicComplaint (after insert) {
     if (Trigger.isAfter && Trigger.isInsert) {
-        PublicComplaintTriggerHandler.updatePHOCSPCOwner(Trigger.new);
+        PublicComplaintTriggerHandler.afterInsert(Trigger.new);
     }
 }
