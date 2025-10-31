@@ -249,8 +249,8 @@ global with sharing class PHOCSWaterRightsSystemService implements Callable {
         return facility;
     }
     
-    //@future
-    private void updateFacility(String recordId, Integer WellTagNumber, Integer AquiferNumber){
+    @future
+    private static void updateFacility(String recordId, Integer WellTagNumber, Integer AquiferNumber){
         Account facility = [SELECT Id, WellTagNumber__c, AquiferNumber__c FROM Account WHERE Id = :recordId LIMIT 1];
         facility.WellTagNumber__c = WellTagNumber;
         facility.AquiferNumber__c = AquiferNumber;
