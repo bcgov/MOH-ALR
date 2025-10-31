@@ -9,6 +9,10 @@
 public without sharing class PublicComplaintTriggerHandler {
     public static Id recordTypePublicComplaint = Schema.SObjectType.PublicComplaint.getRecordTypeInfosByDeveloperName().get('PHOCSPublicComplaint').getRecordTypeId();
     public static Id recordTypePublicRequestInquiry = Schema.SObjectType.PublicComplaint.getRecordTypeInfosByDeveloperName().get('PHOCSPublicRequestInquiry').getRecordTypeId();
+    public static String CLASS_NAME = 'PublicComplaintTriggerHandler';
+    public static final String ORIGIN_WEB = 'Web';
+    public static final String GROUP_TYPE = 'Queue';
+    public static final String PHOCS_BA_QUEUE = 'PHOCSBusinessAdminIntakeQueue';
 
 /**
 * @author: Deepak
@@ -26,28 +30,32 @@ public without sharing class PublicComplaintTriggerHandler {
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */  
     public static void updatePHOCSPCOwner(List<PublicComplaint> newList) {
-        List<PublicComplaint> pCListToUpdate = new List<PublicComplaint>();
-        List<PublicComplaint> updatePCList = new List<PublicComplaint>();
-        for (PublicComplaint pCObj : newList) {
-            if((pCObj.RecordTypeId == recordTypePublicComplaint || pCObj.RecordTypeId == recordTypePublicRequestInquiry) && pCObj.ComplaintOrigin__c == 'Web'){
-                pCListToUpdate.add(pCObj);
-            }
-        }
-        
-        if(pCListToUpdate.isEmpty()){
-            return;
-        } 
-        
-        List<Group> bAQueueList = [SELECT Id FROM Group WHERE DeveloperName = 'PHOCSBusinessAdminIntakeQueue' AND Type = 'Queue' LIMIT 1];
-        
-        if(!bAQueueList.isEmpty()) {           
-            for(PublicComplaint pCRec : pCListToUpdate){
-                updatePCList.add(new PublicComplaint(Id = pCRec.Id, OwnerId = bAQueueList[0].Id));
+        try {
+            List<PublicComplaint> pCListToUpdate = new List<PublicComplaint>();
+            List<PublicComplaint> updatePCList = new List<PublicComplaint>();
+            for(PublicComplaint pCObj : newList){
+                if((pCObj.RecordTypeId == recordTypePublicComplaint || pCObj.RecordTypeId == recordTypePublicRequestInquiry) && pCObj.ComplaintOrigin__c == ORIGIN_WEB){
+                    pCListToUpdate.add(pCObj);
+                }
             }
             
-            if(!updatePCList.isEmpty()){
-                Database.Update(updatePCList, true);
+            if(pCListToUpdate.isEmpty()){
+                return;
+            } 
+            
+            List<Group> bAQueueList = [SELECT Id FROM Group WHERE DeveloperName =: PHOCS_BA_QUEUE AND Type =: GROUP_TYPE LIMIT 1];
+            
+            if(!bAQueueList.isEmpty()){           
+                for(PublicComplaint pCRec : pCListToUpdate){
+                    updatePCList.add(new PublicComplaint(Id = pCRec.Id, OwnerId = bAQueueList[0].Id));
+                }
+                
+                if(!updatePCList.isEmpty()){
+                    Database.Update(updatePCList, true);
+                }
             }
+        }catch(Exception ex){
+            LogService.logAndPublish(CLASS_NAME, 'updatePHOCSPCOwner', '', ex);
         }
     }
 }
