@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OmniDataTransform xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>false</active>
+    <assignmentRulesUsed>true</assignmentRulesUsed>
+    <deletedOnSuccess>false</deletedOnSuccess>
+    <errorIgnored>false</errorIgnored>
+    <expectedInputJson>{
+  &quot;SubmitComplaint&quot; : {
+    &quot;ComplaintLocation&quot; : {
+      &quot;LocationDescription&quot; : null,
+      &quot;BusinessAddress&quot; : null
+    },
+    &quot;ComplaintDetailsBlock&quot; : {
+      &quot;Comments&quot; : null,
+      &quot;IncidentDate&quot; : null,
+      &quot;Topic&quot; : null,
+      &quot;Subject&quot; : null
+    },
+    &quot;ComplainantDetails1&quot; : {
+      &quot;EmailID&quot; : null,
+      &quot;MobileNumber&quot; : null,
+      &quot;NeedFeedbackResolution&quot; : null,
+      &quot;FirstName&quot; : null,
+      &quot;OtherAffectedIndividuals&quot; : null,
+      &quot;WishRemainAnonymous&quot; : null,
+      &quot;LastName&quot; : null
+    }
+  },
+  &quot;vlcTimeTracking&quot; : {
+    &quot;SubmitComplaint&quot; : null,
+    &quot;Acknowledgement&quot; : null,
+    &quot;DataMapperPostPCAction&quot; : null,
+    &quot;CANCEL&quot; : null,
+    &quot;NavigateActionToComplaintPage&quot; : null
+  },
+  &quot;vlcPersistentComponent&quot; : { },
+  &quot;NavigateActionToComplaintPage&quot; : { },
+  &quot;userName&quot; : null,
+  &quot;userId&quot; : null,
+  &quot;userProfile&quot; : null,
+  &quot;userTimeZone&quot; : null,
+  &quot;timeStamp&quot; : null,
+  &quot;Acknowledgement&quot; : { },
+  &quot;DataMapperPostPCAction&quot; : { },
+  &quot;CANCEL&quot; : { },
+  &quot;ContextId&quot; : null
+}</expectedInputJson>
+    <fieldLevelSecurityEnabled>true</fieldLevelSecurityEnabled>
+    <inputType>JSON</inputType>
+    <isManagedUsingStdDesigner>false</isManagedUsingStdDesigner>
+    <name>PHOCSCreatePublicComplaintFeedbackForGU</name>
+    <nullInputsIncludedInOutput>true</nullInputsIncludedInOutput>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>d29dc085-94a3-47de-be38-30cf8a365d63</globalKey>
+        <inputFieldName>SubmitComplaint:ComplainantDetails:FirstName</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSCreatePublicComplaintFeedbackForGU</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>FirstName</outputFieldName>
+        <outputObjectName>PublicComplaint</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <defaultValue>PHOCSPublicRequestInquiry</defaultValue>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>5c26c8e6-c87e-4172-876c-c3bc099228f0</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <lookupByFieldName>DeveloperName</lookupByFieldName>
+        <lookupObjectName>RecordType</lookupObjectName>
+        <lookupReturnedFieldName>Id</lookupReturnedFieldName>
+        <name>PHOCSCreatePublicComplaintFeedbackForGU</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RecordTypeId</outputFieldName>
+        <outputObjectName>PublicComplaint</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| NOW</formulaConverted>
+        <formulaExpression>NOW()</formulaExpression>
+        <formulaResultPath>TodayAppliedDate</formulaResultPath>
+        <formulaSequence>1.0</formulaSequence>
+        <globalKey>57cd5ff3-48a1-4fb1-b7f2-eda1bbf02f52</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSCreatePublicComplaintFeedbackForGU</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <defaultValue>Web</defaultValue>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>c9b2dd52-4cdd-4e76-8941-bf972a2c3084</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSCreatePublicComplaintFeedbackForGU</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>ComplaintOrigin__c</outputFieldName>
+        <outputObjectName>PublicComplaint</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>0540462e-98cd-483c-a62b-d53f07374965</globalKey>
+        <inputFieldName>SubmitComplaint:ComplainantDetails:MobileNumber</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSCreatePublicComplaintFeedbackForGU</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>MobileNumber</outputFieldName>
+        <outputObjectName>PublicComplaint</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>7b30c216-7f93-47ce-9ec5-372305a7a973</globalKey>
+        <inputFieldName>TodayAppliedDate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSCreatePublicComplaintFeedbackForGU</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>ReceivedDate</outputFieldName>
+        <outputObjectName>PublicComplaint</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>f007a561-a8c6-4636-8bd0-30746571c7a8</globalKey>
+        <inputFieldName>SubmitComplaint:ComplaintDetailsBlock:Topic</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSCreatePublicComplaintFeedbackForGU</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Topic__c</outputFieldName>
+        <outputObjectName>PublicComplaint</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>d95eb4d0-8c91-485c-919e-3dba07f4b289</globalKey>
+        <inputFieldName>SubmitComplaint:ComplaintDetailsBlock:Subject</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSCreatePublicComplaintFeedbackForGU</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Subject</outputFieldName>
+        <outputObjectName>PublicComplaint</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>043ba07a-9ba2-4887-ae2b-811699485392</globalKey>
+        <inputFieldName>SubmitComplaint:ComplainantDetails:LastName</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSCreatePublicComplaintFeedbackForGU</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>LastName</outputFieldName>
+        <outputObjectName>PublicComplaint</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>38c8cfcb-b3d5-4901-b38e-0be55e7fa151</globalKey>
+        <inputFieldName>SubmitComplaint:ComplainantDetails:EmailID</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSCreatePublicComplaintFeedbackForGU</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Email</outputFieldName>
+        <outputObjectName>PublicComplaint</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>true</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <globalKey>789e576c-70ec-4f7d-b3dd-40b7a7fffce8</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <migrationValue>FAKEMAPPING</migrationValue>
+        <name>PHOCSCreatePublicComplaintFeedbackForGU</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Id</outputFieldName>
+        <outputObjectName>PublicComplaint</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>f86d7298-f9f6-4e9a-8cc2-7930e66b9215</globalKey>
+        <inputFieldName>SubmitComplaint:ComplaintDetailsBlock:Comments</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSCreatePublicComplaintFeedbackForGU</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>Comments</outputFieldName>
+        <outputObjectName>PublicComplaint</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <outputType>SObject</outputType>
+    <previewJsonData>{
+  &quot;SubmitComplaint&quot; : {
+    &quot;ComplaintDetailsBlock&quot; : {
+      &quot;Topic&quot; : &quot;Child Care&quot;,
+      &quot;IncidentDate&quot; : &quot;2025-10-24&quot;,
+      &quot;Subject&quot; : &quot;Test1&quot;,
+      &quot;Comments&quot; : &quot;Test11&quot;
+    },
+    &quot;ComplainantDetails&quot; : {
+      &quot;FirstName&quot; : &quot;Test Name&quot;,
+      &quot;LastName&quot; : &quot;Test Name last&quot;,
+      &quot;EmailID&quot; : &quot;abc@test.com&quot;,
+      &quot;MobileNumber&quot; : 9876543211,
+      &quot;WishRemainAnonymous&quot; : &quot;Yes&quot;,
+      &quot;NeedFeedbackResolution&quot; : &quot;Yes&quot;,
+      &quot;OtherAffectedIndividuals&quot; : &quot;Yes test&quot;
+    },
+    &quot;ComplaintLocation&quot; : {
+      &quot;BusinessAddress&quot; : &quot;Test Address&quot;,
+      &quot;LocationDescription&quot; : &quot;Test Location&quot;
+    }
+  }
+}</previewJsonData>
+    <processSuperBulk>false</processSuperBulk>
+    <responseCacheTtlMinutes>0.0</responseCacheTtlMinutes>
+    <rollbackOnError>false</rollbackOnError>
+    <sourceObject>json</sourceObject>
+    <sourceObjectDefault>false</sourceObjectDefault>
+    <synchronousProcessThreshold>0.0</synchronousProcessThreshold>
+    <type>Load</type>
+    <uniqueName>PHOCSCreatePublicComplaintFeedbackForGU_1</uniqueName>
+    <versionNumber>1.0</versionNumber>
+    <xmlDeclarationRemoved>false</xmlDeclarationRemoved>
+</OmniDataTransform>
