@@ -16,7 +16,7 @@ global with sharing class PHOCSWaterRightsService implements Callable {
         Map<String, Object> options = (Map<String, Object>) args.get('options');
         return invokeMethod(action, input, output, options);
     }
-
+	
     private Object invokeMethod(String methodName, Map<String, Object> inputMap, Map<String, Object> outMap, Map<String, Object> options) {
         system.debug('>>> Entered in invokeMethod method <<<');
         Account acc = getAccountDetails(String.valueOf(inputMap.get('recordId')));
@@ -51,7 +51,7 @@ global with sharing class PHOCSWaterRightsService implements Callable {
         system.debug('>>> Exist in invokeMethod method <<<');
         return outMap; // always return the whole map
     }
-
+	
     private void integrationFlow(Account acc){
         system.debug('>>> Entered in integrationFlow method <<<');
         Integer wellTagNumber = null;

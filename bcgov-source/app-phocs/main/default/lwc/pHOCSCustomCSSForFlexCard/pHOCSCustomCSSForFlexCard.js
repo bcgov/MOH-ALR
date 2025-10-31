@@ -4,7 +4,7 @@ import MY_CUSTOM_STYLES from '@salesforce/resourceUrl/phocs_flexCard_Global_CSS'
 export default class PHOCSCustomCSSForFlexCard extends LightningElement {
     connectedCallback() {
         Promise.all([
-            loadStyle(this, MY_CUSTOM_STYLES + '/PHOCS_flexCard_Global_CSS.css') // Path within the static resource
+            loadStyle(this, MY_CUSTOM_STYLES + '/phocs_flexCard_Global_CSS.css') // Path within the static resource
         ])
         .then(() => {
             console.log('CSS loaded successfully');
