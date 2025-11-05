@@ -2,6 +2,12 @@
 <SharingSet xmlns="http://soap.sforce.com/2006/04/metadata">
     <accessMappings>
         <accessLevel>Edit</accessLevel>
+        <object>Account</object>
+        <objectField>ParentAccount__c</objectField>
+        <userField>Contact.Account</userField>
+    </accessMappings>
+    <accessMappings>
+        <accessLevel>Edit</accessLevel>
         <object>Asset</object>
         <objectField>Account.Parent</objectField>
         <userField>Contact.Account</userField>
@@ -13,11 +19,17 @@
         <userField>Contact</userField>
     </accessMappings>
     <accessMappings>
+        <accessLevel>Read</accessLevel>
+        <object>BusinessLicense</object>
+        <objectField>Account</objectField>
+        <userField>Contact.Account</userField>
+    </accessMappings>
+    <accessMappings>
         <accessLevel>Edit</accessLevel>
         <object>BusinessLicenseApplication</object>
         <objectField>Account.ParentAccount__c</objectField>
         <userField>Contact.Account</userField>
     </accessMappings>
     <name>Operator Portal Sharing Sets</name>
-    <profiles>Customer Community Operator</profiles>
+    <profiles>customer community operator</profiles>
 </SharingSet>
