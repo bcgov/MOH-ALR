@@ -37,11 +37,11 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             output.put('result',lstSobjects);
             return output;
         }
-        /*if(action == 'getRelatedListPortal'){
+        if(action == 'getRelatedListPortal'){
             List<Object> lstSobjects = PHOCSOperatorPortalDisplayRecords.getRelatedList(String.valueof(input.get('recordId')), String.valueof(input.get('configName')));
             output.put('result',lstSobjects);
             return output;
-        }*/
+        }
 
         return invokeMethod(action, input, output, options);
         
