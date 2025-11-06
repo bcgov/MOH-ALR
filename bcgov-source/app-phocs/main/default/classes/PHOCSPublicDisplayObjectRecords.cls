@@ -4,7 +4,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         Map<String, Object> input = (Map<String, Object>)args.get('input');
         Map<String, Object> output = (Map<String, Object>)args.get('output');
         Map<String, Object> options = (Map<String, Object>)args.get('options');
-        
+        // METHODS FOR GUEST USERS
         if(action == 'getRecordsList'){
             List<Object> lstSobjects =  getRecordsList(String.valueof(input.get('configName')));
             output.put('result', lstSobjects);
@@ -25,6 +25,24 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             output.put('result', lstSobjects);
             return output;
         }
+        // METHODS FOR PORTAL USERS
+        // Methods to call for Portal user in class PHOCSOperatorPortalDisplayRecords  to imply portal user sharing rules.
+         if(action == 'getRecordsListPortal'){
+            List<Object> lstSobjects =  PHOCSOperatorPortalDisplayRecords.getRecordsList(String.valueof(input.get('configName')));
+            output.put('result', lstSobjects);
+            return output;
+        }
+		 if(action == 'getRecordDetailsPortal'){
+            List<Object> lstSobjects = PHOCSOperatorPortalDisplayRecords.getRecordDetails(String.valueof(input.get('recordId')), String.valueof(input.get('configName')));
+            output.put('result',lstSobjects);
+            return output;
+        }
+        if(action == 'getRelatedListPortal'){
+            List<Object> lstSobjects = PHOCSOperatorPortalDisplayRecords.getRelatedList(String.valueof(input.get('recordId')), String.valueof(input.get('configName')));
+            output.put('result',lstSobjects);
+            return output;
+        }
+
         return invokeMethod(action, input, output, options);
         
     }
