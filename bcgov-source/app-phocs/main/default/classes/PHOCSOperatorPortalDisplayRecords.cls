@@ -175,11 +175,7 @@ public with sharing class PHOCSOperatorPortalDisplayRecords{
         public Object wrap(SObject record) {
             BusinessLicenseApplication BLA = (BusinessLicenseApplication) record;
             Map<String, Object> result = new Map<String, Object>{
-                'Status' => BLA.Status,
-                'LicenseTypeName' => BLA.LicenseType.Name,
-                'AccountName' => BLA.Account.Name,
-                'AppliedDate' => BLA.AppliedDate,
-                'LastModifiedDate' => BLA.LastModifiedDate
+                'Status' => BLA.Status
             };
             return result;
         }
