@@ -3,50 +3,58 @@ import getDocumentsList from '@salesforce/apex/PhocsRecordFileManager.getDocumen
 
 export default class PhocsRecordFileManager extends LightningElement {
     @api recordId;
-    @track documentsList =[]
+    @track documentsList = [];
     @track columns;
 
     isUploading = false;
 
     connectedCallback() {
         this.columns = [
-            { label: 'Name', fieldName: 'fileName', type: 'text'},
+            { label: 'Name', fieldName: 'fileName', type: 'text' },
             { label: 'Created Date', fieldName: 'createdDate', type: 'date' },
-            { type: 'action', typeAttributes: { rowActions: this.getRowActions }}
+            { type: 'action', typeAttributes: { rowActions: this.getRowActions } }
         ];
     }
-    getRowActions(row, doneCallback) {
-        let actions = [];
-        actions.push({ label: 'Download', name: 'download'});
-        doneCallback(actions);
-    }  
 
-    @wire(getDocumentsList, {parentRecordId: '$recordId'})
-    wiredResult({data, error}){
-        console.log('getDocumentsList'); 
-        if(data){ 
-           this.documentsList = data;
+    getRowActions(row, doneCallback) {
+        let actions = [
+            { label: 'Preview', name: 'preview' },
+            { label: 'Download', name: 'download' }
+        ];
+        doneCallback(actions);
+    }
+
+    @wire(getDocumentsList, { parentRecordId: '$recordId' })
+    wiredResult({ data, error }) {
+        if (data) {
+            this.documentsList = data;
         }
-        if(error){ 
-            console.log(error)
+        if (error) {
+            console.error(error);
         }
     }
+
     handleRowAction(event) {
         const actionName = event.detail.action.name;
         const row = event.detail.row;
         switch (actionName) {
             case 'download':
                 this.downloadDocument(row);
-            break;   
+                break;
+            case 'preview':
+                this.previewDocument(row);
+                break;
             default:
         }
     }
-    downloadDocument(row){
-        console.log('Downloading document for:', row);
-        if (!row.contentDocumentId) {
-            console.error('No ContentDocumentId found for this row.');
-            return;
-        }
+
+    downloadDocument(row) {
+        if (!row.contentDocumentId) return;
         window.open(row.downloadUrl, '_blank');
+    }
+
+    previewDocument(row) {
+        if (!row.contentDocumentId) return;
+        window.open(row.previewUrl, '_blank'); // 👈 Opens preview in new tab
     }
 }

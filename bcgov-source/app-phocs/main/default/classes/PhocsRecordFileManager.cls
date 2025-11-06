@@ -9,14 +9,14 @@ public with sharing class PhocsRecordFileManager {
 
         Set<Id> contentDocIds = new Set<Id>();
         for(ContentDocumentLink link : [SELECT ContentDocumentId
-                                            FROM ContentDocumentLink
+            FROM ContentDocumentLink
                                             WHERE LinkedEntityId = :parentRecordId]){
             contentDocIds.add(link.ContentDocumentId);
         }
 
         for(ContentVersion cv :  [SELECT ContentDocumentId, Title, FileExtension, CreatedDate
-                                  FROM ContentVersion
-                                  WHERE ContentDocumentId IN :contentDocIds
+            FROM ContentVersion
+            WHERE ContentDocumentId IN :contentDocIds
                                   AND IsLatest = true]){
             DocumentDetail detail = new DocumentDetail();
             detail.contentDocumentId = cv.ContentDocumentId;
@@ -24,6 +24,7 @@ public with sharing class PhocsRecordFileManager {
             detail.createdDate = cv.CreatedDate;
             detail.parentRecordId = parentRecordId;
             detail.downloadUrl = '/sfc/servlet.shepherd/document/download/' + cv.ContentDocumentId;
+            detail.previewUrl  = '/lightning/r/ContentDocument/' + cv.ContentDocumentId + '/view';
             docs.add(detail);
         }
         return docs;
@@ -35,5 +36,6 @@ public with sharing class PhocsRecordFileManager {
         @AuraEnabled public Id parentRecordId;
         @AuraEnabled public Datetime createdDate;
         @AuraEnabled public String downloadUrl;
+        @AuraEnabled public String previewUrl;
     }
 }
