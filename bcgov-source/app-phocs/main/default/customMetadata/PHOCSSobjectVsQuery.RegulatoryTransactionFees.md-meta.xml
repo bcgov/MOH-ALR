@@ -8,9 +8,7 @@
     </values>
     <values>
         <field>ObjectQuery__c</field>
-        <value xsi:type="xsd:string">Select Id, Name,TotalFeeAmount,DueDate
-From RegulatoryTrxnFee 
-where  Status IN (&apos;Due&apos;,&apos;Paid&apos;) LIMIT 3</value>
+        <value xsi:type="xsd:string">SELECT Name, AccountName__c, Status, TotalFeeAmount, RecordType.DeveloperName FROM RegulatoryTrxnFee WHERE Status IN (&apos;Due&apos;, &apos;Paid&apos;) AND RecordType.DeveloperName = &apos;PHOCSTransactionFee&apos; ORDER BY Status ASC</value>
     </values>
     <values>
         <field>ParentFieldAPIName__c</field>
