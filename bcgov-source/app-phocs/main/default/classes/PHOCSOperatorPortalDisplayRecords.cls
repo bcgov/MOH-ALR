@@ -76,6 +76,43 @@ public with sharing class PHOCSOperatorPortalDisplayRecords{
         System.debug('results'+results);
         return results;
     }
+
+         public static List<Object> getRelatedList(Id recordId, string configName) {
+
+        Map<String, SObjectWrapper> wrapperRegistry = new Map<String, SObjectWrapper>{
+            'BusinessLicenseApplication' => new BusinessLicenseApplicationListWrapper()
+        };
+        
+        if (recordId == null) {
+            throw new AuraHandledException('Record ID required.');
+        }
+
+        String parentSObjectName = recordId.getSObjectType().getDescribe().getName();
+        PHOCSSobjectVsQuery__mdt queryConfig = [
+            SELECT ObjectQuery__c, ParentFieldAPIName__c, ChildSobjectAPIName__c
+            FROM PHOCSSobjectVsQuery__mdt 
+            WHERE Type__c = 'Related' AND 
+                  DeveloperName= :configName
+            LIMIT 1
+        ];
+        if (queryConfig == null || String.isBlank(queryConfig.ObjectQuery__c)) {
+            throw new QueryException('No SOQL query found for related list object');
+        }
+        system.debug('QueryFormed------->'+queryConfig.ObjectQuery__c);
+
+        SObjectWrapper wrapper = wrapperRegistry.get(queryConfig.ChildSobjectAPIName__c);
+        List<Object> results = new List<Object>();
+        
+        List<SObject> queryResults = Database.query(queryConfig.ObjectQuery__c);// NOPMD
+        for (SObject sObj : queryResults) {        
+            if (wrapper != null) {
+                results.add(wrapper.wrap(sObj));
+            } else {
+                results.add(sObj);
+            }
+        }
+        return results;
+    }
     
      private static string getAddress(Address physicalAddress){
         string[] returnAddress = new string[]{};
@@ -201,7 +238,8 @@ public with sharing class PHOCSOperatorPortalDisplayRecords{
                 'AccountId' => BLA.Account.Name,
                 'AppliedDate' => BLA.AppliedDate,
                 'LastModifiedDate' => BLA.LastModifiedDate,
-                'Status' => BLA.Status
+                'Status' => BLA.Status,
+                'ClosureReason' => BLA.ClosureReason__c
             };
             return result;
         }
