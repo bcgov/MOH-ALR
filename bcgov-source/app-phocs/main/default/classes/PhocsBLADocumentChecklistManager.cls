@@ -35,13 +35,13 @@ public with sharing class PhocsBLADocumentChecklistManager {
             }
 
             if(!contentDocIds.isEmpty()){
-                for (ContentVersion docLink : [SELECT ContentDocumentId, FileExtension, Title 
-                                               FROM ContentVersion 
-                                               WHERE ContentDocumentId IN :contentDocIds]){
-                    Id docCheckListItemId = contentDocIdDocCheckListItemIdMap.get(docLink.ContentDocumentId);
-                    checklistItemMap.get(docCheckListItemId).fileName = docLink.Title;
-                    checklistItemMap.get(docCheckListItemId).contentDocumentId = docLink.ContentDocumentId;
-                    checklistItemMap.get(docCheckListItemId).downloadUrl = '/sfc/servlet.shepherd/document/download/' + docLink.ContentDocumentId;
+                for (ContentVersion cv : [SELECT ContentDocumentId, FileExtension, Title 
+                                          FROM ContentVersion 
+                                          WHERE ContentDocumentId IN :contentDocIds AND IsLatest = true]){
+                    Id docCheckListItemId = contentDocIdDocCheckListItemIdMap.get(cv.ContentDocumentId);
+                    checklistItemMap.get(docCheckListItemId).fileName = cv.Title;
+                    checklistItemMap.get(docCheckListItemId).contentDocumentId = cv.ContentDocumentId;
+                    checklistItemMap.get(docCheckListItemId).downloadUrl = getRenditionDownloadUrl(cv.Id); //'/sfc/servlet.shepherd/document/download/' + cv.ContentDocumentId;
                     checklistItemMap.get(docCheckListItemId).hasFileUploaded= true; 
                 }
             }
@@ -92,6 +92,15 @@ public with sharing class PhocsBLADocumentChecklistManager {
         return docCheckListItem;
     }
 
+    public static String getRenditionDownloadUrl(Id contentVersionId) {
+        // Get the current request URL
+       String communityBaseUrl = URL.getCurrentRequestUrl().getHost();
+       String renditionUrl = 'https://' + communityBaseUrl 
+                            + '/phocsportal/sfc/servlet.shepherd/version/renditionDownload?rendition=SVGZ&versionId='
+                            + contentVersionId;
+
+        return renditionUrl;
+    }
 
     public Class DocCheckListItem{
         @AuraEnabled public Id docCheckListItemId;

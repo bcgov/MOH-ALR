@@ -9,25 +9,35 @@ public with sharing class PhocsRecordFileManager {
 
         Set<Id> contentDocIds = new Set<Id>();
         for(ContentDocumentLink link : [SELECT ContentDocumentId
-            FROM ContentDocumentLink
-                                            WHERE LinkedEntityId = :parentRecordId]){
+                                        FROM ContentDocumentLink
+                                        WHERE LinkedEntityId = :parentRecordId]){
             contentDocIds.add(link.ContentDocumentId);
         }
 
         for(ContentVersion cv :  [SELECT ContentDocumentId, Title, FileExtension, CreatedDate
-            FROM ContentVersion
-            WHERE ContentDocumentId IN :contentDocIds
-                                  AND IsLatest = true]){
+                                  FROM ContentVersion
+                                  WHERE ContentDocumentId IN :contentDocIds
+                                         AND IsLatest = true]){
             DocumentDetail detail = new DocumentDetail();
             detail.contentDocumentId = cv.ContentDocumentId;
             detail.fileName = cv.Title;
             detail.createdDate = cv.CreatedDate;
             detail.parentRecordId = parentRecordId;
-            detail.downloadUrl = '/sfc/servlet.shepherd/document/download/' + cv.ContentDocumentId;
+            detail.downloadUrl = getRenditionDownloadUrl(cv.Id);
             detail.previewUrl  = '/lightning/r/ContentDocument/' + cv.ContentDocumentId + '/view';
             docs.add(detail);
         }
         return docs;
+    }
+
+    public static String getRenditionDownloadUrl(Id contentVersionId) {
+        // Get the current request URL
+       String communityBaseUrl = URL.getCurrentRequestUrl().getHost();
+       String renditionUrl = 'https://' + communityBaseUrl 
+                            + '/phocsportal/sfc/servlet.shepherd/version/renditionDownload?rendition=SVGZ&versionId='
+                            + contentVersionId;
+
+        return renditionUrl;
     }
 
     public class DocumentDetail {      
