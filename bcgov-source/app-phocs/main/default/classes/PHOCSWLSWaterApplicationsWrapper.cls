@@ -1,3 +1,11 @@
+/*
+*     Created by: Pawan Atri
+*     Created Date: 16-Sept-2025
+*     User Story: EHIS-1425
+*     Title: Retrieve water license information from the Water Rights Database (WLRS)
+*     Description: Wrapper class for PHOCS Water Application License Response
+*/
+
 public class PHOCSWLSWaterApplicationsWrapper {
 	public String type;
     public List<Feature> features;

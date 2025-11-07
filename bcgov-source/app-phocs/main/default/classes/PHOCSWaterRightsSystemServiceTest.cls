@@ -26,7 +26,7 @@ public class PHOCSWaterRightsSystemServiceTest {
     
     @isTest
     static void testGWellWorking(){
-        Test.setMock(HttpCalloutMock.class, new PHOCSGwellsServiceMock());
+        Test.setMock(HttpCalloutMock.class, new PHOCSWaterRightsCommonMock());
         
         // Prepare input for FlexCard-style call
         Map<String, Object> input   = new Map<String, Object>{ 'recordId' => getAccount().Id };
@@ -36,14 +36,14 @@ public class PHOCSWaterRightsSystemServiceTest {
         Test.startTest();
         // Call service
         Object result = new PHOCSWaterRightsSystemService().call(
-            'getGWellDetails',
+            'getAllData',
             new Map<String, Object>{
                 'input'   => input,
                 'output'  => output,
                 'options' => options
             }
         );
-        PHOCSWellResponseWrapper wellResp = PHOCSGwellsService.getWellDetails('129877');        
+        PHOCSWellResponseWrapper wellResp = PHOCSWellCallout.getWellDetails('129877');        
         Test.stopTest();
         
         System.debug(wellResp);
@@ -56,7 +56,7 @@ public class PHOCSWaterRightsSystemServiceTest {
     
     @isTest
     static void testAquifierWorking(){
-        Test.setMock(HttpCalloutMock.class, new PHOCSGwellsServiceMock());
+        Test.setMock(HttpCalloutMock.class, new PHOCSWaterRightsCommonMock());
         
         // Prepare input for FlexCard-style call
         Map<String, Object> input   = new Map<String, Object>{ 'recordId' => getAccount().Id };
@@ -73,7 +73,7 @@ public class PHOCSWaterRightsSystemServiceTest {
                 'options' => options
             }
         );
-        PHOCSAquifersResponseWrapper aquiferResp = PHOCSGwellsService.getAquiferDetails('658');
+        PHOCSAquifersResponseWrapper aquiferResp = PHOCSAquiferCallout.getAquiferDetails('658');
         Test.stopTest();
         
         System.debug('Aquifer Id: ' + aquiferResp.aquifer_id);
@@ -84,7 +84,7 @@ public class PHOCSWaterRightsSystemServiceTest {
     
     @isTest
     static void testWaterLicenseWorking(){
-        Test.setMock(HttpCalloutMock.class, new PHOCSWLSWaterHttpMock());
+        Test.setMock(HttpCalloutMock.class, new PHOCSWaterRightsCommonMock());
         
         // Prepare input for FlexCard-style call
         Map<String, Object> input   = new Map<String, Object>{ 'recordId' => getAccount().Id };
@@ -101,7 +101,7 @@ public class PHOCSWaterRightsSystemServiceTest {
                 'options' => options
             }
         );
-        PHOCSWLSWaterRightsWrapper rightsWrapper = PHOCSWLSWaterService.getWaterRightsByLicence('505833');
+        PHOCSWLSWaterRightsWrapper rightsWrapper = PHOCSWaterLicenseCallout.getWaterRightsByLicence('505833');
         Test.stopTest();
         
         System.debug('Water Licence Type: ' + rightsWrapper.type);
@@ -118,7 +118,7 @@ public class PHOCSWaterRightsSystemServiceTest {
     
     @isTest
     static void testWaterLicenseApplicationWorking(){
-        Test.setMock(HttpCalloutMock.class, new PHOCSWLSWaterHttpMock());
+        Test.setMock(HttpCalloutMock.class, new PHOCSWaterRightsCommonMock());
         
         // Prepare input for FlexCard-style call
         Map<String, Object> input   = new Map<String, Object>{ 'recordId' => getAccount().Id };
@@ -135,7 +135,7 @@ public class PHOCSWaterRightsSystemServiceTest {
                 'options' => options
             }
         );
-        PHOCSWLSWaterApplicationsWrapper applicationsWrapper = PHOCSWLSWaterService.getWaterApplicationsByJob('128116');
+        PHOCSWLSWaterApplicationsWrapper applicationsWrapper = PHOCSWaterApplicationCallout.getWaterApplicationsByJob('128116');
         Test.stopTest();
         
         System.debug('Water Licence Application Type: ' + applicationsWrapper.type);

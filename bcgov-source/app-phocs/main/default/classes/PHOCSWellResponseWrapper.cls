@@ -1,9 +1,9 @@
 /*
-    Created by: Pawan Atri
-    Date: 2024-06-12
-    User Story: EHIS-1425
-    Title: Retrieve water license information from the Water Rights Database (WLRS)
-    Description: Wrapper class for PHOCS Well Response
+*     Created by: Pawan Atri
+*     Created Date: 16-Sept-2025
+*     User Story: EHIS-1425
+*     Title: Retrieve wells information from the Water Rights Database (WLRS)
+*     Description: Wrapper class for PHOCS Well Response
 */
 
 public class PHOCSWellResponseWrapper {
@@ -141,16 +141,16 @@ public class PHOCSWellResponseWrapper {
     public List<LithologyDescription> lithologydescription_set;
     public List<SubmissionWorkDate> submission_work_dates;
     public Boolean is_published;
-
+    
     // ---------- INNER CLASSES ----------
     public class DrillingMethod {
         public String description;
     }
-
+    
     public class DevelopmentMethod {
         public String description;
     }
-
+    
     public class CasingSetItem {
         public String start;
         public String endVal; // renamed from 'end'
@@ -160,7 +160,7 @@ public class PHOCSWellResponseWrapper {
         public String drive_shoe_status;
         public String wall_thickness;
     }
-
+    
     public class ScreenSetItem {
         public String start;
         public String endVal; // renamed from 'end'
@@ -168,7 +168,7 @@ public class PHOCSWellResponseWrapper {
         public String assembly_type;
         public String slot_size;
     }
-
+    
     public class LithologyDescription {
         public String start;
         public String endVal; // renamed from 'end'
@@ -179,7 +179,7 @@ public class PHOCSWellResponseWrapper {
         public String lithology_observation;
         public String water_bearing_estimated_flow;
     }
-
+    
     public class SubmissionWorkDate {
         public Integer well;
         public String create_date;
@@ -188,7 +188,7 @@ public class PHOCSWellResponseWrapper {
         public String work_end_date;
         public String drilling_company;
     }
-
+    
     // ---------- PARSER ----------
     public static PHOCSWellResponseWrapper parse(String jsonString) {
         return (PHOCSWellResponseWrapper) JSON.deserialize(jsonString, PHOCSWellResponseWrapper.class);
