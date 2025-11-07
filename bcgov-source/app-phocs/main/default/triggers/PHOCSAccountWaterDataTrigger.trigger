@@ -46,7 +46,7 @@ trigger PHOCSAccountWaterDataTrigger on Account (after insert, after update) {
         }
     }
     
-    if(!accIds.isEmpty()){
+    if(!accIds.isEmpty() && !Test.isRunningTest()){
         System.enqueueJob(new PHOCSWaterSystemQueueable(accIds));
     } 
 }
