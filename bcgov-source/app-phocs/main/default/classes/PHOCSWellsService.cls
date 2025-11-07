@@ -95,17 +95,7 @@ public class PHOCSWellsService implements PHOCSWaterRights {
         if(
             (wellDetailsResponse == null) || 
             (
-                wellDetailsResponse?.IDENTIFICATION_PLATE_NUMBER == null &&
-                wellDetailsResponse?.well_status == null &&
-                wellDetailsResponse?.artesian_conditions == null &&
-                wellDetailsResponse?.aquifer == null &&
-                wellDetailsResponse?.construction_start_date == null &&
-                wellDetailsResponse?.construction_end_date == null &&
-                wellDetailsResponse?.well_location_description == null &&
-                wellDetailsResponse?.screen_type == null &&
-                wellDetailsResponse?.screen_material == null &&
-                wellDetailsResponse?.screen_intake_method == null &&
-                wellDetailsResponse?.casing_set == null
+                wellDetailsResponse?.IDENTIFICATION_PLATE_NUMBER == null && wellDetailsResponse?.well_status == null && wellDetailsResponse?.artesian_conditions == null && wellDetailsResponse?.aquifer == null && wellDetailsResponse?.construction_start_date == null && wellDetailsResponse?.construction_end_date == null && wellDetailsResponse?.well_location_description == null && wellDetailsResponse?.screen_type == null && wellDetailsResponse?.screen_material == null && wellDetailsResponse?.screen_intake_method == null && wellDetailsResponse?.casing_set == null
             )
         ){
             return false;

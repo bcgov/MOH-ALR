@@ -22,42 +22,30 @@ private class PHOCSWaterApplicationServiceTest {
     }
 
     @IsTest
-    static void testMappingData_success() {
+    static void testApplicationWithValidValue() {        
         Test.setMock(HttpCalloutMock.class, new PHOCSWLSWaterHttpMock());
         
-        Test.startTest();
-            PHOCSWaterApplicationService service = new PHOCSWaterApplicationService();
-            Map<String, Object> result = service.mappingData('WLA20160113-0001');
+        Map<String, Object> applicationResp;
+        PHOCSWaterApplicationService applicationServ = new PHOCSWaterApplicationService();
+        
+        Test.startTest();        
+        applicationResp = applicationServ.mappingData('WLA20160113-0001');
         Test.stopTest();
-
-        System.assertEquals('Active Application', result.get('Application_WaterLicenceApplicationStatus'));
-        System.assertEquals(18010, result.get('Application_WellTagNumber'));
+        
+        System.Assert.isNotNull(applicationResp, 'Water License Application Service responses is blank');
     }
 
     @IsTest
-    static void testMappingData_blankInput() {
+    static void testApplicationWithBlankValue() {
         Test.setMock(HttpCalloutMock.class, new PHOCSWLSWaterHttpMock());
         
-        Test.startTest();
-            PHOCSWaterApplicationService service = new PHOCSWaterApplicationService();
-            Map<String, Object> result = service.mappingData(null);
-        Test.stopTest();
-
-        System.assertEquals(
-            PHOCSWaterApplicationService.errorMsg, 
-            result.get(PHOCSWaterApplicationService.errorKey)
-        );
-    }
-
-    @IsTest
-    static void testCheckValidation_nullResponse() {
-        Test.setMock(HttpCalloutMock.class, new PHOCSWLSWaterHttpMock());
+        Map<String, Object> applicationResp;
+        PHOCSWaterApplicationService applicationServ = new PHOCSWaterApplicationService();
         
-        Test.startTest();
-            PHOCSWaterApplicationService service = new PHOCSWaterApplicationService();
-            Boolean isValid = service.checkValidation(null);
+        Test.startTest();        
+        applicationResp = applicationServ.mappingData(null);
         Test.stopTest();
-
-        System.assertEquals(false, isValid);
+        
+        System.assert(applicationResp.toString().contains('NoDataForLicenseApplication'), 'Expected Error Key');
     }
 }

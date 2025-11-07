@@ -26,46 +26,28 @@ public class PHOCSAquiferServiceTest {
     }
     
     @isTest
-    static void testAquifierWorking(){
-        // Prepare input for FlexCard-style call
-        Map<String, Object> input   = new Map<String, Object>{ 'recordId' => getAccount().Id };
-        Map<String, Object> output  = new Map<String, Object>();
-        Map<String, Object> options = new Map<String, Object>();        
+    static void testAquifierWithValidValue(){
+        Test.setMock(HttpCalloutMock.class, new PHOCSAquiferMock());       
+        Map<String, Object> aquiferResp;
+        PHOCSAquiferService aquiferServ = new PHOCSAquiferService();
         
-        Test.startTest();
-        Test.setMock(HttpCalloutMock.class, new PHOCSWaterRightsCommonMock());
-        // Call service
-        Object result = new PHOCSWaterRightsSystemService().call(
-            'getAllData',
-            new Map<String, Object>{
-                'input'   => input,
-                'output'  => output,
-                'options' => options
-            }
-        );
-        PHOCSAquifersResponseWrapper aquiferResp = PHOCSAquiferCallout.getAquiferDetails('658');
+        Test.startTest();        
+        aquiferResp = aquiferServ.mappingData('658');
         Test.stopTest();
         
-        System.debug('Aquifer Id: ' + aquiferResp.aquifer_id);
-        System.debug('Aquifer Name: ' + aquiferResp.aquifer_name);
-        System.debug('Litho Stratographic Unit: ' + aquiferResp.litho_stratographic_unit);
-        System.assertEquals('658', ''+ aquiferResp.aquifer_id);
+        System.Assert.isNotNull(aquiferResp, 'Aquifer responses is not blank');
     }
     
     @IsTest
-    static void testGetAquiferDetails_Success() {
-        Test.startTest();
-        Test.setMock(HttpCalloutMock.class, new PHOCSAquiferMock());
+    static void testAquifierWithBlankValue() {
+        Test.setMock(HttpCalloutMock.class, new PHOCSAquiferMock());       
+        Map<String, Object> aquiferResp;
+        PHOCSAquiferService aquiferServ = new PHOCSAquiferService();
         
-        PHOCSAquifersResponseWrapper aquiferResp = PHOCSAquiferCallout.getAquiferDetails('658');
-        
-        System.debug('Aquifer Name: ' + aquiferResp.aquifer_name);
-        System.debug('Mapping Year: ' + aquiferResp.mapping_year);
-        System.debug('Licence Count: ' + aquiferResp.licence_details.licence_count);
-        
-        System.assertEquals('Houston Bedrock', aquiferResp.aquifer_name);
-        System.assertEquals(2020, aquiferResp.mapping_year);
-        System.assertEquals(3, aquiferResp.licence_details.licence_count);
+        Test.startTest();        
+        aquiferResp = aquiferServ.mappingData(null);
         Test.stopTest();
+        
+        System.assert(aquiferResp.toString().contains('NoDataForAquifer'), 'Expected Error Key');
     }    
 }

@@ -76,14 +76,7 @@ public class PHOCSWaterApplicationService implements PHOCSWaterRights {
             (waterLicenseAppResponse == null) || 
             (waterLicenseAppResponse?.features == null && waterLicenseAppResponse?.features.size() == 0) ||
             (
-                waterLicenseAppResponse.features[0]?.properties?.APPLICATION_STATUS == null &&
-                waterLicenseAppResponse.features[0]?.properties?.WELL_TAG_NUMBER == null &&
-                waterLicenseAppResponse.features[0]?.properties?.PURPOSE_USE == null &&
-                waterLicenseAppResponse.features[0]?.properties?.PURPOSE_USE_CODE == null &&
-                waterLicenseAppResponse.features[0]?.properties?.QTY_DIVERSION_MAX_RATE == null &&
-                waterLicenseAppResponse.features[0]?.properties?.POD_NUMBER == null &&
-                waterLicenseAppResponse.features[0]?.properties?.POD_DIVERSION_TYPE == null &&
-                waterLicenseAppResponse.features[0]?.properties?.POD_SUBTYPE == null
+                waterLicenseAppResponse.features[0]?.properties?.APPLICATION_STATUS == null && waterLicenseAppResponse.features[0]?.properties?.WELL_TAG_NUMBER == null && waterLicenseAppResponse.features[0]?.properties?.PURPOSE_USE == null && waterLicenseAppResponse.features[0]?.properties?.PURPOSE_USE_CODE == null && waterLicenseAppResponse.features[0]?.properties?.QTY_DIVERSION_MAX_RATE == null && waterLicenseAppResponse.features[0]?.properties?.POD_NUMBER == null && waterLicenseAppResponse.features[0]?.properties?.POD_DIVERSION_TYPE == null && waterLicenseAppResponse.features[0]?.properties?.POD_SUBTYPE == null
             )
         ){
             return false;

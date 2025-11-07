@@ -80,16 +80,7 @@ public class PHOCSWaterLicenseService implements PHOCSWaterRights {
             (waterLicenseResponse == null) || 
             (waterLicenseResponse?.features == null && waterLicenseResponse?.features.size() == 0) ||
             (
-                waterLicenseResponse.features[0]?.properties?.LICENCE_STATUS == null &&
-                waterLicenseResponse.features[0]?.properties?.WELL_TAG_NUMBER == null &&
-                waterLicenseResponse.features[0]?.properties?.PURPOSE_USE == null &&
-                waterLicenseResponse.features[0]?.properties?.PURPOSE_USE_CODE == null &&
-                waterLicenseResponse.features[0]?.properties?.QUANTITY == null &&
-                waterLicenseResponse.features[0]?.properties?.QUANTITY_UNITS == null &&
-                waterLicenseResponse.features[0]?.properties?.POD_NUMBER == null &&
-                waterLicenseResponse.features[0]?.properties?.POD_DIVERSION_TYPE == null &&
-                waterLicenseResponse.features[0]?.properties?.POD_SUBTYPE == null &&
-                waterLicenseResponse.features[0]?.properties?.SOURCE_NAME == null
+                waterLicenseResponse.features[0]?.properties?.LICENCE_STATUS == null && waterLicenseResponse.features[0]?.properties?.WELL_TAG_NUMBER == null && waterLicenseResponse.features[0]?.properties?.PURPOSE_USE == null && waterLicenseResponse.features[0]?.properties?.PURPOSE_USE_CODE == null && waterLicenseResponse.features[0]?.properties?.QUANTITY == null && waterLicenseResponse.features[0]?.properties?.QUANTITY_UNITS == null && waterLicenseResponse.features[0]?.properties?.POD_NUMBER == null && waterLicenseResponse.features[0]?.properties?.POD_DIVERSION_TYPE == null && waterLicenseResponse.features[0]?.properties?.POD_SUBTYPE == null && waterLicenseResponse.features[0]?.properties?.SOURCE_NAME == null
             )
         ){
             return false;

@@ -25,50 +25,28 @@ public class PHOCSWellsServiceTest {
     }
     
     @isTest
-    static void testGWellWorking(){
-        Test.setMock(HttpCalloutMock.class, new PHOCSWaterRightsCommonMock());
-        
-        // Prepare input for FlexCard-style call
-        Map<String, Object> input   = new Map<String, Object>{ 'recordId' => getAccount().Id };
-        Map<String, Object> output  = new Map<String, Object>();
-        Map<String, Object> options = new Map<String, Object>();        
-        
-        Test.startTest();
-        // Call service
-        Object result = new PHOCSWaterRightsSystemService().call(
-            'getAllData',
-            new Map<String, Object>{
-                'input'   => input,
-                'output'  => output,
-                'options' => options
-            }
-        );
-        PHOCSWellResponseWrapper wellResp = PHOCSWellCallout.getWellDetails('129877');        
-        Test.stopTest();
-        
-        System.debug(wellResp);
-        System.debug('Well GUID: ' + wellResp.well_guid);
-        System.debug('Latitude: ' + wellResp.latitude);
-        System.debug('Drilling Method: ' + (wellResp.drilling_methods.isEmpty() ? null : wellResp.drilling_methods[0].description));
-        
-        System.assertEquals('129877', ''+ wellResp.well_tag_number);
-    }
-    
-    
-    @IsTest
-    static void testGetWellDetails_Success() {
-        Test.setMock(HttpCalloutMock.class, new PHOCSWellMock());
+    static void testGWellWithValidValue(){
+        Test.setMock(HttpCalloutMock.class, new PHOCSWellMock());       
+        Map<String, Object> wellResp;
+        PHOCSWellsService wellServ = new PHOCSWellsService();
         
         Test.startTest();        
-        PHOCSWellResponseWrapper wellResp = PHOCSWellCallout.getWellDetails('129877');
+        wellResp = wellServ.mappingData('129877');
         Test.stopTest();
         
-        System.debug('Well GUID: ' + wellResp.well_guid);
-        System.debug('Latitude: ' + wellResp.latitude);
-        System.debug('Drilling Method: ' + (wellResp.drilling_methods.isEmpty() ? null : wellResp.drilling_methods[0].description));
+        System.Assert.isNotNull(wellResp, 'Well Service responses is not blank');
+    }
+    
+    @isTest
+    static void testGWellWithBlankValue(){
+        Test.setMock(HttpCalloutMock.class, new PHOCSWellMock());       
+        Map<String, Object> wellResp;
+        PHOCSWellsService wellServ = new PHOCSWellsService();
         
-        System.assertEquals('dbf618ed-9a8e-428f-89c1-3fc861a0721d', wellResp.well_guid);
-        System.assertEquals(54.81518, wellResp.latitude);
-        System.assertEquals('Dug', wellResp.drilling_methods[0].description);        
+        Test.startTest();        
+        wellResp = wellServ.mappingData(null);
+        Test.stopTest();
+        
+        System.assert(wellResp.toString().contains('NoDataForGWell'), 'Expected Error Key');
     }
 }

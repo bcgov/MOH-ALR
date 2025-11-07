@@ -74,10 +74,7 @@ public class PHOCSAquiferService implements PHOCSWaterRights {
         if(
             (aquiferDetailsResponse == null) || 
             (
-                aquiferDetailsResponse?.aquifer_name == null && 
-                aquiferDetailsResponse?.subtype == null && 
-                aquiferDetailsResponse?.geom?.type == null && 
-                aquiferDetailsResponse?.area == null
+                aquiferDetailsResponse?.aquifer_name == null && aquiferDetailsResponse?.subtype == null && aquiferDetailsResponse?.geom?.type == null && aquiferDetailsResponse?.area == null
             )
         ){
             return false;

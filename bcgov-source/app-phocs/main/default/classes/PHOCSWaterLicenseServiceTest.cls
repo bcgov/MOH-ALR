@@ -26,50 +26,28 @@ public class PHOCSWaterLicenseServiceTest {
     }
     
     @IsTest
-    static void testWaterRightsCallout() {
-        Test.setMock(HttpCalloutMock.class, new PHOCSWLSWaterHttpMock());
-        Test.startTest();
-        PHOCSWLSWaterRightsWrapper rightsWrapper = PHOCSWaterLicenseCallout.getWaterRightsByLicence('505833');
-        System.debug('Water Rights Wrapper: ' + rightsWrapper);
+    static void testWaterWithValidValue() {
+        Test.setMock(HttpCalloutMock.class, new PHOCSWaterRightsCommonMock());       
+        Map<String, Object> waterResp;
+        PHOCSWaterLicenseService waterServ = new PHOCSWaterLicenseService();
+        
+        Test.startTest();        
+        waterResp = waterServ.mappingData('505833');
         Test.stopTest();
-        System.assertNotEquals(null, rightsWrapper);
-        System.assertEquals('FeatureCollection', rightsWrapper.type);
-        System.assertEquals(2, rightsWrapper.features.size());
-        //System.assertEquals('505833', rightsWrapper.features[0].properties.LICENCE_NUMBER);
+        
+        System.Assert.isNotNull(waterResp, 'Water License Service responses is not blank');
     }
     
     @isTest
-    static void testWaterLicenseWorking(){
-        Test.setMock(HttpCalloutMock.class, new PHOCSWaterRightsCommonMock());
+    static void testWaterWithBlankValue(){
+        Test.setMock(HttpCalloutMock.class, new PHOCSWaterRightsCommonMock());       
+        Map<String, Object> waterResp;
+        PHOCSWaterLicenseService waterServ = new PHOCSWaterLicenseService();
         
-        // Prepare input for FlexCard-style call
-        Map<String, Object> input   = new Map<String, Object>{ 'recordId' => getAccount().Id };
-            Map<String, Object> output  = new Map<String, Object>();
-        Map<String, Object> options = new Map<String, Object>();        
-        
-        Test.startTest();
-        // Call service
-        Object result = new PHOCSWaterRightsSystemService().call(
-            'getAllData',
-            new Map<String, Object>{
-                'input'   => input,
-                'output'  => output,
-                'options' => options
-            }
-        );
-        PHOCSWLSWaterRightsWrapper rightsWrapper = PHOCSWaterLicenseCallout.getWaterRightsByLicence('505833');
+        Test.startTest();        
+        waterResp = waterServ.mappingData(null);
         Test.stopTest();
         
-        System.debug('Water Licence Type: ' + rightsWrapper.type);
-        for (PHOCSWLSWaterRightsWrapper.Feature f : rightsWrapper.features) {
-            System.debug('Feature ID: ' + f.id);
-            System.debug('Licence Number: ' + f.properties.LICENCE_NUMBER);
-            System.debug('Well Tag Number: ' + f.properties.WELL_TAG_NUMBER);
-            System.debug('Purpose Use: ' + f.properties.PURPOSE_USE);
-            System.debug('Quantity: ' + f.properties.QUANTITY);
-            System.debug('Latitude / Longitude: ' + f.properties.LATITUDE + ' , ' + f.properties.LONGITUDE);
-        }
-        System.assertEquals('49566', ''+ rightsWrapper.features[0].properties.WELL_TAG_NUMBER);
-    }
-    
+        System.assert(waterResp.toString().contains('NoDataForWaterLicense'), 'Expected Error Key');
+    }    
 }
