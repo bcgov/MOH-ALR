@@ -1,51 +1,51 @@
 /**
- * --------------------------------------------------------------------------------------------
- *  Class Name     : PHOCSWaterRightsSystemService
- *  Developer      : Pawan Atri
- *  Title          : Retrieve water license information from the Water Rights Database (WLRS)
- *  User Story     : EHIS-1425
- *  Created Date   : 16-Sept-2025
- *
- *  Description:
- *  This class acts as a centralized Callable Apex service used to fetch and merge
- *  Water Rights related data including:
- *      # Water License
- *      # Water Application
- *      # Well Tag
- *      # Aquifer
- *
- *  How it works:
- *  • Triggered via Flexcard: PHOCSWaterRightsSystem
- *  • Receives "input", "output", and "options" via the "call()" method as per Callable interface
- *  • Executes method "getAllData" which:
- *       1. Reads recordId from input
- *       2. Queries Account fields holding license, application, welltag, aquifer
- *       3. Determines if caching is enabled via Custom Label: PHOCSWaterRightsCache
- *
- *   If Cache = TRUE:
- *       - Reads previously stored JSON responses from Account fields
- *       - Pushes all values into the output map without doing any new callouts
- *
- *   If Cache = FALSE:
- *       - Makes real-time callouts to:
- *           a) PHOCSWaterLicenseService      (License → License Details)
- *           b) PHOCSWaterApplicationService  (Application → Application Details)
- *           c) PHOCSWellsService             (WellTag → Well Details)
- *           d) PHOCSAquiferService           (Aquifer → Aquifer Details)
- *       - Merges all returned JSON into output map
- *
- *  Purpose / Business Use:
- *      • Used by PHOCS (Public Health Operating Compliance System) to auto-fill water rights
- *        information on Account record pages.
- *      • Data is consumed by Omnistudio FlexCards, OmniScripts, and Salesforce UI components.
- *
- *  Important Notes:
- *      • Supports multi-step API dependency order (License → WellTag → Aquifer)
- *      • Avoids repeated expensive API calls when cache is enabled
- *      • All service response data is stored in output map for downstream usage
- *      • Designed to be extendable for additional water-related services
- * --------------------------------------------------------------------------------------------
- */
+* --------------------------------------------------------------------------------------------
+*  Class Name     : PHOCSWaterRightsSystemService
+*  Developer      : Pawan Atri
+*  Title          : Retrieve water license information from the Water Rights Database (WLRS)
+*  User Story     : EHIS-1425
+*  Created Date   : 16-Sept-2025
+*
+*  Description:
+*  This class acts as a centralized Callable Apex service used to fetch and merge
+*  Water Rights related data including:
+*      # Water License
+*      # Water Application
+*      # Well Tag
+*      # Aquifer
+*
+*  How it works:
+*  • Triggered via Flexcard: PHOCSWaterRightsSystem
+*  • Receives "input", "output", and "options" via the "call()" method as per Callable interface
+*  • Executes method "getAllData" which:
+*       1. Reads recordId from input
+*       2. Queries Account fields holding license, application, welltag, aquifer
+*       3. Determines if caching is enabled via Custom Label: PHOCSWaterRightsCache
+*
+*   If Cache = TRUE:
+*       - Reads previously stored JSON responses from Account fields
+*       - Pushes all values into the output map without doing any new callouts
+*
+*   If Cache = FALSE:
+*       - Makes real-time callouts to:
+*           a) PHOCSWaterLicenseService      (License → License Details)
+*           b) PHOCSWaterApplicationService  (Application → Application Details)
+*           c) PHOCSWellsService             (WellTag → Well Details)
+*           d) PHOCSAquiferService           (Aquifer → Aquifer Details)
+*       - Merges all returned JSON into output map
+*
+*  Purpose / Business Use:
+*      • Used by PHOCS (Public Health Operating Compliance System) to auto-fill water rights
+*        information on Account record pages.
+*      • Data is consumed by Omnistudio FlexCards, OmniScripts, and Salesforce UI components.
+*
+*  Important Notes:
+*      • Supports multi-step API dependency order (License → WellTag → Aquifer)
+*      • Avoids repeated expensive API calls when cache is enabled
+*      • All service response data is stored in output map for downstream usage
+*      • Designed to be extendable for additional water-related services
+* --------------------------------------------------------------------------------------------
+*/
 
 global with sharing class PHOCSWaterRightsSystemService implements Callable {
     
@@ -83,10 +83,14 @@ global with sharing class PHOCSWaterRightsSystemService implements Callable {
                 String aquifer = acc.AquiferNumber__c?.toString();
                 
                 if(isCacheEnabled.equalsIgnoreCase('true')){
-                    outMap.putAll((Map<String, Object>) JSON.deserializeUntyped(acc.PHOCSWaterLicenseJSONRespnose__c));
-                    outMap.putAll((Map<String, Object>) JSON.deserializeUntyped(acc.PHOCSWaterApplicationJSONResponse__c));
-                    outMap.putAll((Map<String, Object>) JSON.deserializeUntyped(acc.PHOCSWellTagJSONResponse__c));
-                    outMap.putAll((Map<String, Object>) JSON.deserializeUntyped(acc.PHOCSAquiferJSONResponse__c));
+                    if(String.isNotBlank(acc.PHOCSWaterLicenseJSONRespnose__c))
+                        outMap.putAll((Map<String, Object>) JSON.deserializeUntyped(acc.PHOCSWaterLicenseJSONRespnose__c));
+                    if(String.isNotBlank(acc.PHOCSWaterApplicationJSONResponse__c))
+                        outMap.putAll((Map<String, Object>) JSON.deserializeUntyped(acc.PHOCSWaterApplicationJSONResponse__c));
+                    if(String.isNotBlank(acc.PHOCSWellTagJSONResponse__c))
+                        outMap.putAll((Map<String, Object>) JSON.deserializeUntyped(acc.PHOCSWellTagJSONResponse__c));
+                    if(String.isNotBlank(acc.PHOCSAquiferJSONResponse__c))
+                        outMap.putAll((Map<String, Object>) JSON.deserializeUntyped(acc.PHOCSAquiferJSONResponse__c));
                 }else{
                     // STEP 1: If License exists → call License API
                     PHOCSWaterLicenseService waterLicService = new PHOCSWaterLicenseService();
