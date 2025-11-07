@@ -1,0 +1,18 @@
+<template>
+    <template if:true={isUploading}>
+            <lightning-spinner
+                alternative-text="File is uploading..."
+                size="medium">
+            </lightning-spinner>
+    </template>
+    <div style="height: 300px;">
+        <lightning-datatable
+                key-field="docCheckListItemId"
+                data={docCheckListItems}
+                columns={columns}
+                onrowaction={handleRowAction}
+                hide-checkbox-column = true
+                single-row-selection-mode=true>
+        </lightning-datatable>
+    </div>
+</template>
