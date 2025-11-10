@@ -72,7 +72,8 @@ public with sharing class ContentDocumentLinkTriggerHandler {
         }
         for(string sobjName : sobjectNameRecordIds.keySet()){
             set<Id> recordIds = sobjectNameRecordIds.get(sobjName);      
-            SObject[] records = Database.query('Select Id, RecordTypeId from ' + sobjName + ' where Id in :recordIds');  //soql inside loop. max 4-5 times soql query called inside loop.
+             //soql inside loop. max 4-5 times soql query called inside loop.
+            SObject[] records = Database.query('Select Id, RecordTypeId from ' + sobjName + ' where Id in :recordIds'); // NOPMD 
             parentSobjectMap.putAll(records);
         }
         return parentSobjectMap;
