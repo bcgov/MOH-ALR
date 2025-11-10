@@ -37,11 +37,15 @@ trigger PHOCSAccountWaterDataTrigger on Account (after insert, after update) {
     for(Account acc : Trigger.new){
         // Only trigger if WaterLicenseNumber__c OR WaterLicenseApplicationNumber__c changed
         Account oldAcc = Trigger.isUpdate ? Trigger.oldMap.get(acc.Id) : null;
+		
+		String AccRecordTypeID = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('DrinkingWaterSourceIntake').getRecordTypeId();
         
-        Boolean licenseChanged = (oldAcc == null || acc.WaterLicenseNumber__c != oldAcc.WaterLicenseNumber__c);
-        Boolean appChanged = (oldAcc == null || acc.WaterLicenseApplicationNumber__c != oldAcc.WaterLicenseApplicationNumber__c);
+        Boolean islicenseChanged = (oldAcc == null || acc.WaterLicenseNumber__c != oldAcc.WaterLicenseNumber__c);
+        Boolean isappNumbChanged = (oldAcc == null || acc.WaterLicenseApplicationNumber__c != oldAcc.WaterLicenseApplicationNumber__c);
+        Boolean isCorrectRecordtype = (acc.RecordtypeId == AccRecordTypeID);
+        Boolean isCorrectType = (acc.Type == 'Drinking Water');
         
-        if(licenseChanged || appChanged){
+        if((islicenseChanged || isappNumbChanged) && (isCorrectRecordtype && isCorrectType)){
             accIds.add(acc.Id);
         }
     }

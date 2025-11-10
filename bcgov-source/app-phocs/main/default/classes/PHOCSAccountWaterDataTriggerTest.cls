@@ -31,6 +31,7 @@ private class PHOCSAccountWaterDataTriggerTest {
             ParentId = accParent.Id,
             ParentAccount__c = accParent.Id,
             RecordtypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('DrinkingWaterSourceIntake').getRecordTypeId(),
+            Type = 'Drinking Water',
             WaterLicenseApplicationNumber__c = 'WLA20160113-0001',
             LicenseType__c = rat.Id
         );
