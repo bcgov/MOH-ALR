@@ -6,6 +6,9 @@ export default class PhocsRecordFileManager extends LightningElement {
     @track documentsList = [];
     @track columns;
 
+    @track showModal = false;
+    @track modalUrl = '';
+
     isUploading = false;
 
     connectedCallback() {
@@ -42,7 +45,7 @@ export default class PhocsRecordFileManager extends LightningElement {
                 this.downloadDocument(row);
                 break;
             case 'preview':
-                this.previewDocument(row);
+                this.filePreview(row);
                 break;
             default:
         }
@@ -57,4 +60,14 @@ export default class PhocsRecordFileManager extends LightningElement {
         if (!row.contentDocumentId) return;
         window.open(row.previewUrl, '_blank'); // 👈 Opens preview in new tab
     }
+
+    filePreview(row) {
+      this.modalUrl = row.downloadUrl
+      this.showModal = true;
+    }
+
+    closeModal() {
+      this.showModal = false;
+    }
+
 }
