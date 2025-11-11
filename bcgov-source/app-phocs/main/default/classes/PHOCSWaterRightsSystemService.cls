@@ -83,14 +83,31 @@ global with sharing class PHOCSWaterRightsSystemService implements Callable {
                 String aquifer = acc.AquiferNumber__c?.toString();
                 
                 if(isCacheEnabled.equalsIgnoreCase('true')){
+                    
+                    // Fetch Water license existing JSON Response, if it is blank then pass Error in Map
                     if(String.isNotBlank(acc.PHOCSWaterLicenseJSONRespnose__c))
                         outMap.putAll((Map<String, Object>) JSON.deserializeUntyped(acc.PHOCSWaterLicenseJSONRespnose__c));
+                    else
+                        outMap.put(PHOCSWaterLicenseService.errorKey, PHOCSWaterLicenseService.errorMsg);
+                    
+                    // Fetch Water license application existing JSON Response, if it is blank then pass Error in Map
                     if(String.isNotBlank(acc.PHOCSWaterApplicationJSONResponse__c))
                         outMap.putAll((Map<String, Object>) JSON.deserializeUntyped(acc.PHOCSWaterApplicationJSONResponse__c));
+                    else
+                        outMap.put(PHOCSWaterApplicationService.errorKey, PHOCSWaterApplicationService.errorMsg);
+                    
+                    // Fetch Well-Tag existing JSON Response, if it is blank then pass Error in Map
                     if(String.isNotBlank(acc.PHOCSWellTagJSONResponse__c))
                         outMap.putAll((Map<String, Object>) JSON.deserializeUntyped(acc.PHOCSWellTagJSONResponse__c));
+                    else
+                        outMap.put(PHOCSWellsService.errorKey, PHOCSWellsService.errorMsg);
+                    
+                    // Fetch Aquifer existing JSON Response, if it is blank then pass Error in Map
                     if(String.isNotBlank(acc.PHOCSAquiferJSONResponse__c))
                         outMap.putAll((Map<String, Object>) JSON.deserializeUntyped(acc.PHOCSAquiferJSONResponse__c));
+                    else
+                        outMap.put(PHOCSAquiferService.errorKey, PHOCSAquiferService.errorMsg);
+                    
                 }else{
                     // STEP 1: If License exists → call License API
                     PHOCSWaterLicenseService waterLicService = new PHOCSWaterLicenseService();
