@@ -58,11 +58,11 @@ export default class PhocsRecordFileManager extends LightningElement {
 
     previewDocument(row) {
         if (!row.contentDocumentId) return;
-        window.open(row.previewUrl, '_blank'); // 👈 Opens preview in new tab
+        window.open(row.downloadUrl, '_blank'); 
     }
 
     filePreview(row) {
-      this.modalUrl = row.downloadUrl
+      this.modalUrl = row.previewUrl;
       this.showModal = true;
     }
 
