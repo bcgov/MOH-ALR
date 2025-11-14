@@ -49,4 +49,17 @@ public class PHOCSWellsServiceTest {
         
         System.assert(wellResp.toString().contains('NoDataForGWell'), 'Expected Error Key');
     }
+    
+    @isTest
+    static void testGWellWithServerError(){
+        Test.setMock(HttpCalloutMock.class, new PHOCSWaterRightsServerErrorMock());       
+        Map<String, Object> wellResp;
+        PHOCSWellsService wellServ = new PHOCSWellsService();
+        
+        Test.startTest();        
+        wellResp = wellServ.mappingData('129877');
+        Test.stopTest();
+        
+        System.Assert.isNotNull(wellResp, 'Well Service responses is not blank');
+    }
 }

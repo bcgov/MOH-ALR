@@ -42,10 +42,12 @@ trigger PHOCSAccountWaterDataTrigger on Account (after insert, after update) {
         
         Boolean islicenseChanged = (oldAcc == null || acc.WaterLicenseNumber__c != oldAcc.WaterLicenseNumber__c);
         Boolean isappNumbChanged = (oldAcc == null || acc.WaterLicenseApplicationNumber__c != oldAcc.WaterLicenseApplicationNumber__c);
+        Boolean isPODNumberChanged = (oldAcc == null || acc.PODNumber__c != oldAcc.PODNumber__c);
+        Boolean isPurposeCodeChanged = (oldAcc == null || acc.PurposeUseCode__c != oldAcc.PurposeUseCode__c);
         Boolean isCorrectRecordtype = (acc.RecordtypeId == AccRecordTypeID);
         Boolean isCorrectType = (acc.Type == 'Drinking Water');
         
-        if((islicenseChanged || isappNumbChanged) && (isCorrectRecordtype && isCorrectType)){
+        if((islicenseChanged || isappNumbChanged || isPODNumberChanged || isPurposeCodeChanged) && (isCorrectRecordtype && isCorrectType)){
             accIds.add(acc.Id);
         }
     }

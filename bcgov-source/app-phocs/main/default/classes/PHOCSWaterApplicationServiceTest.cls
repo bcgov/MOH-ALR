@@ -48,4 +48,18 @@ private class PHOCSWaterApplicationServiceTest {
         
         System.assert(applicationResp.toString().contains('NoDataForLicenseApplication'), 'Expected Error Key');
     }
+    
+    @IsTest
+    static void testApplicationWithServerError() {        
+        Test.setMock(HttpCalloutMock.class, new PHOCSWaterRightsServerErrorMock());
+        
+        Map<String, Object> applicationResp;
+        PHOCSWaterApplicationService applicationServ = new PHOCSWaterApplicationService();
+        
+        Test.startTest();        
+        applicationResp = applicationServ.mappingData('WLA20160113-0001');
+        Test.stopTest();
+        
+        System.Assert.isNotNull(applicationResp, 'Water License Application Service responses is blank');
+    }
 }

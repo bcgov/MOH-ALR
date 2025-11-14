@@ -50,4 +50,17 @@ public class PHOCSAquiferServiceTest {
         
         System.assert(aquiferResp.toString().contains('NoDataForAquifer'), 'Expected Error Key');
     }    
+    
+    @isTest
+    static void testAquifierWithServerError(){
+        Test.setMock(HttpCalloutMock.class, new PHOCSWaterRightsServerErrorMock());       
+        Map<String, Object> aquiferResp;
+        PHOCSAquiferService aquiferServ = new PHOCSAquiferService();
+        
+        Test.startTest();        
+        aquiferResp = aquiferServ.mappingData('658');
+        Test.stopTest();
+        
+        System.Assert.isNotNull(aquiferResp, 'Aquifer responses is not blank');
+    }
 }

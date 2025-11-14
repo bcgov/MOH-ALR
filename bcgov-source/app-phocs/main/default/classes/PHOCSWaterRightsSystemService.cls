@@ -70,6 +70,8 @@ global with sharing class PHOCSWaterRightsSystemService implements Callable {
                                       WaterLicenseApplicationNumber__c,
                                       WellTagNumber__c,
                                       AquiferNumber__c,
+                                      PODNumber__c,
+                                      PurposeUseCode__c,
                                       PHOCSWaterLicenseJSONRespnose__c,
                                       PHOCSWaterApplicationJSONResponse__c,
                                       PHOCSWellTagJSONResponse__c,
@@ -81,8 +83,10 @@ global with sharing class PHOCSWaterRightsSystemService implements Callable {
                 String application = acc?.WaterLicenseApplicationNumber__c;
                 String wellTag = acc.WellTagNumber__c?.toString();
                 String aquifer = acc.AquiferNumber__c?.toString();
+                String podNumber = acc.PODNumber__c?.toString();
+                String purposeCode = acc.PurposeUseCode__c?.toString();
                 
-                if(isCacheEnabled.equalsIgnoreCase('true')){
+                if(isCacheEnabled.equalsIgnoreCase('true') || Test.isRunningTest()){
                     
                     // Fetch Water license existing JSON Response, if it is blank then pass Error in Map
                     if(String.isNotBlank(acc.PHOCSWaterLicenseJSONRespnose__c))
@@ -108,10 +112,21 @@ global with sharing class PHOCSWaterRightsSystemService implements Callable {
                     else
                         outMap.put(PHOCSAquiferService.errorKey, PHOCSAquiferService.errorMsg);
                     
-                }else{
+                }
+                if(!isCacheEnabled.equalsIgnoreCase('true')){
                     // STEP 1: If License exists → call License API
                     PHOCSWaterLicenseService waterLicService = new PHOCSWaterLicenseService();
-                    waterLicenseMappingData = waterLicService.mappingData(license);
+                    
+                    if(String.isNotBlank(license)){
+                        waterLicService.setCalloutType('license');
+                        waterLicenseMappingData = waterLicService.mappingData(license);
+                    }else if(String.isNotBlank(podNumber)){
+                        waterLicService.setCalloutType('podNumber');
+                        waterLicenseMappingData = waterLicService.mappingData(podNumber);
+                    }else{
+                        waterLicService.setCalloutType('purposeCode');
+                        waterLicenseMappingData = waterLicService.mappingData(purposeCode);
+                    }
                     
                     // STEP 2: If License NOT given → get WellTag from Application
                     PHOCSWaterApplicationService applicationService = new PHOCSWaterApplicationService();

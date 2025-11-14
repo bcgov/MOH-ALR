@@ -26,10 +26,38 @@ public class PHOCSWaterLicenseServiceTest {
     }
     
     @IsTest
-    static void testWaterWithValidValue() {
+    static void testWaterWithValidLicenseValue() {
         Test.setMock(HttpCalloutMock.class, new PHOCSWaterRightsCommonMock());       
         Map<String, Object> waterResp;
         PHOCSWaterLicenseService waterServ = new PHOCSWaterLicenseService();
+        
+        Test.startTest();        
+        waterResp = waterServ.mappingData('505833');
+        Test.stopTest();
+        
+        System.Assert.isNotNull(waterResp, 'Water License Service responses is not blank');
+    }
+    
+    @IsTest
+    static void testWaterWithValidPODNumberValue() {
+        Test.setMock(HttpCalloutMock.class, new PHOCSWaterRightsCommonMock());       
+        Map<String, Object> waterResp;
+        PHOCSWaterLicenseService waterServ = new PHOCSWaterLicenseService();
+        waterServ.setCalloutType('podNumber');
+        
+        Test.startTest();        
+        waterResp = waterServ.mappingData('505833');
+        Test.stopTest();
+        
+        System.Assert.isNotNull(waterResp, 'Water License Service responses is not blank');
+    }
+    
+    @IsTest
+    static void testWaterWithValidPurposeCodeValue() {
+        Test.setMock(HttpCalloutMock.class, new PHOCSWaterRightsCommonMock());       
+        Map<String, Object> waterResp;
+        PHOCSWaterLicenseService waterServ = new PHOCSWaterLicenseService();
+        waterServ.setCalloutType('purposeCode');
         
         Test.startTest();        
         waterResp = waterServ.mappingData('505833');
@@ -50,4 +78,46 @@ public class PHOCSWaterLicenseServiceTest {
         
         System.assert(waterResp.toString().contains('NoDataForWaterLicense'), 'Expected Error Key');
     }    
+    
+    @isTest
+    static void testWaterWithPOD_ServerError(){
+        Test.setMock(HttpCalloutMock.class, new PHOCSWaterRightsServerErrorMock());       
+        Map<String, Object> waterResp;
+        PHOCSWaterLicenseService waterServ = new PHOCSWaterLicenseService();
+        waterServ.setCalloutType('podNumber');
+        
+        Test.startTest();        
+        waterResp = waterServ.mappingData('505833');
+        Test.stopTest();
+        
+        System.assert(waterResp.toString().contains('NoDataForWaterLicense'), 'Expected Error Key');
+    }
+    
+    @isTest
+    static void testWaterWithPurpose_ServerError(){
+        Test.setMock(HttpCalloutMock.class, new PHOCSWaterRightsServerErrorMock());       
+        Map<String, Object> waterResp;
+        PHOCSWaterLicenseService waterServ = new PHOCSWaterLicenseService();
+        waterServ.setCalloutType('purposeCode');
+        
+        Test.startTest();        
+        waterResp = waterServ.mappingData('505833');
+        Test.stopTest();
+        
+        System.assert(waterResp.toString().contains('NoDataForWaterLicense'), 'Expected Error Key');
+    }
+    
+    @isTest
+    static void testWaterWithLicense_ServerError(){
+        Test.setMock(HttpCalloutMock.class, new PHOCSWaterRightsServerErrorMock());       
+        Map<String, Object> waterResp;
+        PHOCSWaterLicenseService waterServ = new PHOCSWaterLicenseService();
+        waterServ.setCalloutType('license');
+        
+        Test.startTest();        
+        waterResp = waterServ.mappingData('505833');
+        Test.stopTest();
+        
+        System.assert(waterResp.toString().contains('NoDataForWaterLicense'), 'Expected Error Key');
+    }
 }
