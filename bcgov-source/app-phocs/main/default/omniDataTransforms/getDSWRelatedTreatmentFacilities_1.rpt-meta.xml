@@ -4,32 +4,21 @@
     <assignmentRulesUsed>false</assignmentRulesUsed>
     <deletedOnSuccess>false</deletedOnSuccess>
     <errorIgnored>false</errorIgnored>
-    <expectedOutputJson>{
-  &quot;facilityAccId&quot; : null,
-  &quot;fcilityAccountName&quot; : null,
-  &quot;facilityPhone&quot; : null,
-  &quot;facilityPhoneExtension&quot; : null,
-  &quot;facilityFax&quot; : null,
-  &quot;facilityWebsite&quot; : null,
-  &quot;facilityOperationStartDate&quot; : null,
-  &quot;facilityDescription&quot; : null,
-  &quot;facilityEmail&quot; : null
-}</expectedOutputJson>
-    <fieldLevelSecurityEnabled>false</fieldLevelSecurityEnabled>
+    <fieldLevelSecurityEnabled>true</fieldLevelSecurityEnabled>
     <inputType>JSON</inputType>
     <isManagedUsingStdDesigner>false</isManagedUsingStdDesigner>
-    <name>PHOCSFacilityAccExtract</name>
-    <nullInputsIncludedInOutput>true</nullInputsIncludedInOutput>
+    <name>getDSWRelatedTreatmentFacilities</name>
+    <nullInputsIncludedInOutput>false</nullInputsIncludedInOutput>
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>5419b331-0e3c-4bc4-b45e-5708d1a7d144</globalKey>
-        <inputFieldName>facilityAccount:Physical_Address__Street__s</inputFieldName>
+        <globalKey>baaae3c0-1a98-43cf-bdc8-c527c7ec2f0c</globalKey>
+        <inputFieldName>TreatmentFacilities:ShippingStreet</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
+        <name>getDSWRelatedTreatmentFacilities</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>facilityAccPhysicalAddressStreet</outputFieldName>
+        <outputFieldName>TreatmentFacilities:MailingAddressStreet</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -38,13 +27,13 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>f6737924-766a-48d5-9f72-3a6b3e97e780</globalKey>
-        <inputFieldName>facilityAccount:SaturdayOpen__c</inputFieldName>
+        <globalKey>3bd58628-fd1d-4ad4-9da8-fbe14b46b52c</globalKey>
+        <inputFieldName>TreatmentFacilities:Depth_of_Intake_m__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
+        <name>getDSWRelatedTreatmentFacilities</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>SaturdayOpenSelect</outputFieldName>
+        <outputFieldName>TreatmentFacilities:DepthofIntake</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -53,230 +42,31 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>cf831db7-ae0b-47b5-ac98-9184545eeabb</globalKey>
-        <inputFieldName>facilityAccount:OperationStartDate__c</inputFieldName>
+        <globalKey>138e1d52-b3bf-46f1-b200-d3578e3d6880</globalKey>
+        <inputFieldName>TreatmentFacilities:BillingCountry</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
+        <name>getDSWRelatedTreatmentFacilities</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>OperationStartDate</outputFieldName>
+        <outputFieldName>TreatmentFacilities:BillingAddressCountry</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>LIKE</filterOperator>
-        <filterValue>facilityAccName</filterValue>
-        <globalKey>922c8a14-426c-4657-b701-160cd8dd311b</globalKey>
-        <inputFieldName>Name</inputFieldName>
-        <inputObjectName>Account</inputObjectName>
-        <inputObjectQuerySequence>1.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>facilityAccount</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>57c3611e-e11e-4b27-a633-f4b54a0d3f63</globalKey>
-        <inputFieldName>facilityAccount:WednesdayClose__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>WednesdayCloseSelect</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>FacilityType</filterValue>
-        <globalKey>b19db7b3-fc6d-4e6b-b9f2-5f29727200cb</globalKey>
-        <inputFieldName>Type</inputFieldName>
-        <inputObjectName>Account</inputObjectName>
-        <inputObjectQuerySequence>1.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>facilityAccount</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>c4571766-eb64-467d-a87b-e47f1c3d4f83</globalKey>
-        <inputFieldName>facilityAccount:MondayClose__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>MondayCloseSelect</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>fa858224-4923-454b-9c87-8f8a6745ce90</globalKey>
-        <inputFieldName>facilityAccount:Physical_Address__PostalCode__s</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>facilityAddressPostalCode</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>3092b574-550f-46ef-9366-72bf11ebf619</globalKey>
-        <inputFieldName>facilityAccount:Service_s__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>ServciesSelect</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>50b83f73-f5a4-495d-ac70-8c5e5d71b2a7</globalKey>
-        <inputFieldName>facilityAccount:Id</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>facilityAccId</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>407e79a6-c89b-42c7-af15-4cdd5b0e5b08</globalKey>
-        <inputFieldName>facilityAccount:TuesdayClose__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>TuesdayCloseSelect</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>cc5c4370-26d6-473a-941e-94c36805435a</globalKey>
-        <inputFieldName>facilityAccount:SizeOfPortableWaterTankLitres__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>facilityAccSizeOfPortableWaterTank</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>dfb8e8ff-4397-4fe3-8d1e-07c81432a5dd</globalKey>
-        <inputFieldName>facilityAccount:WaterSourceName__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>facilityAccWaterSourceName</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>0cb25c90-021b-4821-bece-50c9078773fb</globalKey>
-        <inputFieldName>facilityAccount:Phone</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>facilityAccPhone</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>b896246e-7a97-401f-b368-fc9be10d6364</globalKey>
-        <inputFieldName>facilityAccount:FridayOpen__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>FridayOpenSelect</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>ff1f645a-3a94-49ae-a124-f608e394cd10</globalKey>
-        <inputFieldName>facilityAccount:FridayClose__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>FridayCloseSelect</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem> 
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <filterOperator>=</filterOperator>
         <filterValue>&apos;Facility&apos;</filterValue>
-        <globalKey>62b159be-19de-4162-9cd4-77e506adf2e4</globalKey>
-        <inputFieldName>RecordType.DeveloperName</inputFieldName>
+        <globalKey>cd8ee382-6e16-4e87-a0f2-cb9c114e94d3</globalKey>
+        <inputFieldName>RecordTypeName__c</inputFieldName>
         <inputObjectName>Account</inputObjectName>
         <inputObjectQuerySequence>1.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
+        <name>getDSWRelatedTreatmentFacilities</name>
         <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>facilityAccount</outputFieldName>
+        <outputFieldName>TreatmentFacilities</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -284,28 +74,13 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>1ce56cae-c9c4-489d-972e-d514dcd80786</globalKey>
-        <inputFieldName>facilityAccount:WednesdayOpen__c</inputFieldName>
+        <globalKey>75e4793b-96d0-49b1-a0db-74da30ac7f66</globalKey>
+        <inputFieldName>TreatmentFacilities:BillingPostalCode</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
+        <name>getDSWRelatedTreatmentFacilities</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>WednesdayOpenSelect</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>07b9f7f7-dea2-4a1d-8711-23dc50aa4a25</globalKey>
-        <inputFieldName>facilityAccount:NumberOfWareWashingComponents__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>NumberOfWarewashingComponentsSelect</outputFieldName>
+        <outputFieldName>TreatmentFacilities:BillingAddressZip</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -314,14 +89,13 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>3ff670eb-41b7-42d4-a471-3b88c41fcd20</globalKey>
-        <inputFieldName>facilityAccount:Name</inputFieldName>
+        <globalKey>9659c5e6-2b0a-47c1-8c63-b875fc8010e7</globalKey>
+        <inputFieldName>TreatmentFacilities:WaterSupplierName__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
+        <name>getDSWRelatedTreatmentFacilities</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldFormat>String</outputFieldFormat>
-        <outputFieldName>facilityAccName</outputFieldName>
+        <outputFieldName>TreatmentFacilities:WaterSupplierName</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -330,13 +104,13 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>0ca45af9-795c-4427-985e-0fab4d0a88be</globalKey>
-        <inputFieldName>facilityAccount:PowerSourceDuringTransportation__c</inputFieldName>
+        <globalKey>40529cfa-c0f4-4918-99cf-5e453f8c5f1e</globalKey>
+        <inputFieldName>TreatmentFacilities:CategoryL2__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
+        <name>getDSWRelatedTreatmentFacilities</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>PowerSourceDuringTransportationMultiSelect</outputFieldName>
+        <outputFieldName>TreatmentFacilities:CategoryL2</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -345,13 +119,13 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>dd6f40a7-0017-462b-8200-cd4f2c124e07</globalKey>
-        <inputFieldName>facilityAccount:SundayClose__c</inputFieldName>
+        <globalKey>0252fcb7-ee34-40fd-93b1-f9a25c7e7dcf</globalKey>
+        <inputFieldName>TreatmentFacilities:CategoryL3__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
+        <name>getDSWRelatedTreatmentFacilities</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>SundayCloseSelect</outputFieldName>
+        <outputFieldName>TreatmentFacilities:CategoryL3</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -360,13 +134,13 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>3a8f5dc8-0e87-4fc2-85e4-5ce02e92bb0a</globalKey>
-        <inputFieldName>facilityAccount:SundayOpen__c</inputFieldName>
+        <globalKey>a3251902-78b1-4524-acc4-1862729b6d53</globalKey>
+        <inputFieldName>TreatmentFacilities:BillingState</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
+        <name>getDSWRelatedTreatmentFacilities</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>SundayOpenSelect</outputFieldName>
+        <outputFieldName>TreatmentFacilities:BillingAddressState</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -375,13 +149,13 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>5b5ded98-e7ce-4698-939a-6edea7a67966</globalKey>
-        <inputFieldName>facilityAccount:CategoryL2__c</inputFieldName>
+        <globalKey>35fcb3e6-94fc-4902-b9e1-724b50bb8b51</globalKey>
+        <inputFieldName>TreatmentFacilities:Description</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
+        <name>getDSWRelatedTreatmentFacilities</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>CategoryL2Select</outputFieldName>
+        <outputFieldName>TreatmentFacilities:Description</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -390,13 +164,13 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>cc1545a7-2e07-4e62-9d81-36720017fb64</globalKey>
-        <inputFieldName>facilityAccount:ThursdayClose__c</inputFieldName>
+        <globalKey>73d4771a-1951-4ef9-8ba4-189730669fad</globalKey>
+        <inputFieldName>TreatmentFacilities:TankTruckPhysicalAddress__StateCode__s</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
+        <name>getDSWRelatedTreatmentFacilities</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>ThursdayCloseSelect</outputFieldName>
+        <outputFieldName>TreatmentFacilities:PhysicalAddressState</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -405,13 +179,58 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>71b6fc0f-242d-4ddc-a6b5-4f9ba79942c2</globalKey>
-        <inputFieldName>facilityAccount:DesignatedNumberOfHandwashingSinks__c</inputFieldName>
+        <globalKey>3ae0d2c6-c573-4e84-b399-bf2cb52dfab2</globalKey>
+        <inputFieldName>TreatmentFacilities:PhysicalDrivingDirections__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
+        <name>getDSWRelatedTreatmentFacilities</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>DesignatedNumberOfHandwashingSinksSelect</outputFieldName>
+        <outputFieldName>TreatmentFacilities:PhysicalDrivingDirections</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>6ca44380-c568-4991-96fd-a6db9a768a56</globalKey>
+        <inputFieldName>TreatmentFacilities:Physical_Address__Street__s</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>getDSWRelatedTreatmentFacilities</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TreatmentFacilities:PhysicalAddessStreet</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>55f5f776-b187-4483-b14c-a8f9f1798636</globalKey>
+        <inputFieldName>TreatmentFacilities:UseDescription__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>getDSWRelatedTreatmentFacilities</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TreatmentFacilities:UseDescription</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>b7e08735-a8c5-4f64-b408-64efee4283f1</globalKey>
+        <inputFieldName>TreatmentFacilities:PhysicalParameters__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>getDSWRelatedTreatmentFacilities</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TreatmentFacilities:PhysicalParameters</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -421,15 +240,332 @@
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <filterOperator>=</filterOperator>
-        <filterValue>BusinessEntityAcctId</filterValue>
-        <globalKey>7d43dee8-5c67-4ca1-8e1b-1f6c841fb035</globalKey>
+        <filterValue>&apos;Drinking Water Treatment&apos;</filterValue>
+        <globalKey>b695ed9b-6910-4a15-98b2-e40517be0a30</globalKey>
+        <inputFieldName>CategoryL1__c</inputFieldName>
+        <inputObjectName>Account</inputObjectName>
+        <inputObjectQuerySequence>1.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>getDSWRelatedTreatmentFacilities</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>TreatmentFacilities</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>da21364d-b165-42fa-9633-72199272716c</globalKey>
+        <inputFieldName>TreatmentFacilities:Type</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>getDSWRelatedTreatmentFacilities</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TreatmentFacilities:Type</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>32e387b5-4e9f-42f8-8442-d2c9bb8ccb06</globalKey>
+        <inputFieldName>TreatmentFacilities:Physical_Address__CountryCode__s</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>getDSWRelatedTreatmentFacilities</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TreatmentFacilities:PhysicalAddressCountry</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>39522c2b-b8c6-4acb-956f-af0767c99e5a</globalKey>
+        <inputFieldName>TreatmentFacilities:Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>getDSWRelatedTreatmentFacilities</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TreatmentFacilities:Name</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>09ae29b3-3568-41a3-93ac-7fd238f26cac</globalKey>
+        <inputFieldName>TreatmentFacilities:SamplingTaps__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>getDSWRelatedTreatmentFacilities</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TreatmentFacilities:SamplingTaps</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>c8cb3974-11a3-49f9-b2fa-206a8c518c9b</globalKey>
+        <inputFieldName>TreatmentFacilities:ShippingState</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>getDSWRelatedTreatmentFacilities</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TreatmentFacilities:MailingAddressState</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>c1d39f26-672a-4d1f-9b76-381590e01f41</globalKey>
+        <inputFieldName>TreatmentFacilities:MaximumDesignFlowRateM3Day__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>getDSWRelatedTreatmentFacilities</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TreatmentFacilities:MaximumDesignFlowRate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>237bc0c7-972c-426c-a938-08eaa4627f88</globalKey>
+        <inputFieldName>TreatmentFacilities:Id</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>getDSWRelatedTreatmentFacilities</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TreatmentFacilities:Id</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>f16d924d-7494-4f97-b727-ae399094b54c</globalKey>
+        <inputFieldName>TreatmentFacilities:NonPotableWaterSystem__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>getDSWRelatedTreatmentFacilities</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TreatmentFacilities:NonpotableWaterSystem</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>97209c6b-2aa2-4606-978b-5710c4863b8e</globalKey>
+        <inputFieldName>TreatmentFacilities:BillingStreet</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>getDSWRelatedTreatmentFacilities</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TreatmentFacilities:BillingAddressStreet</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>8cb1ecbc-61c5-4158-b2e9-2aaf4239d282</globalKey>
+        <inputFieldName>TreatmentFacilities:FacilityEmail__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>getDSWRelatedTreatmentFacilities</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TreatmentFacilities:FacilityEmail</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>a4247934-3083-414b-a883-ed7e7b5a1dbf</globalKey>
+        <inputFieldName>TreatmentFacilities:Website</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>getDSWRelatedTreatmentFacilities</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TreatmentFacilities:Website</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>1e4c0fee-31a7-4494-b933-9f60627982d9</globalKey>
+        <inputFieldName>TreatmentFacilities:ShippingCountry</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>getDSWRelatedTreatmentFacilities</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TreatmentFacilities:MailingAddressCountry</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>9258a994-4119-4e83-a7c2-3652d0b365a6</globalKey>
+        <inputFieldName>TreatmentFacilities:Extension__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>getDSWRelatedTreatmentFacilities</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TreatmentFacilities:PhoneExt</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>04d6fb29-286c-46c5-8fcd-96d9921fde00</globalKey>
+        <inputFieldName>TreatmentFacilities:ShippingCity</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>getDSWRelatedTreatmentFacilities</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TreatmentFacilities:MailingAddressCity</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>dc83c3e9-6c66-4fbf-b325-d1e2c34d9cdb</globalKey>
+        <inputFieldName>TreatmentFacilities:Physical_Address__City__s</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>getDSWRelatedTreatmentFacilities</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TreatmentFacilities:PhysicalAddressCity</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>5684631d-df02-4839-8ed8-fa6d290e000a</globalKey>
+        <inputFieldName>TreatmentFacilities:Physical_Address__PostalCode__s</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>getDSWRelatedTreatmentFacilities</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TreatmentFacilities:PhysicalAddressZip</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>5bd227cc-9be3-44fa-aabd-acf69241e066</globalKey>
+        <inputFieldName>TreatmentFacilities:EOCPFacilityNumber__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>getDSWRelatedTreatmentFacilities</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TreatmentFacilities:EOCPFacilityNumber</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>0ad4c94f-5460-4c5a-9467-f25ab83a0e86</globalKey>
+        <inputFieldName>TreatmentFacilities:ShippingPostalCode</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>getDSWRelatedTreatmentFacilities</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TreatmentFacilities:MailingAddressZip</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>7e72e44d-cf14-45bb-8d58-d20c70425b08</globalKey>
+        <inputFieldName>TreatmentFacilities:BillingCity</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>getDSWRelatedTreatmentFacilities</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TreatmentFacilities:BillingAddressCity</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>b9c1cb46-992c-46b9-a9eb-88eea6e2172a</globalKey>
+        <inputFieldName>TreatmentFacilities:ChemicalParametersInExceedance__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>getDSWRelatedTreatmentFacilities</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TreatmentFacilities:ChemicalParametersInExceedance</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>SelectedDWSAccountId</filterValue>
+        <globalKey>97528234-d54f-48fd-943b-90f294d6d1d3</globalKey>
         <inputFieldName>ParentId</inputFieldName>
         <inputObjectName>Account</inputObjectName>
         <inputObjectQuerySequence>1.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
+        <name>getDSWRelatedTreatmentFacilities</name>
         <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>facilityAccount</outputFieldName>
+        <outputFieldName>TreatmentFacilities</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -437,28 +573,13 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>83838166-118f-4d3c-976c-f4d6783dbb5e</globalKey>
-        <inputFieldName>facilityAccount:Physical_Address__CountryCode__s</inputFieldName>
+        <globalKey>65068720-e958-4532-84bc-ad44b2a29f44</globalKey>
+        <inputFieldName>TreatmentFacilities:CategoryL1__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
+        <name>getDSWRelatedTreatmentFacilities</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>PhysicalAddressCountrySelect</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>20a7bedf-d5f6-43dd-ac1e-ef7cad89b801</globalKey>
-        <inputFieldName>facilityAccount:Physical_Address__StateCode__s</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>PhysicalAddressStateSelect</outputFieldName>
+        <outputFieldName>TreatmentFacilities:CategoryL1</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -467,13 +588,13 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>87ca51d1-920f-4081-82ee-35db579e1576</globalKey>
-        <inputFieldName>facilityAccount:Website</inputFieldName>
+        <globalKey>109c7085-42b5-486c-923a-3a22ef4ecc56</globalKey>
+        <inputFieldName>TreatmentFacilities:ConstructionDate__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
+        <name>getDSWRelatedTreatmentFacilities</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>facilityAccWebsite</outputFieldName>
+        <outputFieldName>TreatmentFacilities:ConstructionDate</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -482,13 +603,45 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>b8910e35-54a5-4b93-b996-9d7525102a83</globalKey>
-        <inputFieldName>facilityAccount:ApprovedMenu__c</inputFieldName>
+        <globalKey>22b71be5-20c7-49d3-89f0-46da744803af</globalKey>
+        <inputFieldName>TreatmentFacilities:OperationStartDate__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
+        <name>getDSWRelatedTreatmentFacilities</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>facilityAccApprovedMenu</outputFieldName>
+        <outputFieldName>TreatmentFacilities:OperationStartDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <defaultValue>MetalsParameters</defaultValue>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>bc8a9953-1b34-49d5-a7c3-7ee66292b64b</globalKey>
+        <inputFieldName>TreatmentFacilities:MetalParameters__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>getDSWRelatedTreatmentFacilities</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TreatmentFacilities:MetalsParameters</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <defaultValue>RadiologicalParameters</defaultValue>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>8949e5a6-d839-41e3-9bce-1feddb9a3926</globalKey>
+        <inputFieldName>TreatmentFacilities:RadiologicalParameters__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>getDSWRelatedTreatmentFacilities</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>TreatmentFacilities:RadiologicalParameters</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -497,13 +650,13 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>d086b5d8-466e-42df-a29b-a16def4530e6</globalKey>
-        <inputFieldName>facilityAccount:CategoryL1__c</inputFieldName>
+        <globalKey>59e16789-46cb-45fa-9c88-b62737eabf23</globalKey>
+        <inputFieldName>TreatmentFacilities:CommunityWaterFluoridation__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
+        <name>getDSWRelatedTreatmentFacilities</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>CategoryL1Select</outputFieldName>
+        <outputFieldName>TreatmentFacilities:CommunityWaterFluoridation</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -512,13 +665,13 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>c7cb3150-5681-4df9-bf16-e15e5183a650</globalKey>
-        <inputFieldName>facilityAccount:NumberOfSeats__c</inputFieldName>
+        <globalKey>34023e21-beed-4020-a5e3-40756a9b6814</globalKey>
+        <inputFieldName>TreatmentFacilities:Fax</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
+        <name>getDSWRelatedTreatmentFacilities</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>NumberOfSeatsSelect</outputFieldName>
+        <outputFieldName>TreatmentFacilities:Fax</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -527,13 +680,13 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>0a4ae8bc-8783-4c69-ad3e-cc700a29a39b</globalKey>
-        <inputFieldName>facilityAccount:ThursdayOpen__c</inputFieldName>
+        <globalKey>7598cb3c-e0fc-4a01-a5a3-60d2a9065bd3</globalKey>
+        <inputFieldName>TreatmentFacilities:Phone</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
+        <name>getDSWRelatedTreatmentFacilities</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>ThursdayOpenSelect</outputFieldName>
+        <outputFieldName>TreatmentFacilities:Phone</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -542,264 +695,36 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>cf1e2361-0705-45f9-8aa7-ddd1a73d7eac</globalKey>
-        <inputFieldName>facilityAccount:SiteOfOperationIfLocationIsFixed__c</inputFieldName>
+        <globalKey>03325c4b-c40a-4710-ad83-ad6587abc319</globalKey>
+        <inputFieldName>TreatmentFacilities:PesticideParameters__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
+        <name>getDSWRelatedTreatmentFacilities</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>facilityAccSiteOfOperation</outputFieldName>
+        <outputFieldName>TreatmentFacilities:PesticideParameters</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
+        <defaultValue>ChemicalParameters</defaultValue>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>5affde25-d518-4536-91e3-993ef946c572</globalKey>
-        <inputFieldName>facilityAccount:WasteDisposal__c</inputFieldName>
+        <globalKey>488fa633-8f53-4b20-9954-e41c82b65131</globalKey>
+        <inputFieldName>TreatmentFacilities:ChemicalParameters__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
+        <name>getDSWRelatedTreatmentFacilities</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>WasteDisposalSelect</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>d543baee-ed4d-497b-b439-ab386ff295df</globalKey>
-        <inputFieldName>facilityAccount:FacilityEmail__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>facilityAccEmail</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>c9620c68-7d65-4f51-b68b-3aba6a84a241</globalKey>
-        <inputFieldName>facilityAccount:WaterSupply__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>WaterSupplySelect</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>80e225f9-c75a-4eee-94c6-af1f30136efe</globalKey>
-        <inputFieldName>facilityAccount:LicencePlate__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>LicensePlateText</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>29d0057e-7524-4c1b-b5f0-fd8be0136236</globalKey>
-        <inputFieldName>facilityAccount:SaturdayClose__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>SaturdayCloseSelect</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>089c270b-7144-4058-914b-ffdfd4dc79df</globalKey>
-        <inputFieldName>facilityAccount:PhysicalDrivingDirections__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>facilityAccPhysicalDrivingDirections</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>a565b659-a94c-4de1-94ec-98291e0071b9</globalKey>
-        <inputFieldName>facilityAccount:Physical_Address__City__s</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>facilityAccPhysicalAddressCity</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>426f1bc5-54f0-4d00-851a-33a7496dde5f</globalKey>
-        <inputFieldName>facilityAccount:Fax</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>facilityAccFax</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>8d050dc6-0ba5-4414-ac9b-d6ef627265d9</globalKey>
-        <inputFieldName>facilityAccount:TuesdayOpen__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>TuesdayOpenSelect</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>ee1957ca-cc42-4874-9ac3-a8e1b3761b95</globalKey>
-        <inputFieldName>facilityAccount:CategoryL3__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>CategoryL3Select</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>47c57a81-eb47-48eb-be63-825a42f96780</globalKey>
-        <inputFieldName>facilityAccount:OperatingHoursException__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>facilityAccOperatingHoursexception</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>b6550ff3-d31d-43c3-8163-00aa9be6f7be</globalKey>
-        <inputFieldName>facilityAccount:OperatingMonths__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>MonthsOfOperationMultiSelect</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>755a2d2e-502b-48d0-a40c-da1f02335696</globalKey>
-        <inputFieldName>facilityAccount:MondayOpen__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>MondayOpenSelect</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>f8b3978e-265b-4fb3-9282-a6860a0bdc0a</globalKey>
-        <inputFieldName>facilityAccount:SizeofWastewaterTankLitres__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>facilityAccSizeOfWasteWaterTank</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>63449e21-bb34-49d4-9704-40e961b79e67</globalKey>
-        <inputFieldName>facilityAccount:Extension__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>facilityAccPhoneExtension</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>ebfa7df0-f992-433e-aeee-4e96bcc1c4b4</globalKey>
-        <inputFieldName>facilityAccount:Description</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSFacilityAccExtract</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>facilityAccDescription</outputFieldName>
+        <outputFieldName>TreatmentFacilities:ChemicalParameters</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <outputType>JSON</outputType>
-    <previewJsonData>{
-  &quot;facilityAccName&quot; : &quot;Chi&quot;,
-  &quot;BusinessEntityAcctId&quot; : &quot;001bZ00000HwUK5QAN&quot;,
-  &quot;FacilityType&quot; : &quot;Child Care&quot;
-}</previewJsonData>
+    <previewJsonData>{ }</previewJsonData>
     <processSuperBulk>false</processSuperBulk>
     <responseCacheTtlMinutes>0.0</responseCacheTtlMinutes>
     <rollbackOnError>false</rollbackOnError>
@@ -807,7 +732,7 @@
     <sourceObjectDefault>false</sourceObjectDefault>
     <synchronousProcessThreshold>0.0</synchronousProcessThreshold>
     <type>Extract</type>
-    <uniqueName>PHOCSFacilityAccExtract_1</uniqueName>
+    <uniqueName>getDSWRelatedTreatmentFacilities_1</uniqueName>
     <versionNumber>1.0</versionNumber>
     <xmlDeclarationRemoved>false</xmlDeclarationRemoved>
 </OmniDataTransform>

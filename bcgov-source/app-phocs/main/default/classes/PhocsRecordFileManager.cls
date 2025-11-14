@@ -23,8 +23,8 @@ public with sharing class PhocsRecordFileManager {
             detail.fileName = cv.Title;
             detail.createdDate = cv.CreatedDate;
             detail.parentRecordId = parentRecordId;
-            detail.downloadUrl = getDownloadUrl(cv.Id);
-            detail.previewUrl  = '/lightning/r/ContentDocument/' + cv.ContentDocumentId + '/view';
+            detail.downloadUrl = getDownloadUrl(cv.ContentDocumentId);
+            detail.previewUrl  = getRenditionDownloadUrl(cv.Id);
             docs.add(detail);
         }
         return docs;
@@ -40,15 +40,15 @@ public with sharing class PhocsRecordFileManager {
         return renditionUrl;
     }
 
-    // public static String getRenditionDownloadUrl(Id contentVersionId) {
-    //     // Get the current request URL
-    //    String communityBaseUrl = URL.getCurrentRequestUrl().getHost();
-    //    String renditionUrl = 'https://' + communityBaseUrl 
-    //                         + '/phocsportal/sfc/servlet.shepherd/version/renditionDownload?rendition=SVGZ&versionId='
-    //                         + contentVersionId;
+    public static String getRenditionDownloadUrl(Id contentVersionId) {
+        // Get the current request URL
+       String communityBaseUrl = URL.getCurrentRequestUrl().getHost();
+       String renditionUrl = 'https://' + communityBaseUrl 
+                            + '/phocsportal/sfc/servlet.shepherd/version/renditionDownload?rendition=SVGZ&versionId='
+                            + contentVersionId;
 
-    //     return renditionUrl;
-    // }
+        return renditionUrl;
+    }
 
     public class DocumentDetail {      
         @AuraEnabled public String contentDocumentId;
