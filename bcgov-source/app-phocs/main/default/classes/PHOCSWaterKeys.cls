@@ -62,15 +62,15 @@ public with sharing class PHOCSWaterKeys {
     
     // well details keys
     public static Integer WELL_ID_PLATE;
-    public static String WELL_STATUS   = 'WellStatus';
-    public static Boolean ARTESIAN ;
-    public static String AQUIFER_NUM   = 'AquiferNumber';
-    public static String CONS_START    = 'StartDateofConstruction';
-    public static String CONS_END      = 'EndDateofConstruction';
-    public static String WELL_LOC_DESC = 'WellLocationDescription';
-    public static String SCREEN_TYPE   = 'ScreenType';
-    public static String SCREEN_MAT    = 'ScreenMaterial';
-    public static String SCREEN_INTAKE = 'ScreenIntakeMethod';
+    public static String WELL_STATUS;
+    public static Boolean ARTESIAN;
+    public static String AQUIFER_NUM;
+    public static String CONS_START;
+    public static String CONS_END;
+    public static String WELL_LOC_DESC;
+    public static String SCREEN_TYPE;
+    public static String SCREEN_MAT;
+    public static String SCREEN_INTAKE;
     
     // well sections
     public static List<PHOCSWellResponseWrapper.CasingSetItem> CASING_DETAILS;
