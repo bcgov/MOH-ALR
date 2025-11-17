@@ -38,8 +38,8 @@
   &quot;failureResponse&quot; : { },
   &quot;id&quot; : &quot;&quot;,
   &quot;additionalInput&quot; : {
-    &quot;FacilityRecTypeId&quot; : &quot;%GetRecordTypeIds:AccountFacilityRTId%&quot;,
-    &quot;BusinessEntityAccountId&quot; : &quot;%BusinessEntityAccountId%&quot;
+    &quot;BusinessEntityAccountId&quot; : &quot;%BusinessEntityAccountId%&quot;,
+    &quot;FacilityRecTypeId&quot; : &quot;%GetRecordTypeIds:AccountFacilityRTId%&quot;
   },
   &quot;restOptions&quot; : { },
   &quot;bundle&quot; : &quot;CreateAccountForPortalBLA&quot;,
@@ -113,6 +113,69 @@
   &quot;sendJSONNode&quot; : &quot;&quot;
 }</propertySetConfig>
         <sequenceNumber>1.0</sequenceNumber>
+        <type>DataRaptor Extract Action</type>
+    </omniProcessElements>
+    <omniProcessElements>
+        <description>Response Action</description>
+        <isActive>true</isActive>
+        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+        <level>0.0</level>
+        <name>OutputResponseForBLA</name>
+        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+        <propertySetConfig>{
+  &quot;returnFullDataJSON&quot; : false,
+  &quot;returnOnlyAdditionalOutput&quot; : false,
+  &quot;elementValueMap&quot; : { },
+  &quot;responseFormat&quot; : &quot;JSON&quot;,
+  &quot;isActive&quot; : true,
+  &quot;responseJSONPath&quot; : &quot;&quot;,
+  &quot;responseJSONNode&quot; : &quot;&quot;,
+  &quot;executionConditionalFormula&quot; : &quot;&quot;,
+  &quot;additionalOutput&quot; : {
+    &quot;createdBLAApplicationId&quot; : &quot; %PHOCSDMExtractBLARecordCreated:BLAApplicationId%&quot;,
+    &quot;createdBLALicenseType&quot; : &quot;%PHOCSDMExtractBLARecordCreated:BLALicenseTypeName%&quot;
+  },
+  &quot;sendJSONPath&quot; : &quot;&quot;,
+  &quot;id&quot; : &quot;&quot;,
+  &quot;restOptions&quot; : { },
+  &quot;sendJSONNode&quot; : &quot;&quot;
+}</propertySetConfig>
+        <sequenceNumber>5.0</sequenceNumber>
+        <type>Response Action</type>
+    </omniProcessElements>
+    <omniProcessElements>
+        <description>Data Mapper Extract Action</description>
+        <isActive>true</isActive>
+        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+        <level>0.0</level>
+        <name>PHOCSDMExtractBLARecordCreated</name>
+        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+        <propertySetConfig>{
+  &quot;sendOnlyAdditionalInput&quot; : false,
+  &quot;dataRaptor Input Parameters&quot; : [ {
+    &quot;inputParam&quot; : &quot;BLARecId&quot;,
+    &quot;element&quot; : &quot;CreateBLA:BusinessLicenseApplication_1:Id&quot;
+  } ],
+  &quot;returnOnlyAdditionalOutput&quot; : false,
+  &quot;elementValueMap&quot; : { },
+  &quot;failOnStepError&quot; : false,
+  &quot;internalNotes&quot; : &quot;&quot;,
+  &quot;isActive&quot; : true,
+  &quot;chainOnStep&quot; : false,
+  &quot;returnOnlyFailureResponse&quot; : false,
+  &quot;ignoreCache&quot; : false,
+  &quot;responseJSONPath&quot; : &quot;&quot;,
+  &quot;responseJSONNode&quot; : &quot;&quot;,
+  &quot;executionConditionalFormula&quot; : &quot;&quot;,
+  &quot;actionMessage&quot; : &quot;&quot;,
+  &quot;sendJSONPath&quot; : &quot;&quot;,
+  &quot;failureConditionalFormula&quot; : &quot;&quot;,
+  &quot;id&quot; : &quot;&quot;,
+  &quot;restOptions&quot; : { },
+  &quot;bundle&quot; : &quot;PHOCSDMExtractBLARecordCreated&quot;,
+  &quot;sendJSONNode&quot; : &quot;&quot;
+}</propertySetConfig>
+        <sequenceNumber>4.0</sequenceNumber>
         <type>DataRaptor Extract Action</type>
     </omniProcessElements>
     <omniProcessKey>LicenseAndPermit_PHOCSPoolConstructionPermit</omniProcessKey>
