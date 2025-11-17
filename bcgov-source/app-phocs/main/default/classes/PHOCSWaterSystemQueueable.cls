@@ -85,7 +85,7 @@ public class PHOCSWaterSystemQueueable implements Queueable, Database.AllowsCall
             String application = acc.WaterLicenseApplicationNumber__c;
             String podNumber = acc.PODNumber__c;
             String purposeCode = acc.PurposeUseCode__c;
-            String wellTag;
+            String wellTag = acc.WellTagNumber__c != null ? acc.WellTagNumber__c.toString() : null;
             String aquifer;
             
             // STEP 1: If License exists → call License API
