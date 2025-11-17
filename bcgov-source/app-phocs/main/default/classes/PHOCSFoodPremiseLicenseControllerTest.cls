@@ -118,4 +118,60 @@ public class PHOCSFoodPremiseLicenseControllerTest {
         System.assertEquals('error', outputMap.get('status'), 'Status should be error');
         System.assert(outputMap.get('message').toString().contains('Invalid method name'), 'Message should indicate invalid method');
     }
+    
+    @isTest
+    static void testGetOperatingHourByID() {
+        // Fetch test data
+        OperatingHours oh = [SELECT Id FROM OperatingHours LIMIT 1];
+
+        // Prepare input and output maps
+        Map<String, Object> inputMap = new Map<String, Object>{
+            'operatingHourParam' => oh.Id
+        };
+        Map<String, Object> outMap = new Map<String, Object>();
+        Map<String, Object> optionsMap = new Map<String, Object>();
+
+        // Call method
+        Test.startTest();       
+        PHOCSFoodPremiseLicenseController controller = new PHOCSFoodPremiseLicenseController();
+        Object result = controller.call('OperatingHourByID', new Map<String, Object>{
+            'input' => inputMap,
+            'output' => outMap,
+            'options' => optionsMap
+        });
+        Test.stopTest();
+
+        // Assertions
+        System.assertEquals(true, result, 'Method should return true');
+        System.assertEquals(oh.Id, outMap.get('operatingHoursId'), 'OperatingHoursId should match');
+        System.assertNotEquals(null, outMap.get('operatingHoursName'), 'OperatingHoursName should not be null');
+    }
+    
+    @isTest
+    static void testGetOperatingHourByAccountID() {
+        // Fetch test data
+        Account acc = [SELECT Id, OperatingHoursId FROM Account LIMIT 1];
+
+        // Prepare input and output maps
+        Map<String, Object> inputMap = new Map<String, Object>{
+            'accountIdParam' => acc.Id
+        };
+        Map<String, Object> outMap = new Map<String, Object>();
+        Map<String, Object> optionsMap = new Map<String, Object>();
+
+        // Call method
+        Test.startTest();       
+        PHOCSFoodPremiseLicenseController controller = new PHOCSFoodPremiseLicenseController();
+        Object result = controller.call('OperatingHourByAccountID', new Map<String, Object>{
+            'input' => inputMap,
+            'output' => outMap,
+            'options' => optionsMap
+        });
+        
+        Test.stopTest();
+
+        // Assertions
+        System.assertEquals(true, result, 'Method should return true');
+        System.assertEquals(acc.OperatingHoursId, outMap.get('operatingHoursId'), 'OperatingHoursId should match');        
+    }
 }
