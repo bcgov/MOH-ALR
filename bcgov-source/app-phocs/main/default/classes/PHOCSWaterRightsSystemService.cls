@@ -116,20 +116,12 @@ global with sharing class PHOCSWaterRightsSystemService implements Callable {
                 if(!isCacheEnabled.equalsIgnoreCase('true')){
                     // STEP 1: If License exists → call License API
                     PHOCSWaterLicenseService waterLicService = new PHOCSWaterLicenseService();
-                    
-                    if(String.isNotBlank(license)){
-                        waterLicService.setCalloutType('license');
-                        waterLicenseMappingData = waterLicService.mappingData(license);
-                    }else if(String.isNotBlank(podNumber)){
-                        waterLicService.setCalloutType('podNumber');
-                        waterLicenseMappingData = waterLicService.mappingData(podNumber);
-                    }else{
-                        waterLicService.setCalloutType('purposeCode');
-                        waterLicenseMappingData = waterLicService.mappingData(purposeCode);
-                    }
+                    waterLicService.setValues(license, podNumber, purposeCode);
+                    waterLicenseMappingData = waterLicService.mappingData(null);
                     
                     // STEP 2: If License NOT given → get WellTag from Application
                     PHOCSWaterApplicationService applicationService = new PHOCSWaterApplicationService();
+                    applicationService.setValues(application, podNumber, purposeCode);
                     waterLicenseApplicationMappingData = applicationService.mappingData(application);
                     
                     // STEP 3: Get Aquifer from Well Tag

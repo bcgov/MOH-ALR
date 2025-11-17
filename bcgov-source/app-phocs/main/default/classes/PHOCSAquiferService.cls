@@ -54,10 +54,15 @@ public class PHOCSAquiferService implements PHOCSWaterRights {
             if(String.isNotBlank(aquiferNumber)){
                 PHOCSAquifersResponseWrapper aquiferDetailsResponse = runIntegration(aquiferNumber);
                 if(checkValidation(aquiferDetailsResponse)){
+                    outMap.put('Aquifer_aquifer_name', PHOCSWaterKeys.AQUIFER_NAME);
+                    outMap.put('Aquifer_subtype', PHOCSWaterKeys.AQUIFER_SUBT);
+                    outMap.put('Aquifer_material_type', PHOCSWaterKeys.AQUIFER_MAT);
+                    outMap.put('Aquifer_size', PHOCSWaterKeys.AQUIFER_SIZE);    
+                    /*
                     outMap.put('Aquifer_aquifer_name', aquiferDetailsResponse?.aquifer_name);
                     outMap.put('Aquifer_subtype', aquiferDetailsResponse?.subtype);
                     outMap.put('Aquifer_material_type', aquiferDetailsResponse?.geom?.type);
-                    outMap.put('Aquifer_size', aquiferDetailsResponse?.area);    
+                    outMap.put('Aquifer_size', aquiferDetailsResponse?.area);    */
                     flag = false;
                 }
             }
@@ -73,10 +78,14 @@ public class PHOCSAquiferService implements PHOCSWaterRights {
     
     public Boolean checkValidation(Object request){
         PHOCSAquifersResponseWrapper aquiferDetailsResponse = (PHOCSAquifersResponseWrapper) request;
+        PHOCSWaterKeys.setAquiferDetails(aquiferDetailsResponse);
         if(
             (aquiferDetailsResponse == null) || 
             (
-                aquiferDetailsResponse?.aquifer_name == null && aquiferDetailsResponse?.subtype == null && aquiferDetailsResponse?.geom?.type == null && aquiferDetailsResponse?.area == null
+                PHOCSWaterKeys.AQUIFER_NAME == null && 
+                PHOCSWaterKeys.AQUIFER_SUBT == null && 
+                PHOCSWaterKeys.AQUIFER_MAT == null && 
+                PHOCSWaterKeys.AQUIFER_SIZE == null
             )
         ){
             return false;

@@ -15,18 +15,47 @@ public class PHOCSWellsServiceTest {
             ParentId = accParent.Id,
             ParentAccount__c = accParent.Id,
             RecordtypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('DrinkingWaterSourceIntake').getRecordTypeId(),
-            WaterLicenseApplicationNumber__c = 'WLA20160113-0001'
+            WaterLicenseApplicationNumber__c = 'WLA20160113-0001',
+            PODNumber__c = 'PW200605',
+            PurposeUseCode__c = 'WSA08'
         );
         insert acc;
     }
     
     static Account getAccount(){
-        return [Select Id, Name, WaterLicenseNumber__c, WaterLicenseApplicationNumber__c from Account where Name = 'Test Facility' limit 1];
+        return [SELECT Id,
+                WaterLicenseNumber__c,
+                WaterLicenseApplicationNumber__c,
+                WellTagNumber__c,
+                AquiferNumber__c,
+                PODNumber__c,
+                PurposeUseCode__c,
+                PHOCSWaterLicenseJSONRespnose__c,
+                PHOCSWaterApplicationJSONResponse__c,
+                PHOCSWellTagJSONResponse__c,
+                PHOCSAquiferJSONResponse__c 
+                FROM Account
+                where Name = 'Test Facility' limit 1];
     }
     
     @isTest
     static void testGWellWithValidValue(){
         Test.setMock(HttpCalloutMock.class, new PHOCSWellMock());       
+        Map<String, Object> wellResp;
+        PHOCSWellsService wellServ = new PHOCSWellsService();
+        
+        Test.startTest();        
+        wellResp = wellServ.mappingData('129877');
+        Test.stopTest();
+        
+        System.Assert.isNotNull(wellResp, 'Well Service responses is not blank');
+    }
+    
+    @isTest
+    static void testGWellWithBlankResponse(){
+        PHOCSWellMock wellMock = new PHOCSWellMock();
+        wellMock.isBlankResponse = true;
+        Test.setMock(HttpCalloutMock.class, wellMock);       
         Map<String, Object> wellResp;
         PHOCSWellsService wellServ = new PHOCSWellsService();
         

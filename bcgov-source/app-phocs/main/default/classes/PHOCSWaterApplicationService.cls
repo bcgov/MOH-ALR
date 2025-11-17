@@ -39,26 +39,41 @@ public class PHOCSWaterApplicationService implements PHOCSWaterRights {
     public Static String errorKey = 'NoDataForLicenseApplication';
     public Static String errorMsg = 'No water license application details available.';
     
+    String applicationNumber;
+    String podNumber;
+    String purposeCode;
+    
+    public void setValues(String applicationNumber, String podNumber, String purposeCode){
+        this.applicationNumber = applicationNumber;
+        this.podNumber = podNumber;
+        this.purposeCode = purposeCode;
+    }
+    
     public PHOCSWLSWaterApplicationsWrapper runIntegration(String waterApplicationNumber){
-        return PHOCSWaterApplicationCallout.getWaterApplicationsByJob(waterApplicationNumber);
+        return null;
+    }
+    
+    public PHOCSWLSWaterApplicationsWrapper runIntegration(String applicationNumber, String podNumber, String purposeCode){
+        return PHOCSWaterApplicationCallout.getWaterApplicationsByJob(applicationNumber, podNumber, purposeCode);
     }
     
     public Map<String, Object> mappingData(String waterApplicationNumber){
         Boolean flag = true;
         Map<String, Object> outMap = new Map<String, Object>();
         try{
-            if(String.isNotBlank(waterApplicationNumber)){
-                PHOCSWLSWaterApplicationsWrapper waterLicenseAppResponse = runIntegration(waterApplicationNumber);
+            if(String.isNotBlank(this.applicationNumber) && String.isNotBlank(this.podNumber) && String.isNotBlank(this.purposeCode)){
+                PHOCSWLSWaterApplicationsWrapper waterLicenseAppResponse = runIntegration(this.applicationNumber, this.podNumber, this.purposeCode);
                 if(checkValidation(waterLicenseAppResponse)){
-                    outMap.put('Application_WaterLicenceApplicationStatus', waterLicenseAppResponse.features[0].properties.APPLICATION_STATUS);
-                    outMap.put('Application_WellTagNumber', waterLicenseAppResponse.features[0].properties.WELL_TAG_NUMBER);
-                    outMap.put('Application_WaterSourceIntakeUse', waterLicenseAppResponse.features[0].properties.PURPOSE_USE);
-                    outMap.put('Application_WaterSourceIntakeUseCode', waterLicenseAppResponse.features[0].properties.PURPOSE_USE_CODE);
-                    outMap.put('Application_MaximumDiversion', waterLicenseAppResponse.features[0].properties.QTY_DIVERSION_MAX_RATE);
-                    outMap.put('Application_MaximumDiversionUnits', waterLicenseAppResponse.features[0].properties.QTY_UNITS_DIVERSION_MAX_RATE);
-                    outMap.put('Application_PointofDiversionNumber', waterLicenseAppResponse.features[0].properties.POD_NUMBER);
-                    outMap.put('Application_PODDiversionType', waterLicenseAppResponse.features[0].properties.POD_DIVERSION_TYPE);
-                    outMap.put('Application_PODSubtype', waterLicenseAppResponse.features[0].properties.POD_SUBTYPE);   
+                    
+                    outMap.put('Application_WaterLicenceApplicationStatus', PHOCSWaterKeys.APP_STATUS);
+                    outMap.put('Application_WellTagNumber', PHOCSWaterKeys.APP_WELL_TAG);
+                    outMap.put('Application_WaterSourceIntakeUse', PHOCSWaterKeys.APP_PURPOSE_USE);
+                    outMap.put('Application_WaterSourceIntakeUseCode', PHOCSWaterKeys.APP_PURPOSE_USE_CODE);
+                    outMap.put('Application_MaximumDiversion', PHOCSWaterKeys.APP_QTY_DIV_MAX_RATE);
+                    outMap.put('Application_MaximumDiversionUnits', PHOCSWaterKeys.APP_QTY_UNITS_DIV_MAX_RATE);
+                    outMap.put('Application_PointofDiversionNumber', PHOCSWaterKeys.APP_POD_NUMBER);
+                    outMap.put('Application_PODDiversionType', PHOCSWaterKeys.APP_POD_DIV_TYPE);
+                    outMap.put('Application_PODSubtype', PHOCSWaterKeys.APP_POD_SUBTYPE);
                     flag = false;
                 }
             }
@@ -74,11 +89,20 @@ public class PHOCSWaterApplicationService implements PHOCSWaterRights {
     
     public Boolean checkValidation(Object request){
         PHOCSWLSWaterApplicationsWrapper waterLicenseAppResponse = (PHOCSWLSWaterApplicationsWrapper) request;
+        PHOCSWaterKeys.setApplicationDetails(waterLicenseAppResponse);
         if(
             (waterLicenseAppResponse == null) || 
             (waterLicenseAppResponse?.features == null && waterLicenseAppResponse?.features.size() == 0) ||
             (
-                waterLicenseAppResponse.features[0]?.properties?.APPLICATION_STATUS == null && waterLicenseAppResponse.features[0]?.properties?.WELL_TAG_NUMBER == null && waterLicenseAppResponse.features[0]?.properties?.PURPOSE_USE == null && waterLicenseAppResponse.features[0]?.properties?.PURPOSE_USE_CODE == null && waterLicenseAppResponse.features[0]?.properties?.QTY_DIVERSION_MAX_RATE == null && waterLicenseAppResponse.features[0]?.properties?.POD_NUMBER == null && waterLicenseAppResponse.features[0]?.properties?.POD_DIVERSION_TYPE == null && waterLicenseAppResponse.features[0]?.properties?.POD_SUBTYPE == null
+                PHOCSWaterKeys.APP_STATUS == null && 
+                PHOCSWaterKeys.APP_WELL_TAG == null && 
+                PHOCSWaterKeys.APP_PURPOSE_USE == null && 
+                PHOCSWaterKeys.APP_PURPOSE_USE_CODE == null && 
+                PHOCSWaterKeys.APP_QTY_DIV_MAX_RATE == null && 
+                PHOCSWaterKeys.APP_QTY_UNITS_DIV_MAX_RATE == null && 
+                PHOCSWaterKeys.APP_POD_NUMBER == null && 
+                PHOCSWaterKeys.APP_POD_SUBTYPE == null && 
+                PHOCSWaterKeys.APP_POD_DIV_TYPE == null
             )
         ){
             return false;

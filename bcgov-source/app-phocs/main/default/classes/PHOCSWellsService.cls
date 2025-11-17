@@ -58,24 +58,27 @@ public class PHOCSWellsService implements PHOCSWaterRights {
         try{
             if(String.isNotBlank(wellTagNumber)){
                 PHOCSWellResponseWrapper wellDetailsResponse = runIntegration(wellTagNumber);
+                PHOCSWaterKeys.setWellDetails(wellDetailsResponse);
                 if(checkValidation(wellDetailsResponse)){
-                    outMap.put('WellTag_WellIDPlateNumber', wellDetailsResponse?.IDENTIFICATION_PLATE_NUMBER);
-                    outMap.put('WellTag_WellStatus', wellDetailsResponse?.well_status);
-                    outMap.put('WellTag_ArtesianCondition', wellDetailsResponse?.artesian_conditions);
-                    outMap.put('WellTag_AquiferNumber', wellDetailsResponse?.aquifer);
-                    outMap.put('WellTag_StartDateofConstruction', wellDetailsResponse?.construction_start_date);
-                    outMap.put('WellTag_EndDateofConstruction', wellDetailsResponse?.construction_end_date);
-                    outMap.put('WellTag_WellLocationDescription', wellDetailsResponse?.well_location_description);
-                    outMap.put('WellTag_ScreenType', wellDetailsResponse?.screen_type);
-                    outMap.put('WellTag_ScreenMaterial', wellDetailsResponse?.screen_material);
-                    outMap.put('WellTag_ScreenIntakeMethod', wellDetailsResponse?.screen_intake_method);
+                    
+                    outMap.put('WellTag_WellIDPlateNumber', PHOCSWaterKeys.WELL_ID_PLATE);
+                    outMap.put('WellTag_WellStatus', PHOCSWaterKeys.WELL_STATUS);
+                    outMap.put('WellTag_ArtesianCondition', PHOCSWaterKeys.ARTESIAN);
+                    outMap.put('WellTag_AquiferNumber', PHOCSWaterKeys.AQUIFER_NUM);
+                    outMap.put('WellTag_StartDateofConstruction', PHOCSWaterKeys.CONS_START);
+                    outMap.put('WellTag_EndDateofConstruction', PHOCSWaterKeys.CONS_END);
+                    outMap.put('WellTag_WellLocationDescription', PHOCSWaterKeys.WELL_LOC_DESC);
+                    outMap.put('WellTag_ScreenType', PHOCSWaterKeys.SCREEN_TYPE);
+                    outMap.put('WellTag_ScreenMaterial', PHOCSWaterKeys.SCREEN_MAT);
+                    outMap.put('WellTag_ScreenIntakeMethod', PHOCSWaterKeys.SCREEN_INTAKE);
+                    
                     if(wellDetailsResponse?.casing_set.size() > 0){
-                        outMap.put('WellTag_CasingDetails', wellDetailsResponse.casing_set);
+                        outMap.put('WellTag_CasingDetails', PHOCSWaterKeys.CASING_DETAILS);
                     }else{             
                         outMap.put('WellTag_CasingDetails', new PHOCSWellResponseWrapper.CasingSetItem());
                     }
                     if(wellDetailsResponse?.screen_set.size() > 0){
-                        outMap.put('WellTag_InstalledScreens', wellDetailsResponse.screen_set);
+                        outMap.put('WellTag_InstalledScreens', PHOCSWaterKeys.INSTALLED_SCREENS);
                     }else{                    
                         outMap.put('WellTag_InstalledScreens', new PHOCSWellResponseWrapper.ScreenSetItem());
                     }
@@ -94,10 +97,22 @@ public class PHOCSWellsService implements PHOCSWaterRights {
     
     public Boolean checkValidation(Object request){
         PHOCSWellResponseWrapper wellDetailsResponse = (PHOCSWellResponseWrapper) request;
+        PHOCSWaterKeys.setWellDetails(wellDetailsResponse);
         if(
             (wellDetailsResponse == null) || 
             (
-                wellDetailsResponse?.IDENTIFICATION_PLATE_NUMBER == null && wellDetailsResponse?.well_status == null && wellDetailsResponse?.artesian_conditions == null && wellDetailsResponse?.aquifer == null && wellDetailsResponse?.construction_start_date == null && wellDetailsResponse?.construction_end_date == null && wellDetailsResponse?.well_location_description == null && wellDetailsResponse?.screen_type == null && wellDetailsResponse?.screen_material == null && wellDetailsResponse?.screen_intake_method == null && wellDetailsResponse?.casing_set == null
+                PHOCSWaterKeys.WELL_ID_PLATE == null &&
+                PHOCSWaterKeys.WELL_STATUS == null &&
+                PHOCSWaterKeys.ARTESIAN == null &&
+                PHOCSWaterKeys.AQUIFER_NUM == null &&
+                PHOCSWaterKeys.CONS_START == null &&
+                PHOCSWaterKeys.CONS_END == null &&
+                PHOCSWaterKeys.WELL_LOC_DESC == null &&
+                PHOCSWaterKeys.SCREEN_TYPE == null &&
+                PHOCSWaterKeys.SCREEN_MAT == null &&
+                PHOCSWaterKeys.SCREEN_INTAKE == null &&
+                PHOCSWaterKeys.CASING_DETAILS == null &&
+                PHOCSWaterKeys.INSTALLED_SCREENS == null
             )
         ){
             return false;

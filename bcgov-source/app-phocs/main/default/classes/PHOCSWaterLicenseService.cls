@@ -42,47 +42,44 @@ public class PHOCSWaterLicenseService implements PHOCSWaterRights {
     public Static String errorKey = 'NoDataForWaterLicense';
     public Static String errorMsg = 'No water license details available.';
     
-    String calloutType = 'license';
+    String licenseNumber;
+    String podNumber;
+    String purposeCode;
     
-    public void setCalloutType(String type){
-        calloutType = type;
-    }
-    
-    public String getCalloutType(){
-        return calloutType;
+    public void setValues(String licenseNumber, String podNumber, String purposeCode){
+        this.licenseNumber = licenseNumber;
+        this.podNumber = podNumber;
+        this.purposeCode = purposeCode;
     }
     
     public PHOCSWLSWaterRightsWrapper runIntegration(String licenceNumber){
-        PHOCSWLSWaterRightsWrapper response;
-        if(getCalloutType().equalsIgnoreCase('license')){
-            response = PHOCSWaterLicenseCallout.getWaterRightsByLicence(licenceNumber);
-        }
-        if(getCalloutType().equalsIgnoreCase('podNumber')){
-            response = PHOCSWaterPODCallout.getWaterRightsByPODNumber(licenceNumber);
-        }
-        if(getCalloutType().equalsIgnoreCase('purposeCode')){
-            response = PHOCSWaterPurposeCallout.getWaterRightsByPurposeCode(licenceNumber);
-        }
-        return response;
+        return null;
+    }
+    
+    public PHOCSWLSWaterRightsWrapper runIntegration(String licenseNumber, String podNumber, String purposeCode){
+        return PHOCSWaterLicenseCallout.getWaterRightsByLicence(licenseNumber, podNumber, purposeCode);
     }
     
     public Map<String, Object> mappingData(String licenceNumber){
         Boolean flag = true;
         Map<String, Object> outMap = new Map<String, Object>();
         try{
-            if(String.isNotBlank(licenceNumber)){
-                PHOCSWLSWaterRightsWrapper waterLicenseResponse = runIntegration(licenceNumber);
+            if(String.isNotBlank(this.licenseNumber) && String.isNotBlank(this.podNumber) && String.isNotBlank(this.purposeCode)){
+                PHOCSWLSWaterRightsWrapper waterLicenseResponse = runIntegration(this.licenseNumber, this.podNumber, this.purposeCode);
+                PHOCSWaterKeys.setLicenseDetails(waterLicenseResponse);
                 if(checkValidation(waterLicenseResponse)){
-                    outMap.put('License_WaterLicenceStatus', waterLicenseResponse.features[0].properties.LICENCE_STATUS);
-                    outMap.put('License_WellTagNumber', waterLicenseResponse.features[0].properties.WELL_TAG_NUMBER);
-                    outMap.put('License_WaterSourceIntakeUse', waterLicenseResponse.features[0].properties.PURPOSE_USE);
-                    outMap.put('License_WaterSourceIntakeUseCode', waterLicenseResponse.features[0].properties.PURPOSE_USE_CODE);
-                    outMap.put('License_MaximumDiversion', waterLicenseResponse.features[0].properties.QUANTITY);
-                    outMap.put('License_MaximumDiversionUnits', waterLicenseResponse.features[0].properties.QUANTITY_UNITS);
-                    outMap.put('License_PointofDiversionNumber', waterLicenseResponse.features[0].properties.POD_NUMBER);
-                    outMap.put('License_PODDiversionType', waterLicenseResponse.features[0].properties.POD_DIVERSION_TYPE);
-                    outMap.put('License_PODSubtype', waterLicenseResponse.features[0].properties.POD_SUBTYPE);
-                    outMap.put('License_SourceWaterBodyName', waterLicenseResponse.features[0].properties.SOURCE_NAME);
+                    
+                    outMap.put('License_WaterLicenceStatus', PHOCSWaterKeys.LIC_STATUS);
+                    outMap.put('License_WellTagNumber', PHOCSWaterKeys.LIC_WELL_TAG);
+                    outMap.put('License_WaterSourceIntakeUse', PHOCSWaterKeys.LIC_PURPOSE);
+                    outMap.put('License_WaterSourceIntakeUseCode', PHOCSWaterKeys.LIC_PURPOSE_CD);
+                    outMap.put('License_MaximumDiversion', PHOCSWaterKeys.LIC_QUAN);
+                    outMap.put('License_MaximumDiversionUnits', PHOCSWaterKeys.LIC_QUAN_UNT);
+                    outMap.put('License_PointofDiversionNumber', PHOCSWaterKeys.LIC_POD_NUM);
+                    outMap.put('License_PODDiversionType', PHOCSWaterKeys.LIC_POD_TYPE);
+                    outMap.put('License_PODSubtype', PHOCSWaterKeys.LIC_POD_SUBT);
+                    outMap.put('License_SourceWaterBodyName', PHOCSWaterKeys.LIC_SRC_WATER);
+                    
                     flag = false;
                 }
             }
@@ -97,11 +94,21 @@ public class PHOCSWaterLicenseService implements PHOCSWaterRights {
     
     public Boolean checkValidation(Object request){
         PHOCSWLSWaterRightsWrapper waterLicenseResponse = (PHOCSWLSWaterRightsWrapper) request;
+        PHOCSWaterKeys.setLicenseDetails(waterLicenseResponse);
         if(
             (waterLicenseResponse == null) || 
             (waterLicenseResponse?.features == null && waterLicenseResponse?.features.size() == 0) ||
             (
-                waterLicenseResponse.features[0]?.properties?.LICENCE_STATUS == null && waterLicenseResponse.features[0]?.properties?.WELL_TAG_NUMBER == null && waterLicenseResponse.features[0]?.properties?.PURPOSE_USE == null && waterLicenseResponse.features[0]?.properties?.PURPOSE_USE_CODE == null && waterLicenseResponse.features[0]?.properties?.QUANTITY == null && waterLicenseResponse.features[0]?.properties?.QUANTITY_UNITS == null && waterLicenseResponse.features[0]?.properties?.POD_NUMBER == null && waterLicenseResponse.features[0]?.properties?.POD_DIVERSION_TYPE == null && waterLicenseResponse.features[0]?.properties?.POD_SUBTYPE == null && waterLicenseResponse.features[0]?.properties?.SOURCE_NAME == null
+                PHOCSWaterKeys.LIC_STATUS == null && 
+                PHOCSWaterKeys.LIC_WELL_TAG == null && 
+                PHOCSWaterKeys.LIC_PURPOSE == null && 
+                PHOCSWaterKeys.LIC_PURPOSE_CD == null && 
+                PHOCSWaterKeys.LIC_QUAN == null && 
+                PHOCSWaterKeys.LIC_QUAN_UNT == null && 
+                PHOCSWaterKeys.LIC_POD_NUM == null && 
+                PHOCSWaterKeys.LIC_POD_TYPE == null && 
+                PHOCSWaterKeys.LIC_POD_SUBT == null && 
+                PHOCSWaterKeys.LIC_SRC_WATER == null
             )
         ){
             return false;

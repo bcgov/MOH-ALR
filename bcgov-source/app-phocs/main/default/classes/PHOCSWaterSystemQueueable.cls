@@ -90,24 +90,15 @@ public class PHOCSWaterSystemQueueable implements Queueable, Database.AllowsCall
             
             // STEP 1: If License exists → call License API
             PHOCSWaterLicenseService waterLicService = new PHOCSWaterLicenseService();
-            
-            if(String.isNotBlank(license)){
-                waterLicService.setCalloutType('license');
-                waterLicenseMappingData = waterLicService.mappingData(license);
-            }else if(String.isNotBlank(podNumber)){
-                waterLicService.setCalloutType('podNumber');
-                waterLicenseMappingData = waterLicService.mappingData(podNumber);
-            }else{
-                waterLicService.setCalloutType('purposeCode');
-                waterLicenseMappingData = waterLicService.mappingData(purposeCode);
-            }
-            
+            waterLicService.setValues(license, podNumber, purposeCode);
+            waterLicenseMappingData = waterLicService.mappingData(null);            
             if(waterLicenseMappingData.containsKey('License_WellTagNumber')){
                 wellTag = waterLicenseMappingData.get('License_WellTagNumber')?.toString();
             }
             
             // STEP 2: If License NOT given → get WellTag from Application
             PHOCSWaterApplicationService applicationService = new PHOCSWaterApplicationService();
+            applicationService.setValues(application, podNumber, purposeCode);
             waterLicenseApplicationMappingData = applicationService.mappingData(application);
             if(String.isBlank(wellTag) && waterLicenseApplicationMappingData.containsKey('Application_WellTagNumber')){
                 wellTag = waterLicenseApplicationMappingData.get('Application_WellTagNumber')?.toString();

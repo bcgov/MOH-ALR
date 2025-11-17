@@ -22,12 +22,39 @@ public class PHOCSAquiferServiceTest {
     }
     
     static Account getAccount(){
-        return [Select Id, Name, WaterLicenseNumber__c, WaterLicenseApplicationNumber__c from Account where Name = 'Test Facility' limit 1];
+        return [SELECT Id,
+                WaterLicenseNumber__c,
+                WaterLicenseApplicationNumber__c,
+                WellTagNumber__c,
+                AquiferNumber__c,
+                PODNumber__c,
+                PurposeUseCode__c,
+                PHOCSWaterLicenseJSONRespnose__c,
+                PHOCSWaterApplicationJSONResponse__c,
+                PHOCSWellTagJSONResponse__c,
+                PHOCSAquiferJSONResponse__c 
+                FROM Account
+                where Name = 'Test Facility' limit 1];
     }
     
     @isTest
     static void testAquifierWithValidValue(){
         Test.setMock(HttpCalloutMock.class, new PHOCSAquiferMock());       
+        Map<String, Object> aquiferResp;
+        PHOCSAquiferService aquiferServ = new PHOCSAquiferService();
+        
+        Test.startTest();        
+        aquiferResp = aquiferServ.mappingData('658');
+        Test.stopTest();
+        
+        System.Assert.isNotNull(aquiferResp, 'Aquifer responses is not blank');
+    }
+    
+    @isTest
+    static void testAquifierWithBlankResponse(){
+        PHOCSAquiferMock aquiferMock = new PHOCSAquiferMock();
+        aquiferMock.isBlankResponse = true;
+        Test.setMock(HttpCalloutMock.class, aquiferMock);       
         Map<String, Object> aquiferResp;
         PHOCSAquiferService aquiferServ = new PHOCSAquiferService();
         

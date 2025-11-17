@@ -16,7 +16,9 @@ private class PHOCSWaterSystemQueueableTest {
             ParentId = accParent.Id,
             ParentAccount__c = accParent.Id,
             RecordtypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('DrinkingWaterSourceIntake').getRecordTypeId(),
-            WaterLicenseApplicationNumber__c = 'WLA20160113-0001'
+            WaterLicenseApplicationNumber__c = 'WLA20160113-0001',
+            PODNumber__c = 'PW200605',
+            PurposeUseCode__c = 'WSA08'
         );
         insert acc;
     }
@@ -78,7 +80,7 @@ private class PHOCSWaterSystemQueueableTest {
             WHERE Id = : getAccount().Id 
         ];
         
-        System.assertEquals(Decimal.valueOf('49566'), updatedAcc.WellTagNumber__c);
+        System.assertEquals(Decimal.valueOf('18010'), updatedAcc.WellTagNumber__c);
         System.assertEquals(Decimal.valueOf('658'), updatedAcc.AquiferNumber__c);
     }
     
@@ -101,7 +103,7 @@ private class PHOCSWaterSystemQueueableTest {
             WHERE Id = : getAccount().Id 
         ];
         
-        System.assertEquals(Decimal.valueOf('49566'), updatedAcc.WellTagNumber__c);
+        System.assertEquals(Decimal.valueOf('18010'), updatedAcc.WellTagNumber__c);
         System.assertEquals(Decimal.valueOf('658'), updatedAcc.AquiferNumber__c);
     }
     
