@@ -1,134 +1,286 @@
 public with sharing class PHOCSGlobalPayHandler {
-    private static final String ACCESSTOKEN_ENDPOINT_URL = 'https://apis.sandbox.globalpay.com/ucp/accesstoken';
-    private static final String PAYMENT_LINK_ENDPOINT_URL = 'https://apis.sandbox.globalpay.com/ucp/links';
 
-    @AuraEnabled(cacheable=true) 
-    public static string getPaymentLinkUrl() {
-        GlobalPayAccessTokenResponse accessTokenResponse = getAccessToken();
-        if (accessTokenResponse != null && accessTokenResponse.token != null) {
-            GlobalPayLinkResponse globalPayLinkResponse = createHostedPaymentLink(accessTokenResponse.token);
-            if(globalPayLinkResponse != null && globalPayLinkResponse.url != null){
-                return globalPayLinkResponse.url;
+    private static final Map<string, string> healthAuthorityMapping = new Map<string, string>{
+        'Island Health - Island' => 'IS',
+        'Interior Health - IH' => 'IH',
+        'Fraser Health - FH' => 'FH',
+        'Northern Health - NH' => 'NH',
+        'Vancouver Coastal Health - VCH' => 'VCH'
+    };
+
+    private static PHOCSGlobalPayConfig__mdt globalPaySetting = PHOCSGlobalPayConfig__mdt.getInstance('Default'); 
+    private static String AccessTokenEndpointUrl {
+        get { return globalPaySetting.AccssTokenEndpoint__c; }
+    }
+    private static String PaymentLinkEndpointUrl {
+        get { return globalPaySetting.PaymentLinkEndpoint__c; }
+    }
+    private static String GlobalPayRedirectUrl {
+        get { return  getPHOCSSiteDomain() + globalPaySetting.PaymentReturnEndpoint__c; }
+    }
+    private static String GlobalPayStatusUrl {
+        get { return  getPHOCSSiteDomain() + globalPaySetting.PaymentStatusEndpoint__c; }
+    }
+    private static String getPHOCSSiteDomain() {
+        DomainSite ds = [
+            SELECT Domain.Domain
+            FROM DomainSite
+            WHERE Site.Name = 'phocsportal'
+            LIMIT 1
+        ];
+        return 'https://' + ds?.Domain?.Domain;
+    }
+
+    private static string getHealthAuthorityCode(Id regulatoryTransactionFeeId) {
+        string healthAuth = '';
+        if(string.isNotBlank(regulatoryTransactionFeeId)){
+            RegulatoryTrxnFee[] regulatoryTrxnFees = [select Id, Account.HealthAuthority__c from RegulatoryTrxnFee where Id=:regulatoryTransactionFeeId];
+            if(regulatoryTrxnFees != null && !regulatoryTrxnFees.isEmpty()){
+                string ha = regulatoryTrxnFees[0].Account?.HealthAuthority__c;
+                if(string.isNotBlank(ha)){
+                    healthAuth = healthAuthorityMapping.get(ha);
+                }
             }
-            return null;
+        }
+        return healthAuth;
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static String getPaymentLinkUrl(Id regulatoryTransactionFeeId) {
+        GlobalPayAccessTokenResponse tokenResp = getAccessToken(regulatoryTransactionFeeId);
+        if (tokenResp == null || String.isBlank(tokenResp.token)) return null;
+
+        GlobalPayLinkResponse linkResp = createHostedPaymentLink(regulatoryTransactionFeeId, tokenResp.token);
+        return linkResp != null ? linkResp.url : null;
+    }
+
+    private static GlobalPayAccessTokenResponse getAccessToken(Id regulatoryTransactionFeeId) {    
+        string healthAuth = getHealthAuthorityCode(regulatoryTransactionFeeId);
+        if(string.isBlank(healthAuth)) return null;
+
+        string appId =  '{!$Credential.GlobalPay.app_id_' + healthAuth + '}'; 
+        string appSecret = '{!.GlobalPay.app_secret_' + healthAuth + '}'; 
+
+        HttpRequest req = new HttpRequest();
+        req.setEndpoint(AccessTokenEndpointUrl);
+        req.setMethod('POST');
+        req.setHeader('Content-Type', 'application/json');
+        req.setHeader('X-GP-Version', '{!$Credential.GlobalPay.xgp_Version}');
+
+        AccessTokenRequestBody body = new AccessTokenRequestBody(
+            '{!$Credential.GlobalPay.app_id}',
+            '{!$Credential.GlobalPay.app_secret}',
+            'client_credentials',
+            '{!$Credential.GlobalPay.nonce}'
+        );
+        req.setBody(JSON.serialize(body));
+        try {
+            HttpResponse res = new Http().send(req);
+            if (res.getStatusCode() == 200) {
+                return (GlobalPayAccessTokenResponse) JSON.deserialize(res.getBody(), GlobalPayAccessTokenResponse.class);
+            }
+        } catch (Exception e) {
+            System.debug('Access Token Error: ' + e.getMessage());
+            system.assert(false, e);
         }
         return null;
     }
 
-    // Method to get access token
-    public static GlobalPayAccessTokenResponse getAccessToken() {
-        Http http = new Http();
-        HttpRequest request = new HttpRequest();
+    private static GlobalPayLinkResponse createHostedPaymentLink(Id recordId, String accessToken) {
 
-        // Set headers
-        request.setEndpoint(ACCESSTOKEN_ENDPOINT_URL);
-        request.setMethod('POST');
-        request.setHeader('Content-Type', 'application/json');
-        request.setHeader('X-GP-Version', '2023-01-01');
+        string healthAuth = getHealthAuthorityCode(recordId);
+        if(string.isBlank(healthAuth)) return null;
 
-        // Prepare request body
-        Map<String, Object> requestBody = new Map<String, Object>{
-            'app_id' => '1dPAIy90MLVyENnVGMdBLbiSiN4ifoKn',
-            'secret' => '5267726712636df6ca537cea3e284f5ca9281c81d438a20dd70f3063c2fee3dad6edc586593b0a71148a50c1259ab3361905668881e731fb99621668342b8fdf',
-            'grant_type' => 'client_credentials',
-            'nonce' => '2029-03-14T13:24:10.832Z'
-        };
+        string merchantId = '{!.GlobalPay.merchant_id_' + healthAuth + '}';
 
-        String body = JSON.serialize(requestBody);
-        request.setBody(body);
+        HttpRequest req = new HttpRequest();
+        req.setEndpoint(PaymentLinkEndpointUrl);
+        req.setMethod('POST');
+        req.setHeader('Content-Type', 'application/json');
+        req.setHeader('Authorization', 'Bearer ' + accessToken);
+        req.setHeader('X-GP-Version', '{!$Credential.GlobalPay.xgp_Version}');
+
+        PaymentLinkRequestBody requestBody = new PaymentLinkRequestBody();
+        requestBody.account_name = 'pay_link_hpp';
+        requestBody.merchant_id = merchantId;
+        requestBody.type = 'HOSTED_PAYMENT_PAGE';
+        requestBody.name = recordId;
+        requestBody.description = 'Regulatory Transaction Fee details';
+        requestBody.reference = String.valueOf(recordId);
+
+        requestBody.payer = new PaymentLinkRequestPayerDetail(
+            'James Mason', //to be replaced
+            'en',
+            'jamesmason@example.com', //to be replaced
+            new PaymentLinkRequestMobilePhoneDetail('44', '1801555888'), //to be replaced
+            new PaymentLinkRequestBillingAddressDetail('Flat 456', 'House 456', 'Unit 4', 'Halifax', 'k2s 0v1', 'CA')
+        );
+
+        PaymentLinkRequestOrderDetail orderDetail = new PaymentLinkRequestOrderDetail(
+            '1000',
+            'CAD', 
+            recordId,
+            new TransactionConfiguration('CNP', 'CA', 'AUTO', new List<String>{ 'CARD' }),
+            new PaymentMethodConfiguration(new Authentications('CHALLENGE_PREFERRED'))
+        );
+        requestBody.order = orderDetail.toMap();
+
+        requestBody.notifications = new PaymentResponseNotifications(
+           GlobalPayRedirectUrl + recordId,
+           GlobalPayStatusUrl
+        );
+        req.setBody(JSON.serialize(requestBody));
 
         try {
-            HttpResponse response = http.send(request);
-
-            if (response.getStatusCode() == 200) {
-                return (GlobalPayAccessTokenResponse) JSON.deserialize(response.getBody(), GlobalPayAccessTokenResponse.class);
-            } else {
-                System.debug('Error: ' + response.getStatusCode() + ' - ' + response.getBody());
-                return null;
+            HttpResponse res = new Http().send(req);
+            if (res.getStatusCode() == 200 || res.getStatusCode() == 201) {
+                return (GlobalPayLinkResponse) JSON.deserialize(res.getBody(), GlobalPayLinkResponse.class);
             }
         } catch (Exception e) {
-            System.debug('Exception: ' + e.getMessage());
-            return null;
+            system.assert(false, e);
+            System.debug('PaymentLink Error: ' + e.getMessage());
+        }
+        return null;
+    }
+
+    public class AccessTokenRequestBody {
+        public String app_id;
+        public String secret;
+        public String grant_type;
+        public String nonce;
+
+        public AccessTokenRequestBody(String appId, String appSecret, String grantType, String nonceValue) {
+            this.app_id = appId;
+            this.secret = appSecret;
+            this.grant_type = grantType;
+            this.nonce = nonceValue;
         }
     }
 
-    public static GlobalPayLinkResponse createHostedPaymentLink(String accessToken) {
-        Http http = new Http();
-        HttpRequest request = new HttpRequest();
+    public class PaymentLinkRequestBody {
+        public String account_name;
+        public String merchant_id;
+        public String type;
+        public String name;
+        public String description;
+        public String reference;
+        public PaymentLinkRequestPayerDetail payer;
+        public Map<String, Object> order;
+        public PaymentResponseNotifications notifications;
+    }
 
-        request.setEndpoint(PAYMENT_LINK_ENDPOINT_URL);
-        request.setMethod('POST');
-        request.setHeader('Content-Type', 'application/json');
-        request.setHeader('Authorization', 'Bearer ' + accessToken);
-		 request.setHeader('X-GP-Version', '2023-01-01');
-        
-        // Build Request Body
-        Map<String, Object> requestBody = new Map<String, Object>{
-            'account_name' => 'pay_link_hpp',
-            'merchant_id' => 'MER_7e3e2c7df34f42819b3edee31022ee3f',
-            'type' => 'HOSTED_PAYMENT_PAGE',
-            'name' => 'Bill Payment',
-            'description' => 'February and March Invoice',
-            'reference' => 'MER_7e3e2c7df34f42819b3edee31022ee3f',
-            'payer' => new Map<String, Object>{
-                'name' => 'James Mason',
-                'language' => 'en',
-                'email' => 'jamesmason@example.com',
-                'mobile_phone' => new Map<String, Object>{
-                    'country_code' => '44',
-                    'subscriber_number' => '1801555888'
-                },
-                'billing_address' => new Map<String, Object>{
-                    'line_1' => 'Flat 456',
-                    'line_2' => 'House 456',
-                    'line_3' => 'Unit 4',
-                    'city' => 'Halifax',
-                    'postal_code' => '44',
-                    'country' => 'GB'
-                }
-            },
-            'order' => new Map<String, Object>{
-                'amount' => '1000',
-                'currency' => 'CAD',
-                'reference' => 'order-645',
-                'transaction_configuration' => new Map<String, Object>{
-                    'channel' => 'CNP',
-                    'country' => 'CA',
-                    'capture_mode' => 'AUTO',
-                    'allowed_payment_methods' => new List<String>{ 'CARD' }
-                },
-                'payment_method_configuration' => new Map<String, Object>{
-                    'authentications' => new Map<String, Object>{
-                        'preference' => 'CHALLENGE_PREFERRED'
-                    }
-                }
-            },
-            'notifications' => new Map<String, Object>{
-                'return_url' => 'https://www.example.com/return_url',
-                'status_url' => 'https://www.example.com/status_url'
-            }
-        };
+    public class PaymentLinkRequestPayerDetail {
+        public String name;
+        public String language;
+        public String email;
+        public PaymentLinkRequestMobilePhoneDetail mobile_phone;
+        public PaymentLinkRequestBillingAddressDetail billing_address;
 
-        request.setBody(JSON.serialize(requestBody));
-
-        try {
-            HttpResponse response = http.send(request);
-            if (response.getStatusCode() == 200 || response.getStatusCode() == 201) {
-                return (GlobalPayLinkResponse) JSON.deserialize(response.getBody(), GlobalPayLinkResponse.class);
-            } else {
-                System.debug('Error: ' + response.getStatusCode() + ' - ' + response.getBody());
-                return null;
-            }
-        } catch (Exception e) {
-            System.debug('Exception during callout: ' + e.getMessage());
-            return null;
+        public PaymentLinkRequestPayerDetail(String payerName, String languageCode, String emailAddress, PaymentLinkRequestMobilePhoneDetail mobilePhone, PaymentLinkRequestBillingAddressDetail billingAddress) {
+            this.name = payerName;
+            this.language = languageCode;
+            this.email = emailAddress;
+            this.mobile_phone = mobilePhone;
+            this.billing_address = billingAddress;
         }
     }
 
+    public class PaymentLinkRequestMobilePhoneDetail {
+        public String country_code;
+        public String subscriber_number;
 
+        public PaymentLinkRequestMobilePhoneDetail(String countryCode, String subscriberNumber) {
+            this.country_code = countryCode;
+            this.subscriber_number = subscriberNumber;
+        }
+    }
 
+    public class PaymentLinkRequestBillingAddressDetail {
+        public String line_1;
+        public String line_2;
+        public String line_3;
+        public String city;
+        public String postal_code;
+        public String country;
 
-    // Response wrapper class
+        public PaymentLinkRequestBillingAddressDetail(String line1, String line2, String line3, String cityName, String postalCode, String countryCode) {
+            this.line_1 = line1;
+            this.line_2 = line2;
+            this.line_3 = line3;
+            this.city = cityName;
+            this.postal_code = postalCode;
+            this.country = countryCode;
+        }
+    }
+
+    public class PaymentLinkRequestOrderDetail {
+        public String amount;
+        public String currencyCode;
+        public String reference;
+        public TransactionConfiguration transaction_configuration;
+        public PaymentMethodConfiguration payment_method_configuration;
+
+        public PaymentLinkRequestOrderDetail(String amount, String currencyCode, String reference,
+                                            TransactionConfiguration txConfig,
+                                            PaymentMethodConfiguration pmConfig) {
+            this.amount = amount;
+            this.currencyCode = currencyCode;
+            this.reference = reference;
+            this.transaction_configuration = txConfig;
+            this.payment_method_configuration = pmConfig;
+        }
+
+        public Map<String, Object> toMap() {
+            return new Map<String, Object>{
+                'amount' => amount,
+                'currency' => currencyCode,
+                'reference' => reference,
+                'transaction_configuration' => transaction_configuration,
+                'payment_method_configuration' => payment_method_configuration
+            };
+        }
+    }
+
+    public class TransactionConfiguration {
+        public String channel;
+        public String country;
+        public String capture_mode;
+        public List<String> allowed_payment_methods;
+
+        public TransactionConfiguration(String channelType, String countryCode, String captureMode, List<String> allowedPaymentMethods) {
+            this.channel = channelType;
+            this.country = countryCode;
+            this.capture_mode = captureMode;
+            this.allowed_payment_methods = allowedPaymentMethods;
+        }
+    }
+
+    public class PaymentMethodConfiguration {
+        public Authentications authentications;
+
+        public PaymentMethodConfiguration(Authentications authenticationPreference) {
+            this.authentications = authenticationPreference;
+        }
+    }
+
+    public class Authentications {
+        public String preference;
+
+        public Authentications(String preferenceSetting) {
+            this.preference = preferenceSetting;
+        }
+    }
+
+    public class PaymentResponseNotifications {
+        public String return_url;
+        public String status_url;
+
+        public PaymentResponseNotifications(String returnUrl, String statusCallbackUrl) {
+            this.return_url = returnUrl;
+            this.status_url = statusCallbackUrl;
+        }
+    }
+
     public class GlobalPayAccessTokenResponse {
         public String token;
         public String type;
@@ -140,13 +292,11 @@ public with sharing class PHOCSGlobalPayHandler {
         public String email;
     }
 
-    // Nested scope object
     public class Scope {
         public String merchant_id;
         public String merchant_name;
     }
 
-     // Response Wrapper
     public class GlobalPayLinkResponse {
         public String id;
         public String account_name;
@@ -167,11 +317,6 @@ public with sharing class PHOCSGlobalPayHandler {
         public String currencyTest;
         public String reference;
         public TransactionConfiguration transaction_configuration;
-    }
-
-    public class TransactionConfiguration {
-        public String country;
-        public String channel;
     }
 
     public class Action {

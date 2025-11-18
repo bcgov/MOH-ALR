@@ -10,12 +10,14 @@ export default class PhocsPayment extends NavigationMixin(LightningElement) {
 
     ticket;
     monerisInstance;
+
+    isGlobalPay = false;
+    isMonerisPay = false;
     
     @api recordId;
     @api amount;
     @api customerId;
 
-    // === Get URL parameters ===
     @wire(CurrentPageReference)
     getStateParameters(currentPageReference) {
         if (currentPageReference) {
@@ -33,9 +35,11 @@ export default class PhocsPayment extends NavigationMixin(LightningElement) {
         getPaymentSystemRedirectInfo({regulatoryTransactionFeeId:this.regulatoryTransactionFeeId})
             .then(result => {
                 if(result && result.useMoneris){
+                    this.isMonerisPay = true;
                     this.MonerisPayHandler();
                 }
                 if(result && result.useGlobalPay){
+                    this.isGlobalPay = true;
                     this.globalPayHandler();
                 }
             })
