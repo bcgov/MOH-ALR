@@ -84,6 +84,91 @@ public class PHOCSAquifersResponseWrapperTest {
             '}';
         return jsonString;
     }
+    
+    public static String getBlankResponse(){
+        String jsonString = '{' +
+            '"aquifer_id": 658,' +
+            '"aquifer_name": null,' +
+            '"location_description": "Around the town of Houston",' +
+            '"quality_concern": "None",' +
+            '"material": "Bedrock",' +
+            '"subtype": null,' +
+            '"vulnerability": "Moderate",' +
+            '"known_water_use": null,' +
+            '"litho_stratographic_unit": "Kasalka Group, Telka Formation, Goosly Lake Formation",' +
+            '"productivity": "Low",' +
+            '"demand": "Moderate",' +
+            '"mapping_year": 2020,' +
+            '"resources": [' +
+            '{' +
+            '"id": 1664,' +
+            '"name": "Stress Index Report",' +
+            '"url": "https://services6.arcgis.com/ubm4tcTYICKBpist/arcgis/rest/services/Aquifer_180613_NA/FeatureServer/0/149/attachments/149",' +
+            '"section_code": "P"' +
+            '},' +
+            '{' +
+            '"id": 2452,' +
+            '"name": "Vanderhoof and Houston Aquifer Mapping and Hydrostratigraphic Characterization",' +
+            '"url": "https://a100.gov.bc.ca/pub/acat/public/viewReport.do?reportId=59008",' +
+            '"section_code": "M"' +
+            '}' +
+            '],' +
+            '"area": null,' +
+            '"notes": null,' +
+            '"effective_date": "2000-01-01T00:00:00Z",' +
+            '"expiry_date": "9999-12-31T23:59:59.999999Z",' +
+            '"retire_date": "9999-12-31T23:59:59.999999Z",' +
+            '"geom": {' +
+            '"type": null,' +
+            '"coordinates": [[[' +
+            '[-126.546828122686, 54.4499133161687],' +
+            '[-126.535940120632, 54.4459554189032],' +
+            '[-126.528326472044, 54.443186749668],' +
+            '[-126.50645691149, 54.4324666454187],' +
+            '[-126.531315009312, 54.4253909654856],' +
+            '[-126.525185570724, 54.4219423673082],' +
+            '[-126.526367896803, 54.4217080190144],' +
+            '[-126.52874210368, 54.4219843273157],' +
+            '[-126.529625138504, 54.421521987798],' +
+            '[-126.530596553875, 54.420256862569],' +
+            '[-126.531070378086, 54.4187073253515],' +
+            '[-126.530140799545, 54.4155590983698],' +
+            '[-126.528430220275, 54.4131020154563],' +
+            '[-126.546828122686, 54.4499133161687]' +
+            ']]]' +
+            '},' +
+            '"licence_details": {' +
+            '"licence_count": 3,' +
+            '"licences_updated": {' +
+            '"update_date_max": "2025-09-15T11:47:43.757535Z"' +
+            '},' +
+            '"num_wells_with_ems": 0,' +
+            '"num_artesian_wells": 0,' +
+            '"wells_updated": {' +
+            '"update_date_max": "2024-12-27T21:16:35.579665Z"' +
+            '},' +
+            '"num_wells": 53,' +
+            '"obs_wells": [],' +
+            '"wells_by_licence": [' +
+            '{ "licence_number": 506166, "well_tag_numbers_in_licence": "47018" },' +
+            '{ "licence_number": 505833, "well_tag_numbers_in_licence": "130048" },' +
+            '{ "licence_number": 504400, "well_tag_numbers_in_licence": "125498" }' +
+            '],' +
+            '"usage": [' +
+            '{ "purpose_description": "WSA03 - Commercial Enterprise ", "total_qty": 1460 },' +
+            '{ "purpose_description": "WSA08 - Livestock & Animal ", "total_qty": 613.8 },' +
+            '{ "purpose_description": "WSA05 - Greenhouse & Nursery ", "total_qty": 50 }' +
+            '],' +
+            '"lic_qty": [' +
+            '{ "purpose_description": "WSA03 - Commercial Enterprise ", "total_qty": 1 },' +
+            '{ "purpose_description": "WSA08 - Livestock & Animal ", "total_qty": 1 },' +
+            '{ "purpose_description": "WSA05 - Greenhouse & Nursery ", "total_qty": 1 }' +
+            '],' +
+            '"hydraulically_connected": false' +
+            '}' +
+            '}';
+        return jsonString;
+    }
     @IsTest
     static void testDeserialization() {
         String jsonString = getResponse();        
