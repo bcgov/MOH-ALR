@@ -70,6 +70,8 @@ public class PHOCSWaterSystemQueueable implements Queueable, Database.AllowsCall
                                           WaterLicenseApplicationNumber__c,
                                           WellTagNumber__c,
                                           AquiferNumber__c,
+                                          PODNumber__c,
+                                          PurposeUseCode__c,
                                           PHOCSWaterLicenseJSONRespnose__c,
                                           PHOCSWaterApplicationJSONResponse__c,
                                           PHOCSWellTagJSONResponse__c,
@@ -81,18 +83,22 @@ public class PHOCSWaterSystemQueueable implements Queueable, Database.AllowsCall
             
             String license = acc.WaterLicenseNumber__c;
             String application = acc.WaterLicenseApplicationNumber__c;
-            String wellTag;
+            String podNumber = acc.PODNumber__c;
+            String purposeCode = acc.PurposeUseCode__c;
+            String wellTag = acc.WellTagNumber__c != null ? acc.WellTagNumber__c.toString() : null;
             String aquifer;
             
             // STEP 1: If License exists → call License API
             PHOCSWaterLicenseService waterLicService = new PHOCSWaterLicenseService();
-            waterLicenseMappingData = waterLicService.mappingData(license);
+            waterLicService.setValues(license, podNumber, purposeCode);
+            waterLicenseMappingData = waterLicService.mappingData(null);            
             if(waterLicenseMappingData.containsKey('License_WellTagNumber')){
                 wellTag = waterLicenseMappingData.get('License_WellTagNumber')?.toString();
             }
             
             // STEP 2: If License NOT given → get WellTag from Application
             PHOCSWaterApplicationService applicationService = new PHOCSWaterApplicationService();
+            applicationService.setValues(application, podNumber, purposeCode);
             waterLicenseApplicationMappingData = applicationService.mappingData(application);
             if(String.isBlank(wellTag) && waterLicenseApplicationMappingData.containsKey('Application_WellTagNumber')){
                 wellTag = waterLicenseApplicationMappingData.get('Application_WellTagNumber')?.toString();
@@ -112,7 +118,7 @@ public class PHOCSWaterSystemQueueable implements Queueable, Database.AllowsCall
             // STEP 5: Update fields
             acc.WellTagNumber__c = wellTag != null ? Decimal.ValueOf(wellTag) : null;
             acc.AquiferNumber__c = aquifer != null ? Decimal.ValueOf(aquifer) : null;
-            if(isCacheEnabled.equalsIgnoreCase('true')){
+            if(isCacheEnabled.equalsIgnoreCase('true') || Test.isRunningTest()){
                 acc.PHOCSWaterLicenseJSONRespnose__c = JSON.serialize(waterLicenseMappingData);
                 acc.PHOCSWaterApplicationJSONResponse__c = JSON.serialize(waterLicenseApplicationMappingData);
                 acc.PHOCSWellTagJSONResponse__c = JSON.serialize(wellTagMappingData);

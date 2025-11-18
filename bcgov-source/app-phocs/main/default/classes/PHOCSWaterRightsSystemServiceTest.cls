@@ -21,17 +21,101 @@ public class PHOCSWaterRightsSystemServiceTest {
     }
     
     static Account getAccount(){
-        return [Select Id, Name, WaterLicenseNumber__c, WaterLicenseApplicationNumber__c from Account where Name = 'Test Facility' limit 1];
+        return [SELECT Id,
+                WaterLicenseNumber__c,
+                WaterLicenseApplicationNumber__c,
+                WellTagNumber__c,
+                AquiferNumber__c,
+                PODNumber__c,
+                PurposeUseCode__c,
+                PHOCSWaterLicenseJSONRespnose__c,
+                PHOCSWaterApplicationJSONResponse__c,
+                PHOCSWellTagJSONResponse__c,
+                PHOCSAquiferJSONResponse__c 
+                FROM Account
+                where Name = 'Test Facility' limit 1];
     }
     
     @isTest
-    static void testWaterRightServiceWithValidValues(){
+    static void testWaterRightServiceWithValidLicenseValues(){
         Test.setMock(HttpCalloutMock.class, new PHOCSWaterRightsCommonMock());
         
         Map<String, Object> resultMap;
+        Account acc = getAccount();
+        acc.PHOCSWaterLicenseJSONRespnose__c = '{"NoDataForWaterLicense":"No water license details available."}';
+        acc.PHOCSWaterApplicationJSONResponse__c = '{"NoDataForLicenseApplication":"No water license application details available."}';
+        acc.PHOCSWellTagJSONResponse__c = '{"NoDataForGWell":"No well details available."}';
+        acc.PHOCSAquiferJSONResponse__c = '{"NoDataForAquifer":"No aquifer details available."}';
+        update acc;
         
         // Prepare input for FlexCard-style call
-        Map<String, Object> input   = new Map<String, Object>{ 'recordId' => getAccount().Id };
+        Map<String, Object> input   = new Map<String, Object>{ 'recordId' => acc.Id };
+        Map<String, Object> output  = new Map<String, Object>();
+        Map<String, Object> options = new Map<String, Object>();        
+        
+        Test.startTest();
+        // Call service
+        Object result = new PHOCSWaterRightsSystemService().call(
+            'getAllData',
+            new Map<String, Object>{
+                'input'   => input,
+                    'output'  => output,
+                    'options' => options
+                    }
+        );
+        Test.stopTest();
+        System.Assert.isNotNull(result, 'Contains Key with Values');
+    }
+    
+    @isTest
+    static void testWaterRightServiceWithValidPODValues(){
+        Test.setMock(HttpCalloutMock.class, new PHOCSWaterRightsCommonMock());
+        
+        Map<String, Object> resultMap;
+        Account acc = getAccount();
+        acc.PHOCSWaterLicenseJSONRespnose__c = '{"NoDataForWaterLicense":"No water license details available."}';
+        acc.PHOCSWaterApplicationJSONResponse__c = '{"NoDataForLicenseApplication":"No water license application details available."}';
+        acc.PHOCSWellTagJSONResponse__c = '{"NoDataForGWell":"No well details available."}';
+        acc.PHOCSAquiferJSONResponse__c = '{"NoDataForAquifer":"No aquifer details available."}';
+        acc.PODNumber__c = 'PW200605';
+        acc.WaterLicenseNumber__c = null;
+        update acc;
+        
+        // Prepare input for FlexCard-style call
+        Map<String, Object> input   = new Map<String, Object>{ 'recordId' => acc.Id };
+        Map<String, Object> output  = new Map<String, Object>();
+        Map<String, Object> options = new Map<String, Object>();        
+        
+        Test.startTest();
+        // Call service
+        Object result = new PHOCSWaterRightsSystemService().call(
+            'getAllData',
+            new Map<String, Object>{
+                'input'   => input,
+                    'output'  => output,
+                    'options' => options
+                    }
+        );
+        Test.stopTest();
+        System.Assert.isNotNull(result, 'Contains Key with Values');
+    }
+    
+    @isTest
+    static void testWaterRightServiceWithValidPurposeValues(){
+        Test.setMock(HttpCalloutMock.class, new PHOCSWaterRightsCommonMock());
+        
+        Map<String, Object> resultMap;
+        Account acc = getAccount();
+        acc.PHOCSWaterLicenseJSONRespnose__c = '{"NoDataForWaterLicense":"No water license details available."}';
+        acc.PHOCSWaterApplicationJSONResponse__c = '{"NoDataForLicenseApplication":"No water license application details available."}';
+        acc.PHOCSWellTagJSONResponse__c = '{"NoDataForGWell":"No well details available."}';
+        acc.PHOCSAquiferJSONResponse__c = '{"NoDataForAquifer":"No aquifer details available."}';
+        acc.PurposeUseCode__c = 'PW200605';
+        acc.WaterLicenseNumber__c = null;
+        update acc;
+        
+        // Prepare input for FlexCard-style call
+        Map<String, Object> input   = new Map<String, Object>{ 'recordId' => acc.Id };
         Map<String, Object> output  = new Map<String, Object>();
         Map<String, Object> options = new Map<String, Object>();        
         

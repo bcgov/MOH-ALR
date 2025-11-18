@@ -80,6 +80,87 @@ public class PHOCSWLSWaterApplicationsWrapperTest {
         return jsonString;
     }
     
+    public Static String getBlankResponse(){
+        String jsonString = '{' +
+            '"type": "FeatureCollection",' +
+            '"features": [' +
+            '{' +
+            '"type": "Feature",' +
+            '"id": "WHSE_WATER_MANAGEMENT.WLS_WATER_RIGHTS_APPLICTNS_SV.fid--1",' +
+            '"geometry": {' +
+            '"type": "Point",' +
+            '"coordinates": [1451962.2133, 484764.7516]' +
+            '},' +
+            '"geometry_name": "SHAPE",' +
+            '"properties": {' +
+            '"WLS_WRA_SYSID": 233,' +
+            '"APPLICATION_JOB_NUMBER": "128116",' +
+            '"POD_NUMBER": "PW212743",' +
+            '"POD_SUBTYPE": null,' +
+            '"POD_DIVERSION_TYPE": null,' +
+            '"FILE_NUMBER": "20028116",' +
+            '"APPLICATION_STATUS": null,' +
+            '"WELL_TAG_NUMBER": null,' +
+            '"PURPOSE_USE_CODE": null,' +
+            '"PURPOSE_USE": null,' +
+            '"QTY_DIVERSION_MAX_RATE": null,' +
+            '"QTY_UNITS_DIVERSION_MAX_RATE": null,' +
+            '"PRIMARY_APPLICANT_NAME": "0960308 B.C. Ltd. (125786)",' +
+            '"ADDRESS_LINE_2": "2247 Sicamous Avenue",' +
+            '"ADDRESS_LINE_4": "Coquitlam BC V3K 6R9",' +
+            '"COUNTRY": "Canada",' +
+            '"POSTAL_CODE": "V3K 6R9",' +
+            '"LATITUDE": 49.20089,' +
+            '"LONGITUDE": -119.79661,' +
+            '"DISTRICT_PRECINCT_NAME": "Princeton / Keremeos",' +
+            '"OBJECTID": 33342368' +
+            '}' +
+            '},' +
+            '{' +
+            '"type": "Feature",' +
+            '"id": "WHSE_WATER_MANAGEMENT.WLS_WATER_RIGHTS_APPLICTNS_SV.fid--2",' +
+            '"geometry": {' +
+            '"type": "Point",' +
+            '"coordinates": [1451521.8235, 484742.81]' +
+            '},' +
+            '"geometry_name": "SHAPE",' +
+            '"properties": {' +
+            '"WLS_WRA_SYSID": 234,' +
+            '"APPLICATION_JOB_NUMBER": "128116",' +
+            '"POD_NUMBER": "PW212740",' +
+            '"POD_SUBTYPE": null,' +
+            '"POD_DIVERSION_TYPE": null,' +
+            '"FILE_NUMBER": "20028116",' +
+            '"APPLICATION_STATUS": null,' +
+            '"WELL_TAG_NUMBER": null,' +
+            '"PURPOSE_USE_CODE": null,' +
+            '"PURPOSE_USE": null,' +
+            '"QTY_DIVERSION_MAX_RATE": null,' +
+            '"QTY_UNITS_DIVERSION_MAX_RATE": null,' +
+            '"PRIMARY_APPLICANT_NAME": "0960308 B.C. Ltd. (125786)",' +
+            '"ADDRESS_LINE_2": "2247 Sicamous Avenue",' +
+            '"ADDRESS_LINE_4": "Coquitlam BC V3K 6R9",' +
+            '"COUNTRY": "Canada",' +
+            '"POSTAL_CODE": "V3K 6R9",' +
+            '"LATITUDE": 49.20104,' +
+            '"LONGITUDE": -119.80265,' +
+            '"DISTRICT_PRECINCT_NAME": "Princeton / Keremeos",' +
+            '"OBJECTID": 33342369' +
+            '}' +
+            '}' +
+            '],' +
+            '"totalFeatures": 2,' +
+            '"numberMatched": 2,' +
+            '"numberReturned": 2,' +
+            '"timeStamp": "2025-09-16T07:37:46.997Z",' +
+            '"crs": {' +
+            '"type": "name",' +
+            '"properties": {"name": "urn:ogc:def:crs:EPSG::3005"}' +
+            '}' +
+            '}';
+        return jsonString;
+    }
+    
     @IsTest
     static void testParseWaterApplicationsJSON() {
         String jsonString = getResponse();        
