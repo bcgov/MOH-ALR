@@ -1,5 +1,7 @@
 @IsTest
 global class PHOCSWLSWaterHttpMock implements HttpCalloutMock {
+    
+    global Boolean isBlankResponse = false;
 
     global HTTPResponse respond(HTTPRequest req) {
         HttpResponse res = new HttpResponse();
@@ -10,10 +12,17 @@ global class PHOCSWLSWaterHttpMock implements HttpCalloutMock {
 
         if(endpoint.contains('WLS_WATER_RIGHTS_LICENCES_SV')) {
             // Mock response for Water Rights
-            res.setBody(PHOCSWLSWaterRightsWrapperTest.getResponse());
+            if(!isBlankResponse)
+                res.setBody(PHOCSWLSWaterRightsWrapperTest.getResponse());
+            else
+                res.setBody(PHOCSWLSWaterRightsWrapperTest.getBlankResponse());
+            
         } else if(endpoint.contains('WLS_WATER_RIGHTS_APPLICTNS_SV')) {
             // Mock response for Water Applications
-            res.setBody(PHOCSWLSWaterApplicationsWrapperTest.getResponse());
+            if(!isBlankResponse)
+                res.setBody(PHOCSWLSWaterApplicationsWrapperTest.getResponse());
+            else
+                res.setBody(PHOCSWLSWaterApplicationsWrapperTest.getBlankResponse());
         }
         return res;
     }

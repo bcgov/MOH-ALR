@@ -54,7 +54,7 @@
         <propertySetConfig>{
   &quot;controlWidth&quot; : 12,
   &quot;label&quot; : &quot;Get Portal User Account Details&quot;,
-  &quot;bundle&quot; : &quot;DMExtractLogInUserId&quot;,
+  &quot;bundle&quot; : &quot;PHOCSDMExtractLogInUserId&quot;,
   &quot;ignoreCache&quot; : false,
   &quot;dataRaptor Input Parameters&quot; : [ {
     &quot;element&quot; : &quot;userId&quot;,
@@ -140,7 +140,7 @@
             <propertySetConfig>{
   &quot;controlWidth&quot; : 12,
   &quot;label&quot; : &quot;TextBlock13&quot;,
-  &quot;text&quot; : &quot;&lt;p&gt;Thank you. Your application has been submitted successfully.&lt;/p&gt;&quot;,
+  &quot;text&quot; : &quot;&lt;div class=\&quot;slds-form-element slds-form-element_stacked\&quot;&gt;\n&lt;div class=\&quot;slds-form-element__control odc-rich-text\&quot; title=\&quot;edit\&quot;&gt;\n&lt;div class=\&quot;slds-box odc-rich-text-action\&quot;&gt;\n&lt;p&gt;Thank you. Your application for %createdBLALicenseType% has been submitted successfully. Application Number: %createdBLAApplicationId%.&lt;/p&gt;\n&lt;/div&gt;\n&lt;/div&gt;\n&lt;/div&gt;&quot;,
   &quot;show&quot; : null,
   &quot;dataJSON&quot; : false,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
@@ -3223,8 +3223,42 @@
   &quot;dataJsonPath&quot; : &quot;&quot;,
   &quot;HTMLTemplateId&quot; : &quot;&quot;
 }</propertySetConfig>
-            <sequenceNumber>1.0</sequenceNumber>
+            <sequenceNumber>2.0</sequenceNumber>
             <type>Type Ahead Block</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>DisplayRelatedFacilities</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;DisplayRelatedFacilities&quot;,
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;New Construction Permit&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;field&quot; : &quot;PhocsPoolConstReasonforApplyRadio&quot;
+      } ]
+    }
+  },
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;hide&quot; : false,
+  &quot;lwcName&quot; : &quot;cfPHOCSDisplayFacilityAccountsForOperator&quot;,
+  &quot;bStandalone&quot; : true,
+  &quot;customAttributes&quot; : [ {
+    &quot;name&quot; : &quot;record-id&quot;,
+    &quot;source&quot; : &quot;%BusinessEntityAccountId%&quot;
+  }, {
+    &quot;name&quot; : &quot;parent-attribute&quot;,
+    &quot;source&quot; : &quot;%PHOCSReasonforApplying%&quot;
+  } ]
+}</propertySetConfig>
+            <sequenceNumber>1.0</sequenceNumber>
+            <type>Custom Lightning Web Component</type>
         </childElements>
         <childElements>
             <isActive>true</isActive>
@@ -3248,7 +3282,7 @@
     &quot;name&quot; : &quot;New Construction Permit&quot;,
     &quot;developerName&quot; : null,
     &quot;value&quot; : &quot;New Construction Permit&quot;,
-    &quot;autoAdv&quot; : &quot;next&quot;
+    &quot;autoAdv&quot; : null
   }, {
     &quot;name&quot; : &quot;Replacement/Alteration Work&quot;,
     &quot;developerName&quot; : null,

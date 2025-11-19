@@ -7,9 +7,11 @@
 */
 public class PHOCSWaterLicenseCallout {
 
-    public static PHOCSWLSWaterRightsWrapper getWaterRightsByLicence(String licenceNumber) {
+    public static PHOCSWLSWaterRightsWrapper getWaterRightsByLicence(String licenceNumber, String podNumber, String purposeCode) {
         String baseUrl = System.Label.PHOCSWaterRightLicenseNumberURL;
         String endpoint = baseUrl.replace('{LicenseNumber}', licenceNumber);
+        endpoint = endpoint.replace('{PODNumber}', podNumber);
+        endpoint = endpoint.replace('{PurposeCode}', purposeCode);
         HttpRequest req = new HttpRequest();
         req.setEndpoint(endpoint);
         req.setMethod('GET');
