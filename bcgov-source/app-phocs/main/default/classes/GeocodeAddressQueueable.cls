@@ -21,31 +21,14 @@ public class GeocodeAddressQueueable implements Queueable, Database.AllowsCallou
 
         Integer batchSize = Math.min(MAX_BATCH_SIZE, accountIds.size());
         List<Id> currentBatch = new List<Id>();
-
-        // Take first up-to-100 records for this execution
-        for (Integer i = 0; i < batchSize; i++) {
-            currentBatch.add(accountIds[i]);
-        }
-
-        // Prepare remaining IDs to process in a future queueable
         List<Id> remainingIds = new List<Id>();
-        for (Integer i = batchSize; i < accountIds.size(); i++) {
-            remainingIds.add(accountIds[i]);
-        }
 
-        // Process each account in the batch
-        for (Id acctId : currentBatch) {
-            processAccount(acctId);
-        }
+        // Split current batch and remaining IDs
+        for (Integer i = 0; i < batchSize; i++) currentBatch.add(accountIds[i]);
+        for (Integer i = batchSize; i < accountIds.size(); i++) remainingIds.add(accountIds[i]);
 
-        // Enqueue another queueable if there are remaining accounts
-        if (!remainingIds.isEmpty()) {
-            System.enqueueJob(new GeocodeAddressQueueable(remainingIds));
-        }
-    }
-
-    private void processAccount(Id accountId) {
-        Account acct = [
+        // Query all accounts in current batch at once
+        List<Account> accountsToProcess = [
             SELECT Id,
                    Physical_Address__Street__s,
                    Physical_Address__City__s,
@@ -53,10 +36,32 @@ public class GeocodeAddressQueueable implements Queueable, Database.AllowsCallou
                    Physical_Address__PostalCode__s,
                    Physical_Address__CountryCode__s
             FROM Account
-            WHERE Id = :accountId
-            LIMIT 1
+            WHERE Id IN :currentBatch
         ];
 
+        // List to hold accounts to update after callout
+        List<Account> accountsToUpdate = new List<Account>();
+
+        // Process each account
+        for (Account acct : accountsToProcess) {
+            Account updatedAcct = processAccount(acct);
+            if (updatedAcct != null) {
+                accountsToUpdate.add(updatedAcct);
+            }
+        }
+
+        // Perform a single DML outside the loop
+        if (!accountsToUpdate.isEmpty()) {
+            update accountsToUpdate;
+        }
+
+        // Enqueue remaining IDs if any
+        if (!remainingIds.isEmpty()) {
+            System.enqueueJob(new GeocodeAddressQueueable(remainingIds));
+        }
+    }
+
+    private Account processAccount(Account acct) {
         List<String> addressParts = new List<String>();
         if (String.isNotBlank(acct.Physical_Address__Street__s)) addressParts.add(acct.Physical_Address__Street__s);
         if (String.isNotBlank(acct.Physical_Address__City__s)) addressParts.add(acct.Physical_Address__City__s);
@@ -124,9 +129,9 @@ public class GeocodeAddressQueueable implements Queueable, Database.AllowsCallou
                         Physical_Address__StateCode__s = province
                     );
 
-                    update acctToUpdate;
+                    return acctToUpdate;
                 } else {
-                    sendNotification(new Set<String>{initiatingUserId}, accountId);
+                    sendNotification(new Set<String>{initiatingUserId}, acct.Id);
                 }
             } else {
                 System.debug('Geocoding failed with status: ' + res.getStatus());
@@ -135,6 +140,8 @@ public class GeocodeAddressQueueable implements Queueable, Database.AllowsCallou
         } catch (Exception ex) {
             System.debug('Callout exception: ' + ex.getMessage());
         }
+
+        return null; // nothing to update
     }
 
     private void sendNotification(Set<String> recipientsIds, Id accountId) {
