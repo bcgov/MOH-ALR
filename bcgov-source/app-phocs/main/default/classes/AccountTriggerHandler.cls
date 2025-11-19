@@ -36,30 +36,30 @@ public class AccountTriggerHandler {
             continue;
         }
 
-        Boolean shouldGeocode = false;
+        Boolean invokeGeocode = false;
 
         if (oldMap == null) {
-            shouldGeocode =
+            invokeGeocode =
                 String.isNotBlank(acct.Physical_Address__Street__s) ||
                 String.isNotBlank(acct.Physical_Address__City__s) ||
                 String.isNotBlank(acct.Physical_Address__StateCode__s);
         } else {
             Account oldAcct = oldMap.get(acct.Id);
-            shouldGeocode =
+            invokeGeocode =
                 acct.Physical_Address__Street__s != oldAcct.Physical_Address__Street__s ||
                 acct.Physical_Address__City__s != oldAcct.Physical_Address__City__s ||
                 acct.Physical_Address__StateCode__s != oldAcct.Physical_Address__StateCode__s;
         }
 
-        if (shouldGeocode) {
+        if (invokeGeocode) {
             accountsToGeocode.add(acct.Id);
         }
     }
 
-    // Enqueue queueable job for each changed account
-        for (Id acctId : accountsToGeocode) {
-            System.enqueueJob(new GeocodeAddressQueueable(acctId));
+          if (!accountsToGeocode.isEmpty()) {
+            System.enqueueJob(new GeocodeAddressQueueable(new List<Id>(accountsToGeocode)));
         }
+
 
    }
 
