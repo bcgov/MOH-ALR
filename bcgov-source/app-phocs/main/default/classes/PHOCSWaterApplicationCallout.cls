@@ -7,9 +7,11 @@
 */
 public class PHOCSWaterApplicationCallout {
 
-    public static PHOCSWLSWaterApplicationsWrapper getWaterApplicationsByJob(String applicationJobNumber) {
+    public static PHOCSWLSWaterApplicationsWrapper getWaterApplicationsByJob(String applicationJobNumber, String podNumber, String purposeCode) {
 		String baseUrl = System.Label.PHOCSWaterRightApplicationNumberURL;
         String endpoint = baseUrl.replace('{ApplicationNumber}', applicationJobNumber);
+        endpoint = endpoint.replace('{PODNumber}', podNumber);
+        endpoint = endpoint.replace('{PurposeCode}', purposeCode);
         
         HttpRequest req = new HttpRequest();
         req.setEndpoint(endpoint);
