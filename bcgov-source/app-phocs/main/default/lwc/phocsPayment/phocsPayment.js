@@ -10,7 +10,7 @@ export default class PhocsPayment extends NavigationMixin(LightningElement) {
 
     ticket;
     monerisInstance;
-
+    
     isGlobalPay = false;
     isMonerisPay = false;
     
@@ -56,7 +56,7 @@ export default class PhocsPayment extends NavigationMixin(LightningElement) {
     }
 
     redirectUserGlobalPayPaymentPage() {
-        getPaymentLinkUrl()
+        getPaymentLinkUrl({regulatoryTransactionFeeId:this.regulatoryTransactionFeeId})
             .then(result => {
                if(result)
                this.redirectToPaymentPage(result);
