@@ -6,6 +6,7 @@
     <errorConditionFormula>AND(
 NOT( $Permission.EHISBypassValidationRuleCustomPermission ),
 ISCHANGED( Name ),
+AND( OR(RecordType.DeveloperName=&apos;Unit_Request_Record_Type&apos;,  RecordType.DeveloperName=&apos;Units_Record_Type&apos;)),
 NOT( ISNEW()),
 OR(AND(PRIORVALUE(Name) &lt;&gt; Name, Name &lt;&gt; &apos;Unit-&apos;+ TEXT(Type__c)+&apos;-&apos;+  TEXT( DATEVALUE(CreatedDate)),  ISNULL(Parent.Id)= true),
 AND(PRIORVALUE(Name) &lt;&gt; Name, Name &lt;&gt; &apos;UnitRequest-&apos;+ TEXT(Type__c)+&apos;-&apos;+  TEXT( DATEVALUE(CreatedDate)),   ISNULL(Parent.Id)= false)
