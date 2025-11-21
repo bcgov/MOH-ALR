@@ -3,16 +3,15 @@ public with sharing class PHOCSGlobalPayHandler {
         'Island Health - Island' => 'IS',
         'Interior Health - IH' => 'IH',
         'Fraser Health - FH' => 'FH',
-        'Northern Health - NH' => 'NH',
-        'Vancouver Coastal Health - VCH' => 'VCH'
+        'Northern Health - NH' => 'NH'
     };
 
-    private static PHOCSGlobalPayEndpoints__mdt globalPaySetting = PHOCSGlobalPayEndpoints__mdt.getInstance('Default'); 
+    private static PHOCSGlobalPayEndpoints__mdt globalPaySetting = PHOCSGlobalPayEndpoints__mdt.getInstance('Default');
     private static String AccessTokenEndpointUrl {
-        get { return globalPaySetting.AccssTokenEndpoint__c; }
+        get { return globalPaySetting.BaseEndpoint__c + globalPaySetting.AccssTokenEndpoint__c; }
     }
     private static String PaymentLinkEndpointUrl {
-        get { return globalPaySetting.PaymentLinkEndpoint__c; }
+        get { return globalPaySetting.BaseEndpoint__c + globalPaySetting.PaymentLinkEndpoint__c; }
     }
     private static String GlobalPayRedirectUrl {
         get { return  getPHOCSSiteDomain() + globalPaySetting.PaymentReturnEndpoint__c; }
@@ -20,14 +19,40 @@ public with sharing class PHOCSGlobalPayHandler {
     private static String GlobalPayStatusUrl {
         get { return  getPHOCSSiteDomain() + globalPaySetting.PaymentStatusEndpoint__c; }
     }
-    private static String getPHOCSSiteDomain() {
-        DomainSite ds = [
-            SELECT Domain.Domain
-            FROM DomainSite
-            WHERE Site.Name = 'phocsportal'
-            LIMIT 1
-        ];
-        return 'https://' + ds?.Domain?.Domain;
+    
+    @AuraEnabled(cacheable=true)
+    public static String getPaymentLinkUrl(Id regulatoryTransactionFeeId) {
+        AppConfig appConfig = getGlobalPayAppConfig(regulatoryTransactionFeeId);
+        if(appConfig == null) return null;
+
+        GlobalPayAccessTokenResponse tokenResp = getAccessToken(appConfig);
+        if (tokenResp == null || String.isBlank(tokenResp.token)) return null;
+
+        appConfig.onetimeAccessToken = tokenResp.token;
+
+        GlobalPayLinkResponse linkResp = createHostedPaymentLink(regulatoryTransactionFeeId, appConfig);
+        return linkResp != null ? linkResp.url : null;
+    }
+
+    private static AppConfig getGlobalPayAppConfig(Id regulatoryTransactionFeeId){
+        string healthAuth = getHealthAuthorityCode(regulatoryTransactionFeeId);
+        if(string.isNotBlank(healthAuth)){
+            PHOCSGlobalPayConfig__mdt config = PHOCSGlobalPayConfig__mdt.getInstance(healthAuth);
+            AppConfig accessTokenRequestBody = new AppConfig();
+            accessTokenRequestBody.appId = config.AppId__c;
+            accessTokenRequestBody.appToken = config.AppKey__c;
+            accessTokenRequestBody.merchantId = config.MerchantId__c;
+            accessTokenRequestBody.nonce = Datetime.now().format('yyyy-MM-dd\'T\'HH:mm:ss.SSS\'Z\'');
+            accessTokenRequestBody.secret = getAppSecret(accessTokenRequestBody.nonce,config.AppKey__c);
+            return accessTokenRequestBody;
+        }
+        return null;
+    }
+
+    private static string getAppSecret(string nonce, string appToken) {
+        Blob dataToHashBlob = Blob.valueOf(nonce + appToken);
+        Blob sha512Hash = Crypto.generateDigest('SHA-512', dataToHashBlob);
+        return EncodingUtil.convertToHex(sha512Hash);
     }
 
     private static string getHealthAuthorityCode(Id regulatoryTransactionFeeId) {
@@ -44,38 +69,29 @@ public with sharing class PHOCSGlobalPayHandler {
         return healthAuth;
     }
     
-    private static string getAppSecret(string appKey, string nonce){
-        return '';
+    private static String getPHOCSSiteDomain() {
+        DomainSite ds = [
+            SELECT Domain.Domain
+            FROM DomainSite
+            WHERE Site.Name = 'phocsportal'
+            LIMIT 1
+        ];
+        return 'https://' + ds?.Domain?.Domain;
     }
-
-    @AuraEnabled(cacheable=true)
-    public static String getPaymentLinkUrl(Id regulatoryTransactionFeeId) {
-        GlobalPayAccessTokenResponse tokenResp = getAccessToken(regulatoryTransactionFeeId);
-        if (tokenResp == null || String.isBlank(tokenResp.token)) return null;
-
-        GlobalPayLinkResponse linkResp = createHostedPaymentLink(regulatoryTransactionFeeId, tokenResp.token);
-        return linkResp != null ? linkResp.url : null;
-    }
-
-    private static GlobalPayAccessTokenResponse getAccessToken(Id regulatoryTransactionFeeId) {    
-        string healthAuth = getHealthAuthorityCode(regulatoryTransactionFeeId);
-        if(string.isBlank(healthAuth)) return null;
-
-        string appId =  '{!$Credential.GlobalPay.app_id_' + healthAuth + '}'; 
-        string appSecret = '{!$Credential.GlobalPay.app_secret_' + healthAuth + '}'; 
-
+   
+    private static GlobalPayAccessTokenResponse getAccessToken(AppConfig appConfig) {        
         HttpRequest req = new HttpRequest();
         req.setEndpoint(AccessTokenEndpointUrl);
         req.setMethod('POST');
         req.setHeader('Content-Type', 'application/json');
-        req.setHeader('X-GP-Version', '{!$Credential.GlobalPay.xgp_Version}');
+        req.setHeader('X-GP-Version', '2021-03-22');
 
-        AccessTokenRequestBody body = new AccessTokenRequestBody(
-            appId,
-            appSecret,
-            'client_credentials',
-            '{!$Credential.GlobalPay.nonce}'
-        );
+        AccessTokenRequestBody body = new AccessTokenRequestBody();
+        body.app_id = appConfig.appId;
+        body.secret = appConfig.secret;
+        body.grant_type = 'client_credentials';
+        body.nonce = appConfig.nonce;
+
         req.setBody(JSON.serialize(body));
         try {
             HttpResponse res = new Http().send(req);
@@ -90,23 +106,18 @@ public with sharing class PHOCSGlobalPayHandler {
         return null;
     }
 
-    private static GlobalPayLinkResponse createHostedPaymentLink(Id recordId, String accessToken) {
-
-        string healthAuth = getHealthAuthorityCode(recordId);
-        if(string.isBlank(healthAuth)) return null;
-
-        string merchantId = '{!$Credential.GlobalPay.merchant_id_' + healthAuth + '}';
+    private static GlobalPayLinkResponse createHostedPaymentLink(Id recordId, AppConfig appConfig) {
 
         HttpRequest req = new HttpRequest();
         req.setEndpoint(PaymentLinkEndpointUrl);
         req.setMethod('POST');
         req.setHeader('Content-Type', 'application/json');
-        req.setHeader('Authorization', 'Bearer ' + accessToken);
-        req.setHeader('X-GP-Version', '{!$Credential.GlobalPay.xgp_Version}');
+        req.setHeader('Authorization', 'Bearer ' + appConfig.onetimeAccessToken);
+        req.setHeader('X-GP-Version', '2021-03-22');
 
         PaymentLinkRequestBody requestBody = new PaymentLinkRequestBody();
         requestBody.account_name = 'pay_link_hpp';
-        requestBody.merchant_id = merchantId;
+        requestBody.merchant_id = appConfig.merchantId;
         requestBody.type = 'HOSTED_PAYMENT_PAGE';
         requestBody.name = recordId;
         requestBody.description = 'Regulatory Transaction Fee details';
@@ -147,40 +158,42 @@ public with sharing class PHOCSGlobalPayHandler {
         return null;
     }
 
-    public class AccessTokenRequestBody {
-        public String app_id;
-        public String secret;
-        public String grant_type;
-        public String nonce;
-
-        public AccessTokenRequestBody(String appId, String appSecret, String grantType, String nonceValue) {
-            this.app_id = appId;
-            this.secret = appSecret;
-            this.grant_type = grantType;
-            this.nonce = nonceValue;
-        }
+    private class AppConfig {
+        private String appId;
+        private String appToken;
+        private string onetimeAccessToken;
+        private String secret;
+        private String nonce;
+        private String merchantId;
     }
 
-    public class PaymentLinkRequestBody {
-        public String account_name;
-        public String merchant_id;
-        public String type;
-        public String name;
-        public String description;
-        public String reference;
-        public PaymentLinkRequestPayerDetail payer;
-        public Map<String, Object> order;
-        public PaymentResponseNotifications notifications;
+    private class AccessTokenRequestBody {
+        private String app_id ;
+        private String secret;
+        private String nonce;
+        private String grant_type;
     }
 
-    public class PaymentLinkRequestPayerDetail {
-        public String name;
-        public String language;
-        public String email;
-        public PaymentLinkRequestMobilePhoneDetail mobile_phone;
-        public PaymentLinkRequestBillingAddressDetail billing_address;
+    private class PaymentLinkRequestBody {
+        private String account_name;
+        private String merchant_id;
+        private String type;
+        private String name;
+        private String description;
+        private String reference;
+        private PaymentLinkRequestPayerDetail payer;
+        private Map<String, Object> order;
+        private PaymentResponseNotifications notifications;
+    }
 
-        public PaymentLinkRequestPayerDetail(String payerName, String languageCode, String emailAddress, PaymentLinkRequestMobilePhoneDetail mobilePhone, PaymentLinkRequestBillingAddressDetail billingAddress) {
+    private class PaymentLinkRequestPayerDetail {
+        private String name;
+        private String language;
+        private String email;
+        private PaymentLinkRequestMobilePhoneDetail mobile_phone;
+        private PaymentLinkRequestBillingAddressDetail billing_address;
+
+        private PaymentLinkRequestPayerDetail(String payerName, String languageCode, String emailAddress, PaymentLinkRequestMobilePhoneDetail mobilePhone, PaymentLinkRequestBillingAddressDetail billingAddress) {
             this.name = payerName;
             this.language = languageCode;
             this.email = emailAddress;
@@ -189,25 +202,25 @@ public with sharing class PHOCSGlobalPayHandler {
         }
     }
 
-    public class PaymentLinkRequestMobilePhoneDetail {
-        public String country_code;
-        public String subscriber_number;
+    private class PaymentLinkRequestMobilePhoneDetail {
+        private String country_code;
+        private String subscriber_number;
 
-        public PaymentLinkRequestMobilePhoneDetail(String countryCode, String subscriberNumber) {
+        private PaymentLinkRequestMobilePhoneDetail(String countryCode, String subscriberNumber) {
             this.country_code = countryCode;
             this.subscriber_number = subscriberNumber;
         }
     }
 
-    public class PaymentLinkRequestBillingAddressDetail {
-        public String line_1;
-        public String line_2;
-        public String line_3;
-        public String city;
-        public String postal_code;
-        public String country;
+    private class PaymentLinkRequestBillingAddressDetail {
+        private String line_1;
+        private String line_2;
+        private String line_3;
+        private String city;
+        private String postal_code;
+        private String country;
 
-        public PaymentLinkRequestBillingAddressDetail(String line1, String line2, String line3, String cityName, String postalCode, String countryCode) {
+        private PaymentLinkRequestBillingAddressDetail(String line1, String line2, String line3, String cityName, String postalCode, String countryCode) {
             this.line_1 = line1;
             this.line_2 = line2;
             this.line_3 = line3;
@@ -217,14 +230,14 @@ public with sharing class PHOCSGlobalPayHandler {
         }
     }
 
-    public class PaymentLinkRequestOrderDetail {
-        public String amount;
-        public String currencyCode;
-        public String reference;
-        public TransactionConfiguration transaction_configuration;
-        public PaymentMethodConfiguration payment_method_configuration;
+    private class PaymentLinkRequestOrderDetail {
+        private String amount;
+        private String currencyCode;
+        private String reference;
+        private TransactionConfiguration transaction_configuration;
+        private PaymentMethodConfiguration payment_method_configuration;
 
-        public PaymentLinkRequestOrderDetail(String amount, String currencyCode, String reference,
+        private PaymentLinkRequestOrderDetail(String amount, String currencyCode, String reference,
                                             TransactionConfiguration txConfig,
                                             PaymentMethodConfiguration pmConfig) {
             this.amount = amount;
@@ -234,7 +247,7 @@ public with sharing class PHOCSGlobalPayHandler {
             this.payment_method_configuration = pmConfig;
         }
 
-        public Map<String, Object> toMap() {
+        private Map<String, Object> toMap() {
             return new Map<String, Object>{
                 'amount' => amount,
                 'currency' => currencyCode,
@@ -245,13 +258,13 @@ public with sharing class PHOCSGlobalPayHandler {
         }
     }
 
-    public class TransactionConfiguration {
-        public String channel;
-        public String country;
-        public String capture_mode;
-        public List<String> allowed_payment_methods;
+    private class TransactionConfiguration {
+        private String channel;
+        private String country;
+        private String capture_mode;
+        private List<String> allowed_payment_methods;
 
-        public TransactionConfiguration(String channelType, String countryCode, String captureMode, List<String> allowedPaymentMethods) {
+        private TransactionConfiguration(String channelType, String countryCode, String captureMode, List<String> allowedPaymentMethods) {
             this.channel = channelType;
             this.country = countryCode;
             this.capture_mode = captureMode;
@@ -259,76 +272,76 @@ public with sharing class PHOCSGlobalPayHandler {
         }
     }
 
-    public class PaymentMethodConfiguration {
-        public Authentications authentications;
+    private class PaymentMethodConfiguration {
+        private Authentications authentications;
 
-        public PaymentMethodConfiguration(Authentications authenticationPreference) {
+        private PaymentMethodConfiguration(Authentications authenticationPreference) {
             this.authentications = authenticationPreference;
         }
     }
 
-    public class Authentications {
-        public String preference;
+    private class Authentications {
+        private String preference;
 
-        public Authentications(String preferenceSetting) {
+        private Authentications(String preferenceSetting) {
             this.preference = preferenceSetting;
         }
     }
 
-    public class PaymentResponseNotifications {
-        public String return_url;
-        public String status_url;
+    private class PaymentResponseNotifications {
+        private String return_url;
+        private String status_url;
 
-        public PaymentResponseNotifications(String returnUrl, String statusCallbackUrl) {
+        private PaymentResponseNotifications(String returnUrl, String statusCallbackUrl) {
             this.return_url = returnUrl;
             this.status_url = statusCallbackUrl;
         }
     }
 
-    public class GlobalPayAccessTokenResponse {
-        public String token;
-        public String type;
-        public Scope scope;
-        public String app_id;
-        public String app_name;
-        public String time_created;
-        public Integer seconds_to_expire;
-        public String email;
+    private class GlobalPayAccessTokenResponse {
+        private String token;
+       private String type;
+       private Scope scope;
+       private String app_id;
+       private String app_name;
+       private String time_created;
+       private Integer seconds_to_expire;
+       private String email;
     }
 
-    public class Scope {
-        public String merchant_id;
-        public String merchant_name;
+   private class Scope {
+       private String merchant_id;
+       private String merchant_name;
     }
 
-    public class GlobalPayLinkResponse {
-        public String id;
-        public String account_name;
-        public String url;
-        public String status;
-        public String type;
-        public String usage_mode;
-        public String usage_limit;
-        public String name;
-        public String description;
-        public String expiration_date;
-        public Order order;
-        public Action action;
+   private class GlobalPayLinkResponse {
+       private String id;
+       private String account_name;
+       private String url;
+       private String status;
+       private String type;
+       private String usage_mode;
+       private String usage_limit;
+       private String name;
+       private String description;
+       private String expiration_date;
+       private Order order;
+       private Action action;
     }
 
-    public class Order {
-        public String amount;
-        public String currencyTest;
-        public String reference;
-        public TransactionConfiguration transaction_configuration;
+   private class Order {
+       private String amount;
+       private String currencyTest;
+       private String reference;
+       private TransactionConfiguration transaction_configuration;
     }
 
-    public class Action {
-        public String id;
-        public String type;
-        public String time_created;
-        public String result_code;
-        public String app_id;
-        public String app_name;
+   private class Action {
+       private String id;
+       private String type;
+       private String time_created;
+       private String result_code;
+       private String app_id;
+       private String app_name;
     }
 }
