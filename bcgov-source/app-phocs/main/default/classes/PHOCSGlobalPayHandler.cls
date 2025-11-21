@@ -1,5 +1,4 @@
 public with sharing class PHOCSGlobalPayHandler {
-
     private static final Map<string, string> healthAuthorityMapping = new Map<string, string>{
         'Island Health - Island' => 'IS',
         'Interior Health - IH' => 'IH',
@@ -8,7 +7,7 @@ public with sharing class PHOCSGlobalPayHandler {
         'Vancouver Coastal Health - VCH' => 'VCH'
     };
 
-    private static PHOCSGlobalPayConfig__mdt globalPaySetting = PHOCSGlobalPayConfig__mdt.getInstance('Default'); 
+    private static PHOCSGlobalPayEndpoints__mdt globalPaySetting = PHOCSGlobalPayEndpoints__mdt.getInstance('Default'); 
     private static String AccessTokenEndpointUrl {
         get { return globalPaySetting.AccssTokenEndpoint__c; }
     }
@@ -32,7 +31,7 @@ public with sharing class PHOCSGlobalPayHandler {
     }
 
     private static string getHealthAuthorityCode(Id regulatoryTransactionFeeId) {
-        string healthAuth = '';
+        string healthAuth = '';        
         if(string.isNotBlank(regulatoryTransactionFeeId)){
             RegulatoryTrxnFee[] regulatoryTrxnFees = [select Id, Account.HealthAuthority__c from RegulatoryTrxnFee where Id=:regulatoryTransactionFeeId];
             if(regulatoryTrxnFees != null && !regulatoryTrxnFees.isEmpty()){
@@ -43,6 +42,10 @@ public with sharing class PHOCSGlobalPayHandler {
             }
         }
         return healthAuth;
+    }
+    
+    private static string getAppSecret(string appKey, string nonce){
+        return '';
     }
 
     @AuraEnabled(cacheable=true)
@@ -59,7 +62,7 @@ public with sharing class PHOCSGlobalPayHandler {
         if(string.isBlank(healthAuth)) return null;
 
         string appId =  '{!$Credential.GlobalPay.app_id_' + healthAuth + '}'; 
-        string appSecret = '{!.GlobalPay.app_secret_' + healthAuth + '}'; 
+        string appSecret = '{!$Credential.GlobalPay.app_secret_' + healthAuth + '}'; 
 
         HttpRequest req = new HttpRequest();
         req.setEndpoint(AccessTokenEndpointUrl);
@@ -68,8 +71,8 @@ public with sharing class PHOCSGlobalPayHandler {
         req.setHeader('X-GP-Version', '{!$Credential.GlobalPay.xgp_Version}');
 
         AccessTokenRequestBody body = new AccessTokenRequestBody(
-            '{!$Credential.GlobalPay.app_id}',
-            '{!$Credential.GlobalPay.app_secret}',
+            appId,
+            appSecret,
             'client_credentials',
             '{!$Credential.GlobalPay.nonce}'
         );
@@ -79,6 +82,7 @@ public with sharing class PHOCSGlobalPayHandler {
             if (res.getStatusCode() == 200) {
                 return (GlobalPayAccessTokenResponse) JSON.deserialize(res.getBody(), GlobalPayAccessTokenResponse.class);
             }
+            system.assert(false, res.getBody());
         } catch (Exception e) {
             System.debug('Access Token Error: ' + e.getMessage());
             system.assert(false, e);
@@ -91,7 +95,7 @@ public with sharing class PHOCSGlobalPayHandler {
         string healthAuth = getHealthAuthorityCode(recordId);
         if(string.isBlank(healthAuth)) return null;
 
-        string merchantId = '{!.GlobalPay.merchant_id_' + healthAuth + '}';
+        string merchantId = '{!$Credential.GlobalPay.merchant_id_' + healthAuth + '}';
 
         HttpRequest req = new HttpRequest();
         req.setEndpoint(PaymentLinkEndpointUrl);
