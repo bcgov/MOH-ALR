@@ -297,7 +297,8 @@ public with sharing class PHOCSGlobalPayHandler {
             this.status_url = statusCallbackUrl;
         }
     }
-
+   
+    @TestVisible
     private class GlobalPayAccessTokenResponse {
         private String token;
        private String type;
@@ -313,7 +314,8 @@ public with sharing class PHOCSGlobalPayHandler {
        private String merchant_id;
        private String merchant_name;
     }
-
+    
+    @TestVisible
    private class GlobalPayLinkResponse {
        private String id;
        private String account_name;

@@ -24,10 +24,8 @@ global without sharing class PHOCSGlobalPayResponseHandler {
                 throw new SecurityException('Invalid signature — webhook not from Global Payments');
             }
 
-            GlobalPaymentStatus response = new GlobalPaymentStatus().parse(rawBody);
-            System.debug('Validated Payload: ' + payload);
-
-            if(string.isNotBlank(response.reference) && Id.valueOf(response.reference)){
+            GlobalPaymentStatus response = new GlobalPaymentStatus().parse(rawBody);            
+            if(string.isNotBlank(response.reference)){
                 RegulatoryTrxnFee fees = new RegulatoryTrxnFee(Id=response.reference);
                 fees.PaymentResponse__c = rawBody;
                 fees.ReferenceNumber__c = response.id;
