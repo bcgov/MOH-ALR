@@ -29,7 +29,9 @@ global without sharing class PHOCSGlobalPayResponseHandler {
                 RegulatoryTrxnFee fees = new RegulatoryTrxnFee(Id=response.reference);
                 fees.PaymentResponse__c = rawBody;
                 fees.ReferenceNumber__c = response.id;
-                fees.Status = response.payment_method.message;
+                if( response.payment_method.message == 'CAPTURED' || response.payment_method.message == 'FUNDED'){
+                    fees.Status = 'Paid';
+                }
                 update fees;
             }
             

@@ -1,11 +1,4 @@
 public with sharing class PHOCSGlobalPayHandler {
-    private static final Map<string, string> healthAuthorityMapping = new Map<string, string>{
-        'Island Health - Island' => 'IS',
-        'Interior Health - IH' => 'IH',
-        'Fraser Health - FH' => 'FH',
-        'Northern Health - NH' => 'NH'
-    };
-
     private static PHOCSGlobalPayEndpoints__mdt globalPaySetting = PHOCSGlobalPayEndpoints__mdt.getInstance('Default');
     private static String AccessTokenEndpointUrl {
         get { return globalPaySetting.BaseEndpoint__c + globalPaySetting.AccssTokenEndpoint__c; }
@@ -35,16 +28,20 @@ public with sharing class PHOCSGlobalPayHandler {
     }
 
     private static AppConfig getGlobalPayAppConfig(Id regulatoryTransactionFeeId){
-        string healthAuth = getHealthAuthorityCode(regulatoryTransactionFeeId);
+        string healthAuth = getHealthAuthority(regulatoryTransactionFeeId);
         if(string.isNotBlank(healthAuth)){
-            PHOCSGlobalPayConfig__mdt config = PHOCSGlobalPayConfig__mdt.getInstance(healthAuth);
-            AppConfig accessTokenRequestBody = new AppConfig();
-            accessTokenRequestBody.appId = config.AppId__c;
-            accessTokenRequestBody.appToken = config.AppKey__c;
-            accessTokenRequestBody.merchantId = config.MerchantId__c;
-            accessTokenRequestBody.nonce = Datetime.now().format('yyyy-MM-dd\'T\'HH:mm:ss.SSS\'Z\'');
-            accessTokenRequestBody.secret = getAppSecret(accessTokenRequestBody.nonce,config.AppKey__c);
-            return accessTokenRequestBody;
+            PHOCSHealthAuthorityPaymentSetting__mdt config = [SELECT Id, PaymentSystem__c, HealthAuthority__c,AppId__c,AppKey__c,MerchantId__c
+                                                                        FROM PHOCSHealthAuthorityPaymentSetting__mdt 
+                                                                        WHERE HealthAuthority__c = :healthAuth LIMIT 1];
+            if(config != null){                                                   
+                AppConfig accessTokenRequestBody = new AppConfig();
+                accessTokenRequestBody.appId = config.AppId__c;
+                accessTokenRequestBody.appToken = config.AppKey__c;
+                accessTokenRequestBody.merchantId = config.MerchantId__c;
+                accessTokenRequestBody.nonce = Datetime.now().format('yyyy-MM-dd\'T\'HH:mm:ss.SSS\'Z\'');
+                accessTokenRequestBody.secret = getAppSecret(accessTokenRequestBody.nonce,config.AppKey__c);
+                return accessTokenRequestBody;
+            }
         }
         return null;
     }
@@ -55,15 +52,12 @@ public with sharing class PHOCSGlobalPayHandler {
         return EncodingUtil.convertToHex(sha512Hash);
     }
 
-    private static string getHealthAuthorityCode(Id regulatoryTransactionFeeId) {
+    private static string getHealthAuthority(Id regulatoryTransactionFeeId) {
         string healthAuth = '';        
         if(string.isNotBlank(regulatoryTransactionFeeId)){
             RegulatoryTrxnFee[] regulatoryTrxnFees = [select Id, Account.HealthAuthority__c from RegulatoryTrxnFee where Id=:regulatoryTransactionFeeId];
             if(regulatoryTrxnFees != null && !regulatoryTrxnFees.isEmpty()){
-                string ha = regulatoryTrxnFees[0].Account?.HealthAuthority__c;
-                if(string.isNotBlank(ha)){
-                    healthAuth = healthAuthorityMapping.get(ha);
-                }
+               return regulatoryTrxnFees[0].Account?.HealthAuthority__c;
             }
         }
         return healthAuth;
@@ -98,7 +92,6 @@ public with sharing class PHOCSGlobalPayHandler {
             if (res.getStatusCode() == 200) {
                 return (GlobalPayAccessTokenResponse) JSON.deserialize(res.getBody(), GlobalPayAccessTokenResponse.class);
             }
-            system.assert(false, res.getBody());
         } catch (Exception e) {
             System.debug('Access Token Error: ' + e.getMessage());
             system.assert(false, e);
@@ -166,7 +159,7 @@ public with sharing class PHOCSGlobalPayHandler {
         private String nonce;
         private String merchantId;
     }
-
+    
     private class AccessTokenRequestBody {
         private String app_id ;
         private String secret;
@@ -300,7 +293,8 @@ public with sharing class PHOCSGlobalPayHandler {
    
     @TestVisible
     private class GlobalPayAccessTokenResponse {
-        private String token;
+       @TestVisible 
+       private String token;
        private String type;
        private Scope scope;
        private String app_id;
@@ -315,10 +309,13 @@ public with sharing class PHOCSGlobalPayHandler {
        private String merchant_name;
     }
     
-    @TestVisible
+   @TestVisible
    private class GlobalPayLinkResponse {
+       @TestVisible
        private String id;
        private String account_name;
+       
+       @TestVisible
        private String url;
        private String status;
        private String type;
