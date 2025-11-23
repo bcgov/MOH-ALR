@@ -13,20 +13,46 @@ public with sharing class PHOCSGlobalPayHandler {
         get { return  getPHOCSSiteDomain() + globalPaySetting.PaymentStatusEndpoint__c; }
     }
     
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled
     public static String getPaymentLinkUrl(Id regulatoryTransactionFeeId) {
-        AppConfig appConfig = getGlobalPayAppConfig(regulatoryTransactionFeeId);
-        if(appConfig == null) return null;
+        if (string.isBlank(regulatoryTransactionFeeId)) return null;
 
-        GlobalPayAccessTokenResponse tokenResp = getAccessToken(appConfig);
-        if (tokenResp == null || String.isBlank(tokenResp.token)) return null;
+        AppConfig appConfig = getAccessToken(regulatoryTransactionFeeId);
+        if (String.isBlank(appConfig.onetimeAccessToken)) return null;
 
-        appConfig.onetimeAccessToken = tokenResp.token;
-
-        GlobalPayLinkResponse linkResp = createHostedPaymentLink(regulatoryTransactionFeeId, appConfig);
+        NewGlobalPayLinkResponse linkResp = createHostedPaymentLink(regulatoryTransactionFeeId, appConfig);
+        if(string.isNotBlank(linkResp?.url)){
+            RegulatoryTrxnFee regulatoryTrxnFeeRec =[select GlobalPayPaymentLink__c,GlobalPayPaymentLinkId__c From RegulatoryTrxnFee where Id=:regulatoryTransactionFeeId limit 1];
+            regulatoryTrxnFeeRec.GlobalPayPaymentLinkId__c = linkResp.id;
+            regulatoryTrxnFeeRec.GlobalPayPaymentLink__c = linkResp.url;
+            update regulatoryTrxnFeeRec;
+        }
         return linkResp != null ? linkResp.url : null;
     }
+    
+    @AuraEnabled
+    public static String updatePaymentStatus(Id regulatoryTransactionFeeId) {
+        if (string.isBlank(regulatoryTransactionFeeId)) return null;
 
+        AppConfig appConfig = getAccessToken(regulatoryTransactionFeeId);
+        if (String.isBlank(appConfig.onetimeAccessToken)) return null;
+		
+        RegulatoryTrxnFee regulatoryTrxnFeeRec =[select GlobalPayPaymentLink__c,
+                                                        GlobalPayPaymentLinkId__c,
+                                                 		GlobalPayPaymentStatus__c
+                                                 From RegulatoryTrxnFee 
+                                                 where Id=:regulatoryTransactionFeeId limit 1];
+        
+        GlobalPayLinkDetailsResponse linkResp = getPaymentLinkStatus(regulatoryTrxnFeeRec, appConfig);
+        if(linkResp.transactions != null && linkResp.transactions.transaction_list != null && !linkResp.transactions.transaction_list.isEmpty()){
+            linkResp.transactions.transaction_list.sort();
+            regulatoryTrxnFeeRec.ReferenceNumber__c = linkResp.transactions.transaction_list[0].id;
+            regulatoryTrxnFeeRec.GlobalPayPaymentStatus__c = linkResp.transactions.transaction_list[0].status;
+            update regulatoryTrxnFeeRec;
+        }
+        return linkResp != null ? linkResp.url : null;
+    }
+    
     private static AppConfig getGlobalPayAppConfig(Id regulatoryTransactionFeeId){
         string healthAuth = getHealthAuthority(regulatoryTransactionFeeId);
         if(string.isNotBlank(healthAuth)){
@@ -73,7 +99,10 @@ public with sharing class PHOCSGlobalPayHandler {
         return 'https://' + ds?.Domain?.Domain;
     }
    
-    private static GlobalPayAccessTokenResponse getAccessToken(AppConfig appConfig) {        
+    private static AppConfig getAccessToken(Id regulatoryTransactionFeeId) {        
+        AppConfig appConfig = getGlobalPayAppConfig(regulatoryTransactionFeeId);
+        if(appConfig == null) return null;
+        
         HttpRequest req = new HttpRequest();
         req.setEndpoint(AccessTokenEndpointUrl);
         req.setMethod('POST');
@@ -90,17 +119,17 @@ public with sharing class PHOCSGlobalPayHandler {
         try {
             HttpResponse res = new Http().send(req);
             if (res.getStatusCode() == 200) {
-                return (GlobalPayAccessTokenResponse) JSON.deserialize(res.getBody(), GlobalPayAccessTokenResponse.class);
+                 GlobalPayAccessTokenResponse tokenResp = (GlobalPayAccessTokenResponse) JSON.deserialize(res.getBody(), GlobalPayAccessTokenResponse.class);
+                 appConfig.onetimeAccessToken = tokenResp.token;
+                 return appConfig;
             }
         } catch (Exception e) {
             System.debug('Access Token Error: ' + e.getMessage());
-            system.assert(false, e);
-        }
-        return null;
+        } 
+        return appConfig;
     }
 
-    private static GlobalPayLinkResponse createHostedPaymentLink(Id recordId, AppConfig appConfig) {
-
+    private static NewGlobalPayLinkResponse createHostedPaymentLink(Id recordId, AppConfig appConfig) {
         HttpRequest req = new HttpRequest();
         req.setEndpoint(PaymentLinkEndpointUrl);
         req.setMethod('POST');
@@ -142,7 +171,7 @@ public with sharing class PHOCSGlobalPayHandler {
         try {
             HttpResponse res = new Http().send(req);
             if (res.getStatusCode() == 200 || res.getStatusCode() == 201) {
-                return (GlobalPayLinkResponse) JSON.deserialize(res.getBody(), GlobalPayLinkResponse.class);
+                return (NewGlobalPayLinkResponse) JSON.deserialize(res.getBody(), NewGlobalPayLinkResponse.class);
             }
         } catch (Exception e) {
             system.assert(false, e);
@@ -150,6 +179,33 @@ public with sharing class PHOCSGlobalPayHandler {
         }
         return null;
     }
+    
+    private static GlobalPayLinkDetailsResponse getPaymentLinkStatus(RegulatoryTrxnFee regulatoryTrxnFeeRec, AppConfig appConfig) {
+        HttpRequest req = new HttpRequest();
+        req.setEndpoint(PaymentLinkEndpointUrl + '/' + regulatoryTrxnFeeRec.GlobalPayPaymentLinkId__c);
+        req.setMethod('POST');
+        req.setHeader('Content-Type', 'application/json');
+        req.setHeader('Authorization', 'Bearer ' + appConfig.onetimeAccessToken);
+        req.setHeader('X-GP-Version', '2021-03-22');
+        
+        HttpResponse res = new Http().send(req);
+        if (res.getStatusCode() != 200) {
+            throw new CalloutException('GlobalPay callout failed: ' + res.getStatus() + ' - ' + res.getBody());
+        }
+   
+    	return (GlobalPayLinkDetailsResponse)JSON.deserialize(res.getBody(), GlobalPayLinkDetailsResponse.class);
+    }
+    
+    public class TransactionItemSortByTime implements Comparator<TransactionItem> {
+        public Integer compare(TransactionItem a, TransactionItem b) { 
+            if (a == null && b == null) return 0;
+            if (a == null) return -1;
+            if (b == null) return 1;
+
+            if (a.time_created == b.time_created) return 0;
+            return a.time_created > b.time_created ? 1 : -1;
+        }
+	}
 
     private class AppConfig {
         private String appId;
@@ -310,7 +366,7 @@ public with sharing class PHOCSGlobalPayHandler {
     }
     
    @TestVisible
-   private class GlobalPayLinkResponse {
+   private class NewGlobalPayLinkResponse {
        @TestVisible
        private String id;
        private String account_name;
@@ -343,4 +399,55 @@ public with sharing class PHOCSGlobalPayHandler {
        private String app_id;
        private String app_name;
     }
+    
+    public class GlobalPayLinkDetailsResponse {
+        public String merchant_id;
+        public String merchant_name;
+        public String account_id;
+        public String account_name;
+        public String id;
+        public String url;
+        public String status;
+        public String type;
+        public String usage_mode;
+        public String usage_limit;
+        public String reference;
+        public String name;
+        public String description;
+        public String shippable;
+        public String shipping_amount;
+        public String usage_count;
+        public String viewed_count;
+        public Datetime expiration_date;
+        public List<Object> images;
+        public Notifications notifications;
+        public Transactions transactions;
+        public Action action;
+    }
+
+    public class Notifications {
+        public String return_url;
+        public String status_url;
+        public String cancel_url;
+    }
+
+    public class Transactions {
+        public String amount;
+        public String channel;
+        public String country;
+        public String transactionCurrency;
+        public List<String> allowed_payment_methods;
+        public List<TransactionItem> transaction_list;
+    }
+    
+	public class TransactionItem {
+        public String id;
+        public Datetime time_created;
+        public String status;
+        public String type;
+        public String channel;
+        public String amount;
+        public String transactionCurrency;
+        public String reference;
+   }
 }

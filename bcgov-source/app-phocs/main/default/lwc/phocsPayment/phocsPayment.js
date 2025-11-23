@@ -2,10 +2,15 @@ import { LightningElement, wire, track, api } from 'lwc';
 import getPaymentLinkUrl from '@salesforce/apex/PHOCSGlobalPayHandler.getPaymentLinkUrl';    
 import { CurrentPageReference, NavigationMixin } from 'lightning/navigation';
 import getPaymentSystemRedirectInfo from '@salesforce/apex/PHOCSPaymentController.getPaymentSystemRedirectInfo';
+import updatePaymentStatus from '@salesforce/apex/PHOCSGlobalPayHandler.updatePaymentStatus';
 
 
 export default class PhocsPayment extends NavigationMixin(LightningElement) {
     @api regulatoryTransactionFeeId;
+    
+    @api source;
+    @api state;
+
     error;
 
     ticket;
@@ -24,11 +29,20 @@ export default class PhocsPayment extends NavigationMixin(LightningElement) {
             this.recordId = currentPageReference.state.recordId;
             this.amount = currentPageReference.state.Amount;
             this.customerId = currentPageReference.state.CustomerId;
+            this.source = currentPageReference.state.source;
+            this.state = currentPageReference.state.state;
         }
     }
 
     connectedCallback() {
-        this.redirectPaymentGateway();
+        const url = new URL(window.location.href);
+        this.source = url.searchParams.get('source');
+
+        if(this.source  === "GP" && this.state === "1"){
+           this.updateGlobalPaymentStaus()
+        }else{
+            this.redirectPaymentGateway();
+        }
     }
 
     redirectPaymentGateway(){
@@ -42,7 +56,25 @@ export default class PhocsPayment extends NavigationMixin(LightningElement) {
                     this.isGlobalPay = true;
                     this.globalPayHandler();
                 }
-            })
+        })
+    }
+
+    updateGlobalPaymentStaus(){
+         updatePaymentStatus({regulatoryTransactionFeeId:this.regulatoryTransactionFeeId})
+            .then(result => {
+               this.redirectToRegTransactionFeePage();
+        })
+    }
+    redirectToRegTransactionFeePage(){
+        this[NavigationMixin.Navigate]({
+            type: 'comm__namedPage',
+            attributes: {
+                name: 'PHOCSRegulatoryTransactionFeeDetails__c'
+            },
+            state: {
+                recordId: this.recordId
+            }
+        });
     }
 
     /* ============================================================
