@@ -31,26 +31,25 @@ public with sharing class PHOCSGlobalPayHandler {
     }
     
     @AuraEnabled
-    public static String updatePaymentStatus(Id regulatoryTransactionFeeId) {
-        if (string.isBlank(regulatoryTransactionFeeId)) return null;
-
-        AppConfig appConfig = getAccessToken(regulatoryTransactionFeeId);
-        if (String.isBlank(appConfig.onetimeAccessToken)) return null;
-		
-        RegulatoryTrxnFee regulatoryTrxnFeeRec =[select GlobalPayPaymentLink__c,
-                                                        GlobalPayPaymentLinkId__c,
-                                                 		GlobalPayPaymentStatus__c
-                                                 From RegulatoryTrxnFee 
-                                                 where Id=:regulatoryTransactionFeeId limit 1];
-        
-        GlobalPayLinkDetailsResponse linkResp = getPaymentLinkStatus(regulatoryTrxnFeeRec, appConfig);
-        if(linkResp.transactions != null && linkResp.transactions.transaction_list != null && !linkResp.transactions.transaction_list.isEmpty()){
-            linkResp.transactions.transaction_list.sort();
-            regulatoryTrxnFeeRec.ReferenceNumber__c = linkResp.transactions.transaction_list[0].id;
-            regulatoryTrxnFeeRec.GlobalPayPaymentStatus__c = linkResp.transactions.transaction_list[0].status;
-            update regulatoryTrxnFeeRec;
+    public static void updatePaymentStatus(Id regulatoryTransactionFeeId) {
+        if (string.isNotBlank(regulatoryTransactionFeeId)){
+            AppConfig appConfig = getAccessToken(regulatoryTransactionFeeId);           
+            if (String.isNotBlank(appConfig.onetimeAccessToken)){         
+                RegulatoryTrxnFee regulatoryTrxnFeeRec =[select GlobalPayPaymentLink__c,
+                                                                GlobalPayPaymentLinkId__c,
+                                                                GlobalPayPaymentStatus__c
+                                                         From RegulatoryTrxnFee 
+                                                         where Id=:regulatoryTransactionFeeId limit 1];
+                
+                GlobalPayLinkDetailsResponse linkResp = getPaymentLinkStatus(regulatoryTrxnFeeRec, appConfig);
+                if(linkResp.transactions != null && linkResp.transactions.transaction_list != null && !linkResp.transactions.transaction_list.isEmpty()){
+                    linkResp.transactions.transaction_list.sort();
+                    regulatoryTrxnFeeRec.ReferenceNumber__c = linkResp.transactions.transaction_list[0].id;
+                    regulatoryTrxnFeeRec.GlobalPayPaymentStatus__c = linkResp.transactions.transaction_list[0].status;
+                    update regulatoryTrxnFeeRec;
+                }
+            }
         }
-        return linkResp != null ? linkResp.url : null;
     }
     
     private static AppConfig getGlobalPayAppConfig(Id regulatoryTransactionFeeId){
@@ -183,8 +182,7 @@ public with sharing class PHOCSGlobalPayHandler {
     private static GlobalPayLinkDetailsResponse getPaymentLinkStatus(RegulatoryTrxnFee regulatoryTrxnFeeRec, AppConfig appConfig) {
         HttpRequest req = new HttpRequest();
         req.setEndpoint(PaymentLinkEndpointUrl + '/' + regulatoryTrxnFeeRec.GlobalPayPaymentLinkId__c);
-        req.setMethod('POST');
-        req.setHeader('Content-Type', 'application/json');
+        req.setMethod('GET');
         req.setHeader('Authorization', 'Bearer ' + appConfig.onetimeAccessToken);
         req.setHeader('X-GP-Version', '2021-03-22');
         
@@ -198,12 +196,15 @@ public with sharing class PHOCSGlobalPayHandler {
     
     public class TransactionItemSortByTime implements Comparator<TransactionItem> {
         public Integer compare(TransactionItem a, TransactionItem b) { 
-            if (a == null && b == null) return 0;
-            if (a == null) return -1;
-            if (b == null) return 1;
+            DateTime aDateTime = (a != null && a.time_created != null) ? a.time_created: null;
+            DateTime bDateTime = (b != null && b.time_created != null) ? b.time_created : null;
 
-            if (a.time_created == b.time_created) return 0;
-            return a.time_created > b.time_created ? 1 : -1;
+            if (aDateTime == null && bDateTime == null) return 0;
+            if (aDateTime == null) return -1;
+            if (bDateTime == null) return 1;
+
+            if (aDateTime == bDateTime) return 0;
+            return aDateTime > bDateTime ? 1 : -1;
         }
 	}
 
