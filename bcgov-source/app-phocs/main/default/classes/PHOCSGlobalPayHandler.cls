@@ -1,4 +1,7 @@
 public with sharing class PHOCSGlobalPayHandler {
+    private static set<string> SUCCESSFUL_STATUS_MESSAGES = new set<String>{'CAPTURED'};
+    private static string STATUS_PAID = 'PAID';
+
     private static PHOCSGlobalPayEndpoints__mdt globalPaySetting = PHOCSGlobalPayEndpoints__mdt.getInstance('Default');
     private static String AccessTokenEndpointUrl {
         get { return globalPaySetting.BaseEndpoint__c + globalPaySetting.AccssTokenEndpoint__c; }
@@ -46,6 +49,10 @@ public with sharing class PHOCSGlobalPayHandler {
                     linkResp.transactions.transaction_list.sort();
                     regulatoryTrxnFeeRec.ReferenceNumber__c = linkResp.transactions.transaction_list[0].id;
                     regulatoryTrxnFeeRec.GlobalPayPaymentStatus__c = linkResp.transactions.transaction_list[0].status;
+                    regulatoryTrxnFeeRec.PaymentDate__c = Date.today();
+                    if(SUCCESSFUL_STATUS_MESSAGES.contains(linkResp.transactions.transaction_list[0].status)){
+                         regulatoryTrxnFeeRec.Status = STATUS_PAID;
+                    }
                     update regulatoryTrxnFeeRec;
                 }
             }
