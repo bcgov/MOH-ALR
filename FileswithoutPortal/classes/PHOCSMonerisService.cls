@@ -152,7 +152,7 @@ public class PHOCSMonerisService {
                 receiptStatus = 'Paid';
             }
             if(receiptWrapper.response.receipt.result == 'd'){
-                receiptStatus = 'Canceled';
+                receiptStatus = 'Due';//Canceled';
             }
             updateRegulatoryTransFee(recordId, transFee.PHOCSMonerisTicketNumber__c, receiptWrapper.response.receipt.cc.reference_no, receiptStatus);
         }
