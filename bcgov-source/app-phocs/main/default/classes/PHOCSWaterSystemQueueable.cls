@@ -86,7 +86,7 @@ public class PHOCSWaterSystemQueueable implements Queueable, Database.AllowsCall
             String podNumber = acc.PODNumber__c;
             String purposeCode = acc.PurposeUseCode__c;
             String wellTag = acc.WellTagNumber__c != null ? acc.WellTagNumber__c.toString() : null;
-            String aquifer;
+            String aquifer = acc.AquiferNumber__c != null ? acc.AquiferNumber__c.toString() : null;
             
             // STEP 1: If License exists → call License API
             PHOCSWaterLicenseService waterLicService = new PHOCSWaterLicenseService();
@@ -109,6 +109,8 @@ public class PHOCSWaterSystemQueueable implements Queueable, Database.AllowsCall
             wellTagMappingData = wellService.mappingData(wellTag);
             if(wellTagMappingData.containsKey('WellTag_AquiferNumber')){
                 aquifer = wellTagMappingData.get('WellTag_AquiferNumber')?.toString();
+            }else{
+                aquifer = null;
             }
             
             // STEP 4: Get Aquifer details

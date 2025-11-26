@@ -26,7 +26,7 @@ public class PHOCSAquifersResponseWrapper {
     public Datetime expiry_date;
     public Datetime retire_date;
     public Geom geom;
-    public Licence_Details licence_details;
+    public LicenceDetails licence_details;
 
     public class Resource {
         public Integer id;
@@ -40,31 +40,37 @@ public class PHOCSAquifersResponseWrapper {
         public List<List<List<List<Double>>>> coordinates;
     }
 
-    public class Licence_Details {
+    public class LicenceDetails {
         public Integer licence_count;
-        public Licences_Updated licences_updated;
+        public LicencesUpdated licences_updated;
         public Integer num_wells_with_ems;
         public Integer num_artesian_wells;
-        public Wells_Updated wells_updated;
+        public WellsUpdated wells_updated;
         public Integer num_wells;
-        public List<Object> obs_wells;
-        public List<Wells_By_Licence> wells_by_licence;
+        public List<ObsWell> obs_wells;
+        public List<WellsByLicence> wells_by_licence;
         public List<Usage> usage;
-        public List<Lic_Qty> lic_qty;
+        public List<LicQty> lic_qty;
         public Boolean hydraulically_connected;
     }
 
-    public class Licences_Updated {
+    public class LicencesUpdated {
         @SerializedName('update_date__max')
         public Datetime updateDateMax;
     }
 
-    public class Wells_Updated {
+    public class WellsUpdated {
         @SerializedName('update_date__max')
         public Datetime updateDateMax;
     }
 
-    public class Wells_By_Licence {
+    public class ObsWell {
+        public Integer well_tag_number;
+        public String observation_well_number;
+        public String observation_well_status;
+    }
+
+    public class WellsByLicence {
         public Integer licence_number;
         public String well_tag_numbers_in_licence;
     }
@@ -72,12 +78,17 @@ public class PHOCSAquifersResponseWrapper {
     public class Usage {
         @SerializedName('purpose__description')
         public String purposeDescription;
-        public Decimal total_qty;
+        public Double total_qty;
     }
 
-    public class Lic_Qty {
+    public class LicQty {
         @SerializedName('purpose__description')
         public String purposeDescription;
-        public Decimal total_qty;
+        public Integer total_qty;
+    }
+
+    // Helper method to deserialize JSON
+    public static PHOCSAquifersResponseWrapper parseJson(String jsonString) {
+        return (PHOCSAquifersResponseWrapper) JSON.deserialize(jsonString, PHOCSAquifersResponseWrapper.class);
     }
 }
