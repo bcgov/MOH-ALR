@@ -124,22 +124,10 @@ public class PHOCSWaterSystemQueueable implements Queueable, Database.AllowsCall
             acc.WellTagNumber__c = wellTag != null ? Decimal.ValueOf(wellTag) : null;
             acc.AquiferNumber__c = aquifer != null ? Decimal.ValueOf(aquifer) : null;
             if(isCacheEnabled.equalsIgnoreCase('true') || Test.isRunningTest()){  
-                // If Water License throw "No water license details available." msg then it will retrain older value
-                if(String.isNotEmpty(acc.WaterLicenseNumber__c) && !waterLicenseMappingData.toString().contains(PHOCSWaterKeys.MSG_NO_WL)){
-                    acc.PHOCSWaterLicenseJSONRespnose__c = JSON.serialize(waterLicenseMappingData);
-                }
-                // If Water Application throw "No water license application details available." msg then it will retrain older value
-                if(String.isNotEmpty(acc.WaterLicenseApplicationNumber__c) && !waterLicenseApplicationMappingData.toString().contains(PHOCSWaterKeys.MSG_NO_WLA)){
-                    acc.PHOCSWaterApplicationJSONResponse__c = JSON.serialize(waterLicenseApplicationMappingData);
-                }
-                // If Water WellTag throw "No well details available." msg then it will retrain older value
-                if(String.isNotEmpty(acc.WellTagNumber__c.ToString()) && !wellTagMappingData.toString().contains(PHOCSWaterKeys.MSG_NO_WELL)){
-                    acc.PHOCSWellTagJSONResponse__c = JSON.serialize(wellTagMappingData);
-                }
-                // If Water Aquifer throw "No aquifer details available." msg then it will retrain older value
-                if(String.isNotEmpty(acc.AquiferNumber__c.toString()) && !aquiferMappingData.toString().contains(PHOCSWaterKeys.MSG_NO_AQ)){
-                    acc.PHOCSAquiferJSONResponse__c = JSON.serialize(aquiferMappingData);
-                }
+                acc.PHOCSWaterLicenseJSONRespnose__c = JSON.serialize(waterLicenseMappingData);
+                acc.PHOCSWaterApplicationJSONResponse__c = JSON.serialize(waterLicenseApplicationMappingData);
+                acc.PHOCSWellTagJSONResponse__c = JSON.serialize(wellTagMappingData);
+                acc.PHOCSAquiferJSONResponse__c = JSON.serialize(aquiferMappingData);
             }
         }
         
