@@ -23,8 +23,8 @@ public class PHOCSAquiferCallout {
 
         HttpResponse res = http.send(req);
 
-        if (res.getStatusCode() == 200) {
-            return (PHOCSAquifersResponseWrapper) JSON.deserialize(res.getBody(), PHOCSAquifersResponseWrapper.class);
+        if (res.getStatusCode() == 200) {            
+            return PHOCSAquifersResponseWrapper.parseJson(res.getBody());
         } else {
             throw new CalloutException('Failed to fetch Aquifer details. Status Code: ' + res.getStatusCode());
         }
