@@ -86,7 +86,7 @@ public class PHOCSWaterSystemQueueable implements Queueable, Database.AllowsCall
             String podNumber = acc.PODNumber__c;
             String purposeCode = acc.PurposeUseCode__c;
             String wellTag = acc.WellTagNumber__c != null ? acc.WellTagNumber__c.toString() : null;
-            String aquifer;
+            String aquifer = acc.AquiferNumber__c != null ? acc.AquiferNumber__c.toString() : null;
             
             // STEP 1: If License exists → call License API
             PHOCSWaterLicenseService waterLicService = new PHOCSWaterLicenseService();
@@ -105,10 +105,15 @@ public class PHOCSWaterSystemQueueable implements Queueable, Database.AllowsCall
             }
             
             // STEP 3: Get Aquifer from Well Tag
+            if((wellTag == null || wellTag == '') && (String.isNotBlank(acc.WellTagNumber__c?.toString()))){
+                wellTag = acc.WellTagNumber__c?.toString();
+            }
             PHOCSWellsService wellService = new PHOCSWellsService();
             wellTagMappingData = wellService.mappingData(wellTag);
             if(wellTagMappingData.containsKey('WellTag_AquiferNumber')){
                 aquifer = wellTagMappingData.get('WellTag_AquiferNumber')?.toString();
+            }else{
+                aquifer = acc.AquiferNumber__c?.toString();
             }
             
             // STEP 4: Get Aquifer details
@@ -118,7 +123,7 @@ public class PHOCSWaterSystemQueueable implements Queueable, Database.AllowsCall
             // STEP 5: Update fields
             acc.WellTagNumber__c = wellTag != null ? Decimal.ValueOf(wellTag) : null;
             acc.AquiferNumber__c = aquifer != null ? Decimal.ValueOf(aquifer) : null;
-            if(isCacheEnabled.equalsIgnoreCase('true') || Test.isRunningTest()){
+            if(isCacheEnabled.equalsIgnoreCase('true') || Test.isRunningTest()){  
                 acc.PHOCSWaterLicenseJSONRespnose__c = JSON.serialize(waterLicenseMappingData);
                 acc.PHOCSWaterApplicationJSONResponse__c = JSON.serialize(waterLicenseApplicationMappingData);
                 acc.PHOCSWellTagJSONResponse__c = JSON.serialize(wellTagMappingData);
