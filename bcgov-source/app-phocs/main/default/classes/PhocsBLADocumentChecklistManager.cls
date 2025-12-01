@@ -1,4 +1,4 @@
-public without sharing class PhocsBLADocumentChecklistManager {
+public with sharing class PhocsBLADocumentChecklistManager {
     @AuraEnabled(cacheable=true)
     public static DocCheckListItem[] getChecklistItems(Id businessLicenseApplicationId) {
         Map<Id, DocCheckListItem> checklistItemMap = new Map<Id, DocCheckListItem>();
