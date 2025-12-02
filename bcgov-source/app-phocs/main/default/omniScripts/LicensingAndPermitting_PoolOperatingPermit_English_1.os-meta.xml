@@ -49,6 +49,56 @@
         <type>Navigate Action</type>
     </omniProcessElements>
     <omniProcessElements>
+        <isActive>true</isActive>
+        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+        <level>0.0</level>
+        <name>ExtractPrimaryContactInfo</name>
+        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+        <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;ExtractPrimaryContactInfo&quot;,
+  &quot;bundle&quot; : &quot;PHOCSDMExtractContactInformation&quot;,
+  &quot;ignoreCache&quot; : false,
+  &quot;dataRaptor Input Parameters&quot; : [ {
+    &quot;element&quot; : &quot;PrimaryOwner&quot;,
+    &quot;inputParam&quot; : &quot;conId&quot;
+  } ],
+  &quot;remoteTimeout&quot; : 30000,
+  &quot;responseJSONPath&quot; : &quot;&quot;,
+  &quot;responseJSONNode&quot; : &quot;&quot;,
+  &quot;inProgressMessage&quot; : &quot;In Progress&quot;,
+  &quot;postMessage&quot; : &quot;Done&quot;,
+  &quot;failureNextLabel&quot; : &quot;Continue&quot;,
+  &quot;failureAbortLabel&quot; : &quot;Abort&quot;,
+  &quot;failureGoBackLabel&quot; : &quot;Go Back&quot;,
+  &quot;failureAbortMessage&quot; : &quot;Are you sure?&quot;,
+  &quot;validationRequired&quot; : &quot;Step&quot;,
+  &quot;redirectPageName&quot; : &quot;&quot;,
+  &quot;redirectTemplateUrl&quot; : &quot;vlcAcknowledge.html&quot;,
+  &quot;redirectNextLabel&quot; : &quot;Next&quot;,
+  &quot;redirectNextWidth&quot; : 3,
+  &quot;redirectPreviousLabel&quot; : &quot;Previous&quot;,
+  &quot;redirectPreviousWidth&quot; : 3,
+  &quot;showPersistentComponent&quot; : [ true, false ],
+  &quot;show&quot; : null,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;wpm&quot; : false,
+  &quot;ssm&quot; : false,
+  &quot;message&quot; : { },
+  &quot;pubsub&quot; : false,
+  &quot;errorMessage&quot; : {
+    &quot;custom&quot; : [ ],
+    &quot;default&quot; : null
+  },
+  &quot;enableDefaultAbort&quot; : false,
+  &quot;enableActionMessage&quot; : false,
+  &quot;businessCategory&quot; : &quot;&quot;,
+  &quot;businessEvent&quot; : &quot;&quot;
+}</propertySetConfig>
+        <sequenceNumber>8.0</sequenceNumber>
+        <type>DataRaptor Extract Action</type>
+    </omniProcessElements>
+    <omniProcessElements>
         <childElements>
             <childElements>
                 <isActive>true</isActive>
@@ -2014,7 +2064,7 @@
   &quot;businessEvent&quot; : &quot;&quot;,
   &quot;targetName&quot; : &quot;Home&quot;
 }</propertySetConfig>
-        <sequenceNumber>12.0</sequenceNumber>
+        <sequenceNumber>13.0</sequenceNumber>
         <type>Navigate Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -2089,7 +2139,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>11.0</sequenceNumber>
+        <sequenceNumber>12.0</sequenceNumber>
         <type>Step</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -2242,16 +2292,16 @@
         &quot;FilterOperator__c&quot; : &quot;=&quot;,
         &quot;FilterValue__c&quot; : &quot;searchId&quot;,
         &quot;InterfaceObjectLookupOrder__c&quot; : 1,
-        &quot;DomainObjectFieldAPIName__c&quot; : &quot;primaryOwner&quot;
+        &quot;DomainObjectFieldAPIName__c&quot; : &quot;primaryOwnerLookup&quot;
       } ],
       &quot;phase2MapItems&quot; : [ {
         &quot;DomainObjectFieldAPIName__c&quot; : &quot;name&quot;,
-        &quot;InterfaceFieldAPIName__c&quot; : &quot;primaryOwner:Id&quot;,
+        &quot;InterfaceFieldAPIName__c&quot; : &quot;primaryOwnerLookup:Id&quot;,
         &quot;DomainObjectAPIName__c&quot; : &quot;JSON&quot;,
         &quot;DomainObjectCreationOrder__c&quot; : 1
       }, {
         &quot;DomainObjectFieldAPIName__c&quot; : &quot;value&quot;,
-        &quot;InterfaceFieldAPIName__c&quot; : &quot;primaryOwner:Name&quot;,
+        &quot;InterfaceFieldAPIName__c&quot; : &quot;primaryOwnerLookup:Name&quot;,
         &quot;DomainObjectAPIName__c&quot; : &quot;JSON&quot;,
         &quot;DomainObjectCreationOrder__c&quot; : 1
       } ],
@@ -2268,7 +2318,7 @@
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;hide&quot; : false,
   &quot;disOnTplt&quot; : false,
-  &quot;clearValue&quot; : false,
+  &quot;clearValue&quot; : true,
   &quot;errorMessage&quot; : {
     &quot;custom&quot; : [ ],
     &quot;default&quot; : null
@@ -2408,7 +2458,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>10.0</sequenceNumber>
+        <sequenceNumber>11.0</sequenceNumber>
         <type>Integration Procedure Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -3464,7 +3514,7 @@
                 <name>ReviewPrimaryOwner1</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;expression&quot; : &quot;%PHOCSApplicationDetails:ApplicationDetails:PrimaryOwner%&quot;,
+  &quot;expression&quot; : &quot;%contactName%&quot;,
   &quot;controlWidth&quot; : 6,
   &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
   &quot;label&quot; : &quot;Primary Owner&quot;,
@@ -3928,7 +3978,7 @@
   &quot;ariaLevel&quot; : 2,
   &quot;HTMLTemplateId&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>9.0</sequenceNumber>
+        <sequenceNumber>10.0</sequenceNumber>
         <type>Step</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -3950,7 +4000,7 @@
   &quot;message&quot; : { },
   &quot;pubsub&quot; : false
 }</propertySetConfig>
-        <sequenceNumber>13.0</sequenceNumber>
+        <sequenceNumber>14.0</sequenceNumber>
         <type>Set Errors</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -3978,7 +4028,7 @@
   &quot;message&quot; : { },
   &quot;pubsub&quot; : false
 }</propertySetConfig>
-        <sequenceNumber>8.0</sequenceNumber>
+        <sequenceNumber>9.0</sequenceNumber>
         <type>Set Values</type>
     </omniProcessElements>
     <omniProcessElements>
