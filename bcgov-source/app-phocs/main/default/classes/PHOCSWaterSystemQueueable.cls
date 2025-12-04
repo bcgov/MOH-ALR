@@ -100,23 +100,24 @@ public class PHOCSWaterSystemQueueable implements Queueable, Database.AllowsCall
             PHOCSWaterApplicationService applicationService = new PHOCSWaterApplicationService();
             applicationService.setValues(application, podNumber, purposeCode);
             waterLicenseApplicationMappingData = applicationService.mappingData(application);
-            if(String.isBlank(wellTag) && waterLicenseApplicationMappingData.containsKey('Application_WellTagNumber')){
+            if(String.isBlank(license) && waterLicenseApplicationMappingData.containsKey('Application_WellTagNumber')){
                 wellTag = waterLicenseApplicationMappingData.get('Application_WellTagNumber')?.toString();
             }
             
             // STEP 3: Get Aquifer from Well Tag
             if((wellTag == null || wellTag == '') && (String.isNotBlank(acc.WellTagNumber__c?.toString()))){
-                wellTag = acc.WellTagNumber__c?.toString();
+                wellTag = acc.WellTagNumber__c.toString();
             }
             PHOCSWellsService wellService = new PHOCSWellsService();
             wellTagMappingData = wellService.mappingData(wellTag);
             if(wellTagMappingData.containsKey('WellTag_AquiferNumber')){
                 aquifer = wellTagMappingData.get('WellTag_AquiferNumber')?.toString();
-            }else{
-                aquifer = acc.AquiferNumber__c?.toString();
-            }
+            }            
             
             // STEP 4: Get Aquifer details
+            if((aquifer == null || aquifer == '') && (String.isNotBlank(acc.AquiferNumber__c?.toString()))){
+                aquifer = acc.AquiferNumber__c?.toString();
+            }
             PHOCSAquiferService aquiferService = new PHOCSAquiferService();
             aquiferMappingData = aquiferService.mappingData(aquifer);
             
