@@ -1,0 +1,204 @@
+<template>
+    <div class="slds-box slds-theme_default slds-p-around_medium slds-m-around_medium">
+        <lightning-card title="Inspection Questions">
+            <div class="slds-p-around_medium">
+                <template if:false={showQuestions}>
+                    <lightning-button
+                        label="Start Inspection"
+                        variant="brand"
+                        onclick={handleStart}>
+                    </lightning-button>
+                </template>
+            </div>
+
+            <template if:true={showQuestions}>
+                <template for:each={groupedQuestions} for:item="taskGroup">
+                    <div key={taskGroup.taskDefinitionId}
+                         class="slds-box slds-theme_default slds-m-vertical_medium slds-p-around_small">
+
+                        <!-- Section Header -->
+                        <div class="slds-box slds-box_xx-small slds-theme_shade slds-m-bottom_small
+                                    slds-grid slds-grid_vertical-align-center slds-grid_align-spread section-header"
+                             data-id={taskGroup.taskDefinitionId}
+                             onclick={handleToggleSection}>
+                            <div class="slds-grid slds-grid_vertical-align-center">
+                                <lightning-button-icon
+                                    icon-name={taskGroup.iconName}
+                                    alternative-text="Toggle Section"
+                                    variant="bare"
+                                    data-id={taskGroup.taskDefinitionId}
+                                    class="slds-m-right_x-small">
+                                </lightning-button-icon>
+                                <span class="slds-text-heading_medium slds-text-title_bold">
+                                    {taskGroup.taskDefinitionName}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Section Body -->
+                        <template if:true={taskGroup.isExpanded}>
+                            <template for:each={taskGroup.parentQuestions} for:item="parent">
+                                <div key={parent.assessmentTaskId}
+                                     class="slds-box slds-m-vertical_small slds-p-around_medium slds-theme_default">
+
+                                    <!-- Parent Question Text -->
+                                    <!--<p class="slds-text-heading_small slds-p-bottom_x-small">
+                                        {parent.questionText}
+                                    </p>-->
+                                    <div class="slds-grid slds-grid_vertical-align-center slds-p-bottom_x-small">
+                                        <template if:true={parent.showCriticalIcon}>
+                                            <lightning-icon
+                                                icon-name="utility:warning"
+                                                variant="error"
+                                                size="x-small"
+                                                class="slds-m-right_x-small">
+                                            </lightning-icon>
+                                        </template>
+                                        <p class="slds-text-heading_small">{parent.questionText}</p>
+                                    </div>
+
+                                    <!-- Result + Regulatory Code -->
+                                    <div class="slds-grid slds-wrap slds-m-top_small slds-grid_vertical-align-center">
+                                        <div class="slds-col slds-size_1-of-2 slds-p-right_small">
+                                            <!--<lightning-combobox
+                                                label="Compliance Status"
+                                                name={parent.assessmentTaskId}
+                                                options={resultOptions}
+                                                value={parent.result}
+                                                onchange={handleAssessmentChange}>
+                                            </lightning-combobox> -->
+                                            <!-- Using button group instead of combobox as per EHIS - 2680-->
+                                            <lightning-button-group>
+                                                <lightning-button 
+                                                    label="Compliant"
+                                                    data-definitionid={parent.assessmentIndicatorDefinitionId}
+                                                    data-value="Compliant"
+                                                    onclick={handleAssessmentChange}>
+                                                </lightning-button>
+
+                                                <lightning-button 
+                                                    label="Non-compliant"
+                                                    data-definitionid={parent.assessmentIndicatorDefinitionId}
+                                                    data-value="Non-compliant"
+                                                    onclick={handleAssessmentChange}>
+                                                </lightning-button>
+
+                                                <lightning-button 
+                                                    label="N/A (Not Applicable)"
+                                                    data-definitionid={parent.assessmentIndicatorDefinitionId}
+                                                    data-value="N/A (Not Applicable)"
+                                                    onclick={handleAssessmentChange}>
+                                                </lightning-button>
+
+                                                <lightning-button 
+                                                    label="N/S (Not Assessed)"
+                                                    data-definitionid={parent.assessmentIndicatorDefinitionId}
+                                                    data-value="N/S (Not Assessed)"
+                                                    onclick={handleAssessmentChange}>
+                                                </lightning-button>
+                                            </lightning-button-group>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-2 slds-p-left_small slds-text-align_center">
+                                            <lightning-button
+                                                label="View Regulatory Codes"
+                                                variant="neutral"
+                                                class="slds-m-top_small"
+                                                value={parent.assessmentIndicatorDefinitionId}
+                                                onclick={handleViewRegulatoryCodes}>
+                                            </lightning-button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Child Questions -->
+                                    <template if:true={parent.showChildren}>
+                                        <div class="slds-m-left_large slds-m-top_small">
+                                            <template for:each={parent.childQuestions} for:item="child">
+                                                <div key={child.assessmentTaskId}
+                                                     class="slds-box slds-m-vertical_x-small slds-p-around_small">
+                                                    <c-inspection-question-child
+                                                        question-text={child.questionText}
+                                                        field-type={child.dataType}
+                                                        ass-task-id={child.assessmentTaskId}
+                                                        onvaluechange={handleChildValueChange}
+                                                        data-parent-id={parent.assessmentIndicatorDefinitionId}>
+                                                    </c-inspection-question-child>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </template>
+
+                                    <!-- Inspection Comments -->
+                                    <div class="slds-m-top_medium">
+                                        <!--<lightning-textarea
+                                            label="Comments"
+                                            name={parent.assessmentTaskId}
+                                            value={parent.inspectionComments}
+                                            onchange={handleCommentChange}>
+                                        </lightning-textarea>-->
+                                        <!-- Using lightning-text area for comments as per EHIS-2661 -->
+                                        <lightning-textarea
+                                            label="Free Text Comment"
+                                            data-definitionid={parent.assessmentIndicatorDefinitionId}
+                                            data-taskid={parent.assessmentTaskId}
+                                            value={parent.comment}
+                                            onchange={handleCommentChange}>
+                                        </lightning-textarea>
+                                    </div>
+                                </div>
+                            </template>
+                        </template>
+                    </div>
+                </template>
+
+                <!-- Submit Button -->
+                <div class="slds-m-top_large slds-text-align_right">
+                    <lightning-button
+                        label="Submit"
+                        variant="brand"
+                        onclick={handleSubmit}>
+                    </lightning-button>
+                </div>
+            </template>
+
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </template>
+        </lightning-card>
+
+        <!-- Regulatory Codes Modal -->
+        <template if:true={showRegulatoryModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                        <h2 class="slds-text-heading_medium">Regulatory Codes</h2>
+                        <button class="slds-button slds-button_icon slds-modal__close"
+                                onclick={closeRegulatoryModal}
+                                title="Close">
+                            <lightning-icon icon-name="utility:close" size="small"></lightning-icon>
+                        </button>
+                    </header>
+
+                    <div class="slds-modal__content slds-p-around_medium" style="max-height:400px;overflow-y:auto;">
+                        <template if:true={regulatoryCodes.length}>
+                            <template for:each={regulatoryCodes} for:item="code">
+                                <div key={code.regulatoryCodeName} class="slds-box slds-m-bottom_small">
+                                    <div class="slds-text-heading_small">{code.regulatoryCodeName}</div>
+                                    <p><strong>Status:</strong> {code.statusText}</p>
+                                    <p><strong>Validity:</strong> {code.validityText}</p>
+                                </div>
+                            </template>
+                        </template>
+                        <template if:false={regulatoryCodes.length}>
+                            <p>Looks like there aren’t regulatory codes associated with this assessment task.</p>
+                        </template>
+                    </div>
+
+                    <footer class="slds-modal__footer">
+                        <lightning-button label="Got It" variant="brand" onclick={closeRegulatoryModal}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </div>
+</template>
