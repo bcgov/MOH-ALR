@@ -112,11 +112,12 @@ public class PHOCSWaterSystemQueueable implements Queueable, Database.AllowsCall
             wellTagMappingData = wellService.mappingData(wellTag);
             if(wellTagMappingData.containsKey('WellTag_AquiferNumber')){
                 aquifer = wellTagMappingData.get('WellTag_AquiferNumber')?.toString();
-            }else{
-                aquifer = acc.AquiferNumber__c?.toString();
-            }
+            }            
             
             // STEP 4: Get Aquifer details
+            if((aquifer == null || aquifer == '') && (String.isNotBlank(acc.AquiferNumber__c?.toString()))){
+                aquifer = acc.AquiferNumber__c?.toString();
+            }
             PHOCSAquiferService aquiferService = new PHOCSAquiferService();
             aquiferMappingData = aquiferService.mappingData(aquifer);
             
