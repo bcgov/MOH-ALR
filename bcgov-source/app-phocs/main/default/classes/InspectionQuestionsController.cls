@@ -30,8 +30,8 @@ public with sharing class InspectionQuestionsController {
                    AssessmentIndDefinitionId,
                    AssessmentIndDefinition.Name,
                    AssessmentIndDefinition.DataType,
-                   AssessmentIndDefinition.PHOCSParentId__c,
-           		   AssessmentIndDefinition.Criticality__c
+                   AssessmentIndDefinition.PHOCSParentId__c
+           		   //AssessmentIndDefinition.Criticality__c
             FROM AssessmentTaskIndDefinition
             WHERE AssessmentTaskDefinitionId IN :definitionToTaskIdMap.keySet()
             ORDER BY AssessmentTaskDefinition.Name, DisplayOrder ASC
@@ -62,9 +62,9 @@ public with sharing class InspectionQuestionsController {
                 actualTaskId, 
                 indicatorRecord.AssessmentIndDefinition.DataType,
                 indicatorRecord.AssessmentIndDefinition.PHOCSParentId__c,
-                //indicatorRecord.AssessmentIndDefinitionId
-                indicatorRecord.AssessmentIndDefinitionId,
-                'Critical'.equalsIgnoreCase(indicatorRecord.AssessmentIndDefinition.Criticality__c)
+                indicatorRecord.AssessmentIndDefinitionId
+                //indicatorRecord.AssessmentIndDefinitionId,
+                //'Critical'.equalsIgnoreCase(indicatorRecord.AssessmentIndDefinition.Criticality__c)
             ));
         }
 
@@ -207,7 +207,7 @@ public with sharing class InspectionQuestionsController {
         @AuraEnabled public Id assessmentTaskId { get; set; }
         @AuraEnabled public Id parentQuestionId { get; set; }
         @AuraEnabled public Id assessmentIndicatorDefinitionId { get; set; }
-        @AuraEnabled public Boolean showCriticalIcon { get; set; }
+       // @AuraEnabled public Boolean showCriticalIcon { get; set; }
         @AuraEnabled public List<QuestionWrapper> childQuestions { get; set; }
 
         public QuestionWrapper(
@@ -215,15 +215,15 @@ public with sharing class InspectionQuestionsController {
             Id taskIdValue,
             String dataTypeValue,
             Id parentIndicatorId,
-            Id indicatorDefinitionId,
-            Boolean showIcon
+            Id indicatorDefinitionId
+           // Boolean showIcon
         ) {
             questionText = questionTextValue;
             assessmentTaskId = taskIdValue;
             dataType = dataTypeValue;
             parentQuestionId = parentIndicatorId;
             assessmentIndicatorDefinitionId = indicatorDefinitionId;
-            showCriticalIcon = showIcon;
+            //showCriticalIcon = showIcon;
             childQuestions = new List<QuestionWrapper>();
         }
     }
