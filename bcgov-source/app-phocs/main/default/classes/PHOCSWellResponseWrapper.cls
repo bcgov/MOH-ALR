@@ -36,7 +36,6 @@ public class PHOCSWellResponseWrapper {
     public String alteration_end_date;
     public String decommission_start_date;
     public String decommission_end_date;
-    public String person_responsible;
     public String driller_name;
     public String drilling_company;
     public String company_of_person_responsible;
@@ -59,6 +58,7 @@ public class PHOCSWellResponseWrapper {
     public String surface_seal_depth;
     public String backfill_type;
     public String backfill_depth;
+    public String liner_material;
     public String liner_diameter;
     public String liner_thickness;
     public String liner_from;
