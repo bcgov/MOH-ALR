@@ -8,7 +8,13 @@
             <stringValue>{&quot;location&quot;:&quot;top&quot;,&quot;type&quot;:&quot;simple&quot;}</stringValue>
         </value>
     </customProperties>
+    <description>EHIS-2615</description>
     <environments>Default</environments>
+    <formulas>
+        <name>BLContactId</name>
+        <dataType>String</dataType>
+        <expression>IF({!recordId.LicenseType.Name}==&apos;BCCDC Dairy Worker Licence&apos;, {!recordId.ApplicantId}, null)</expression>
+    </formulas>
     <formulas>
         <name>BLName</name>
         <dataType>String</dataType>
@@ -78,6 +84,12 @@
             <field>Account__c</field>
             <value>
                 <elementReference>recordId.AccountId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ContactId</field>
+            <value>
+                <elementReference>BLContactId</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
