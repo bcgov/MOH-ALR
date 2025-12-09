@@ -4,6 +4,7 @@ import getRegulatoryCodesByIndicator from '@salesforce/apex/InspectionQuestionsC
 //import createInspectionAssessments from '@salesforce/apex/InspectionQuestionsController.createInspectionAssessments';
 import getcmtresult from '@salesforce/apex/PHOCSInspectionAssessmentIndController.getcmtresult';
 import getExistingComments from '@salesforce/apex/PHOCSInspectionAssessmentIndController.getExistingComments';
+import getExistingCommentsByDefAndTask from '@salesforce/apex/PHOCSInspectionAssessmentIndController.getExistingCommentsByDefAndTask';
 
 
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
@@ -24,30 +25,57 @@ export default class InspectionQuestionsParent extends LightningElement {
     connectedCallback() {
         this.loadInspectionQuestions();
     }
-    async loadInspectionQuestions() {
+        async loadInspectionQuestions() {
     this.isLoading = true;
-
     try {
         const result = await getInspectionQuestions({ visitId: this.recordId });
-        const definitionIds = [];
+
+        // Debug raw
+        console.log('RAW QUESTIONS FROM APEX:', result);
+
+        // Collect defIds and taskIds (unique + non-null)
+        let defIds = [];
+        let taskIds = [];
         result.forEach(group => {
             group.parentQuestions.forEach(parent => {
-                definitionIds.push(parent.assessmentIndicatorDefinitionId);
+                const defId = parent.assessmentIndicatorDefinitionId || parent.assessmentIndDefinitionId;
+                const taskId = parent.assessmentTaskId;
+                if (defId) defIds.push(defId);
+                if (taskId) taskIds.push(taskId);
             });
         });
-        const commentsMap = await getExistingComments({ defIds: definitionIds });
+
+        // unique
+        defIds = [...new Set(defIds)].filter(id => id);
+        taskIds = [...new Set(taskIds)].filter(id => id);
+
+        console.log('DEFINITION IDS SENT TO APEX:', defIds);
+        console.log('TASK IDS SENT TO APEX:', taskIds);
+
+        let commentsMap = {};
+        if (defIds.length && taskIds.length) {
+            // use the new Apex method name
+            commentsMap = await getExistingCommentsByDefAndTask({ defIds: defIds, taskIds: taskIds });
+        } else {
+            commentsMap = {};
+        }
+
+        console.log('COMMENTS MAP FROM APEX:', commentsMap);
+
+       
         this.groupedQuestions = result.map(group => ({
             ...group,
             isExpanded: false,
             iconName: 'utility:chevronright',
             parentQuestions: group.parentQuestions.map(parent => {
-
-                const savedComment =
-                    commentsMap[parent.assessmentIndicatorDefinitionId] || '';
+                const defId = parent.assessmentIndicatorDefinitionId || parent.assessmentIndDefinitionId;
+                const taskId = parent.assessmentTaskId;
+                const key = defId && taskId ? (defId + '|' + taskId) : null;
+                const savedComment = key && commentsMap ? commentsMap[key] || '' : '';
 
                 return {
                     ...parent,
-                    result: parent.Result || '',       
+                    result: parent.Result || '',
                     originalResult: parent.Result || '',
                     comment: savedComment,
                     commentChange: false,
@@ -61,14 +89,16 @@ export default class InspectionQuestionsParent extends LightningElement {
             })
         }));
 
-    } catch (error) {
-        console.error(error);
-        this.showToast('Error', 'Error loading inspection questions', 'error');
-
+    } catch (err) {
+        console.error('Error loading inspection questions', err);
+        // show the exact message in toast for debugging
+        this.showToast('Error', 'Error loading inspection questions: ' + (err?.body?.message || err?.message || JSON.stringify(err)), 'error');
     } finally {
         this.isLoading = false;
     }
 }
+
+
 
     handleStart() {
         this.showQuestions = true;

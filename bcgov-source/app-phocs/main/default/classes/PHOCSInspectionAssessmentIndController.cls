@@ -40,25 +40,42 @@ public with sharing class PHOCSInspectionAssessmentIndController {
         // Set values
         rec.PHOCSInspectionComments__c = comment;
         rec.Result = result;
+         
+                                        System.debug('🟢 Preparing to upsert InspectionAssessmentInd: ' + rec);
+
 
         // Insert/update
         upsert rec;
     }
-    		@AuraEnabled(cacheable=true)
-				public static Map<String, String> getExistingComments(List<Id> defIds) {
 
-    				Map<String, String> commentsMap = new Map<String, String>();
+    
+   @AuraEnabled(cacheable=true)
+	public static Map<String, String> getExistingCommentsByDefAndTask(List<Id> defIds, List<Id> taskIds) {
+    Map<String, String> commentsMap = new Map<String, String>();
+        
+    if (defIds == null) defIds = new List<Id>();
+    if (taskIds == null) taskIds = new List<Id>();
 
-    				for (InspectionAssessmentInd rec : [
-        					SELECT AssessmentIndDefinitionId, PHOCSInspectionComments__c
-        					FROM InspectionAssessmentInd
-        					WHERE AssessmentIndDefinitionId IN :defIds
-    					])
-                    {
-        			commentsMap.put(rec.AssessmentIndDefinitionId, rec.PHOCSInspectionComments__c);
-    		}
+    defIds = new List<Id>(new Set<Id>(defIds).removeAll(new List<Id>{null}) ? new List<Id>(new Set<Id>(defIds)) : defIds);
+    taskIds = new List<Id>(new Set<Id>(taskIds).removeAll(new List<Id>{null}) ? new List<Id>(new Set<Id>(taskIds)) : taskIds);
+
+    if (defIds.isEmpty() || taskIds.isEmpty()) {
+        return commentsMap;
+    }
+
+    // Query for matching comments (Definition + Task)
+    for (InspectionAssessmentInd rec : [
+        SELECT AssessmentIndDefinitionId, AssessmentTaskId, PHOCSInspectionComments__c
+        FROM InspectionAssessmentInd
+        WHERE AssessmentIndDefinitionId IN :defIds
+        AND AssessmentTaskId IN :taskIds
+    ]) {
+        String key = String.valueOf(rec.AssessmentIndDefinitionId) + '|' + String.valueOf(rec.AssessmentTaskId);
+        commentsMap.put(key, rec.PHOCSInspectionComments__c);
+    }
 
     return commentsMap;
 }
+
 
 }

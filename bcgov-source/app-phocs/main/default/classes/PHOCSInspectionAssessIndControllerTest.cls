@@ -68,17 +68,38 @@ public class PHOCSInspectionAssessIndControllerTest {
     }
     
     @isTest
-    static void checkexistingcomment(){
-        AssessmentIndicatorDefinition assinddef = [SELECT ID FROM AssessmentIndicatorDefinition LIMIT 1];
-        
-        Test.startTest();
-        Map<String,String> result = PHOCSInspectionAssessmentIndController.getExistingComments(new List<Id>{assinddef.Id});
-        Test.stopTest();
-        
-        System.assert(result.containsKey(assinddef.Id), 'Assessment Indicator Definition should exists');
-        System.assertEquals('test comment',result.get(assinddef.Id));
-        
-        
-    }
+	static void test_getExistingCommentsByDefAndTask() {
+
+    AssessmentIndicatorDefinition def = [SELECT Id FROM AssessmentIndicatorDefinition LIMIT 1];
+    AssessmentTask task = [SELECT Id FROM AssessmentTask LIMIT 1];
+    InspectionAssessmentInd ind = [
+        SELECT PHOCSInspectionComments__c
+        FROM InspectionAssessmentInd
+        WHERE AssessmentIndDefinitionId = :def.Id
+        AND AssessmentTaskId = :task.Id
+        LIMIT 1
+    ];
+
+    Test.startTest();
+    Map<String, String> result =
+        PHOCSInspectionAssessmentIndController.getExistingCommentsByDefAndTask(
+            new List<Id>{ def.Id },
+            new List<Id>{ task.Id }
+        );
+    Test.stopTest();
+    String key = def.Id + '|' + task.Id;
+
+    // Assertions
+    System.assert(result.containsKey(key), 'Returned map must contain the correct key');
+    System.assertEquals('test comment', result.get(key), 'Comment value should match the inserted record');
+
+    Map<String, String> emptyResult =
+        PHOCSInspectionAssessmentIndController.getExistingCommentsByDefAndTask(
+            new List<Id>(),
+            new List<Id>()
+        );
+
+    System.assertEquals(0, emptyResult.size(), 'Empty input should return an empty map');
+}
 
 }
