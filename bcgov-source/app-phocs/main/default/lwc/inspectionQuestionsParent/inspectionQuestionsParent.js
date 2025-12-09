@@ -3,7 +3,6 @@ import getInspectionQuestions from '@salesforce/apex/InspectionQuestionsControll
 import getRegulatoryCodesByIndicator from '@salesforce/apex/InspectionQuestionsController.getRegulatoryCodesByIndicator';
 //import createInspectionAssessments from '@salesforce/apex/InspectionQuestionsController.createInspectionAssessments';
 import getcmtresult from '@salesforce/apex/PHOCSInspectionAssessmentIndController.getcmtresult';
-import getExistingComments from '@salesforce/apex/PHOCSInspectionAssessmentIndController.getExistingComments';
 import getExistingCommentsByDefAndTask from '@salesforce/apex/PHOCSInspectionAssessmentIndController.getExistingCommentsByDefAndTask';
 
 

@@ -40,8 +40,6 @@ public with sharing class PHOCSInspectionAssessmentIndController {
         // Set values
         rec.PHOCSInspectionComments__c = comment;
         rec.Result = result;
-         
-                                        System.debug('🟢 Preparing to upsert InspectionAssessmentInd: ' + rec);
 
 
         // Insert/update
