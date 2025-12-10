@@ -5,27 +5,6 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>actionNames</name>
-                    <valueList>
-                        <valueListItems>
-                            <value>ChangeOwnerOne</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>RegulatoryCodeViolation.EHISNewTaskOnRCV</value>
-                            <visibilityRule>
-                                <booleanFilter>1 OR 2</booleanFilter>
-                                <criteria>
-                                    <leftValue>{!$Permission.CustomPermission.PHOCSOfficer}</leftValue>
-                                    <operator>EQUAL</operator>
-                                    <rightValue>true</rightValue>
-                                </criteria>
-                                <criteria>
-                                    <leftValue>{!$Permission.CustomPermission.PHOCSAdmin}</leftValue>
-                                    <operator>EQUAL</operator>
-                                    <rightValue>true</rightValue>
-                                </criteria>
-                            </visibilityRule>
-                        </valueListItems>
-                    </valueList>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>collapsed</name>
@@ -72,38 +51,18 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Status</fieldItem>
-                <identifier>RecordStatusField</identifier>
+                <fieldItem>Record.Corrected_During_Inspection__c</fieldItem>
+                <identifier>RecordCorrected_During_Inspection__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>required</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Priority</fieldItem>
-                <identifier>RecordPriorityField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Description</fieldItem>
-                <identifier>RecordDescriptionField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.CorrectiveActionDescription</fieldItem>
-                <identifier>RecordCorrectiveActionDescriptionField</identifier>
+                <fieldItem>Record.DateCreated</fieldItem>
+                <identifier>RecordDateCreatedField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -112,18 +71,8 @@
                     <name>uiBehavior</name>
                     <value>readonly</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.InspectionId</fieldItem>
-                <identifier>RecordInspectionIdField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Corrected_During_Inspection__c</fieldItem>
-                <identifier>RecordCorrected_During_Inspection__cField</identifier>
+                <fieldItem>Record.DaysOpen</fieldItem>
+                <identifier>RecordDaysOpenField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -136,20 +85,30 @@
                 <identifier>RecordOperatorResponse_cField</identifier>
             </fieldInstance>
         </itemInstances>
-        <name>Facet-238c471d-395c-4360-88bf-980f823f051c</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
         <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>required</value>
+                    <value>readonly</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.DateCreated</fieldItem>
-                <identifier>RecordDateCreatedField</identifier>
+                <fieldItem>Record.RegulatoryCodeId</fieldItem>
+                <identifier>RecordRegulatoryCodeIdField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Description</fieldItem>
+                <identifier>RecordDescriptionField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-238c471d-395c-4360-88bf-980f823f051c</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
         <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
@@ -174,10 +133,10 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.DaysOpen</fieldItem>
-                <identifier>RecordDaysOpenField</identifier>
+                <fieldItem>Record.CorrectiveActionDescription</fieldItem>
+                <identifier>RecordCorrectiveActionDescriptionField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -192,12 +151,8 @@
         </itemInstances>
         <itemInstances>
             <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>readonly</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.InspectionAssmntIndId</fieldItem>
-                <identifier>RecordInspectionAssmntIndIdField</identifier>
+                <fieldItem>Record.RegulatoryCode.Subject</fieldItem>
+                <identifier>RecordRegulatoryCodeSubjectField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-a3e19af1-89c7-4d70-8790-84cc18d5694d</name>
@@ -218,7 +173,7 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-a3e19af1-89c7-4d70-8790-84cc18d5694d</value>
+                    <value>Facet-e15215d0-a3c2-4e9c-a9cc-98a130de2d59</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
                 <identifier>flexipage_column2</identifier>
@@ -240,7 +195,7 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>label</name>
-                    <value>Inspection Violation Information</value>
+                    <value>Violation Information</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection</identifier>
@@ -294,9 +249,6 @@
                         </valueListItems>
                         <valueListItems>
                             <value>Priority</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Status</value>
                         </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
