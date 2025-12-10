@@ -1,7 +1,4 @@
 public with sharing class PHOCSGlobalPayHandler {
-    private static set<string> SUCCESSFUL_STATUS_MESSAGES = new set<String>{'CAPTURED'};
-    private static string STATUS_PAID = 'PAID';
-
     private static PHOCSGlobalPayEndpoints__mdt globalPaySetting = PHOCSGlobalPayEndpoints__mdt.getInstance('Default');
     private static String AccessTokenEndpointUrl {
         get { return globalPaySetting.BaseEndpoint__c + globalPaySetting.AccssTokenEndpoint__c; }
@@ -15,6 +12,79 @@ public with sharing class PHOCSGlobalPayHandler {
     private static String GlobalPayStatusUrl {
         get { return  getPHOCSSiteDomain() + globalPaySetting.PaymentStatusEndpoint__c; }
     }
+
+    @AuraEnabled(cacheable=false)
+    public static Map<String, Object> getHppJsonForEmbeddedCheckout(Id regulatoryTransactionFeeId) {
+
+        // ======== 1. Load Health Authority Configuration ========
+        AppConfig appConfig = getGlobalPayAppConfig(regulatoryTransactionFeeId);
+        if (appConfig == null || String.isBlank(appConfig.merchantId)) {
+            throw new AuraHandledException('Global Pay configuration missing.');
+        }
+
+        // ======== 2. Load Regulatory Fee Record ========
+        RegulatoryTrxnFee fee = [
+            SELECT Id, TotalFeeAmount, Account.Name
+            FROM RegulatoryTrxnFee
+            WHERE Id = :regulatoryTransactionFeeId
+            LIMIT 1
+        ];
+
+        // Amount in cents
+        Decimal amount = fee.TotalFeeAmount != null ? fee.TotalFeeAmount : 0;
+        Integer amountCents = Integer.valueOf(amount * 100);
+
+        // ======== 3. Build HPP JSON fields ========
+        Map<String, Object> json = new Map<String, Object>();
+        Datetime now = Datetime.now();
+        String timestamp = now.formatGMT('yyyyMMddHHmmss');
+        String orderId = 'SF-' + fee.Id + '-' + now.getTime();
+
+        json.put('MERCHANT_ID', appConfig.merchantId);
+        json.put('ACCOUNT', 'pay_link_hpp');          // match your configuration
+        json.put('ORDER_ID', orderId);
+        json.put('AMOUNT', String.valueOf(amountCents));
+        json.put('CURRENCY', 'CAD');
+        json.put('TIMESTAMP', timestamp);
+
+        // 3D Secure / HPP mandatory fields
+        json.put('HPP_VERSION', '2');
+        json.put('CUSTOMER_EMAIL', 'testemail@gmail.com');
+        json.put('CUSTOMER_PHONEMOBILE', '1|' + '6474478521');   // country|number
+        json.put('ADDRESSES_MATCH', 'FALSE');
+
+        // Billing address placeholders
+        json.put('BILLING_STREET1', '123 Street');
+        json.put('BILLING_STREET2', 'Unit 2');
+        json.put('BILLING_STREET3', '');
+        json.put('BILLING_CITY', 'Victoria');
+        json.put('BILLING_POSTALCODE', 'V8P1A1');
+        json.put('BILLING_COUNTRY', '124');  // Canada
+
+        // Shipping address placeholders
+        json.put('SHIPPING_STREET1', '123 Street');
+        json.put('SHIPPING_STREET2', 'Unit 2');
+        json.put('SHIPPING_STREET3', '');
+        json.put('SHIPPING_CITY', 'Victoria');
+        json.put('SHIPPING_STATE', 'BC');
+        json.put('SHIPPING_POSTALCODE', 'V8P1A1');
+        json.put('SHIPPING_COUNTRY', '124');
+
+        // ======== 4. Compute SHA1HASH ========
+        String toHash = timestamp + '.' + appConfig.merchantId + '.' + orderId + '.' + amountCents + '.CAD';
+        String sha1hash = sha1(sha1(toHash) + '.' + appConfig.appToken);
+        json.put('SHA1HASH', sha1hash);
+
+        // ======== 5. Return HPP JSON ========
+        return json;
+    }
+
+    // Helper for SHA1 hashing
+    private static String sha1(String input) {
+        Blob b = Crypto.generateDigest('SHA1', Blob.valueOf(input));
+        return EncodingUtil.convertToHex(b).toLowerCase();
+    }
+
     
     @AuraEnabled
     public static String getPaymentLinkUrl(Id regulatoryTransactionFeeId) {
@@ -49,10 +119,6 @@ public with sharing class PHOCSGlobalPayHandler {
                     linkResp.transactions.transaction_list.sort();
                     regulatoryTrxnFeeRec.ReferenceNumber__c = linkResp.transactions.transaction_list[0].id;
                     regulatoryTrxnFeeRec.GlobalPayPaymentStatus__c = linkResp.transactions.transaction_list[0].status;
-                    regulatoryTrxnFeeRec.PaymentDate__c = Date.today();
-                    if(SUCCESSFUL_STATUS_MESSAGES.contains(linkResp.transactions.transaction_list[0].status)){
-                         regulatoryTrxnFeeRec.Status = STATUS_PAID;
-                    }
                     update regulatoryTrxnFeeRec;
                 }
             }

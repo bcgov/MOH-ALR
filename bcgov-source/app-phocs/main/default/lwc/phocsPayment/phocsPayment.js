@@ -1,11 +1,15 @@
 import { LightningElement, wire, track, api } from 'lwc';
 import getPaymentLinkUrl from '@salesforce/apex/PHOCSGlobalPayHandler.getPaymentLinkUrl';    
+import getHppJsonForEmbeddedCheckout from '@salesforce/apex/PHOCSGlobalPayHandler.getHppJsonForEmbeddedCheckout';   
 import { CurrentPageReference, NavigationMixin } from 'lightning/navigation';
 import getPaymentSystemRedirectInfo from '@salesforce/apex/PHOCSPaymentController.getPaymentSystemRedirectInfo';
 import updatePaymentStatus from '@salesforce/apex/PHOCSGlobalPayHandler.updatePaymentStatus';
+import { loadScript } from 'lightning/platformResourceLoader';
+import globalPayJs from '@salesforce/resourceUrl/PHOCSGlobalPaymentCheckoutJS';
 
 
 export default class PhocsPayment extends NavigationMixin(LightningElement) {
+    iframeSrc;
     @api regulatoryTransactionFeeId;
     
     @api source;
@@ -35,6 +39,10 @@ export default class PhocsPayment extends NavigationMixin(LightningElement) {
     }
 
     connectedCallback() {
+      
+    }
+
+    renderedCallback() {
         const url = new URL(window.location.href);
         this.source = url.searchParams.get('source');
 
@@ -77,30 +85,115 @@ export default class PhocsPayment extends NavigationMixin(LightningElement) {
         });
     }
 
-    /* ============================================================
-        GLOBAL PAY
-    ============================================================ */
-    globalPayHandler(){
-        this.redirectUserGlobalPayPaymentPage();
-    }
     MonerisPayHandler(){
         this.redirectToRegulatoryPage();
     }
 
-    redirectUserGlobalPayPaymentPage() {
-        getPaymentLinkUrl({regulatoryTransactionFeeId:this.regulatoryTransactionFeeId})
-            .then(result => {
-               if(result)
-               this.redirectToPaymentPage(result);
-            })
+    
+    /* ============================================================
+        GLOBAL PAY
+    ============================================================ */
+    globalPayHandler(){
+        this.loadGlobalPayJs()
+            .then(() => this.getHppJson())
+            .then(hppJson => this.initGlobalPayIframe(hppJson))
             .catch(error => {
+                console.error('Error in GlobalPay HPP flow:', error);
                 this.error = error;
             });
     }
 
-     redirectToPaymentPage(paymentPageUrl) {
-        window.open(paymentPageUrl,"_self")
+   loadGlobalPayJs() {
+    return loadScript(this, globalPayJs)
+          .then(() => {
+           
+            // Case 1 — it’s already on window (rare)
+            if (window.RealexHpp) {
+                console.log('RealexHpp found on window');
+                return;
+            }
+
+            // Case 2 — it exists as a global (script-level) variable
+            if (typeof RealexHpp !== 'undefined' && RealexHpp !== null) {
+                console.log('RealexHpp found as global variable, attaching to window');
+                window.RealexHpp = RealexHpp;
+                return;
+            }
+
+            // Case 3 — the file did not define the variable
+            console.error('RealexHpp not found in script after loading');
+            return Promise.reject('RealexHpp not found');
+        })
+        .catch(error => {
+            console.error('Failed to load GlobalPay script', error);
+            return Promise.reject(error);
+        });
     }
+
+
+
+    getHppJson() {
+        return getHppJsonForEmbeddedCheckout({ regulatoryTransactionFeeId: this.regulatoryTransactionFeeId })
+            .then(result => {
+                if (!result) {
+                    return Promise.reject('HPP JSON is empty');
+                }
+                return result;
+            })
+            .catch(error => {
+                console.error('Error fetching HPP JSON:', error);
+                return Promise.reject(error);
+            });
+    }
+
+    initGlobalPayIframe(hppJson) {
+        if (!window.RealexHpp) {
+            return Promise.reject('RealexHpp is not loaded');
+        }
+
+        // Grab the iframe container
+        var iframe = this.template.querySelector('.globalPayIframe');
+        if (!iframe) {
+            return Promise.reject('Iframe element not found in the template');
+        }
+
+        // Ensure iframe has an ID
+        if (!iframe.id) {
+            iframe.id = `realex-hpp-iframe-${Date.now()}`;
+        }
+
+        // Configure RealexHpp
+        RealexHpp.setHppUrl('https://pay.sandbox.realexpayments.com/pay');
+        RealexHpp.setConfigItem('enableLogging', true);
+
+        // Log HPP events
+        window.addEventListener(RealexHpp.constants.logEventName, e => {
+            console.log('HPP Log:', e.detail);
+        });
+
+        return new Promise((resolve, reject) => {
+            // Get the embedded singleton instance
+            const embeddedInstance = RealexHpp._internal.RxpEmbedded.getInstance(hppJson);
+
+            // Set the iframe explicitly
+            embeddedInstance.setIframe(iframe.id);
+
+            // Initialize embedded mode using autoload
+            RealexHpp.embedded.init(
+                'autoload',
+                iframe.id,
+                'https://www.google.com', // merchant URL
+                hppJson
+            );
+
+            // Make iframe visible
+            iframe.style.display = 'block';
+
+            resolve('Realex HPP iframe initialized');
+        });
+    }
+
+
 
     /* ============================================================
          Moneris PAY
