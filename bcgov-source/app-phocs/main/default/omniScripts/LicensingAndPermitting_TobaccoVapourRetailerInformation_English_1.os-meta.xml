@@ -54,8 +54,8 @@
         <propertySetConfig>{
   &quot;controlWidth&quot; : 12,
   &quot;label&quot; : &quot;Get Portal User Account Details&quot;,
-  &quot;bundle&quot; : &quot;DMExtractLogInUserId&quot;,
-  &quot;ignoreCache&quot; : false,
+  &quot;bundle&quot; : &quot;PHOCSDMExtractLogInUserId&quot;,
+  &quot;ignoreCache&quot; : true,
   &quot;dataRaptor Input Parameters&quot; : [ {
     &quot;element&quot; : &quot;userId&quot;,
     &quot;inputParam&quot; : &quot;captureId&quot;
@@ -2672,7 +2672,7 @@
   &quot;dataJsonPath&quot; : &quot;&quot;,
   &quot;HTMLTemplateId&quot; : &quot;&quot;
 }</propertySetConfig>
-            <sequenceNumber>1.0</sequenceNumber>
+            <sequenceNumber>2.0</sequenceNumber>
             <type>Type Ahead Block</type>
         </childElements>
         <childElements>
@@ -2728,8 +2728,33 @@
   &quot;enableCaption&quot; : true,
   &quot;disOnTplt&quot; : false
 }</propertySetConfig>
-            <sequenceNumber>2.0</sequenceNumber>
+            <sequenceNumber>3.0</sequenceNumber>
             <type>Radio</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>DisplayRelatedFacilities</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;DisplayRelatedFacilities&quot;,
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;hide&quot; : false,
+  &quot;lwcName&quot; : &quot;cfPHOCSDisplayFacilityAccountsForOperator&quot;,
+  &quot;bStandalone&quot; : true,
+  &quot;customAttributes&quot; : [ {
+    &quot;name&quot; : &quot;record-id&quot;,
+    &quot;source&quot; : &quot;%BusinessEntityAccountId%&quot;
+  }, {
+    &quot;name&quot; : &quot;parent-attribute&quot;,
+    &quot;source&quot; : &quot;%PHOCSReasonforApplying%&quot;
+  } ]
+}</propertySetConfig>
+            <sequenceNumber>1.0</sequenceNumber>
+            <type>Custom Lightning Web Component</type>
         </childElements>
         <childElements>
             <isActive>true</isActive>
@@ -3840,7 +3865,12 @@
   &quot;controlWidth&quot; : 12,
   &quot;label&quot; : &quot;SetValues&quot;,
   &quot;elementValueMap&quot; : {
-    &quot;DefaultFacilityType&quot; : &quot;Tobacco and Vapour&quot;
+    &quot;DefaultFacilityType&quot; : &quot;Tobacco and Vapour&quot;,
+    &quot;FacilityType&quot; : &quot;Tobacco and Vapour&quot;,
+    &quot;BLARecordtypeName&quot; : &quot;OperatingPermitApplication&quot;,
+    &quot;BLALicenseTypeName&quot; : &quot;Tobacco and Vapour Retailer Information&quot;,
+    &quot;BLAStatus&quot; : &quot;Submitted&quot;,
+    &quot;BLACategory&quot; : &quot;Information&quot;
   },
   &quot;showPersistentComponent&quot; : [ true, false ],
   &quot;show&quot; : null,
