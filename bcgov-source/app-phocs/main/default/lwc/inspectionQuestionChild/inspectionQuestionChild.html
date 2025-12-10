@@ -1,0 +1,24 @@
+<template>
+    <div class="slds-p-vertical_small">
+        <div class="slds-text-longform slds-text-heading_small"
+             style="white-space: normal; word-wrap: break-word; overflow-wrap: anywhere;">
+            {questionText}
+        </div>
+
+        <template if:true={isText}>
+            <lightning-input type="text" label="Response" data-id={assTaskId}></lightning-input>
+        </template>
+
+        <template if:true={isCheckbox}>
+            <lightning-input type="checkbox" label="Yes" data-id={assTaskId}></lightning-input>
+        </template>
+
+        <template if:true={isNumber}>
+            <lightning-input type="number" label="Enter a number" data-id={assTaskId}></lightning-input>
+        </template>
+
+        <template if:true={isDate}>
+            <lightning-input type="date" label="Select a date" data-id={assTaskId}></lightning-input>
+        </template>
+    </div>
+</template>
