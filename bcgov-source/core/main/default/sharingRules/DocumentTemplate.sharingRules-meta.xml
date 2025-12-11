@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingCriteriaRules>
+        <fullName>ShareDocumentTemplatesWithALRUsers</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>EHIS-2841</description>
+        <label>Share Document Templates With ALR Users</label>
+        <sharedTo>
+            <group>ALRAllUsersPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>ALR Document Template</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>ShareDocumentTemplatesWithPHOCSUsers</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>EHIS-2841</description>
+        <label>Share Document Templates With PHOCS Users</label>
+        <sharedTo>
+            <group>EHISUsersPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Document Template</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+</SharingRules>
