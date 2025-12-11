@@ -128,7 +128,7 @@
                 <fieldItem>Record.RoomEquipmentOtherSpecify__c</fieldItem>
                 <identifier>RecordPlantEquipmentOtherSpecify_cField</identifier>
                 <visibilityRule>
-                    <booleanFilter>1 OR 2</booleanFilter>
+                    <booleanFilter>(1 AND 4 ) OR ( 3 AND 2)</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.PlantEquipment__c}</leftValue>
                         <operator>EQUAL</operator>
@@ -138,6 +138,16 @@
                         <leftValue>{!Record.Room__c}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>Other</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Type__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Plant physical spaces (rooms)</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Type__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Plant equipment</rightValue>
                     </criteria>
                 </visibilityRule>
             </fieldInstance>
