@@ -5,6 +5,7 @@ export default class InspectionQuestionChild extends LightningElement {
     @api fieldType;
     @api assTaskId;
     @api assessmentIndicatorDefinitionId;
+    @api checked = false;
 
     get normalizedType() {
         return this.fieldType ? this.fieldType.toLowerCase() : '';
@@ -23,21 +24,25 @@ export default class InspectionQuestionChild extends LightningElement {
         return ['date', 'datetime'].includes(this.normalizedType);
     }
 
-    handleValueChange(event) {
+    handlecheckboxchange(event){
         let value;
-        if (this.isCheckbox) {
+        if(this.isCheckbox){
             value = event.target.checked;
         } else {
             value = event.target.value;
         }
+       
 
-        const detail = {
-            value: String(value),
-            parentId: this.template.host.dataset.parentId,
-            childId: this.assessmentIndicatorDefinitionId
-        };
-        this.dispatchEvent(new CustomEvent('valuechange', { detail }));
+        this.dispatchEvent(
+            new CustomEvent('valuechange', {
+                detail: {
+                childId: this.assessmentIndicatorDefinitionId,
+                taskId: this.assTaskId,
+                value: value,
+                isCheckbox: this.isCheckbox   
+                }
+            })
+        );
     }
-
     
 }

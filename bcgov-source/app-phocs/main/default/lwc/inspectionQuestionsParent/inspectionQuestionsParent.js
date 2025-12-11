@@ -36,6 +36,13 @@ export default class InspectionQuestionsParent extends LightningElement {
                 const taskId = parent.assessmentTaskId;
                 if (defId) defIds.push(defId);
                 if (taskId) taskIds.push(taskId);
+
+                if (parent.childQuestions && parent.childQuestions.length) {
+                    parent.childQuestions.forEach(child => {
+                if (child.assessmentIndicatorDefinitionId) defIds.push(child.assessmentIndicatorDefinitionId);
+                if (child.assessmentTaskId) taskIds.push(child.assessmentTaskId);
+                });
+                }
             });
         });
 
@@ -59,21 +66,31 @@ export default class InspectionQuestionsParent extends LightningElement {
             parentQuestions: group.parentQuestions.map(parent => {
                 const defId = parent.assessmentIndicatorDefinitionId || parent.assessmentIndDefinitionId;
                 const taskId = parent.assessmentTaskId;
-                const key = defId && taskId ? (defId + '|' + taskId) : null;
-                const savedComment = key && commentsMap ? commentsMap[key] || '' : '';
+                const key = `${defId}|${taskId}`;
+                const saved = commentsMap[key] || {};
+                const savedComment = saved.comment || '';
+                const savedCheckbox = saved.checkbox || false;
 
                 return {
                     ...parent,
                     result: parent.Result || '',
                     originalResult: parent.Result || '',
                     comment: savedComment,
+                    originalComment: savedComment,
                     commentChange: false,
                     showChildren: parent.Result === 'Non-compliant',
-                    childQuestions: parent.childQuestions.map(child => ({
+                    childQuestions: parent.childQuestions.map(child => {
+                        const childKey = `${child.assessmentIndicatorDefinitionId}|${child.assessmentTaskId}`;
+                        const childSaved = commentsMap[childKey] || {};
+                        return{
                         ...child,
                         responseValue: child.Result || '',
-                        originalResponse: child.Result || ''
-                    }))
+                        originalResponse: child.Result || '',
+                        checkboxValue: childSaved.hasOwnProperty('checkbox') ? childSaved.checkbox : false,
+                        originalCheckboxValue: childSaved.hasOwnProperty('checkbox') ? childSaved.checkbox : false
+
+                        };
+                    })
                 };
             })
         }));
@@ -144,25 +161,31 @@ export default class InspectionQuestionsParent extends LightningElement {
 
 
     handleChildValueChange(event) {
-        const { parentId, childId } = event.detail;
-        const value = event.detail.value;
+    const { childId, taskId, value, isCheckbox } = event.detail;
 
-        this.groupedQuestions = this.groupedQuestions.map(group => ({
-            ...group,
-            parentQuestions: group.parentQuestions.map(parent => {
-                if (parent.assessmentIndicatorDefinitionId === parentId) {
-                    const updatedChildren = parent.childQuestions.map(child => {
-                        if (child.assessmentIndicatorDefinitionId === childId) {
-                            return { ...child, responseValue: value };
-                        }
-                        return child;
-                    });
-                    return { ...parent, childQuestions: updatedChildren };
+    this.groupedQuestions = this.groupedQuestions.map(group => ({
+        ...group,
+        parentQuestions: group.parentQuestions.map(parent => ({
+            ...parent,
+            childQuestions: parent.childQuestions.map(child => {
+                if (
+                    child.assessmentIndicatorDefinitionId === childId &&
+                    child.assessmentTaskId === taskId
+                ) {
+                    return {
+                        ...child,
+                        checkboxValue: isCheckbox ? value : child.checkboxValue,
+                        responseValue: !isCheckbox ? value : child.responseValue
+                    };
                 }
-                return parent;
+                return child;
             })
-        }));
-    }
+        }))
+    }));
+}
+
+
+ 
 
     async handleViewRegulatoryCodes(event) {
         const indicatorId = event.target.value;
@@ -192,6 +215,8 @@ export default class InspectionQuestionsParent extends LightningElement {
 
     try {
         let hasAnySelection = false;
+        
+
 
         for (const group of this.groupedQuestions) {
 
@@ -201,9 +226,11 @@ export default class InspectionQuestionsParent extends LightningElement {
                     parent.result !== parent.originalResult;
 
                 const commentChanged =
-                    parent.commentChange === true;
+                    parent.comment !== parent.originalComment;
 
                 if (resultChanged || commentChanged) {
+
+                     
 
                     await getcmtresult({
                         assessmentTaskId: parent.assessmentTaskId,
@@ -221,16 +248,17 @@ export default class InspectionQuestionsParent extends LightningElement {
                 if (parent.showChildren && parent.childQuestions) {
 
                     for (const child of parent.childQuestions) {
+                    const checkboxChanged = child.checkboxValue !== child.originalCheckboxValue;
 
-                        const childChanged =
-                            child.responseValue !== child.originalResponse;
+                        if(checkboxChanged){
+                            
 
-                        if (childChanged) {
                             await getcmtresult({
                                 assessmentTaskId: child.assessmentTaskId,
                                 definitionId: child.assessmentIndicatorDefinitionId,
                                 comment: '',
-                                result: child.responseValue || "Non-compliant"
+                                result: "Non-compliant",
+                                checkboxValue: child.checkboxValue
                             });
                         }
                     }
