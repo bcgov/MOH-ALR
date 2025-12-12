@@ -169,6 +169,7 @@ public with sharing class RenewalManagementController {
     //method to form a RegulatoryTrxnFeeItem record with given parameters
      public static RegulatoryTrxnFeeItem createTransFeeItemRecord(Id recordTypeId, Id regTrxnFeeId, Id assetId, String assetType, Decimal amtValue, Decimal quantValue, String feeType) {
          RegulatoryTrxnFeeItem transFeeItemRec = new RegulatoryTrxnFeeItem(
+         RecordTypeId = Schema.SObjectType.RegulatoryTrxnFeeItem.getRecordTypeInfosByDeveloperName().get('ALRTransactionFeeItem').getRecordTypeId(),
          RegulatoryTrxnFeeId = regTrxnFeeId,
          Unit__c = assetId,
          Name = assetType,
