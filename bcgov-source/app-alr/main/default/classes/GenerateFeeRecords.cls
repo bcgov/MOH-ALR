@@ -46,7 +46,8 @@ public with sharing class GenerateFeeRecords {
                 RegulatoryTrxnFeeId = rTFrec.getId(),
                 Name = 'Application Fee',
                 FeeAmount = blaList[0].LicenseType.OneTimeFee__c,
-                Amount__c = blaList[0].LicenseType.OneTimeFee__c
+                Amount__c = blaList[0].LicenseType.OneTimeFee__c,
+                RecordTypeId = Schema.SObjectType.RegulatoryTrxnFeeItem.getRecordTypeInfosByDeveloperName().get('ALRTransactionFeeItem').getRecordTypeId()
             );
             //Insert RegulatoryTrxnFeeItem record
             Database.SaveResult rTFIrec = Database.Insert(transFeeItemRec);
