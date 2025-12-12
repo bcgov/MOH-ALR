@@ -66,7 +66,7 @@
 
 ## Deployment Steps (20 mins)
 
-1. [ ] EHIS-1707 - Deploy Decision Matrix (5 min)
+1. [hold on ] EHIS-1707 - Deploy Decision Matrix (5 min)
  
 > sf project deploy start --source-dir src-bre\main\default\PhocsdecisionMatrixDefinition --wait 30 --target-org deployment.user@phocs.uat.com
 
@@ -100,13 +100,13 @@
 
 ## Post-Deployment Steps (30 mins)
 
-[ ] EHIS-1701 , EHIS-2116 Update Sharing on PHOCS Action Plan Template
+[ ]  Update Sharing on PHOCS Action Plan Template
 
    1. App Launcher -> Action Plan Templates -> **navigate** to `all Phocs action plan templates` record
 
    [ ] - As part of post deployment steps, after the deployment of “Action plan templates“, the status of this template is ‘Read only’, it's not visible to the users while adding a template on Action plan creation.
    -So please do the following steps to activate the template, 
-   -Note: Login as Phocs system admin user should have only Permissions assigned
+   -Note: Login as Phocs system admin user should have only phocs Permissions assigned
    -Step 1: Clone the existing Templates
    -Step 2: After cloning the Original Action Plan Template
    Before Publishing the template in the items section of Document checklist items 
@@ -119,44 +119,9 @@
 
    3. Click **Save**
 
-2. [ ] EHIS-2070 - Sharing list view with Phocs users
-
-3. [ ] EHIS-1622 , 1725 , 2221
-   - Click App Launcher, search “Business Rules Engine”
-   - Select Lookup Tables tab, find “PHOCS Document Checklists Decision Matrix” record
-   - Select Lookup Tables tab, find “PHOCS Inspection Action Plan Template Decision Matrix”
-   - Select Lookup Table tab, find "PHOCS Document Checklist Exemption " 
-   - Select the latest version in Related list ,Click “Upload CSV File” to upload attached file 
-
-4. [ ] EHIS-2079
-
-- Login with admin user and add below buttons in home tab
-- similarly perform same step for Officer user and all reporting persona users 
-  Fraser, interior, vancover, northern , vancover coastal
-- Home
-  Accounts
-  Contacts
-  Business License Applications
-  Business License
-  Public Complaint
-  Cases
-  Reports
-  Dashboards
-  Interaction Summaries
-
-5.[ ] EHIS-2089
-- navigate to visited party object - go to list view - phocs visited party - open list view with fields contacts, visits - and delete this list view - redeploy the listview from branch
-  
-6.[ ] EHIS-2098 , 2111 ,2292,2293,2125,2124,1968 - total 18 templates
-- Import PHOCSInvoiceTemplate and PHOCSReceiptTemplate in the target org .  (ST,QA,UAT & PROD) Save Template details and Activate 
-- Import PHOCSWaterBacteriologyRequisition.json ,PHOCS Water Bacteriology Requisition Template_V0.1.docx
-- Import PHOCSFoodSafetyRequisition.json,PHOCS Food safety Requisition Template_V1.docx,
-
-7.[ ] EHIA-2134
-- Setup, in the Quick Find box, enter Document Generation, and then select Custom Fonts Configuration.
-- To transfer your fonts from Static Resources to the centralized Docgen Custom Fonts Library, click Migrate.
-- From Setup, in the Quick Find box, enter Document Generation, and then select Custom Fonts Configuration.
-- To synchronize all font updates, additions, or deletions and to ensure they’re available for document generation, click Sync.
+6.[ ] EHIS-2565 - PR-1796 download lastest file from qa and upload in UAT
+- Import PHOCSReceiptTemplate in the target org .  (ST,QA,UAT & PROD) Save Template details and Activate 
+- compare all templates in qa and uat nd upload
 
 8.[?] EHIS-2194
 - Post PD Step to perform - create a contact
@@ -167,10 +132,7 @@
 - Profile - Custom Community Operator.
 - Permission set - PHOCS Operator User CRE PS.
 
-- [ ] EHIS-2104
-
 - [?] EHIS-2535 verify in UAT
-- [?] EHIS-2565 - PR-1796 download lastest file from qa and upload in UAT
 
 - [?] EHIS-2735
 
@@ -242,15 +204,6 @@ Upload Decision Matrix
 - Follow the Instructions Provided in the attachment “EHIS-2617.xlsx” to Insert data to Products object.
 
 > Verification Steps 
-
-[ ] EHIS-1613
-- Go To EHIS Standard User Profile -> object setting --> Account Account Relation -->  provide access to record type - Facility Linkage and make it default.
-
-[ ] EHIS-1786
-- Login as System Admin ,Navigate to Inspection, All list view,Select All, delete one duplicate
-
-[ ] EHIS-1815
-- Navigate to app launcher - search for regulatory authorization type object - select the list view with last modified date - go to list view filter - select the list view and delete
 
 [ ] EHIS-2258 
 - Go to Quick find →All Sites → click on Builder for phocsservices → click on Blue menu tab present in top left corner (refer screenshot_--->Click on Administration -- > click on emai section --> provide David user meail in Sender Email Address.
