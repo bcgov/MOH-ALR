@@ -36,6 +36,13 @@ public with sharing class PHOCSInspectionAssessmentIndController {
             rec = new InspectionAssessmentInd();
             rec.AssessmentIndDefinitionId = definitionId;
             rec.AssessmentTaskId = assessmentTaskId;
+            
+            Id rtId = Schema.SObjectType.InspectionAssessmentInd.getRecordTypeInfosByDeveloperName()
+    			.get('PHOCSInspectionAssessmentInd')
+    			.getRecordTypeId();
+            	
+            rec.RecordTypeId = rtId;
+
         }
 
         // Set values

@@ -15,12 +15,17 @@ public class PHOCSInspectionAssessIndControllerTest {
         );
         insert asstask;
         
+        Id rectId = Schema.SObjectType.InspectionAssessmentInd.getRecordTypeInfosByDeveloperName()
+    			.get('PHOCSInspectionAssessmentInd')
+    			.getRecordTypeId();
+        
         InspectionAssessmentInd insassind = new InspectionAssessmentInd(
         	AssessmentIndDefinitionId = assinddef.Id,
             AssessmentTaskId = asstask.Id,
             PHOCSInspectionComments__c = 'test comment',
             Result = 'Compliant',
-            PHOCSCheckboxResponse__c = false
+            PHOCSCheckboxResponse__c = false,
+            RecordTypeId = rectId
         );
         insert insassind;
     
@@ -33,7 +38,7 @@ public class PHOCSInspectionAssessIndControllerTest {
         delete [SELECT ID FROM InspectionAssessmentInd];
         
         Test.startTest();
-        PHOCSInspectionAssessmentIndController.getcmtresult(asstask.Id,assinddef.Id,'test comment','Non-compliant',true);
+        PHOCSInspectionAssessmentIndController.getcmtresult(asstask.Id,assinddef.Id,'test comment','Non Compliant',true);
         Test.stopTest();
         
         InspectionAssessmentInd newrec = [SELECT PHOCSInspectionComments__c,
@@ -41,10 +46,10 @@ public class PHOCSInspectionAssessIndControllerTest {
                                           Result
                                           FROM InspectionAssessmentInd 
                                           WHERE AssessmentTaskId =:asstask.Id 
-                                          AND AssessmentIndDefinitionId =:assinddef.Id 
+                                          AND AssessmentIndDefinitionId =:assinddef.Id
                                           LIMIT 1];
         System.assertEquals('test comment',newrec.PHOCSInspectionComments__c);
-        System.assertEquals('Non-compliant',newrec.Result);
+        System.assertEquals('Non Compliant',newrec.Result);
         
     }
 

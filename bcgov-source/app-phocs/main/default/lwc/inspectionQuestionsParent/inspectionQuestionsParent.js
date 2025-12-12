@@ -78,7 +78,7 @@ export default class InspectionQuestionsParent extends LightningElement {
                     comment: savedComment,
                     originalComment: savedComment,
                     commentChange: false,
-                    showChildren: parent.Result === 'Non-compliant',
+                    showChildren: parent.Result === 'PHOCSNonCompliant',
                     childQuestions: parent.childQuestions.map(child => {
                         const childKey = `${child.assessmentIndicatorDefinitionId}|${child.assessmentTaskId}`;
                         const childSaved = commentsMap[childKey] || {};
@@ -136,7 +136,7 @@ export default class InspectionQuestionsParent extends LightningElement {
                 
                 parent.result = value;
                 parent.resultChanged = true;
-                parent.showChildren = (value === 'Non-compliant');
+                parent.showChildren = (value === 'PHOCSNonCompliant');
             }
             return parent;
         })
@@ -257,7 +257,7 @@ export default class InspectionQuestionsParent extends LightningElement {
                                 assessmentTaskId: child.assessmentTaskId,
                                 definitionId: child.assessmentIndicatorDefinitionId,
                                 comment: '',
-                                result: "Non-compliant",
+                                result: "PHOCSNonCompliant",
                                 checkboxValue: child.checkboxValue
                             });
                         }
