@@ -203,6 +203,10 @@ Upload Decision Matrix
 [?] EHIS-2889 Follow Jira to perform the step
 - Follow the Instructions Provided in the attachment “EHIS-2617.xlsx” to Insert data to Products object.
 
+[ ] EHIS-2943 follow jira for steps
+[ ] EHIS-2974 follow jira for steps
+[ ] EHIS-2969 follow jira for steps
+
 > Verification Steps 
 
 [ ] EHIS-2258 
