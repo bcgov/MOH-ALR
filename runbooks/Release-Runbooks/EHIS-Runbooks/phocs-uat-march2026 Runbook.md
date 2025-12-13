@@ -49,9 +49,6 @@
 [ ] 1. EHIS-2530
 - Include changes in salesforcebackupadmininstratorbackup.ps copy from BCMOHAD-28583-Release-1.14.0.8 branch in the current deployment branch for UAT
 
-[ ] 2. EHIS-2527 Change the value of default domain field available in "User Registration User Mappings" custom metadata
-- Follow Jira to perform the step
-
 [ ] 3. Delete ReasonForAdvisory__c Single Picklist (old field) for case object
 
 [ ] 4.EHIS-2592 follow jira for the components
@@ -80,13 +77,7 @@
 
 3. [ ] Deploy Omni studio components 
 
-> sf project deploy start --source-dir bcgov-source/app-phocs/main/default/omniDataTransforms --source-dir bcgov-source/core/main/default/omniDataTransforms --target-org deployment.user@phocs.uat.com
-
-> sf project deploy start --source-dir bcgov-source\app-alr\main\default\omniDataTransforms --wait 30 --target-org deployment.user@phocs.uat.com
-
->sf project deploy start --source-dir bcgov-source\app-alr\main\default\omniUiCard --target-org deployment.user@phocs.uat.com
-
->sf project deploy start --source-dir bcgov-source/app-phocs/main/default/omniScripts --source-dir bcgov-source/core/main/default/omniScripts --target-org deployment.user@phocs.uat.com
+> sf project deploy start --source-dir bcgov-source\app-alr\main\default\omniDataTransforms --source-dir bcgov-source\app-alr\main\default\omniUiCard --source-dir bcgov-source\app-alr\main\default\omniIntegrationProcedures --source-dir bcgov-source\app-alr\main\default\omniScripts --source-dir bcgov-source/app-phocs/main/default/omniDataTransforms --source-dir bcgov-source\app-phocs\main\default\omniIntegrationProcedures --source-dir bcgov-source\app-phocs\main\default\omniUiCard --source-dir bcgov-source/app-phocs/main/default/omniScripts --source-dir bcgov-source/core/main/default/omniDataTransforms --source-dir bcgov-source/core/main/default/omniScripts --target-org deployment.user@phocs.uat.com
 
 4.[ ]  Deploy full repository (~20 min)
     1. [ ] Verify folders
