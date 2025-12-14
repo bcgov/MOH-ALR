@@ -101,6 +101,7 @@ public class TestDataFactory {
     public static RegulatoryTrxnFeeItem createTransFeeItemRecord(Id recordTypeId, Id regTrxnFeeId, Id assetId, String assetType, Decimal amtValue, Decimal quantValue, String feeType, Boolean isInsert) {
          RegulatoryTrxnFeeItem transFeeItemRec = new RegulatoryTrxnFeeItem(
          RegulatoryTrxnFeeId = regTrxnFeeId,
+         RecordTypeId = Schema.SObjectType.RegulatoryTrxnFeeItem.getRecordTypeInfosByDeveloperName().get('ALRTransactionFeeItem').getRecordTypeId(),
          Unit__c = assetId,
          Name = assetType,
          Amount__c = amtValue,
