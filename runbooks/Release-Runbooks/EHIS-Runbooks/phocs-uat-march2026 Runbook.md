@@ -18,6 +18,7 @@
    9.Groupmembership PS
   10.OmniStudio User
   11.OmniStudio Admin
+  12.Industries Visit
 
 - Public Groups
     - ALR All Users PG
@@ -36,7 +37,7 @@
     - EHIS Business Admin PSG
     - PHOCS System Administrator PSG
 
-2. [ ] Checkout to `latest`code 
+2. [x] Checkout to `release-phocs-uat-sp16`code 
 
 ## Assumptions
 
@@ -46,56 +47,38 @@
 
 ## Pre-Deployment Steps (20 mins)
 
-[ ] 1. EHIS-2530
+[x] 1. EHIS-2530
 - Include changes in salesforcebackupadmininstratorbackup.ps copy from BCMOHAD-28583-Release-1.14.0.8 branch in the current deployment branch for UAT
 
-[ ] 3. Delete ReasonForAdvisory__c Single Picklist (old field) for case object
+[x] 2. Delete ReasonForAdvisory__c Single Picklist (old field) for case object
 
-[ ] 4.EHIS-2592 follow jira for the components
+[x] 3.EHIS-2592 follow jira for the components
 - Please do the destructive changes deployment. I have attached the zip file
-
-[ ] 5.Destructive deployment -
-
-1. Action Plan Template path  - "src\main\default\actionPlanTemplates\Application_Document_Checklist_Updated_Vers_7ed25cd9_b55f_11ee_baf3_8b08e788e277.apt-meta.xml"
+Destructive deployment -
 
 > sf project deploy start -o deployment.user@phocs.uat.com --manifest "destructive/destructive-post-refresh/package.xml" --post-destructive-changes "destructive/destructive-post-refresh/destructiveChanges.xml" --wait 10
 
-
 ## Deployment Steps (20 mins)
 
-1. [hold on ] EHIS-1707 - Deploy Decision Matrix (5 min)
- 
-> sf project deploy start --source-dir src-bre\main\default\PhocsdecisionMatrixDefinition --wait 30 --target-org deployment.user@phocs.uat.com
+1. [x] EHIS-2865 Deploy ActionPlanTemplates
 
-> sf project deploy start --source-dir src-bre\main\default\decisionMatrixDefinition\Action_Plan_Template_Decision_Matrix.decisionMatrixDefinition-meta.xml --wait 30 --target-org deployment.user@phocs.uat.com
+> sf project deploy start --source-dir ActionPlanTemplates-Phocs\main\default\BCCDC_Dairy_Checklist_13e2c7f5_c56a_11f0_8a33_9524194c70a3.apt-meta.xml --wait 30 --target-org deployment.user@phocs.uat.com
 
-2. [ ] Deploy ActionPlanTemplates
-
-> sf project deploy start --source-dir bcgov-source/app-phocs/main/default/actionPlanTemplates --wait 30 --target-org deployment.user@phocs.uat.com
-
-> sf project deploy start --source-dir ActionPlanTemplates-Phocs/main/default --wait 30 --target-org deployment.user@phocs.uat.com
-
-3. [ ] Deploy Omni studio components 
+2. [x] Deploy Omni studio components 
 
 > sf project deploy start --source-dir bcgov-source\app-alr\main\default\omniDataTransforms --source-dir bcgov-source\app-alr\main\default\omniUiCard --source-dir bcgov-source\app-alr\main\default\omniIntegrationProcedures --source-dir bcgov-source\app-alr\main\default\omniScripts --source-dir bcgov-source/app-phocs/main/default/omniDataTransforms --source-dir bcgov-source\app-phocs\main\default\omniIntegrationProcedures --source-dir bcgov-source\app-phocs\main\default\omniUiCard --source-dir bcgov-source/app-phocs/main/default/omniScripts --source-dir bcgov-source/core/main/default/omniDataTransforms --source-dir bcgov-source/core/main/default/omniScripts --target-org deployment.user@phocs.uat.com
 
-4.[ ]  Deploy full repository (~20 min)
-    1. [ ] Verify folders
-      |Folder|Path|
-      |-|-|
-      |'bcgov-source/core/main/default,bcgov-source/app-phocs/main/default`|
+4.[x]  Deploy full repository (~20 min)
 
-> sf project deploy start --source-dir bcgov-source/core/main/default --source-dir bcgov-source/app-phocs/main/default --target-org deployment.user@phocs.uat.com --test-level RunLocalTests
-
-> move Accountaccount sharing rules that moved to temp to Phocs sharing rules folder and deploy to UAT
+> sf project deploy start --source-dir bcgov-source --target-org deployment.user@phocs.uat.com --test-level RunLocalTests -g
 
 ## Post-Deployment Steps (30 mins)
 
-[ ]  Update Sharing on PHOCS Action Plan Template
+[x] EHIS-2865 Update Sharing on PHOCS Action Plan Template
 
-   1. App Launcher -> Action Plan Templates -> **navigate** to `all Phocs action plan templates` record
+   1. App Launcher -> Action Plan Templates -> **navigate** to `BCCDC Dairy checklists` record
 
-   [ ] - As part of post deployment steps, after the deployment of “Action plan templates“, the status of this template is ‘Read only’, it's not visible to the users while adding a template on Action plan creation.
+   [x] - As part of post deployment steps, after the deployment of “Action plan templates“, the status of this template is ‘Read only’, it's not visible to the users while adding a template on Action plan creation.
    -So please do the following steps to activate the template, 
    -Note: Login as Phocs system admin user should have only phocs Permissions assigned
    -Step 1: Clone the existing Templates
@@ -106,15 +89,25 @@
       |Item Type|Item Name|Access Level|
       |-|-|-|
       |Public Group|` EHISUsersPG`|Read/Write|
-      |Public Group|`PHOCS Reporting User PG`|Read Only|
+      |Public Group|`PHOCS Reporting User PG` |Read Only|
+      |Public Group|`PHOCS Operator User PG` |Read Only|
 
    3. Click **Save**
 
-6.[ ] EHIS-2565 - PR-1796 download lastest file from qa and upload in UAT
-- Import PHOCSReceiptTemplate in the target org .  (ST,QA,UAT & PROD) Save Template details and Activate 
-- compare all templates in qa and uat nd upload
+- [x] Upload Action plan template
+  MOH-ALR\ActionPlanTemplates-Phocs\main\default\ BCCDC_Dairy_Checklist_13e2c7f5_c56a_11f0_8a33_9524194c70a3.apt-meta
+- Share the action plan template to 
+- PHOCS Business Admin & Officer PG - Public Group - Read/Write
+- PHOCS Reporting User PG -Public Group - Read
+- Update Decision Metrics
 
-8.[?] EHIS-2194
+[x] Upload Decision Matrix
+- Click App Launcher, search “Business Rules Engine”
+- Select Lookup Tables tab, find “PHOCS Document Checklists Decision Matrix” record
+- Select the latest version in Related list
+- Click “Upload PHOCS Document Checklists V1_2025-11-26 14_05_31 CSV File” to upload attached file 
+
+8.[x] EHIS-2703
 - Post PD Step to perform - create a contact
  2. Create an account with BE RT
  3. Assign role to contact owner 
@@ -123,9 +116,7 @@
 - Profile - Custom Community Operator.
 - Permission set - PHOCS Operator User CRE PS.
 
-- [?] EHIS-2535 verify in UAT
-
-- [?] EHIS-2735
+- [x] EHIS-2735
 
   PDT's for PHOCS site publish
   Step-1: Open the target salesforce instance.
@@ -144,15 +135,13 @@
   Step-5: Again Click on "phocsservices Profile" hyperlink under the Guest User Profile.Step-6: Click on "Assigned Users" button and wait and select the "Site Guest User, phocsservices".
   Step-7: Assign the "PHOCS Services Guest User PSG" Permission Set Group to the user.
 
+[ ] EHIS-2565 - PR-1796 download lastest file from qa and upload in UAT
+- Import PHOCSReceiptTemplate in the target org .  (ST,QA,UAT & PROD) Save Template details and Activate 
+- compare all templates in qa and uat nd upload
+
 > DataLoading
 
-[?] EHIS-2432 Follow Jira to Load the data into LabTestMasterList__c object. 
-
-Assign the corresponding recordtype and load the data.
-1. Query below and map the fields along with recordtypeId for radon, dye, food, water  in excel and load the data and verify the data with below query
-select Id , TestCategory__c, SampleTestType__c, ParameterType__c, PhysicalQuantity__c, RecordType.name , UnitOfMeasure__c, Name , CreatedBy.Name from LabTestMasterList__c 
-
-[?] EHIS-2810
+[x] EHIS-2810
 
 - Create Regulatory Authority and Regulatory Authorization record in all sandboxes
 
@@ -167,21 +156,6 @@ Name - Regulatory Authorization Category
 Issuing Department (Regulatory Authority)-BCCDC Dairy Worker Licence
 License-BCCDC
 
-[?] EHIS-2865
-
-- Upload Action plan template
-  MOH-ALR\ActionPlanTemplates-Phocs\main\default\ BCCDC_Dairy_Checklist_13e2c7f5_c56a_11f0_8a33_9524194c70a3.apt-meta
-- Share the action plan template to 
-- PHOCS Business Admin & Officer PG - Public Group - Read/Write
-- PHOCS Reporting User PG -Public Group - Read
-- Update Decision Metrics
-
-Upload Decision Matrix
-- Click App Launcher, search “Business Rules Engine”
-- Select Lookup Tables tab, find “PHOCS Document Checklists Decision Matrix” record
-- Select the latest version in Related list
-- Click “Upload PHOCS Document Checklists V1_2025-11-26 14_05_31 CSV File” to upload attached file 
-
 [x] EHIS-2894
 
 - Object: BusinessLicenseApplication
@@ -194,14 +168,16 @@ Upload Decision Matrix
 [?] EHIS-2889 Follow Jira to perform the step
 - Follow the Instructions Provided in the attachment “EHIS-2617.xlsx” to Insert data to Products object.
 
-[ ] EHIS-2943 follow jira for steps
-[ ] EHIS-2974 follow jira for steps
-[ ] EHIS-2969 follow jira for steps
+[x] EHIS-2943 follow jira for steps
+[x] EHIS-2974 follow jira for steps
+[x] EHIS-2969 follow jira for steps
 
 > Verification Steps 
 
-[ ] EHIS-2258 
+[x] EHIS-2258 
 - Go to Quick find →All Sites → click on Builder for phocsservices → click on Blue menu tab present in top left corner (refer screenshot_--->Click on Administration -- > click on emai section --> provide David user meail in Sender Email Address.
+
+- [ ] EHIS-2535 verify in UAT
 
 
 
