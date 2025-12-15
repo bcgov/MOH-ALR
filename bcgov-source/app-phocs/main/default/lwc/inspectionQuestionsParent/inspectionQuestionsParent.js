@@ -1,6 +1,7 @@
 import { LightningElement, track, api } from 'lwc';
 import getInspectionQuestions from '@salesforce/apex/InspectionQuestionsController.getInspectionQuestions';
 import getRegulatoryCodesByIndicator from '@salesforce/apex/InspectionQuestionsController.getRegulatoryCodesByIndicator';
+import updateInspectionStatusToInProgress from '@salesforce/apex/InspectionQuestionsController.updateInspectionStatusToInProgress';
 //import createInspectionAssessments from '@salesforce/apex/InspectionQuestionsController.createInspectionAssessments';
 import getcmtresult from '@salesforce/apex/PHOCSInspectionAssessmentIndController.getcmtresult';
 import getExistingCommentsByDefAndTask from '@salesforce/apex/PHOCSInspectionAssessmentIndController.getExistingCommentsByDefAndTask';
@@ -103,10 +104,17 @@ export default class InspectionQuestionsParent extends LightningElement {
     }
 }
 
-
-
-    handleStart() {
-        this.showQuestions = true;
+    async handleStart() {
+        this.isLoading = true;
+        try {
+            await updateInspectionStatusToInProgress({inspectionId: this.recordId});
+            this.showQuestions = true;
+            } catch (error) {
+                console.error(error);
+                this.showToast('Error', 'Unable to start inspection', 'error' );
+            } finally {
+                this.isLoading = false;
+            }
     }
 
     handleToggleSection(event) {
