@@ -1,7 +1,7 @@
 |Sandbox|`Post refresh runbook till SP-16 " UAT ORG "for March 2026 release UAT`|
 |-|-|
 |Runbook Created|`2025-12-12`|
-|Runbook Last Modified|`2025-12-14`|
+|Runbook Last Modified|`2025-12-15`|
 
 ## Pre-Requisites [5 min ]
 
@@ -135,8 +135,7 @@ Destructive deployment -
   Step-5: Again Click on "phocsservices Profile" hyperlink under the Guest User Profile.Step-6: Click on "Assigned Users" button and wait and select the "Site Guest User, phocsservices".
   Step-7: Assign the "PHOCS Services Guest User PSG" Permission Set Group to the user.
 
-[ ] EHIS-2565 - PR-1796 download lastest file from qa and upload in UAT
-- Import PHOCSReceiptTemplate in the target org .  (ST,QA,UAT & PROD) Save Template details and Activate 
+[x] EHIS-2565 - PR-1796 download lastest file from qa and upload in UAT
 - compare all templates in qa and uat nd upload
 
 > DataLoading
@@ -165,7 +164,19 @@ License-BCCDC
   2. The above list view does NOT exist on DEV main branch.
   3. There is another list view with same label name (API: PHOCSMyApplications). Please keep it as-is and do NOT delete it.
 
-[?] EHIS-2889 Follow Jira to perform the step
+[X] EHIS-2631 Create work area records
+- Work Area Name: BCCDC Dairy Work Area 1
+  Health Authority: blank
+  Primary Owner: blank
+  Supervisor: blank
+  Backup Owner: blank
+  Work Area Name: BCCDC Dairy Work Area 2
+  Health Authority: blank
+  Primary Owner: blank
+  Supervisor: blank
+  Backup Owner: blank
+
+[x] EHIS-2889 Follow Jira to perform the step
 - Follow the Instructions Provided in the attachment “EHIS-2617.xlsx” to Insert data to Products object.
 
 [x] EHIS-2943 follow jira for steps
