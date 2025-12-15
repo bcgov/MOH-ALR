@@ -136,7 +136,16 @@ Destructive deployment -
   Step-7: Assign the "PHOCS Services Guest User PSG" Permission Set Group to the user.
 
 [x] EHIS-2565 - PR-1796 download lastest file from qa and upload in UAT
-- compare all templates in qa and uat nd upload
+- compared all templates in qa and uat found differences for these templates and uploaded below
+- Construction Permit for Water Supply System
+- Pool Construction Permit
+- Drinking Water System Operating Permit
+- Food Premise Operating Permit
+- PHOCSChildcareLicenseTemplate
+- Residential Care License Template
+- Sewerage Holding Tank construction permit
+- Sewerage System
+- Temporary Food Premise Operating Permit
 
 > DataLoading
 
