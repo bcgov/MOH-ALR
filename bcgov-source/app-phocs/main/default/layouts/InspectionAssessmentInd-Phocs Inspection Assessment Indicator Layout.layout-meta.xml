@@ -3,33 +3,41 @@
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
         <customLabel>false</customLabel>
-        <detailHeading>false</detailHeading>
-        <editHeading>false</editHeading>
-        <label>Information</label>
+        <detailHeading>true</detailHeading>
+        <editHeading>true</editHeading>
+        <label>InspectionAssessmentIndicatorInfo</label>
         <layoutColumns>
             <layoutItems>
                 <behavior>Required</behavior>
-                <field>Name</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Required</behavior>
-                <field>Category__c</field>
+                <field>AssessmentTaskId</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Description</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Required</behavior>
-                <field>DataType</field>
+                <field>AssessmentIndDefinitionId</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>PHOCSParentId__c</field>
+                <field>Result</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Required</behavior>
-                <field>Criticality__c</field>
+                <behavior>Edit</behavior>
+                <field>DisplayOrder</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>TextFieldResponse</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Picklist_Field_Response__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>PHOCSInspectionComments__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>PHOCSCheckboxResponse__c</field>
             </layoutItems>
         </layoutColumns>
         <style>OneColumn</style>
@@ -44,38 +52,28 @@
         <layoutColumns/>
         <style>CustomLinks</style>
     </layoutSections>
-    <platformActionList>
-        <actionListContext>Record</actionListContext>
-        <platformActionListItems>
-            <actionName>Delete</actionName>
-            <actionType>StandardButton</actionType>
-            <sortOrder>0</sortOrder>
-        </platformActionListItems>
-    </platformActionList>
-    <quickActionList/>
     <relatedLists>
-        <fields>Name</fields>
-        <fields>RegulatoryCode</fields>
-        <relatedList>RegulatoryCodeAssessmentInds</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>Value</fields>
-        <fields>SequenceNumber</fields>
-        <relatedList>AssessmentIndDefinedValues</relatedList>
+        <relatedList>RelatedFileList</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>Name</fields>
-        <fields>Description</fields>
-        <fields>DataType</fields>
-        <fields>CreatedDate</fields>
-        <fields>CreatedBy</fields>
-        <relatedList>AssessmentIndicatorDefinition.PHOCSParentId__c</relatedList>
+        <fields>DateCreated</fields>
+        <fields>Priority</fields>
+        <fields>Status</fields>
+        <relatedList>RegCodeViolInspAssessmentInds</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>AssessmentIndDefinedValue</fields>
+        <relatedList>AssessmentIndValue</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <relatedList>RelatedEntityHistoryList</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00hbZ000000m9CI</masterLabel>
+        <masterLabel>00hbZ000002xTpd</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>

@@ -15,11 +15,17 @@ public class PHOCSInspectionAssessIndControllerTest {
         );
         insert asstask;
         
+        Id rectId = Schema.SObjectType.InspectionAssessmentInd.getRecordTypeInfosByDeveloperName()
+    			.get('PHOCSInspectionAssessmentInd')
+    			.getRecordTypeId();
+        
         InspectionAssessmentInd insassind = new InspectionAssessmentInd(
         	AssessmentIndDefinitionId = assinddef.Id,
             AssessmentTaskId = asstask.Id,
             PHOCSInspectionComments__c = 'test comment',
-            Result = 'Compliant'
+            Result = 'Compliant',
+            PHOCSCheckboxResponse__c = false,
+            RecordTypeId = rectId
         );
         insert insassind;
     
@@ -32,17 +38,18 @@ public class PHOCSInspectionAssessIndControllerTest {
         delete [SELECT ID FROM InspectionAssessmentInd];
         
         Test.startTest();
-        PHOCSInspectionAssessmentIndController.getcmtresult(asstask.Id,assinddef.Id,'test comment','Non-compliant');
+        PHOCSInspectionAssessmentIndController.getcmtresult(asstask.Id,assinddef.Id,'test comment','Non Compliant',true);
         Test.stopTest();
         
         InspectionAssessmentInd newrec = [SELECT PHOCSInspectionComments__c,
+                                          PHOCSCheckboxResponse__c,
                                           Result
                                           FROM InspectionAssessmentInd 
                                           WHERE AssessmentTaskId =:asstask.Id 
-                                          AND AssessmentIndDefinitionId =:assinddef.Id 
+                                          AND AssessmentIndDefinitionId =:assinddef.Id
                                           LIMIT 1];
         System.assertEquals('test comment',newrec.PHOCSInspectionComments__c);
-        System.assertEquals('Non-compliant',newrec.Result);
+        System.assertEquals('Non Compliant',newrec.Result);
         
     }
 
@@ -52,10 +59,11 @@ public class PHOCSInspectionAssessIndControllerTest {
         AssessmentTask asstask = [SELECT ID FROM AssessmentTask LIMIT 1];
         
         Test.startTest();
-        PHOCSInspectionAssessmentIndController.getcmtresult(asstask.Id,assinddef.Id,'update comment','N/A (Not Applicable)');
+        PHOCSInspectionAssessmentIndController.getcmtresult(asstask.Id,assinddef.Id,'update comment','N/A (Not Applicable)',false);
         Test.stopTest();
         
 		InspectionAssessmentInd updaterec = [SELECT PHOCSInspectionComments__c,
+                                          PHOCSCheckboxResponse__c,
                                           Result
                                           FROM InspectionAssessmentInd 
                                           WHERE AssessmentTaskId =:asstask.Id 
@@ -73,7 +81,7 @@ public class PHOCSInspectionAssessIndControllerTest {
     AssessmentIndicatorDefinition def = [SELECT Id FROM AssessmentIndicatorDefinition LIMIT 1];
     AssessmentTask task = [SELECT Id FROM AssessmentTask LIMIT 1];
     InspectionAssessmentInd ind = [
-        SELECT PHOCSInspectionComments__c
+        SELECT PHOCSInspectionComments__c,PHOCSCheckboxResponse__c
         FROM InspectionAssessmentInd
         WHERE AssessmentIndDefinitionId = :def.Id
         AND AssessmentTaskId = :task.Id
@@ -81,7 +89,7 @@ public class PHOCSInspectionAssessIndControllerTest {
     ];
 
     Test.startTest();
-    Map<String, String> result =
+    Map<String, Object> result =
         PHOCSInspectionAssessmentIndController.getExistingCommentsByDefAndTask(
             new List<Id>{ def.Id },
             new List<Id>{ task.Id }
@@ -91,9 +99,11 @@ public class PHOCSInspectionAssessIndControllerTest {
 
     // Assertions
     System.assert(result.containsKey(key), 'Returned map must contain the correct key');
-    System.assertEquals('test comment', result.get(key), 'Comment value should match the inserted record');
-
-    Map<String, String> emptyResult =
+     @SuppressWarnings('unchecked')
+    Map<String, Object> saved = (Map<String, Object>) result.get(key);
+    System.assertEquals('test comment',String.valueOf(saved.get('comment')),  'Comment value should match the inserted record');
+	System.assertEquals(false, Boolean.valueOf(String.valueOf(saved.get('checkbox'))), 'Checkbox value should match the inserted record');
+    Map<String, Object> emptyResult =
         PHOCSInspectionAssessmentIndController.getExistingCommentsByDefAndTask(
             new List<Id>(),
             new List<Id>()
