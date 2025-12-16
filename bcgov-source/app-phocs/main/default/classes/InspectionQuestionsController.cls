@@ -1,4 +1,6 @@
 public with sharing class InspectionQuestionsController {
+    public static String STATUS_PLANNED = 'Planned';
+    public static final String STATUS_INPROGRESS = 'InProgress';
 
     @AuraEnabled(cacheable = false)
     public static List<TaskGroupWrapper> getInspectionQuestions(Id visitId) {
@@ -190,6 +192,18 @@ public with sharing class InspectionQuestionsController {
             PublicSectrSltn.AssessmentResponses.storeResponses(inptKeyVsValue, output1KeyVsValue, output2KeyVsValue);
             }
     }
+    
+    @AuraEnabled
+    public static void updateInspectionStatusToInProgress(Id inspectionId) {
+        
+        Visit vistRec = [SELECT Id, Status FROM Visit WHERE Id =: inspectionId LIMIT 1];
+        
+        if (vistRec.Status != STATUS_INPROGRESS && vistRec.Status == STATUS_PLANNED) {
+            vistRec.Status = STATUS_INPROGRESS;
+            update vistRec;
+        }
+    }
+
 
     public class TaskGroupWrapper {
         @AuraEnabled public Id taskDefinitionId { get; set; }
