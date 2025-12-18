@@ -180,7 +180,7 @@ public with sharing class ServerSideDocumentGenerationController {
             documentMappingData1.put('LicenseType', accRec.LicenseType__r.Name);//TO DO: add if for null check?
             documentMappingData1.put('ResidencePhoneNumber', accRec.Phone);
             documentMappingData1.put('ResidenceFax', accRec.Fax);
-            documentMappingData1.put('CurrentYear', String.valueOf(Date.Today().Year()));
+            documentMappingData1.put('CurrentYear', BCMOH_Constants.renewalYear);
             
             if(accRec.ParentId != NULL) {
                 documentMappingData1.put('RegistrantName', accRec.Parent.Name);          
