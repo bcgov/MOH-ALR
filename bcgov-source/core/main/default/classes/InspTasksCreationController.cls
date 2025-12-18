@@ -75,7 +75,9 @@ public with sharing class InspTasksCreationController {
                     newAssessmentTask.AssessmentTaskDefinitionId = ATDs.Id;
                     newAssessmentTask.ParentId = visitId;
                     newAssessmentTask.TaskType = BCMOH_Constants.TaskType;
+                    if(assesmentTaskRecordTypeId != null){
                     newAssessmentTask.RecordTypeId = assesmentTaskRecordTypeId;
+                    }
                     aTstoInsert.add(newAssessmentTask);
                 }
                 if(!aTstoInsert.isEmpty()){
