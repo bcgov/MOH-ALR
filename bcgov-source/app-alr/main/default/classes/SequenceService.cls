@@ -49,7 +49,7 @@ public with sharing class SequenceService {
             Sequence__c singleton = lockOrCreateSingleton();
 
             // Compute allocation window
-            Integer base = (singleton.LastNumber__c == null) ? 0 : Integer.valueOf(singleton.LastNumber__c);
+            Integer base = (singleton.LastNumber__c == null) ? 00001 : Integer.valueOf(singleton.LastNumber__c);
             Integer size = requests.size();
             Integer newLast = base + size;
 
