@@ -2,7 +2,7 @@
 <OmniIntegrationProcedure xmlns="http://soap.sforce.com/2006/04/metadata">
     <customJavaScript>{&quot;omniscriptId&quot;:&quot;0jNbZ000000PqOPUA0&quot;,&quot;language&quot;:&quot;English&quot;,&quot;type&quot;:&quot;LicensingAndPermitting&quot;,&quot;subType&quot;:&quot;PersonalServiceEstablishmentHealthApproval&quot;,&quot;sId&quot;:&quot;0jNbZ000000PqOPUA0&quot;,&quot;runMode&quot;:&quot;preview&quot;,&quot;theme&quot;:&quot;lightning&quot;,&quot;LanguageCode&quot;:&quot;en_US&quot;,&quot;userProfile&quot;:&quot;System Administrator&quot;,&quot;timeStamp&quot;:&quot;2025-11-14T09:13:59.989Z&quot;,&quot;userTimeZoneName&quot;:&quot;America/Vancouver&quot;,&quot;userTimeZone&quot;:&quot;-480&quot;,&quot;userCurrencyCode&quot;:&quot;CAD&quot;,&quot;userName&quot;:&quot;haripavan.madireddy@accenture.dev.com&quot;,&quot;userId&quot;:&quot;005bZ00000Aku0FQAR&quot;,&quot;omniProcessId&quot;:&quot;0jNbZ000000PqOPUA0&quot;,&quot;localTimeZoneName&quot;:&quot;Asia/Calcutta&quot;,&quot;LoggedInUserContactName&quot;:&quot;&quot;,&quot;LogInUserContactId&quot;:&quot;&quot;,&quot;BusinessEntityAccountId&quot;:&quot;&quot;,&quot;DefaultFacilityType&quot;:&quot;Personal Services&quot;,&quot;ReasonForApplyingStep&quot;:{&quot;ReasonForApplyRadio&quot;:&quot;New operating permit/licence&quot;},&quot;FacilityInformationStep&quot;:{&quot;CategoryBlock&quot;:{&quot;TypeText&quot;:&quot;Personal Services&quot;,&quot;CategoryL1Select&quot;:&quot;Low risk services&quot;},&quot;BasicInformationBlock&quot;:{&quot;AccountNameText&quot;:&quot;test ps account&quot;}},&quot;ApplicationDetailsStep&quot;:{&quot;ReviewApplicationDescription&quot;:&quot;test ps acc&quot;},&quot;ReviewStep&quot;:{&quot;BasicInformationReviewBlock&quot;:{&quot;AccountNameFormula&quot;:&quot;test ps account&quot;,&quot;PhoneFormula&quot;:null,&quot;PhoneExtensionFormula&quot;:null,&quot;FactoryEmailFormula&quot;:null,&quot;FaxFormula&quot;:null,&quot;WebSiteFormula&quot;:null,&quot;OperationStartDateFormula&quot;:null,&quot;DescriptionFormula&quot;:null},&quot;CategoryReviewBlock&quot;:{&quot;TypeFormula&quot;:&quot;Personal Services&quot;,&quot;CategoryL1Formula&quot;:&quot;Low risk services&quot;,&quot;CategoryL2Formula&quot;:null,&quot;CategoryL3Formula&quot;:null},&quot;AddressInformationReviewBlock&quot;:{&quot;PhysicalAddressStreetFormula&quot;:null,&quot;PhysicalAddressCountryFormula&quot;:null,&quot;PhysicalAddressCityFormula&quot;:null,&quot;PhysicalAddressStateFormula&quot;:null,&quot;PhysicalAddressZipcodeFormula&quot;:null,&quot;DrivingDirectionsFormula&quot;:null,&quot;MailingAddressStreetFormula&quot;:null,&quot;MailingAddressCountryFormula&quot;:null,&quot;MailingAddressCityFormula&quot;:null,&quot;MailingAddressStateFormula&quot;:null,&quot;MailingAddressZipcodeFormula&quot;:null,&quot;BillingAddressStreetFormula&quot;:null,&quot;BillingAddressCountryFormula&quot;:null,&quot;BillingAddressCityFormula&quot;:null,&quot;BillingAddressStateFormula&quot;:null,&quot;BillingAddressZipcodeFormula&quot;:null,&quot;Formula4&quot;:null},&quot;AdditionalFacilityInfoReviewBlock&quot;:{&quot;ServiceAreaReviewFormula&quot;:null},&quot;PrimaryOwnerFormula&quot;:null,&quot;ReviewNameOfCommunityWaterSupply&quot;:null,&quot;ParentAccount&quot;:null,&quot;OtherServicesAtThisAddressFormula&quot;:null},&quot;omniScriptId&quot;:&quot;0jNbZ000000PqOPUA0&quot;,&quot;elementName&quot;:&quot;PHOCSPersonalServiceEstablishmentIP&quot;}</customJavaScript>
     <elementTypeComponentMapping>{&quot;ElementTypeToHTMLTemplateList&quot;:[]}</elementTypeComponentMapping>
-    <isActive>false</isActive>
+    <isActive>true</isActive>
     <isIntegProcdSignatureAvl>false</isIntegProcdSignatureAvl>
     <isIntegrationProcedure>true</isIntegrationProcedure>
     <isManagedUsingStdDesigner>false</isManagedUsingStdDesigner>
@@ -81,7 +81,7 @@
   &quot;bundle&quot; : &quot;PHOCSPersonalServiceEstablishmentCreateBLA&quot;,
   &quot;sendJSONNode&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>3.0</sequenceNumber>
+        <sequenceNumber>4.0</sequenceNumber>
         <type>DataRaptor Post Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -148,7 +148,7 @@
   &quot;bundle&quot; : &quot;PHOCSDMExtractBLARecordCreated&quot;,
   &quot;sendJSONNode&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>4.0</sequenceNumber>
+        <sequenceNumber>5.0</sequenceNumber>
         <type>DataRaptor Extract Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -176,8 +176,34 @@
   &quot;restOptions&quot; : { },
   &quot;sendJSONNode&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>5.0</sequenceNumber>
+        <sequenceNumber>6.0</sequenceNumber>
         <type>Response Action</type>
+    </omniProcessElements>
+    <omniProcessElements>
+        <description>Set Values Action</description>
+        <isActive>true</isActive>
+        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+        <level>0.0</level>
+        <name>SetValues</name>
+        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+        <propertySetConfig>{
+  &quot;responseJSONPath&quot; : &quot;&quot;,
+  &quot;responseJSONNode&quot; : &quot;&quot;,
+  &quot;executionConditionalFormula&quot; : &quot;&quot;,
+  &quot;actionMessage&quot; : &quot;&quot;,
+  &quot;elementValueMap&quot; : {
+    &quot;CreatedAccountId&quot; : &quot;%CreateAccount:createdAccId%&quot;
+  },
+  &quot;failureConditionalFormula&quot; : &quot;&quot;,
+  &quot;failOnStepError&quot; : false,
+  &quot;id&quot; : &quot;&quot;,
+  &quot;internalNotes&quot; : &quot;&quot;,
+  &quot;isActive&quot; : true,
+  &quot;restOptions&quot; : { },
+  &quot;chainOnStep&quot; : false
+}</propertySetConfig>
+        <sequenceNumber>3.0</sequenceNumber>
+        <type>Set Values</type>
     </omniProcessElements>
     <omniProcessKey>LicenseAndPermit_PHOCSPersonalServiceEstablishmentHealthApproval</omniProcessKey>
     <omniProcessType>Integration Procedure</omniProcessType>
@@ -207,6 +233,6 @@
 }</propertySetConfig>
     <subType>PHOCSPersonalServiceEstablishmentHealthApproval</subType>
     <type>LicenseAndPermit</type>
-    <uniqueName>LicenseAndPermit_PHOCSPersonalServiceEstablishmentHealthApproval_Procedure_1</uniqueName>
-    <versionNumber>1.0</versionNumber>
+    <uniqueName>LicenseAndPermit_PHOCSPersonalServiceEstablishmentHealthApproval_Procedure_2</uniqueName>
+    <versionNumber>2.0</versionNumber>
 </OmniIntegrationProcedure>
