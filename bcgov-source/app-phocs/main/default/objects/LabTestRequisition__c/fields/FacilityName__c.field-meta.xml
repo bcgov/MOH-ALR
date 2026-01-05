@@ -5,7 +5,7 @@
     <label>Facility Name</label>
     <lookupFilter>
         <active>true</active>
-        <booleanFilter>((1 AND (5 OR 6)) OR (2 AND 5 AND 8) OR (3 AND 5 AND 7) OR (4 AND 5 AND 7))</booleanFilter>
+        <booleanFilter>((1 AND (5 OR 6)) OR (2 AND 5 AND 8) OR (3 AND 5 AND 7) OR (4 AND 5 AND 7)) OR (9 AND 10)</booleanFilter>
         <filterItems>
             <field>$Source.RecordTypeId</field>
             <operation>equals</operation>
@@ -45,6 +45,16 @@
             <field>Account.Type</field>
             <operation>equals</operation>
             <value>Sewerage</value>
+        </filterItems>
+        <filterItems>
+            <field>$Source.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Dairy Product Test Requisition</value>
+        </filterItems>
+        <filterItems>
+            <field>Account.Type</field>
+            <operation>equals</operation>
+            <value>Dairy</value>
         </filterItems>
         <isOptional>true</isOptional>
     </lookupFilter>
