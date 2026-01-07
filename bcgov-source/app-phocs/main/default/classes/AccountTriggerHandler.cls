@@ -32,7 +32,8 @@ public class AccountTriggerHandler {
     for (Account acct : accounts) {
         if (acct.RecordTypeName__c != 'DrinkingWaterSourceIntake' &&
             acct.RecordTypeName__c != 'DrinkingWaterSystem' &&
-            acct.RecordTypeName__c != 'Facility') {
+            acct.RecordTypeName__c != 'Facility' && 
+           	acct.RecordTypeName__c != 'PHOCSDairyFacility') {
             continue;
         }
 
