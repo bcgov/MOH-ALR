@@ -15,6 +15,11 @@
     ),
     AND(
         ISPICKVAL(Status__c, &quot;Open&quot;),
+        $RecordType.DeveloperName = &quot;PHOCSDairyFacility&quot;,
+        ISBLANK(ParentAccount__c)
+    ),
+    AND(
+        ISPICKVAL(Status__c, &quot;Open&quot;),
         $RecordType.DeveloperName = &quot;DrinkingWaterSystem&quot;,
         ISBLANK(ParentAccount__c)
     )
