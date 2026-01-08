@@ -42,6 +42,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
     selectPriority = '';
     preferredDateTime;
     actionDescription;
+    correctedDuringInspection;
     regcodvioId;
     
 
@@ -152,7 +153,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
                     questionCount++;
                     const currentResult = parent.Result || '';
                     const savedComment = parent.PHOCSInspectionComments || '';
-                    
+
                     if (currentResult) {
                         answeredCount++;
                         if (currentResult === RESULT_COMPLIANT) compliant++;
@@ -161,18 +162,10 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
                     return this.updateParentQuestion(parent, {
                         result: currentResult,
-                        originalResult: currentResult,
+                        originalResult: parent.originalResult ?? currentResult,
                         comment: savedComment,
-                        originalComment: savedComment,
+                        originalComment: parent.originalComment ?? savedComment,
                         commentChange: false,
-                        selectPriority: parent.selectPriority ?? null,
-                        originalSelectPriority: parent.selectPriority ?? null,
-                        preferredDateTime: parent.preferredDateTime ?? null,
-                        originalPreferredDateTime: parent.preferredDateTime ?? null,
-                        actionDescription: parent.actionDescription ?? null,
-                        originalActionDescription: parent.actionDescription ?? null,
-                        correctedDuringInspection: parent.correctedDuringInspection ?? false,
-                        originalCorrectedDuringInspection: parent.correctedDuringInspection ?? false,
                         regcodvioId: parent.regcodvioId ?? null,
                         questionCardClass: parent.showCriticalIcon ? 'question-card question-card--critical' : 'question-card',
                         uploadedContentDocIds: [],
@@ -571,7 +564,15 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
                     for (const group of this.groupedQuestions) {
                         for (const parent of group.parentQuestions) {
-                            if (parent.result) {
+                            //if (parent.result) {
+                            if (
+                                parent.result ||
+                                parent.comment ||
+                                parent.selectPriority ||
+                                parent.preferredDateTime ||
+                                parent.actionDescription ||
+                                parent.correctedDuringInspection
+                            ) {
                                 responsesToSave.push({
                                     assessmentTaskId: parent.assessmentTaskId,
                                     definitionId: parent.assessmentIndicatorDefinitionId,
