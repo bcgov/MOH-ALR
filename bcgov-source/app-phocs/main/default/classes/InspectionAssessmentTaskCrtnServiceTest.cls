@@ -10,7 +10,7 @@ public class InspectionAssessmentTaskCrtnServiceTest{
     public static Id recordTypePHOCSDairyAccount = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('PHOCSDairyFacility').getRecordTypeId();
     public static Id recordTypePHOCSInspection = Schema.SObjectType.Visit.getRecordTypeInfosByDeveloperName().get('PHOCSInspection').getRecordTypeId();
     public static Id recordTypePHOCSDairyPlantRoomsandEquipment = Schema.SObjectType.Asset.getRecordTypeInfosByDeveloperName().get('PHOCSDairyPlantRoomsandEquipment').getRecordTypeId();
-    
+    public static Id recordTypePHOCSInspectionType = Schema.SObjectType.InspectionType.getRecordTypeInfosByDeveloperName().get('PHOCSInspectionType').getRecordTypeId();
     //Test Data Setup
     private static void createTestData() {
         Id rtPHOCSInspectionAssessmentInd = Schema.SObjectType.InspectionAssessmentInd.getRecordTypeInfosByDeveloperName().get('PHOCSInspectionAssessmentInd').getRecordTypeId();
@@ -61,20 +61,17 @@ public class InspectionAssessmentTaskCrtnServiceTest{
         loc.Longitude = 27.635308;
         loc.Latitude = 29.635308;
         insert loc;
-        Id instypeId ;
-        List<InspectionType> listInsType = [select id,name from InspectionType ];
-        IF(listInsType.isEmpty()){
+        	
             InspectionType inspectype = new InspectionType(
-                Name = 'In-depth'
-            );
-            insert inspectype;
-            instypeId= inspectype.Id;
-        }else{
-           instypeId =  listInsType.get(0).id;
-        }
+            Name = 'test isnpection type',
+            InspectionTypes__c = 'Routine',
+            Description = 'description test',
+            RecordTypeId = recordTypePHOCSInspectionType
+        );
+        insert inspectype;
 		
         
-        Visit insp = new Visit(InspectionMethod__c = 'Scheduled on Site Inspection', AccountId = dairyAccount.Id, PlaceId = loc.Id, PlannedVisitStartTime = System.now(), RecordTypeId = recordTypePHOCSInspection, VisitTypeId = instypeId);
+        Visit insp = new Visit(InspectionMethod__c = 'Scheduled on Site Inspection', AccountId = dairyAccount.Id, PlaceId = loc.Id, PlannedVisitStartTime = System.now(), RecordTypeId = recordTypePHOCSInspection, VisitTypeId = inspectype.Id);
         insert insp;   
     }
     
