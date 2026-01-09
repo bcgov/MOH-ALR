@@ -61,8 +61,18 @@ public class InspectionAssessmentTaskCrtnServiceTest{
         loc.Longitude = 27.635308;
         loc.Latitude = 29.635308;
         insert loc;
-        
-        Id instypeId = [SELECT Id FROM InspectionType WHERE Name = 'In-depth'].Id;
+        Id instypeId ;
+        List<InspectionType> listInsType = [select id,name from InspectionType ];
+        IF(listInsType.isEmpty()){
+            InspectionType inspectype = new InspectionType(
+                Name = 'In-depth'
+            );
+            insert inspectype;
+            instypeId= inspectype.Id;
+        }else{
+           instypeId =  listInsType.get(0).id;
+        }
+		
         
         Visit insp = new Visit(InspectionMethod__c = 'Scheduled on Site Inspection', AccountId = dairyAccount.Id, PlaceId = loc.Id, PlannedVisitStartTime = System.now(), RecordTypeId = recordTypePHOCSInspection, VisitTypeId = instypeId);
         insert insp;   
