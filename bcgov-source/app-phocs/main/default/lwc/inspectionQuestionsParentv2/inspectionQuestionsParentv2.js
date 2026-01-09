@@ -39,11 +39,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
     regulatoryCodesCache = {};
     uploadedFilesMap = {};
-    selectPriority = '';
-    preferredDateTime;
-    actionDescription;
-    correctedDuringInspection;
-    regcodvioId;
+    
     
 
     get acceptedFormats() {
@@ -113,18 +109,20 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
         return { progressText: `(${answered}/${total})`, isComplete: answered === total, pendingCount: total - answered };
     }
 
-    updateParentQuestion(parent, updates) {
-        const result = updates.result ?? parent.result;
-        return {
-            ...parent,
-            ...updates,
-            compliantButtonClass: this.getButtonClass(RESULT_COMPLIANT, result),
-            nonCompliantButtonClass: this.getButtonClass(RESULT_NON_COMPLIANT, result),
-            naButtonClass: this.getButtonClass(RESULT_NA, result),
-            nsButtonClass: this.getButtonClass(RESULT_NS, result),
-            showChildren: result === RESULT_NON_COMPLIANT
-        };
-    }
+   updateParentQuestion(parent, updates) {
+    const result = updates.result ?? parent.result;
+
+    return {
+        ...parent,
+        ...updates,
+        compliantButtonClass: this.getButtonClass(RESULT_COMPLIANT, result),
+        nonCompliantButtonClass: this.getButtonClass(RESULT_NON_COMPLIANT, result),
+        naButtonClass: this.getButtonClass(RESULT_NA, result),
+        nsButtonClass: this.getButtonClass(RESULT_NS, result),
+        showChildren: result === RESULT_NON_COMPLIANT
+    };
+}
+
 
     updateGroupedQuestions(updateFn) {
         this.groupedQuestions = this.groupedQuestions.map(group => {
@@ -143,57 +141,128 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
     // ========================================
 
     async loadInspectionQuestions() {
-        this.isLoading = true;
-        try {
-            const result = await getInspectionQuestions({ visitId: this.recordId });
-            let questionCount = 0, answeredCount = 0, compliant = 0, nonCompliant = 0;
+    this.isLoading = true;
 
-            this.groupedQuestions = result.map(group => {
-                const parentQs = group.parentQuestions.map(parent => {
-                    questionCount++;
-                    const currentResult = parent.Result || '';
-                    const savedComment = parent.PHOCSInspectionComments || '';
+    try {
+        const result = await getInspectionQuestions({ visitId: this.recordId });
 
-                    if (currentResult) {
-                        answeredCount++;
-                        if (currentResult === RESULT_COMPLIANT) compliant++;
-                        else if (currentResult === RESULT_NON_COMPLIANT) nonCompliant++;
-                    }
+        let questionCount = 0;
+        let answeredCount = 0;
+        let compliant = 0;
+        let nonCompliant = 0;
 
-                    return this.updateParentQuestion(parent, {
-                        result: currentResult,
-                        originalResult: parent.originalResult ?? currentResult,
-                        comment: savedComment,
-                        originalComment: parent.originalComment ?? savedComment,
-                        commentChange: false,
-                        regcodvioId: parent.regcodvioId ?? null,
-                        questionCardClass: parent.showCriticalIcon ? 'question-card question-card--critical' : 'question-card',
-                        uploadedContentDocIds: [],
-                        childQuestions: parent.childQuestions.map(child => ({
-                            ...child,
-                            responseValue: child.Result || '',
-                            originalResponse: child.Result || '',
-                            checkboxValue: child.PHOCSCheckboxResponse || false,
-                            originalCheckboxValue: child.PHOCSCheckboxResponse || false
-                        }))
-                    });
+
+        let headerSource = null;
+
+        this.groupedQuestions = result.map(group => {
+            const parentQs = group.parentQuestions.map(parent => {
+                questionCount++;
+
+                const currentResult = parent.Result || '';
+                const savedComment = parent.PHOCSInspectionComments || '';
+
+                if (currentResult) {
+                    answeredCount++;
+                    if (currentResult === RESULT_COMPLIANT) compliant++;
+                    else if (currentResult === RESULT_NON_COMPLIANT) nonCompliant++;
+                }
+
+                // 🔑 Capture header record (ONLY ONE)
+                if (
+                    !headerSource &&
+                    parent.inspectionAssessmentIndId &&
+                    (
+                        parent.selectPriority !== null ||
+                        parent.preferredDateTime !== null ||
+                        parent.actionDescription !== null ||
+                        parent.correctedDuringInspection === true
+                    )
+                ) {
+                    headerSource = parent;
+                }
+
+                console.log('FINAL PARENT BEFORE RENDER', {
+    priority: parent.selectPriority,
+    dueDate: parent.preferredDateTime,
+    action: parent.actionDescription,
+    corrected: parent.correctedDuringInspection
+});
+
+
+                return this.updateParentQuestion(parent, {
+                    result: currentResult,
+                    originalResult: parent.originalResult ?? currentResult,
+                    comment: savedComment,
+                    originalComment: parent.originalComment ?? savedComment,
+                    commentChange: false,
+                    selectPriority: parent.selectPriority ?? null,
+                    preferredDateTime: parent.preferredDateTime
+                    ? new Date(parent.preferredDateTime).toISOString().slice(0,16)
+                    : null,
+                    actionDescription: parent.actionDescription ?? '',
+                    correctedDuringInspection: parent.correctedDuringInspection ?? false,
+                    regcodvioId: parent.inspectionAssessmentIndId ?? null,
+                    questionCardClass: parent.showCriticalIcon
+                        ? 'question-card question-card--critical'
+                        : 'question-card',
+                    uploadedContentDocIds: [],
+                    childQuestions: parent.childQuestions.map(child => ({
+                        ...child,
+                        responseValue: child.Result || '',
+                        originalResponse: child.Result || '',
+                        checkboxValue: child.PHOCSCheckboxResponse || false,
+                        originalCheckboxValue: child.PHOCSCheckboxResponse || false
+                    }))
                 });
-
-                const progress = this.calculateSectionProgress(parentQs);
-                return { ...group, isExpanded: false, iconName: 'utility:chevronright', isSaving: false, hasSaved: false, parentQuestions: parentQs, ...progress };
             });
 
-            this.totalQuestions = questionCount;
-            this.answeredQuestions = answeredCount;
-            this.compliantCount = compliant;
-            this.nonCompliantCount = nonCompliant;
-        } catch (err) {
-            console.error('Error loading inspection questions', err);
-            this.showToast('Error', 'Error loading inspection questions: ' + (err?.body?.message || err?.message || JSON.stringify(err)), 'error');
-        } finally {
-            this.isLoading = false;
+            const progress = this.calculateSectionProgress(parentQs);
+            return {
+                ...group,
+                isExpanded: false,
+                iconName: 'utility:chevronright',
+                isSaving: false,
+                hasSaved: false,
+                parentQuestions: parentQs,
+                ...progress
+            };
+        });
+
+        // 🔑 APPLY HEADER VALUES ONCE (AFTER MAP)
+        if (headerSource) {
+            this.selectPriority = headerSource.selectPriority ?? null;
+            this.preferredDateTime = headerSource.preferredDateTime ?? null;
+            this.actionDescription = headerSource.actionDescription ?? '';
+            this.correctedDuringInspection =
+                headerSource.correctedDuringInspection ?? false;
+            this.regcodvioId = headerSource.inspectionAssessmentIndId ?? null;
         }
+
+        this.totalQuestions = questionCount;
+        this.answeredQuestions = answeredCount;
+        this.compliantCount = compliant;
+        this.nonCompliantCount = nonCompliant;
+
+        console.log('Loaded header values:', {
+            priority: this.selectPriority,
+            dueDate: this.preferredDateTime,
+            action: this.actionDescription,
+            corrected: this.correctedDuringInspection
+        });
+
+    } catch (err) {
+        console.error('Error loading inspection questions', err);
+        this.showToast(
+            'Error',
+            'Error loading inspection questions: ' +
+                (err?.body?.message || err?.message),
+            'error'
+        );
+    } finally {
+        this.isLoading = false;
     }
+}
+
 
     // ========================================
     // EVENT HANDLERS
@@ -287,16 +356,20 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
         
 
-    updateParentQuestionById(questionId, updates) {
-        this.groupedQuestions = this.groupedQuestions.map(group => ({
-        ...group,
-        parentQuestions: group.parentQuestions.map(parent =>
+            updateParentQuestionById(questionId, updates) {
+            this.groupedQuestions = this.groupedQuestions.map(group => {
+            const parentQuestions = group.parentQuestions.map(parent =>
             parent.assessmentIndicatorDefinitionId === questionId
-                ? this.updateParentQuestion(parent, updates)
+                ? { ...parent, ...updates }
                 : parent
-                )
-        }));
-        }
+        );
+        return { ...group, parentQuestions };
+    });
+}
+
+
+
+
 
     handleDatetimeChange(event) {
     const questionId = event.target.dataset.questionId;
