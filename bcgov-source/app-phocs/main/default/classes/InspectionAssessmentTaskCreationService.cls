@@ -11,6 +11,7 @@ public without sharing class InspectionAssessmentTaskCreationService {
     public static String className = 'InspectionAssessmentTaskCreationService';
     public static Boolean forceSignatureProcessingInTest = false;
     public static Set<Id> testSignatureItemIds = new Set<Id>();
+    public static Id recordTypePHOCSInspection = Schema.SObjectType.Visit.getRecordTypeInfosByDeveloperName().get('PHOCSInspection').getRecordTypeId();
 /**
 * @author: Deepak
 * @date: 06 Jan 2026
@@ -44,7 +45,7 @@ public without sharing class InspectionAssessmentTaskCreationService {
         try {
             Visit visit = [SELECT Id, RecordType.DeveloperName, AccountId, Account.Type, Account.RecordType.DeveloperName, VisitType.Name FROM Visit WHERE Id = :visitId LIMIT 1];
             
-            if (visit.RecordType == null || visit.RecordType.DeveloperName != 'PHOCSInspection'){
+            if (visit.RecordTypeId != recordTypePHOCSInspection){
                 return;
             }
             
