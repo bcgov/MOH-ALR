@@ -6,6 +6,8 @@
  * 
  */
 public with sharing class InspectionQuestionsControllerV2 {
+    public static String STATUS_PLANNED = 'Planned';
+    public static final String STATUS_INPROGRESS = 'InProgress';
 
     /**
      * @description Fetches inspection questions grouped by AssessmentTaskDefinition
@@ -49,8 +51,10 @@ public with sharing class InspectionQuestionsControllerV2 {
         
         // Query existing responses for all tasks
         Map<String, InspectionAssessmentInd> existingResponses = new Map<String, InspectionAssessmentInd>();
-        List<InspectionAssessmentInd> inspAssmntList = [SELECT Id, AssessmentIndDefinitionId, AssessmentTaskId, Result, PHOCSInspectionComments__c, PHOCSCheckboxResponse__c, Priority__c,ComplianceDueDate__c,CorrectiveActionDescription__c,CorrectedDuringInspection__c 
+        List<InspectionAssessmentInd> inspAssmntList = [SELECT Id, AssessmentIndDefinitionId, AssessmentTaskId, Result, PHOCSInspectionComments__c, PHOCSCheckboxResponse__c, 
+                                                        Priority__c,ComplianceDueDate__c,CorrectiveActionDescription__c,CorrectedDuringInspection__c 
                                                         FROM InspectionAssessmentInd WHERE AssessmentTaskId IN :definitionToTaskIdMap.values() WITH SECURITY_ENFORCED];
+        
             for (InspectionAssessmentInd resp : inspAssmntList){
                 String key = String.valueOf(resp.AssessmentIndDefinitionId) + '|' + String.valueOf(resp.AssessmentTaskId);
                 existingResponses.put(key, resp);
@@ -239,6 +243,20 @@ public with sharing class InspectionQuestionsControllerV2 {
             regulatoryCodeName = name;
             isActive = active;
             validityText = validity;
+        }
+    }
+    
+    /**
+     * @description: Update Status to inprogress on click of start inspection.
+     */
+    @AuraEnabled
+    public static void updateInspectionStatusToInProgress(Id inspectionId) {
+        
+        Visit vistRec = [SELECT Id, Status FROM Visit WHERE Id =: inspectionId LIMIT 1];
+        
+        if (vistRec.Status != STATUS_INPROGRESS && vistRec.Status == STATUS_PLANNED) {
+            vistRec.Status = STATUS_INPROGRESS;
+            update vistRec;
         }
     }
 }
