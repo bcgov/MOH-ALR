@@ -4,6 +4,7 @@ import getRegulatoryCodesByIndicator from '@salesforce/apex/InspectionQuestionsC
 import saveAssessmentResponses from '@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.saveAssessmentResponses';
 import linkFilesToAssessmentRecords from '@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.linkFilesToAssessmentRecords';
 import createViolationsForInspection from '@salesforce/apex/InspectionViolationService.createViolationsForInspection';
+import completeInspection from '@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.completeInspection';
 import updateRegulatoryCodeViolations from '@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.updateRegulatoryCodeViolations';
 import getViolationsFromInspection from '@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.getViolationsFromInspection';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
@@ -36,6 +37,11 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
     answeredQuestions = 0;
     compliantCount = 0;
     nonCompliantCount = 0;
+
+    showEndInspectionModal = false;
+    closingComments = '';
+    closingCommentsMessage = '';
+    closingCommentsMessageClass = '';
 
     regulatoryCodesCache = {};
     uploadedFilesMap = {};
@@ -571,7 +577,20 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
     // SUBMIT
     // ========================================
 
-    async handleSubmit() {
+    handleSubmit() {
+      this.showEndInspectionModal = true;
+    }
+
+    handleGoBack() {
+      this.showEndInspectionModal = false;
+    }
+
+    async handleCompleteInspection() {
+      this.showEndInspectionModal = false;
+      await this.handleFinalSubmit();
+    }
+
+    async handleFinalSubmit() {
                     let isValid = true;
                     let statusnotselected = false;
                     let duedateempty = false;
@@ -782,6 +801,8 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
                                 });
                             }
 
+                            await completeInspection({ visitId: this.recordId, closingComments: this.closingComments });
+
                     } catch (error) {
                         console.error('Error saving assessment:', error);
                         this.setSectionSavingState(false);
@@ -789,6 +810,24 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
                     } finally {
                         this.isLoading = false;
                     }
+    }
+
+    handleClosingCommentsChange(event) {
+      this.closingComments = event.target.value;
+      const length = this.closingComments.length;
+
+      if (length >= 900 && length < 1000) {
+        this.closingCommentsMessage =
+            `You are approaching the 1000 character limit (${length}/1000).`;
+        this.closingCommentsMessageClass = 'slds-text-color_warning';
+      } else if (length === 1000) {
+        this.closingCommentsMessage =
+            'Maximum 1000 characters allowed.';
+        this.closingCommentsMessageClass = 'slds-text-color_error';
+      } else {
+        this.closingCommentsMessage = '';
+        this.closingCommentsMessageClass = '';
+      }
     }
 
     async createViolationsAndNotify() {
