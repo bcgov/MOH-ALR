@@ -15,9 +15,11 @@ trigger AccountTrigger on Account (after update,after insert) {
         }
        if (Trigger.isAfter && Trigger.isUpdate) {
         AccountTriggerHandler.handleAfterUpdate(Trigger.new, Trigger.oldMap);
+        AccountTriggerHandler.phocsWaterRights(Trigger.new, Trigger.oldMap);
        }
       if(Trigger.isAfter && Trigger.isInsert){
         AccountTriggerHandler.handleAfterInsert(Trigger.new);
+        AccountTriggerHandler.phocsWaterRights(Trigger.new, null);
        }
     
     }
