@@ -217,5 +217,38 @@
             </section>
             <div class="slds-backdrop slds-backdrop_open"></div>
         </template>
+        <template lwc:if={showEndInspectionModal}>
+            <section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 class="slds-text-heading_medium">End Inspection?</h2>
+                    </header>
+
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <div class="slds-m-bottom_medium">
+                            <p>
+                                Do you want to complete the inspection?<br />
+                                No further edits will be possible once inspection is marked as completed.
+                            </p>
+                        </div>
+
+                        <lightning-textarea label="Closing Comments" value={closingComments} maxlength="1000" onchange={handleClosingCommentsChange} placeholder="Additional comments..."></lightning-textarea>
+
+                        <template lwc:if={closingCommentsMessage}>
+                            <div class="slds-m-top_x-small">
+                                <span class={closingCommentsMessageClass}>{closingCommentsMessage}</span>
+                            </div>
+                        </template>
+                    </div>
+
+                    <footer class="slds-modal__footer slds-grid slds-grid_align-spread">
+                        <lightning-button label="Go Back" variant="neutral" onclick={handleGoBack}></lightning-button>
+                        <lightning-button label="Complete Inspection" variant="brand" onclick={handleCompleteInspection}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
     </div>
 </template>
