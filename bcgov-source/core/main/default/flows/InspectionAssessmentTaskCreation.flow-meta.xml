@@ -1,9 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
+        <name>Execute_Inspection_Assessment_Task_Creation_for_Dairy</name>
+        <label>Execute Inspection Assessment Task Creation for Dairy</label>
+        <locationX>594</locationX>
+        <locationY>647</locationY>
+        <actionName>InspectionAssessmentTaskCreationService</actionName>
+        <actionType>apex</actionType>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>inspId</name>
+            <value>
+                <elementReference>GetVisitRecord.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>InspectionAssessmentTaskCreationService</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
         <name>Get_Action_Plan_Template_Name</name>
         <label>Get Action Plan Template Name</label>
-        <locationX>1012</locationX>
+        <locationX>1122</locationX>
         <locationY>539</locationY>
         <actionName>Action_Plan_Template_Decision_Matrix</actionName>
         <actionType>runDecisionMatrix</actionType>
@@ -37,41 +54,10 @@
         </outputParameters>
     </actionCalls>
     <actionCalls>
-        <description>To get the template name based multiple criteria</description>
-        <name>Get_Template_Name_Based_On_Criteria</name>
-        <label>Get Template Name Based On Criteria</label>
-        <locationX>704</locationX>
-        <locationY>539</locationY>
-        <actionName>GetInsActionPlanTemplateMappings</actionName>
-        <actionType>apex</actionType>
-        <connector>
-            <targetReference>PHOCS_Inspection_Action_Plan_Template_Decision_Matrix</targetReference>
-        </connector>
-        <flowTransactionModel>Automatic</flowTransactionModel>
-        <inputParameters>
-            <name>AccountType</name>
-            <value>
-                <elementReference>$Record.Account.Type</elementReference>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>InspectionType</name>
-            <value>
-                <elementReference>GetVisitRecord.VisitType.Name</elementReference>
-            </value>
-        </inputParameters>
-        <nameSegment>GetInsActionPlanTemplateMappings</nameSegment>
-        <offset>0</offset>
-        <outputParameters>
-            <assignToReference>PhocsActionPlanTemplateName</assignToReference>
-            <name>TemplateName</name>
-        </outputParameters>
-    </actionCalls>
-    <actionCalls>
         <name>getActionPlanItemIds</name>
         <label>AssessmentTaskController</label>
         <locationX>182</locationX>
-        <locationY>2195</locationY>
+        <locationY>2087</locationY>
         <actionName>InspTasksCreationController</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -96,12 +82,12 @@
     <actionCalls>
         <name>PHOCS_Inspection_Action_Plan_Template_Decision_Matrix</name>
         <label>PHOCS Inspection Action Plan Template Decision Matrix</label>
-        <locationX>704</locationX>
+        <locationX>330</locationX>
         <locationY>647</locationY>
         <actionName>PHOCS_Inspection_Action_Plan_Template_Decision_Matrix</actionName>
         <actionType>runDecisionMatrix</actionType>
         <connector>
-            <targetReference>Check_Action_Plan_Template_Returned_from_Additional_Criteria</targetReference>
+            <targetReference>ActionPlanTemplateCheck</targetReference>
         </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
@@ -123,7 +109,7 @@
         <name>ActionPlanItemIds</name>
         <label>ActionPlanItemIds</label>
         <locationX>270</locationX>
-        <locationY>2003</locationY>
+        <locationY>1895</locationY>
         <assignmentItems>
             <assignToReference>ATIId</assignToReference>
             <operator>Add</operator>
@@ -139,7 +125,7 @@
         <name>add_assessment_task</name>
         <label>add assessment task</label>
         <locationX>270</locationX>
-        <locationY>2519</locationY>
+        <locationY>2411</locationY>
         <assignmentItems>
             <assignToReference>SignAssessmentTask.ParentId</assignToReference>
             <operator>Assign</operator>
@@ -166,27 +152,10 @@
         </connector>
     </assignments>
     <assignments>
-        <description>Assign action plan template name to the action plan template name returned from additional criteria</description>
-        <name>Assign_Action_Plan_Template_Name</name>
-        <label>Assign Action Plan Template Name</label>
-        <locationX>572</locationX>
-        <locationY>863</locationY>
-        <assignmentItems>
-            <assignToReference>ActionPlanTemplateName</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>PhocsActionPlanTemplateName</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>ActionPlanTemplateCheck</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
         <name>AssignActionPlanToVisit</name>
         <label>Assign Action Plan To Visit</label>
         <locationX>182</locationX>
-        <locationY>1679</locationY>
+        <locationY>1571</locationY>
         <assignmentItems>
             <assignToReference>NewActionPlan.ActionPlanTemplateVersionId</assignToReference>
             <operator>Assign</operator>
@@ -234,7 +203,7 @@
         <name>ActionPlanTemplateActivated</name>
         <label>Action Plan Template Activated</label>
         <locationX>380</locationX>
-        <locationY>1571</locationY>
+        <locationY>1463</locationY>
         <defaultConnectorLabel>Action Plan Template Is  Not Active</defaultConnectorLabel>
         <rules>
             <name>ActionPlanTemplateIsActive</name>
@@ -256,7 +225,7 @@
         <name>ActionPlanTemplateCheck</name>
         <label>Action Plan Template Check</label>
         <locationX>858</locationX>
-        <locationY>1139</locationY>
+        <locationY>1031</locationY>
         <defaultConnectorLabel>Template Name Not Available</defaultConnectorLabel>
         <rules>
             <name>TemplateNameAvailable</name>
@@ -278,7 +247,7 @@
         <name>ActionPlanTemplateIDcheck</name>
         <label>Action Plan Template ID check</label>
         <locationX>611</locationX>
-        <locationY>1355</locationY>
+        <locationY>1247</locationY>
         <defaultConnectorLabel>Action Plan Template Not Found</defaultConnectorLabel>
         <rules>
             <name>ActionPlanTemplateFound</name>
@@ -297,28 +266,40 @@
         </rules>
     </decisions>
     <decisions>
-        <name>Check_Action_Plan_Template_Returned_from_Additional_Criteria</name>
-        <label>Check Action Plan Template Returned from Additional Criteria</label>
-        <locationX>704</locationX>
-        <locationY>755</locationY>
-        <defaultConnector>
-            <targetReference>ActionPlanTemplateCheck</targetReference>
-        </defaultConnector>
+        <name>Check_Account_Type</name>
+        <label>Check Account Type</label>
+        <locationX>594</locationX>
+        <locationY>539</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
-            <name>Action_Plant_Template_Name_From_Additional_Criteria</name>
+            <name>Is_Not_Dairy</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>PhocsActionPlanTemplateName</leftValueReference>
-                <operator>IsNull</operator>
+                <leftValueReference>GetVisitRecord.Account.Type</leftValueReference>
+                <operator>NotEqualTo</operator>
                 <rightValue>
-                    <booleanValue>false</booleanValue>
+                    <stringValue>Dairy</stringValue>
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Assign_Action_Plan_Template_Name</targetReference>
+                <targetReference>PHOCS_Inspection_Action_Plan_Template_Decision_Matrix</targetReference>
             </connector>
-            <label>Action Plant Template Name From Additional Criteria</label>
+            <label>Is Not Dairy</label>
+        </rules>
+        <rules>
+            <name>Is_Dairy</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>GetVisitRecord.Account.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Dairy</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Execute_Inspection_Assessment_Task_Creation_for_Dairy</targetReference>
+            </connector>
+            <label>Is Dairy</label>
         </rules>
     </decisions>
     <decisions>
@@ -341,7 +322,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Get_Template_Name_Based_On_Criteria</targetReference>
+                <targetReference>Check_Account_Type</targetReference>
             </connector>
             <label>is PHOCS</label>
         </rules>
@@ -350,7 +331,7 @@
         <name>CheckSignatureAcationPlanItemAvailable</name>
         <label>CheckSignatureAcationPlanItemAvailable</label>
         <locationX>182</locationX>
-        <locationY>2711</locationY>
+        <locationY>2603</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>SignatureAcationPlanItemAvailable</name>
@@ -373,7 +354,7 @@ EHIS:1363 PHOCS - Updated Apex Action Name
 EHIS-2691
 This is the working version created for the EHIS-2691 ticket
 This version created for testing of existing logic is working with old decision matrix
-This version 19 is for testing purpose</description>
+This version 21 is for Development purpose</description>
     <environments>Default</environments>
     <formulas>
         <name>accountType</name>
@@ -391,7 +372,7 @@ This version 19 is for testing purpose</description>
         <name>ActionPlanItemValues</name>
         <label>ActionPlanItemValues</label>
         <locationX>182</locationX>
-        <locationY>1895</locationY>
+        <locationY>1787</locationY>
         <collectionReference>Actionplantempitem</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -405,7 +386,7 @@ This version 19 is for testing purpose</description>
         <name>signitem</name>
         <label>signitem</label>
         <locationX>182</locationX>
-        <locationY>2411</locationY>
+        <locationY>2303</locationY>
         <collectionReference>Get_SignaturetaskActionPlanItem</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -438,7 +419,7 @@ This version 19 is for testing purpose</description>
         <name>CreateSignatureAssessment</name>
         <label>CreateSignatureAssessment</label>
         <locationX>50</locationX>
-        <locationY>2819</locationY>
+        <locationY>2711</locationY>
         <assignRecordIdToReference>SignAssessmentID</assignRecordIdToReference>
         <connector>
             <targetReference>CreateSignatureTask</targetReference>
@@ -467,7 +448,7 @@ This version 19 is for testing purpose</description>
         <name>CreateSignatureTask</name>
         <label>CreateSignatureTask</label>
         <locationX>50</locationX>
-        <locationY>2927</locationY>
+        <locationY>2819</locationY>
         <assignRecordIdToReference>SignatureTaskId</assignRecordIdToReference>
         <connector>
             <targetReference>UpdateAssessmentTask</targetReference>
@@ -490,7 +471,7 @@ This version 19 is for testing purpose</description>
         <name>Actionplantempitem</name>
         <label>Actionplantempitem</label>
         <locationX>182</locationX>
-        <locationY>1787</locationY>
+        <locationY>1679</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>ActionPlanItemValues</targetReference>
@@ -519,7 +500,7 @@ This version 19 is for testing purpose</description>
         <name>Get_SignaturetaskActionPlanItem</name>
         <label>Get SignaturetaskActionPlanItem</label>
         <locationX>182</locationX>
-        <locationY>2303</locationY>
+        <locationY>2195</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>signitem</targetReference>
@@ -547,7 +528,7 @@ This version 19 is for testing purpose</description>
         <name>GetActionPlanTemplate</name>
         <label>Get Action Plan Template</label>
         <locationX>611</locationX>
-        <locationY>1247</locationY>
+        <locationY>1139</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>ActionPlanTemplateIDcheck</targetReference>
@@ -575,7 +556,7 @@ This version 19 is for testing purpose</description>
         <name>GetActionPlanTemplateVersion</name>
         <label>Get Action Plan Template Version</label>
         <locationX>380</locationX>
-        <locationY>1463</locationY>
+        <locationY>1355</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>ActionPlanTemplateActivated</targetReference>
@@ -624,7 +605,7 @@ This version 19 is for testing purpose</description>
         <name>UpdateAssessmentTask</name>
         <label>UpdateAssessmentTask</label>
         <locationX>50</locationX>
-        <locationY>3035</locationY>
+        <locationY>2927</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
