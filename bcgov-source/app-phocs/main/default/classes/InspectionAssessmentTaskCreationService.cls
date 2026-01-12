@@ -11,6 +11,7 @@ public without sharing class InspectionAssessmentTaskCreationService {
     public static String className = 'InspectionAssessmentTaskCreationService';
     public static Boolean forceSignatureProcessingInTest = false;
     public static Set<Id> testSignatureItemIds = new Set<Id>();
+    public static Id recordTypePHOCSInspection = Schema.SObjectType.Visit.getRecordTypeInfosByDeveloperName().get('PHOCSInspection').getRecordTypeId();
 /**
 * @author: Deepak
 * @date: 06 Jan 2026
@@ -44,25 +45,20 @@ public without sharing class InspectionAssessmentTaskCreationService {
         try {
             Visit visit = [SELECT Id, RecordType.DeveloperName, AccountId, Account.Type, Account.RecordType.DeveloperName, VisitType.Name FROM Visit WHERE Id = :visitId LIMIT 1];
             
-            if (visit.RecordType == null || visit.RecordType.DeveloperName != 'PHOCSInspection'){
+            if (visit.RecordTypeId != recordTypePHOCSInspection){
                 return;
             }
             
             Id facilityAccountId = visit.AccountId != null ? visit.AccountId : null;
             String accountType = visit.Account != null ? visit.Account.Type : null;
             String inspectionType = visit.VisitType != null ? visit.VisitType.Name : null;
-            System.debug('###facilityAccountId'+ facilityAccountId);
-            System.debug('###accountType'+ accountType);
-            System.debug('###inspectionType'+ inspectionType);
             
             Set<String> templateNames = new Set<String>();
             templateNames = getActionPlanTemplateNames(facilityAccountId, accountType, inspectionType);
-            System.debug('###templateNames'+ templateNames);
             
             if (templateNames.isEmpty()) return;
             
             List<ActionPlanTemplate> templates = [SELECT Id, Name FROM ActionPlanTemplate WHERE Name IN: templateNames AND Status = 'Final'];
-            System.debug('###templates'+ templates);
             
             if (templates.isEmpty()) return;
             
@@ -70,46 +66,37 @@ public without sharing class InspectionAssessmentTaskCreationService {
             for (ActionPlanTemplate t : templates) templateIds.add(t.Id);
             
             List<ActionPlanTemplateVersion> versions = [SELECT Id, ActionPlanTemplateId FROM ActionPlanTemplateVersion WHERE ActionPlanTemplateId IN :templateIds AND Status = 'Final'];
-            System.debug('###versions'+ versions);
             if (versions.isEmpty()) return;
             
             Set<Id> versionIds = new Set<Id>();
             for (ActionPlanTemplateVersion v : versions){
                 versionIds.add(v.Id);
             } 
-            System.debug('###versionIds'+ versionIds);
             
             List<ActionPlanTemplateItem> assessmentItems = [SELECT Id, ActionPlanTemplateVersionId, DisplayOrder FROM ActionPlanTemplateItem WHERE ActionPlanTemplateVersionId IN :versionIds AND ItemEntityType = 'AssessmentTask' ORDER BY DisplayOrder ASC];
             
             List<ActionPlanTemplateItem> signatureItems = [SELECT Id, ActionPlanTemplateVersionId, DisplayOrder FROM ActionPlanTemplateItem WHERE ActionPlanTemplateVersionId IN :versionIds AND ItemEntityType = 'SignatureTask' ORDER BY DisplayOrder ASC];
             
-            System.debug('###assessmentItems'+ assessmentItems);
-            System.debug('###signatureItems'+ signatureItems);
-            
             List<Id> assessmentItemIds = new List<Id>();            
             for (ActionPlanTemplateItem item : assessmentItems) {
                 assessmentItemIds.add(item.Id);
             }
-            System.debug('###assessmentItemIds'+ assessmentItemIds);
             
             Set<Id> signatureItemIds = new Set<Id>();
             for (ActionPlanTemplateItem it : signatureItems){
                 signatureItemIds.add(it.Id);
             }
-            System.debug('###signatureItemIds'+ signatureItemIds);
             
             Map<Id, String> templateItemIdToDefName = new Map<Id, String>();
             if (!assessmentItemIds.isEmpty()) {
                 List<ActionPlanTemplateItemValue> aPTemplateItemValueList = [SELECT Id, ItemEntityFieldName, ValueLiteral, ValueFormula, ActionPlanTemplateItemId FROM ActionPlanTemplateItemValue
                                                                              WHERE ActionPlanTemplateItemId IN :assessmentItemIds AND ItemEntityFieldName = :BCMOH_Constants.ItemEntityName];
-                System.debug('###aPTemplateItemValueList'+ aPTemplateItemValueList);
                 for (ActionPlanTemplateItemValue v : aPTemplateItemValueList){
                     if(String.isNotBlank(v.ValueLiteral)){
                         templateItemIdToDefName.put(v.ActionPlanTemplateItemId, v.ValueLiteral);
                     }
                 }
             }
-            System.debug('###templateItemIdToDefName'+ templateItemIdToDefName);
             
             if (templateItemIdToDefName.isEmpty() && signatureItemIds.isEmpty()) {
                 return;
@@ -119,13 +106,11 @@ public without sharing class InspectionAssessmentTaskCreationService {
             if (!templateItemIdToDefName.isEmpty()) {
                 taskDefs = [SELECT Id, Name, Category__c FROM AssessmentTaskDefinition WHERE Name IN :templateItemIdToDefName.Values()];
             }
-            System.debug('###taskDefs'+ taskDefs);
             
             Map<String, AssessmentTaskDefinition> defByName = new Map<String, AssessmentTaskDefinition>();
             for (AssessmentTaskDefinition def : taskDefs) {
                 defByName.put(def.Name, def);
             }
-            System.debug('###defByName'+ defByName);
             
             Id assessmentTaskRecordTypeId;
             if (visit.AccountId != null) {
@@ -163,7 +148,6 @@ public without sharing class InspectionAssessmentTaskCreationService {
                 tasksToInsert.add(newTask);
             }            
             
-            System.debug('###tasksToInsert'+ tasksToInsert);
             if (!tasksToInsert.isEmpty()) {
                 Database.insert(tasksToInsert, true);
             }
@@ -172,7 +156,6 @@ public without sharing class InspectionAssessmentTaskCreationService {
             for (AssessmentTask t : tasksToInsert) {
                 defIdToCreatedTaskId.put(t.AssessmentTaskDefinitionId, t.Id);
             }
-            System.debug('###defIdToCreatedTaskId'+ defIdToCreatedTaskId);
             
             List<InspectionAssessmentInd> indicatorsToInsert = new List<InspectionAssessmentInd>();
             Id inspAssmntIndRTId = Schema.SObjectType.InspectionAssessmentInd.getRecordTypeInfosByDeveloperName().get('PHOCSInspectionAssessmentInd').getRecordTypeId();
@@ -180,7 +163,6 @@ public without sharing class InspectionAssessmentTaskCreationService {
             if (!defIdToCreatedTaskId.isEmpty()) {
                 List<AssessmentTaskIndDefinition> atidList = [SELECT AssessmentTaskDefinitionId, AssessmentIndDefinitionId FROM AssessmentTaskIndDefinition
                                                               WHERE AssessmentTaskDefinitionId IN :defIdToCreatedTaskId.keySet()];
-                System.debug('###atidList'+ atidList);
                 
                 for (AssessmentTaskIndDefinition atid : atidList) {
                     Id createdTaskId = defIdToCreatedTaskId.get(atid.AssessmentTaskDefinitionId);
@@ -192,7 +174,6 @@ public without sharing class InspectionAssessmentTaskCreationService {
                         indicatorsToInsert.add(ia);
                     }
                 }
-                System.debug('###indicatorsToInsert'+ indicatorsToInsert);
                 
                 if (!indicatorsToInsert.isEmpty()) {
                     Database.insert(indicatorsToInsert, true);
@@ -202,10 +183,6 @@ public without sharing class InspectionAssessmentTaskCreationService {
             if (Test.isRunningTest()) {
                 forceSignatureProcessingInTest = true;
             }
-            System.debug('### isTest=' + Test.isRunningTest());
-            System.debug('### forceSignatureProcessingInTest=' + forceSignatureProcessingInTest);
-            System.debug('### signatureItemIds=' + signatureItemIds);
-            System.debug('### testSignatureItemIds=' + testSignatureItemIds);
             
             if (!signatureItemIds.isEmpty() || (Test.isRunningTest() && forceSignatureProcessingInTest)) {                
                 Set<Id> effectiveSignatureItemIds = !signatureItemIds.isEmpty() ? signatureItemIds : testSignatureItemIds;
@@ -280,7 +257,6 @@ public without sharing class InspectionAssessmentTaskCreationService {
                     getAPTemplatesName.add(dm.ActionPlanTemplateName__c);
                 }
             }
-            System.debug('###getAPTemplatesName1'+ getAPTemplatesName);
             
             if(accountType == 'Dairy'){       
                 for (Asset assetObj : [SELECT PlantEquipment__c FROM Asset WHERE AccountId =: facilityAccountId AND RecordTypeId =: dairyAssetRTId AND Status = 'Active']) {
@@ -288,7 +264,6 @@ public without sharing class InspectionAssessmentTaskCreationService {
                         attributeTypesFromAssets.add(assetObj.PlantEquipment__c);
                     }
                 }
-                System.debug('###attributeTypesFromAssets'+ attributeTypesFromAssets);
                 
                 if (!attributeTypesFromAssets.isEmpty()) {
                     for (PHOCSActionPlanTemplateDecisionMap__mdt dm : decisionMaps) {
@@ -298,7 +273,6 @@ public without sharing class InspectionAssessmentTaskCreationService {
                     }
                 }
             }
-            System.debug('###getAPTemplatesName2'+ getAPTemplatesName);
             
         } catch(Exception e){
             LogService.logAndPublish(className, 'getActionPlanTemplateNames', 'Error in getActionPlanTemplateNames: ', e);
