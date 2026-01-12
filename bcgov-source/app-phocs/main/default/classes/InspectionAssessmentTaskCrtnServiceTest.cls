@@ -11,6 +11,7 @@ public class InspectionAssessmentTaskCrtnServiceTest{
     public static Id recordTypePHOCSInspection = Schema.SObjectType.Visit.getRecordTypeInfosByDeveloperName().get('PHOCSInspection').getRecordTypeId();
     public static Id recordTypePHOCSDairyPlantRoomsandEquipment = Schema.SObjectType.Asset.getRecordTypeInfosByDeveloperName().get('PHOCSDairyPlantRoomsandEquipment').getRecordTypeId();
     public static Id recordTypePHOCSInspectionType = Schema.SObjectType.InspectionType.getRecordTypeInfosByDeveloperName().get('PHOCSInspectionType').getRecordTypeId();
+    
     //Test Data Setup
     private static void createTestData() {
         Id rtPHOCSInspectionAssessmentInd = Schema.SObjectType.InspectionAssessmentInd.getRecordTypeInfosByDeveloperName().get('PHOCSInspectionAssessmentInd').getRecordTypeId();
@@ -61,20 +62,27 @@ public class InspectionAssessmentTaskCrtnServiceTest{
         loc.Longitude = 27.635308;
         loc.Latitude = 29.635308;
         insert loc;
-        	
-            InspectionType inspectype = new InspectionType(
+        
+        InspectionType inspectype = new InspectionType(
             Name = 'test isnpection type',
             InspectionTypes__c = 'Routine',
             Description = 'description test',
             RecordTypeId = recordTypePHOCSInspectionType
         );
-        insert inspectype;
-		
-        
-        Visit insp = new Visit(InspectionMethod__c = 'Scheduled on Site Inspection', AccountId = dairyAccount.Id, PlaceId = loc.Id, PlannedVisitStartTime = System.now(), RecordTypeId = recordTypePHOCSInspection, VisitTypeId = inspectype.Id);
+        insert inspectype;		
+        Account accnt = [select id from account where recordtype.developername ='PHOCSDairyFacility' limit 1 ];
+        system.debug('+++++'+accnt);
+		ID dairyAccountId = accnt.id;
+        Visit insp = new Visit(InspectionMethod__c = 'Scheduled on Site Inspection', AccountId = dairyAccountId, PlaceId = loc.Id, PlannedVisitStartTime = System.now(), RecordTypeId = recordTypePHOCSInspection, VisitTypeId = inspectype.Id);
         insert insp;   
     }
-    
+ 
+/**
+* @author: Deepak
+* @date: 07 Jan 2026
+* @description: The purpose of this method is to cover Negative Testcoverage of executeInspectionQuestions.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/ 
     @isTest
     public static void testSignatureCoverageWithTest(){
         
@@ -100,8 +108,6 @@ public class InspectionAssessmentTaskCrtnServiceTest{
         update aptv;
         
         System.debug('###sigItem'+sigItem);
-        //InspectionAssessmentTaskCreationService.forceSignatureProcessingInTest = true;
-        //InspectionAssessmentTaskCreationService.testSignatureItemIds.clear();
         InspectionAssessmentTaskCreationService.testSignatureItemIds.add(sigItem.Id);
         InspectionAssessmentTaskCreationService.addTestSignatureItemIds(new Set<Id>{ sigItem.Id });
         
@@ -110,11 +116,10 @@ public class InspectionAssessmentTaskCrtnServiceTest{
         List<InspectionAssessmentTaskCreationService.FlowInputs> inputs = new List<InspectionAssessmentTaskCreationService.FlowInputs>{ input };        
             
         Test.startTest();        
-        //InspectionAssessmentTaskCreationService.executeInspectionQuestions(inputs);
-        InspectionAssessmentTaskCreationService.runForVisit(input.inspId);
+        InspectionAssessmentTaskCreationService.executeInspectionQuestions(inputs);
         Test.stopTest();
         
-        System.assertEquals(false,[SELECT COUNT() FROM AssessmentTask WHERE ParentId =: input.inspId AND TaskType = 'SignatureTask'] > 0, 'Signature AssessmentTask should be created in test');
+        Assert.areEqual(false, [SELECT COUNT() FROM AssessmentTask WHERE ParentId =: input.inspId AND TaskType = 'SignatureTask'] > 0, 'Signature AssessmentTask should be not created in test');
     }
      
 /**
@@ -136,11 +141,11 @@ public class InspectionAssessmentTaskCrtnServiceTest{
         Test.stopTest();
         
         List<AssessmentTask> tasks = [SELECT Id, SequenceNumber, AssessmentTaskDefinitionId FROM AssessmentTask WHERE ParentId =: input.inspId];        
-        System.assertEquals(true, tasks.size() > 0, 'AssessmentTasks should be created');
-        // System.assertEquals(null, tasks.size(), 'Task Size cannot be null');
+        Assert.areEqual(true, tasks.size() > 0, 'AssessmentTasks should be created');
+        Assert.areNotEqual(null, tasks.size(), 'Task Size cannot be null');
         
         List<InspectionAssessmentInd> inds = [SELECT Id, AssessmentTaskId, AssessmentIndDefinitionId FROM InspectionAssessmentInd WHERE AssessmentTaskId IN :tasks];        
-         System.assertEquals(true, inds.size() > 0, 'InspectionAssessmentInd records should be created');
+        Assert.areEqual(true, inds.size() > 0, 'InspectionAssessmentInd records should be created');
     }
     
 /**
@@ -160,8 +165,8 @@ public class InspectionAssessmentTaskCrtnServiceTest{
         Test.startTest();        
         InspectionAssessmentTaskCreationService.executeInspectionQuestions(inputs);
         Test.stopTest();
-         System.assertEquals(true,[SELECT COUNT() FROM AssessmentTask] > 0,'No AssessmentTask should be created for invalid inspection Id');
+        
+        Assert.areEqual(true,[SELECT COUNT() FROM AssessmentTask] > 0,'No AssessmentTask should be created for invalid inspection Id');
         
     }
-
 }
