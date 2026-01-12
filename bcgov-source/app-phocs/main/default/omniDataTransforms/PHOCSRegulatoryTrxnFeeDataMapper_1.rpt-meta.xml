@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OmniDataTransform xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>false</active>
+    <assignmentRulesUsed>false</assignmentRulesUsed>
+    <deletedOnSuccess>false</deletedOnSuccess>
+    <errorIgnored>false</errorIgnored>
+    <expectedInputJson>{
+  &quot;RegulatoryTrxnFeeAccountNumber&quot; : &quot;FA-01342&quot;,
+  &quot;RegulatoryTrxnFeeItemFeeAmount&quot; : 53,
+  &quot;RegulatoryTrxnFeeItem&quot; : [ {
+    &quot;Id&quot; : &quot;0kybZ0000007Hs9QAE&quot;,
+    &quot;FeeAmount&quot; : 53
+  }, {
+    &quot;Id&quot; : &quot;0kybZ0000007b4TQAQ&quot;,
+    &quot;FeeAmount&quot; : 234
+  } ],
+  &quot;BillingContactName&quot; : &quot;VANGLIRAJAN KALIMUTHU&quot;,
+  &quot;BillingContactEmail&quot; : &quot;v.b.kalimuthu@accenture.com&quot;,
+  &quot;RegulatoryTrxnFee&quot; : {
+    &quot;TotalFeeAmount&quot; : 287,
+    &quot;Comments&quot; : &quot;testcomment&quot;,
+    &quot;CreatedDate&quot; : &quot;2025-09-08T16:17:58.000Z&quot;,
+    &quot;Id&quot; : &quot;0kxbZ00000071SPQAY&quot;,
+    &quot;Name&quot; : &quot;FEE-000000618&quot;
+  },
+  &quot;RegulatoryTrxnFeeAccount&quot; : {
+    &quot;PhysicalAddressCity&quot; : &quot;Ottawa&quot;,
+    &quot;PhysicalAddressStateCode&quot; : &quot;ON&quot;,
+    &quot;PhysicalAddressStreet&quot; : &quot;151 Maestro Avenue&quot;,
+    &quot;PhysicalAddressCountryCode&quot; : &quot;CA&quot;,
+    &quot;PostalCode&quot; : &quot;K2S 1B9&quot;,
+    &quot;AccountNumber&quot; : &quot;FA-01342&quot;,
+    &quot;Name&quot; : &quot;PHOCS Dairy Facility&quot;
+  },
+  &quot;InvoiceDate&quot; : &quot;2026-01-07&quot;,
+  &quot;RegulatoryTrxnFeeItemCount&quot; : 2
+}</expectedInputJson>
+    <fieldLevelSecurityEnabled>false</fieldLevelSecurityEnabled>
+    <inputType>JSON</inputType>
+    <isManagedUsingStdDesigner>false</isManagedUsingStdDesigner>
+    <name>PHOCSRegulatoryTrxnFeeDataMapper</name>
+    <nullInputsIncludedInOutput>false</nullInputsIncludedInOutput>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>febf5a19-922b-4e79-9057-bef8df9b8e4f</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeAccount:PostalCode</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSRegulatoryTrxnFeeDataMapper</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>AccountPhysicalAddressPostalCode</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>072f3e2b-b3ec-4ec5-b9c2-63ebcf350eab</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeItemFeeAmount</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSRegulatoryTrxnFeeDataMapper</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RTFItemFeeAmount</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>7f30af1a-fab2-45c9-874b-dd3f7eeb56af</globalKey>
+        <inputFieldName>InvoiceDate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSRegulatoryTrxnFeeDataMapper</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Date(MM/dd/yyyy)</outputFieldFormat>
+        <outputFieldName>InvoiceCreatedDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>cdfba49a-4266-4014-88ae-82f1f771ceb4</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeAccount:PhysicalAddressCountryCode</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSRegulatoryTrxnFeeDataMapper</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>AccountPhysicalAddressCountryCode</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>734a783d-ae33-47d6-8e23-e21f3adab20f</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeAccount:PhysicalAddressStreet</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSRegulatoryTrxnFeeDataMapper</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>AccountPhysicalAddressStreet</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>ceaf1427-a45d-4623-8947-430cb38c2b17</globalKey>
+        <inputFieldName>RegulatoryTrxnFee:Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSRegulatoryTrxnFeeDataMapper</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegulatoryTrxnFeeName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>2676c141-6cf3-4414-8d5e-e6fcf0ea970f</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeAccount:Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSRegulatoryTrxnFeeDataMapper</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>AccountName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>5b6e9305-687b-4892-aa14-4c0ea4a95ea0</globalKey>
+        <inputFieldName>RegulatoryTrxnFee:CreatedDate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSRegulatoryTrxnFeeDataMapper</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Date(MM/dd/yyyy)</outputFieldFormat>
+        <outputFieldName>RTFCreatedDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>e9fb9dd1-6477-40e4-812c-114805ced156</globalKey>
+        <inputFieldName>RegulatoryTrxnFee:Comments</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSRegulatoryTrxnFeeDataMapper</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RTFComments</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>ccac99f8-64a3-4f3c-8032-67d979a1fa03</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeItemCount</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSRegulatoryTrxnFeeDataMapper</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RTFItemCount</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>21fa2ca0-f245-4d91-b720-888032cd60cf</globalKey>
+        <inputFieldName>RTFitemFeeAmount</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSRegulatoryTrxnFeeDataMapper</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RTFitemFeeAmount</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>123c5b51-c2a1-4405-94f6-a9dbe71c2304</globalKey>
+        <inputFieldName>RegulatoryTrxnFee:TotalFeeAmount</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSRegulatoryTrxnFeeDataMapper</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RTFTotalFeeAmount</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>565354be-b92b-45d2-8d22-58de40d66ee3</globalKey>
+        <inputFieldName>RegulatoryTrxnFee:Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSRegulatoryTrxnFeeDataMapper</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegulatoryTrxnFeeName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>f051a1af-ab7c-4c21-803a-f3cc8d4b9815</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeAccount:PhysicalAddressStateCode</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSRegulatoryTrxnFeeDataMapper</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>AccountPhysicalAddressStateCode</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>34c9638a-749d-4bce-90de-499dee6e6b3d</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeAccount:PhysicalAddressCity</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSRegulatoryTrxnFeeDataMapper</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>AccountPhysicalAddressCity</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>5c7ebaf0-b83d-4197-b478-f3789911b528</globalKey>
+        <inputFieldName>BillingContactName</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSRegulatoryTrxnFeeDataMapper</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BillingContactName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaSequence>1.0</formulaSequence>
+        <globalKey>ec571e30-866b-4408-9821-d660c4b52090</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSRegulatoryTrxnFeeDataMapper</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>70c7959c-0d10-4b49-ab3c-c472f3912a73</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeAccount:AccountNumber</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSRegulatoryTrxnFeeDataMapper</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>AccountNumber</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>45e3a265-4e2a-45e2-be79-7bc87805ba17</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeAccount:PhysicalAddressCountryCode</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSRegulatoryTrxnFeeDataMapper</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>AccountPhysicalAddressCountryCode</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>3c344966-8e5e-45b6-9aff-20a8608ca8e5</globalKey>
+        <inputFieldName>BillingContactEmail</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSRegulatoryTrxnFeeDataMapper</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BillingContactEmail</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <outputType>JSON</outputType>
+    <previewJsonData>{
+  &quot;RegulatoryTrxnFeeAccountNumber&quot; : &quot;FA-01342&quot;,
+  &quot;RegulatoryTrxnFeeItemFeeAmount&quot; : 53,
+  &quot;RegulatoryTrxnFeeItem&quot; : [ {
+    &quot;Id&quot; : &quot;0kybZ0000007Hs9QAE&quot;,
+    &quot;FeeAmount&quot; : 53
+  }, {
+    &quot;Id&quot; : &quot;0kybZ0000007b4TQAQ&quot;,
+    &quot;FeeAmount&quot; : 234123
+  } ],
+  &quot;BillingContactName&quot; : &quot;VANGLIRAJAN KALIMUTHU&quot;,
+  &quot;BillingContactEmail&quot; : &quot;v.b.kalimuthu@accenture.com&quot;,
+  &quot;RegulatoryTrxnFee&quot; : {
+    &quot;TotalFeeAmount&quot; : 24234,
+    &quot;Comments&quot; : &quot;testcomment&quot;,
+    &quot;CreatedDate&quot; : &quot;2025-09-08T16:17:58.000Z&quot;,
+    &quot;Id&quot; : &quot;0kxbZ00000071SPQAY&quot;,
+    &quot;Name&quot; : &quot;FEE-000000618&quot;
+  },
+  &quot;RegulatoryTrxnFeeAccount&quot; : {
+    &quot;PhysicalAddressCity&quot; : &quot;Ottawa&quot;,
+    &quot;PhysicalAddressStateCode&quot; : &quot;ON&quot;,
+    &quot;PhysicalAddressStreet&quot; : &quot;151 Maestro Avenue&quot;,
+    &quot;PhysicalAddressCountryCode&quot; : &quot;CA&quot;,
+    &quot;PostalCode&quot; : &quot;K2S 1B9&quot;,
+    &quot;AccountNumber&quot; : &quot;FA-01342&quot;,
+    &quot;Name&quot; : &quot;PHOCS Dairy Facility&quot;
+  },
+  &quot;InvoiceDate&quot; : &quot;2026-01-08&quot;,
+  &quot;RegulatoryTrxnFeeItemCount&quot; : 2
+}</previewJsonData>
+    <processSuperBulk>false</processSuperBulk>
+    <responseCacheTtlMinutes>0.0</responseCacheTtlMinutes>
+    <rollbackOnError>false</rollbackOnError>
+    <sourceObject>json</sourceObject>
+    <sourceObjectDefault>false</sourceObjectDefault>
+    <synchronousProcessThreshold>0.0</synchronousProcessThreshold>
+    <targetOutputFileName>PHOCSInvoiceBCCDCTemplate(Version 1)</targetOutputFileName>
+    <type>Transform</type>
+    <uniqueName>PHOCSRegulatoryTrxnFeeDataMapper_1</uniqueName>
+    <versionNumber>1.0</versionNumber>
+    <xmlDeclarationRemoved>false</xmlDeclarationRemoved>
+</OmniDataTransform>
