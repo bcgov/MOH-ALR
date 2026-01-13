@@ -5,8 +5,6 @@ import saveAssessmentResponses from '@salesforce/apex/PHOCSInspectionAssessmentI
 import linkFilesToAssessmentRecords from '@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.linkFilesToAssessmentRecords';
 import createViolationsForInspection from '@salesforce/apex/InspectionViolationService.createViolationsForInspection';
 import completeInspection from '@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.completeInspection';
-import updateRegulatoryCodeViolations from '@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.updateRegulatoryCodeViolations';
-import getViolationsFromInspection from '@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.getViolationsFromInspection';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 const RESULT_COMPLIANT = 'Compliant';
@@ -81,14 +79,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
     ];
 
     connectedCallback() {
-            this.loadInspectionQuestions()
-            .then(() => {
-            this.loadExistingViolations();
-            })
-        .catch(error => {
-            console.error('Error loading inspection questions:', error);
-        });
-    
+            this.loadInspectionQuestions();
         }       
     
 
@@ -120,12 +111,38 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
     return {
         ...parent,
+
+         selectPriority:
+            updates.selectPriority !== undefined
+                ? updates.selectPriority
+                : parent.selectPriority,
+
+        preferredDateTime:
+            updates.preferredDateTime !== undefined
+                ? updates.preferredDateTime
+                : parent.preferredDateTime,
+
+        actionDescription:
+            updates.actionDescription !== undefined
+                ? updates.actionDescription
+                : parent.actionDescription,
+
+        correctedDuringInspection:
+            updates.correctedDuringInspection !== undefined
+                ? updates.correctedDuringInspection
+                : parent.correctedDuringInspection,
+
         ...updates,
+        
+        
         compliantButtonClass: this.getButtonClass(RESULT_COMPLIANT, result),
         nonCompliantButtonClass: this.getButtonClass(RESULT_NON_COMPLIANT, result),
         naButtonClass: this.getButtonClass(RESULT_NA, result),
         nsButtonClass: this.getButtonClass(RESULT_NS, result),
         showChildren: result === RESULT_NON_COMPLIANT
+
+        
+        
     };
 }
 
@@ -157,15 +174,14 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
         let compliant = 0;
         let nonCompliant = 0;
 
-
-        let headerSource = null;
-
         this.groupedQuestions = result.map(group => {
             const parentQs = group.parentQuestions.map(parent => {
                 questionCount++;
 
-                const currentResult = parent.Result || '';
+                //const currentResult = parent.Result || '';
+                const currentResult = parent.Result ?? parent.result ?? '';
                 const savedComment = parent.PHOCSInspectionComments || '';
+
 
                 if (currentResult) {
                     answeredCount++;
@@ -173,40 +189,42 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
                     else if (currentResult === RESULT_NON_COMPLIANT) nonCompliant++;
                 }
 
-                // 🔑 Capture header record (ONLY ONE)
-                if (
-                    !headerSource &&
-                    parent.inspectionAssessmentIndId &&
-                    (
-                        parent.selectPriority !== null ||
-                        parent.preferredDateTime !== null ||
-                        parent.actionDescription !== null ||
-                        parent.correctedDuringInspection === true
-                    )
-                ) {
-                    headerSource = parent;
-                }
-
-                console.log('FINAL PARENT BEFORE RENDER', {
-    priority: parent.selectPriority,
-    dueDate: parent.preferredDateTime,
-    action: parent.actionDescription,
-    corrected: parent.correctedDuringInspection
-});
-
+                            
 
                 return this.updateParentQuestion(parent, {
                     result: currentResult,
                     originalResult: parent.originalResult ?? currentResult,
                     comment: savedComment,
                     originalComment: parent.originalComment ?? savedComment,
-                    commentChange: false,
-                    selectPriority: parent.selectPriority ?? null,
-                    preferredDateTime: parent.preferredDateTime
-                    ? new Date(parent.preferredDateTime).toISOString().slice(0,16)
-                    : null,
-                    actionDescription: parent.actionDescription ?? '',
-                    correctedDuringInspection: parent.correctedDuringInspection ?? false,
+                                        originalSelectPriority:
+                            parent.originalSelectPriority !== undefined
+                                ? parent.originalSelectPriority
+                                : parent.selectPriority ?? null,
+
+                        originalPreferredDateTime:
+                            parent.originalPreferredDateTime !== undefined
+                                ? parent.originalPreferredDateTime
+                                : parent.preferredDateTime
+                                    ? parent.preferredDateTime.slice(0, 16)
+                                    : null,
+
+                        originalActionDescription:
+                            parent.originalActionDescription !== undefined
+                                ? parent.originalActionDescription
+                                : parent.actionDescription ?? '',
+
+                        originalCorrectedDuringInspection:
+                            parent.originalCorrectedDuringInspection !== undefined
+                                ? parent.originalCorrectedDuringInspection
+                                : parent.correctedDuringInspection ?? false,
+
+                        // current editable values
+                        selectPriority: parent.selectPriority ?? null,
+                        preferredDateTime: parent.preferredDateTime
+                            ? parent.preferredDateTime.slice(0, 16)
+                            : null,
+                        actionDescription: parent.actionDescription ?? '',
+                        correctedDuringInspection: parent.correctedDuringInspection ?? false,
                     regcodvioId: parent.inspectionAssessmentIndId ?? null,
                     questionCardClass: parent.showCriticalIcon
                         ? 'question-card question-card--critical'
@@ -219,6 +237,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
                         checkboxValue: child.PHOCSCheckboxResponse || false,
                         originalCheckboxValue: child.PHOCSCheckboxResponse || false
                     }))
+                                
                 });
             });
 
@@ -234,27 +253,11 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
             };
         });
 
-        // 🔑 APPLY HEADER VALUES ONCE (AFTER MAP)
-        if (headerSource) {
-            this.selectPriority = headerSource.selectPriority ?? null;
-            this.preferredDateTime = headerSource.preferredDateTime ?? null;
-            this.actionDescription = headerSource.actionDescription ?? '';
-            this.correctedDuringInspection =
-                headerSource.correctedDuringInspection ?? false;
-            this.regcodvioId = headerSource.inspectionAssessmentIndId ?? null;
-        }
-
         this.totalQuestions = questionCount;
         this.answeredQuestions = answeredCount;
         this.compliantCount = compliant;
         this.nonCompliantCount = nonCompliant;
 
-        console.log('Loaded header values:', {
-            priority: this.selectPriority,
-            dueDate: this.preferredDateTime,
-            action: this.actionDescription,
-            corrected: this.correctedDuringInspection
-        });
 
     } catch (err) {
         console.error('Error loading inspection questions', err);
@@ -323,104 +326,101 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
             // PRIORITY AND DUE DATE EVENT 
             // ========================================
 
-        async loadExistingViolations() {
+        
 
-        if (!this.groupedQuestions || this.groupedQuestions.length === 0) {
-            return;
-        }
 
-        const violationMap = await getViolationsFromInspection({
-            visitId: this.recordId
-        });
+            handleDatetimeChange(event) {
+            const defId = event.target.dataset.definitionid;
+            const taskId = event.target.dataset.taskid;
+            const value = event.target.value;
 
-        if (!violationMap) return;
-
-        this.groupedQuestions = this.groupedQuestions.map(group => ({
-            ...group,
-            parentQuestions: (group.parentQuestions || []).map(parent => {
-
-                
-                if (!parent.assessmentIndicatorDefinitionId) {
+            this.updateGroupedQuestions((group, parent) => {
+                if (
+                    parent.assessmentIndicatorDefinitionId !== defId ||
+                    parent.assessmentTaskId !== taskId
+                ) {
                     return parent;
                 }
 
-                const violation =
-                    violationMap[parent.assessmentIndicatorDefinitionId];
-
-                return violation
-                    ? {
-                        ...parent,
-                        regcodvioId: violation.Id,
-                        preferredDateTime: violation.ComplianceDueDate,
-                        selectPriority: violation.Priority,
-                        actionDescription: violation.ActionDescription
-                    }
-                    : parent;
-            })
-        }));
+                return {
+                    ...parent,
+                    preferredDateTime: value
+                };
+            });
         }
 
-        
 
-            updateParentQuestionById(questionId, updates) {
-            this.groupedQuestions = this.groupedQuestions.map(group => {
-            const parentQuestions = group.parentQuestions.map(parent =>
-            parent.assessmentIndicatorDefinitionId === questionId
-                ? { ...parent, ...updates }
-                : parent
-        );
-        return { ...group, parentQuestions };
-    });
-}
+        handlePriorityChange(event) {
+            const defId = event.target.dataset.definitionid;
+            const taskId = event.target.dataset.taskid;
+            const value = event.target.value;
 
+            this.updateGroupedQuestions((group, parent) => {
+                if (
+                    parent.assessmentIndicatorDefinitionId !== defId ||
+                    parent.assessmentTaskId !== taskId
+                ) {
+                    return parent;
+                }
 
+                return {
+                    ...parent,
+                    selectPriority: value
+                };
+            });
+        }
 
-
-
-    handleDatetimeChange(event) {
-    const questionId = event.target.dataset.questionId;
-    const value = event.target.value;
-
-    this.updateParentQuestionById(questionId, {
-        preferredDateTime: value
-    });
-    }
-
-   handlePriorityChange(event) {
-    const questionId = event.target.dataset.questionId;
-    const value = event.target.value;
-
-    this.updateParentQuestionById(questionId, {
-        selectPriority: value
-    });
-    }
 
           // ========================================
           // Corrective Action Description EVENT 
           // ========================================
 
     handleCorrectiveActionDescriptionChange(event) {
-    const questionId = event.target.dataset.questionId;
+    const defId = event.target.dataset.definitionid;
+    const taskId = event.target.dataset.taskid;
     const value = event.target.value;
 
-    this.updateParentQuestionById(questionId, {
-        actionDescription: value
+    this.updateGroupedQuestions((group, parent) => {
+        if (
+            parent.assessmentIndicatorDefinitionId !== defId ||
+            parent.assessmentTaskId !== taskId
+        ) {
+            return parent;
+        }
+
+        return {
+            ...parent,
+            actionDescription: value
+        };
     });
-    }
+}
+
 
         
           // ========================================
           // Corrected During Inspection EVENT 
           // ========================================
 
-    handleCorrectedDuringInspectionChange(event) {
-    const questionId = event.target.dataset.questionId;
-    const isChecked = event.target.checked;
+            handleCorrectedDuringInspectionChange(event) {
+            const defId = event.target.dataset.definitionid;
+            const taskId = event.target.dataset.taskid;
+            const value = event.target.checked;
 
-    this.updateParentQuestionById(questionId, {
-        correctedDuringInspection: isChecked
-    });
-    }
+            this.updateGroupedQuestions((group, parent) => {
+                if (
+                    parent.assessmentIndicatorDefinitionId !== defId ||
+                    parent.assessmentTaskId !== taskId
+                ) {
+                    return parent;
+                }
+
+                return {
+                    ...parent,
+                    correctedDuringInspection: value
+                };
+            });
+        }
+
 
 
     handleCommentChange(event) {
@@ -649,7 +649,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
                     this.isLoading = true;
                     this.setSectionSavingState(true);
 
-                    try {
+            try {
                     const responsesToSave = [];
                     let hasAnySelection = false;
                     const sectionsWithChanges = new Set();
@@ -657,14 +657,15 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
                     for (const group of this.groupedQuestions) {
                         for (const parent of group.parentQuestions) {
                             //if (parent.result) {
-                            if (
-                                parent.result ||
-                                parent.comment ||
-                                parent.selectPriority ||
-                                parent.preferredDateTime ||
-                                parent.actionDescription ||
-                                parent.correctedDuringInspection
-                            ) {
+                                const hasParentChanged =
+                                    parent.result !== parent.originalResult ||
+                                    parent.comment !== parent.originalComment ||
+                                    parent.selectPriority !== parent.originalSelectPriority ||
+                                    parent.preferredDateTime !== parent.originalPreferredDateTime ||
+                                    parent.actionDescription !== parent.originalActionDescription ||
+                                    parent.correctedDuringInspection !== parent.originalCorrectedDuringInspection;
+
+                                if (hasParentChanged) {
                                 responsesToSave.push({
                                     assessmentTaskId: parent.assessmentTaskId,
                                     definitionId: parent.assessmentIndicatorDefinitionId,
@@ -672,7 +673,9 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
                                     result: parent.result || '',
                                     checkboxValue: null,
                                     selectPriority: parent.selectPriority || null,
-                                    preferredDateTime: parent.preferredDateTime || null,
+                                    preferredDateTime: parent.preferredDateTime
+                                    ? new Date(parent.preferredDateTime).toISOString()
+                                    : null,
                                     actionDescription: parent.actionDescription || null,
                                     correctedDuringInspection: parent.correctedDuringInspection || false
                                 });
@@ -696,10 +699,6 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
                             }
                         }
                     }
-                                                console.log(
-                                'FINAL RESPONSES →',
-                                JSON.stringify(responsesToSave)
-                            );
 
 
                     if (!hasAnySelection && responsesToSave.length === 0) {
@@ -744,6 +743,10 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
                         ...parent,
                         originalResult: parent.result,
                         originalComment: parent.comment,
+                        originalSelectPriority: parent.selectPriority,
+                        originalPreferredDateTime: parent.preferredDateTime,
+                        originalActionDescription: parent.actionDescription,
+                        originalCorrectedDuringInspection: parent.correctedDuringInspection,
                         childQuestions: parent.childQuestions.map(child => ({ ...child, originalCheckboxValue: child.checkboxValue }))
                     }));
 
@@ -751,57 +754,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
                     this.setSectionSavedState(sectionsWithChanges);
                     await this.createViolationsAndNotify();
 
-                        const violationMap = await getViolationsFromInspection({
-                        visitId: this.recordId
-                        });
-
-
-                        let index = 0;
-
-                                this.groupedQuestions = this.groupedQuestions.map(group => ({
-                                    ...group,
-                                    parentQuestions: group.parentQuestions.map(parent => {
-
-                                                const violation =
-                                                violationMap[parent.assessmentIndicatorDefinitionId];
-
-                                            return violation
-                                                ? {
-                                                    ...parent,
-                                                    regcodvioId: violation.Id,
-                                                    inspectionAssmntIndId: violation.InspectionAssmntIndId
-                                                }
-                                                : parent;
-                                        })
-                                }));
-
-
-                    
-                    const violationUpdates = [];
-
-                            for (const group of this.groupedQuestions) {
-                                for (const parent of group.parentQuestions) {
-
-                                    // only update records that exist
-                                    if (parent.regcodvioId && (parent.selectPriority || parent.preferredDateTime)) {
-                                        violationUpdates.push({
-                                            regcodvioId: parent.regcodvioId,
-                                            preferredDateTime: parent.preferredDateTime,
-                                            selectPriority: parent.selectPriority,
-                                            actionDescription: parent.actionDescription,
-                                            correctedDuringInspection: parent.correctedDuringInspection
-                                        });
-                                    }
-                                }
-                            }
-
-                            if (violationUpdates.length > 0) {
-                                await updateRegulatoryCodeViolations({
-                                    rcodevio: violationUpdates
-                                });
-                            }
-
-                            await completeInspection({ visitId: this.recordId, closingComments: this.closingComments });
+                    await completeInspection({ visitId: this.recordId, closingComments: this.closingComments });
 
                     } catch (error) {
                         console.error('Error saving assessment:', error);
