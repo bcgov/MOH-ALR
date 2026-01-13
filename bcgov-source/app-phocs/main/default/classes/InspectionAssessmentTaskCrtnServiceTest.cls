@@ -136,12 +136,12 @@ public class InspectionAssessmentTaskCrtnServiceTest{
         Test.stopTest();
         
         List<AssessmentTask> tasks = [SELECT Id, SequenceNumber, AssessmentTaskDefinitionId FROM AssessmentTask WHERE ParentId =: input.inspId];        
-        //Assert.areEqual(true, tasks.size() > 0, 'AssessmentTasks should be created');
-        //Assert.areNotEqual(null, tasks.size(), 'Task Size cannot be null');
+        Assert.areEqual(true, tasks.size() > 0, 'AssessmentTasks should be created');
+        Assert.areNotEqual(null, tasks.size(), 'Task Size cannot be null');
         
         List<InspectionAssessmentInd> inds = [SELECT Id, AssessmentTaskId, AssessmentIndDefinitionId FROM InspectionAssessmentInd WHERE AssessmentTaskId IN :tasks];        
-        //Assert.areEqual(true, inds.size() > 0, 'InspectionAssessmentInd records should be created');
-        Assert.areEqual(1, 1, 'Test Assert need to be deleted');
+        Assert.areEqual(true, inds.size() > 0, 'InspectionAssessmentInd records should be created');
+        //Assert.areEqual(1, 1, 'Test Assert need to be deleted');
     }
     
 /**

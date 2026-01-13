@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PHOCSPreventEditAfterCompleted</fullName>
+    <active>true</active>
+    <description>Prevents updates to PHOCS Inspection records when Status is Completed, unless the user has the EHIS Bypass Validation Rule custom permission.</description>
+    <errorConditionFormula>AND(
+    RecordType.DeveloperName = &quot;PHOCSInspection&quot;,
+    NOT($Permission.EHISBypassValidationRuleCustomPermission),
+    OR(
+        AND(
+            ISPICKVAL(Status, &quot;Completed&quot;),
+            NOT(ISCHANGED(Status))
+        ),
+        AND(
+            ISCHANGED(Status),
+            ISPICKVAL(PRIORVALUE(Status), &quot;Completed&quot;)
+        )
+    )
+)</errorConditionFormula>
+    <errorMessage>You cannot edit this Inspection record once the Status is marked as Completed.</errorMessage>
+</ValidationRule>
