@@ -201,7 +201,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>required</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.PeriodStart</fieldItem>
                 <identifier>RecordPeriodStartField</identifier>
@@ -276,6 +276,30 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.PeriodEnd</fieldItem>
                 <identifier>RecordPeriodEndField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
+                        <operator>NE</operator>
+                        <rightValue>BCCDC Dairy Plant Licence</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>required</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.PeriodEnd</fieldItem>
+                <identifier>RecordPeriodEndField2</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>BCCDC Dairy Plant Licence</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -292,7 +316,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>required</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.LicenceTotalYears__c</fieldItem>
                 <identifier>RecordLicenceTotalYears__cField</identifier>
