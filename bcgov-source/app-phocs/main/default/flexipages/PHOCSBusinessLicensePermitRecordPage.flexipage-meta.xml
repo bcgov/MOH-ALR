@@ -91,7 +91,7 @@
                         <valueListItems>
                             <value>CustomButton.BusinessLicense.View_License</value>
                             <visibilityRule>
-                                <booleanFilter>(1 OR 2) AND (3 OR 4)</booleanFilter>
+                                <booleanFilter>(1 OR 2 OR 5 OR 6) AND (3 OR 4)</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
                                     <operator>EQUAL</operator>
@@ -111,6 +111,16 @@
                                     <leftValue>{!$Permission.CustomPermission.PHOCSAdmin}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>true</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>BCCDC Dairy Plant Licence</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>BCCDC Dairy Worker Licence</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
@@ -463,7 +473,7 @@
                     <name>adminFilters</name>
                     <valueList>
                         <valueListItems>
-                            <value>RecordType|EQUALS|[&quot;Evaluation&quot;,&quot;ConstructionPermitApplication&quot;,&quot;OperatingPermitApplication&quot;,&quot;PHOCSExemptions&quot;]</value>
+                            <value>RecordType|EQUALS|[&quot;Evaluation&quot;,&quot;ConstructionPermitApplication&quot;,&quot;OperatingPermitApplication&quot;,&quot;PHOCSExemptions&quot;,&quot;DairyWorkerLicence&quot;]</value>
                         </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
