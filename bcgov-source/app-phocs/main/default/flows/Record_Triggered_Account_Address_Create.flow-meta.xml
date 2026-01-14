@@ -183,13 +183,21 @@
                     <stringValue>Facility</stringValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>PHOCSDairyFacility</stringValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>Location_Type_Check</targetReference>
             </connector>
             <label>Recordtype Check</label>
         </rules>
     </decisions>
-    <description>Flow to create or Update  Location , Address , Associated Location Records</description>
+    <description>Flow to create or Update  Location , Address , Associated Location Records
+Update changes related to EHIS-3070 AC#3</description>
     <environments>Default</environments>
     <formulas>
         <description>Concat Lat and Long</description>
