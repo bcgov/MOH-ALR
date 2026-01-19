@@ -84,8 +84,9 @@ public class InspectionAssessmentTaskCrtnServiceTest{
     @isTest
     public static void testSignatureCoverageWithTest(){
         
-        createTestData();        
-        AssessmentTaskDefinition sigDef = new AssessmentTaskDefinition(Name = 'Test Signature Def', TaskType = 'InspectionChecklist');
+        createTestData();   
+		Id rectId = Schema.SObjectType.AssessmentTaskDefinition.getRecordTypeInfosByDeveloperName().get('PHOCSAssessmentTaskDefinition').getRecordTypeId();
+        AssessmentTaskDefinition sigDef = new AssessmentTaskDefinition(Name = 'Test Signature Def', TaskType = 'InspectionChecklist',recordtypeid = rectId);
         insert sigDef;
         
         ActionPlanTemplate apt = new ActionPlanTemplate(Name = 'Test Signature Template for testclass', TargetEntityType = 'Visit', ActionPlanType = 'Retail');
@@ -114,7 +115,7 @@ public class InspectionAssessmentTaskCrtnServiceTest{
         InspectionAssessmentTaskCreationService.executeInspectionQuestions(inputs);
         Test.stopTest();
         
-        Assert.areEqual(false, [SELECT COUNT() FROM AssessmentTask WHERE ParentId =: input.inspId AND TaskType = 'SignatureTask'] > 0, 'Signature AssessmentTask should be not created in test');
+       Assert.areEqual(false, [SELECT COUNT() FROM AssessmentTask WHERE ParentId =: input.inspId AND TaskType = 'SignatureTask'] > 0, 'Signature AssessmentTask should be not created in test');
     }
      
 /**
@@ -123,7 +124,7 @@ public class InspectionAssessmentTaskCrtnServiceTest{
 * @description: The purpose of this method is to cover Testcoverage of executeInspectionQuestions.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */      
-    @isTest(SeeAllData=true)
+    @isTest(SeeAllData = true)
     public static void executeInspectionQuestionsTest(){        
         createTestData();
         
@@ -138,7 +139,7 @@ public class InspectionAssessmentTaskCrtnServiceTest{
         List<AssessmentTask> tasks = [SELECT Id, SequenceNumber, AssessmentTaskDefinitionId FROM AssessmentTask WHERE ParentId =: input.inspId];        
         //Assert.areEqual(true, tasks.size() > 0, 'AssessmentTasks should be created');
         //Assert.areNotEqual(null, tasks.size(), 'Task Size cannot be null');
-        
+
         List<InspectionAssessmentInd> inds = [SELECT Id, AssessmentTaskId, AssessmentIndDefinitionId FROM InspectionAssessmentInd WHERE AssessmentTaskId IN :tasks];        
         //Assert.areEqual(true, inds.size() > 0, 'InspectionAssessmentInd records should be created');
         Assert.areEqual(1, 1, 'Test Assert need to be deleted');
