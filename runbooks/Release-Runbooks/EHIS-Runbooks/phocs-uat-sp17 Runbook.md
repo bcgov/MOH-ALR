@@ -66,9 +66,14 @@ Go to phocs app services - open action plan templates - click on setup - edit ob
 
 ## Deployment Steps (20 mins)
 
-1. [ ] Deploy ActionPlanTemplates
+1. [x] EHIS-3000 Deploy ActionPlanTemplates
 
-> sf project deploy start --source-dir ActionPlanTemplates-Phocs\main\default\BCCDC_Dairy_Checklist_13e2c7f5_c56a_11f0_8a33_9524194c70a3.apt-meta.xml --wait 30 --target-org deployment.user@phocs.uat.com
+> BCCDC Holder Pasteurizer equipment
+> BCCDC HTST 
+> BCCDC In Depth Inspection
+> BCCDC Inspection Update
+> BCCDC Routine Inspection
+> BCCDC UHT Pasteurizer Equipment
 
 2. [x] Deploy Omni studio components 
 
@@ -90,9 +95,9 @@ LicensingAndPermitting_storagefacilities_English_3
 
 ## Post-Deployment Steps (30 mins)
 
-[x] EHIS-2865 Update Sharing on PHOCS Action Plan Template
+[x] EHIS-3079 Update Sharing on PHOCS Action Plan Template
 
-   1. App Launcher -> Action Plan Templates -> **navigate** to `BCCDC Dairy checklists` record
+   1. App Launcher -> Action Plan Templates -> **navigate** to `ActionPlanTemplates` record above
 
    [x] - As part of post deployment steps, after the deployment of “Action plan templates“, the status of this template is ‘Read only’, it's not visible to the users while adding a template on Action plan creation.
    -So please do the following steps to activate the template, 
@@ -110,107 +115,15 @@ LicensingAndPermitting_storagefacilities_English_3
 
    3. Click **Save**
 
-- [x] Upload Action plan template
-  MOH-ALR\ActionPlanTemplates-Phocs\main\default\ BCCDC_Dairy_Checklist_13e2c7f5_c56a_11f0_8a33_9524194c70a3.apt-meta
-- Share the action plan template to 
-- PHOCS Business Admin & Officer PG - Public Group - Read/Write
-- PHOCS Reporting User PG -Public Group - Read
-- Update Decision Metrics
-
-[x] Upload Decision Matrix
-- Click App Launcher, search “Business Rules Engine”
-- Select Lookup Tables tab, find “PHOCS Document Checklists Decision Matrix” record
-- Select the latest version in Related list
-- Click “Upload PHOCS Document Checklists V1_2025-11-26 14_05_31 CSV File” to upload attached file 
-
-8.[x] EHIS-2703
-- Post PD Step to perform - create a contact
- 2. Create an account with BE RT
- 3. Assign role to contact owner 
- 4. switch to classic and open contact and enable for experience user ,now it will direct to create user - create a user with customer community operator
- 4. go to potal - click on workspace - administration - memebers - add potal profile and ps 
-- Profile - Custom Community Operator.
-- Permission set - PHOCS Operator User CRE PS.
-
-- [x] EHIS-2735
-
-  PDT's for PHOCS site publish
-  Step-1: Open the target salesforce instance.
-  Step-2: Click on the gear icon and select setup.
-  Step-3: Search for 'All Sites' and then select builder for phocsservices.
-  Step-4: Select the "Publish" on Home Page - on right top Corner.
-  Step-5: Again Click on "publish" button on pop-up window.
-  Step-6: Click on "Got It" button and wait till you get confirmation email about site published.
-  Step-7: Repeat the above steps from 3 to 6 for phocsportal as well.
-
-  PDT's for PHOCS site publish
-  Step-1: Open the target salesforce instance.
-  Step-2: Click on the gear icon and select setup.
-  Step-3: Search for 'All Sites' and then select builder for phocsservices.
-  Step-4: Select the "Settings" Icon on Home Page - on left top Corner.
-  Step-5: Again Click on "phocsservices Profile" hyperlink under the Guest User Profile.Step-6: Click on "Assigned Users" button and wait and select the "Site Guest User, phocsservices".
-  Step-7: Assign the "PHOCS Services Guest User PSG" Permission Set Group to the user.
-
-[x] EHIS-2565 - PR-1796 download lastest file from qa and upload in UAT
-- compared all templates in qa and uat found differences for these templates and uploaded below
-- Construction Permit for Water Supply System
-- Pool Construction Permit
-- Drinking Water System Operating Permit
-- Food Premise Operating Permit
-- PHOCSChildcareLicenseTemplate
-- Residential Care License Template
-- Sewerage Holding Tank construction permit
-- Sewerage System
-- Temporary Food Premise Operating Permit
-
 > DataLoading
 
-[x] EHIS-2810
+[x] EHIS-2998
 
-- Create Regulatory Authority and Regulatory Authorization record in all sandboxes
+- Create  inspection type record in all sandboxes with phocs inspection type
+In-depth
+In-depth Follow-up
+Pre-licensing
+Pre-licensing Follow-up
+Inspection Update
 
-1. go to app launcher , search for regulatory authority - select phocs regulatory authority RT - create record with name “BCCDC”
-2. Regulatory Authorization Type record create using the “PHOCS Regulatory Authorization Type” record type:
-Name -Regulatory Authorization Category
-Issuing Department (Regulatory Authority)-BCCDC Dairy Plant License
-License-BCCDC
-
-3.A new Regulatory Authorization Type record is created using the “PHOCS Regulatory Authorization Type” record type:
-Name - Regulatory Authorization Category
-Issuing Department (Regulatory Authority)-BCCDC Dairy Worker Licence
-License-BCCDC
-
-[x] EHIS-2894
-
-- Object: BusinessLicenseApplication
-- List view API name: MyApplicationsPHOCS
-- Note: 
-  1. the above list view may or may not exist in lower environment. If it exists, please do destructive deployment to delete it.
-  2. The above list view does NOT exist on DEV main branch.
-  3. There is another list view with same label name (API: PHOCSMyApplications). Please keep it as-is and do NOT delete it.
-
-[X] EHIS-2631 Create work area records
-- Work Area Name: BCCDC Dairy Work Area 1
-  Health Authority: blank
-  Primary Owner: blank
-  Supervisor: blank
-  Backup Owner: blank
-  Work Area Name: BCCDC Dairy Work Area 2
-  Health Authority: blank
-  Primary Owner: blank
-  Supervisor: blank
-  Backup Owner: blank
-
-[x] EHIS-2889 Follow Jira to perform the step
-- Follow the Instructions Provided in the attachment “EHIS-2617.xlsx” to Insert data to Products object.
-
-[x] EHIS-2943 follow jira for steps
-[x] EHIS-2974 follow jira for steps
-[x] EHIS-2969 follow jira for steps
-
-> Verification Steps 
-
-[x] EHIS-2258 
-- Go to Quick find →All Sites → click on Builder for phocsservices → click on Blue menu tab present in top left corner (refer screenshot_--->Click on Administration -- > click on emai section --> provide David user meail in Sender Email Address.
-
-- [ ] EHIS-2535 verify in UAT
+[X] EHIS-3057,3079,3095,3109
