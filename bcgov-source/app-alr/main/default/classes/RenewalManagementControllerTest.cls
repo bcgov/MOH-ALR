@@ -25,7 +25,16 @@ public class RenewalManagementControllerTest {
                                         BillingStreet = 'csd');
         update parentRec;
         //bla
-        //BusinessLicenseApplication blaRec = TestDataFactory.createRenewalBla(residenceRec1.LicenseType__c, residenceRec1.Id, true); 
+        BusinessLicenseApplication blaRec = TestDataFactory.createRenewalBla(residenceRec1.LicenseType__c, residenceRec1.Id, false); 
+        String blaRecTypeId = Schema.getGlobalDescribe().get('BusinessLicenseApplication').getDescribe().getRecordTypeInfosByDeveloperName().get('Renewal').getRecordTypeId();
+        blaRec.recordTypeId = blaRecTypeId;
+        blaRec.AccountId = residenceRec1.Id;
+        blaRec.LicenseTypeId = residenceRec1.LicenseType__c;
+        blaRec.Status = 'Cancelled';
+        blaRec.AppliedDate = DateTime.now();
+        blaRec.RenewalYear__c = String.valueOf(Date.today().year());
+        Database.Insert(blaRec);
+        
         //asset parent
 
         Asset unitRec1 = TestDataFactory.createUnit('1', 'Private', 5, residenceRec1.Id, false);
