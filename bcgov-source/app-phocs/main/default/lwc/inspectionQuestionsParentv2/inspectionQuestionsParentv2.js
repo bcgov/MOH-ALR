@@ -8,6 +8,8 @@ import completeInspection from "@salesforce/apex/PHOCSInspectionAssessmentIndCon
 import getVisitMeta from "@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.getVisitMeta";
 import resetChildResponsesForCompliantParents from "@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.resetChildResponsesForCompliantParents";
 import markInspectionAsDraft from "@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.markInspectionAsDraft";
+import validateResumeInspection from "@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.validateResumeInspection";
+import updateInspectionStatusToInProgress from "@salesforce/apex/InspectionQuestionsControllerV2.updateInspectionStatusToInProgress";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
 const RESULT_COMPLIANT = "Compliant";
@@ -293,8 +295,34 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
     // EVENT HANDLERS
     // ========================================
 
-    handleStart() {
-        this.showQuestions = true;
+    async handleStart() {
+        this.isLoading = true;
+
+    try {
+         if (this.isDraft) {
+           await validateResumeInspection({
+             visitId: this.recordId
+           });
+        } 
+    else {
+      await updateInspectionStatusToInProgress({
+        inspectionId: this.recordId
+      });
+      this.isDraft = true;
+    }
+    this.showQuestions = true;
+
+    } catch (error) {
+       this.showToast(
+         "Error",
+         "Only the Officer who started the inspection can resume this inspection",
+         "error"
+       );
+       this.showQuestions = false;
+       
+    } finally {
+      this.isLoading = false;
+     }
     }
 
     handleToggleSection(event) {

@@ -396,7 +396,7 @@ public without sharing class PHOCSInspectionAssessmentIndControllerV2 {
 */     
     @AuraEnabled(cacheable=true)
     public static Visit getVisitMeta(Id visitId) {
-        return [SELECT Id, PHOCSIsDraft__c, Status FROM Visit WHERE Id = :visitId LIMIT 1];
+        return [SELECT Id, PHOCSIsDraft__c, Status, ownerId FROM Visit WHERE Id = :visitId LIMIT 1];
     }
     
     
@@ -454,6 +454,25 @@ public without sharing class PHOCSInspectionAssessmentIndControllerV2 {
         }
         
         update childrenToReset;
+    }
+
+/**
+* @description: ownership enforcement at Resume Inspection.
+*/       
+    @AuraEnabled
+    public static void validateResumeInspection(Id visitId) {
+        if (visitId == null) {
+            throw new AuraHandledException('Invalid inspection record.');
+        }
+        
+        Visit visitRec = [SELECT Id, OwnerId, PHOCSIsDraft__c, Status FROM Visit WHERE Id = :visitId LIMIT 1];
+        
+        Boolean isStatusInProgress = visitRec.Status == 'In Progress' ? true : false;
+        Boolean isOfficerLoggedInUser = visitRec.OwnerId != UserInfo.getUserId() ? true : false;
+        
+        if(visitRec.PHOCSIsDraft__c && isStatusInProgress && isOfficerLoggedInUser){
+            throw new AuraHandledException('Only the Officer who started the inspection can resume this inspection');
+        }
     }
     
 }

@@ -247,9 +247,10 @@ public with sharing class InspectionQuestionsControllerV2 {
         
         Visit vistRec = [SELECT Id, Status FROM Visit WHERE Id =: inspectionId LIMIT 1];
         
-        if (vistRec.Status != STATUS_INPROGRESS && vistRec.Status == STATUS_PLANNED) {
+        if (vistRec.Status == STATUS_PLANNED) {
             vistRec.Status = STATUS_INPROGRESS;
             vistRec.OwnerId = (vistRec.OwnerId != loggedInUserId) ? loggedInUserId : vistRec.OwnerId;
+            vistRec.PHOCSIsDraft__c = true;
             update vistRec;
         }
     }
