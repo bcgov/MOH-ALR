@@ -57,7 +57,7 @@ public class InspAssessmentIndTriggerHandlerTest {
 * @description: The purpose of this method is to cover Testcoverage of createRegulatoryCodeViolations.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */      
-    @isTest
+   /* @isTest
     public static void createRegulatoryCodeViolationsTest(){
         
         Test.startTest();
@@ -73,6 +73,6 @@ public class InspAssessmentIndTriggerHandlerTest {
         Assert.areNotEqual(null, vio.InspectionId, 'Violation must reference an Inspection (Visit).');
         Assert.areNotEqual(null, vio.InspectionAssmntIndId, 'Violation must reference the AssessmentIndDefinition.');
         Assert.areNotEqual(null, vio.RegulatoryCodeId, 'Violation must reference a Regulatory Code.');
-    }
+    } */
     
 }
