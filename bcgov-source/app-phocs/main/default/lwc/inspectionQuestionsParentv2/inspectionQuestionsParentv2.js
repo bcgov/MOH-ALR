@@ -308,7 +308,6 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
       await updateInspectionStatusToInProgress({
         inspectionId: this.recordId
       });
-      this.isDraft = true;
     }
     this.showQuestions = true;
 
