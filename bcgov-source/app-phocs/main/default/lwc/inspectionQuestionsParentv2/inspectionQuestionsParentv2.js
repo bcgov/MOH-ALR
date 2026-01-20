@@ -296,33 +296,37 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
     // ========================================
 
     async handleStart() {
-        this.isLoading = true;
+       this.isLoading = true;
 
     try {
-         if (this.isDraft) {
-           await validateResumeInspection({
-             visitId: this.recordId
-           });
-        } 
-    else {
-      await updateInspectionStatusToInProgress({
-        inspectionId: this.recordId
-      });
-    }
-    this.showQuestions = true;
+        if (this.isDraft) {
+            await validateResumeInspection({
+                visitId: this.recordId
+            });
+        } else {
+            await updateInspectionStatusToInProgress({
+                inspectionId: this.recordId
+            });
+        }
+        this.showQuestions = true;
 
     } catch (error) {
-       this.showToast(
-         "Error",
-         "Only the Officer who started the inspection can resume this inspection",
-         "error"
-       );
-       this.showQuestions = false;
-       
+        const message =
+            error?.body?.message ||
+            error?.message ||
+            "Unexpected error occurred";
+
+        if (message.includes("Only the Officer who started the inspection")) {
+            this.showToast("Error", message, "error");
+        } else {
+            this.showToast("Error", message, "error");
+        }
+        this.showQuestions = false;
+
     } finally {
-      this.isLoading = false;
-     }
+        this.isLoading = false;
     }
+}
 
     handleToggleSection(event) {
         const sectionId = event.currentTarget.dataset.id;

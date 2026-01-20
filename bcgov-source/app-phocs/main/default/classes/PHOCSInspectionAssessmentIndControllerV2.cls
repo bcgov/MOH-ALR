@@ -467,10 +467,10 @@ public without sharing class PHOCSInspectionAssessmentIndControllerV2 {
         
         Visit visitRec = [SELECT Id, OwnerId, PHOCSIsDraft__c, Status FROM Visit WHERE Id = :visitId LIMIT 1];
         
-        Boolean isStatusInProgress = visitRec.Status == 'In Progress' ? true : false;
-        Boolean isOfficerLoggedInUser = visitRec.OwnerId != UserInfo.getUserId() ? true : false;
+        Boolean isStatusInProgress = visitRec.Status == 'InProgress';
+        Boolean isNotOwner = visitRec.OwnerId != UserInfo.getUserId();
         
-        if(visitRec.PHOCSIsDraft__c && isStatusInProgress && isOfficerLoggedInUser){
+        if(visitRec.PHOCSIsDraft__c && isStatusInProgress && isNotOwner){
             throw new AuraHandledException('Only the Officer who started the inspection can resume this inspection');
         }
     }
