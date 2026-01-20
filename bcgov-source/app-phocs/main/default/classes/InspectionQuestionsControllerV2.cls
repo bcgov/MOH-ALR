@@ -245,7 +245,7 @@ public with sharing class InspectionQuestionsControllerV2 {
     public static void updateInspectionStatusToInProgress(Id inspectionId) {
         Id loggedInUserId = UserInfo.getUserId();
         
-        Visit vistRec = [SELECT Id, Status FROM Visit WHERE Id =: inspectionId LIMIT 1];
+        Visit vistRec = [SELECT Id, Status, OwnerId FROM Visit WHERE Id =: inspectionId LIMIT 1];
         
         if (vistRec.Status == STATUS_PLANNED) {
             vistRec.Status = STATUS_INPROGRESS;
