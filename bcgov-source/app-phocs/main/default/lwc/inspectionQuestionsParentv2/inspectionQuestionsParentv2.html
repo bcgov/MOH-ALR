@@ -1,6 +1,15 @@
 <template>
     <div class="inspection-container">
-        <lightning-card title="Inspection Questions">
+        <lightning-card>
+            <div slot="title" class="slds-grid slds-grid_vertical-align-center">
+                <span>Inspection Questions</span>
+
+                <template lwc:if={isDraft}>
+                    <span class="slds-badge slds-theme_warning slds-m-left_small">
+                        Draft
+                    </span>
+                </template>
+            </div>
             <template lwc:if={showQuestions}>
                 <div class="progress-container" slot="actions">
                     <span class="progress-text">{progressText}</span>
@@ -14,7 +23,7 @@
                 <template lwc:if={showQuestions}>
                 </template>
                 <template lwc:else>
-                    <lightning-button label="Start Inspection" variant="brand" onclick={handleStart}></lightning-button>
+                    <lightning-button label={startButtonLabel} variant="brand" onclick={handleStart}></lightning-button>
                 </template>
             </div>
 
@@ -53,7 +62,7 @@
 
                         <template lwc:if={taskGroup.isExpanded}>
                             <template for:each={taskGroup.parentQuestions} for:item="parent">
-                                <div key={parent.assessmentTaskId} class={parent.questionCardClass} data-question-id={parent.assessmentIndicatorDefinitionId}>
+                                <div key={parent.assessmentIndicatorDefinitionId} class={parent.questionCardClass} data-question-id={parent.assessmentIndicatorDefinitionId}>
                                     <div class="question-row">
                                         <template lwc:if={parent.showCriticalIcon}>
                                             <lightning-icon icon-name="utility:warning" variant="error" size="x-small" class="critical-icon"></lightning-icon>
@@ -61,10 +70,10 @@
                                         <span class="question-text">{parent.questionText}</span>
                                         <div class="question-controls">
                                             <div class="compliance-button-group">
-                                                <button type="button" class={parent.compliantButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-value="Compliant" onclick={handleAssessmentChange}>Compliant</button>
-                                                <button type="button" class={parent.nonCompliantButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-value="PHOCSNonCompliant" onclick={handleAssessmentChange}>Non Compliant</button>
-                                                <button type="button" class={parent.naButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-value="N/A (Not Applicable)" onclick={handleAssessmentChange}>N/A</button>
-                                                <button type="button" class={parent.nsButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-value="N/S (Not Assessed)" onclick={handleAssessmentChange}>N/S</button>
+                                                <button type="button" class={parent.compliantButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="Compliant" onclick={handleAssessmentChange}>Compliant</button>
+                                                <button type="button" class={parent.nonCompliantButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="PHOCSNonCompliant" onclick={handleAssessmentChange}>Non Compliant</button>
+                                                <button type="button" class={parent.naButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="N/A (Not Applicable)" onclick={handleAssessmentChange}>N/A</button>
+                                                <button type="button" class={parent.nsButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="N/S (Not Assessed)" onclick={handleAssessmentChange}>N/S</button>
                                             </div>
                                             <button type="button" class="regulatory-codes-btn" data-value={parent.assessmentIndicatorDefinitionId} onclick={handleViewRegulatoryCodes}>View Codes</button>
                                         </div>
@@ -92,7 +101,7 @@
                                         <div class="child-questions-container">
                                             <div class="child-questions-header">Select applicable observations</div>
                                             <template for:each={parent.childQuestions} for:item="child">
-                                                <div key={child.assessmentTaskId}>
+                                                <div key={child.assessmentIndicatorDefinitionId}>
                                                     <c-inspection-question-childv2 question-text={child.questionText} field-type={child.dataType} ass-task-id={child.assessmentTaskId} assessment-indicator-definition-id={child.assessmentIndicatorDefinitionId} checked={child.checkboxValue} onvaluechange={handleChildValueChange} data-parent-id={parent.assessmentIndicatorDefinitionId}></c-inspection-question-childv2>
                                                 </div>
                                             </template>
@@ -121,9 +130,12 @@
                     </div>
                 </template>
 
-                <div class="submit-container slds-grid slds-grid_align-spread">
+                <div class="submit-container slds-grid slds-grid_align-spread">                    
                     <lightning-button label="Review Responses" variant="neutral" onclick={handleShowReview} icon-name="utility:preview"></lightning-button>
-                    <lightning-button label="Submit Inspection" variant="brand" onclick={handleSubmit} disabled={isSubmitDisabled}></lightning-button>
+                <div class="slds-grid slds-grid_align-end">
+                    <lightning-button label="Save for Later" variant="neutral" onclick={handleSaveForLater} disabled={isLoading}></lightning-button>
+                    <lightning-button label="Submit Inspection" variant="brand" onclick={handleSubmit} disabled={isSubmitDisabled} class="slds-m-left_small"></lightning-button>
+                </div>
                 </div>
             </template>
 

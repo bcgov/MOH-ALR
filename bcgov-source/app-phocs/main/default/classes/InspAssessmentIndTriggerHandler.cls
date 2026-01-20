@@ -18,7 +18,7 @@ public without sharing class InspAssessmentIndTriggerHandler {
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */      
     public static void afterInsert(List<InspectionAssessmentInd> newList) {
-        createRegulatoryCodeViolations(newList);
+        //createRegulatoryCodeViolations(newList);
     }
     
 /**
@@ -27,7 +27,7 @@ public without sharing class InspAssessmentIndTriggerHandler {
 * @description: The purpose of this method is to Create Violations for PHOCS InspectionAssessmentInd records.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
-    public static void createRegulatoryCodeViolations(List<InspectionAssessmentInd> newList) {
+   /* public static void createRegulatoryCodeViolations(List<InspectionAssessmentInd> newList) {
         try {
             List<InspectionAssessmentInd> filteredInsAsmntIndList = new List<InspectionAssessmentInd>();
             Set<Id> assessmentIndDefIds = new Set<Id>();
@@ -85,6 +85,6 @@ public without sharing class InspAssessmentIndTriggerHandler {
         } catch (Exception ex) {
             LogService.logAndPublish(CLASS_NAME, 'afterInsert', '', ex);
         }
-    }
+    } */
     
 }

@@ -129,36 +129,20 @@ public with sharing class InspectionQuestionsControllerV2 {
             return new List<RegulatoryCodeWrapper>();
         }
 
-        List<RegulatoryCodeAssessmentInd> regulatoryCodeRecords = [
-            SELECT RegulatoryCode.Subject,
-                   RegulatoryCode.EffectiveFrom,
-                   RegulatoryCode.EffectiveTo,
-                   RegulatoryCode.IsActive
-            FROM RegulatoryCodeAssessmentInd
-            WHERE AssessmentIndDefinitionId = :assessmentIndicatorDefinitionId
-            WITH SECURITY_ENFORCED
-        ];
+        List<RegulatoryCodeAssessmentInd> regulatoryCodeRecords = [ SELECT RegulatoryCode.Subject, RegulatoryCode.EffectiveFrom, RegulatoryCode.EffectiveTo, RegulatoryCode.IsActive
+            FROM RegulatoryCodeAssessmentInd WHERE AssessmentIndDefinitionId = :assessmentIndicatorDefinitionId WITH SECURITY_ENFORCED];
 
         List<RegulatoryCodeWrapper> regulatoryCodeWrappers = new List<RegulatoryCodeWrapper>();
 
         for (RegulatoryCodeAssessmentInd record : regulatoryCodeRecords) {
             String formattedValidity = '';
             if (record.RegulatoryCode.EffectiveFrom != null || record.RegulatoryCode.EffectiveTo != null) {
-                formattedValidity =
-                    (record.RegulatoryCode.EffectiveFrom != null
-                        ? String.valueOf(record.RegulatoryCode.EffectiveFrom) : '') +
-                    ' to ' +
-                    (record.RegulatoryCode.EffectiveTo != null
-                        ? String.valueOf(record.RegulatoryCode.EffectiveTo) : '');
+                formattedValidity = (record.RegulatoryCode.EffectiveFrom != null ? String.valueOf(record.RegulatoryCode.EffectiveFrom) : '') + ' to ' +
+                    (record.RegulatoryCode.EffectiveTo != null ? String.valueOf(record.RegulatoryCode.EffectiveTo) : '');
             }
 
-            regulatoryCodeWrappers.add(new RegulatoryCodeWrapper(
-                record.RegulatoryCode.Subject,
-                record.RegulatoryCode.IsActive,
-                formattedValidity
-            ));
+            regulatoryCodeWrappers.add(new RegulatoryCodeWrapper(record.RegulatoryCode.Subject, record.RegulatoryCode.IsActive, formattedValidity));
         }
-
         return regulatoryCodeWrappers;
     }
 
@@ -259,12 +243,15 @@ public with sharing class InspectionQuestionsControllerV2 {
      */
     @AuraEnabled
     public static void updateInspectionStatusToInProgress(Id inspectionId) {
+        Id loggedInUserId = UserInfo.getUserId();
         
         Visit vistRec = [SELECT Id, Status FROM Visit WHERE Id =: inspectionId LIMIT 1];
         
         if (vistRec.Status != STATUS_INPROGRESS && vistRec.Status == STATUS_PLANNED) {
             vistRec.Status = STATUS_INPROGRESS;
+            vistRec.OwnerId = (vistRec.OwnerId != loggedInUserId) ? loggedInUserId : vistRec.OwnerId;
             update vistRec;
         }
     }
+
 }
