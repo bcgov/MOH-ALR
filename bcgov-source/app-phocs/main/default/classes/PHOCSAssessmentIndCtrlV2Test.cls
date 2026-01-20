@@ -529,7 +529,7 @@ private class PHOCSAssessmentIndCtrlV2Test {
 
        
                 PHOCSInspectionAssessmentIndControllerV2.SaveResponsesResult result = 
-                PHOCSInspectionAssessmentIndControllerV2.saveAssessmentResponsesNOTUSED(responses);
+                PHOCSInspectionAssessmentIndControllerV2.saveAssessmentResponses(responses);
                 Test.stopTest();
         
         // Verify records were created
