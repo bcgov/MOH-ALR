@@ -819,7 +819,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
                                     assessmentTaskId: child.assessmentTaskId,
                                     definitionId: child.assessmentIndicatorDefinitionId,
                                     comment: "",
-                                    result: RESULT_NON_COMPLIANT,
+                                    result: child.checkboxValue === true ? RESULT_NON_COMPLIANT : null,
                                     checkboxValue: child.checkboxValue === true,
                                 });
                             }
@@ -1101,7 +1101,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
                                 assessmentTaskId: child.assessmentTaskId,
                                 definitionId: child.assessmentIndicatorDefinitionId,
                                 comment: "",
-                                result: RESULT_NON_COMPLIANT,
+                                result: child.checkboxValue === true ? RESULT_NON_COMPLIANT : null,
                                 checkboxValue: child.checkboxValue === true,
                             });
                         }
