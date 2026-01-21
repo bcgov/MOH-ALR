@@ -7,7 +7,7 @@ export default class PHOCSRegCodeViolationRelatedList extends LightningElement {
 
    columns = [
     {
-        label: 'Canned Comment',
+        label: 'Name',
         fieldName: 'assessmentIndicatorName',
         type: 'text'
     },

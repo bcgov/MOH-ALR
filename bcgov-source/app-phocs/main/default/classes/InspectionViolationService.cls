@@ -332,6 +332,7 @@ public with sharing class InspectionViolationService {
             }
             
             List<RegulatoryCodeViolation> violationsToInsert = new List<RegulatoryCodeViolation>();
+            List<InspectionAssessmentInd> violationSourceInds = new List<InspectionAssessmentInd>();
             
             for (InspectionAssessmentInd ind : filteredInsAsmntIndList) {
                 List<RegulatoryCodeAssessmentInd> mappings = regMap.get(ind.AssessmentIndDefinitionId);
@@ -348,10 +349,11 @@ public with sharing class InspectionViolationService {
                     vio.DateCreated = System.now();
                     vio.RegulatoryCodeId = mapItem.RegulatoryCodeId;
                     vio.Status = 'Open';
+                    
                     violationsToInsert.add(vio);
+                    violationSourceInds.add(ind);
                 }
             }
-            System.debug('###violationsToInsert'+violationsToInsert);
             
             if (violationsToInsert.isEmpty()) {
                 result.success = true;
@@ -367,7 +369,15 @@ public with sharing class InspectionViolationService {
             
             for (Integer i = 0; i < srList.size(); i++) {
                 if (srList[i].isSuccess()) {
-                    result.violationIds.add(srList[i].getId());
+                    Id vioId = srList[i].getId();
+                    result.violationIds.add(vioId);
+                    
+                    InspectionAssessmentInd ind = violationSourceInds[i];
+                    if (ind.AssessmentIndDefinition.PHOCSParentId__c == null) {
+                        result.parentViolationIds.add(vioId);
+                    } else {
+                        result.cannedCommentViolationIds.add(vioId);
+                    }
                 } else {
                     for (Database.Error err : srList[i].getErrors()) {
                         result.failedViolations.add(err.getMessage());
