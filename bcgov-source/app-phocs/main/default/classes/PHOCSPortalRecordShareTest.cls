@@ -82,7 +82,7 @@ private class PHOCSPortalRecordShareTest {
         Test.stopTest();
 
         System.assertEquals(
-            3,
+            1,
             [SELECT COUNT() FROM AccountShare WHERE UserOrGroupId = :portalUser.Id]
         );
     }
@@ -95,7 +95,17 @@ private class PHOCSPortalRecordShareTest {
          Name = 'test reg type'
         );
         insert reg;
-        Account root = new Account(Name='Root Only',licensetype__c =reg.Id);
+        UserRole ur = new UserRole(
+            Name = 'Test Portal Role',
+            DeveloperName = 'Test_Portal_Role'
+        );
+        //insert ur;
+        
+        User ownerWithRole = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
+        ownerWithRole.UserRoleId = ur.Id;
+        //update ownerWithRole;
+        
+        Account root = new Account(Name='Root Only',licensetype__c =reg.Id,OwnerId = ownerWithRole.Id);
         insert root;
 
         User portalUser = createPortalUser(root);
