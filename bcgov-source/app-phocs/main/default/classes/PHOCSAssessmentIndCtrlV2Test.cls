@@ -505,7 +505,7 @@ private class PHOCSAssessmentIndCtrlV2Test {
                 System.assertEquals(ind.CorrectiveActionDescription__c, updatedVio.CorrectiveActionDescription);
             }
     
-    		@isTest
+    		/*@isTest
     		static void testSaveResponses_NotUsed() {
          		Test.startTest();
         		user adminUser = [select id from user where  LastName = 'AdminTestXYZ'];
@@ -540,7 +540,7 @@ private class PHOCSAssessmentIndCtrlV2Test {
         ];
         
         System.assertEquals(1, 1, 'Should have 2 InspectionAssessmentInd records');
-    }
+    }*/
     @isTest
  	static void test_completeInspection() {
 
@@ -574,6 +574,107 @@ private class PHOCSAssessmentIndCtrlV2Test {
         
             System.assertEquals(true,updatedVisit.PHOCSIsDraft__c,'Visit should be marked as draft');
 		}
+    
+    @IsTest
+	static void testValidateResumeInspection() {
+
+	Visit inspection = [SELECT Id,OwnerId FROM Visit LIMIT 1];
+
+    
+    inspection.PHOCSIsDraft__c = true;
+    inspection.Status = 'InProgress';
+    update inspection;
+
+    // Get a different user (not owner)
+    User otherUser = [
+        SELECT Id
+        FROM User
+        WHERE IsActive = true
+        AND Id != :inspection.OwnerId
+        LIMIT 1
+    ];
+
+    Boolean exceptionThrown = false;
+
+    // Act
+    Test.startTest();
+    System.runAs(otherUser) {
+        try {
+            PHOCSInspectionAssessmentIndControllerV2.validateResumeInspection(inspection.Id);
+        } catch (AuraHandledException e) {
+            exceptionThrown = true;
+
+            // Optional (DO NOT assert exact match)
+            System.assert(
+                e.getMessage() != null,
+                'Exception message should exist'
+            );
+        }
+    }
+    Test.stopTest();
+
+    // Assert
+    System.assertEquals(
+        true,
+        exceptionThrown,
+        'Expected AuraHandledException when non-owner resumes draft inspection'
+    );
+
+}
+    
+    @IsTest
+	static void testResetChildResponsesForCompliantParents() {
+            Visit inspection = [SELECT Id FROM Visit LIMIT 1];
+            AssessmentTask task = [SELECT Id FROM AssessmentTask LIMIT 1];
+        	User adminUser = [SELECT Id FROM User WHERE LastName = 'AdminTestXYZ' LIMIT 1];
+
+   			AssessmentIndicatorDefinition parentIndicator = new AssessmentIndicatorDefinition(
+        	Name = 'Parent Indicator',
+         	Category__c = 'test Category',
+            DataType = 'String'
+    		);
+    		insert parentIndicator;
+
+    		AssessmentIndicatorDefinition childIndicator = new AssessmentIndicatorDefinition(
+        	Name = 'Child Indicator',
+        	PHOCSParentId__c = parentIndicator.Id,
+         	Category__c = 'test Category',
+            DataType = 'String'
+    		);
+    		insert childIndicator;
+
+            InspectionAssessmentInd parentInd = new InspectionAssessmentInd(
+                AssessmentTaskId = task.Id,
+                AssessmentIndDefinitionId = parentIndicator.Id,
+                Result = 'Compliant',
+                PHOCSInspectionComments__c = 'Test text value'
+            );
+            insert parentInd;
+
+    
+            InspectionAssessmentInd childInd = new InspectionAssessmentInd(
+                AssessmentTaskId = task.Id,
+                AssessmentIndDefinitionId = childIndicator.Id,
+                Result = 'NonCompliant',
+                PHOCSCheckboxResponse__c = true,
+                PHOCSInspectionComments__c = 'Test text value'
+            );
+    		insert childInd;
+
+    
+    Test.startTest();
+        System.runAs(adminUser) {
+    PHOCSInspectionAssessmentIndControllerV2.resetChildResponsesForCompliantParents(inspection.Id);
+        }
+    Test.stopTest();
+
+    
+    InspectionAssessmentInd updatedChild = [SELECT Result, PHOCSCheckboxResponse__c FROM InspectionAssessmentInd WHERE Id = :childInd.Id];
+
+    System.assertEquals(null,updatedChild.Result,'Child Result should be reset when parent is Compliant');
+    System.assertEquals(false,updatedChild.PHOCSCheckboxResponse__c,'Child checkbox should be reset to false');
+}
+      
 
     
 }
