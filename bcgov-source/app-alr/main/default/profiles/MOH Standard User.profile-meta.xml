@@ -2080,6 +2080,10 @@
         <layout>InspectionType-Inspection Type Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
+        <layout>InspectionType-Inspection Type Layout</layout>
+        <recordType>InspectionType.ALRInspectionType</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
         <layout>PublicComplaint-Public Complaint Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
@@ -2094,8 +2098,22 @@
         <recordType>RegulatoryTrxnFee.TransactionFee</recordType>
     </layoutAssignments>
     <layoutAssignments>
+        <layout>RegulatoryTrxnFeeItem-ALR Regulatory Transaction Fee Item Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RegulatoryTrxnFeeItem-ALR Regulatory Transaction Fee Item Layout</layout>
+        <recordType>RegulatoryTrxnFeeItem.ALRTransactionFeeItem</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
         <layout>Task-Standard Task Layout</layout>
         <recordType>Task.Task</recordType>
+    </layoutAssignments>
+     <layoutAssignments>
+        <layout>InteractionSummary-Interaction Summary Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>InteractionSummary-Interaction Summary Layout</layout>
+        <recordType>InteractionSummary.InteractionSummary</recordType>
     </layoutAssignments>
     <objectPermissions>
         <allowCreate>false</allowCreate>
@@ -2154,8 +2172,39 @@
     </recordTypeVisibilities>
     <recordTypeVisibilities>
         <default>true</default>
-        <recordType>ActionPlan.ActionPlan</recordType>
+        <recordType>ActionPlanTemplate.ALRActionPlanTemplate</recordType>
         <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <default>true</default>
+        <recordType>AssessmentIndicatorDefinition.ALRAssessmentIndicatorDefinition</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <default>false</default>
+        <recordType>AssessmentIndicatorDefinition.PHOCSAssessmentIndicatorDefinition</recordType>
+        <visible>false</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <default>true</default>
+        <personAccountDefault>true</personAccountDefault>
+        <recordType>AssessmentTask.ALRAssessmentTask</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <default>false</default>
+        <recordType>AssessmentTask.PHOCSAssessmentTask</recordType>
+        <visible>false</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <default>true</default>
+        <recordType>AssessmentTaskDefinition.ALRAssessmentTaskDefinition</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <default>false</default>
+        <recordType>AssessmentTaskDefinition.PHOCSAssessmentTaskDefinition</recordType>
+        <visible>false</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
         <default>false</default>
@@ -2218,10 +2267,10 @@
         <recordType>Event.PHOCSEvent</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
-    <recordTypeVisibilities>
-        <default>false</default>
+     <recordTypeVisibilities>
+        <default>true</default>
         <recordType>InteractionSummary.InteractionSummary</recordType>
-        <visible>false</visible>
+        <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
         <default>true</default>
@@ -2237,6 +2286,26 @@
         <default>true</default>
         <recordType>PublicComplaint.Public_Complaint</recordType>
         <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <default>true</default>
+        <recordType>InspectionType.ALRInspectionType</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <default>false</default>
+        <recordType>InspectionType.PHOCSInspectionType</recordType>
+        <visible>false</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <default>true</default>
+        <recordType>RegulatoryTrxnFeeItem.ALRTransactionFeeItem</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <default>false</default>
+        <recordType>RegulatoryTrxnFeeItem.PHOCSRegulatoryTransactionFeeItem</recordType>
+        <visible>false</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
         <default>false</default>
@@ -2372,6 +2441,10 @@
         <name>AllowUniversalSearch</name>
     </userPermissions>
     <userPermissions>
+        <enabled>false</enabled>
+        <name>CreateCustomizeReports</name>
+    </userPermissions>
+    <userPermissions>
         <enabled>true</enabled>
         <name>AllowViewKnowledge</name>
     </userPermissions>
@@ -2402,10 +2475,6 @@
     <userPermissions>
         <enabled>true</enabled>
         <name>CreateCustomizeFilters</name>
-    </userPermissions>
-    <userPermissions>
-        <enabled>true</enabled>
-        <name>CreateCustomizeReports</name>
     </userPermissions>
     <userPermissions>
         <enabled>true</enabled>
@@ -2503,7 +2572,7 @@
         <enabled>true</enabled>
         <name>ViewRoles</name>
     </userPermissions>
-<userPermissions>
+    <userPermissions>
         <enabled>false</enabled>
         <name>ViewSetup</name>
     </userPermissions>

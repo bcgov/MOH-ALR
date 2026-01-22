@@ -217,13 +217,21 @@
                     <stringValue>Facility</stringValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>PHOCSDairyFacility</stringValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>Get_AssociatedLocation_Records</targetReference>
             </connector>
             <label>Recordtype Check</label>
         </rules>
     </decisions>
-    <description>Flow to Update or create Location , Address , Associated Location Records - final</description>
+    <description>Flow to Update or create Location , Address , Associated Location Records - final
+Update changes related to EHIS-3070 AC#3</description>
     <environments>Default</environments>
     <formulas>
         <description>Concat Lat and Long</description>

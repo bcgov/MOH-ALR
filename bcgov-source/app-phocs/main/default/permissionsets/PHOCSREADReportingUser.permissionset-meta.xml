@@ -135,15 +135,15 @@
     <description>Read access on PHOCS objects and custom permission for Reporting User</description>
     <fieldPermissions>
         <editable>false</editable>
-        <field>InspectionAssessmentInd.Priority__c</field>
+        <field>InspectionAssessmentInd.AssessmentIndDefinitionName__c</field>
         <readable>true</readable>
     </fieldPermissions>
-<fieldPermissions>
+    <fieldPermissions>
         <editable>false</editable>
         <field>InspectionAssessmentInd.ComplianceDueDate__c</field>
         <readable>true</readable>
     </fieldPermissions>
-<fieldPermissions>
+    <fieldPermissions>
         <editable>false</editable>
         <field>InspectionAssessmentInd.CorrectedDuringInspection__c</field>
         <readable>true</readable>
@@ -153,12 +153,27 @@
         <field>InspectionAssessmentInd.CorrectiveActionDescription__c</field>
         <readable>true</readable>
     </fieldPermissions>
-<fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>InspectionAssessmentInd.PHOCSCheckboxResponse__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>InspectionAssessmentInd.PHOCSInspectionComments__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>InspectionAssessmentInd.Priority__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>false</editable>
         <field>RegulatoryCodeViolation.PHOCSParentAccountID__c</field>
         <readable>true</readable>
     </fieldPermissions>
-<fieldPermissions>
+    <fieldPermissions>
         <editable>false</editable>
         <field>RegulatoryCodeViolation.PHOCSParentId__c</field>
         <readable>true</readable>
@@ -2326,6 +2341,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>BusinessLicenseApplication.AccordanceWithBCDesignGuidelines__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>BusinessLicenseApplication.AdditionalExperience__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -4503,9 +4523,24 @@
         <field>RegulatoryTrxnFee.FeeType__c</field>
         <readable>true</readable>
     </fieldPermissions>
-     <fieldPermissions>
+    <fieldPermissions>
         <editable>false</editable>
-        <field>RegulatoryTrxnFee.ReferenceNumber__c</field>
+        <field>RegulatoryCodeViolation.Corrected_During_Inspection__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>RegulatoryCodeViolation.PHOCSAssessmentIndicatorDefinition__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>RegulatoryCodeViolation.PHOCSParentAccountID__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>RegulatoryCodeViolation.PHOCSParentId__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -4621,6 +4656,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Visit.PHOCSIsBelongsToPHOCS__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Visit.PHOCSIsDraft__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -5343,6 +5383,10 @@
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
+        <recordType>RegulatoryCodeViolation.PHOCSRegulatoryCodeViolation</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
         <recordType>RegulatoryTrxnFee.PHOCSTransactionFee</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
@@ -5452,6 +5496,10 @@
     </tabSettings>
     <tabSettings>
         <tab>standard-RegulatoryCode</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>standard-RegulatoryCodeViolation</tab>
         <visibility>Visible</visibility>
     </tabSettings>
     <tabSettings>

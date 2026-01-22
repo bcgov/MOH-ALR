@@ -1,6 +1,15 @@
 <template>
     <div class="inspection-container">
-        <lightning-card title="Inspection Questions">
+        <lightning-card>
+            <div slot="title" class="slds-grid slds-grid_vertical-align-center">
+                <span>Inspection Questions</span>
+
+                <template lwc:if={isDraft}>
+                    <span class="slds-badge slds-theme_warning slds-m-left_small">
+                        Draft
+                    </span>
+                </template>
+            </div>
             <template lwc:if={showQuestions}>
                 <div class="progress-container" slot="actions">
                     <span class="progress-text">{progressText}</span>
@@ -14,7 +23,7 @@
                 <template lwc:if={showQuestions}>
                 </template>
                 <template lwc:else>
-                    <lightning-button label="Start Inspection" variant="brand" onclick={handleStart}></lightning-button>
+                    <lightning-button label={startButtonLabel} variant="brand" onclick={handleStart}></lightning-button>
                 </template>
             </div>
 
@@ -53,7 +62,7 @@
 
                         <template lwc:if={taskGroup.isExpanded}>
                             <template for:each={taskGroup.parentQuestions} for:item="parent">
-                                <div key={parent.assessmentTaskId} class={parent.questionCardClass} data-question-id={parent.assessmentIndicatorDefinitionId}>
+                                <div key={parent.assessmentIndicatorDefinitionId} class={parent.questionCardClass} data-question-id={parent.assessmentIndicatorDefinitionId}>
                                     <div class="question-row">
                                         <template lwc:if={parent.showCriticalIcon}>
                                             <lightning-icon icon-name="utility:warning" variant="error" size="x-small" class="critical-icon"></lightning-icon>
@@ -61,10 +70,10 @@
                                         <span class="question-text">{parent.questionText}</span>
                                         <div class="question-controls">
                                             <div class="compliance-button-group">
-                                                <button type="button" class={parent.compliantButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-value="Compliant" onclick={handleAssessmentChange}>Compliant</button>
-                                                <button type="button" class={parent.nonCompliantButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-value="PHOCSNonCompliant" onclick={handleAssessmentChange}>Non Compliant</button>
-                                                <button type="button" class={parent.naButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-value="N/A (Not Applicable)" onclick={handleAssessmentChange}>N/A</button>
-                                                <button type="button" class={parent.nsButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-value="N/S (Not Assessed)" onclick={handleAssessmentChange}>N/S</button>
+                                                <button type="button" class={parent.compliantButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="Compliant" onclick={handleAssessmentChange}>Compliant</button>
+                                                <button type="button" class={parent.nonCompliantButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="PHOCSNonCompliant" onclick={handleAssessmentChange}>Non Compliant</button>
+                                                <button type="button" class={parent.naButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="N/A (Not Applicable)" onclick={handleAssessmentChange}>N/A</button>
+                                                <button type="button" class={parent.nsButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="N/S (Not Assessed)" onclick={handleAssessmentChange}>N/S</button>
                                             </div>
                                             <button type="button" class="regulatory-codes-btn" data-value={parent.assessmentIndicatorDefinitionId} onclick={handleViewRegulatoryCodes}>View Codes</button>
                                         </div>
@@ -74,23 +83,25 @@
                                         <div class="slds-grid slds-grid_align-center">
                                             <div class="slds-grid slds-gutters">
                                                 <div class="slds-col slds-size_1-of-3">
-                                                    <lightning-input label="Corrected During Inspection" type="checkbox" checked={parent.correctedDuringInspection} data-question-id={parent.assessmentIndicatorDefinitionId} onchange={handleCorrectedDuringInspectionChange}></lightning-input>
+                                                    <lightning-input label="Corrected During Inspection" type="checkbox" checked={parent.correctedDuringInspection} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} onchange={handleCorrectedDuringInspectionChange}></lightning-input>
                                                 </div>
                                                 <div class="slds-col slds-size_1-of-3">
-                                                    <!--lightning-select label="Priority" value={parent.selectPriority} options={priorityOptions} data-question-id={parent.assessmentIndicatorDefinitionId} onchange={handlePriorityChange}></lightning-select>-->
-                                                    <lightning-combobox label="Priority" value={parent.selectPriority} options={priorityOptions} data-question-id={parent.assessmentIndicatorDefinitionId} onchange={handlePriorityChange}></lightning-combobox>
+                                                    <!--<lightning-select label="Priority" value={parent.selectPriority} options={priorityOptions} data-question-id={parent.assessmentIndicatorDefinitionId} onchange={handlePriorityChange}></lightning-select>-->
+                                                    <lightning-combobox label="Priority" value={parent.selectPriority} options={priorityOptions} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} onchange={handlePriorityChange}></lightning-combobox>
                                                 </div>
                                                 <div class="slds-col slds-size_1-of-3">
-                                                    <lightning-input label="Compliance Due Date" type="datetime" value={parent.preferredDateTime} required ={parent.showChildren} data-question-id={parent.assessmentIndicatorDefinitionId} data-field ="compduedate" onchange={handleDatetimeChange}> </lightning-input>
+                                                    <lightning-input label="Compliance Due Date" type="datetime-local" value={parent.preferredDateTime} required ={parent.showChildren} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-field ="compduedate" onchange={handleDatetimeChange}> </lightning-input>
                                                 </div>
                                             </div>
                                         </div> 
-                                    </template> 
+                                    </template>
+
+                                    
                                     <template lwc:if={parent.showChildren}>
                                         <div class="child-questions-container">
                                             <div class="child-questions-header">Select applicable observations</div>
                                             <template for:each={parent.childQuestions} for:item="child">
-                                                <div key={child.assessmentTaskId}>
+                                                <div key={child.assessmentIndicatorDefinitionId}>
                                                     <c-inspection-question-childv2 question-text={child.questionText} field-type={child.dataType} ass-task-id={child.assessmentTaskId} assessment-indicator-definition-id={child.assessmentIndicatorDefinitionId} checked={child.checkboxValue} onvaluechange={handleChildValueChange} data-parent-id={parent.assessmentIndicatorDefinitionId}></c-inspection-question-childv2>
                                                 </div>
                                             </template>
@@ -99,7 +110,7 @@
 
                                     <div class="comments-upload-row">
                                         <div class="comments-container">
-                                            <lightning-textarea label="Comments" data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} value={parent.comment} onchange={handleCommentChange} placeholder="Additional observations..." class="compact-textarea"></lightning-textarea>
+                                            <lightning-textarea label="Comments" data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} value={parent.comment} onchange={handleCommentChange} placeholder="Additional observations..." class="compact-textarea"></lightning-textarea> 
                                         </div>
                                         <!--<div class="file-upload-container">
                                             <lightning-file-upload label="Attach" name="fileUploader" accept={acceptedFormats} record-id={recordId} onuploadfinished={handleUploadFinished} data-definitionid={parent.assessmentIndicatorDefinitionId} multiple class="compact-upload"></lightning-file-upload>
@@ -110,7 +121,7 @@
                                     </div>
                                         <template lwc:if={parent.showChildren}>
                                             <div class="comments-container">
-                                                <lightning-textarea label="Corrective Action Description" data-question-id={parent.assessmentIndicatorDefinitionId} value={parent.actionDescription} onchange={handleCorrectiveActionDescriptionChange} placeholder="Additional action descriptions..." class="compact-textarea"></lightning-textarea>
+                                                <lightning-textarea label="Corrective Action Description" data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} value={parent.actionDescription} onchange={handleCorrectiveActionDescriptionChange} placeholder="Additional action descriptions..." class="compact-textarea"></lightning-textarea>
                                             </div>
                                         </template>
                                 </div>
@@ -119,9 +130,12 @@
                     </div>
                 </template>
 
-                <div class="submit-container slds-grid slds-grid_align-spread">
+                <div class="submit-container slds-grid slds-grid_align-spread">                    
                     <lightning-button label="Review Responses" variant="neutral" onclick={handleShowReview} icon-name="utility:preview"></lightning-button>
-                    <lightning-button label="Submit Inspection" variant="brand" onclick={handleSubmit} disabled={isSubmitDisabled}></lightning-button>
+                <div class="slds-grid slds-grid_align-end">
+                    <lightning-button label="Save for Later" variant="neutral" onclick={handleSaveForLater} disabled={isLoading}></lightning-button>
+                    <lightning-button label="Submit Inspection" variant="brand" onclick={handleSubmit} disabled={isSubmitDisabled} class="slds-m-left_small"></lightning-button>
+                </div>
                 </div>
             </template>
 
@@ -215,6 +229,39 @@
                     </footer>
                 </div>
             </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+        <template lwc:if={showEndInspectionModal}>
+            <section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 class="slds-text-heading_medium">End Inspection?</h2>
+                    </header>
+
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <div class="slds-m-bottom_medium">
+                            <p>
+                                Do you want to complete the inspection?<br />
+                                No further edits will be possible once inspection is marked as completed.
+                            </p>
+                        </div>
+
+                        <lightning-textarea label="Closing Comments" value={closingComments} maxlength="1000" onchange={handleClosingCommentsChange} placeholder="Additional comments..."></lightning-textarea>
+
+                        <template lwc:if={closingCommentsMessage}>
+                            <div class="slds-m-top_x-small">
+                                <span class={closingCommentsMessageClass}>{closingCommentsMessage}</span>
+                            </div>
+                        </template>
+                    </div>
+
+                    <footer class="slds-modal__footer slds-grid slds-grid_align-spread">
+                        <lightning-button label="Go Back" variant="neutral" onclick={handleGoBack}></lightning-button>
+                        <lightning-button label="Complete Inspection" variant="brand" onclick={handleCompleteInspection}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+
             <div class="slds-backdrop slds-backdrop_open"></div>
         </template>
     </div>

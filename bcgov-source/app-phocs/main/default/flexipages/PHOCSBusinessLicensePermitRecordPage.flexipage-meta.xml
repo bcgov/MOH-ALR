@@ -91,7 +91,7 @@
                         <valueListItems>
                             <value>CustomButton.BusinessLicense.View_License</value>
                             <visibilityRule>
-                                <booleanFilter>(1 OR 2) AND (3 OR 4)</booleanFilter>
+                                <booleanFilter>(1 OR 2 OR 5 OR 6) AND (3 OR 4)</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
                                     <operator>EQUAL</operator>
@@ -111,6 +111,16 @@
                                     <leftValue>{!$Permission.CustomPermission.PHOCSAdmin}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>true</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>BCCDC Dairy Plant Licence</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>BCCDC Dairy Worker Licence</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
@@ -201,7 +211,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>required</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.PeriodStart</fieldItem>
                 <identifier>RecordPeriodStartField</identifier>
@@ -276,6 +286,30 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.PeriodEnd</fieldItem>
                 <identifier>RecordPeriodEndField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
+                        <operator>NE</operator>
+                        <rightValue>BCCDC Dairy Plant Licence</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>required</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.PeriodEnd</fieldItem>
+                <identifier>RecordPeriodEndField2</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>BCCDC Dairy Plant Licence</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -292,7 +326,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>required</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.LicenceTotalYears__c</fieldItem>
                 <identifier>RecordLicenceTotalYears__cField</identifier>
@@ -439,7 +473,7 @@
                     <name>adminFilters</name>
                     <valueList>
                         <valueListItems>
-                            <value>RecordType|EQUALS|[&quot;Evaluation&quot;,&quot;ConstructionPermitApplication&quot;,&quot;OperatingPermitApplication&quot;,&quot;PHOCSExemptions&quot;]</value>
+                            <value>RecordType|EQUALS|[&quot;Evaluation&quot;,&quot;ConstructionPermitApplication&quot;,&quot;OperatingPermitApplication&quot;,&quot;PHOCSExemptions&quot;,&quot;DairyWorkerLicence&quot;,&quot;PHOCSBCCDCDairyPlantLicence&quot;]</value>
                         </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
@@ -571,6 +605,19 @@
                 </componentInstanceProperties>
                 <componentName>lst:dynamicRelatedList</componentName>
                 <identifier>lst_dynamicRelatedList3</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
+                        <operator>NE</operator>
+                        <rightValue>BCCDC Dairy Plant Licence</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
+                        <operator>NE</operator>
+                        <rightValue>BCCDC Dairy Worker Licence</rightValue>
+                    </criteria>
+                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <itemInstances>
