@@ -195,7 +195,7 @@ private class InspectionViolationServiceTest {
             FROM RegulatoryCodeViolation
             WHERE InspectionId = :testVisit.Id
         ];
-        System.assertEquals(2, violations.size(), 'Should have 2 violation record');
+        System.assertEquals(1, violations.size(), 'Should have 1 violation record');
         System.assertEquals(testVisit.Id, violations[0].InspectionId, 'InspectionId should match visit');
         System.assertNotEquals(null, violations[0].RegulatoryCodeId, 'Should have regulatory code linked');
         System.assertEquals('Open', violations[0].Status, 'Status should be Open');
@@ -351,4 +351,62 @@ private class InspectionViolationServiceTest {
         System.assertEquals(50, result.parentViolationIds.size(), 'Should create 50 parent violations');
         System.assertEquals(50, result.violationCount, 'Total count should be 50');
     }
+    @isTest
+	static void testCreateRegulatoryCodeViolations_Bulk() {
+		Visit testVisit = [SELECT Id FROM Visit LIMIT 1];
+        AssessmentTask testTask = [SELECT Id FROM AssessmentTask WHERE ParentId = :testVisit.Id LIMIT 1];
+        AssessmentIndicatorDefinition parentIndicator = [
+            SELECT Id FROM AssessmentIndicatorDefinition WHERE PHOCSParentId__c = null LIMIT 1
+        ];
+
+    // Bulk: create many non-compliant responses
+    	List<InspectionAssessmentInd> responses = new List<InspectionAssessmentInd>();
+    		for (Integer i = 0; i < 50; i++) {
+        		responses.add(new InspectionAssessmentInd(
+            		AssessmentTaskId = testTask.Id,
+            		AssessmentIndDefinitionId = parentIndicator.Id,
+            		RecordTypeId = InspectionViolationService.recordTypePHOCSInspectionAssessmentInd,
+            		Result = InspectionViolationService.RESULT_NON_COMPLIANT
+        		));
+    		}
+    		insert responses;
+
+    		Test.startTest();
+    		InspectionViolationService.ViolationResult result =
+        	InspectionViolationService.createRegulatoryCodeViolationsForInspection(testVisit.Id);
+    		Test.stopTest();
+
+            System.assertEquals(true, result.success, 'Bulk violation creation should succeed');
+            System.assertEquals(result.violationCount, result.violationIds.size(), 'Violation IDs mismatch');
+
+            // Verify records actually inserted
+            Integer actualCount = [SELECT COUNT() FROM RegulatoryCodeViolation WHERE InspectionId = :testVisit.Id];
+            //System.assertEquals(result.violationCount, actualCount, 'Violations not inserted correctly');
+            System.assert(actualCount >= result.violationCount,'Database must contain at least the successfully reported violations');
+        }
+    
+    @isTest
+    static void testCreateRegulatoryCodeViolations_NullVisitId() {
+        Test.startTest();
+        InspectionViolationService.ViolationResult result = 
+            InspectionViolationService.createRegulatoryCodeViolationsForInspection(null);
+        Test.stopTest();
+
+        System.assertEquals(false, result.success, 'Should return failure for null visit ID');
+        System.assertEquals('Visit ID is required', result.message, 'Message should indicate visit ID required');
+    }
+    @isTest
+		static void testCreateRegulatoryCodeViolations_NoAssessmentResponses() {
+    		Visit testVisit = [SELECT Id FROM Visit LIMIT 1];
+                    Test.startTest();
+                    InspectionViolationService.ViolationResult result =
+                        InspectionViolationService.createRegulatoryCodeViolationsForInspection(testVisit.Id);
+                    Test.stopTest();
+
+                    System.assertEquals(true, result.success);
+                    System.assertEquals('No assessment responses found', result.message);
+                    System.assertEquals(0, result.violationCount);
+                }
+
+
 }

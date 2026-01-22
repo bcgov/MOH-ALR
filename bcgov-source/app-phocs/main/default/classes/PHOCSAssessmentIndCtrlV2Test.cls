@@ -472,5 +472,209 @@ private class PHOCSAssessmentIndCtrlV2Test {
 	//	System.assert(result.containsKey(def.Id),'Map should be keyed by Assessment Indicator Definition Id');
 	System.assertEquals(1,1, 'Result should match');
 	}
+    @IsTest
+	static void test_updateRegulatoryCodeViolations() {
+
+    		InspectionAssessmentInd ind = [SELECT Id,Priority__c,ComplianceDueDate__c,CorrectiveActionDescription__c FROM InspectionAssessmentInd LIMIT 1];
+    		RegulatoryCodeViolation vio = [SELECT Id FROM RegulatoryCodeViolation WHERE InspectionAssmntIndId = :ind.Id LIMIT 1];
+
+			PHOCSInspectionAssessmentIndControllerV2.RegulatoryCodeViolationWrapper wrap =
+    		new PHOCSInspectionAssessmentIndControllerV2.RegulatoryCodeViolationWrapper();
+			wrap.regcodvioId = vio.Id;
+            wrap.preferredDateTime = System.now();
+            wrap.selectPriority = 'Low';
+            wrap.actionDescription = 'test action';
+
+			List<PHOCSInspectionAssessmentIndControllerV2.RegulatoryCodeViolationWrapper> wrappers =
+    			new List<PHOCSInspectionAssessmentIndControllerV2.RegulatoryCodeViolationWrapper>{ wrap };
+    			
+
+    		Test.startTest();
+        	PHOCSInspectionAssessmentIndControllerV2.updateRegulatoryCodeViolations(wrappers);
+    		Test.stopTest();
+
+    
+    	RegulatoryCodeViolation updatedVio = [
+        		SELECT Priority,ComplianceDueDate,CorrectiveActionDescription
+        		FROM RegulatoryCodeViolation
+        		WHERE Id = :vio.Id
+    		];
+
+                System.assertEquals(ind.Priority__c, updatedVio.Priority);
+                System.assertEquals(ind.ComplianceDueDate__c, updatedVio.ComplianceDueDate);
+                System.assertEquals(ind.CorrectiveActionDescription__c, updatedVio.CorrectiveActionDescription);
+            }
+    
+    		/*@isTest
+    		static void testSaveResponses_NotUsed() {
+         		Test.startTest();
+        		user adminUser = [select id from user where  LastName = 'AdminTestXYZ'];
+        
+            		AssessmentTask task = [SELECT Id FROM AssessmentTask LIMIT 1];
+            		List<AssessmentIndicatorDefinition> indicators = [SELECT Id FROM AssessmentIndicatorDefinition];
+            		List<PHOCSInspectionAssessmentIndControllerV2.AssessmentResponseWrapper> responses = 
+                	new List<PHOCSInspectionAssessmentIndControllerV2.AssessmentResponseWrapper>();
+            
+        			for (AssessmentIndicatorDefinition indicator : indicators) {
+            		PHOCSInspectionAssessmentIndControllerV2.AssessmentResponseWrapper resp = 
+                	new PHOCSInspectionAssessmentIndControllerV2.AssessmentResponseWrapper();
+                    resp.assessmentTaskId = task.Id;
+                    resp.definitionId = indicator.Id;
+                    resp.comment = 'Test comment';
+                    resp.result = 'Compliant';
+                    resp.checkboxValue = false;
+                    resp.correctedDuringInspection = false;
+                    responses.add(resp);
+                }
+
+       
+                PHOCSInspectionAssessmentIndControllerV2.SaveResponsesResult result = 
+                PHOCSInspectionAssessmentIndControllerV2.saveAssessmentResponses(responses);
+                Test.stopTest();
+        
+        // Verify records were created
+        List<InspectionAssessmentInd> createdRecords = [
+            SELECT Id, Result, PHOCSInspectionComments__c 
+            FROM InspectionAssessmentInd 
+            WHERE AssessmentTaskId = :task.Id
+        ];
+        
+        System.assertEquals(1, 1, 'Should have 2 InspectionAssessmentInd records');
+    }*/
+    @isTest
+ 	static void test_completeInspection() {
+
+			Visit inspection = [SELECT Id FROM Visit LIMIT 1];
+			String closingComments = 'Inspection completed successfully';
+		
+
+			Test.startTest();
+        	PHOCSInspectionAssessmentIndControllerV2.completeInspection(inspection.Id,closingComments);
+    		Test.stopTest();
+		
+		Visit updRecv = [SELECT Id, Status, StatusRemarks, ActualVisitEndTime, PHOCSIsDraft__c FROM Visit WHERE Id =: inspection.Id LIMIT 1];
+		
+		System.assertEquals('Completed', updRecv.Status,'Visit status should be Completed');
+		System.assertEquals(closingComments, updRecv.StatusRemarks,'Closing comments should be saved');
+		System.assertNotEquals(null, updRecv.ActualVisitEndTime,'ActualVisitEndTime should be set');
+		System.assertEquals(false, updRecv.PHOCSIsDraft__c,'Draft should be false');
+
+
+}
+    @IsTest
+	static void testMarkInspectionAsDraft() {
+  
+		Visit inspection = [SELECT Id FROM Visit LIMIT 1];
+  
+            Test.startTest();
+            PHOCSInspectionAssessmentIndControllerV2.markInspectionAsDraft(inspection.Id);
+            Test.stopTest();
+        
+            Visit updatedVisit = [SELECT PHOCSIsDraft__c FROM Visit WHERE Id = :inspection.Id];
+        
+            System.assertEquals(true,updatedVisit.PHOCSIsDraft__c,'Visit should be marked as draft');
+		}
+    
+    @IsTest
+	static void testValidateResumeInspection() {
+
+	Visit inspection = [SELECT Id,OwnerId FROM Visit LIMIT 1];
+
+    
+    inspection.PHOCSIsDraft__c = true;
+    inspection.Status = 'InProgress';
+    update inspection;
+
+    // Get a different user (not owner)
+    User otherUser = [
+        SELECT Id
+        FROM User
+        WHERE IsActive = true
+        AND Id != :inspection.OwnerId
+        LIMIT 1
+    ];
+
+    Boolean exceptionThrown = false;
+
+    // Act
+    Test.startTest();
+    System.runAs(otherUser) {
+        try {
+            PHOCSInspectionAssessmentIndControllerV2.validateResumeInspection(inspection.Id);
+        } catch (AuraHandledException e) {
+            exceptionThrown = true;
+
+            // Optional (DO NOT assert exact match)
+            System.assert(
+                e.getMessage() != null,
+                'Exception message should exist'
+            );
+        }
+    }
+    Test.stopTest();
+
+    // Assert
+    System.assertEquals(
+        true,
+        exceptionThrown,
+        'Expected AuraHandledException when non-owner resumes draft inspection'
+    );
+
+}
+    
+    @IsTest
+	static void testResetChildResponsesForCompliantParents() {
+            Visit inspection = [SELECT Id FROM Visit LIMIT 1];
+            AssessmentTask task = [SELECT Id FROM AssessmentTask LIMIT 1];
+        	User adminUser = [SELECT Id FROM User WHERE LastName = 'AdminTestXYZ' LIMIT 1];
+
+   			AssessmentIndicatorDefinition parentIndicator = new AssessmentIndicatorDefinition(
+        	Name = 'Parent Indicator',
+         	Category__c = 'test Category',
+            DataType = 'String'
+    		);
+    		insert parentIndicator;
+
+    		AssessmentIndicatorDefinition childIndicator = new AssessmentIndicatorDefinition(
+        	Name = 'Child Indicator',
+        	PHOCSParentId__c = parentIndicator.Id,
+         	Category__c = 'test Category',
+            DataType = 'String'
+    		);
+    		insert childIndicator;
+
+            InspectionAssessmentInd parentInd = new InspectionAssessmentInd(
+                AssessmentTaskId = task.Id,
+                AssessmentIndDefinitionId = parentIndicator.Id,
+                Result = 'Compliant',
+                PHOCSInspectionComments__c = 'Test text value'
+            );
+            insert parentInd;
+
+    
+            InspectionAssessmentInd childInd = new InspectionAssessmentInd(
+                AssessmentTaskId = task.Id,
+                AssessmentIndDefinitionId = childIndicator.Id,
+                Result = 'NonCompliant',
+                PHOCSCheckboxResponse__c = true,
+                PHOCSInspectionComments__c = 'Test text value'
+            );
+    		insert childInd;
+
+    
+    Test.startTest();
+        System.runAs(adminUser) {
+    PHOCSInspectionAssessmentIndControllerV2.resetChildResponsesForCompliantParents(inspection.Id);
+        }
+    Test.stopTest();
+
+    
+    InspectionAssessmentInd updatedChild = [SELECT Result, PHOCSCheckboxResponse__c FROM InspectionAssessmentInd WHERE Id = :childInd.Id];
+
+    System.assertEquals(null,updatedChild.Result,'Child Result should be reset when parent is Compliant');
+    System.assertEquals(false,updatedChild.PHOCSCheckboxResponse__c,'Child checkbox should be reset to false');
+}
+      
+
     
 }
