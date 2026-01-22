@@ -1,0 +1,55 @@
+<template>
+    <div class="child-question-container">
+        <template lwc:if={isCheckbox}></template>
+        <template lwc:else>
+            <div class="question-text">{questionText}</div>
+        </template>
+        
+        <div class="input-wrapper">
+            <template lwc:if={isText}>
+                <lightning-input 
+                    type="text" 
+                    label="Response" 
+                    data-id={assTaskId}
+                    class="text-input"
+                    onchange={handleValueChange}>
+                </lightning-input>
+            </template>
+
+            <template lwc:if={isCheckbox}>
+                <div class={checkboxContainerClass} onclick={toggleCheckbox}>
+                    <lightning-input 
+                        type="checkbox"
+                        variant="label-hidden"
+                        checked={checked}
+                        onchange={handleValueChange}
+                        class="checkbox-input">
+                    </lightning-input>
+
+                    <span class="checkbox-label">
+                        {questionText}
+                    </span>
+                </div>
+            </template>
+
+            <template lwc:if={isNumber}>
+                <lightning-input 
+                    type="number" 
+                    label="Enter a number" 
+                    data-id={assTaskId}
+                    class="number-input"
+                    onchange={handleValueChange}>
+                </lightning-input>
+            </template>
+            <template lwc:if={isDate}>
+                <lightning-input 
+                    type="date" 
+                    label="Select a date" 
+                    data-id={assTaskId}
+                    class="date-input"
+                    onchange={handleValueChange}>
+                </lightning-input>
+            </template>
+        </div>
+    </div>
+</template>

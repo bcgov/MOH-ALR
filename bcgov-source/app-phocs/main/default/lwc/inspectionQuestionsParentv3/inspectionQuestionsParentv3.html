@@ -1,15 +1,6 @@
 <template>
     <div class="inspection-container">
-        <lightning-card>
-            <div slot="title" class="slds-grid slds-grid_vertical-align-center">
-                <span>Inspection Questions</span>
-
-                <template lwc:if={isDraft}>
-                    <span class="slds-badge slds-theme_warning slds-m-left_small">
-                        Draft
-                    </span>
-                </template>
-            </div>
+        <lightning-card title="Inspection Questions">
             <template lwc:if={showQuestions}>
                 <div class="progress-container" slot="actions">
                     <span class="progress-text">{progressText}</span>
@@ -23,7 +14,15 @@
                 <template lwc:if={showQuestions}>
                 </template>
                 <template lwc:else>
-                    <lightning-button label={startButtonLabel} variant="brand" onclick={handleStart}></lightning-button>
+                    <div class="button-progress-wrapper action-row">
+                        <lightning-button label="Inspection Form" variant="brand" class="full-width-btn" onclick={handleStart}></lightning-button>
+                        <div class="progress-container progress-text-right" slot="actions">
+                        <span class="progress-text">{progressText}</span>
+                            <div class="progress-bar">
+                                <div class="progress-bar-fill" style={progressBarStyle}></div>
+                            </div>
+                        </div>
+                    </div>
                 </template>
             </div>
 
@@ -62,7 +61,7 @@
 
                         <template lwc:if={taskGroup.isExpanded}>
                             <template for:each={taskGroup.parentQuestions} for:item="parent">
-                                <div key={parent.assessmentIndicatorDefinitionId} class={parent.questionCardClass} data-question-id={parent.assessmentIndicatorDefinitionId}>
+                                <div key={parent.assessmentTaskId} class={parent.questionCardClass} data-question-id={parent.assessmentIndicatorDefinitionId}>
                                     <div class="question-row">
                                         <template lwc:if={parent.showCriticalIcon}>
                                             <lightning-icon icon-name="utility:warning" variant="error" size="x-small" class="critical-icon"></lightning-icon>
@@ -70,30 +69,70 @@
                                         <span class="question-text">{parent.questionText}</span>
                                         <div class="question-controls">
                                             <div class="compliance-button-group">
-                                                <button type="button" class={parent.compliantButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="Compliant" onclick={handleAssessmentChange}>Compliant</button>
-                                                <button type="button" class={parent.nonCompliantButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="PHOCSNonCompliant" onclick={handleAssessmentChange}>Non Compliant</button>
-                                                <button type="button" class={parent.naButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="N/A (Not Applicable)" onclick={handleAssessmentChange}>N/A</button>
-                                                <button type="button" class={parent.nsButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="N/S (Not Assessed)" onclick={handleAssessmentChange}>N/S</button>
+                                                <button type="button" class={parent.compliantButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-value="Compliant" onclick={handleAssessmentChange}>Compliant</button>
+                                                <button type="button" class={parent.nonCompliantButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-value="PHOCSNonCompliant" onclick={handleAssessmentChange}>Non Compliant</button>
+                                                <button type="button" class={parent.naButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-value="N/A (Not Applicable)" onclick={handleAssessmentChange}>N/A</button>
+                                                <button type="button" class={parent.nsButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-value="N/S (Not Assessed)" onclick={handleAssessmentChange}>N/S</button>
                                             </div>
                                             <button type="button" class="regulatory-codes-btn" data-value={parent.assessmentIndicatorDefinitionId} onclick={handleViewRegulatoryCodes}>View Codes</button>
                                         </div>
                                     </div>
                                     
                                     <template if:true={parent.showChildren}>
-                                        <div class="slds-grid slds-grid_align-center">
-                                            <div class="slds-grid slds-gutters">
-                                                <div class="slds-col slds-size_1-of-3">
-                                                    <lightning-input label="Corrected During Inspection" type="checkbox" checked={parent.correctedDuringInspection} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} onchange={handleCorrectedDuringInspectionChange}></lightning-input>
-                                                </div>
-                                                <div class="slds-col slds-size_1-of-3">
-                                                    <!--<lightning-select label="Priority" value={parent.selectPriority} options={priorityOptions} data-question-id={parent.assessmentIndicatorDefinitionId} onchange={handlePriorityChange}></lightning-select>-->
-                                                    <lightning-combobox label="Priority" value={parent.selectPriority} options={priorityOptions} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} onchange={handlePriorityChange}></lightning-combobox>
-                                                </div>
-                                                <div class="slds-col slds-size_1-of-3">
-                                                    <lightning-input label="Compliance Due Date" type="datetime-local" value={parent.preferredDateTime} required ={parent.showChildren} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-field ="compduedate" onchange={handleDatetimeChange}> </lightning-input>
-                                                </div>
-                                            </div>
-                                        </div> 
+                                        <lightning-layout 
+                                            multiple-rows="true"
+                                            vertical-align="end"
+                                            class="slds-p-horizontal_small">
+
+                                            <lightning-layout-item
+                                                size="12"
+                                                medium-device-size="4"
+                                                padding="around-small">
+
+                                                <lightning-input
+                                                    label="Corrected During Inspection"
+                                                    type="checkbox"
+                                                    checked={parent.correctedDuringInspection}
+                                                    data-definitionid={parent.assessmentIndicatorDefinitionId}
+                                                    data-taskid={parent.assessmentTaskId}
+                                                    onchange={handleCorrectedDuringInspectionChange}>
+                                                </lightning-input>
+                                            </lightning-layout-item>
+
+                                            <lightning-layout-item
+                                                size="12"
+                                                medium-device-size="4"
+                                                padding="around-small">
+
+                                                <lightning-combobox
+                                                    label="Priority"
+                                                    value={parent.selectPriority}
+                                                    options={priorityOptions}
+                                                    data-definitionid={parent.assessmentIndicatorDefinitionId}
+                                                    data-taskid={parent.assessmentTaskId}
+                                                    onchange={handlePriorityChange}>
+                                                </lightning-combobox>
+                                            </lightning-layout-item>
+
+                                            <lightning-layout-item
+                                                size="12"
+                                                medium-device-size="4"
+                                                padding="around-small">
+
+                                                <lightning-input
+                                                    label="Compliance Due Date"
+                                                    type="datetime-local"
+                                                    value={parent.preferredDateTime}
+                                                    required={parent.showChildren}
+                                                    data-definitionid={parent.assessmentIndicatorDefinitionId}
+                                                    data-taskid={parent.assessmentTaskId}
+                                                    data-field="compduedate"
+                                                    onchange={handleDatetimeChange}>
+                                                </lightning-input>
+                                            </lightning-layout-item>
+
+                                        </lightning-layout>
+ 
                                     </template>
 
                                     
@@ -101,8 +140,8 @@
                                         <div class="child-questions-container">
                                             <div class="child-questions-header">Select applicable observations</div>
                                             <template for:each={parent.childQuestions} for:item="child">
-                                                <div key={child.assessmentIndicatorDefinitionId}>
-                                                    <c-inspection-question-childv2 question-text={child.questionText} field-type={child.dataType} ass-task-id={child.assessmentTaskId} assessment-indicator-definition-id={child.assessmentIndicatorDefinitionId} checked={child.checkboxValue} onvaluechange={handleChildValueChange} data-parent-id={parent.assessmentIndicatorDefinitionId}></c-inspection-question-childv2>
+                                                <div key={child.assessmentTaskId}>
+                                                    <c-inspection-question-childv3 question-text={child.questionText} field-type={child.dataType} ass-task-id={child.assessmentTaskId} assessment-indicator-definition-id={child.assessmentIndicatorDefinitionId} checked={child.checkboxValue} onvaluechange={handleChildValueChange} data-parent-id={parent.assessmentIndicatorDefinitionId}></c-inspection-question-childv3>
                                                 </div>
                                             </template>
                                         </div>
@@ -130,12 +169,9 @@
                     </div>
                 </template>
 
-                <div class="submit-container slds-grid slds-grid_align-spread">                    
+                <div class="submit-container slds-grid slds-grid_align-spread">
                     <lightning-button label="Review Responses" variant="neutral" onclick={handleShowReview} icon-name="utility:preview"></lightning-button>
-                <div class="slds-grid slds-grid_align-end">
-                    <lightning-button label="Save for Later" variant="neutral" onclick={handleSaveForLater} disabled={isLoading}></lightning-button>
-                    <lightning-button label="Submit Inspection" variant="brand" onclick={handleSubmit} disabled={isSubmitDisabled} class="slds-m-left_small"></lightning-button>
-                </div>
+                    <lightning-button label="Submit Inspection" variant="brand" onclick={handleSubmit} disabled={isSubmitDisabled}></lightning-button>
                 </div>
             </template>
 

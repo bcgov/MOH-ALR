@@ -1,16 +1,21 @@
-import { LightningElement, api } from 'lwc';
-import getInspectionQuestions from '@salesforce/apex/InspectionQuestionsControllerV2.getInspectionQuestions';
-import getRegulatoryCodesByIndicator from '@salesforce/apex/InspectionQuestionsControllerV2.getRegulatoryCodesByIndicator';
-import saveAssessmentResponses from '@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.saveAssessmentResponses';
-import linkFilesToAssessmentRecords from '@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.linkFilesToAssessmentRecords';
-import createViolationsForInspection from '@salesforce/apex/InspectionViolationService.createViolationsForInspection';
-import completeInspection from '@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.completeInspection';
-import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { LightningElement, api } from "lwc";
+import getInspectionQuestions from "@salesforce/apex/InspectionQuestionsControllerV2.getInspectionQuestions";
+import getRegulatoryCodesByIndicator from "@salesforce/apex/InspectionQuestionsControllerV2.getRegulatoryCodesByIndicator";
+import saveAssessmentResponses from "@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.saveAssessmentResponses";
+import linkFilesToAssessmentRecords from "@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.linkFilesToAssessmentRecords";
+import createViolationsForInspection from "@salesforce/apex/InspectionViolationService.createRegulatoryCodeViolationsForInspection";
+import completeInspection from "@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.completeInspection";
+import getVisitMeta from "@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.getVisitMeta";
+import resetChildResponsesForCompliantParents from "@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.resetChildResponsesForCompliantParents";
+import markInspectionAsDraft from "@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.markInspectionAsDraft";
+import validateResumeInspection from "@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.validateResumeInspection";
+import updateInspectionStatusToInProgress from "@salesforce/apex/InspectionQuestionsControllerV2.updateInspectionStatusToInProgress";
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
-const RESULT_COMPLIANT = 'Compliant';
-const RESULT_NON_COMPLIANT = 'PHOCSNonCompliant';
-const RESULT_NA = 'N/A (Not Applicable)';
-const RESULT_NS = 'N/S (Not Assessed)';
+const RESULT_COMPLIANT = "Compliant";
+const RESULT_NON_COMPLIANT = "PHOCSNonCompliant";
+const RESULT_NA = "N/A (Not Applicable)";
+const RESULT_NS = "N/S (Not Assessed)";
 
 const STATUS_CONFIG = {
     [RESULT_COMPLIANT]: { label: 'Compliant', icon: 'utility:success', iconClass: 'slds-icon-text-success', itemClass: 'review-item review-item--compliant', statusClass: 'review-status-compliant' },
@@ -22,7 +27,7 @@ const STATUS_CONFIG = {
 
 export default class InspectionQuestionsParentv2 extends LightningElement {
     @api recordId;
-    
+
     groupedQuestions = [];
     showQuestions = false;
     isLoading = false;
@@ -30,24 +35,23 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
     regulatoryCodes = [];
     showReviewModal = false;
     reviewData = [];
-    
+
     totalQuestions = 0;
     answeredQuestions = 0;
     compliantCount = 0;
     nonCompliantCount = 0;
 
     showEndInspectionModal = false;
-    closingComments = '';
-    closingCommentsMessage = '';
-    closingCommentsMessageClass = '';
+    closingComments = "";
+    closingCommentsMessage = "";
+    closingCommentsMessageClass = "";
+    isDraft = false;
 
     regulatoryCodesCache = {};
     uploadedFilesMap = {};
-    
-    
 
     get acceptedFormats() {
-        return ['.pdf', '.png', '.jpg', '.jpeg', '.doc', '.docx', '.xls', '.xlsx'];
+        return [".pdf", ".png", ".jpg", ".jpeg", ".doc", ".docx", ".xls", ".xlsx"];
     }
 
     get progressText() {
@@ -55,7 +59,10 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
     }
 
     get progressBarStyle() {
-        const pct = this.totalQuestions > 0 ? Math.round((this.answeredQuestions / this.totalQuestions) * 100) : 0;
+        const pct =
+            this.totalQuestions > 0 ?
+            Math.round((this.answeredQuestions / this.totalQuestions) * 100) :
+            0;
         return `width: ${pct}%`;
     }
 
@@ -72,91 +79,100 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
     }
 
     priorityOptions = [
-        { label: 'Critical', value: 'Critical' },
-        { label: 'High', value: 'High' },
-        { label: 'Medium', value: 'Medium' },
-        { label: 'Low', value: 'Low' }
-    ];
+    { label: "Critical", value: "Critical" },
+    { label: "High", value: "High" },
+    { label: "Medium", value: "Medium" },
+    { label: "Low", value: "Low" },
+  ];
 
     connectedCallback() {
-            this.loadInspectionQuestions();
-        }       
-    
-
-    
+        this.loadInspectionQuestions();
+    }
 
     // ========================================
     // HELPER METHODS
     // ========================================
 
     getButtonClass(buttonValue, selectedValue) {
-        if (selectedValue !== buttonValue) return 'compliance-btn';
+        if (selectedValue !== buttonValue) return "compliance-btn";
         const classMap = {
-            [RESULT_COMPLIANT]: 'compliance-btn compliance-btn--selected-compliant',
-            [RESULT_NON_COMPLIANT]: 'compliance-btn compliance-btn--selected-noncompliant',
-            [RESULT_NA]: 'compliance-btn compliance-btn--selected-na',
-            [RESULT_NS]: 'compliance-btn compliance-btn--selected-ns'
+            [RESULT_COMPLIANT]: "compliance-btn compliance-btn--selected-compliant",
+            [RESULT_NON_COMPLIANT]: "compliance-btn compliance-btn--selected-noncompliant",
+            [RESULT_NA]: "compliance-btn compliance-btn--selected-na",
+            [RESULT_NS]: "compliance-btn compliance-btn--selected-ns",
         };
-        return classMap[buttonValue] || 'compliance-btn';
+        return classMap[buttonValue] || "compliance-btn";
+    }
+
+    get startButtonLabel() {
+        return this.isDraft ? "Resume Inspection" : "Start Inspection";
     }
 
     calculateSectionProgress(parentQuestions) {
         const total = parentQuestions.length;
-        const answered = parentQuestions.filter(q => q.result).length;
-        return { progressText: `(${answered}/${total})`, isComplete: answered === total, pendingCount: total - answered };
+        const answered = parentQuestions.filter((q) => q.result).length;
+        return {
+            progressText: `(${answered}/${total})`,
+            isComplete: answered === total,
+            pendingCount: total - answered,
+        };
     }
 
-   updateParentQuestion(parent, updates) {
-    const result = updates.result ?? parent.result;
+    updateParentQuestion(parent, updates) {
+        const result = updates.result ?? parent.result;
 
-    return {
-        ...parent,
+        return {
+            ...parent,
 
-         selectPriority:
-            updates.selectPriority !== undefined
-                ? updates.selectPriority
-                : parent.selectPriority,
+            selectPriority: updates.selectPriority !== undefined ?
+                updates.selectPriority :
+                parent.selectPriority,
 
-        preferredDateTime:
-            updates.preferredDateTime !== undefined
-                ? updates.preferredDateTime
-                : parent.preferredDateTime,
+            preferredDateTime: updates.preferredDateTime !== undefined ?
+                updates.preferredDateTime :
+                parent.preferredDateTime,
 
-        actionDescription:
-            updates.actionDescription !== undefined
-                ? updates.actionDescription
-                : parent.actionDescription,
+            actionDescription: updates.actionDescription !== undefined ?
+                updates.actionDescription :
+                parent.actionDescription,
 
-        correctedDuringInspection:
-            updates.correctedDuringInspection !== undefined
-                ? updates.correctedDuringInspection
-                : parent.correctedDuringInspection,
+            correctedDuringInspection: updates.correctedDuringInspection !== undefined ?
+                updates.correctedDuringInspection :
+                parent.correctedDuringInspection,
 
-        ...updates,
-        
-        
-        compliantButtonClass: this.getButtonClass(RESULT_COMPLIANT, result),
-        nonCompliantButtonClass: this.getButtonClass(RESULT_NON_COMPLIANT, result),
-        naButtonClass: this.getButtonClass(RESULT_NA, result),
-        nsButtonClass: this.getButtonClass(RESULT_NS, result),
-        showChildren: result === RESULT_NON_COMPLIANT
+            ...updates,
 
-        
-        
-    };
-}
-
+            compliantButtonClass: this.getButtonClass(RESULT_COMPLIANT, result),
+            nonCompliantButtonClass: this.getButtonClass(
+                RESULT_NON_COMPLIANT,
+                result,
+            ),
+            naButtonClass: this.getButtonClass(RESULT_NA, result),
+            nsButtonClass: this.getButtonClass(RESULT_NS, result),
+            showChildren: result === RESULT_NON_COMPLIANT,
+        };
+    }
 
     updateGroupedQuestions(updateFn) {
-        this.groupedQuestions = this.groupedQuestions.map(group => {
-            const parentQuestions = group.parentQuestions.map(parent => updateFn(group, parent));
+        this.groupedQuestions = this.groupedQuestions.map((group) => {
+            const parentQuestions = group.parentQuestions.map((parent) =>
+                updateFn(group, parent),
+            );
             const progress = this.calculateSectionProgress(parentQuestions);
-            return { ...group, parentQuestions, ...progress };
+            return {
+                ...group,
+                parentQuestions,
+                ...progress
+            };
         });
     }
 
     showToast(title, message, variant) {
-        this.dispatchEvent(new ShowToastEvent({ title, message, variant }));
+        this.dispatchEvent(new ShowToastEvent({
+            title,
+            message,
+            variant
+        }));
     }
 
     // ========================================
@@ -164,134 +180,169 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
     // ========================================
 
     async loadInspectionQuestions() {
-    this.isLoading = true;
+        this.isLoading = true;
 
-    try {
-        const result = await getInspectionQuestions({ visitId: this.recordId });
+        try {
+            const visit = await getVisitMeta({
+                visitId: this.recordId
+            });
 
-        let questionCount = 0;
-        let answeredCount = 0;
-        let compliant = 0;
-        let nonCompliant = 0;
+            this.isDraft = visit.PHOCSIsDraft__c === true;
+            this.showQuestions = false;
 
-        this.groupedQuestions = result.map(group => {
-            const parentQs = group.parentQuestions.map(parent => {
-                questionCount++;
+            const result = await getInspectionQuestions({
+                visitId: this.recordId
+            });
 
-                //const currentResult = parent.Result || '';
-                const currentResult = parent.Result ?? parent.result ?? '';
-                const savedComment = parent.PHOCSInspectionComments || '';
+            let questionCount = 0;
+            let answeredCount = 0;
+            let compliant = 0;
+            let nonCompliant = 0;
 
+            this.groupedQuestions = result.map((group) => {
+                const parentQs = group.parentQuestions.map((parent) => {
+                    questionCount++;
 
-                if (currentResult) {
-                    answeredCount++;
-                    if (currentResult === RESULT_COMPLIANT) compliant++;
-                    else if (currentResult === RESULT_NON_COMPLIANT) nonCompliant++;
-                }
+                    //const currentResult = parent.Result || '';
+                    const currentResult = parent.Result ?? parent.result ?? "";
+                    const savedComment = parent.PHOCSInspectionComments || "";
 
-                            
+                    if (currentResult) {
+                        answeredCount++;
+                        if (currentResult === RESULT_COMPLIANT) compliant++;
+                        else if (currentResult === RESULT_NON_COMPLIANT) nonCompliant++;
+                    }
 
-                return this.updateParentQuestion(parent, {
-                    result: currentResult,
-                    originalResult: parent.originalResult ?? currentResult,
-                    comment: savedComment,
-                    originalComment: parent.originalComment ?? savedComment,
-                                        originalSelectPriority:
-                            parent.originalSelectPriority !== undefined
-                                ? parent.originalSelectPriority
-                                : parent.selectPriority ?? null,
+                    return this.updateParentQuestion(parent, {
+                        result: currentResult,
+                        originalResult: parent.originalResult ?? currentResult,
+                        comment: savedComment,
+                        originalComment: parent.originalComment ?? savedComment,
+                        originalSelectPriority: parent.originalSelectPriority !== undefined ?
+                            parent.originalSelectPriority :
+                            (parent.selectPriority ?? null),
 
-                        originalPreferredDateTime:
-                            parent.originalPreferredDateTime !== undefined
-                                ? parent.originalPreferredDateTime
-                                : parent.preferredDateTime
-                                    ? parent.preferredDateTime.slice(0, 16)
-                                    : null,
+                        originalPreferredDateTime: parent.originalPreferredDateTime !== undefined ?
+                            parent.originalPreferredDateTime :
+                            parent.preferredDateTime ?
+                            parent.preferredDateTime.slice(0, 16) :
+                            null,
 
-                        originalActionDescription:
-                            parent.originalActionDescription !== undefined
-                                ? parent.originalActionDescription
-                                : parent.actionDescription ?? '',
+                        originalActionDescription: parent.originalActionDescription !== undefined ?
+                            parent.originalActionDescription :
+                            (parent.actionDescription ?? ""),
 
-                        originalCorrectedDuringInspection:
-                            parent.originalCorrectedDuringInspection !== undefined
-                                ? parent.originalCorrectedDuringInspection
-                                : parent.correctedDuringInspection ?? false,
+                        originalCorrectedDuringInspection: parent.originalCorrectedDuringInspection !== undefined ?
+                            parent.originalCorrectedDuringInspection :
+                            (parent.correctedDuringInspection ?? false),
 
                         // current editable values
                         selectPriority: parent.selectPriority ?? null,
-                        preferredDateTime: parent.preferredDateTime
-                            ? parent.preferredDateTime.slice(0, 16)
-                            : null,
-                        actionDescription: parent.actionDescription ?? '',
+                        preferredDateTime: parent.preferredDateTime ?
+                            parent.preferredDateTime.slice(0, 16) :
+                            null,
+                        actionDescription: parent.actionDescription ?? "",
                         correctedDuringInspection: parent.correctedDuringInspection ?? false,
-                    regcodvioId: parent.inspectionAssessmentIndId ?? null,
-                    questionCardClass: parent.showCriticalIcon
-                        ? 'question-card question-card--critical'
-                        : 'question-card',
-                    uploadedContentDocIds: [],
-                    childQuestions: parent.childQuestions.map(child => ({
-                        ...child,
-                        responseValue: child.Result || '',
-                        originalResponse: child.Result || '',
-                        checkboxValue: child.PHOCSCheckboxResponse || false,
-                        originalCheckboxValue: child.PHOCSCheckboxResponse || false
-                    }))
-                                
+                        regcodvioId: parent.inspectionAssessmentIndId ?? null,
+                        questionCardClass: parent.showCriticalIcon ?
+                            "question-card question-card--critical" :
+                            "question-card",
+                        uploadedContentDocIds: [],
+                        childQuestions: parent.childQuestions.map((child) => {
+                            const savedCheckbox = child.PHOCSCheckboxResponse === true;
+
+                            return {
+                                ...child,
+                                responseValue: child.Result || "",
+                                originalResponse: child.Result || "",
+                                checkboxValue: savedCheckbox,
+                                originalCheckboxValue: savedCheckbox
+                            };
+                        }),
+                    });
                 });
+
+                const progress = this.calculateSectionProgress(parentQs);
+                return {
+                    ...group,
+                    isExpanded: false,
+                    iconName: "utility:chevronright",
+                    isSaving: false,
+                    hasSaved: false,
+                    parentQuestions: parentQs,
+                    ...progress,
+                };
             });
 
-            const progress = this.calculateSectionProgress(parentQs);
-            return {
-                ...group,
-                isExpanded: false,
-                iconName: 'utility:chevronright',
-                isSaving: false,
-                hasSaved: false,
-                parentQuestions: parentQs,
-                ...progress
-            };
-        });
-
-        this.totalQuestions = questionCount;
-        this.answeredQuestions = answeredCount;
-        this.compliantCount = compliant;
-        this.nonCompliantCount = nonCompliant;
-
-
-    } catch (err) {
-        console.error('Error loading inspection questions', err);
-        this.showToast(
-            'Error',
-            'Error loading inspection questions: ' +
+            this.totalQuestions = questionCount;
+            this.answeredQuestions = answeredCount;
+            this.compliantCount = compliant;
+            this.nonCompliantCount = nonCompliant;
+        } catch (err) {
+            console.error("Error loading inspection questions", err);
+            this.showToast(
+                "Error",
+                "Error loading inspection questions: " +
                 (err?.body?.message || err?.message),
-            'error'
-        );
-    } finally {
-        this.isLoading = false;
+                "error",
+            );
+        } finally {
+            this.isLoading = false;
+        }
     }
-}
-
 
     // ========================================
     // EVENT HANDLERS
     // ========================================
 
-    handleStart() {
+    async handleStart() {
+    this.isLoading = true;
+
+    try {
+        if (this.isDraft) {
+            await validateResumeInspection({
+                visitId: this.recordId
+            });
+        } else {
+            await updateInspectionStatusToInProgress({
+                inspectionId: this.recordId
+            });
+        }
         this.showQuestions = true;
+
+    } catch (error) {
+        const message =
+            error?.body?.message ||
+            error?.message ||
+            "Unexpected error occurred";
+
+        if (message.includes("Only the Officer who started the inspection")) {
+            this.showToast("Error", message, "error");
+        } else {
+            this.showToast("Error", message, "error");
+        }
+        this.showQuestions = false;
+
+    } finally {
+        this.isLoading = false;
     }
+}
 
     handleToggleSection(event) {
         const sectionId = event.currentTarget.dataset.id;
-        this.groupedQuestions = this.groupedQuestions.map(group => {
+        this.groupedQuestions = this.groupedQuestions.map((group) => {
             if (group.taskDefinitionId !== sectionId) return group;
             const expanded = !group.isExpanded;
-            return { ...group, isExpanded: expanded, iconName: expanded ? 'utility:chevrondown' : 'utility:chevronright' };
+            return {
+                ...group,
+                isExpanded: expanded,
+                iconName: expanded ? "utility:chevrondown" : "utility:chevronright",
+            };
         });
     }
 
     handleSectionKeydown(event) {
-        if (event.key === 'Enter' || event.key === ' ') {
+        if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
             this.handleToggleSection(event);
         }
@@ -299,14 +350,22 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
     handleAssessmentChange(event) {
         const definitionId = event.target.dataset.definitionid;
+        const taskId = event.target.dataset.taskid;
         const value = event.target.dataset.value;
-        let prevResult = '';
+        let prevResult = "";
 
         this.updateGroupedQuestions((group, parent) => {
-            if (parent.assessmentIndicatorDefinitionId !== definitionId) return parent;
+            if (
+                parent.assessmentIndicatorDefinitionId !== definitionId ||
+                parent.assessmentTaskId !== taskId
+            ) {
+                return parent;
+            }
+
             prevResult = parent.result;
-            //return this.updateParentQuestion(parent, { result: value, resultChanged: true });
-            return this.updateParentQuestion(parent, { result: value });
+            return this.updateParentQuestion(parent, {
+                result: value
+            });
         });
 
         // Update counts
@@ -315,134 +374,163 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
         } else if (prevResult && !value) {
             this.answeredQuestions--;
         }
-        
+
         // Update compliant/nonCompliant counts
         if (prevResult === RESULT_COMPLIANT) this.compliantCount--;
         if (prevResult === RESULT_NON_COMPLIANT) this.nonCompliantCount--;
         if (value === RESULT_COMPLIANT) this.compliantCount++;
         if (value === RESULT_NON_COMPLIANT) this.nonCompliantCount++;
     }
-            // ========================================
-            // PRIORITY AND DUE DATE EVENT 
-            // ========================================
+    // ========================================
+    // PRIORITY AND DUE DATE EVENT
+    // ========================================
 
-        
+    handleDatetimeChange(event) {
+        const defId = event.target.dataset.definitionid;
+        const taskId = event.target.dataset.taskid;
+        const value = event.target.value;
 
+        this.updateGroupedQuestions((group, parent) => {
+            if (
+                parent.assessmentIndicatorDefinitionId !== defId ||
+                parent.assessmentTaskId !== taskId
+            ) {
+                return parent;
+            }
 
-            handleDatetimeChange(event) {
-            const defId = event.target.dataset.definitionid;
-            const taskId = event.target.dataset.taskid;
-            const value = event.target.value;
+            return {
+                ...parent,
+                preferredDateTime: value,
+            };
+        });
+    }
 
-            this.updateGroupedQuestions((group, parent) => {
-                if (
-                    parent.assessmentIndicatorDefinitionId !== defId ||
-                    parent.assessmentTaskId !== taskId
-                ) {
-                    return parent;
-                }
+    handlePriorityChange(event) {
+        const defId = event.target.dataset.definitionid;
+        const taskId = event.target.dataset.taskid;
+        const value = event.target.value;
 
-                return {
-                    ...parent,
-                    preferredDateTime: value
-                };
-            });
-        }
+        this.updateGroupedQuestions((group, parent) => {
+            if (
+                parent.assessmentIndicatorDefinitionId !== defId ||
+                parent.assessmentTaskId !== taskId
+            ) {
+                return parent;
+            }
 
+            return {
+                ...parent,
+                selectPriority: value,
+            };
+        });
+    }
 
-        handlePriorityChange(event) {
-            const defId = event.target.dataset.definitionid;
-            const taskId = event.target.dataset.taskid;
-            const value = event.target.value;
-
-            this.updateGroupedQuestions((group, parent) => {
-                if (
-                    parent.assessmentIndicatorDefinitionId !== defId ||
-                    parent.assessmentTaskId !== taskId
-                ) {
-                    return parent;
-                }
-
-                return {
-                    ...parent,
-                    selectPriority: value
-                };
-            });
-        }
-
-
-          // ========================================
-          // Corrective Action Description EVENT 
-          // ========================================
+    // ========================================
+    // Corrective Action Description EVENT
+    // ========================================
 
     handleCorrectiveActionDescriptionChange(event) {
-    const defId = event.target.dataset.definitionid;
-    const taskId = event.target.dataset.taskid;
-    const value = event.target.value;
+        const defId = event.target.dataset.definitionid;
+        const taskId = event.target.dataset.taskid;
+        const value = event.target.value;
 
-    this.updateGroupedQuestions((group, parent) => {
-        if (
-            parent.assessmentIndicatorDefinitionId !== defId ||
-            parent.assessmentTaskId !== taskId
-        ) {
-            return parent;
-        }
+        this.updateGroupedQuestions((group, parent) => {
+            if (
+                parent.assessmentIndicatorDefinitionId !== defId ||
+                parent.assessmentTaskId !== taskId
+            ) {
+                return parent;
+            }
 
-        return {
-            ...parent,
-            actionDescription: value
-        };
-    });
-}
+            return {
+                ...parent,
+                actionDescription: value,
+            };
+        });
+    }
 
+    // ========================================
+    // Corrected During Inspection EVENT
+    // ========================================
 
-        
-          // ========================================
-          // Corrected During Inspection EVENT 
-          // ========================================
+    handleCorrectedDuringInspectionChange(event) {
+        const defId = event.target.dataset.definitionid;
+        const taskId = event.target.dataset.taskid;
+        const value = event.target.checked;
 
-            handleCorrectedDuringInspectionChange(event) {
-            const defId = event.target.dataset.definitionid;
-            const taskId = event.target.dataset.taskid;
-            const value = event.target.checked;
+        this.updateGroupedQuestions((group, parent) => {
+            if (
+                parent.assessmentIndicatorDefinitionId !== defId ||
+                parent.assessmentTaskId !== taskId
+            ) {
+                return parent;
+            }
 
-            this.updateGroupedQuestions((group, parent) => {
-                if (
-                    parent.assessmentIndicatorDefinitionId !== defId ||
-                    parent.assessmentTaskId !== taskId
-                ) {
-                    return parent;
-                }
-
-                return {
-                    ...parent,
-                    correctedDuringInspection: value
-                };
-            });
-        }
-
-
+            return {
+                ...parent,
+                correctedDuringInspection: value,
+            };
+        });
+    }
 
     handleCommentChange(event) {
         const definitionId = event.target.dataset.definitionid;
         const newComment = event.target.value;
 
         this.updateGroupedQuestions((group, parent) => {
-            if (parent.assessmentIndicatorDefinitionId !== definitionId) return parent;
-            return { ...parent, comment: newComment, commentChange: true };
+            const taskId = event.target.dataset.taskid;
+
+            if (
+                parent.assessmentIndicatorDefinitionId !== definitionId ||
+                parent.assessmentTaskId !== taskId
+            ) {
+                return parent;
+            }
+            return {
+                ...parent,
+                comment: newComment,
+                commentChange: true
+            };
         });
     }
 
     handleChildValueChange(event) {
-        const { childId, taskId, value, isCheckbox } = event.detail;
+        const {
+            childId,
+            taskId,
+            value,
+            isCheckbox
+        } = event.detail;
 
-        this.updateGroupedQuestions((group, parent) => ({
-            ...parent,
-            childQuestions: parent.childQuestions.map(child => {
-                if (child.assessmentIndicatorDefinitionId !== childId || child.assessmentTaskId !== taskId) return child;
-                return { ...child, checkboxValue: isCheckbox ? value : child.checkboxValue, responseValue: !isCheckbox ? value : child.responseValue };
-            })
-        }));
+        this.updateGroupedQuestions((group, parent) => {
+            const ownsChild = parent.childQuestions?.some(
+                (child) =>
+                child.assessmentIndicatorDefinitionId === childId &&
+                child.assessmentTaskId === taskId,
+            );
+
+            if (!ownsChild) {
+                return parent;
+            }
+
+            return {
+                ...parent,
+                childQuestions: parent.childQuestions.map((child) => {
+                    if (
+                        child.assessmentIndicatorDefinitionId !== childId ||
+                        child.assessmentTaskId !== taskId
+                    ) {
+                        return child;
+                    }
+
+                    return {
+                        ...child,
+                        checkboxValue: isCheckbox ? value : child.checkboxValue,
+                        responseValue: !isCheckbox ? value : child.responseValue,
+                    };
+                }),
+            };
+        });
     }
 
     // ========================================
@@ -451,7 +539,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
     async handleViewRegulatoryCodes(event) {
         const indicatorId = event.target.dataset.value;
-        
+
         if (this.regulatoryCodesCache[indicatorId]) {
             this.regulatoryCodes = this.regulatoryCodesCache[indicatorId];
             this.showRegulatoryModal = true;
@@ -460,19 +548,21 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
         this.isLoading = true;
         try {
-            const result = await getRegulatoryCodesByIndicator({ assessmentIndicatorDefinitionId: indicatorId });
-            const formattedCodes = result.map(code => ({
+            const result = await getRegulatoryCodesByIndicator({
+                assessmentIndicatorDefinitionId: indicatorId,
+            });
+            const formattedCodes = result.map((code) => ({
                 regulatoryCodeName: code.regulatoryCodeName,
-                statusText: code.isActive ? 'Active' : 'Inactive',
-                validityText: code.validityText || 'N/A'
+                statusText: code.isActive ? "Active" : "Inactive",
+                validityText: code.validityText || "N/A",
             }));
-            
+
             this.regulatoryCodesCache[indicatorId] = formattedCodes;
             this.regulatoryCodes = formattedCodes;
             this.showRegulatoryModal = true;
         } catch (error) {
             console.error(error);
-            this.showToast('Error', 'Unable to fetch regulatory codes', 'error');
+            this.showToast("Error", "Unable to fetch regulatory codes", "error");
         } finally {
             this.isLoading = false;
         }
@@ -487,31 +577,33 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
     // ========================================
 
     handleShowReview() {
-        this.reviewData = this.groupedQuestions.map(group => {
-            const questions = group.parentQuestions.map(parent => {
+        this.reviewData = this.groupedQuestions.map((group) => {
+            const questions = group.parentQuestions.map((parent) => {
                 const config = STATUS_CONFIG[parent.result] || STATUS_CONFIG.default;
                 return {
-                    questionId: parent.assessmentIndicatorDefinitionId,
+                    questionId: `${parent.assessmentTaskId}-${parent.assessmentIndicatorDefinitionId}`,
                     questionText: parent.questionText,
-                    result: parent.result || '',
+                    result: parent.result || "",
                     statusLabel: config.label,
                     statusIcon: config.icon,
                     statusClass: config.statusClass,
                     statusIconClass: config.iconClass,
                     reviewItemClass: config.itemClass,
                     hasComment: !!parent.comment,
-                    comment: parent.comment || ''
+                    comment: parent.comment || "",
                 };
             });
 
-            const answeredCount = questions.filter(q => q.result).length;
+            const answeredCount = questions.filter((q) => q.result).length;
             return {
                 categoryId: group.taskDefinitionId,
                 categoryName: group.taskDefinitionName,
                 totalCount: questions.length,
                 answeredCount,
-                progressClass: answeredCount === questions.length ? 'progress-complete' : 'progress-pending',
-                questions
+                progressClass: answeredCount === questions.length ?
+                    "progress-complete" :
+                    "progress-pending",
+                questions,
             };
         });
         this.showReviewModal = true;
@@ -527,22 +619,34 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
     }
 
     handleNavigateToQuestion(event) {
-        const { questionid, categoryid } = event.currentTarget.dataset;
+        const {
+            questionid,
+            categoryid
+        } = event.currentTarget.dataset;
         this.closeReviewModal();
 
-        this.groupedQuestions = this.groupedQuestions.map(group => {
+        this.groupedQuestions = this.groupedQuestions.map((group) => {
             if (group.taskDefinitionId !== categoryid) return group;
-            return { ...group, isExpanded: true, iconName: 'utility:chevrondown' };
+            return {
+                ...group,
+                isExpanded: true,
+                iconName: "utility:chevrondown"
+            };
         });
 
         // eslint-disable-next-line @lwc/lwc/no-async-operation
         setTimeout(() => {
-            const el = this.template.querySelector(`[data-question-id="${questionid}"]`);
+            const el = this.template.querySelector(
+                `[data-question-id="${questionid}"]`,
+            );
             if (el) {
-                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                el.classList.add('question-card--highlight');
+                el.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+                el.classList.add("question-card--highlight");
                 // eslint-disable-next-line @lwc/lwc/no-async-operation
-                setTimeout(() => el.classList.remove('question-card--highlight'), 2000);
+                setTimeout(() => el.classList.remove("question-card--highlight"), 2000);
             }
         }, 100);
     }
@@ -558,19 +662,31 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
         if (!this.uploadedFilesMap[definitionId]) {
             this.uploadedFilesMap[definitionId] = [];
         }
-        uploadedFiles.forEach(file => file.documentId && this.uploadedFilesMap[definitionId].push(file.documentId));
+        uploadedFiles.forEach(
+            (file) =>
+            file.documentId &&
+            this.uploadedFilesMap[definitionId].push(file.documentId),
+        );
 
         this.updateGroupedQuestions((group, parent) => {
-            if (parent.assessmentIndicatorDefinitionId !== definitionId) return parent;
+            if (parent.assessmentIndicatorDefinitionId !== definitionId)
+                return parent;
             return {
                 ...parent,
                 hasAttachments: true,
                 attachmentCount: (parent.attachmentCount || 0) + uploadedFiles.length,
-                uploadedContentDocIds: [...(parent.uploadedContentDocIds || []), ...uploadedFiles.map(f => f.documentId)]
+                uploadedContentDocIds: [
+                    ...(parent.uploadedContentDocIds || []),
+                    ...uploadedFiles.map((f) => f.documentId),
+                ],
             };
         });
 
-        this.showToast('Success', `${uploadedFiles.length} file(s) uploaded`, 'success');
+        this.showToast(
+            "Success",
+            `${uploadedFiles.length} file(s) uploaded`,
+            "success",
+        );
     }
 
     // ========================================
@@ -578,251 +694,423 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
     // ========================================
 
     handleSubmit() {
-      this.showEndInspectionModal = true;
+        this.showEndInspectionModal = true;
     }
 
     handleGoBack() {
-      this.showEndInspectionModal = false;
+        this.showEndInspectionModal = false;
     }
 
     async handleCompleteInspection() {
-      this.showEndInspectionModal = false;
-      await this.handleFinalSubmit();
+        this.showEndInspectionModal = false;
+        await this.handleFinalSubmit();
     }
 
     async handleFinalSubmit() {
-                    let isValid = true;
-                    let statusnotselected = false;
-                    let duedateempty = false;
-                        this.template.querySelectorAll('lightning-input[data-field="compduedate"]').forEach(input => {
-                            input.setCustomValidity('');
-                            input.reportValidity();
+        let isValid = true;
+        let statusnotselected = false;
+        let duedateempty = false;
+        this.template
+            .querySelectorAll('lightning-input[data-field="compduedate"]')
+            .forEach((input) => {
+                input.setCustomValidity("");
+                input.reportValidity();
+            });
+
+        for (const group of this.groupedQuestions) {
+            for (const parent of group.parentQuestions) {
+                if (!parent.result) {
+                    statusnotselected = true;
+                    isValid = false;
+                }
+
+                if (parent.showChildren && !parent.preferredDateTime) {
+                    duedateempty = true;
+                    isValid = false;
+
+                    const input = this.template.querySelector(
+                        `lightning-input[data-field="compduedate"][data-question-id="${parent.assessmentIndicatorDefinitionId}"]`,
+                    );
+
+                    if (input) {
+                        input.setCustomValidity(
+                            "Enter a compliance due date for non-compliant items",
+                        );
+                        input.reportValidity();
+                    }
+                }
+            }
+        }
+
+        if (!isValid) {
+            if (statusnotselected) {
+                this.showToast(
+                    "Error",
+                    "Compliance Status must be selected for each inspection question before submitting.",
+                    "error",
+                );
+                return;
+            }
+            if (duedateempty) {
+                this.showToast(
+                    "Error",
+                    "Enter a compliance due date for non-compliant items",
+                    "error",
+                );
+                return;
+            }
+        }
+        this.isLoading = true;
+        this.setSectionSavingState(true);
+
+        try {
+            const responsesToSave = [];
+            const sectionsWithChanges = new Set();
+            const seenChildren = new Set();
+
+            for (const group of this.groupedQuestions) {
+                for (const parent of group.parentQuestions) {
+
+                    const hasParentChanged =
+                        parent.result !== parent.originalResult ||
+                        parent.comment !== parent.originalComment ||
+                        parent.selectPriority !== parent.originalSelectPriority ||
+                        parent.preferredDateTime !== parent.originalPreferredDateTime ||
+                        parent.actionDescription !== parent.originalActionDescription ||
+                        parent.correctedDuringInspection !==
+                        parent.originalCorrectedDuringInspection;
+
+                    if (hasParentChanged) {
+                        responsesToSave.push({
+                            assessmentTaskId: parent.assessmentTaskId,
+                            definitionId: parent.assessmentIndicatorDefinitionId,
+                            comment: parent.comment || "",
+                            result: parent.result || "",
+                            checkboxValue: null,
+                            selectPriority: parent.selectPriority || null,
+                            preferredDateTime: parent.preferredDateTime ?
+                                new Date(parent.preferredDateTime).toISOString() :
+                                null,
+                            actionDescription: parent.actionDescription || null,
+                            correctedDuringInspection: parent.correctedDuringInspection || false,
                         });
 
-                        for (const group of this.groupedQuestions) {
-                            for (const parent of group.parentQuestions) {
+                        sectionsWithChanges.add(group.taskDefinitionId);
+                    }
 
-                                if (!parent.result) {
-                                    statusnotselected = true;
-                                    isValid = false;
-                                }
+                    if (parent.result === RESULT_NON_COMPLIANT && parent.childQuestions?.length) {
 
-                                if (
-                                    parent.showChildren &&                 
-                                    !parent.preferredDateTime              
-                                ) {
-                                    duedateempty = true;
-                                    isValid = false;
+                        const parentJustBecameNonCompliant =
+                            parent.originalResult !== RESULT_NON_COMPLIANT;
 
-                                    
-                                    const input = this.template.querySelector(
-                                        `lightning-input[data-field="compduedate"][data-question-id="${parent.assessmentIndicatorDefinitionId}"]`
-                                    );
+                        const anyChildChanged = parent.childQuestions.some(
+                            (c) => c.checkboxValue !== c.originalCheckboxValue
+                        );
 
-                                    if (input) {
-                                        input.setCustomValidity('Enter a compliance due date for non-compliant items');
-                                        input.reportValidity();
-                                    }
-                                }
-                            }
-                        }
+                        if (parentJustBecameNonCompliant || anyChildChanged) {
+                            sectionsWithChanges.add(group.taskDefinitionId);
 
-                        if (!isValid) {
+                            for (const child of parent.childQuestions) {
+                                const key = `${child.assessmentTaskId}-${child.assessmentIndicatorDefinitionId}`;
+                                if (seenChildren.has(key)) continue;
+                                seenChildren.add(key);
 
-                            if (statusnotselected) {
-                                this.showToast(
-                                    'Error',
-                                    'Compliance Status must be selected for each inspection question before submitting.',
-                                    'error'
-                                );
-                               return;
-                            } 
-                            if (duedateempty) {
-                                this.showToast(
-                                    'Error',
-                                    'Enter a compliance due date for non-compliant items',
-                                    'error'
-                                );
-                                return;
-                            }
-                        }
-                    this.isLoading = true;
-                    this.setSectionSavingState(true);
-
-            try {
-                    const responsesToSave = [];
-                    let hasAnySelection = false;
-                    const sectionsWithChanges = new Set();
-
-                    for (const group of this.groupedQuestions) {
-                        for (const parent of group.parentQuestions) {
-                            //if (parent.result) {
-                                const hasParentChanged =
-                                    parent.result !== parent.originalResult ||
-                                    parent.comment !== parent.originalComment ||
-                                    parent.selectPriority !== parent.originalSelectPriority ||
-                                    parent.preferredDateTime !== parent.originalPreferredDateTime ||
-                                    parent.actionDescription !== parent.originalActionDescription ||
-                                    parent.correctedDuringInspection !== parent.originalCorrectedDuringInspection;
-
-                                if (hasParentChanged) {
                                 responsesToSave.push({
-                                    assessmentTaskId: parent.assessmentTaskId,
-                                    definitionId: parent.assessmentIndicatorDefinitionId,
-                                    comment: parent.comment || '',
-                                    result: parent.result || '',
-                                    checkboxValue: null,
-                                    selectPriority: parent.selectPriority || null,
-                                    preferredDateTime: parent.preferredDateTime
-                                    ? new Date(parent.preferredDateTime).toISOString()
-                                    : null,
-                                    actionDescription: parent.actionDescription || null,
-                                    correctedDuringInspection: parent.correctedDuringInspection || false
-                                });
-                                sectionsWithChanges.add(group.taskDefinitionId);
-                                //if (resultChanged && parent.result) hasAnySelection = true;
-                            }
-
-                            if (parent.showChildren && parent.childQuestions) {
-                                for (const child of parent.childQuestions) {
-                                    if (child.checkboxValue !== child.originalCheckboxValue) {
-                                        responsesToSave.push({
-                                            assessmentTaskId: child.assessmentTaskId,
-                                            definitionId: child.assessmentIndicatorDefinitionId,
-                                            comment: '',
-                                            result: RESULT_NON_COMPLIANT,
-                                            checkboxValue: child.checkboxValue
-                                        });
-                                        sectionsWithChanges.add(group.taskDefinitionId);
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-
-                    if (!hasAnySelection && responsesToSave.length === 0) {
-                        this.setSectionSavingState(false);
-                        this.showToast('Info', 'No changes to save', 'info');
-                        this.isLoading = false;
-                        return;
-                    }
-
-                    let saveResult = null;
-                    if (responsesToSave.length > 0) {
-                        saveResult = await saveAssessmentResponses({ responses: responsesToSave });
-                        
-                        if (!saveResult.success && saveResult.errors?.length > 0) {
-                            console.error('Save errors:', saveResult.errors);
-                            this.showToast('Warning', `Saved with ${saveResult.errors.length} error(s). Some responses may not have been saved.`, 'warning');
-                        }
-                    }
-
-                    // Link uploaded files
-                    if (saveResult && Object.keys(this.uploadedFilesMap).length > 0) {
-                        try {
-                            const defIdToAssessmentIndId = {};
-                            for (const defId of Object.keys(this.uploadedFilesMap)) {
-                                const assessmentIndId = saveResult.definitionIdToRecordIdMap[defId];
-                                if (assessmentIndId) defIdToAssessmentIndId[defId] = assessmentIndId;
-                            }
-
-                            if (Object.keys(defIdToAssessmentIndId).length > 0) {
-                                await linkFilesToAssessmentRecords({
-                                    definitionIdToContentDocIds: this.uploadedFilesMap,
-                                    definitionIdToAssessmentIndId: defIdToAssessmentIndId
+                                    assessmentTaskId: child.assessmentTaskId,
+                                    definitionId: child.assessmentIndicatorDefinitionId,
+                                    comment: "",
+                                    result: child.checkboxValue === true ? RESULT_NON_COMPLIANT : null,
+                                    checkboxValue: child.checkboxValue === true,
                                 });
                             }
-                        } catch (linkError) {
-                            console.error('Error linking files:', linkError);
                         }
                     }
+                }
+            }
 
-                    // Update original values
-                    this.updateGroupedQuestions((group, parent) => ({
-                        ...parent,
-                        originalResult: parent.result,
-                        originalComment: parent.comment,
-                        originalSelectPriority: parent.selectPriority,
-                        originalPreferredDateTime: parent.preferredDateTime,
-                        originalActionDescription: parent.actionDescription,
-                        originalCorrectedDuringInspection: parent.correctedDuringInspection,
-                        childQuestions: parent.childQuestions.map(child => ({ ...child, originalCheckboxValue: child.checkboxValue }))
-                    }));
+            /*if (responsesToSave.length === 0) {
+                this.setSectionSavingState(false);
+                this.showToast("Info", "No changes to save", "info");
+                this.isLoading = false;
+                return;
+            } */
 
-                    this.uploadedFilesMap = {};
-                    this.setSectionSavedState(sectionsWithChanges);
-                    await this.createViolationsAndNotify();
+            let saveResult = null;
+            if (responsesToSave.length > 0) {
+                saveResult = await saveAssessmentResponses({
+                    responses: responsesToSave,
+                });
 
-                    await completeInspection({ visitId: this.recordId, closingComments: this.closingComments });
+                if (!saveResult.success && saveResult.errors?.length > 0) {
+                    console.error("Save errors:", saveResult.errors);
+                    this.showToast(
+                        "Warning",
+                        `Saved with ${saveResult.errors.length} error(s). Some responses may not have been saved.`,
+                        "warning",
+                    );
+                }
+            }
 
-                    } catch (error) {
-                        console.error('Error saving assessment:', error);
-                        this.setSectionSavingState(false);
-                        this.showToast('Error', 'Error saving assessment: ' + (error?.body?.message || error?.message || 'Unknown error'), 'error');
-                    } finally {
-                        this.isLoading = false;
+            // Link uploaded files
+            if (saveResult && Object.keys(this.uploadedFilesMap).length > 0) {
+                try {
+                    const defIdToAssessmentIndId = {};
+                    for (const defId of Object.keys(this.uploadedFilesMap)) {
+                        const assessmentIndId = saveResult.definitionIdToRecordIdMap[defId];
+                        if (assessmentIndId)
+                            defIdToAssessmentIndId[defId] = assessmentIndId;
                     }
+
+                    if (Object.keys(defIdToAssessmentIndId).length > 0) {
+                        await linkFilesToAssessmentRecords({
+                            definitionIdToContentDocIds: this.uploadedFilesMap,
+                            definitionIdToAssessmentIndId: defIdToAssessmentIndId,
+                        });
+                    }
+                } catch (linkError) {
+                    console.error("Error linking files:", linkError);
+                }
+            }
+
+            // Update original values
+            this.updateGroupedQuestions((group, parent) => ({
+                ...parent,
+                originalResult: parent.result,
+                originalComment: parent.comment,
+                originalSelectPriority: parent.selectPriority,
+                originalPreferredDateTime: parent.preferredDateTime,
+                originalActionDescription: parent.actionDescription,
+                originalCorrectedDuringInspection: parent.correctedDuringInspection,
+                childQuestions: parent.childQuestions.map((child) => ({
+                    ...child,
+                    originalCheckboxValue: child.checkboxValue,
+                })),
+            }));
+
+            this.uploadedFilesMap = {};
+            this.setSectionSavedState(sectionsWithChanges);
+            if (saveResult?.success) {
+                await resetChildResponsesForCompliantParents({
+                    visitId: this.recordId
+                });
+            }
+            await this.createViolationsAndNotify();
+
+            await completeInspection({
+                visitId: this.recordId,
+                closingComments: this.closingComments,
+            });
+            this.isDraft = false;
+        } catch (error) {
+            console.error("Error saving assessment:", error);
+            this.setSectionSavingState(false);
+            this.showToast(
+                "Error",
+                "Error saving assessment: " +
+                (error?.body?.message || error?.message || "Unknown error"),
+                "error",
+            );
+        } finally {
+            this.isLoading = false;
+        }
     }
 
     handleClosingCommentsChange(event) {
-      this.closingComments = event.target.value;
-      const length = this.closingComments.length;
+        this.closingComments = event.target.value;
+        const length = this.closingComments.length;
 
-      if (length >= 900 && length < 1000) {
-        this.closingCommentsMessage =
-            `You are approaching the 1000 character limit (${length}/1000).`;
-        this.closingCommentsMessageClass = 'slds-text-color_warning';
-      } else if (length === 1000) {
-        this.closingCommentsMessage =
-            'Maximum 1000 characters allowed.';
-        this.closingCommentsMessageClass = 'slds-text-color_error';
-      } else {
-        this.closingCommentsMessage = '';
-        this.closingCommentsMessageClass = '';
-      }
+        if (length >= 900 && length < 1000) {
+            this.closingCommentsMessage = `You are approaching the 1000 character limit (${length}/1000).`;
+            this.closingCommentsMessageClass = "slds-text-color_warning";
+        } else if (length === 1000) {
+            this.closingCommentsMessage = "Maximum 1000 characters allowed.";
+            this.closingCommentsMessageClass = "slds-text-color_error";
+        } else {
+            this.closingCommentsMessage = "";
+            this.closingCommentsMessageClass = "";
+        }
     }
 
     async createViolationsAndNotify() {
         try {
-            const violationResult = await createViolationsForInspection({ visitId: this.recordId });
-            
+            const violationResult = await createViolationsForInspection({
+                visitId: this.recordId,
+            });
+
             if (violationResult?.success) {
                 const parentCount = violationResult.parentViolationIds?.length || 0;
-                const cannedCount = violationResult.cannedCommentViolationIds?.length || 0;
+                const cannedCount =
+                    violationResult.cannedCommentViolationIds?.length || 0;
                 const totalCount = violationResult.violationCount || 0;
-                
+
                 if (totalCount > 0) {
                     let msg = `Inspection saved. ${parentCount} violation(s) created for non-compliant questions`;
-                    if (cannedCount > 0) msg += ` and ${cannedCount} violation(s) for selected canned comments`;
-                    this.showToast('Success', msg + '.', 'success');
+                    if (cannedCount > 0)
+                        msg += ` and ${cannedCount} violation(s) for selected canned comments`;
+                    this.showToast("Success", msg + ".", "success");
                 } else {
-                    this.showToast('Success', 'Inspection Assessment saved successfully. No violations created.', 'success');
+                    this.showToast(
+                        "Success",
+                        "Inspection Assessment saved successfully. No violations created.",
+                        "success",
+                    );
                 }
-                return violationResult.parentViolationIds || [];              
+                return violationResult.parentViolationIds || [];
             } else {
-                this.showToast('Partial Success', `Inspection saved, but violation creation had issues: ${violationResult?.message || 'Unknown error'}. Please review manually.`, 'warning');
+                this.showToast(
+                    "Partial Success",
+                    `Inspection saved, but violation creation had issues: ${violationResult?.message || "Unknown error"}. Please review manually.`,
+                    "warning",
+                );
             }
         } catch (violationError) {
-            console.error('Error creating violations:', violationError);
-            this.showToast('Partial Success', `Inspection saved, but could not create violations: ${violationError?.body?.message || violationError?.message || 'Unknown error'}. Please review the inspection manually.`, 'warning');
+            console.error("Error creating violations:", violationError);
+            this.showToast(
+                "Partial Success",
+                `Inspection saved, but could not create violations: ${violationError?.body?.message || violationError?.message || "Unknown error"}. Please review the inspection manually.`,
+                "warning",
+            );
         }
     }
 
     setSectionSavingState(isSaving) {
-        this.groupedQuestions = this.groupedQuestions.map(group => ({ ...group, isSaving, hasSaved: false }));
+        this.groupedQuestions = this.groupedQuestions.map((group) => ({
+            ...group,
+            isSaving,
+            hasSaved: false,
+        }));
     }
 
     setSectionSavedState(sectionIds) {
-        this.groupedQuestions = this.groupedQuestions.map(group => ({
+        this.groupedQuestions = this.groupedQuestions.map((group) => ({
             ...group,
             isSaving: false,
-            hasSaved: sectionIds ? sectionIds.has(group.taskDefinitionId) : true
+            hasSaved: sectionIds ? sectionIds.has(group.taskDefinitionId) : true,
         }));
 
         // eslint-disable-next-line @lwc/lwc/no-async-operation
         setTimeout(() => {
-            this.groupedQuestions = this.groupedQuestions.map(group => ({ ...group, hasSaved: false }));
+            this.groupedQuestions = this.groupedQuestions.map((group) => ({
+                ...group,
+                hasSaved: false,
+            }));
         }, 3000);
     }
+
+    async handleSaveForLater() {
+        this.isLoading = true;
+        this.setSectionSavingState(true);
+
+        try {
+            const responsesToSave = this.buildResponsesPayload();
+
+            if (responsesToSave.length > 0) {
+                await saveAssessmentResponses({
+                    responses: responsesToSave
+                });
+            }
+
+            await markInspectionAsDraft({
+                visitId: this.recordId
+            });
+
+            // Reset originals so resume works cleanly
+            this.updateGroupedQuestions((group, parent) => ({
+                ...parent,
+                originalResult: parent.result,
+                originalComment: parent.comment,
+                originalSelectPriority: parent.selectPriority,
+                originalPreferredDateTime: parent.preferredDateTime,
+                originalActionDescription: parent.actionDescription,
+                originalCorrectedDuringInspection: parent.correctedDuringInspection,
+                childQuestions: parent.childQuestions.map((child) => ({
+                    ...child,
+                    originalCheckboxValue: child.checkboxValue,
+                })),
+            }));
+
+            this.isDraft = true;
+
+            this.showToast(
+                "Saved",
+                "Inspection saved as draft. You can resume later.",
+                "success",
+            );
+
+            this.setSectionSavedState();
+        } catch (error) {
+            console.error(error);
+            this.showToast("Error", "Failed to save draft", "error");
+            this.setSectionSavingState(false);
+        } finally {
+            this.isLoading = false;
+        }
+    }
+
+    buildResponsesPayload() {
+        const responses = [];
+        const seenChildren = new Set();
+
+        for (const group of this.groupedQuestions) {
+            for (const parent of group.parentQuestions) {
+                const parentChanged =
+                    parent.result !== parent.originalResult ||
+                    parent.comment !== parent.originalComment ||
+                    parent.selectPriority !== parent.originalSelectPriority ||
+                    parent.preferredDateTime !== parent.originalPreferredDateTime ||
+                    parent.actionDescription !== parent.originalActionDescription ||
+                    parent.correctedDuringInspection !==
+                    parent.originalCorrectedDuringInspection;
+
+                // Parent
+                if (parentChanged) {
+                    responses.push({
+                        assessmentTaskId: parent.assessmentTaskId,
+                        definitionId: parent.assessmentIndicatorDefinitionId,
+                        comment: parent.comment || "",
+                        result: parent.result || "",
+                        checkboxValue: null,
+                        selectPriority: parent.selectPriority || null,
+                        preferredDateTime: parent.preferredDateTime ?
+                            new Date(parent.preferredDateTime).toISOString() :
+                            null,
+                        actionDescription: parent.actionDescription || null,
+                        correctedDuringInspection: parent.correctedDuringInspection || false,
+                    });
+                }
+
+                // Children
+                if (
+                    parent.result === RESULT_NON_COMPLIANT &&
+                    parent.childQuestions?.length
+                ) {
+                    const parentJustBecameNonCompliant =
+                        parent.originalResult !== RESULT_NON_COMPLIANT;
+
+                    const anyChildChanged = parent.childQuestions.some(
+                        (c) => c.checkboxValue !== c.originalCheckboxValue
+                    );
+
+                    if (parentJustBecameNonCompliant || anyChildChanged) {
+                        for (const child of parent.childQuestions) {
+                            const key = `${child.assessmentTaskId}-${child.assessmentIndicatorDefinitionId}`;
+                            if (seenChildren.has(key)) continue;
+                            seenChildren.add(key);
+
+                            responses.push({
+                                assessmentTaskId: child.assessmentTaskId,
+                                definitionId: child.assessmentIndicatorDefinitionId,
+                                comment: "",
+                                result: child.checkboxValue === true ? RESULT_NON_COMPLIANT : null,
+                                checkboxValue: child.checkboxValue === true,
+                            });
+                        }
+                    }
+                }
+            }
+        }
+
+        return responses;
+    }
+
 }
