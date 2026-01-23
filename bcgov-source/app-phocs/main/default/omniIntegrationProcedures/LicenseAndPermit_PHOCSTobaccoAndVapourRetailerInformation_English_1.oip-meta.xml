@@ -13,6 +13,33 @@
     <language>English</language>
     <name>PHOCS Tobacco &amp; Vapour Retailer Information IP</name>
     <omniProcessElements>
+        <description>Response Action</description>
+        <isActive>false</isActive>
+        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+        <level>0.0</level>
+        <name>BLAResponse</name>
+        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+        <propertySetConfig>{
+  &quot;returnFullDataJSON&quot; : true,
+  &quot;returnOnlyAdditionalOutput&quot; : true,
+  &quot;elementValueMap&quot; : { },
+  &quot;responseFormat&quot; : &quot;JSON&quot;,
+  &quot;isActive&quot; : true,
+  &quot;responseJSONPath&quot; : &quot;&quot;,
+  &quot;responseJSONNode&quot; : &quot;&quot;,
+  &quot;executionConditionalFormula&quot; : &quot;&quot;,
+  &quot;additionalOutput&quot; : {
+    &quot;createdBLAApplicationId&quot; : &quot;%ExtractBLArecord:BLAApplicationId%&quot;
+  },
+  &quot;sendJSONPath&quot; : &quot;&quot;,
+  &quot;id&quot; : &quot;&quot;,
+  &quot;restOptions&quot; : { },
+  &quot;sendJSONNode&quot; : &quot;&quot;
+}</propertySetConfig>
+        <sequenceNumber>6.0</sequenceNumber>
+        <type>Response Action</type>
+    </omniProcessElements>
+    <omniProcessElements>
         <description>Data Mapper Post Action</description>
         <isActive>true</isActive>
         <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
@@ -23,7 +50,7 @@
   &quot;sendOnlyAdditionalInput&quot; : false,
   &quot;returnOnlyAdditionalOutput&quot; : false,
   &quot;elementValueMap&quot; : { },
-  &quot;failOnStepError&quot; : true,
+  &quot;failOnStepError&quot; : false,
   &quot;internalNotes&quot; : &quot;&quot;,
   &quot;isActive&quot; : true,
   &quot;chainOnStep&quot; : false,
@@ -38,11 +65,10 @@
   &quot;failureResponse&quot; : { },
   &quot;id&quot; : &quot;&quot;,
   &quot;additionalInput&quot; : {
-    &quot;BusinessEntityAccountId&quot; : &quot;%BusinessEntityAccountId%&quot;,
-    &quot;FacilityRecTypeId&quot; : &quot;%GetRecordTypeIds:AccountFacilityRTId%&quot;
+    &quot;BusinessEntityAccountId&quot; : &quot;%BusinessEntityAccountId%&quot;
   },
   &quot;restOptions&quot; : { },
-  &quot;bundle&quot; : &quot;CreateAccountForPortalBLA&quot;,
+  &quot;bundle&quot; : &quot;CreateAccountForPortalBLApp&quot;,
   &quot;sendJSONNode&quot; : &quot;&quot;
 }</propertySetConfig>
         <sequenceNumber>2.0</sequenceNumber>
@@ -75,14 +101,49 @@
   &quot;id&quot; : &quot;&quot;,
   &quot;additionalInput&quot; : {
     &quot;BLAConstructionPermitAppRecTypeId&quot; : &quot;%GetRecordTypeIds:OperatingPermitApplicationRTId%&quot;,
-    &quot;DRAccountId&quot; : &quot;%CreateAccount:Account_1:Id%&quot;
+    &quot;DRAccountId&quot; : &quot;%SetValues:CreatedAccountId%&quot;
   },
   &quot;restOptions&quot; : { },
   &quot;bundle&quot; : &quot;PHOCSPortalCreateBLA&quot;,
   &quot;sendJSONNode&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>3.0</sequenceNumber>
+        <sequenceNumber>4.0</sequenceNumber>
         <type>DataRaptor Post Action</type>
+    </omniProcessElements>
+    <omniProcessElements>
+        <description>Data Mapper Extract Action</description>
+        <isActive>true</isActive>
+        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+        <level>0.0</level>
+        <name>ExtractBLArecord</name>
+        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+        <propertySetConfig>{
+  &quot;sendOnlyAdditionalInput&quot; : false,
+  &quot;dataRaptor Input Parameters&quot; : [ {
+    &quot;inputParam&quot; : &quot;BLARecId&quot;,
+    &quot;element&quot; : &quot;CreateBLA:BusinessLicenseApplication_1:Id&quot;
+  } ],
+  &quot;returnOnlyAdditionalOutput&quot; : false,
+  &quot;elementValueMap&quot; : { },
+  &quot;failOnStepError&quot; : false,
+  &quot;internalNotes&quot; : &quot;&quot;,
+  &quot;isActive&quot; : true,
+  &quot;chainOnStep&quot; : false,
+  &quot;returnOnlyFailureResponse&quot; : false,
+  &quot;ignoreCache&quot; : false,
+  &quot;responseJSONPath&quot; : &quot;&quot;,
+  &quot;responseJSONNode&quot; : &quot;&quot;,
+  &quot;executionConditionalFormula&quot; : &quot;&quot;,
+  &quot;actionMessage&quot; : &quot;&quot;,
+  &quot;sendJSONPath&quot; : &quot;&quot;,
+  &quot;failureConditionalFormula&quot; : &quot;&quot;,
+  &quot;id&quot; : &quot;&quot;,
+  &quot;restOptions&quot; : { },
+  &quot;bundle&quot; : &quot;PHOCSDMExtractBLARecordCreated&quot;,
+  &quot;sendJSONNode&quot; : &quot;&quot;
+}</propertySetConfig>
+        <sequenceNumber>5.0</sequenceNumber>
+        <type>DataRaptor Extract Action</type>
     </omniProcessElements>
     <omniProcessElements>
         <description>Data Mapper Extract Action</description>
@@ -115,28 +176,35 @@
         <sequenceNumber>1.0</sequenceNumber>
         <type>DataRaptor Extract Action</type>
     </omniProcessElements>
+    <omniProcessElements>
+        <description>Set Values Action</description>
+        <isActive>true</isActive>
+        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+        <level>0.0</level>
+        <name>SetValues</name>
+        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+        <propertySetConfig>{
+  &quot;responseJSONPath&quot; : &quot;&quot;,
+  &quot;responseJSONNode&quot; : &quot;&quot;,
+  &quot;executionConditionalFormula&quot; : &quot;&quot;,
+  &quot;actionMessage&quot; : &quot;&quot;,
+  &quot;elementValueMap&quot; : {
+    &quot;CreatedAccountId&quot; : &quot;%CreateAccount:Account_1:Id%&quot;
+  },
+  &quot;failureConditionalFormula&quot; : &quot;&quot;,
+  &quot;failOnStepError&quot; : false,
+  &quot;id&quot; : &quot;&quot;,
+  &quot;internalNotes&quot; : &quot;&quot;,
+  &quot;isActive&quot; : true,
+  &quot;restOptions&quot; : { },
+  &quot;chainOnStep&quot; : false
+}</propertySetConfig>
+        <sequenceNumber>3.0</sequenceNumber>
+        <type>Set Values</type>
+    </omniProcessElements>
     <omniProcessKey>LicenseAndPermit_PHOCSTobaccoAndVapourRetailerInformation</omniProcessKey>
     <omniProcessType>Integration Procedure</omniProcessType>
     <propertySetConfig>{
-  &quot;linkToExternalObject&quot; : &quot;&quot;,
-  &quot;trackingCustomData&quot; : [ ],
-  &quot;includeAllActionsInResponse&quot; : false,
-  &quot;columnsPropertyMap&quot; : [ ],
-  &quot;relationshipFieldsMap&quot; : [ ],
-  &quot;labelSingular&quot; : &quot;&quot;,
-  &quot;labelPlural&quot; : &quot;&quot;,
-  &quot;description&quot; : &quot;&quot;,
-  &quot;nameColumn&quot; : &quot;&quot;,
-  &quot;rollbackOnError&quot; : false,
-  &quot;chainableQueriesLimit&quot; : 50,
-  &quot;chainableDMLStatementsLimit&quot; : null,
-  &quot;chainableCpuLimit&quot; : 2000,
-  &quot;chainableHeapSizeLimit&quot; : null,
-  &quot;chainableDMLRowsLimit&quot; : null,
-  &quot;chainableQueryRowsLimit&quot; : null,
-  &quot;chainableSoslQueriesLimit&quot; : null,
-  &quot;additionalChainableResponse&quot; : [ ],
-  &quot;chainableActualTimeLimit&quot; : null,
   &quot;transientValues&quot; : {
     &quot;activateOrDeactivateConsent&quot; : false
   }
