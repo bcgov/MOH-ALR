@@ -487,35 +487,61 @@ export default class InspectionQuestionsParentv3 extends LightningElement {
     // ========================================
 
     handleShowReview() {
-        this.reviewData = this.groupedQuestions.map(group => {
-            const questions = group.parentQuestions.map(parent => {
-                const config = STATUS_CONFIG[parent.result] || STATUS_CONFIG.default;
-                return {
-                    questionId: parent.assessmentIndicatorDefinitionId,
-                    questionText: parent.questionText,
-                    result: parent.result || '',
-                    statusLabel: config.label,
-                    statusIcon: config.icon,
-                    statusClass: config.statusClass,
-                    statusIconClass: config.iconClass,
-                    reviewItemClass: config.itemClass,
-                    hasComment: !!parent.comment,
-                    comment: parent.comment || ''
+    this.reviewData = this.groupedQuestions.map(group => {
+        const questions = group.parentQuestions.map(parent => {
+            const config = STATUS_CONFIG[parent.result] || STATUS_CONFIG.default;
+            const isNonCompliant = parent.result === RESULT_NON_COMPLIANT;
+
+            return {
+                questionId: parent.assessmentIndicatorDefinitionId,
+                questionText: parent.questionText,
+                result: parent.result || '',
+                statusLabel: config.label,
+                statusIcon: config.icon,
+                statusClass: config.statusClass,
+                statusIconClass: config.iconClass,
+                reviewItemClass: config.itemClass,
+
+                // Parent-level details
+                hasComment: !!parent.comment,
+                comment: parent.comment || '',
+
+                isNonCompliant,
+                priority: isNonCompliant ? parent.selectPriority || '' : null,
+                complianceDueDate: isNonCompliant ? parent.preferredDateTime || null : null,
+                correctiveActionDescription: isNonCompliant
+                    ? parent.actionDescription || ''
+                    : null,
+
+                // ✅ ADD THIS: selected child questions
+                childQuestionsForReview: isNonCompliant
+                    ? (parent.childQuestions || []).map(child => ({
+                        id: child.assessmentIndicatorDefinitionId,
+                        questionText: child.questionText,
+                        checked: child.checkboxValue === true
+                    }))
+                    : []
                 };
             });
 
             const answeredCount = questions.filter(q => q.result).length;
+
             return {
                 categoryId: group.taskDefinitionId,
                 categoryName: group.taskDefinitionName,
                 totalCount: questions.length,
                 answeredCount,
-                progressClass: answeredCount === questions.length ? 'progress-complete' : 'progress-pending',
+                progressClass:
+                    answeredCount === questions.length
+                        ? 'progress-complete'
+                        : 'progress-pending',
                 questions
             };
         });
+
         this.showReviewModal = true;
     }
+
 
     closeReviewModal() {
         this.showReviewModal = false;

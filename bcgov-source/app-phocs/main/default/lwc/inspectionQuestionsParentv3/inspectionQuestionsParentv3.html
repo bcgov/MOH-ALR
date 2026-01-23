@@ -212,9 +212,67 @@
                                                     <lightning-icon icon-name="utility:forward" size="xx-small"></lightning-icon>
                                                 </button>
                                             </div>
-                                            <template lwc:if={question.hasComment}>
-                                                <div class="review-question-comment">{question.comment}</div>
+
+                                            <template if:true={question.isNonCompliant}>
+                                                <div class="review-noncompliant slds-m-top_small">
+
+                                                    <div class="review-meta-row">
+                                                        <span class="review-meta-label">Priority:</span>
+                                                        <span class="review-meta-value">{question.priority}</span>
+                                                    </div>
+
+                                                    <div class="review-meta-row">
+                                                        <span class="review-meta-label">Compliance Due Date:</span>
+                                                        <span class="review-meta-value">
+                                                            <lightning-formatted-date-time
+                                                                value={question.complianceDueDate}
+                                                                year="numeric"
+                                                                month="long"
+                                                                day="2-digit"
+                                                                hour="2-digit"
+                                                                minute="2-digit"
+                                                                time-zone-name="short">
+                                                            </lightning-formatted-date-time>
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="review-meta-row review-meta-row--block slds-m-top_small">
+                                                        <span class="review-meta-label">Select applicable observations:</span>
+
+                                                        <div class="slds-m-top_x-small slds-m-left_medium">
+                                                            <template for:each={question.childQuestionsForReview} for:item="child">
+                                                                <lightning-input
+                                                                    key={child.id}
+                                                                    type="checkbox"
+                                                                    label={child.questionText}
+                                                                    checked={child.checked}
+                                                                    disabled
+                                                                    class="review-child-checkbox slds-m-bottom_x-small">
+                                                                </lightning-input>
+                                                            </template>
+                                                        </div>
+                                                    </div>
+
+                                                    <template if:true={question.correctiveActionDescription}>
+                                                        <div class="review-meta-row review-meta-row--block">
+                                                            <span class="review-meta-label">Corrective Action:</span>
+                                                            <div class="review-question-comment">
+                                                                {question.correctiveActionDescription}
+                                                            </div>
+                                                        </div>
+                                                    </template>
+
+                                                </div>
                                             </template>
+                                        
+                                            <template lwc:if={question.hasComment}>
+                                                <div class="review-meta-row review-meta-row--block">
+                                                            <span class="review-meta-label">Comment:</span>
+                                                <div class="review-question-comment">{question.comment}</div>
+                                                </div>
+                                            </template>
+
+
                                         </div>
                                     </template>
                                 </div>
