@@ -143,8 +143,14 @@
                                         <div class="child-questions-container">
                                             <div class="child-questions-header">Select applicable observations</div>
                                             <template for:each={parent.childQuestions} for:item="child">
-                                                <div key={child.assessmentTaskId}>
-                                                    <c-inspection-question-childv3 question-text={child.questionText} field-type={child.dataType} ass-task-id={child.assessmentTaskId} assessment-indicator-definition-id={child.assessmentIndicatorDefinitionId} checked={child.checkboxValue} onvaluechange={handleChildValueChange} data-parent-id={parent.assessmentIndicatorDefinitionId} disabled-question={isCompleted}></c-inspection-question-childv3>
+                                                <div key={child.assessmentTaskId} class="question-row">
+                                                    <div class="question-col">
+                                                        <c-inspection-question-childv3 question-text={child.questionText} field-type={child.dataType} ass-task-id={child.assessmentTaskId} assessment-indicator-definition-id={child.assessmentIndicatorDefinitionId} checked={child.checkboxValue} onvaluechange={handleChildValueChange} data-parent-id={parent.assessmentIndicatorDefinitionId} disabled-question={isCompleted}></c-inspection-question-childv3>
+                                                    </div>
+                                                    
+                                                    <div class="button-col">
+                                                        <button type="button" class="regulatory-codes-btn" data-value={child.assessmentIndicatorDefinitionId} onclick={handleViewRegulatoryCodes}>View Codes</button>  
+                                                    </div>                                                    
                                                 </div>
                                             </template>
                                         </div>
@@ -221,7 +227,24 @@
                                             </div>
 
                                             <template if:true={question.isNonCompliant}>
-                                                <div class="review-noncompliant slds-m-top_small">
+                                                <div class="review-noncompliant slds-m-top_small">                                                    
+
+                                                    <div class="review-meta-row review-meta-row--block slds-m-top_small">
+                                                        <span class="review-meta-label">Selected Canned Comments:</span>
+
+                                                        <div class="slds-m-top_x-small slds-m-left_medium">
+                                                            <template for:each={question.childQuestionsForReview} for:item="child">
+                                                                <lightning-input
+                                                                    key={child.id}
+                                                                    type="checkbox"
+                                                                    label={child.questionText}
+                                                                    checked={child.checked}
+                                                                    disabled
+                                                                    class="review-child-checkbox slds-m-bottom_x-small">
+                                                                </lightning-input>
+                                                            </template>
+                                                        </div>
+                                                    </div>
 
                                                     <div class="review-meta-row">
                                                         <span class="review-meta-label">Priority:</span>
@@ -243,26 +266,16 @@
                                                         </span>
                                                     </div>
 
-                                                    <div class="review-meta-row review-meta-row--block slds-m-top_small">
-                                                        <span class="review-meta-label">Select applicable observations:</span>
-
-                                                        <div class="slds-m-top_x-small slds-m-left_medium">
-                                                            <template for:each={question.childQuestionsForReview} for:item="child">
-                                                                <lightning-input
-                                                                    key={child.id}
-                                                                    type="checkbox"
-                                                                    label={child.questionText}
-                                                                    checked={child.checked}
-                                                                    disabled
-                                                                    class="review-child-checkbox slds-m-bottom_x-small">
-                                                                </lightning-input>
-                                                            </template>
+                                                    <template lwc:if={question.hasComment}>
+                                                        <div class="review-meta-row review-meta-row--block">
+                                                                    <span class="review-meta-label">Comments:</span>
+                                                        <div class="review-question-comment">{question.comment}</div>
                                                         </div>
-                                                    </div>
+                                                    </template>
 
                                                     <template if:true={question.correctiveActionDescription}>
                                                         <div class="review-meta-row review-meta-row--block">
-                                                            <span class="review-meta-label">Corrective Action:</span>
+                                                            <span class="review-meta-label">Corrective Action Description:</span>
                                                             <div class="review-question-comment">
                                                                 {question.correctiveActionDescription}
                                                             </div>
@@ -271,14 +284,6 @@
 
                                                 </div>
                                             </template>
-                                        
-                                            <template lwc:if={question.hasComment}>
-                                                <div class="review-meta-row review-meta-row--block">
-                                                            <span class="review-meta-label">Comment:</span>
-                                                <div class="review-question-comment">{question.comment}</div>
-                                                </div>
-                                            </template>
-
 
                                         </div>
                                     </template>
