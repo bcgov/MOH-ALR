@@ -48,13 +48,13 @@
 /* === Checkbox Styling - Compact === */
 .checkbox-container {
     display: flex;
-    align-items: flex-start;
-    gap: var(--phocs-spacing-xs);
-    padding: var(--phocs-spacing-xs);
-    border-radius: var(--phocs-border-radius-sm);
+    align-items: center; /* inline alignment */
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
     cursor: pointer;
     transition: background-color 150ms ease-in-out;
-    -webkit-tap-highlight-color: transparent;
+    min-height: 44px; /* mobile-friendly tap target */
 }
 
 .checkbox-container:hover {
@@ -63,20 +63,20 @@
 
 /* Custom checkbox visual - larger touch target */
 .checkbox-input {
-    width: 18px;
-    height: 18px;
+    transform: scale(1.35); 
+    transform-origin: left center;
+    margin: 0;
     flex-shrink: 0;
-    margin-top: 1px;
 }
 
 .checkbox-label {
-    flex: 1;
-    font-size: 0.75rem;
-    line-height: 1.3;
+    font-size: 0.875rem; /* more legible */
+    line-height: 1.4;
     color: #181818;
-    cursor: pointer;
+    flex: 1;
+    white-space: normal;
+    word-break: break-word;
 }
-
 /* Selected state for checkbox container */
 .checkbox-container--selected {
     background-color: #e8f4fd;
