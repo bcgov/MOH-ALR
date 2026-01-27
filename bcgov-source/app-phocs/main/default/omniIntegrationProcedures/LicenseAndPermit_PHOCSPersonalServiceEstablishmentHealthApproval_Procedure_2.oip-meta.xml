@@ -75,7 +75,7 @@
   &quot;id&quot; : &quot;&quot;,
   &quot;additionalInput&quot; : {
     &quot;BLAConstructionPermitAppRecTypeId&quot; : &quot;%GetRecordTypeIds:BLAConstructionPermitAppRTId%&quot;,
-    &quot;DRAccountId&quot; : &quot;%CreateAccount:Account_1:Id%&quot;
+    &quot;DRAccountId&quot; : &quot;%SetValues:CreatedAccountId%&quot;
   },
   &quot;restOptions&quot; : { },
   &quot;bundle&quot; : &quot;PHOCSPersonalServiceEstablishmentCreateBLA&quot;,
@@ -124,6 +124,10 @@
         <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
         <propertySetConfig>{
   &quot;sendOnlyAdditionalInput&quot; : false,
+  &quot;dataRaptor Input Parameters&quot; : [ {
+    &quot;inputParam&quot; : &quot;BLARecId&quot;,
+    &quot;element&quot; : &quot;CreateBLA:BusinessLicenseApplication_1:Id&quot;
+  } ],
   &quot;returnOnlyAdditionalOutput&quot; : false,
   &quot;elementValueMap&quot; : { },
   &quot;failOnStepError&quot; : false,
@@ -160,7 +164,7 @@
         <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
         <propertySetConfig>{
   &quot;returnFullDataJSON&quot; : false,
-  &quot;returnOnlyAdditionalOutput&quot; : false,
+  &quot;returnOnlyAdditionalOutput&quot; : true,
   &quot;elementValueMap&quot; : { },
   &quot;responseFormat&quot; : &quot;&quot;,
   &quot;isActive&quot; : true,
@@ -192,7 +196,7 @@
   &quot;executionConditionalFormula&quot; : &quot;&quot;,
   &quot;actionMessage&quot; : &quot;&quot;,
   &quot;elementValueMap&quot; : {
-    &quot;CreatedAccountId&quot; : &quot;%CreateAccount:createdAccId%&quot;
+    &quot;CreatedAccountId&quot; : &quot;%CreateAccount:Account_1:Id%&quot;
   },
   &quot;failureConditionalFormula&quot; : &quot;&quot;,
   &quot;failOnStepError&quot; : false,
@@ -209,7 +213,7 @@
     <omniProcessType>Integration Procedure</omniProcessType>
     <propertySetConfig>{
   &quot;linkToExternalObject&quot; : &quot;&quot;,
-  &quot;trackingCustomData&quot; : [ ],
+  &quot;trackingCustomData&quot; : { },
   &quot;includeAllActionsInResponse&quot; : false,
   &quot;columnsPropertyMap&quot; : [ ],
   &quot;relationshipFieldsMap&quot; : [ ],
@@ -225,7 +229,7 @@
   &quot;chainableDMLRowsLimit&quot; : null,
   &quot;chainableQueryRowsLimit&quot; : null,
   &quot;chainableSoslQueriesLimit&quot; : null,
-  &quot;additionalChainableResponse&quot; : [ ],
+  &quot;additionalChainableResponse&quot; : { },
   &quot;chainableActualTimeLimit&quot; : null,
   &quot;transientValues&quot; : {
     &quot;activateOrDeactivateConsent&quot; : false
