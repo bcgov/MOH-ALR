@@ -12,7 +12,8 @@
                     label="Response" 
                     data-id={assTaskId}
                     class="text-input"
-                    onchange={handleValueChange}>
+                    onchange={handleValueChange}
+                    disabled={isCompleted}>
                 </lightning-input>
             </template>
 
@@ -23,7 +24,8 @@
                         variant="label-hidden"
                         checked={checked}
                         onchange={handleValueChange}
-                        class="checkbox-input">
+                        class="checkbox-input"
+                        disabled={isCompleted}>
                     </lightning-input>
 
                     <span class="checkbox-label">
@@ -38,7 +40,8 @@
                     label="Enter a number" 
                     data-id={assTaskId}
                     class="number-input"
-                    onchange={handleValueChange}>
+                    onchange={handleValueChange}
+                    disabled={isCompleted}>
                 </lightning-input>
             </template>
             <template lwc:if={isDate}>
@@ -47,7 +50,8 @@
                     label="Select a date" 
                     data-id={assTaskId}
                     class="date-input"
-                    onchange={handleValueChange}>
+                    onchange={handleValueChange}
+                    disabled={isCompleted}>
                 </lightning-input>
             </template>
         </div>

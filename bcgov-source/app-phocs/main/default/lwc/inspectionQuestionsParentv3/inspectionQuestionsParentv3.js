@@ -6,6 +6,7 @@ import linkFilesToAssessmentRecords from '@salesforce/apex/PHOCSInspectionAssess
 import createViolationsForInspection from '@salesforce/apex/InspectionViolationService.createViolationsForInspection';
 import completeInspection from '@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.completeInspection';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import getInspection from '@salesforce/apex/PHOCSInspectionsHelper.getInspection';
 
 const RESULT_COMPLIANT = 'Compliant';
 const RESULT_NON_COMPLIANT = 'PHOCSNonCompliant';
@@ -23,6 +24,7 @@ const STATUS_CONFIG = {
 export default class InspectionQuestionsParentv3 extends LightningElement {
     @api recordId;
     
+    inspection = {};
     groupedQuestions = [];
     showQuestions = false;
     isLoading = false;
@@ -44,7 +46,10 @@ export default class InspectionQuestionsParentv3 extends LightningElement {
     regulatoryCodesCache = {};
     uploadedFilesMap = {};
     
-    
+    get isCompleted() {
+        return this.inspection?.Status === 'Completed';
+    }
+
 
     get acceptedFormats() {
         return ['.pdf', '.png', '.jpg', '.jpeg', '.doc', '.docx', '.xls', '.xlsx'];
@@ -79,6 +84,7 @@ export default class InspectionQuestionsParentv3 extends LightningElement {
     ];
 
     connectedCallback() {
+            this.getInspection();
             this.loadInspectionQuestions();
         }       
     
@@ -162,6 +168,14 @@ export default class InspectionQuestionsParentv3 extends LightningElement {
     // ========================================
     // DATA LOADING
     // ========================================
+
+    async getInspection(){
+        try {
+            this.inspection = await getInspection({ visitId: this.recordId });
+        }catch(error){
+            console.error('Error fetching inspection:', error);
+        }
+    }
 
     async loadInspectionQuestions() {
     this.isLoading = true;
@@ -778,6 +792,13 @@ export default class InspectionQuestionsParentv3 extends LightningElement {
 
                     this.uploadedFilesMap = {};
                     this.setSectionSavedState(sectionsWithChanges);
+                    
+                    this.inspection = {
+                        ...(this.inspection || {}),
+                        Status: 'Completed'
+                    };
+
+
                     await this.createViolationsAndNotify();
 
                     await completeInspection({ visitId: this.recordId, closingComments: this.closingComments });
