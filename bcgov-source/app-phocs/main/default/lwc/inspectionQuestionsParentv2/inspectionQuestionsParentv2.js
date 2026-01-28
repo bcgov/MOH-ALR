@@ -11,6 +11,7 @@ import markInspectionAsDraft from "@salesforce/apex/PHOCSInspectionAssessmentInd
 import validateResumeInspection from "@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.validateResumeInspection";
 import updateInspectionStatusToInProgress from "@salesforce/apex/InspectionQuestionsControllerV2.updateInspectionStatusToInProgress";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
+import getInspection from '@salesforce/apex/PHOCSInspectionsHelper.getInspection';
 
 const RESULT_COMPLIANT = "Compliant";
 const RESULT_NON_COMPLIANT = "PHOCSNonCompliant";
@@ -28,6 +29,7 @@ const STATUS_CONFIG = {
 export default class InspectionQuestionsParentv2 extends LightningElement {
     @api recordId;
 
+    inspection = {};
     groupedQuestions = [];
     showQuestions = false;
     isLoading = false;
@@ -86,6 +88,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
   ];
 
     connectedCallback() {
+        this.getInspection();
         this.loadInspectionQuestions();
     }
 
@@ -178,6 +181,13 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
     // ========================================
     // DATA LOADING
     // ========================================
+    async getInspection(){
+        try {
+            this.inspection = await getInspection({ visitId: this.recordId });
+        }catch(error){
+            console.error('Error fetching inspection:', error);
+        }
+    }
 
     async loadInspectionQuestions() {
         this.isLoading = true;
@@ -296,7 +306,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
     // ========================================
 
     async handleStart() {
-       this.isLoading = true;
+    this.isLoading = true;
 
     try {
         if (this.isDraft) {
@@ -356,8 +366,8 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
         this.updateGroupedQuestions((group, parent) => {
             if (
-                parent.assessmentIndicatorDefinitionId !== definitionId ||
-                parent.assessmentTaskId !== taskId
+                parent.assessmentIndicatorDefinitionId !== definitionId /*||
+                parent.assessmentTaskId !== taskId*/
             ) {
                 return parent;
             }
@@ -580,6 +590,8 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
         this.reviewData = this.groupedQuestions.map((group) => {
             const questions = group.parentQuestions.map((parent) => {
                 const config = STATUS_CONFIG[parent.result] || STATUS_CONFIG.default;
+                const isNonCompliant = parent.result === RESULT_NON_COMPLIANT;
+                
                 return {
                     questionId: `${parent.assessmentTaskId}-${parent.assessmentIndicatorDefinitionId}`,
                     questionText: parent.questionText,
@@ -591,8 +603,23 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
                     reviewItemClass: config.itemClass,
                     hasComment: !!parent.comment,
                     comment: parent.comment || "",
-                };
-            });
+
+                    isNonCompliant,
+                    priority: isNonCompliant ? parent.selectPriority || '' : null,
+                    complianceDueDate: isNonCompliant ? parent.preferredDateTime || null : null,
+                    correctiveActionDescription: isNonCompliant
+                        ? parent.actionDescription || ''
+                        : null,
+
+                    childQuestionsForReview: isNonCompliant
+                        ? (parent.childQuestions || []).map(child => ({
+                            id: child.assessmentIndicatorDefinitionId,
+                            questionText: child.questionText,
+                            checked: child.checkboxValue === true
+                        }))
+                        : []                    
+                    };
+                });
 
             const answeredCount = questions.filter((q) => q.result).length;
             return {
@@ -894,6 +921,10 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
                     visitId: this.recordId
                 });
             }
+            this.inspection = {
+                ...(this.inspection || {}),
+                Status: 'Completed'
+            };
             await this.createViolationsAndNotify();
 
             await completeInspection({
