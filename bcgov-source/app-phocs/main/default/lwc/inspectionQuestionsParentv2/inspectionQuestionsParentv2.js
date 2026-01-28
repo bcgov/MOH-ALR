@@ -306,11 +306,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
     // ========================================
 
     async handleStart() {
-<<<<<<< HEAD
     this.isLoading = true;
-=======
-       this.isLoading = true;
->>>>>>> 45214b365683adcfbeb5efcaa8fa0b0df43d625e
 
     try {
         if (this.isDraft) {
