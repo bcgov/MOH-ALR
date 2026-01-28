@@ -366,8 +366,8 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
         this.updateGroupedQuestions((group, parent) => {
             if (
-                parent.assessmentIndicatorDefinitionId !== definitionId ||
-                parent.assessmentTaskId !== taskId
+                parent.assessmentIndicatorDefinitionId !== definitionId /*||
+                parent.assessmentTaskId !== taskId*/
             ) {
                 return parent;
             }
@@ -590,6 +590,8 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
         this.reviewData = this.groupedQuestions.map((group) => {
             const questions = group.parentQuestions.map((parent) => {
                 const config = STATUS_CONFIG[parent.result] || STATUS_CONFIG.default;
+                const isNonCompliant = parent.result === RESULT_NON_COMPLIANT;
+                
                 return {
                     questionId: `${parent.assessmentTaskId}-${parent.assessmentIndicatorDefinitionId}`,
                     questionText: parent.questionText,
@@ -601,8 +603,23 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
                     reviewItemClass: config.itemClass,
                     hasComment: !!parent.comment,
                     comment: parent.comment || "",
-                };
-            });
+
+                    isNonCompliant,
+                    priority: isNonCompliant ? parent.selectPriority || '' : null,
+                    complianceDueDate: isNonCompliant ? parent.preferredDateTime || null : null,
+                    correctiveActionDescription: isNonCompliant
+                        ? parent.actionDescription || ''
+                        : null,
+
+                    childQuestionsForReview: isNonCompliant
+                        ? (parent.childQuestions || []).map(child => ({
+                            id: child.assessmentIndicatorDefinitionId,
+                            questionText: child.questionText,
+                            checked: child.checkboxValue === true
+                        }))
+                        : []                    
+                    };
+                });
 
             const answeredCount = questions.filter((q) => q.result).length;
             return {
