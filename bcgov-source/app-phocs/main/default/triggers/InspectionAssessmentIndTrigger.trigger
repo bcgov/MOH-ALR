@@ -7,6 +7,6 @@
 ***********************************************************************************************/
 trigger InspectionAssessmentIndTrigger on InspectionAssessmentInd (after insert) {
     if (Trigger.isAfter && Trigger.isInsert) {
-        InspAssessmentIndTriggerHandler.afterInsert(Trigger.new);
+        //InspAssessmentIndTriggerHandler.afterInsert(Trigger.new);
     }
 }

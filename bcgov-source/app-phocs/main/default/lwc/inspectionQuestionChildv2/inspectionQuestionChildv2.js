@@ -6,6 +6,7 @@ export default class InspectionQuestionChildv2 extends LightningElement {
     @api assTaskId;
     @api assessmentIndicatorDefinitionId;
     @api checked = false;
+    @api disabledQuestion = false;
 
     get normalizedType() {
         return this.fieldType?.toLowerCase() || '';
@@ -37,7 +38,14 @@ export default class InspectionQuestionChildv2 extends LightningElement {
         return this.checked ? 'Selected' : 'Select';
     }
 
+    get isCompleted() {
+        return this.disabledQuestion;
+    }
+
     handleValueChange(event) {
+        if(this.isCompleted) {
+            return;
+        }
         const isCheckbox = event.target.type === 'checkbox';
         this.dispatchEvent(new CustomEvent('valuechange', {
             detail: {
@@ -47,5 +55,23 @@ export default class InspectionQuestionChildv2 extends LightningElement {
                 isCheckbox
             }
         }));
+    }
+
+    toggleCheckbox() {
+        if (this.isCompleted) {
+            return;
+        }else{
+            this.checked = !this.checked;
+
+            this.dispatchEvent(new CustomEvent('valuechange', {
+                detail: {
+                    childId: this.assessmentIndicatorDefinitionId,
+                    taskId: this.assTaskId,
+                    value: this.checked,
+                    isCheckbox: true
+                }
+            }));
+        }
+
     }
 }
