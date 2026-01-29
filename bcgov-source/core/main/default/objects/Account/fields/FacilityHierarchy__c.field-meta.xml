@@ -7,6 +7,7 @@
     <label>Facility Hierarchy</label>
     <lookupFilter>
         <active>true</active>
+        <booleanFilter>(1 AND 2 AND 3) OR (1 AND 4)</booleanFilter>
         <filterItems>
             <field>Account.RecordTypeId</field>
             <operation>equals</operation>
@@ -16,6 +17,16 @@
             <field>Account.Type</field>
             <operation>equals</operation>
             <value>4-CHSA</value>
+        </filterItems>
+        <filterItems>
+            <field>$Source.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Drinking Water Source Intake, PHOCS Drinking Water System, PHOCS Facility</value>
+        </filterItems>
+        <filterItems>
+            <field>$Source.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Dairy Facility</value>
         </filterItems>
         <isOptional>false</isOptional>
     </lookupFilter>
