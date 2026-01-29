@@ -1,6 +1,6 @@
 <template>
     <div class="inspection-container">
-        <lightning-card title="Inspection Questions">
+        <lightning-card>
             <div slot="title" class="slds-grid slds-grid_vertical-align-center">
                 <span>Inspection Form</span>
 
@@ -24,7 +24,12 @@
                 </template>
                 <template lwc:else>
                     <div class="button-progress-wrapper action-row">
-                        <lightning-button label="Inspection Form" variant="brand" class="full-width-btn" onclick={handleStart}></lightning-button>
+                        <template lwc:if={isCompleted}>
+                        <lightning-button label="View Responses" variant="brand" class="full-width-btn" onclick={handleViewOnly}></lightning-button>
+                        </template>
+                        <template lwc:else>
+                        <lightning-button label={startButtonLabel} variant="brand" class="full-width-btn" onclick={handleStart}></lightning-button>
+                        </template>
                         <div class="progress-container progress-text-right" slot="actions">
                         <span class="progress-text">{progressText}</span>
                             <div class="progress-bar">
@@ -78,15 +83,19 @@
                                         <span class="question-text">{parent.questionText}</span>
                                         <div class="question-controls">
                                             <div class="compliance-button-group">
-                                                <button type="button" class={parent.compliantButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-value="Compliant" onclick={handleAssessmentChange} disabled={isCompleted}>Compliant</button>
-                                                <button type="button" class={parent.nonCompliantButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-value="PHOCSNonCompliant" onclick={handleAssessmentChange} disabled={isCompleted}>Non Compliant</button>
-                                                <button type="button" class={parent.naButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-value="N/A (Not Applicable)" onclick={handleAssessmentChange} disabled={isCompleted}>N/A</button>
-                                                <button type="button" class={parent.nsButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-value="N/S (Not Assessed)" onclick={handleAssessmentChange} disabled={isCompleted}>N/S</button>
+                                                <button type="button" class={parent.compliantButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="Compliant" onclick={handleAssessmentChange} disabled={isCompleted}>Compliant</button>
+                                                <button type="button" class={parent.nonCompliantButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="PHOCSNonCompliant" onclick={handleAssessmentChange} disabled={isCompleted}>Non Compliant</button>
+                                                <button type="button" class={parent.naButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="Not Applicable" onclick={handleAssessmentChange} disabled={isCompleted}>Not Applicable</button>
+                                                <button type="button" class={parent.nsButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="Not Inspected" onclick={handleAssessmentChange} disabled={isCompleted}>Not Inspected</button>
                                             </div>
                                             <button type="button" class="regulatory-codes-btn" data-value={parent.assessmentIndicatorDefinitionId} onclick={handleViewRegulatoryCodes}>View Codes</button>
                                         </div>
                                     </div>
-                                    
+                                    <template lwc:if={parent.showNonCompliantHelpText}>
+                                        <div class="noncompliant-helper-text slds-text-color_error slds-m-top_xx-small">
+                                            Please select the applicable observation(s) or enter comments for the non-compliant question.
+                                        </div>
+                                    </template>                                    
                                     <template if:true={parent.showChildren}>
                                         <lightning-layout 
                                             multiple-rows="true"
@@ -137,6 +146,7 @@
                                                     required={parent.showChildren}
                                                     data-definitionid={parent.assessmentIndicatorDefinitionId}
                                                     data-taskid={parent.assessmentTaskId}
+                                                    data-question-id={parent.assessmentIndicatorDefinitionId}
                                                     data-field="compduedate"
                                                     onchange={handleDatetimeChange}
                                                     disabled={isCompleted}>
@@ -152,7 +162,7 @@
                                         <div class="child-questions-container">
                                             <div class="child-questions-header">Select applicable observations</div>
                                             <template for:each={parent.childQuestions} for:item="child">
-                                                <div key={child.assessmentTaskId} class="question-row">
+                                                <div key={child.assessmentIndicatorDefinitionId} class="question-row">
                                                     <div class="question-col">
                                                         <c-inspection-question-childv2 question-text={child.questionText} field-type={child.dataType} ass-task-id={child.assessmentTaskId} assessment-indicator-definition-id={child.assessmentIndicatorDefinitionId} checked={child.checkboxValue} onvaluechange={handleChildValueChange} data-parent-id={parent.assessmentIndicatorDefinitionId} disabled-question={isCompleted}></c-inspection-question-childv2>
                                                     </div>
@@ -193,7 +203,7 @@
                     <div class="submit-container slds-grid slds-grid_align-spread">
                         <lightning-button label="Review Responses" variant="neutral" onclick={handleShowReview} icon-name="utility:preview"></lightning-button>
                         <div class="slds-grid slds-grid_align-end">
-                            <lightning-button label="Save for Later" variant="neutral" onclick={handleSaveForLater} disabled={isLoading}></lightning-button>
+                            <lightning-button label="Save for Later" variant="neutral" class="slds-m-right_small" onclick={handleSaveForLater} disabled={isLoading}></lightning-button>
                             <lightning-button label="Submit Inspection" variant="brand" onclick={handleSubmit} disabled={isSubmitDisabled}></lightning-button>
                         </div>
                     </div>
@@ -331,8 +341,9 @@
                     <div class="slds-modal__content slds-p-around_medium modal-content-scrollable">
                         <template lwc:if={hasRegulatoryCodes}>
                             <template for:each={regulatoryCodes} for:item="code">
-                                <div key={code.regulatoryCodeName} class="modal-code-item">
+                                <div key={code.regulatoryCodeId} class="modal-code-item">
                                     <div class="slds-text-heading_small">{code.regulatoryCodeName}</div>
+                                    <div class="slds-text-body_regular slds-m-bottom_x-small">{code.regulatoryCodeSubject}</div>
                                     <p><strong>Status:</strong> {code.statusText}</p>
                                     <p><strong>Validity:</strong> {code.validityText}</p>
                                 </div>
