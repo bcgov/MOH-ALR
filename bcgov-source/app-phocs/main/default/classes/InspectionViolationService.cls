@@ -4,7 +4,9 @@
  * @date 2025-12-14
  */
 public with sharing class InspectionViolationService {
-    
+    public static Id recordTypePHOCSInspectionAssessmentInd = Schema.SObjectType.InspectionAssessmentInd.getRecordTypeInfosByDeveloperName().get('PHOCSInspectionAssessmentInd').getRecordTypeId();
+    public static Id recordTypePHOCSRegulatoryCodeViolation = Schema.SObjectType.RegulatoryCodeViolation.getRecordTypeInfosByDeveloperName().get('PHOCSRegulatoryCodeViolation').getRecordTypeId();
+    public static final String RESULT_NON_COMPLIANT = 'PHOCSNonCompliant';    
     public static String className = 'InspectionViolationService';
 
     /**
@@ -231,13 +233,7 @@ public with sharing class InspectionViolationService {
      * @param parentViolationId The Parent Violation ID for canned comments (can be null for parent questions)
      * @return RegulatoryCodeViolation record ready for insert
      */
-    private static RegulatoryCodeViolation createViolationRecord(
-        Id visitId, 
-        Id accountId, 
-        InspectionAssessmentInd assessmentInd, 
-        Id regulatoryCodeId,
-        Id parentViolationId
-    ) {
+    private static RegulatoryCodeViolation createViolationRecord(Id visitId, Id accountId, InspectionAssessmentInd assessmentInd, Id regulatoryCodeId, Id parentViolationId) {
         RegulatoryCodeViolation newViolation = new RegulatoryCodeViolation();
         
         // Required field mappings per user story
@@ -276,6 +272,130 @@ public with sharing class InspectionViolationService {
         
         return newViolation;
     }
+    
+/**
+* @author: Deepak
+* @date: 19 Jan 2026
+* @description: The purpose of this method is to Create Violations for PHOCS InspectionAssessmentInd records.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
+    @AuraEnabled
+    public static ViolationResult createRegulatoryCodeViolationsForInspection(Id visitId) {
+        ViolationResult result = new ViolationResult();
+        
+        if (visitId == null) {
+            result.success = false;
+            result.message = 'Visit ID is required';
+            return result;
+        }
+        
+        try {            
+            // Get all InspectionAssessmentInd records for this visit with their definitions
+            // Including both parent (non-compliant) and child (selected canned comments) records
+            List<InspectionAssessmentInd> allResponses = [SELECT Id, RecordTypeId, AssessmentTaskId, AssessmentTask.Name, AssessmentTask.ParentId, AssessmentIndDefinitionId,
+                AssessmentIndDefinition.Name, AssessmentIndDefinition.PHOCSParentId__c, Result, PHOCSInspectionComments__c,CorrectedDuringInspection__c,
+                PHOCSCheckboxResponse__c FROM InspectionAssessmentInd WHERE AssessmentTask.ParentId = :visitId WITH SECURITY_ENFORCED];
+            
+            if (allResponses.isEmpty()) {
+                result.success = true;
+                result.message = 'No assessment responses found';
+                return result;
+            }
+            List<InspectionAssessmentInd> filteredInsAsmntIndList = new List<InspectionAssessmentInd>();
+            Set<Id> assessmentIndDefIds = new Set<Id>();
+            Set<Id> assessmentTaskIds = new Set<Id>();
+            Map<Id, List<RegulatoryCodeAssessmentInd>> regMap = new Map<Id, List<RegulatoryCodeAssessmentInd>>();
+            
+            for (InspectionAssessmentInd ind : allResponses) {
+                if(ind.RecordTypeId == recordTypePHOCSInspectionAssessmentInd && ind.Result == RESULT_NON_COMPLIANT && ind.AssessmentIndDefinitionId != null && ind.AssessmentTaskId != null){
+                    filteredInsAsmntIndList.add(ind);
+                    assessmentIndDefIds.add(ind.AssessmentIndDefinitionId);
+                    assessmentTaskIds.add(ind.AssessmentTaskId);
+                }
+            }
+            
+            if (filteredInsAsmntIndList.isEmpty()){
+                result.success = true;
+                result.message = 'No non-compliant assessment indicators found';
+                return result;
+            }
+            
+            Map<Id, AssessmentTask> taskMap = new Map<Id, AssessmentTask>([SELECT Id, ParentId FROM AssessmentTask WHERE Id IN :assessmentTaskIds]);           
+            
+            List<RegulatoryCodeAssessmentInd> regCodeAsmntList = [SELECT Id, AssessmentIndDefinitionId, RegulatoryCodeId FROM RegulatoryCodeAssessmentInd WHERE AssessmentIndDefinitionId IN :assessmentIndDefIds];
+            
+            for (RegulatoryCodeAssessmentInd rca : regCodeAsmntList) {
+                if (!regMap.containsKey(rca.AssessmentIndDefinitionId)) {
+                    regMap.put(rca.AssessmentIndDefinitionId, new List<RegulatoryCodeAssessmentInd>());
+                }
+                regMap.get(rca.AssessmentIndDefinitionId).add(rca);
+            }
+            
+            List<RegulatoryCodeViolation> violationsToInsert = new List<RegulatoryCodeViolation>();
+            List<InspectionAssessmentInd> violationSourceInds = new List<InspectionAssessmentInd>();
+            
+            for (InspectionAssessmentInd ind : filteredInsAsmntIndList) {
+                List<RegulatoryCodeAssessmentInd> mappings = regMap.get(ind.AssessmentIndDefinitionId);
+                if (mappings == null){
+                    continue;
+                }
+                Id inspectionId = taskMap.get(ind.AssessmentTaskId)?.ParentId;
+                
+                for (RegulatoryCodeAssessmentInd mapItem : mappings) {
+                    RegulatoryCodeViolation vio = new RegulatoryCodeViolation();
+                    vio.RecordTypeId = recordTypePHOCSRegulatoryCodeViolation;
+                    vio.InspectionAssmntIndId = ind.Id;
+                    vio.InspectionId = inspectionId;
+                    vio.DateCreated = System.now();
+                    vio.RegulatoryCodeId = mapItem.RegulatoryCodeId;
+                    vio.Status = ind.CorrectedDuringInspection__c == true ? 'Resolved' :'Open';
+                    
+                    violationsToInsert.add(vio);
+                    violationSourceInds.add(ind);
+                }
+            }
+            
+            if (violationsToInsert.isEmpty()) {
+                result.success = true;
+                result.message = 'No violations to create';
+                return result;
+            }
+            
+            if (!Schema.sObjectType.RegulatoryCodeViolation.isCreateable()) {
+                throw new AuraHandledException('Insufficient permissions to create violations');
+            }
+            
+            Database.SaveResult[] srList = Database.insert(violationsToInsert, false);
+            
+            for (Integer i = 0; i < srList.size(); i++) {
+                if (srList[i].isSuccess()) {
+                    Id vioId = srList[i].getId();
+                    result.violationIds.add(vioId);
+                    
+                    InspectionAssessmentInd ind = violationSourceInds[i];
+                    if (ind.AssessmentIndDefinition.PHOCSParentId__c == null) {
+                        result.parentViolationIds.add(vioId);
+                    } else {
+                        result.cannedCommentViolationIds.add(vioId);
+                    }
+                } else {
+                    for (Database.Error err : srList[i].getErrors()) {
+                        result.failedViolations.add(err.getMessage());
+                    }
+                }
+            }
+            
+            result.success = result.failedViolations.isEmpty();
+            result.violationCount = result.violationIds.size();
+            result.message = 'Created ' + result.violationCount + ' violation(s).';
+            
+        } catch (Exception ex) {
+            LogService.logAndPublish(className, 'createRegulatoryCodeViolations', String.valueOf(visitId), ex);
+            result.success = false;
+            result.message = ex.getMessage();
+        }        
+        return result;
+    }    
 
     /**
      * @description Wrapper class for violation creation result

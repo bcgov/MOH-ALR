@@ -129,36 +129,20 @@ public with sharing class InspectionQuestionsControllerV2 {
             return new List<RegulatoryCodeWrapper>();
         }
 
-        List<RegulatoryCodeAssessmentInd> regulatoryCodeRecords = [
-            SELECT RegulatoryCode.Subject,
-                   RegulatoryCode.EffectiveFrom,
-                   RegulatoryCode.EffectiveTo,
-                   RegulatoryCode.IsActive
-            FROM RegulatoryCodeAssessmentInd
-            WHERE AssessmentIndDefinitionId = :assessmentIndicatorDefinitionId
-            WITH SECURITY_ENFORCED
-        ];
+        List<RegulatoryCodeAssessmentInd> regulatoryCodeRecords = [ SELECT RegulatoryCode.Id, RegulatoryCode.Name, RegulatoryCode.Subject, RegulatoryCode.EffectiveFrom, RegulatoryCode.EffectiveTo, RegulatoryCode.IsActive
+            FROM RegulatoryCodeAssessmentInd WHERE AssessmentIndDefinitionId = :assessmentIndicatorDefinitionId WITH SECURITY_ENFORCED];
 
         List<RegulatoryCodeWrapper> regulatoryCodeWrappers = new List<RegulatoryCodeWrapper>();
 
         for (RegulatoryCodeAssessmentInd record : regulatoryCodeRecords) {
             String formattedValidity = '';
             if (record.RegulatoryCode.EffectiveFrom != null || record.RegulatoryCode.EffectiveTo != null) {
-                formattedValidity =
-                    (record.RegulatoryCode.EffectiveFrom != null
-                        ? String.valueOf(record.RegulatoryCode.EffectiveFrom) : '') +
-                    ' to ' +
-                    (record.RegulatoryCode.EffectiveTo != null
-                        ? String.valueOf(record.RegulatoryCode.EffectiveTo) : '');
+                formattedValidity = (record.RegulatoryCode.EffectiveFrom != null ? String.valueOf(record.RegulatoryCode.EffectiveFrom) : '') + ' to ' +
+                    (record.RegulatoryCode.EffectiveTo != null ? String.valueOf(record.RegulatoryCode.EffectiveTo) : '');
             }
 
-            regulatoryCodeWrappers.add(new RegulatoryCodeWrapper(
-                record.RegulatoryCode.Subject,
-                record.RegulatoryCode.IsActive,
-                formattedValidity
-            ));
+            regulatoryCodeWrappers.add(new RegulatoryCodeWrapper(record.RegulatoryCode.Id, record.RegulatoryCode.Name, record.RegulatoryCode.Subject, record.RegulatoryCode.IsActive, formattedValidity));
         }
-
         return regulatoryCodeWrappers;
     }
 
@@ -243,12 +227,16 @@ public with sharing class InspectionQuestionsControllerV2 {
      * @description Wrapper for regulatory code display
      */
     public class RegulatoryCodeWrapper {
+        @AuraEnabled public Id regulatoryCodeId { get; set; }
         @AuraEnabled public String regulatoryCodeName { get; set; }
+         @AuraEnabled public String regulatoryCodeSubject { get; set; }
         @AuraEnabled public Boolean isActive { get; set; }
         @AuraEnabled public String validityText { get; set; }
 
-        public RegulatoryCodeWrapper(String name, Boolean active, String validity) {
+        public RegulatoryCodeWrapper(Id codeId, String name, String Subject, Boolean active, String validity) {
+            regulatoryCodeId = codeId;
             regulatoryCodeName = name;
+            regulatoryCodeSubject = Subject;
             isActive = active;
             validityText = validity;
         }
@@ -259,12 +247,15 @@ public with sharing class InspectionQuestionsControllerV2 {
      */
     @AuraEnabled
     public static void updateInspectionStatusToInProgress(Id inspectionId) {
+        Id loggedInUserId = UserInfo.getUserId();
         
-        Visit vistRec = [SELECT Id, Status FROM Visit WHERE Id =: inspectionId LIMIT 1];
+        Visit vistRec = [SELECT Id, Status, OwnerId FROM Visit WHERE Id =: inspectionId LIMIT 1];
         
-        if (vistRec.Status != STATUS_INPROGRESS && vistRec.Status == STATUS_PLANNED) {
+        if (vistRec.Status == STATUS_PLANNED) {
             vistRec.Status = STATUS_INPROGRESS;
+            vistRec.OwnerId = (vistRec.OwnerId != loggedInUserId) ? loggedInUserId : vistRec.OwnerId;
             update vistRec;
         }
     }
+
 }

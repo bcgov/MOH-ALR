@@ -1,6 +1,10 @@
 <template>
     <div class="child-question-container">
-        <div class="question-text">{questionText}</div>
+        <template lwc:if={isCheckbox}></template>
+        <template lwc:else>
+            <div class="question-text">{questionText}</div>
+        </template>
+        
         <div class="input-wrapper">
             <template lwc:if={isText}>
                 <lightning-input 
@@ -8,29 +12,36 @@
                     label="Response" 
                     data-id={assTaskId}
                     class="text-input"
-                    onchange={handleValueChange}>
+                    onchange={handleValueChange}
+                    disabled={isCompleted}>
                 </lightning-input>
             </template>
+
             <template lwc:if={isCheckbox}>
                 <div class={checkboxContainerClass}>
                     <lightning-input 
-                        type="checkbox" 
-                        label={questionText}
+                        type="checkbox"
                         variant="label-hidden"
-                        checked={checked} 
+                        checked={checked}
                         onchange={handleValueChange}
-                        class="checkbox-input">
+                        class="checkbox-input"
+                        disabled={isCompleted}>
                     </lightning-input>
-                    <span class="checkbox-label">{checkboxLabel}</span>
+
+                    <span class="checkbox-label">
+                        {questionText}
+                    </span>
                 </div>
             </template>
+
             <template lwc:if={isNumber}>
                 <lightning-input 
                     type="number" 
                     label="Enter a number" 
                     data-id={assTaskId}
                     class="number-input"
-                    onchange={handleValueChange}>
+                    onchange={handleValueChange}
+                    disabled={isCompleted}>
                 </lightning-input>
             </template>
             <template lwc:if={isDate}>
@@ -39,7 +50,8 @@
                     label="Select a date" 
                     data-id={assTaskId}
                     class="date-input"
-                    onchange={handleValueChange}>
+                    onchange={handleValueChange}
+                    disabled={isCompleted}>
                 </lightning-input>
             </template>
         </div>

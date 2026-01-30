@@ -12,6 +12,7 @@ public class RegulatoryCodeViolationRelControllerTest{
     private static void createTestData() {
         Id rtPHOCSInspectionAssessmentInd = Schema.SObjectType.InspectionAssessmentInd.getRecordTypeInfosByDeveloperName().get('PHOCSInspectionAssessmentInd').getRecordTypeId();
         Id rtPHOCSRegulatoryCodeViolation = Schema.SObjectType.RegulatoryCodeViolation.getRecordTypeInfosByDeveloperName().get('PHOCSRegulatoryCodeViolation').getRecordTypeId();
+        Id recordTypePHOCSRegulatoryCodeViolation = Schema.SObjectType.RegulatoryCodeViolation.getRecordTypeInfosByDeveloperName().get('PHOCSRegulatoryCodeViolation').getRecordTypeId();
         
         AssessmentIndicatorDefinition indDef = new AssessmentIndicatorDefinition(Name = 'Test Parent Assessment Definition', Category__c = 'Compliance', DataType = 'Boolean');
         insert indDef;
@@ -58,7 +59,37 @@ public class RegulatoryCodeViolationRelControllerTest{
         iAListToInsert.add(iAParent);
         InspectionAssessmentInd iAChild = new InspectionAssessmentInd(RecordTypeId = rtPHOCSInspectionAssessmentInd, AssessmentIndDefinitionId = indChildDef.Id, AssessmentTaskId = task.Id, Result = InspAssessmentIndTriggerHandler.RESULT_NON_COMPLIANT);        
         iAListToInsert.add(iAChild);
-        insert iAListToInsert;   
+        insert iAListToInsert;  
+        
+        List<RegulatoryCodeAssessmentInd> mappings = [SELECT Id, RegulatoryCodeId, AssessmentIndDefinitionId FROM RegulatoryCodeAssessmentInd WHERE RegulatoryCodeId = :regCode.Id];
+        
+        Map<Id, InspectionAssessmentInd> indMap = new Map<Id, InspectionAssessmentInd>();
+        
+        for (InspectionAssessmentInd ia : [SELECT Id, AssessmentIndDefinitionId FROM InspectionAssessmentInd WHERE AssessmentTaskId = :task.Id]){
+            indMap.put(ia.AssessmentIndDefinitionId, ia);
+        }        
+        
+        List<RegulatoryCodeViolation> violationsToInsert = new List<RegulatoryCodeViolation>();
+        
+        for (RegulatoryCodeAssessmentInd mapItem : mappings) {
+            InspectionAssessmentInd ind = indMap.get(mapItem.AssessmentIndDefinitionId);
+            
+            if (ind != null) {
+                RegulatoryCodeViolation vio = new RegulatoryCodeViolation();
+                vio.RecordTypeId = recordTypePHOCSRegulatoryCodeViolation;
+                vio.InspectionAssmntIndId = ind.Id;
+                vio.InspectionId = insp.Id;
+                vio.DateCreated = Date.today();
+                vio.RegulatoryCodeId = mapItem.RegulatoryCodeId;
+                vio.Status = 'Open';
+                
+                violationsToInsert.add(vio);
+            }
+        }
+
+        if(!violationsToInsert.isEmpty()){
+            insert violationsToInsert;
+        }
     }
      
 /**
