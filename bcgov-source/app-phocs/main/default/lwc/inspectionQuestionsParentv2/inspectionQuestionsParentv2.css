@@ -220,7 +220,7 @@
 /* Desktop / Tablet layout */
 .question-row {
     display: flex;
-    align-items: flex-start;
+    align-items: center; 
     gap: 0.75rem;
     width: 100%;
 }
@@ -232,7 +232,12 @@
 .button-col {
     flex: 1;
     display: flex;
+    align-items: center;
     justify-content: flex-end;
+}
+
+.button-col button {
+    white-space: nowrap;
 }
 
 /* Button styling (optional but recommended)
@@ -251,11 +256,11 @@
 @media screen and (max-width: 768px) {
     .question-row {
         flex-direction: column;
+        align-items: flex-start;
     }
 
     .question-col,
     .button-col {
-        flex: none;
         width: 100%;
     }
 
