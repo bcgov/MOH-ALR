@@ -26,7 +26,7 @@ public with sharing class RegulatoryCodeViolationRelatedController {
             Id inspectionId = parentViolation.InspectionId;
             Id parentAssessmentDefId = parentViolation.InspectionAssmntInd.AssessmentIndDefinitionId;
             
-            List<RegulatoryCodeViolation> relatedViolations = [SELECT Id, Name, InspectionId, InspectionAssmntIndId, RegulatoryCodeId, RegulatoryCode.Name, RegulatoryCode.Description, InspectionAssmntInd.AssessmentIndDefinitionId, InspectionAssmntInd.AssessmentIndDefinition.Name
+            List<RegulatoryCodeViolation> relatedViolations = [SELECT Id, Name, InspectionId, InspectionAssmntIndId, RegulatoryCodeId, RegulatoryCode.Name, RegulatoryCode.Subject, RegulatoryCode.Description, InspectionAssmntInd.AssessmentIndDefinitionId, InspectionAssmntInd.AssessmentIndDefinition.Name
                                                                FROM RegulatoryCodeViolation WHERE InspectionId =: inspectionId AND InspectionAssmntInd.AssessmentIndDefinition.PHOCSParentId__c =: parentAssessmentDefId 
                                                                ORDER BY CreatedDate DESC];
             
