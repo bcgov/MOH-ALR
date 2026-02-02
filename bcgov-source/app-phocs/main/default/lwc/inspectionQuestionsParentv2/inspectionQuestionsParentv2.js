@@ -57,6 +57,10 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 		return [".pdf", ".png", ".jpg", ".jpeg", ".doc", ".docx", ".xls", ".xlsx"];
 	}
 
+	get isAllQuestionsAnswered() {
+		return this.totalQuestions > 0 && this.answeredQuestions === this.totalQuestions;
+	}
+
 	get progressText() {
 		return `${this.answeredQuestions} of ${this.totalQuestions} questions answered`;
 	}
