@@ -58,7 +58,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 	}
 
 	get isAllQuestionsAnswered() {
-		return this.totalQuestions > 0 && this.answeredQuestions === this.totalQuestions;
+		return !(this.totalQuestions > 0 && this.answeredQuestions === this.totalQuestions);
 	}
 
 	get progressText() {
