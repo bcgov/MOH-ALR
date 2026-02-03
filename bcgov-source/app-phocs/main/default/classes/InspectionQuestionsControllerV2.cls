@@ -129,7 +129,7 @@ public with sharing class InspectionQuestionsControllerV2 {
             return new List<RegulatoryCodeWrapper>();
         }
 
-        List<RegulatoryCodeAssessmentInd> regulatoryCodeRecords = [ SELECT RegulatoryCode.Subject, RegulatoryCode.EffectiveFrom, RegulatoryCode.EffectiveTo, RegulatoryCode.IsActive
+        List<RegulatoryCodeAssessmentInd> regulatoryCodeRecords = [ SELECT RegulatoryCode.Id, RegulatoryCode.Name, RegulatoryCode.Subject, RegulatoryCode.EffectiveFrom, RegulatoryCode.EffectiveTo, RegulatoryCode.IsActive
             FROM RegulatoryCodeAssessmentInd WHERE AssessmentIndDefinitionId = :assessmentIndicatorDefinitionId WITH SECURITY_ENFORCED];
 
         List<RegulatoryCodeWrapper> regulatoryCodeWrappers = new List<RegulatoryCodeWrapper>();
@@ -141,7 +141,7 @@ public with sharing class InspectionQuestionsControllerV2 {
                     (record.RegulatoryCode.EffectiveTo != null ? String.valueOf(record.RegulatoryCode.EffectiveTo) : '');
             }
 
-            regulatoryCodeWrappers.add(new RegulatoryCodeWrapper(record.RegulatoryCode.Subject, record.RegulatoryCode.IsActive, formattedValidity));
+            regulatoryCodeWrappers.add(new RegulatoryCodeWrapper(record.RegulatoryCode.Id, record.RegulatoryCode.Name, record.RegulatoryCode.Subject, record.RegulatoryCode.IsActive, formattedValidity));
         }
         return regulatoryCodeWrappers;
     }
@@ -227,12 +227,16 @@ public with sharing class InspectionQuestionsControllerV2 {
      * @description Wrapper for regulatory code display
      */
     public class RegulatoryCodeWrapper {
+        @AuraEnabled public Id regulatoryCodeId { get; set; }
         @AuraEnabled public String regulatoryCodeName { get; set; }
+         @AuraEnabled public String regulatoryCodeSubject { get; set; }
         @AuraEnabled public Boolean isActive { get; set; }
         @AuraEnabled public String validityText { get; set; }
 
-        public RegulatoryCodeWrapper(String name, Boolean active, String validity) {
+        public RegulatoryCodeWrapper(Id codeId, String name, String Subject, Boolean active, String validity) {
+            regulatoryCodeId = codeId;
             regulatoryCodeName = name;
+            regulatoryCodeSubject = Subject;
             isActive = active;
             validityText = validity;
         }

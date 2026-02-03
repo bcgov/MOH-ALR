@@ -101,7 +101,7 @@ global without sharing class PHOCSPortalRecordShare implements Callable {
         List<Account> children = [
             SELECT Id
             FROM Account
-            WHERE ParentId = :parentId
+            WHERE ParentId = :parentId and recordtype.developername in ('Facility','DrinkingWaterSourceIntake')
         ];
 
         for (Account acc : children) {

@@ -293,7 +293,7 @@ public with sharing class InspectionViolationService {
             // Get all InspectionAssessmentInd records for this visit with their definitions
             // Including both parent (non-compliant) and child (selected canned comments) records
             List<InspectionAssessmentInd> allResponses = [SELECT Id, RecordTypeId, AssessmentTaskId, AssessmentTask.Name, AssessmentTask.ParentId, AssessmentIndDefinitionId,
-                AssessmentIndDefinition.Name, AssessmentIndDefinition.PHOCSParentId__c, Result, PHOCSInspectionComments__c,
+                AssessmentIndDefinition.Name, AssessmentIndDefinition.PHOCSParentId__c, Result, PHOCSInspectionComments__c,CorrectedDuringInspection__c,
                 PHOCSCheckboxResponse__c FROM InspectionAssessmentInd WHERE AssessmentTask.ParentId = :visitId WITH SECURITY_ENFORCED];
             
             if (allResponses.isEmpty()) {
@@ -348,7 +348,7 @@ public with sharing class InspectionViolationService {
                     vio.InspectionId = inspectionId;
                     vio.DateCreated = System.now();
                     vio.RegulatoryCodeId = mapItem.RegulatoryCodeId;
-                    vio.Status = 'Open';
+                    vio.Status = ind.CorrectedDuringInspection__c == true ? 'Resolved' :'Open';
                     
                     violationsToInsert.add(vio);
                     violationSourceInds.add(ind);

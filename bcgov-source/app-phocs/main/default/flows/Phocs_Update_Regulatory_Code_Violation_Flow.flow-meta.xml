@@ -25,10 +25,46 @@
                     <stringValue>PHOCSRegulatoryCodeViolation</stringValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Closed</stringValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>update_regulatory_code_violation_record</targetReference>
             </connector>
             <label>corrected during inspection checked</label>
+        </rules>
+        <rules>
+            <name>corrected_during_inspection_not_checked</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_inspection_assessment_indicator_records.CorrectedDuringInspection__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>PHOCSRegulatoryCodeViolation</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Closed</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>update_regulatory_code_violation_record_without_date_resolved</targetReference>
+            </connector>
+            <label>corrected during inspection not checked</label>
         </rules>
     </decisions>
     <description>This is the flow used for the update of the regulatory code violation records with inspection assessment indicator fields</description>
@@ -94,6 +130,12 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>Corrected_During_Inspection__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>CorrectiveActionDescription</field>
             <value>
                 <elementReference>Get_inspection_assessment_indicator_records.CorrectiveActionDescription__c</elementReference>
@@ -109,6 +151,49 @@
             <field>Priority</field>
             <value>
                 <elementReference>Get_inspection_assessment_indicator_records.Priority__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Closed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>update_regulatory_code_violation_record_without_date_resolved</name>
+        <label>update regulatory code violation record without date resolved</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>ComplianceDueDate</field>
+            <value>
+                <elementReference>Get_inspection_assessment_indicator_records.ComplianceDueDate__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Corrected_During_Inspection__c</field>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CorrectiveActionDescription</field>
+            <value>
+                <elementReference>Get_inspection_assessment_indicator_records.CorrectiveActionDescription__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority</field>
+            <value>
+                <elementReference>Get_inspection_assessment_indicator_records.Priority__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Closed</stringValue>
             </value>
         </inputAssignments>
         <inputReference>$Record</inputReference>
