@@ -258,7 +258,7 @@ public without sharing class InspectionAssessmentTaskCreationService {
                 }
             }
             
-            if(accountType == 'Dairy'){       
+            if(accountType == 'Dairy' && inspectionType != 'Inspection Update'){       
                 for (Asset assetObj : [SELECT PlantEquipment__c FROM Asset WHERE AccountId =: facilityAccountId AND RecordTypeId =: dairyAssetRTId AND Status = 'Active']) {
                     if (String.isNotBlank(assetObj.PlantEquipment__c)) {
                         attributeTypesFromAssets.add(assetObj.PlantEquipment__c);
