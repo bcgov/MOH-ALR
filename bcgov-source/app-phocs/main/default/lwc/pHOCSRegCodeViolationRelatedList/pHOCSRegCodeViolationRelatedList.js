@@ -48,7 +48,7 @@ export default class PHOCSRegCodeViolationRelatedList extends LightningElement {
     Name: row.Name,
     recordUrl: '/' + row.Id,
     regulatoryCodeName: row.RegulatoryCode?.Name || '',
-    regulatoryCodeDescription: row.RegulatoryCode?.Description || '',
+    regulatoryCodeDescription: row.RegulatoryCode?.Subject || '',
     assessmentIndicatorName: row.InspectionAssmntInd?.AssessmentIndDefinition?.Name || ''
 }));
 

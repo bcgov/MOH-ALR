@@ -204,7 +204,7 @@
                         <lightning-button label="Review Responses" variant="neutral" onclick={handleShowReview} icon-name="utility:preview"></lightning-button>
                         <div class="slds-grid slds-grid_align-end">
                             <lightning-button label="Save for Later" variant="neutral" class="slds-m-right_small" onclick={handleSaveForLater} disabled={isLoading}></lightning-button>
-                            <lightning-button label="Submit Inspection" variant="brand" onclick={handleSubmit} disabled={isSubmitDisabled}></lightning-button>
+                            <lightning-button label="Submit Inspection" variant="brand" onclick={handleSubmit} disabled={isAllQuestionsAnswered}></lightning-button>
                         </div>
                     </div>
                 </template>
@@ -273,7 +273,7 @@
                                                         <span class="review-meta-value">{question.priority}</span>
                                                     </div>
 
-                                                    <div class="review-meta-row">
+                                                    <div class="review-meta-row compliance-due-date">
                                                         <span class="review-meta-label">Compliance Due Date:</span>
                                                         <span class="review-meta-value">
                                                             <lightning-formatted-date-time
