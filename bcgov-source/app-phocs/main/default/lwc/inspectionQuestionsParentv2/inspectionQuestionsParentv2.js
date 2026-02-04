@@ -655,6 +655,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 			const questions = group.parentQuestions.map((parent) => {
 				const config = STATUS_CONFIG[parent.result] || STATUS_CONFIG.default;
 				const isNonCompliant = parent.result === RESULT_NON_COMPLIANT;
+				const isCompliant = parent.result === RESULT_COMPLIANT;
 
 				return {
 					questionId: `${parent.assessmentTaskId}-${parent.assessmentIndicatorDefinitionId}`,
@@ -667,7 +668,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 					reviewItemClass: config.itemClass,
 					hasComment: !!parent.comment,
 					comment: parent.comment || "",
-
+					isCompliant,
 					isNonCompliant,
 					priority: isNonCompliant ? parent.selectPriority || '' : null,
 					complianceDueDate: isNonCompliant ? parent.preferredDateTime || null : null,

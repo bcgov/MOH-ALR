@@ -248,6 +248,17 @@
                                                 </button>
                                             </div>
 
+                                            <template if:true={question.isCompliant}>
+                                                <div class="review-noncompliant slds-m-top_small">  
+                                                    <template lwc:if={question.hasComment}>
+                                                        <div class="review-meta-row review-meta-row--block">
+                                                                    <span class="review-meta-label">Comment:</span>
+                                                        <div class="review-question-comment">{question.comment}</div>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </template>
+
                                             <template if:true={question.isNonCompliant}>
                                                 <div class="review-noncompliant slds-m-top_small">                                                    
 
