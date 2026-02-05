@@ -10,6 +10,7 @@
                     </span>
                 </template>
             </div>
+
             <template lwc:if={showQuestions}>
                 <div class="progress-container" slot="actions">
                     <span class="progress-text">{progressText}</span>
@@ -248,6 +249,17 @@
                                                 </button>
                                             </div>
 
+                                            <template if:true={question.isCompliant}>
+                                                <div class="review-noncompliant slds-m-top_small">  
+                                                    <template lwc:if={question.hasComment}>
+                                                        <div class="review-meta-row review-meta-row--block">
+                                                                    <span class="review-meta-label">Comment:</span>
+                                                        <div class="review-question-comment">{question.comment}</div>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </template>
+
                                             <template if:true={question.isNonCompliant}>
                                                 <div class="review-noncompliant slds-m-top_small">                                                    
 
@@ -305,7 +317,7 @@
                                                     </template>
 
                                                 </div>
-                                            </template>
+                                            </template>                                            
 
                                         </div>
                                     </template>
@@ -360,6 +372,7 @@
             </section>
             <div class="slds-backdrop slds-backdrop_open"></div>
         </template>
+        
         <template lwc:if={showEndInspectionModal}>
             <section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open">
                 <div class="slds-modal__container">
