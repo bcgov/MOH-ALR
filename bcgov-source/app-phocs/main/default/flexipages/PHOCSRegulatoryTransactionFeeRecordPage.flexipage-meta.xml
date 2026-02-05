@@ -25,7 +25,7 @@
                         <valueListItems>
                             <value>CustomButton.RegulatoryTrxnFee.PHOCSIssueReceipt</value>
                             <visibilityRule>
-                                <booleanFilter>1 AND (2 OR 3)</booleanFilter>
+                                <booleanFilter>(1 OR 4) AND (2 OR 3)</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.Status}</leftValue>
                                     <operator>EQUAL</operator>
@@ -40,6 +40,11 @@
                                     <leftValue>{!$Permission.CustomPermission.PHOCSOfficer}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>true</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Status}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>PARTIALLY_PAID</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
