@@ -658,7 +658,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 				const isCompliant = parent.result === RESULT_COMPLIANT;
 
 				return {
-					questionId: `${parent.assessmentTaskId}-${parent.assessmentIndicatorDefinitionId}`,
+					questionId: parent.assessmentIndicatorDefinitionId,
 					questionText: parent.questionText,
 					result: parent.result || "",
 					statusLabel: config.label,
@@ -710,36 +710,24 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 	}
 
 	handleNavigateToQuestion(event) {
-		const {
-			questionid,
-			categoryid
-		} = event.currentTarget.dataset;
-		this.closeReviewModal();
+		const { questionid, categoryid } = event.currentTarget.dataset;
+        this.closeReviewModal();
 
-		this.groupedQuestions = this.groupedQuestions.map((group) => {
-			if (group.taskDefinitionId !== categoryid) return group;
-			return {
-				...group,
-				isExpanded: true,
-				iconName: "utility:chevrondown"
-			};
-		});
+		this.groupedQuestions = this.groupedQuestions.map(group => {
+            if (group.taskDefinitionId !== categoryid) return group;
+            return { ...group, isExpanded: true, iconName: 'utility:chevrondown' };
+        });
 
 		// eslint-disable-next-line @lwc/lwc/no-async-operation
 		setTimeout(() => {
-			const el = this.template.querySelector(
-				`[data-question-id="${questionid}"]`,
-			);
+			const el = this.template.querySelector(`[data-question-id="${questionid}"]`);
 			if (el) {
-				el.scrollIntoView({
-					behavior: "smooth",
-					block: "center"
-				});
-				el.classList.add("question-card--highlight");
+				el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				el.classList.add('question-card--highlight');
 				// eslint-disable-next-line @lwc/lwc/no-async-operation
 				setTimeout(() => el.classList.remove("question-card--highlight"), 2000);
 			}
-		}, 100);
+		}, 200);
 	}
 
 	// ========================================
