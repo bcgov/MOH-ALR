@@ -711,23 +711,41 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
 	handleNavigateToQuestion(event) {
 		const { questionid, categoryid } = event.currentTarget.dataset;
-        this.closeReviewModal();
 
+		// Close modal
+		this.closeReviewModal();
+
+		// Expand the correct category
 		this.groupedQuestions = this.groupedQuestions.map(group => {
-            if (group.taskDefinitionId !== categoryid) return group;
-            return { ...group, isExpanded: true, iconName: 'utility:chevrondown' };
-        });
+			if (group.taskDefinitionId !== categoryid) return group;
+			return {
+				...group,
+				isExpanded: true,
+				iconName: 'utility:chevrondown'
+			};
+		});
 
-		// eslint-disable-next-line @lwc/lwc/no-async-operation
-		setTimeout(() => {
-			const el = this.template.querySelector(`[data-question-id="${questionid}"]`);
-			if (el) {
-				el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-				el.classList.add('question-card--highlight');
-				// eslint-disable-next-line @lwc/lwc/no-async-operation
-				setTimeout(() => el.classList.remove("question-card--highlight"), 2000);
-			}
-		}, 200);
+		// Wait for LWC render + browser paint
+		requestAnimationFrame(() => {
+			requestAnimationFrame(() => {
+				const target = this.template.querySelector(
+					`[data-question-id="${questionid}"]`
+				);
+
+				if (target) {
+					target.scrollIntoView({
+						behavior: 'smooth',
+						block: 'center'
+					});
+
+					target.classList.add('question-card--highlight');
+
+					setTimeout(() => {
+						target.classList.remove('question-card--highlight');
+					}, 2000);
+				}
+			});
+		});
 	}
 
 	// ========================================
