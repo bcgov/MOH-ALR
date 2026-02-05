@@ -19,11 +19,11 @@ private class PHOCSPortalRecordShareTest {
         insert reg;
         Id accountRecordTypeIdBE =  Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('Business_Entity').getRecordTypeId();
         Id accountRecordTypeIdFacility =  Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('Facility').getRecordTypeId();
-        Account root = new Account(Name='Root', LicenseType__c=reg.Id);
+        Account root = new Account(Name='Root', LicenseType__c=reg.Id, recordtypeid = accountRecordTypeIdFacility);
         insert root;
 	
-        Account a1 = new Account(Name='A1', ParentId=root.Id, LicenseType__c=reg.Id,recordtypeid = accountRecordTypeIdBE);
-        Account a2 = new Account(Name='A2', ParentId=a1.Id, LicenseType__c=reg.Id,recordtypeid = accountRecordTypeIdFacility);
+        Account a1 = new Account(Name='A1', ParentId=root.Id, LicenseType__c=reg.Id,recordtypeid = accountRecordTypeIdFacility);
+        Account a2 = new Account(Name='A2', ParentId=a1.Id, LicenseType__c=reg.Id,recordtypeid = accountRecordTypeIdBE);
         Account a3 = new Account(Name='A3', ParentId=a2.Id, LicenseType__c=reg.Id,recordtypeid = accountRecordTypeIdFacility);
         insert new List<Account>{ a1, a2, a3 };
 
