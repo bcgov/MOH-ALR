@@ -75,17 +75,18 @@ public without sharing class InspectionAssessmentTaskCreationService {
             
             List<ActionPlanTemplateItem> assessmentItems = [SELECT Id, ActionPlanTemplateVersionId, DisplayOrder FROM ActionPlanTemplateItem WHERE ActionPlanTemplateVersionId IN :versionIds AND ItemEntityType = 'AssessmentTask' ORDER BY DisplayOrder ASC];
             
-            List<ActionPlanTemplateItem> signatureItems = [SELECT Id, ActionPlanTemplateVersionId, DisplayOrder FROM ActionPlanTemplateItem WHERE ActionPlanTemplateVersionId IN :versionIds AND ItemEntityType = 'SignatureTask' ORDER BY DisplayOrder ASC];
+            //List<ActionPlanTemplateItem> signatureItems = [SELECT Id, ActionPlanTemplateVersionId, DisplayOrder FROM ActionPlanTemplateItem WHERE ActionPlanTemplateVersionId IN :versionIds AND ItemEntityType = 'SignatureTask' ORDER BY DisplayOrder ASC];
             
             List<Id> assessmentItemIds = new List<Id>();            
             for (ActionPlanTemplateItem item : assessmentItems) {
                 assessmentItemIds.add(item.Id);
             }
             
-            Set<Id> signatureItemIds = new Set<Id>();
+            /*Set<Id> signatureItemIds = new Set<Id>();
             for (ActionPlanTemplateItem it : signatureItems){
                 signatureItemIds.add(it.Id);
             }
+            System.debug('###signatureItemIds'+ signatureItemIds); */
             
             Map<Id, String> templateItemIdToDefName = new Map<Id, String>();
             if (!assessmentItemIds.isEmpty()) {
@@ -98,7 +99,8 @@ public without sharing class InspectionAssessmentTaskCreationService {
                 }
             }
             
-            if (templateItemIdToDefName.isEmpty() && signatureItemIds.isEmpty()) {
+            //if (templateItemIdToDefName.isEmpty() && signatureItemIds.isEmpty()) {
+            if (templateItemIdToDefName.isEmpty()) {
                 return;
             }
             
@@ -184,7 +186,7 @@ public without sharing class InspectionAssessmentTaskCreationService {
                 forceSignatureProcessingInTest = true;
             }
             
-            if (!signatureItemIds.isEmpty() || (Test.isRunningTest() && forceSignatureProcessingInTest)) {                
+           /* if (!signatureItemIds.isEmpty() || (Test.isRunningTest() && forceSignatureProcessingInTest)) {                
                 Set<Id> effectiveSignatureItemIds = !signatureItemIds.isEmpty() ? signatureItemIds : testSignatureItemIds;
                 Set<String> signatureLiterals = new Set<String>();
                 
@@ -226,7 +228,7 @@ public without sharing class InspectionAssessmentTaskCreationService {
                 if (!signatureChildTasks.isEmpty()) {
                     Database.insert(signatureChildTasks);
                 }
-            }
+            } */
             
         } catch (Exception ex) {
             LogService.logAndPublish(className, 'runForVisit', String.valueOf(visitId), ex);
