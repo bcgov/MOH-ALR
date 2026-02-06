@@ -27,9 +27,9 @@
             </conditions>
             <conditions>
                 <leftValueReference>$Record.Status</leftValueReference>
-                <operator>NotEqualTo</operator>
+                <operator>EqualTo</operator>
                 <rightValue>
-                    <stringValue>Closed</stringValue>
+                    <stringValue>Resolved</stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -56,9 +56,9 @@
             </conditions>
             <conditions>
                 <leftValueReference>$Record.Status</leftValueReference>
-                <operator>NotEqualTo</operator>
+                <operator>EqualTo</operator>
                 <rightValue>
-                    <stringValue>Closed</stringValue>
+                    <stringValue>Open</stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -142,21 +142,9 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>DateResolved</field>
-            <value>
-                <elementReference>$Record.Inspection.CreatedDate</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
             <field>Priority</field>
             <value>
                 <elementReference>Get_inspection_assessment_indicator_records.Priority__c</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Status</field>
-            <value>
-                <stringValue>Closed</stringValue>
             </value>
         </inputAssignments>
         <inputReference>$Record</inputReference>
@@ -188,12 +176,6 @@
             <field>Priority</field>
             <value>
                 <elementReference>Get_inspection_assessment_indicator_records.Priority__c</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Status</field>
-            <value>
-                <stringValue>Closed</stringValue>
             </value>
         </inputAssignments>
         <inputReference>$Record</inputReference>
