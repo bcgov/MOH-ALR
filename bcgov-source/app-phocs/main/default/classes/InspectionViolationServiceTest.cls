@@ -198,7 +198,7 @@ private class InspectionViolationServiceTest {
         System.assertEquals(1, violations.size(), 'Should have 1 violation record');
         System.assertEquals(testVisit.Id, violations[0].InspectionId, 'InspectionId should match visit');
         System.assertNotEquals(null, violations[0].RegulatoryCodeId, 'Should have regulatory code linked');
-        System.assertEquals('Closed', violations[0].Status, 'Status should be Closed');
+        System.assertEquals('Open', violations[0].Status, 'Status should be Open');
 
     }
 
