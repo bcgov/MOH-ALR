@@ -211,8 +211,7 @@ public with sharing class InspectionViolationService {
 
             result.success = true;
             result.violationCount = result.violationIds.size();
-            result.message = 'Successfully created ' + result.parentViolationIds.size() + ' parent violation(s) and ' + 
-                           result.cannedCommentViolationIds.size() + ' canned comment violation(s)';
+            result.message = 'Successfully created ' + result.parentViolationIds.size() + ' violation(s)';
 
         } catch (Exception ex) {
             LogService.logAndPublish(className, 'createViolationsForInspection', String.valueOf(visitId), ex);

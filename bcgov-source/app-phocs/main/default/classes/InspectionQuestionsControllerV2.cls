@@ -253,6 +253,7 @@ public with sharing class InspectionQuestionsControllerV2 {
         
         if (vistRec.Status == STATUS_PLANNED) {
             vistRec.Status = STATUS_INPROGRESS;
+            vistRec.ActualVisitStartTime = System.Now();
             vistRec.OwnerId = (vistRec.OwnerId != loggedInUserId) ? loggedInUserId : vistRec.OwnerId;
             update vistRec;
         }
