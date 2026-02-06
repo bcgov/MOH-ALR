@@ -27,6 +27,10 @@ public class BCMOH_Constants {
     public Final static String blaExcludedStatus = 'Excluded';
     public Final static String feeType = 'Renewal Unit Fee';
     public Final static String feeStatus = 'Paid';
+    public Final static List<String> renewalEligibleStatuses = new List<String>{'Cancelled', 'Completed'};
+    public Final static String blaClosedStatus = 'Closed';
+    public Final static String blaRecTypeNewLicenseDeveloperName = 'New_License_Application_Record_Type';
+    public Final static List<String> blaRecTypeDeveloperNames = new List<String>{'New_License_Application_Record_Type' , 'Renewal'};
     //ALR-1348
     public Final static String accountStatus = 'Registered Active';
     public Final static String accountStat = 'Registered Active with Conditions';

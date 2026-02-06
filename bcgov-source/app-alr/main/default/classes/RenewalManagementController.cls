@@ -49,18 +49,52 @@ public with sharing class RenewalManagementController {
     }
     @AuraEnabled(cacheable=true)
     public static List<Account> fetchAccounts() {
-    return [
-        SELECT Id, RegId__c, Name, Parent.Name, Status__c, LicenseType__r.Name, HealthAuthority__c
-        FROM Account 
-        WHERE Status__c IN ('Registered Active', 'Registered Active with Conditions', 'Registered Active Progressive Enforcement') 
-        AND RecordType.DeveloperName = 'Residence'
-        AND Id NOT IN (
-            SELECT AccountId 
-            FROM BusinessLicenseApplication 
-            WHERE RecordType.DeveloperName = 'Renewal' 
-            AND Status IN ('Sent', 'Errored', 'Ready for Renewal', 'Completed', 'Excluded')
-        )
-    ];
+     // Query all relevant accounts with only the latest BLA
+      List<Account> accountsEligibleForRenewal = new List<Account>();
+        List<Account> allAccounts = [
+            SELECT Id, RegId__c, Name, Parent.Name, Status__c, LicenseType__r.Name, HealthAuthority__c,
+                (SELECT Id, RecordType.DeveloperName, Status, RenewalYear__c
+                    FROM BusinessLicenseApplicationAccount
+                    WHERE RecordType.DeveloperName IN :BCMOH_Constants.blaRecTypeDeveloperNames
+                    ORDER BY CreatedDate DESC
+                    LIMIT 1 )FROM Account
+            WHERE Status__c IN (
+                    'Registered Active', 
+                    'Registered Active with Conditions', 
+                    'Registered Active Progressive Enforcement') AND RecordType.DeveloperName = 'Residence'
+        ];
+        for (Account acc : allAccounts) {
+            if (!acc.BusinessLicenseApplicationAccount.isEmpty()) {
+
+                BusinessLicenseApplication latestBlaOnAccount = acc.BusinessLicenseApplicationAccount[0];
+
+                if (
+                    // when the BLA record type is Renewal
+                    (  latestBlaOnAccount.RecordType.DeveloperName == BCMOH_Constants.blaRecType &&
+                            (
+                                // the renewal year is not the current year and status is completed or cancelled.
+                                ( latestBlaOnAccount.RenewalYear__c != String.valueOf(BCMOH_Constants.renewalYear) &&
+                                    String.valueOf(BCMOH_Constants.renewalEligibleStatuses).contains(latestBlaOnAccount.Status)
+                                )
+                            ||
+                                // the renewal year is the current year and status is cancelled.
+                                ( latestBlaOnAccount.RenewalYear__c == String.valueOf(BCMOH_Constants.renewalYear) &&
+                                    latestBlaOnAccount.Status == BCMOH_Constants.blaCancelledStatus
+                                )
+                            )
+                    )
+                    ||
+                    // when the record type is New License Application and status is Closed
+                    ( latestBlaOnAccount.RecordType.DeveloperName == BCMOH_Constants.blaRecTypeNewLicenseDeveloperName &&
+                    latestBlaOnAccount.Status == BCMOH_Constants.blaClosedStatus )
+                ) {
+
+                    accountsEligibleForRenewal.add(acc);
+                }
+            }
+        }  
+        //  return eligible accounts for renewal
+        return  accountsEligibleForRenewal; 
 }
  
 
