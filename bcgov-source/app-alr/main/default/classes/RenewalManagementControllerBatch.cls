@@ -12,6 +12,7 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
     private Final static String renewalName = 'LicenseRenewalCriteria';
     private Final static String blaRecType = 'Renewal';
     private Final static String blaCancelledStatus = 'Cancelled';
+    private Final static String blaCompletedStatus = 'Completed';
     private Final static String renewalYear = BCMOH_Constants.renewalYear;
     private Final static String blaRenewalStatus = 'Ready for Renewal';
     private Final static String blaExcludedStatus = 'Excluded';
@@ -19,6 +20,8 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
     public Final static List<String> allALUnitTypes = BCMOH_Constants.allALUnitTypes;
     public Final static String activeStatusBl = BCMOH_Constants.activeStatusBl;
     public Final static List<String> Accountstatus = BCMOH_Constants.AccountTypeStatuses;
+    private Final static String blaRecordTypeNewLicenseDeveloperName = BCMOH_Constants.blaRecTypeNewLicenseDeveloperName;
+    private Final static String blaStatusClosed = BCMOH_Constants.blaClosedStatus;
 
     public List<Id> recordListIds = new List<Id>();
     
@@ -43,8 +46,7 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
             +' (SELECT RegistrationCertificate__c FROM AccountBusinessLicenses__r WHERE Status =: activeStatusBl LIMIT 1),'//ALR-560
             +' (SELECT ContactId, Contact.Name, Contact.Phone, Contact.Email, Contact.MobilePhone, Roles FROM AccountContactRelations'//ALR-560
             +'  WHERE PrimaryContact__c = TRUE AND IsActive = TRUE LIMIT 1),'//ALR-560 //ALR-854 - Added ContactId
-            +' (SELECT Id FROM BusinessLicenseApplicationAccount WHERE RecordType.DeveloperName =: blaRecType'
-            +'  AND Status !=: blaCancelledStatus AND RenewalYear__c =: renewalYear),'
+            +' (SELECT Id, AccountId, Status, RenewalYear__c, RecordType.DeveloperName, CreatedDate FROM BusinessLicenseApplicationAccount ORDER BY CreatedDate DESC LIMIT 1),'
             +' (SELECT Id, Type__c, Quantity, Amount__c FROM Assets WHERE RecordType.DeveloperName =: parentAssetRT'
             +' AND Type__c IN: allALUnitTypes AND Quantity > 0)'//ALR-769 - added type check, ALR-726 - quantity to be greater than 0
             +' FROM Account'
@@ -58,21 +60,50 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
         Map<Id, Account> renewalAccMap = new Map<Id, Account>();
         Map<Id, Account> renewalFeeAccMap = new Map<Id, Account>();
         List<Id> includedAccIds = recordListIds;
-                try {
+        try {
             for(Account accRec : renewalAccList) {
-                //check if non cancelled renewalbla already exists for the current year to avoid duplicates
-                if(accRec.BusinessLicenseApplicationAccount.size() == 0) {
-                    //**As per ALR-560 and ALR-796 - No more applicable --> create BLA with status as excluded and dont create child records if id not present in includedAccIds
-                    //As per ALR-560 and ALR-796 - create BLA with status as excluded and create child records 
-                    blaStatusMap.put(accRec.Id, includedAccIds.contains(accRec.Id) ? blaRenewalStatus : blaExcludedStatus);
-                    renewalAccMap.put(accRec.Id, accRec);
-                    //**As per ALR-560 and ALR-796 - No more applicable -->if assets are not present dont create Fee records (change logic to remove nesting if later)
-                    //ALR-560 & ALR-796 - Excluded Ids will also have Fee records generated if assets are present.
-                    if(accRec.Assets != NULL && accRec.Assets.size() > 0) {//removed - includedAccIds.contains(accRec.Id) && 
-                        renewalFeeAccMap.put(accRec.Id, accRec);
+                if (accRec.BusinessLicenseApplicationAccount != null && !accRec.BusinessLicenseApplicationAccount.isEmpty()) {
+                    Boolean generateRenewal = false;
+                    BusinessLicenseApplication latestBLA = accRec.BusinessLicenseApplicationAccount[0];
+
+                    // when the BLA record type is Renewal 
+                    if ( latestBLA.RecordType.DeveloperName == blaRecType &&
+                            (
+                                // the renewal year is not the current year and status is completed or cancelled.
+                                (latestBLA.RenewalYear__c != renewalYear &&
+                                (latestBLA.Status == blaCancelledStatus || latestBLA.Status == blaCompletedStatus))
+                            ||
+                                // the renewal year is the current year and status is cancelled.
+                                (latestBLA.RenewalYear__c == renewalYear &&
+                                latestBLA.Status == blaCancelledStatus)
+                            )
+                        ) 
+                    {
+                        generateRenewal = true;
                     }
-                }
-        	}
+
+                    // when No renewal BLA exists, then the BLA record type is New License and status is closed.
+                    else if (latestBLA.RecordType.DeveloperName == blaRecordTypeNewLicenseDeveloperName && latestBLA.Status ==  blaStatusClosed) {
+                        generateRenewal = true;
+                    }
+
+                    // Generate Renewals
+                    if (generateRenewal) {
+
+                         //**As per ALR-560 and ALR-796 - No more applicable --> create BLA with status as excluded and dont create child records if id not present in includedAccIds
+                        //As per ALR-560 and ALR-796 - create BLA with status as excluded and create child records 
+                        blaStatusMap.put(accRec.Id, includedAccIds.contains(accRec.Id) ? blaRenewalStatus : blaExcludedStatus);
+                        renewalAccMap.put(accRec.Id, accRec);
+
+                        //**As per ALR-560 and ALR-796 - No more applicable -->if assets are not present dont create Fee records (change logic to remove nesting if later)
+                        //ALR-560 & ALR-796 - Excluded Ids will also have Fee records generated if assets are present.
+                        if(accRec.Assets != NULL && accRec.Assets.size() > 0) {//removed - includedAccIds.contains(accRec.Id) && 
+                            renewalFeeAccMap.put(accRec.Id, accRec);
+                        }
+                    }
+        	    }
+            }
+
             //1) create BLA records in controlled class
             Map<Id, BusinessLicenseApplication> blaRecCreateMap = RenewalManagementController.createBlaRecords(renewalAccMap, blaStatusMap);
                         //2) create Trans Fee Record
