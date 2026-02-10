@@ -68,7 +68,15 @@ public without sharing class PHOCSInspectionAssessmentIndControllerV2 {
                 rec.PHOCSInspectionComments__c = resp.comment;
                 
                 if (resp.result != null) {
-                    rec.Result = resp.result;
+                    String normalized = resp.result.trim();
+                    
+                    Map<String, String> valueMap = new Map<String, String>{'Not Applicable' => 'N/A (Not Applicable)', 'Not Inspected' => 'N/S (Not Assessed)','Non-compliant'=> 'PHOCSNonCompliant'};
+                        
+                        if (valueMap.containsKey(normalized)) {
+                            normalized = valueMap.get(normalized);
+                        }
+                    
+                    rec.Result = normalized;
                 }
                 
                 if (resp.selectPriority != null) {

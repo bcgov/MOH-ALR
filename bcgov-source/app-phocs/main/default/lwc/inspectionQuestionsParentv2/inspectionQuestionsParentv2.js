@@ -1073,8 +1073,8 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
 				if (totalCount > 0) {
 					let msg = `Inspection saved. ${parentCount} violation(s) created for non-compliant questions`;
-					if (cannedCount > 0)
-						msg += ` and ${cannedCount} violation(s) for selected canned comments`;
+					//if (cannedCount > 0)
+					//	msg += ` and ${cannedCount} violation(s) for selected canned comments`;
 					this.showToast("Success", msg + ".", "success");
 				} else {
 					this.showToast(
