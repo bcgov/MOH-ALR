@@ -3,53 +3,44 @@
     <apiVersion>66.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
-        <name>assign_date_value</name>
-        <label>assign date value</label>
+        <name>Adding_violation_to_List</name>
+        <label>Adding violation to List</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Violations</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>loop_all_violation_records</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>loop_all_violation_records</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Updating_Status_Date_Resolved</name>
+        <label>Updating Status &amp; Date Resolved</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>loop_all_violation_records.Status</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Resolved</stringValue>
+            </value>
+        </assignmentItems>
         <assignmentItems>
             <assignToReference>loop_all_violation_records.DateResolved</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>$Record.ActualVisitEndTime</elementReference>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Update_Records_1</targetReference>
+            <targetReference>Adding_violation_to_List</targetReference>
         </connector>
     </assignments>
-    <decisions>
-        <name>check_the_checkbox_value</name>
-        <label>check the checkbox value</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnector>
-            <targetReference>Update_Records_1</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>checked</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>loop_all_violation_records.Corrected_During_Inspection__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>loop_all_violation_records.RecordType.DeveloperName</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>PHOCSRegulatoryCodeViolation</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>assign_date_value</targetReference>
-            </connector>
-            <label>checked</label>
-        </rules>
-    </decisions>
     <description>This flow is used to update date resolved field of regulatory code violation with Actual end time date field of inspection</description>
     <environments>Default</environments>
     <interviewLabel>PHOCS Update violation date field with Inspection field {!$Flow.CurrentDateTime}</interviewLabel>
@@ -60,10 +51,13 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <collectionReference>get_violation_records</collectionReference>
-        <iterationOrder>Asc</iterationOrder>
+        <iterationOrder>Desc</iterationOrder>
         <nextValueConnector>
-            <targetReference>check_the_checkbox_value</targetReference>
+            <targetReference>Updating_Status_Date_Resolved</targetReference>
         </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Updating_violations</targetReference>
+        </noMoreValuesConnector>
     </loops>
     <processMetadataValues>
         <name>BuilderType</name>
@@ -101,19 +95,25 @@
                 <elementReference>$Record.Id</elementReference>
             </value>
         </filters>
+        <filters>
+            <field>PHOCSIsBelongsToPHOCS__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
         <getFirstRecordOnly>false</getFirstRecordOnly>
         <object>RegulatoryCodeViolation</object>
+        <sortField>CreatedDate</sortField>
+        <sortOrder>Desc</sortOrder>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordUpdates>
-        <name>Update_Records_1</name>
-        <label>Update Records 1</label>
+        <name>Updating_violations</name>
+        <label>Updating violations</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <connector>
-            <targetReference>loop_all_violation_records</targetReference>
-        </connector>
-        <inputReference>loop_all_violation_records</inputReference>
+        <inputReference>Violations</inputReference>
     </recordUpdates>
     <start>
         <locationX>0</locationX>
@@ -141,4 +141,12 @@
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
+    <variables>
+        <name>Violations</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <objectType>RegulatoryCodeViolation</objectType>
+    </variables>
 </Flow>
