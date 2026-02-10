@@ -319,7 +319,7 @@ public with sharing class InspectionViolationService {
                 return result;
             }
             
-            Map<Id, AssessmentTask> taskMap = new Map<Id, AssessmentTask>([SELECT Id, ParentId FROM AssessmentTask WHERE Id IN :assessmentTaskIds]);           
+            Map<Id, AssessmentTask> taskMap = new Map<Id, AssessmentTask>([SELECT Id, ParentId, Parent.AccountId FROM AssessmentTask WHERE Id IN :assessmentTaskIds]);           
             
             List<RegulatoryCodeAssessmentInd> regCodeAsmntList = [SELECT Id, AssessmentIndDefinitionId, RegulatoryCodeId FROM RegulatoryCodeAssessmentInd WHERE AssessmentIndDefinitionId IN :assessmentIndDefIds];
             
@@ -339,12 +339,14 @@ public with sharing class InspectionViolationService {
                     continue;
                 }
                 Id inspectionId = taskMap.get(ind.AssessmentTaskId)?.ParentId;
+                Id inspectionAccountId = taskMap.get(ind.AssessmentTaskId)?.Parent?.AccountId;
                 
                 for (RegulatoryCodeAssessmentInd mapItem : mappings) {
                     RegulatoryCodeViolation vio = new RegulatoryCodeViolation();
                     vio.RecordTypeId = recordTypePHOCSRegulatoryCodeViolation;
                     vio.InspectionAssmntIndId = ind.Id;
                     vio.InspectionId = inspectionId;
+                    vio.PHOCSParentAccountID__c = inspectionAccountId;
                     vio.DateCreated = System.now();
                     vio.RegulatoryCodeId = mapItem.RegulatoryCodeId;
                     vio.Status = ind.CorrectedDuringInspection__c == true ? 'Resolved' :'Open';
