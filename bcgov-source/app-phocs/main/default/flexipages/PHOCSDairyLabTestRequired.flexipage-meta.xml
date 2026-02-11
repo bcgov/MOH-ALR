@@ -13,7 +13,7 @@
                             <value>Delete</value>
                         </valueListItems>
                         <valueListItems>
-                            <value>LabTestRequired__c.EHISNewTaskOnLTR</value>
+                            <value>Global.NewTask</value>
                         </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
@@ -49,10 +49,10 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Name</fieldItem>
-                <identifier>RecordNameField</identifier>
+                <fieldItem>Record.LabTestRequisition__c</fieldItem>
+                <identifier>RecordLabTestRequisition_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -79,10 +79,10 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>required</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Result__c</fieldItem>
-                <identifier>RecordResult_cField</identifier>
+                <fieldItem>Record.Comments__c</fieldItem>
+                <identifier>RecordComments_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-1abfbb77-3c4d-4fa8-9ead-3d55c9a1ab26</name>
@@ -103,20 +103,10 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>required</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.LabTestRequisition__c</fieldItem>
-                <identifier>RecordLabTestRequisition_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Comments__c</fieldItem>
-                <identifier>RecordComments_cField</identifier>
+                <fieldItem>Record.Result__c</fieldItem>
+                <identifier>RecordResult_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-47c79b42-b29c-4bbe-9938-59223f1e1276</name>
@@ -321,6 +311,32 @@
         <type>Region</type>
     </flexiPageRegions>
     <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>parentFieldApiName</name>
+                    <value>LabTestRequired__c.Id</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListApiName</name>
+                    <value>ActivityHistories</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListComponentOverride</name>
+                    <value>NONE</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>rowsToDisplay</name>
+                    <value>10</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>showActionBar</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentName>force:relatedListSingleContainer</componentName>
+                <identifier>force_relatedListSingleContainer</identifier>
+            </componentInstance>
+        </itemInstances>
         <name>sidebar</name>
         <type>Region</type>
     </flexiPageRegions>
