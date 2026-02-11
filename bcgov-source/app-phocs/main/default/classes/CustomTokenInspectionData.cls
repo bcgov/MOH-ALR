@@ -140,8 +140,7 @@ global without sharing class CustomTokenInspectionData
         WHERE AssessmentTask.ParentId = :visitRec.Id
         AND AssessmentIndDefinition.PHOCSParentId__c = null
         ORDER BY
-            AssessmentIndDefinition.Criticality__c,
-            AssessmentIndDefinition.Group_Record_Id__c
+            AssessmentIndDefinition.Criticality__c
     ]) {
         Map<String, Object> item = new Map<String, Object>();
         item.put('category', rec.AssessmentIndDefinition.Category__c);
