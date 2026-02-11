@@ -141,7 +141,6 @@ global without sharing class CustomTokenInspectionData
         AND AssessmentIndDefinition.PHOCSParentId__c = null
         ORDER BY
             AssessmentIndDefinition.Criticality__c,
-            Result_Sequence__c,
             AssessmentIndDefinition.Group_Record_Id__c
     ]) {
         Map<String, Object> item = new Map<String, Object>();
