@@ -63,10 +63,19 @@ public with sharing class InspectionQuestionsControllerV2 {
                                                             FROM InspectionAssessmentInd WHERE AssessmentTaskId IN :definitionToTaskIdMap.values()];
         }
         
-            for (InspectionAssessmentInd resp : inspAssmntList){
-                String key = String.valueOf(resp.AssessmentIndDefinitionId) + '|' + String.valueOf(resp.AssessmentTaskId);
-                existingResponses.put(key, resp);
+        for (InspectionAssessmentInd resp : inspAssmntList){
+            if (resp.Result != null) {                
+                String normalized = resp.Result.trim();                
+                Map<String, String> valueMap = new Map<String, String>{'N/A (Not Applicable)' => 'Not Applicable', 'N/S (Not Assessed)' => 'Not Inspected'};
+                    
+                    if (valueMap.containsKey(normalized)) {
+                        normalized = valueMap.get(normalized);
+                    }                
+                resp.Result = normalized;
             }
+            String key = String.valueOf(resp.AssessmentIndDefinitionId) + '|' + String.valueOf(resp.AssessmentTaskId);
+            existingResponses.put(key, resp);
+        }
         
         // Build task groups        
         for (AssessmentTaskIndDefinition indicatorRecord : indicatorDefinitions) {
