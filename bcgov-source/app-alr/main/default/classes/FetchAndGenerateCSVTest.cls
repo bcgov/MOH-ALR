@@ -72,15 +72,17 @@ private class FetchAndGenerateCSVTest {
         BusinessLicense blRec = TestDataFactory.createBlRecord(regAuth.Id, Residence.Id, Residence.ParentId, '58659', 'BL RECORD 1', true);
         busiLicense.add(blRec);
         
-        Contact con = new Contact(LastName = 'Test Contact',Phone ='1234567890');
+        Contact con = new Contact(LastName = 'Test Contact',Phone ='1234567890', AccountId = Residence.Id);
         insert con;
 
-        AccountContactRelation acr = new AccountContactRelation(
-            AccountId = Residence.Id,
-            ContactId = con.Id,
-            Roles = 'Decision Maker',
-            PrimaryContact__c = true
-        );
+        AccountContactRelation acr = [SELECT Id, Roles, PrimaryContact__c
+                                        FROM AccountContactRelation
+                                        WHERE AccountId = :Residence.Id
+                                        AND ContactId = :con.Id
+                                        LIMIT 1];
+		acr.PrimaryContact__c = true;
+
+		update acr;
         
         Asset unit1 = TestDataFactory.createUnit('1','Private',2,Residence.Id,true);
         
