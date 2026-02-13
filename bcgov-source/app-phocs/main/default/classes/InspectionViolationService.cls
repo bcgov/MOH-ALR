@@ -350,7 +350,6 @@ public with sharing class InspectionViolationService {
                     vio.DateCreated = System.now();
                     vio.RegulatoryCodeId = mapItem.RegulatoryCodeId;
                     vio.Corrected_During_Inspection__c = ind.CorrectedDuringInspection__c;
-                    System.debug('###ind.CorrectedDuringInspection__c'+ ind.CorrectedDuringInspection__c);
                     vio.Status = 'Open'; //ind.CorrectedDuringInspection__c == true ? 'Resolved' :'Open';
                     
                     violationsToInsert.add(vio);
