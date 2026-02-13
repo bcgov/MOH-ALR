@@ -349,7 +349,9 @@ public with sharing class InspectionViolationService {
                     vio.PHOCSParentAccountID__c = inspectionAccountId;
                     vio.DateCreated = System.now();
                     vio.RegulatoryCodeId = mapItem.RegulatoryCodeId;
-                    vio.Status = ind.CorrectedDuringInspection__c == true ? 'Resolved' :'Open';
+                    vio.Corrected_During_Inspection__c = ind.CorrectedDuringInspection__c;
+                    System.debug('###ind.CorrectedDuringInspection__c'+ ind.CorrectedDuringInspection__c);
+                    vio.Status = 'Open'; //ind.CorrectedDuringInspection__c == true ? 'Resolved' :'Open';
                     
                     violationsToInsert.add(vio);
                     violationSourceInds.add(ind);
