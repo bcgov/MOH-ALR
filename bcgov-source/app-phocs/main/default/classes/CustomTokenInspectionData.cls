@@ -61,10 +61,10 @@ global without sharing class CustomTokenInspectionData
                 Id,
                 Owner.Name,
                 Account.Name,
-                Account.BillingStreet,
-                Account.BillingCity,
-                Account.BillingState,
-                Account.BillingPostalCode,
+                Account.Physical_Address__Street__s,
+                Account.Physical_Address__City__s,
+                Account.Physical_Address__StateCode__s,
+                Account.Physical_Address__PostalCode__s,
                 ActualVisitStartTime,
                 ActualVisitEndTime,
                 VisitType.Name,
@@ -120,11 +120,11 @@ global without sharing class CustomTokenInspectionData
     }
 
     /* ---------------- RESULT LISTS ---------------- */
-    List<Object> criticalInfractions = new List<Object>();
-    List<Object> nonCriticalInfractions = new List<Object>();
-    List<Object> inCompliance = new List<Object>();
-    List<Object> notAssessed = new List<Object>();
-    List<Object> notApplicable = new List<Object>();
+  Map<String, List<Object>> criticalInfractions = new Map<String, List<Object>>();
+  Map<String, List<Object>> nonCriticalInfractions = new Map<String, List<Object>>();
+  Map<String, List<Object>> inCompliance = new Map<String, List<Object>>();
+  Map<String, List<Object>> notAssessed = new Map<String, List<Object>>();
+  Map<String, List<Object>> notApplicable = new Map<String, List<Object>>();
 
     for (InspectionAssessmentInd rec : [
         SELECT
@@ -145,7 +145,7 @@ global without sharing class CustomTokenInspectionData
         Map<String, Object> item = new Map<String, Object>();
         item.put('category', rec.AssessmentIndDefinition.Category__c);
         item.put('question', rec.AssessmentIndDefinition.Name);
-        item.put('complianceDueDate', rec.ComplianceDueDate__c);
+        item.put('complianceDueDate', rec.ComplianceDueDate__c!=null?rec.ComplianceDueDate__c.date():null);
         item.put('comments', rec.Comments__c);
         item.put('correctiveAction', rec.CorrectiveActionDescription__c);
         item.put(
@@ -154,28 +154,28 @@ global without sharing class CustomTokenInspectionData
                 ? cannedCommentsByParentDef.get(rec.AssessmentIndDefinitionId)
                 : new List<String>()
         );
-
+		String categoryName = rec.AssessmentIndDefinition.Category__c;
         if (rec.Result == 'PHOCSNonCompliant') {
             if (rec.AssessmentIndDefinition.Criticality__c == 'Critical') {
-                criticalInfractions.add(item);
+                 addToGroupedCategory(criticalInfractions, categoryName, item);
             } else {
-                nonCriticalInfractions.add(item);
+                addToGroupedCategory(nonCriticalInfractions, categoryName, item);
             }
         } else if (rec.Result == 'Compliant') {
-            inCompliance.add(item);
+           addToGroupedCategory(inCompliance, categoryName, item);
         } else if (rec.Result == 'N/S (Not Assessed)') {
-            notAssessed.add(item);
+           addToGroupedCategory(notAssessed, categoryName, item);
         } else if (rec.Result == 'N/A (Not Applicable)') {
-            notApplicable.add(item);
+           addToGroupedCategory(notApplicable, categoryName, item);
         }
     }
 
     /* ---------------- FINAL TOKEN MAP ---------------- */
-    reportMap.put('criticalInfractions', criticalInfractions);
-    reportMap.put('nonCriticalInfractions', nonCriticalInfractions);
-    reportMap.put('inCompliance', inCompliance);
-    reportMap.put('notAssessed', notAssessed);
-    reportMap.put('notApplicable', notApplicable);
+    reportMap.put('criticalInfractions', buildCategoryList(criticalInfractions));
+	reportMap.put('nonCriticalInfractions', buildCategoryList(nonCriticalInfractions));
+	reportMap.put('inCompliance', buildCategoryList(inCompliance));
+	reportMap.put('notAssessed', buildCategoryList(notAssessed));
+	reportMap.put('notApplicable', buildCategoryList(notApplicable));
 
     output.put('tokenMap', reportMap);
     System.debug('jsonoutput*'+JSON.serializePretty(reportMap));
@@ -186,20 +186,58 @@ global without sharing class CustomTokenInspectionData
     
     private static String buildAddress(Account acc) {
         List<String> parts = new List<String>();
-        if (String.isNotBlank(acc.BillingStreet)) parts.add(acc.BillingStreet);
-        if (String.isNotBlank(acc.BillingCity)) parts.add(acc.BillingCity);
-        if (String.isNotBlank(acc.BillingState)) parts.add(acc.BillingState);
-        if (String.isNotBlank(acc.BillingPostalCode)) parts.add(acc.BillingPostalCode);
+        if (String.isNotBlank(acc.Physical_Address__Street__s)) parts.add(acc.Physical_Address__Street__s);
+        if (String.isNotBlank(acc.Physical_Address__City__s)) parts.add(acc.Physical_Address__City__s);
+        if (String.isNotBlank(acc.Physical_Address__StateCode__s)) parts.add(acc.Physical_Address__StateCode__s);
+        if (String.isNotBlank(acc.Physical_Address__PostalCode__s)) parts.add(acc.Physical_Address__PostalCode__s);
         return String.join(parts, ', ');
     }
+	private void addToGroupedCategory(
+    Map<String, List<Object>> grouping,
+    String category,
+    Map<String, Object> item
+) {
+    if (String.isBlank(category)) {
+        category = 'Uncategorized';
+    }
+
+    if (!grouping.containsKey(category)) {
+        grouping.put(category, new List<Object>());
+    }
+
+    grouping.get(category).add(item);
+}
+
+private List<Object> buildCategoryList(Map<String, List<Object>> source) {
+
+    List<Object> outerList = new List<Object>();
+
+    if (source == null || source.isEmpty()) {
+        return outerList;
+    }
+
+    for (String key : source.keySet()) {
+
+        Map<String, Object> categoryWrapper = new Map<String, Object>();
+        categoryWrapper.put('categoryName', key);
+        categoryWrapper.put('questions', source.get(key));
+
+        outerList.add(categoryWrapper);
+    }
+
+    return outerList;
+}
+
+
+
 
     global class Report {
         global Header header;
-        global List<LineItem> criticalInfractions = new List<LineItem>();
-        global List<LineItem> nonCriticalInfractions = new List<LineItem>();
-        global List<LineItem> inCompliance = new List<LineItem>();
-        global List<LineItem> notAssessed = new List<LineItem>();
-        global List<LineItem> notApplicable = new List<LineItem>();
+        global  List<Object> criticalInfractions = new  List<Object>();
+        global  List<Object> nonCriticalInfractions = new  List<Object>();
+        global  List<Object> inCompliance = new  List<Object>();
+        global  List<Object> notAssessed = new  List<Object>();
+        global  List<Object> notApplicable = new  List<Object>();
     }
 
     global class Header {
