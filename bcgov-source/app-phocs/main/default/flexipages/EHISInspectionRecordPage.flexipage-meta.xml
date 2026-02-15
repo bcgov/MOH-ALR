@@ -30,7 +30,7 @@
                         <valueListItems>
                             <value>Visit.Add_Inspection_Task</value>
                             <visibilityRule>
-                                <booleanFilter>1 OR 2</booleanFilter>
+                                <booleanFilter>(1 OR 2) AND 3</booleanFilter>
                                 <criteria>
                                     <leftValue>{!$Permission.CustomPermission.PHOCSOfficer}</leftValue>
                                     <operator>EQUAL</operator>
@@ -40,6 +40,11 @@
                                     <leftValue>{!$Permission.CustomPermission.PHOCSAdmin}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>true</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Status}</leftValue>
+                                    <operator>NE</operator>
+                                    <rightValue>Completed</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
