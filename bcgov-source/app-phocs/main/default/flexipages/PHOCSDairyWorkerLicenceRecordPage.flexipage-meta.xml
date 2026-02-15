@@ -294,10 +294,17 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>required</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.WorkerEducationOutsideBC__c</fieldItem>
-                <identifier>RecordWorkerEducationOutsideBC_cField</identifier>
+                <fieldItem>Record.ApprovedLicenceStatus__c</fieldItem>
+                <identifier>RecordApprovedLicenceStatus_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Approved for Invoicing</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -314,17 +321,10 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>required</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.ApprovedLicenceStatus__c</fieldItem>
-                <identifier>RecordApprovedLicenceStatus_cField</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.Status}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Approved for Invoicing</rightValue>
-                    </criteria>
-                </visibilityRule>
+                <fieldItem>Record.WorkerEducationOutsideBC__c</fieldItem>
+                <identifier>RecordWorkerEducationOutsideBC_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
