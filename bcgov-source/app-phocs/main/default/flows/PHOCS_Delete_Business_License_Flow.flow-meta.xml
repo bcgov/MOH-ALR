@@ -3,6 +3,22 @@
     <apiVersion>66.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
+        <name>assign_the_count</name>
+        <label>assign the count</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>count</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>1.0</numberValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>loop_for_count_is_correct</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>assign_the_final_duration_value</name>
         <label>assign the final duration value</label>
         <locationX>0</locationX>
@@ -12,13 +28,6 @@
             <operator>Add</operator>
             <value>
                 <elementReference>loop_all_BL.RestrictedLicenceDuration__c</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>count</assignToReference>
-            <operator>Add</operator>
-            <value>
-                <numberValue>1.0</numberValue>
             </value>
         </assignmentItems>
         <connector>
@@ -76,6 +85,20 @@ IF({!Get_Contact_record.PHOCSTotallicenseyears__c} &lt;= 1,0,{!Get_Contact_recor
             <targetReference>assign_the_final_duration_value</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
+            <targetReference>get_BL_records_with_date</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <name>loop_for_count_is_correct</name>
+        <label>loop for count is correct</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>get_BL_records_with_date</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>assign_the_count</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
             <targetReference>Update_the_Contact_Record</targetReference>
         </noMoreValuesConnector>
     </loops>
@@ -127,6 +150,52 @@ IF({!Get_Contact_record.PHOCSTotallicenseyears__c} &lt;= 1,0,{!Get_Contact_recor
             <operator>NotEqualTo</operator>
             <value>
                 <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>BusinessLicense</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>get_BL_records_with_date</name>
+        <label>get BL records with date</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>loop_for_count_is_correct</targetReference>
+        </connector>
+        <filterLogic>1 AND 2 AND 3 AND ( 4 OR 5 )</filterLogic>
+        <filters>
+            <field>ContactId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Contact_record.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>RecordTypeId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.RecordType.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Id</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>PeriodEnd</field>
+            <operator>EqualTo</operator>
+        </filters>
+        <filters>
+            <field>PeriodEnd</field>
+            <operator>LessThanOrEqualTo</operator>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>false</getFirstRecordOnly>
