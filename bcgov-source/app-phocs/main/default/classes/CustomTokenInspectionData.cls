@@ -134,7 +134,7 @@ global without sharing class CustomTokenInspectionData
             AssessmentIndDefinition.Name,
             Result,
             ComplianceDueDate__c,
-            Comments__c,
+            PHOCSInspectionComments__c,
             CorrectiveActionDescription__c
         FROM InspectionAssessmentInd
         WHERE AssessmentTask.ParentId = :visitRec.Id
@@ -146,7 +146,7 @@ global without sharing class CustomTokenInspectionData
         item.put('category', rec.AssessmentIndDefinition.Category__c);
         item.put('question', rec.AssessmentIndDefinition.Name);
         item.put('complianceDueDate', rec.ComplianceDueDate__c!=null?rec.ComplianceDueDate__c.date():null);
-        item.put('comments', rec.Comments__c);
+        item.put('comments', rec.PHOCSInspectionComments__c);
         item.put('correctiveAction', rec.CorrectiveActionDescription__c);
         item.put(
             'cannedComments',
@@ -171,11 +171,25 @@ global without sharing class CustomTokenInspectionData
     }
 
     /* ---------------- FINAL TOKEN MAP ---------------- */
-    reportMap.put('criticalInfractions', buildCategoryList(criticalInfractions));
-	reportMap.put('nonCriticalInfractions', buildCategoryList(nonCriticalInfractions));
-	reportMap.put('inCompliance', buildCategoryList(inCompliance));
-	reportMap.put('notAssessed', buildCategoryList(notAssessed));
-	reportMap.put('notApplicable', buildCategoryList(notApplicable));
+	List<Object> criticalList = buildCategoryList(criticalInfractions);
+	List<Object> nonCriticalList = buildCategoryList(nonCriticalInfractions);
+	List<Object> inComplianceList = buildCategoryList(inCompliance);
+	List<Object> notAssessedList = buildCategoryList(notAssessed);
+	List<Object> notApplicableList = buildCategoryList(notApplicable);
+
+	reportMap.put('criticalInfractions', criticalList);
+	reportMap.put('nonCriticalInfractions', nonCriticalList);
+	reportMap.put('inCompliance', inComplianceList);
+	reportMap.put('notAssessed', notAssessedList);
+	reportMap.put('notApplicable', notApplicableList);
+
+/* ---------------- CONDITIONAL DISPLAY FLAGS ---------------- */
+	reportMap.put('showCriticalInfractions', !criticalList.isEmpty());
+	reportMap.put('showNonCriticalInfractions', !nonCriticalList.isEmpty());
+	reportMap.put('showInCompliance', !inComplianceList.isEmpty());
+	reportMap.put('showNotAssessed', !notAssessedList.isEmpty());
+	reportMap.put('showNotApplicable', !notApplicableList.isEmpty());
+
 
     output.put('tokenMap', reportMap);
     System.debug('jsonoutput*'+JSON.serializePretty(reportMap));
