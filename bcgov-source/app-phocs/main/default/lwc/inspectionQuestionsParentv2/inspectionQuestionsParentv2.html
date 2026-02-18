@@ -205,7 +205,7 @@
                         <lightning-button label="Review Responses" variant="neutral" onclick={handleShowReview} icon-name="utility:preview"></lightning-button>
                         <div class="slds-grid slds-grid_align-end">
                             <lightning-button label="Save for Later" variant="neutral" class="slds-m-right_small" onclick={handleSaveForLater} disabled={isLoading}></lightning-button>
-                            <lightning-button label="Submit Inspection" variant="brand" onclick={handleSubmit} disabled={isAllQuestionsAnswered}></lightning-button>
+                            <lightning-button label="Submit Inspection" variant="brand" onclick={handleSubmit} disabled={isSubmitDisabled}></lightning-button>
                         </div>
                     </div>
                 </template>
@@ -326,7 +326,7 @@
                         </div>
                         <footer class="slds-modal__footer slds-grid slds-grid_align-spread">
                             <lightning-button label="Back to Edit" variant="neutral" onclick={closeReviewModal}></lightning-button>
-                            <lightning-button label="Submit Inspection" variant="brand" onclick={handleSubmitFromReview} disabled={isAllQuestionsAnswered}></lightning-button>
+                            <lightning-button label="Submit Inspection" variant="brand" onclick={handleSubmitFromReview} disabled={isSubmitDisabled}></lightning-button>
                         </footer>
                     </div>
                 </section>
