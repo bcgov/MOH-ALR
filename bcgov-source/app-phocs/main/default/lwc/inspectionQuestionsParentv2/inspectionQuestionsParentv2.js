@@ -57,8 +57,17 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 		return [".pdf", ".png", ".jpg", ".jpeg", ".doc", ".docx", ".xls", ".xlsx"];
 	}
 
-	get isAllQuestionsAnswered() {
-		return !(this.totalQuestions > 0 && this.answeredQuestions === this.totalQuestions);
+	get isSubmitDisabled() {
+		if (!this.groupedQuestions?.length) return true;
+		
+		for (const group of this.groupedQuestions) {
+			for (const parent of group.parentQuestions) {
+				if (!parent.result) {
+					return true; 
+            }
+        }
+    }
+	   return false; 
 	}
 
 	get progressText() {
@@ -75,10 +84,6 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
 	get hasRegulatoryCodes() {
 		return this.regulatoryCodes?.length > 0;
-	}
-
-	get isSubmitDisabled() {
-		return this.answeredQuestions === 0;
 	}
 
 	get unansweredCount() {
