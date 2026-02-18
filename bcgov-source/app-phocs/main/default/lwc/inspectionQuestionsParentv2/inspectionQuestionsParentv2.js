@@ -808,6 +808,24 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 		let statusnotselected = false;
 		let duedateempty = false;
 		let missingNonCompliantDetails = false;
+		const unansweredParents = [];
+
+        for (const group of this.groupedQuestions) {
+          for (const parent of group.parentQuestions) {
+              if (!parent.result) {
+                  unansweredParents.push(parent.assessmentIndicatorDefinitionId);
+              }
+            }
+        }
+
+        if (unansweredParents.length > 0) {
+          this.showToast(
+            "Error",
+            `You have ${unansweredParents.length} unanswered question(s). Please complete them before submitting.`,
+            "error"
+          );
+          return;
+        }
 
 		this.template
 			.querySelectorAll('lightning-input[data-field="compduedate"]')
