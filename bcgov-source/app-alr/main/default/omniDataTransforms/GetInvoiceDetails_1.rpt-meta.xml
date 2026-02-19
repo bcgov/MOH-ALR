@@ -44,6 +44,22 @@
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
+        <defaultValue>[]</defaultValue>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>a48550b6-69d4-49ff-83cb-b8a403ecaad8</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>List&lt;Map&gt;</outputFieldFormat>
+        <outputFieldName>AppFee</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <globalKey>GetInvoiceDetailsCustom2236</globalKey>
@@ -294,6 +310,56 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:AppFeeSumValue 0 &lt;&gt; var:AppFeeSumValue &apos;&apos; IF</formulaConverted>
+        <formulaExpression>IF(AppFeeSumValue&lt;&gt;0,AppFeeSumValue,&apos;&apos;)</formulaExpression>
+        <formulaResultPath>AppFeeSum</formulaResultPath>
+        <formulaSequence>45.0</formulaSequence>
+        <globalKey>0e2fd8fb-9448-4e77-8896-1a15388dcce9</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>d5363cd9-a23d-4efe-926a-69d53fc32440</globalKey>
+        <inputFieldName>AppFeeSum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Currency</outputFieldFormat>
+        <outputFieldName>AppFee:AppFeeSum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| | &quot;SELECT/\/\/FeeAmount/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Application/\/\/Fee&apos;/\/\/&quot; var:InvItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
+        <formulaExpression>SUM(QUERY(&quot;SELECT FeeAmount FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Application Fee&apos; &quot;, InvItem:RegulatoryTrxnFeeId))</formulaExpression>
+        <formulaResultPath>AppFeeSumValue</formulaResultPath>
+        <formulaSequence>44.0</formulaSequence>
+        <globalKey>85509299-31c5-4f15-9267-e094988e2789</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <filterOperator>=</filterOperator>
         <filterValue>Invoice:Id</filterValue>
         <globalKey>GetInvoiceDetailsCustom630</globalKey>
@@ -306,6 +372,39 @@
         <outputFieldName>InvoiceItem</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| &quot;SELECT/\/\/Amount__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Application/\/\/Fee&apos;/\/\/Limit/\/\/1&quot; var:InvItem:RegulatoryTrxnFeeId QUERY</formulaConverted>
+        <formulaExpression>QUERY(&quot;SELECT Amount__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Application Fee&apos; Limit 1&quot;, InvItem:RegulatoryTrxnFeeId)</formulaExpression>
+        <formulaResultPath>AppSum</formulaResultPath>
+        <formulaSequence>43.0</formulaSequence>
+        <globalKey>3b268da2-7805-42e3-8ec9-e9e63f7080ab</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>2abeca0f-df7f-4261-9b7c-8d71a8a72e5d</globalKey>
+        <inputFieldName>AppSum</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Currency</outputFieldFormat>
+        <outputFieldName>AppFee:AppSum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -498,6 +597,23 @@
         <outputCreationSequence>1.0</outputCreationSequence>
         <outputFieldFormat>List&lt;Map&gt;</outputFieldFormat>
         <outputFieldName>InvoiceItem</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>Invoice:Id</filterValue>
+        <globalKey>20a449a8-d413-4dc0-a67a-75f8f767f4fb</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeId</inputFieldName>
+        <inputObjectName>RegulatoryTrxnFeeItem</inputObjectName>
+        <inputObjectQuerySequence>11.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>InvItem</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -1151,6 +1267,23 @@
         <outputCreationSequence>1.0</outputCreationSequence>
         <outputFieldFormat>Currency</outputFieldFormat>
         <outputFieldName>Other:OtherFeeSum</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>&gt;</filterOperator>
+        <filterValue>&apos;1&apos;</filterValue>
+        <globalKey>58e490d6-e32c-407c-952d-82288b5913c0</globalKey>
+        <inputFieldName>FeeAmount</inputFieldName>
+        <inputObjectName>RegulatoryTrxnFeeItem</inputObjectName>
+        <inputObjectQuerySequence>11.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetInvoiceDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>InvItem</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
