@@ -1,0 +1,42 @@
+|Sandbox|`Runbook for PRD from SP-3 to SP18'|
+|-|-|
+|Runbook Created|`2026-02-20`|
+|Runbook Last Modified|`2026-02-20`|
+
+Pre-deployment steps
+
+[ ] EHIS-2258
+
+> Quick Find → Digital Experience → Settings and enable all items under Experience Management Settings.
+> Provide Deployment User for Site
+- bcgov-source\app-phocs\main\default\sites\phocsservices.site-meta.xml
+- bcgov-source\app-phocs\main\default\sites\phocsportal.site-meta.xml
+> Go to Quick find → Sites → click on phocsservices → add David user meail in deployment user in site admin and record owner.
+
+Post -deployment steps
+
+[ ] EHIS-2703
+
+> go to potal - click on workspace - administration - memebers - add potal profile and ps 
+  - Profile - Custom Community Operator.
+  - Permission set - PHOCS Operator User CRE PS.
+
+[ ] EHIS-2735
+
+>  PHOCS site publish
+Step-1: Open the target salesforce instance.
+Step-2: Click on the gear icon and select setup.
+Step-3: Search for 'All Sites' and then select builder for phocsservices.
+Step-4: Select the "Publish" on Home Page - on right top Corner.
+Step-5: Again Click on "publish" button on pop-up window.
+Step-6: Click on "Got It" button and wait till you get confirmation email about site published.
+Step-7: Repeat the above steps from 3 to 6 for phocsportal as well.
+
+> PHOCS site publish
+Step-1: Open the target salesforce instance.
+Step-2: Click on the gear icon and select setup.
+Step-3: Search for 'All Sites' and then select builder for phocsservices.
+Step-4: Select the "Settings" Icon on Home Page - on left top Corner.
+Step-5: Again Click on "phocsservices Profile" hyperlink under the Guest User Profile.
+Step-6: Click on "Assigned Users" button and wait and select the "Site Guest User, phocsservices".
+Step-7: Assign the "PHOCS Services Guest User PSG" Permission Set Group to the user.
