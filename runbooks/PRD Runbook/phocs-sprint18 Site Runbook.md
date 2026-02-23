@@ -11,7 +11,7 @@ Pre-deployment steps
 > Provide Deployment User for Site
 - bcgov-source\app-phocs\main\default\sites\phocsservices.site-meta.xml
 - bcgov-source\app-phocs\main\default\sites\phocsportal.site-meta.xml
-> Go to Quick find → Sites → click on phocsservices → add David user meail in deployment user in site admin and record owner.
+> Go to Quick find → Sites → click on phocsservices - workspaces → add deployment user in email repeat same step for phocsportal
 
 Post -deployment steps
 
@@ -26,7 +26,7 @@ Post -deployment steps
 >  PHOCS site publish
 Step-1: Open the target salesforce instance.
 Step-2: Click on the gear icon and select setup.
-Step-3: Search for 'All Sites' and then select builder for phocsservices.
+Step-3: Search for 'All Sites' and then select builder for phocsportal.
 Step-4: Select the "Publish" on Home Page - on right top Corner.
 Step-5: Again Click on "publish" button on pop-up window.
 Step-6: Click on "Got It" button and wait till you get confirmation email about site published.
