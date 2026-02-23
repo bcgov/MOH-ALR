@@ -49,3 +49,8 @@
 - Tobacco and Vapour Inspection
 - Personal Services Inspection
 - Recreational Water Inspection
+
+Verification Steps
+
+- Make sure Action plan templates are populated with phocs record type id
+- Action plan templates are activated
