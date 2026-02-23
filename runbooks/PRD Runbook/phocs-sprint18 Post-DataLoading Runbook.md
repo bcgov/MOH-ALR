@@ -1,0 +1,45 @@
+|Sandbox|`Runbook for PRD from SP-3 to SP18'|
+|-|-|
+|Runbook Created|`2026-02-23`|
+|Runbook Last Modified|`2026-02-23`|
+
+> Prerequisite
+
+- Use Data Loader/ workbench Imports Tool to Insert records 
+
+
+[ ] 1. Upload Decision matrix data EHIS-2221 , 1725 , 2865
+
+> go to business rules engine -  decision matrix - In the related tab under - Decision Matrix Versions - open the active verision and click on upload file attached and then reload to see the records once loaded
+
+1. DeveloperName : PHOCS Document Checklist Exemption
+   UniqueName : PHOCS_Document_Checklists
+
+2. DeveloperName : PHOCS Document Checklists Decision Matrix
+   UniqueName : PHOCS_Document_Checklists_Decision_Matrix
+
+3. DeveloperName : PHOCS Inspection Action Plan Template Decision Matrix
+   Unique Name : PHOCS_Inspection_Action_Plan_Template_Decision_Matrix
+
+[ ] 2. Upload LabTestMasterList__c Object records : EHIS-3344 , 2432
+
+> Copy RecordTypeId of Water , lab  , dye , radon , dair/environmental swab RecordType Ids in the csv files
+> Upload the CSV file   into Data Loader or workbench (Insert) 
+
+[ ] 3. Upload Product object records : EHIS-2889 , 3378
+
+- Populate Record Type Id in RecordTypeId column
+- Execute this query in Query Editor:
+> select id from RecordType where SobjectType ='Product2' and Name='PHOCS Products'
+- Populate Record Type Id in RecordTypeId column
+
+"Use Data Loader/ workbench Imports Tool to Insert records 
+
+Object: Product2
+Action: Insert
+Field Mapping : Automatically Mapped. Column Names are Matching with the Object Field Names (Name=Name, Family=Family, RecordTypeId=RecordTypeId)
+Run Insert
+
+[ ] 4. EHiS-2969
+
+[ ] 
