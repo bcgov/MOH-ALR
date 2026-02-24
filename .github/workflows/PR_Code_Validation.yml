@@ -48,7 +48,7 @@ jobs:
 
       # === Static Code Analysis ===
       - name: Run static apexunit validations
-        run: sf scanner run --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH }}" --pmdconfig ruleset/apexunit.xml --format table --engine pmd --normalize-severity 1 --severity-threshold 1
+        run: sf scanner run --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH }}" --pmdconfig ruleset/apexunit.xml --format table --engine pmd --normalize-severity --severity-threshold 1
 
       - name: Run static braces validations
         run: sf scanner run --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH }}" --format table --pmdconfig ruleset/braces.xml
