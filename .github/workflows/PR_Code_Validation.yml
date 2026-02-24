@@ -25,20 +25,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: mkdir smoke-test-results
       
       # === Make three attempts to install sfdx ===
-      - name: 'Install Salesforce CLI'
-        run: |
-          wget https://developer.salesforce.com/media/salesforce-cli/sfdx/channels/stable/sfdx-linux-x64.tar.xz
-          mkdir ~/sfdx
-          tar xJf sfdx-linux-x64.tar.xz -C ~/sfdx --strip-components 1
-          echo "$HOME/sfdx/bin" >> $GITHUB_PATH
-          ~/sfdx/bin/sfdx version
+      - name: Install Salesforce CLI (modern)
+        run: npm install -g @salesforce/cli
+
+      - name: Verify sfdx
+        run: sfdx version
 
       # === Attempt to install the scanner plugin ===
       - name: Install Scanner Plugin
-        id: scanner_install
         run: sfdx plugins:install @salesforce/sfdx-scanner@3.17.0
 
       # === Log the installed plugins for easier debugging ===
