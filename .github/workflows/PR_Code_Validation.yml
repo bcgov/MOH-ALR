@@ -48,38 +48,38 @@ jobs:
 
       # === Static Code Analysis ===
       - name: Run static apexunit validations
-        run: sf scanner run --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH }}" --pmdconfig ruleset/apexunit.xml --format table --engine pmd --normalize-severity --severity-threshold 1
+        run: sf scanner run --target "${{ vars.RELEASE_PIPELINE_PATH }}" --pmdconfig ruleset/apexunit.xml --format table --engine pmd --normalize-severity --severity-threshold 1
 
       - name: Run static braces validations
-        run: sf scanner run --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH }}" --format table --pmdconfig ruleset/braces.xml
+        run: sf scanner run --target "${{ vars.RELEASE_PIPELINE_PATH }}" --format table --pmdconfig ruleset/braces.xml
 
       - name: Run static complexity validations
-        run: sf scanner run --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH }}" --format table --pmdconfig ruleset/complexity.xml
+        run: sf scanner run --target "${{ vars.RELEASE_PIPELINE_PATH }}" --format table --pmdconfig ruleset/complexity.xml
 
       # === Attempt to execute static source validations ===
       - name: Run static empty source validations
         id: static_tests_empty
-        run: sf scanner run --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH }}" --format "table" --pmdconfig "ruleset/empty.xml"
+        run: sf scanner run --target "${{ vars.RELEASE_PIPELINE_PATH }}" --format "table" --pmdconfig "ruleset/empty.xml"
 
       # === Attempt to execute static source validations ===
       - name: Run static complexity source validations
         id: static_tests_metrics
-        run: sf scanner run --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH }}" --format "table" --pmdconfig "ruleset/metrics.xml"
+        run: sf scanner run --target "${{ vars.RELEASE_PIPELINE_PATH }}" --format "table" --pmdconfig "ruleset/metrics.xml"
 
       # === Attempt to execute static source validations ===
       - name: Run static security source validations
         id: static_tests_security
-        run: sf scanner run --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH }}" --format "table" --pmdconfig "ruleset/security.xml"
+        run: sf scanner run --target "${{ vars.RELEASE_PIPELINE_PATH }}" --format "table" --pmdconfig "ruleset/security.xml"
 
       # === Attempt to execute static source validations ===
       - name: Run static style source validations
         id: static_tests_style
-        run: sf scanner run --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH }}" --format "table" --pmdconfig "ruleset/style.xml"
+        run: sf scanner run --target "${{ vars.RELEASE_PIPELINE_PATH }}" --format "table" --pmdconfig "ruleset/style.xml"
 
       # === Attempt to execute lint source validations ===
       - name: Run lint empty source validations
         id: lint_tests
-        run: sf scanner run --engine eslint-lwc --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH }}"
+        run: sf scanner run --engine eslint-lwc --target "${{ vars.RELEASE_PIPELINE_PATH }}"
 
       # Authenticate CI01 sandbox
       - name: 'Authenticate CI01 Sandbox'
@@ -89,4 +89,5 @@ jobs:
 
       - name: Validate Code
         id: run_code_validation
-        run: sf project deploy start --source-dir "${{ vars.RELEASE_PIPELINE_SOURCEPATH }}" --wait 60 --dry-run --test-level RunLocalTests --target-org CI01
+        run: sf project deploy start --source-dir "${{ vars.RELEASE_PIPELINE_PATH }}" --wait 60 --dry-run --test-level RunLocalTests --target-org CI01
+RELEASE_PIPELINE_PATH
