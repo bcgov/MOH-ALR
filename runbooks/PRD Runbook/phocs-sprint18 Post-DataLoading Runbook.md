@@ -42,4 +42,7 @@ Run Insert
 
 [ ] 4. EHiS-2969
 
-[ ] 
+- All Event records without a Record Type must be updated so that they use the PHOCS Event Record Type Id.
+- Using the data loader:
+- Populate the RecordTypeId field with the PHOCS Event Record Type Id
+- Perform an Update operation on the Event object.
