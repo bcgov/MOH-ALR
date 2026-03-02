@@ -388,6 +388,18 @@
                             </p>
                         </div>
 
+                        <div class="slds-grid slds-wrap slds-m-bottom_medium">
+
+        <div class="slds-col slds-size_1-of-2 slds-p-right_small">
+            <lightning-input type="number" label="Time Spent (minutes)" value={timeSpentMinutes} min="0" max="999999" required data-field="timespent" onchange={handleTimeSpentChange}></lightning-input>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2 slds-align_absolute-center">
+            <lightning-input type="checkbox" label="Follow-up Inspection Required" checked={followUpInspectionRequired} onchange={handleFollowUpChange}></lightning-input>
+        </div>
+        
+    </div>
+
                         <lightning-textarea label="Closing Comments" value={closingComments} maxlength="1000" onchange={handleClosingCommentsChange} placeholder="Additional comments..."></lightning-textarea>
 
                         <template lwc:if={closingCommentsMessage}>

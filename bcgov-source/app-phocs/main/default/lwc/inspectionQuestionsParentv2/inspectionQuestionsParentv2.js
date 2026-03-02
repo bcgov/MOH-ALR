@@ -38,6 +38,8 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 	showReviewModal = false;
 	reviewData = [];
 	autoOpenedReview = false;
+	timeSpentMinutes = null;
+    followUpInspectionRequired = false;
 
 	totalQuestions = 0;
 	answeredQuestions = 0;
@@ -342,6 +344,14 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 		this.showQuestions = true;
 
 	}
+
+	handleTimeSpentChange(event) {
+        this.timeSpentMinutes = event.target.value;
+    }
+
+    handleFollowUpChange(event) {
+        this.followUpInspectionRequired = event.target.checked;
+    }
 
 	async handleStart() {
 		this.isLoading = true;
@@ -804,6 +814,19 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 	}
 
 	async handleCompleteInspection() {
+		const input = this.template.querySelector(
+        'lightning-input[data-field="timespent"]'
+        );
+
+        if (!this.timeSpentMinutes && this.timeSpentMinutes !== 0) {
+           input.setCustomValidity("Time Spent is required.");
+           input.reportValidity();
+           return;
+        }
+
+        input.setCustomValidity("");
+        input.reportValidity();
+
 		this.showEndInspectionModal = false;
 		await this.handleFinalSubmit();
 	}
@@ -1046,6 +1069,8 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 			await completeInspection({
 				visitId: this.recordId,
 				closingComments: this.closingComments,
+				timeSpentMinutes: this.timeSpentMinutes,
+                followUpInspectionRequired: this.followUpInspectionRequired
 			});
 			this.isDraft = false;
 
