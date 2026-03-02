@@ -549,7 +549,7 @@ private class PHOCSAssessmentIndCtrlV2Test {
 		
 
 			Test.startTest();
-        	PHOCSInspectionAssessmentIndControllerV2.completeInspection(inspection.Id,closingComments);
+        	PHOCSInspectionAssessmentIndControllerV2.completeInspection(inspection.Id,closingComments, null, false);
     		Test.stopTest();
 		
 		Visit updRecv = [SELECT Id, Status, StatusRemarks, ActualVisitEndTime, PHOCSIsDraft__c FROM Visit WHERE Id =: inspection.Id LIMIT 1];
