@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>PHOCSIsBelongstoPHOCS__c</fullName>
-    <formula>CONTAINS(RecordType.Name, &apos;PHOCS&apos;)</formula>
+    <formula>OR(RecordType.DeveloperName = &apos;PHOCSBCCDCDairyPlantLicence&apos; ,
+RecordType.DeveloperName = &apos;ConstructionPermitApplication&apos;,
+RecordType.DeveloperName = &apos;DairyWorkerLicence&apos;,
+RecordType.DeveloperName = &apos;Evaluation&apos;,
+RecordType.DeveloperName = &apos;PHOCSExemptions&apos;,
+RecordType.DeveloperName = &apos;OperatingPermitApplication&apos;
+)</formula>
     <label>Is Belongs to PHOCS?</label>
     <trackHistory>false</trackHistory>
     <type>Checkbox</type>
