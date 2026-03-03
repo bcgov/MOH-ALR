@@ -389,14 +389,14 @@ public without sharing class PHOCSInspectionAssessmentIndControllerV2 {
 * @description Update the inspection status to complete & closing comments.
 */    
     @AuraEnabled
-    public static void completeInspection(Id visitId, String closingComments, Integer timeSpentMinutes, Boolean followUpInspectionRequired) {
+    public static void completeInspection(Id visitId, String closingComments, String timeSpent, Boolean followUpInspectionRequired) {
         Visit visitRec = [SELECT Id, Status, StatusRemarks, ActualVisitEndTime FROM Visit WHERE Id =: visitId LIMIT 1];
         
         visitRec.Status = 'Completed';
         visitRec.StatusRemarks = closingComments;
         visitRec.ActualVisitEndTime = System.now();
         visitRec.PHOCSIsDraft__c = false; 
-        visitRec.TimeSpentMinutes__c = timeSpentMinutes;
+        visitRec.TimeSpentMinutes__c = timeSpent;
         visitRec.FollowUpInspectionRequired__c = followUpInspectionRequired;
         update visitRec;
     }    

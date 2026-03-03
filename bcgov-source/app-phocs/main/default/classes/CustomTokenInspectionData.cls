@@ -87,11 +87,8 @@ global without sharing class CustomTokenInspectionData
     );
     reportMap.put('inspectionType', visitRec.VisitType.Name);
     reportMap.put(
-        'timeSpent',
-        visitRec.TimeSpentMinutes__c != null
-            ? Integer.valueOf(visitRec.TimeSpentMinutes__c)
-            : 0
-    );
+        'timeSpent', 
+        visitRec.TimeSpentMinutes__c != null ? String.valueOf(visitRec.TimeSpentMinutes__c) : null);
     reportMap.put('closingComments', visitRec.StatusRemarks);
 
        /* ---------------- CANNED COMMENTS ---------------- */
@@ -260,7 +257,7 @@ private List<Object> buildCategoryList(Map<String, List<Object>> source) {
         global String address;
         global Date inspectionDate;
         global String inspectionType;
-        global Integer timeSpentMinutes;
+        global String timeSpentMinutes;
     }
 
     global class LineItem {
