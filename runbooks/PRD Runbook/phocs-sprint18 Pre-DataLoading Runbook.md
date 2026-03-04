@@ -47,7 +47,15 @@ Create the following new Inspection Type records using the existing PHOCS Inspec
 > Retrieve RecordTypeId of PHOCSRegulatorycode in the Salesforce instance
 > Copy RecordTypeId into CSV file
 > Map RegulatoryAuthority Id's in the excel 
-> Upload the CSV file into Data Loader (Insert)
+> Upload the CSV file into Data Loader (Insert) and do the mapping 
+
+- field mapping:- 
+                - Name: Name
+                - RecordTypeId: RecordTypeId 
+                - RegulatoryAuthorityId: RegulatoryAuthorityId
+                - Effective from (created date)
+                - Subject
+                - Description
 
 2. Create Assessment Indicator Definition Parent Questions
 
@@ -56,12 +64,25 @@ Create the following new Inspection Type records using the existing PHOCS Inspec
 > Map RecordTypeId, category , datatype , Name(Parentquestions)
 Upload the CSV file into Data Loader (Insert)
 
+Map : Category__c - Parent categories 
+      Name - Parent questions
+      Criticality__c	
+      DataType- string
+      RecordTypeId - Phocs record typeId
+
 3. Create Assessment Indicator Definition Child Questions
 
 > Retrieve RecordTypeId of PHOCSAssessmentIndicator definition in the Salesforce instance
 > Copy RecordTypeId into CSV file
 > Map RecordTypeId, category , datatype , Name(Childquestions)
 Upload the CSV file into Data Loader (Insert)
+
+Map : Category__c - Child categories 
+      Name - Child questions
+      Criticality__c	
+      DataType- Boolean
+      RecordTypeId - Phocs record typeId
+
 
 4. Map Child with Parent questions
 
@@ -97,39 +118,31 @@ Formula
  - you will get ATD Id's vlookup to AID Id's
  - Insert Operation
 
+ - field mapping:- 
+                - AssessmentTaskdefinitionId
+                - AssessmentInddefinitionId
+
+6. Map Parent and Child Regulatory codes with ParentAssessmentIndicatordefinition and ChildAssessmentIndicatordefinition questions
+> Copy results of ParentAssessmentIndicatordefinition
+> Copy results of ChildAssessmentIndicatordefinition
+> Copy results of Regulatory codes
+> Use the reference file for mapping Parent questions with RC and child questions with RC based on category (9.ReferencefileDairyRegulatoryCodeAssessmentInd)and arrange columns as per refernece file and use the same lookup
+
+> Here we are getting Regulatory code Id's using vlookup for parent and child questions and AssessmentIndDefindition Id's using Xlookup
+
+- field mapping:- 
+                - RegulatorycodeId
+                - AssessmentInddefinitionId
 
 
+7. [ ] Create record EHIS-3093
 
-
-
-3093
-
-
-Following question is added to the system as an assessment indicator definition record
-
-Record Type 
-
-Name
-
-Category
-
-Indicatory Field Type
-
-Criticality
-
-ParentId
-
-PHOCS Assessment Indicator Definition
-
-Instructions for the operator (outcomes of environmental swabbing or monthly product evaluations)
-
-Directive to operators 
-
-Text
-
-Non-Critical
-
-Null
+Record Type : PHOCS Assessment Indicator Definition
+Name : Instructions for the operator (outcomes of environmental swabbing or monthly product evaluations)
+Category : Directive to operators 
+Indicatory Field Type : Text
+Criticality : Non-Critical
+ParentId : Null
 
 
 Verification steps

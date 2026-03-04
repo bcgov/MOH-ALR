@@ -127,6 +127,13 @@ label=PHOCS Assessment Indicator Definition
 Provide RT access
 field access
 Deploy - bcgov-source\core\main\default\objects\AssessmentIndicatorDefinition\fields\Criticality__c.field-meta.xml
+bcgov-source\core\main\default\objects\AssessmentIndicatorDefinition\fields\PHOCSParentId__c.field-meta.xml
+add category field and parentid fied in searchlayout -default layout
+
+- give RT access to ActionPlantemplate
+- deploy phocs Assessmenttaskdefinition RT and provide access
+- deploy phocs regulatory authority  RT and provide access
+- deploy regulatory code RT and provide access
 
 [x] 4. EHIS-2070 (3mins)
 
