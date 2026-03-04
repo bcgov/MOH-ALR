@@ -6,11 +6,11 @@
         <name>Check_BLA_Record_Type</name>
         <label>Check BLA Record Type</label>
         <locationX>578</locationX>
-        <locationY>827</locationY>
+        <locationY>935</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>PHOCS_BLA_Record_Types</name>
-            <conditionLogic>(1 OR 2 OR 3 OR 5) AND 4</conditionLogic>
+            <conditionLogic>(1 OR 2 OR 3 OR 5 OR 6) AND 4</conditionLogic>
             <conditions>
                 <leftValueReference>Get_BLA.RecordType.DeveloperName</leftValueReference>
                 <operator>EqualTo</operator>
@@ -46,6 +46,13 @@
                     <stringValue>PHOCSExemptions</stringValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>Get_BLA.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>Get_Dairy_Plant.DeveloperName</elementReference>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>Check_Document_Checklist_Item</targetReference>
             </connector>
@@ -56,7 +63,7 @@
         <name>Check_Document_Checklist_Item</name>
         <label>Check Document Checklist Item</label>
         <locationX>314</locationX>
-        <locationY>935</locationY>
+        <locationY>1043</locationY>
         <defaultConnector>
             <targetReference>Update_Document_Checklist_Items</targetReference>
         </defaultConnector>
@@ -162,6 +169,27 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
+        <name>Get_Dairy_Plant</name>
+        <label>Get Dairy Plant</label>
+        <locationX>578</locationX>
+        <locationY>827</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_BLA_Record_Type</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>PHOCS BCCDC Dairy Plant Licence</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>RecordType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>Get_Document_Checklist_Item_Record_Type</name>
         <label>Get Document Checklist Item Record Type - Non ERCP</label>
         <locationX>578</locationX>
@@ -190,7 +218,7 @@
         <locationY>719</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Check_BLA_Record_Type</targetReference>
+            <targetReference>Get_Dairy_Plant</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -254,7 +282,7 @@
         <name>Update_Document_Checklist_Items</name>
         <label>Update Document Checklist Items</label>
         <locationX>578</locationX>
-        <locationY>1043</locationY>
+        <locationY>1151</locationY>
         <inputAssignments>
             <field>RecordTypeId</field>
             <value>
@@ -267,7 +295,7 @@
         <name>Update_Document_Checklist_Items_ERCP</name>
         <label>Update Document Checklist Items ERCP</label>
         <locationX>50</locationX>
-        <locationY>1043</locationY>
+        <locationY>1151</locationY>
         <inputAssignments>
             <field>RecordTypeId</field>
             <value>
@@ -280,7 +308,7 @@
         <name>Update_Records_DrawingPlan</name>
         <label>Update Document Checklist Items Drawing/Plan</label>
         <locationX>314</locationX>
-        <locationY>1043</locationY>
+        <locationY>1151</locationY>
         <inputAssignments>
             <field>RecordTypeId</field>
             <value>
