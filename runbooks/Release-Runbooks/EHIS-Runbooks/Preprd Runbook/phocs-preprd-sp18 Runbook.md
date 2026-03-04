@@ -49,11 +49,12 @@
 > Deactivate matching rule 
 - Navigate to setup , search for matching rules - search for - Residence_Account_Matching_Rule_V2 - click on deactivate
 
-> Remove Action Plan Template from the folder till deployment , once deployed move it back to the folder
+> Remove Action Plan Template from the folder and AAR sharing rules till deployment , once deployed move it back to the folder
 
 - bcgov-source/app-alr/main/default/actionPlanTemplates
+- bcgov-source\app-phocs\main\default\sharingRules\AccountAccountRelation.sharingRules-meta.xml
 
-[x] 2. EHIS-1639 - 10mins
+[x] 2. EHIS-1639 - 10mins one time activity
 
 Delete Record Types in Asset object : 
 go to setup - object manager - search for Asset object and delete below 
@@ -76,7 +77,7 @@ go to setup - object manager - search for Asset object and delete below
 
 > [x] Delete sharing rules associated with these record types water distribution and water storage Asset record types
 
-[x]
+[x] one time activity
 3. Delete EHIS_Water_Source_Intake_Record_Page , EHIS_Water_System_Record_Page from account object
 4. Delete Water_Source_Intake_Layout , Water_System_Layout compact Layout from account object
 5. Delete Water_Source_Intake , Water_System record type from account object
@@ -85,7 +86,7 @@ go to setup - object manager - search for Asset object and delete below
 7.AccountAccountRelation.EHIS_Facility_AAR - Recordtype
 8.PartyRoleRelation.EHIS_PRR - Recordtype
 
-[x] 2. EHIS-2592 (5mins)
+[x] 2. EHIS-2592 (5mins) - one time activity
 
 > Delete fields from account object
 
@@ -117,6 +118,16 @@ API Name - ALRActionPlanTemplate
 Active=True
 Description - Capture templates for ALR Action Plans
 
+> Create RecordType this step is for data loading of Assessment Indicator defintion and provide field access to the PS
+
+API Name - PHOCSAssessmentIndicatorDefinition
+Active=True
+description=Capture inspection questions
+label=PHOCS Assessment Indicator Definition
+Provide RT access
+field access
+Deploy - bcgov-source\core\main\default\objects\AssessmentIndicatorDefinition\fields\Criticality__c.field-meta.xml
+
 [x] 4. EHIS-2070 (3mins)
 
 To avoid deployment overrides the manual configuration, the listview has been deleted from DEV branch. Instead, the following configuration need to take place in Production:
@@ -132,7 +143,7 @@ Filters:
         <value>Resolved</value>
     </filters>
 
-[x] EHIS-2258 (3 mins)
+[x] 5. EHIS-2258 (3 mins)
 
 > Quick Find → Digital Experience → Settings enable Enable Digital Experiences
 > and enable all items under Experience Management Settings.
@@ -140,29 +151,42 @@ Filters:
 - bcgov-source\app-phocs\main\default\sites\phocsservices.site-meta.xml - 
 - bcgov-source\app-phocs\main\default\sites\phocsportal.site-meta.xml
 
-[ ] 
-## Deployment Steps (20 mins)
+[x] 6. Include custom metadata during deployment (3mins)
 
-[ ] Validate components
+from 
+- copy files from C:\repo\MOH-ALR\src-env-specific\prod\main\default\customMetadata
+in 
+-C:\repo\MOH-ALR\bcgov-source\app-phocs\main\default\customMetadata 
 
-1. sf project deploy start --dry-run --source-dir bcgov-source --wait 30 --target-org deployment.user@phocs.preprd.com -l RunLocalTests -g
+[x] Deploy DecisionMatrixDefinition files (3mins)
+
+> sf project deploy start --source-dir src-bre\main\default\PhocsdecisionMatrixDefinition --wait 30 --target-org deployment.user@phocs.preprd.com
+
+## Deployment Steps (60 mins)
+
+1. [x] Deploy Omni studio components (~15min)
+
+> sf project deploy start --source-dir bcgov-source\app-alr\main\default\omniDataTransforms --source-dir bcgov-source\app-alr\main\default\omniIntegrationProcedures --source-dir bcgov-source\app-alr\main\default\omniScripts --source-dir bcgov-source\app-alr\main\default\OmniInteractionConfig --source-dir bcgov-source\app-alr\main\default\omniUiCard --source-dir bcgov-source\app-phocs\main\default\omniDataTransforms --source-dir bcgov-source\app-phocs\main\default\omniIntegrationProcedures --source-dir bcgov-source\app-phocs\main\default\omniScripts --source-dir bcgov-source\app-phocs\main\default\omniUiCard --source-dir bcgov-source\core\main\default\omniDataTransforms --source-dir bcgov-source\core\main\default\omniScripts --target-org deployment.user@phocs.preprd.com
+
+2. [ ] Validate components
+
+> sf project deploy start --dry-run --source-dir bcgov-source --wait 30 --target-org deployment.user@phocs.preprd.com -l RunLocalTests -g
 
 [ ]  Deploy full repository (~20 min)
 
-1. [ ] Verify folders
-      |Folder|Path|
-      |-|-|
-      |'bcgov-source`|
-
-2. [ ] Deploy Omni studio components
-
-   - sf project deploy start --source-dir bcgov-source/app-phocs/main/default/omniDataTransforms --wait 30 --target-org 
-   - sf project deploy start --source-dir bcgov-source/core/main/default/omniDataTransforms --wait 30 --target-org
-   
 3. [ ] Deploy 
    - sf project deploy start --source-dir bcgov-source --target-org deployment.user@phocs.preprd.com --test-level RunLocalTests -g
 
-## Post-Deployment Steps
+## Post-Deployment Steps 
+
+[ ] 1. deactivate and activate Omni studio Active version components after deployment , make sure the active version to be verified from branch during deactivation and activation and 
+
+  1. App Launcher -> OmniStudio -> Omnistudio **Integration Procedures**
+      2. Locate all active custom **Integration Procedures** -> deactivate them -> activate them back.
+      3. App Launcher -> Omniflex cards -> **Omnistudio Flex Cards**
+      4. Locate all active custom **Flex Cards** -> open each Flex Card -> deactivate -> activate back.
+      5. App Launcher -> OmniStudio -> **OmniScripts**
+      6. Locate all active custom **OmniScripts** -> open each omni script -> deactivate -> activate back
 
 [ ] 2. EHIS-2070
 
@@ -287,6 +311,8 @@ Assign Profile and Permission set related to Operator portal.
 > Go to Quick find → Sites → click on phocsservices → add David user meail in site admin and record owner.
 > Go to Quick find → Sites → click on phocsportal → add David user meail in site admin and record owner.
 
+[ ] 14. Populate AAR recordtypeID in PRD
+
 EMAIL - david.surrao@gov.bc.ca
 
 Verification checklist
@@ -313,3 +339,11 @@ Note:
 7. [ ] EHIS-3128
 
 8. Make sure Operator Portal Sharing Sets sharing sets are deployed
+
+9. - Click App Launcher, search “Business Rules Engine”
+   - Select Lookup Tables tab, find “PHOCS Document Checklists Decision Matrix” record
+   - Select Lookup Tables tab, find “PHOCS Inspection Action Plan Template Decision Matrix”
+   - Select Lookup Table tab, find "PHOCS Document Checklist Exemption " 
+   - Make sure the above DM's are activated
+
+10. Verify sharing rules for account , ARR , PRR, Asset
