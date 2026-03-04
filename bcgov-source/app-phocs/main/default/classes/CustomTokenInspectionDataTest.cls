@@ -35,7 +35,7 @@ public class CustomTokenInspectionDataTest {
             PlannedVisitStartTime = visitDateTime,
             ActualVisitStartTime = visitDateTime,
             ActualVisitEndTime = visitDateTime.addHours(2),
-            TimeSpentMinutes__c = 120,
+            TimeSpentMinutes__c = '01:20',
              PlaceId = cpa.Id,
             StatusRemarks = 'Inspection Completed'
         );

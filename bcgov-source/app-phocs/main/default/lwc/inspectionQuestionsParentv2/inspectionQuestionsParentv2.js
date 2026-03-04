@@ -38,7 +38,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 	showReviewModal = false;
 	reviewData = [];
 	autoOpenedReview = false;
-	timeSpentMinutes = null;
+	timeSpent = '';
     followUpInspectionRequired = false;
 
 	totalQuestions = 0;
@@ -346,8 +346,22 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 	}
 
 	handleTimeSpentChange(event) {
-        this.timeSpentMinutes = event.target.value;
+    const input = event.target;
+    const value = input.value.trim();
+    this.timeSpent = value;
+
+    const timeRegex = /^(\d{1,2}):([0-5][0-9])$/;
+
+    if (!value) {
+        input.setCustomValidity("Time Spent is required.");
+    } else if (!timeRegex.test(value)) {
+        input.setCustomValidity("Please enter time in valid HH:MM format.");
+    } else {
+        input.setCustomValidity("");
     }
+
+	input.reportValidity();
+	}
 
     handleFollowUpChange(event) {
         this.followUpInspectionRequired = event.target.checked;
@@ -818,11 +832,20 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
         'lightning-input[data-field="timespent"]'
         );
 
-        if (!this.timeSpentMinutes && this.timeSpentMinutes !== 0) {
-           input.setCustomValidity("Time Spent is required.");
-           input.reportValidity();
-           return;
-        }
+        const value = input.value ? input.value.trim() : '';
+		const timeRegex = /^(\d{1,2}):([0-5][0-9])$/;
+
+        if (!value) {
+			input.setCustomValidity("Time Spent is required.");
+			input.reportValidity();
+			return;
+		}
+		
+		if (!timeRegex.test(value)) {
+			input.setCustomValidity("Please enter time in valid HH:MM format.");
+			input.reportValidity();
+			return;
+		}
 
         input.setCustomValidity("");
         input.reportValidity();
@@ -1069,7 +1092,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 			await completeInspection({
 				visitId: this.recordId,
 				closingComments: this.closingComments,
-				timeSpentMinutes: this.timeSpentMinutes,
+				timeSpent: this.timeSpent,
                 followUpInspectionRequired: this.followUpInspectionRequired
 			});
 			this.isDraft = false;
