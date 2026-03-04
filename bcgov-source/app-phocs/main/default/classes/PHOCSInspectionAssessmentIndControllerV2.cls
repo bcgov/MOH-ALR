@@ -397,7 +397,7 @@ public without sharing class PHOCSInspectionAssessmentIndControllerV2 {
         visitRec.ActualVisitEndTime = System.now();
         visitRec.PHOCSIsDraft__c = false; 
         visitRec.TimeSpentMinutes__c = timeSpent;
-        visitRec.FollowUpInspectionRequired__c = followUpInspectionRequired;
+        //visitRec.FollowUpInspectionRequired__c = followUpInspectionRequired;
         update visitRec;
     }    
     
