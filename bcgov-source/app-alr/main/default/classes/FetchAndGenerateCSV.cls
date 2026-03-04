@@ -63,9 +63,10 @@ public with sharing class FetchAndGenerateCSV {
                         ResCatCode = (acc.LicenseType__r.RegulatoryAuthorizationCode__c != null) ? acc.LicenseType__r.RegulatoryAuthorizationCode__c : '';
                         
                         Contact primaryContact = getPrimaryContact(acc);
-                        if (primaryContact != null){
-                            Registrant_Contact = String.valueOf(primaryContact.Name).replaceAll(',','');
-                        }
+                        Registrant_Contact = (primaryContact != null && primaryContact.Name != null)
+                                                                        ? String.valueOf(primaryContact.Name).replaceAll(',','')
+                                                                        : '';
+
                         
                         RegNo = getRegistrationCertificates(acc.AccountBusinessLicenses__r);
                         Appl_LegalName = (acc.Parent.Name != null) ? String.valueOf(acc.Parent.Name).replaceAll(',','') : '';
