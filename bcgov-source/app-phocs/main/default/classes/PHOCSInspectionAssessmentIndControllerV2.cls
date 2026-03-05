@@ -448,22 +448,27 @@ public without sharing class PHOCSInspectionAssessmentIndControllerV2 {
             allParentDefIds.addAll(defIds);
         }        
         
-        Set<Id> relevantDefIds = new Set<Id>();
-        for (AssessmentIndicatorDefinition def : [SELECT Id FROM AssessmentIndicatorDefinition WHERE Id IN :allParentDefIds]) {
-            relevantDefIds.add(def.Id);
-        }
-        
-        List<InspectionAssessmentInd> childrenToReset = [SELECT Id, Result, PHOCSCheckboxResponse__c FROM InspectionAssessmentInd
-                                                         WHERE AssessmentTaskId IN :taskToParentDefIds.keySet() AND AssessmentIndDefinition.PHOCSParentId__c IN :relevantDefIds];
+        List<InspectionAssessmentInd> childrenToReset = [SELECT Id, Result, PHOCSCheckboxResponse__c, AssessmentTaskId, AssessmentIndDefinition.PHOCSParentId__c 
+                                                         FROM InspectionAssessmentInd
+                                                         WHERE AssessmentTaskId IN :taskToParentDefIds.keySet() AND AssessmentIndDefinition.PHOCSParentId__c != null];
         
         if (childrenToReset.isEmpty()) return;
         
-        for (InspectionAssessmentInd child : childrenToReset) {
-            child.Result = null;
-            child.PHOCSCheckboxResponse__c = false;
+        List<InspectionAssessmentInd> recordsToUpdate = new List<InspectionAssessmentInd>();
+        
+        for (InspectionAssessmentInd child : childrenToReset) {            
+            Set<Id> parentDefIds = taskToParentDefIds.get(child.AssessmentTaskId);    
+            
+            if (parentDefIds != null && parentDefIds.contains(child.AssessmentIndDefinition.PHOCSParentId__c)) {                    
+                child.Result = null;
+                child.PHOCSCheckboxResponse__c = false;
+                recordsToUpdate.add(child);
+            }
         }
         
-        update childrenToReset;
+        if (!recordsToUpdate.isEmpty()) {
+            update recordsToUpdate;
+        }
     }
 
 /**
