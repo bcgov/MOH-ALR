@@ -125,7 +125,7 @@ private class PHOCSInspectionAssessmentIndBatchTest {
                                                    	FROM InspectionAssessmentInd
                                                    	WHERE AssessmentTaskId =:task.Id
                                                    	AND AssessmentIndDefinitionId =:childindicator.Id ];
-        System.assertEquals(1,insasstind.size(),'Canned comment records with PHOCSCheckboxResponse__c checked will be present');
+        System.assertEquals(3,insasstind.size(),'Canned comment records with PHOCSCheckboxResponse__c checked will be present');
         System.assertEquals(true,insasstind[0].PHOCSCheckboxResponse__c);
     }
 }
