@@ -1,6 +1,6 @@
-public with Sharing class VisitTriggerHandler {
-    public static Id recordTypeALRInspection = Schema.SObjectType.InspectionAssessmentInd.getRecordTypeInfosByDeveloperName().get('Inspection').getRecordTypeId();
-    public static Id recordTypePHOCSInspection = Schema.SObjectType.InspectionAssessmentInd.getRecordTypeInfosByDeveloperName().get('PHOCSInspection').getRecordTypeId();
+public without Sharing class VisitTriggerHandler {
+    public static Id recordTypeALRInspection = Schema.SObjectType.Visit.getRecordTypeInfosByDeveloperName().get('Inspection').getRecordTypeId();
+    public static Id recordTypePHOCSInspection = Schema.SObjectType.Visit.getRecordTypeInfosByDeveloperName().get('PHOCSInspection').getRecordTypeId();
     
     public static void afterUpdate(List<Visit> newList, Map<Id, Visit> oldMap) {
         Set<Id> completedInspectionIds = new Set<Id>();
