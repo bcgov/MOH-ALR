@@ -154,9 +154,9 @@ global without sharing class CustomTokenInspectionData
         item.put('TaskId',rec.AssessmentTaskId);
         item.put('complianceDueDate', rec.ComplianceDueDate__c!=null?rec.ComplianceDueDate__c.date():null);
         item.put('comments', rec.PHOCSInspectionComments__c);
-        item.put('showcomments', String.isNotBlank(rec.PHOCSInspectionComments__c));
+        item.put('IF_showComments', String.isNotBlank(rec.PHOCSInspectionComments__c));
         item.put('correctiveAction', rec.CorrectiveActionDescription__c);
-        item.put('showAction', String.isNotBlank(rec.CorrectiveActionDescription__c));
+        item.put('IF_showAction', String.isNotBlank(rec.CorrectiveActionDescription__c));
         item.put('CDI',rec.CorrectedDuringInspection__c?'Yes':'No');
         item.put('IF_showCDI',rec.CorrectedDuringInspection__c?true:false);
         
