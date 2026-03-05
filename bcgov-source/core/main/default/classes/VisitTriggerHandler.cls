@@ -1,4 +1,4 @@
-public without Sharing class VisitTriggerHandler {
+public with Sharing class VisitTriggerHandler {
     public static Id recordTypeALRInspection = Schema.SObjectType.Visit.getRecordTypeInfosByDeveloperName().get('Inspection').getRecordTypeId();
     public static Id recordTypePHOCSInspection = Schema.SObjectType.Visit.getRecordTypeInfosByDeveloperName().get('PHOCSInspection').getRecordTypeId();
     
