@@ -285,8 +285,8 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
 						// current editable values
 						selectPriority: parent.selectPriority ?? null,
-						preferredDateTime: parent.preferredDateTime ?
-							parent.preferredDateTime.slice(0, 16) : null,
+						preferredDateTime: parent.preferredDateTime 
+						? this.formatDatetimeForInput(parent.preferredDateTime) : null,
 						actionDescription: parent.actionDescription ?? "",
 						correctedDuringInspection: parent.correctedDuringInspection ?? false,
 						regcodvioId: parent.inspectionAssessmentIndId ?? null,
@@ -978,8 +978,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 							result: parent.result || "",
 							checkboxValue: null,
 							selectPriority: parent.selectPriority || null,
-							preferredDateTime: parent.preferredDateTime ?
-								new Date(parent.preferredDateTime).toISOString() : null,
+							preferredDateTime: parent.preferredDateTime ? this.convertToSalesforceDatetime(parent.preferredDateTime) : null,
 							actionDescription: parent.actionDescription || null,
 							correctedDuringInspection: parent.correctedDuringInspection || false,
 						});
@@ -1246,6 +1245,24 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 		}
 	}
 
+	formatDatetimeForInput(sfDate) {
+    if (!sfDate) return null;
+
+    const d = new Date(sfDate);
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth()+1).padStart(2,'0');
+    const dd = String(d.getDate()).padStart(2,'0');
+    const hh = String(d.getHours()).padStart(2,'0');
+    const mi = String(d.getMinutes()).padStart(2,'0');
+
+    return `${yyyy}-${mm}-${dd}T${hh}:${mi}`;
+    }
+
+	convertToSalesforceDatetime(value) {
+    if (!value) return null;
+    return value.replace('T',' ') + ':00';
+    }
+
 	buildResponsesPayload() {
 		const responses = [];
 		const seenChildren = new Set();
@@ -1271,9 +1288,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 						result: parent.result || "",
 						checkboxValue: null,
 						selectPriority: isNonCompliant ? parent.selectPriority : null,
-						preferredDateTime: isNonCompliant && parent.preferredDateTime ?
-							new Date(parent.preferredDateTime).toISOString() :
-							null,
+						preferredDateTime: isNonCompliant && parent.preferredDateTime ? parent.preferredDateTime : null,
 						correctedDuringInspection: isNonCompliant ?
 							parent.correctedDuringInspection :
 							false,
@@ -1308,9 +1323,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 								result: child.checkboxValue === true ? RESULT_NON_COMPLIANT : null,
 								checkboxValue: child.checkboxValue === true,
 								selectPriority: parent.selectPriority || null,
-								preferredDateTime: parent.preferredDateTime ?
-									new Date(parent.preferredDateTime).toISOString() :
-									null,
+								preferredDateTime: isNonCompliant && parent.preferredDateTime ? parent.preferredDateTime : null,
 								correctedDuringInspection: parent.correctedDuringInspection || false,
 							});
 						}
