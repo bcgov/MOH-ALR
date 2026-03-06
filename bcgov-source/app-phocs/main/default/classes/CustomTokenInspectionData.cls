@@ -59,8 +59,10 @@ global without sharing class CustomTokenInspectionData
         Visit visitRec = [
             SELECT
                 Id,
+                Name,
                 Owner.Name,
                 Account.Name,
+                AccountId,
                 Account.Physical_Address__Street__s,
                 Account.Physical_Address__City__s,
                 Account.Physical_Address__StateCode__s,
@@ -69,52 +71,56 @@ global without sharing class CustomTokenInspectionData
                 ActualVisitEndTime,
                 VisitType.Name,
                 TimeSpentMinutes__c,
+                EnvironmentalSwabsTaken__c,
+            	FollowUpInspectionRequired__c,
             	StatusRemarks
             FROM Visit
             WHERE Id = :visitId
             LIMIT 1
         ];
- Map<String, Object> reportMap = new Map<String, Object>();
+        List<AccountContactRelation> acrList = [SELECT Id, AccountId, ContactId, Contact.Name FROM AccountContactRelation
+                                                WHERE AccountId = :visitRec.AccountId AND Roles INCLUDES ('Owner Contact') LIMIT 1];
+        
+        String primaryOwner = acrList.isEmpty() ? null : acrList[0].Contact.Name;
+   Map<String, Object> reportMap = new Map<String, Object>();
         /* ---------------- HEADER ---------------- */
     reportMap.put('inspector', visitRec.Owner.Name);
     reportMap.put('dairyPlant', visitRec.Account.Name);
     reportMap.put('address', buildAddress(visitRec.Account));
-    reportMap.put(
-        'inspectionDate',
-        visitRec.ActualVisitEndTime != null
-            ? visitRec.ActualVisitEndTime.date()
-            : null
-    );
+    reportMap.put('inspectionDate', visitRec.ActualVisitEndTime != null ? visitRec.ActualVisitEndTime.date() : null);
     reportMap.put('inspectionType', visitRec.VisitType.Name);
-    reportMap.put(
-        'timeSpent', 
-        visitRec.TimeSpentMinutes__c != null ? String.valueOf(visitRec.TimeSpentMinutes__c) : null);
+    reportMap.put('timeSpent',  visitRec.TimeSpentMinutes__c != null ? String.valueOf(visitRec.TimeSpentMinutes__c) : null);
+        
     reportMap.put('closingComments', visitRec.StatusRemarks);
+    reportMap.put('IF_showclosingComments', String.isNotBlank(visitRec.StatusRemarks)?true:false);
+    reportMap.put('swabsTaken', visitRec.EnvironmentalSwabsTaken__c?'Yes':'No'); 
+    reportMap.put('Isfollowup', visitRec.FollowUpInspectionRequired__c?'Yes':'No');
+    reportMap.put('InspNum', visitRec.Name);
+    reportMap.put('PrimaryOwner', primaryOwner);
 
        /* ---------------- CANNED COMMENTS ---------------- */
-    Map<Id, List<String>> cannedCommentsByParentDef = new Map<Id, List<String>>();
-
-    for (InspectionAssessmentInd cc : [
-        SELECT
-            AssessmentIndDefinition.PHOCSParentId__c,
-            AssessmentIndDefinition.Name
-        FROM InspectionAssessmentInd
-        WHERE AssessmentTask.ParentId = :visitRec.Id
-        AND AssessmentIndDefinition.PHOCSParentId__c != null
-        AND PHOCSCheckboxResponse__c = true
-    ]) {
-        Id parentDefId = cc.AssessmentIndDefinition.PHOCSParentId__c;
-
-        if (!cannedCommentsByParentDef.containsKey(parentDefId)) {
-            cannedCommentsByParentDef.put(parentDefId, new List<String>());
-        }
-
-        if (String.isNotBlank(cc.AssessmentIndDefinition.Name)) {
-            cannedCommentsByParentDef
-                .get(parentDefId)
-                .add(cc.AssessmentIndDefinition.Name);
-        }
-    }
+        Map<String, List<String>> cannedCommentsByParentDef = new Map<String, List<String>>();
+        
+        for (InspectionAssessmentInd cc : [SELECT
+                                           AssessmentTaskId,
+                                           AssessmentIndDefinition.PHOCSParentId__c,
+                                           AssessmentIndDefinition.Name
+                                           FROM InspectionAssessmentInd
+                                           WHERE AssessmentTask.ParentId = :visitRec.Id
+                                           AND AssessmentIndDefinition.PHOCSParentId__c != null
+                                           AND PHOCSCheckboxResponse__c = true
+                                          ]) {
+                                              
+                                              String key = cc.AssessmentTaskId + '_' + cc.AssessmentIndDefinition.PHOCSParentId__c;
+                                              
+                                              if (!cannedCommentsByParentDef.containsKey(key)) {
+                                                  cannedCommentsByParentDef.put(key, new List<String>());
+                                              }
+                                              
+                                              if (String.isNotBlank(cc.AssessmentIndDefinition.Name)) {
+                                                  cannedCommentsByParentDef.get(key).add(cc.AssessmentIndDefinition.Name);
+                                              }
+                                          }
 
     /* ---------------- RESULT LISTS ---------------- */
   Map<String, List<Object>> criticalInfractions = new Map<String, List<Object>>();
@@ -124,7 +130,8 @@ global without sharing class CustomTokenInspectionData
   Map<String, List<Object>> notApplicable = new Map<String, List<Object>>();
 
     for (InspectionAssessmentInd rec : [
-        SELECT
+        SELECT AssessmentTaskId,
+            AssessmentTask.Name,
             AssessmentIndDefinitionId,
             AssessmentIndDefinition.Criticality__c,
             AssessmentIndDefinition.Category__c,
@@ -132,7 +139,8 @@ global without sharing class CustomTokenInspectionData
             Result,
             ComplianceDueDate__c,
             PHOCSInspectionComments__c,
-            CorrectiveActionDescription__c
+            CorrectiveActionDescription__c,
+            CorrectedDuringInspection__c
         FROM InspectionAssessmentInd
         WHERE AssessmentTask.ParentId = :visitRec.Id
         AND AssessmentIndDefinition.PHOCSParentId__c = null
@@ -140,18 +148,23 @@ global without sharing class CustomTokenInspectionData
             AssessmentIndDefinition.Criticality__c
     ]) {
         Map<String, Object> item = new Map<String, Object>();
-        item.put('category', rec.AssessmentIndDefinition.Category__c);
+        item.put('category', rec.AssessmentTask.Name);
         item.put('question', rec.AssessmentIndDefinition.Name);
+        item.put('questionId', rec.AssessmentIndDefinitionId);
+        item.put('TaskId',rec.AssessmentTaskId);
         item.put('complianceDueDate', rec.ComplianceDueDate__c!=null?rec.ComplianceDueDate__c.date():null);
         item.put('comments', rec.PHOCSInspectionComments__c);
+        item.put('IF_showComments', String.isNotBlank(rec.PHOCSInspectionComments__c));
         item.put('correctiveAction', rec.CorrectiveActionDescription__c);
-        item.put(
-            'cannedComments',
-            cannedCommentsByParentDef.containsKey(rec.AssessmentIndDefinitionId)
-                ? cannedCommentsByParentDef.get(rec.AssessmentIndDefinitionId)
-                : new List<String>()
-        );
-		String categoryName = rec.AssessmentIndDefinition.Category__c;
+        item.put('IF_showAction', String.isNotBlank(rec.CorrectiveActionDescription__c));
+        item.put('CDI',rec.CorrectedDuringInspection__c?'Yes':'No');
+        item.put('IF_showCDI',rec.CorrectedDuringInspection__c?true:false);
+        
+        String key = rec.AssessmentTaskId + '_' + rec.AssessmentIndDefinitionId;
+        
+        item.put('cannedComments', cannedCommentsByParentDef.containsKey(key) ? cannedCommentsByParentDef.get(key) : new List<String>());
+        
+		String categoryName = rec.AssessmentTask.Name;
         if (rec.Result == 'PHOCSNonCompliant') {
             if (rec.AssessmentIndDefinition.Criticality__c == 'Critical') {
                  addToGroupedCategory(criticalInfractions, categoryName, item);

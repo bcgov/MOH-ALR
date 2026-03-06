@@ -28,8 +28,7 @@ public with sharing class InspectionViolationService {
             Visit visitRecord = [
                 SELECT Id, AccountId, Account.Name
                 FROM Visit 
-                WHERE Id = :visitId 
-                WITH SECURITY_ENFORCED
+                WHERE Id = :visitId
                 LIMIT 1
             ];
 
@@ -48,7 +47,6 @@ public with sharing class InspectionViolationService {
                        PHOCSCheckboxResponse__c
                 FROM InspectionAssessmentInd
                 WHERE AssessmentTask.ParentId = :visitId
-                WITH SECURITY_ENFORCED
             ];
 
             if (allResponses.isEmpty()) {
@@ -109,7 +107,6 @@ public with sharing class InspectionViolationService {
                     SELECT AssessmentIndDefinitionId, RegulatoryCodeId
                     FROM RegulatoryCodeAssessmentInd
                     WHERE AssessmentIndDefinitionId IN :definitionIds
-                    WITH SECURITY_ENFORCED
                 ];
 
                 for (RegulatoryCodeAssessmentInd link : regCodeLinks) {
@@ -293,7 +290,7 @@ public with sharing class InspectionViolationService {
             // Including both parent (non-compliant) and child (selected canned comments) records
             List<InspectionAssessmentInd> allResponses = [SELECT Id, RecordTypeId, AssessmentTaskId, AssessmentTask.Name, AssessmentTask.ParentId, AssessmentIndDefinitionId,
                 AssessmentIndDefinition.Name, AssessmentIndDefinition.PHOCSParentId__c, Result, PHOCSInspectionComments__c,CorrectedDuringInspection__c,
-                PHOCSCheckboxResponse__c FROM InspectionAssessmentInd WHERE AssessmentTask.ParentId = :visitId WITH SECURITY_ENFORCED];
+                PHOCSCheckboxResponse__c FROM InspectionAssessmentInd WHERE AssessmentTask.ParentId = :visitId ];
             
             if (allResponses.isEmpty()) {
                 result.success = true;
