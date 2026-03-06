@@ -1,5 +1,6 @@
 @isTest
 private class PHOCSInspectionAssessmentIndBatchTest {
+    public static Id recordTypePHOCSInspection = Schema.SObjectType.Visit.getRecordTypeInfosByDeveloperName().get('PHOCSInspection').getRecordTypeId();
 	/**
      * @description Creates test data for violation service tests
      */
@@ -34,7 +35,8 @@ private class PHOCSInspectionAssessmentIndBatchTest {
             AccountId = testAccount.Id,
             PlaceId = cpa.Id,
             PlannedVisitStartTime = DateTime.now(),
-            PlannedVisitEndTime = DateTime.now().addHours(2)
+            PlannedVisitEndTime = DateTime.now().addHours(2),
+            RecordTypeId = recordTypePHOCSInspection
         );
         insert testVisit;
 

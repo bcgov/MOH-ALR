@@ -92,6 +92,7 @@ global without sharing class CustomTokenInspectionData
     reportMap.put('timeSpent',  visitRec.TimeSpentMinutes__c != null ? String.valueOf(visitRec.TimeSpentMinutes__c) : null);
         
     reportMap.put('closingComments', visitRec.StatusRemarks);
+    reportMap.put('IF_showclosingComments', String.isNotBlank(visitRec.StatusRemarks)?true:false);
     reportMap.put('swabsTaken', visitRec.EnvironmentalSwabsTaken__c?'Yes':'No'); 
     reportMap.put('Isfollowup', visitRec.FollowUpInspectionRequired__c?'Yes':'No');
     reportMap.put('InspNum', visitRec.Name);
@@ -130,6 +131,7 @@ global without sharing class CustomTokenInspectionData
 
     for (InspectionAssessmentInd rec : [
         SELECT AssessmentTaskId,
+            AssessmentTask.Name,
             AssessmentIndDefinitionId,
             AssessmentIndDefinition.Criticality__c,
             AssessmentIndDefinition.Category__c,
@@ -146,19 +148,23 @@ global without sharing class CustomTokenInspectionData
             AssessmentIndDefinition.Criticality__c
     ]) {
         Map<String, Object> item = new Map<String, Object>();
-        item.put('category', rec.AssessmentIndDefinition.Category__c);
+        item.put('category', rec.AssessmentTask.Name);
         item.put('question', rec.AssessmentIndDefinition.Name);
+        item.put('questionId', rec.AssessmentIndDefinitionId);
+        item.put('TaskId',rec.AssessmentTaskId);
         item.put('complianceDueDate', rec.ComplianceDueDate__c!=null?rec.ComplianceDueDate__c.date():null);
         item.put('comments', rec.PHOCSInspectionComments__c);
-        item.put('showcomments', String.isNotBlank(rec.PHOCSInspectionComments__c));
+        item.put('IF_showComments', String.isNotBlank(rec.PHOCSInspectionComments__c));
         item.put('correctiveAction', rec.CorrectiveActionDescription__c);
-        item.put('showAction', String.isNotBlank(rec.CorrectiveActionDescription__c));
+        item.put('IF_showAction', String.isNotBlank(rec.CorrectiveActionDescription__c));
         item.put('CDI',rec.CorrectedDuringInspection__c?'Yes':'No');
+        item.put('IF_showCDI',rec.CorrectedDuringInspection__c?true:false);
+        
         String key = rec.AssessmentTaskId + '_' + rec.AssessmentIndDefinitionId;
         
         item.put('cannedComments', cannedCommentsByParentDef.containsKey(key) ? cannedCommentsByParentDef.get(key) : new List<String>());
         
-		String categoryName = rec.AssessmentIndDefinition.Category__c;
+		String categoryName = rec.AssessmentTask.Name;
         if (rec.Result == 'PHOCSNonCompliant') {
             if (rec.AssessmentIndDefinition.Criticality__c == 'Critical') {
                  addToGroupedCategory(criticalInfractions, categoryName, item);
