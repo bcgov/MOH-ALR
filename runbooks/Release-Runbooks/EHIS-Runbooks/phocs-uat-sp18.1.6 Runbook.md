@@ -1,9 +1,9 @@
 Sandbox|`Post refresh runbook till SP-18 " UAT ORG "|
 |-|-|
-|Runbook Created|`2026-03-2`|
-|Runbook Last Modified|`2026-03-2`|
+|Runbook Created|`2026-03-9`|
+|Runbook Last Modified|`2026-03-9`|
 
-2. [x] Checkout to `release-phocs-uat-sp18.1.5`code
+2. [x] Checkout to `release-phocs-uat-sp18.1.6`code
 
 3.[x]  Deploy full repository (~20 min)
 
