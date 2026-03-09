@@ -84,7 +84,8 @@ public without sharing class PHOCSInspectionAssessmentIndControllerV2 {
                 }
                 
                 if (resp.preferredDateTime != null) {
-                    rec.ComplianceDueDate__c = resp.preferredDateTime;
+                    String formattedDate = resp.preferredDateTime.replace('T',' ') + ':00';
+                    rec.ComplianceDueDate__c = Datetime.valueOfGmt(formattedDate);
                 }
                 
                 if (resp.actionDescription != null) {
@@ -254,7 +255,7 @@ public without sharing class PHOCSInspectionAssessmentIndControllerV2 {
         @AuraEnabled public Boolean checkboxValue { get; set; }
         @AuraEnabled public Boolean correctedDuringInspection { get; set; }
         @AuraEnabled public String selectPriority { get; set; }
-        @AuraEnabled public Datetime preferredDateTime { get; set; }
+        @AuraEnabled public String preferredDateTime { get; set; }
         @AuraEnabled public String actionDescription { get; set; }
     }
     
