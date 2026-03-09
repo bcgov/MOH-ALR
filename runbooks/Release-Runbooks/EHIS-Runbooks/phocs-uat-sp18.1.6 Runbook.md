@@ -1,0 +1,14 @@
+Sandbox|`Post refresh runbook till SP-18 " UAT ORG "|
+|-|-|
+|Runbook Created|`2026-03-2`|
+|Runbook Last Modified|`2026-03-2`|
+
+2. [x] Checkout to `release-phocs-uat-sp18.1.5`code
+
+3.[x]  Deploy full repository (~20 min)
+
+> sf project deploy start --source-dir bcgov-source/app-phocs/main/default/classes/PHOCSAssessmentIndCtrlV2Test.cls --source-dir bcgov-source/app-phocs/main/default/classes/PHOCSInspectionAssessmentIndControllerV2.cls --source-dir bcgov-source/app-phocs/main/default/classes/CustomTokenInspectionData.cls --source-dir bcgov-source/core/main/default/classes/VisitTriggerHandler.cls --source-dir bcgov-source/app-phocs/main/default/classes/PHOCSInspectionAssessmentIndBatchTest.cls --source-dir bcgov-source/app-phocs/main/default/classes/CustomTokenInspectionDataTest.cls --source-dir bcgov-source/app-phocs/main/default/lwc/inspectionQuestionsParentv2/inspectionQuestionsParentv2.html --source-dir bcgov-source/app-phocs/main/default/lwc/inspectionQuestionsParentv2/inspectionQuestionsParentv2.js --source-dir bcgov-source/core/main/default/classes/VisitTriggerHandler.cls-meta.xml --source-dir bcgov-source/app-phocs/main/default/classes/InspectionViolationService.cls --target-org deployment.user@phocs.uat.com
+
+> sf project deploy start --source-dir bcgov-source/core/main/default/sharingRules/RegulatoryCodeViolation.sharingRules-meta.xml --source-dir bcgov-source/core/main/default/objects/Visit/fields/TimeSpentMinutes__c.field-meta.xml --source-dir bcgov-source/core/main/default/objects/InspectionAssessmentInd/recordTypes/ALRInspectionAssessmentIndicator.recordType-meta.xml --source-dir bcgov-source/core/main/default/objects/InspectionAssessmentInd/validationRules/ALRPreventUsingPHOCSResultValues.validationRule-meta.xml --source-dir bcgov-source/core/main/default/objects/Account/fields/ThirdPartyCertifications__c.field-meta.xml --source-dir bcgov-source/app-phocs/main/default/flows/UpdateDocumentChecklistItemsFromBLA.flow-meta.xml --source-dir bcgov-source/app-alr/main/default/permissionsetgroups/EHIS_ALR_Admin_PSG.permissionsetgroup-meta.xml --source-dir bcgov-source/app-alr/main/default/permissionsetgroups/EHIS_System_Administrator_PSG.permissionsetgroup-meta.xml --source-dir bcgov-source/core/main/default/profiles/Admin.profile-meta.xml --source-dir bcgov-source/app-phocs/main/default/triggers/PHOCSInspectionAfterUpdate.trigger --source-dir bcgov-source/app-phocs/main/default/triggers/PHOCSInspectionAfterUpdate.trigger-meta.xml --source-dir bcgov-source/core/main/default/triggers/Inspectiontrigger.trigger --target-org deployment.user@phocs.uat.com 
+
+> sf project deploy start --source-dir bcgov-source/app-alr/main/default/profiles/MOH Standard User.profile-meta.xml --target-org deployment.user@phocs.uat.com 
