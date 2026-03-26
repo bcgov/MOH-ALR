@@ -19,7 +19,7 @@ public with sharing class AccountContactRelationController {
             accountRecordTypeName = account.RecordType.Name;
 
             relations = [
-                SELECT Id, Contact.Id, Contact.Name, Contact.Phone, Contact.Email, IsActive, PrimaryContact__c, Roles
+                SELECT Id, Contact.Id, Contact.Name, Contact.Phone, Contact.Email, IsActive, PrimaryContact__c, Roles, Contact.Description
                 FROM AccountContactRelation
                 WHERE AccountId = :accountId AND IsActive = true
                 ORDER BY PrimaryContact__c DESC

@@ -40,20 +40,25 @@ export default class RelatedContactsLWC extends NavigationMixin(LightningElement
     wiredRelatedContacts(result) {
         this._wiredResult = result;
         if (result.data) {
-            this.relatedContacts = result.data.relations.map(item => ({
+            this.relatedContacts = result.data.relations.map(item => {
+                const fullDesc = item.Contact ? item.Contact.Description : null;
+
+                return {
                 Id: item.Id,
                 Contact: {
                     Id: item.Contact ? item.Contact.Id : null,
                     Name: item.Contact ? item.Contact.Name : null,
                     Phone: item.Contact ? item.Contact.Phone : null,
-                    Email: item.Contact ? item.Contact.Email : null
+                    Email: item.Contact ? item.Contact.Email : null,
+                    Description: fullDesc,
+                    DescriptionShort: fullDesc ? (fullDesc.length > 255 ? fullDesc.substring(0, 255) + '...' : fullDesc) : null
                 },
                 relation: {
                     isActive: item.IsActive,
                     PrimaryContact__c: item.PrimaryContact__c,
                     Roles: item.Roles
                 }
-            }));
+        }});
             this.accountRecordTypeName = result.data.accountRecordTypeName;
         } else if (result.error) {
             console.error('Error fetching related contacts:', result.error);
