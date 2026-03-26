@@ -134,6 +134,32 @@ node scripts/create-users.js --sheet Dev --file path/to/other.xlsx
 
 ---
 
+## Reset Passwords
+
+Sends a password reset email to all active users listed in a sheet. Run this separately after user creation.
+
+### Dry run — preview without sending
+```bash
+node scripts/reset-passwords.js --sheet Dev --dry-run
+```
+
+### Send password reset emails
+```bash
+node scripts/reset-passwords.js --sheet Dev
+node scripts/reset-passwords.js --sheet QA
+node scripts/reset-passwords.js --sheet UAT
+node scripts/reset-passwords.js --sheet PreProd
+```
+
+### Override org alias
+```bash
+node scripts/reset-passwords.js --sheet Dev --target-org SomeOtherAlias
+```
+
+> This script is intentionally separate from `create-users.js` — run it only when you want to trigger reset emails.
+
+---
+
 ## What the script does (in order)
 
 1. Reads the specified sheet from `users.xlsx`
