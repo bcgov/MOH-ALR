@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
-    <apiVersion>61.0</apiVersion>
+    <apiVersion>60.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <customErrors>
         <name>PA_Address_Error</name>
         <label>PA Address Error</label>
@@ -155,24 +156,38 @@
             <name>Recordtype_Check</name>
             <conditionLogic>or</conditionLogic>
             <conditions>
-                <leftValueReference>$Record.RecordType.Name</leftValueReference>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
-                    <stringValue>Water System</stringValue>
+                    <stringValue>DrinkingWaterSystem</stringValue>
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>$Record.RecordType.Name</leftValueReference>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
-                    <stringValue>Water Source Intake</stringValue>
+                    <stringValue>DrinkingWaterSourceIntake</stringValue>
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>$Record.RecordType.Name</leftValueReference>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Residence</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Facility</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>PHOCSDairyFacility</stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -181,7 +196,8 @@
             <label>Recordtype Check</label>
         </rules>
     </decisions>
-    <description>Flow to create or Update  Location , Address , Associated Location Records</description>
+    <description>Flow to create or Update  Location , Address , Associated Location Records
+Update changes related to EHIS-3070 AC#3</description>
     <environments>Default</environments>
     <formulas>
         <description>Concat Lat and Long</description>

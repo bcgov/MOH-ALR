@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LinkOnlyWaterSystemFacilityRecords</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+
+    RecordType.DeveloperName = &quot;FacilityLinkage&quot;,
+
+    NOT(
+
+        AND(
+	     (Account.RecordType.DeveloperName =&quot;DrinkingWaterSystem&quot;) ||
+
+             (Account.RecordType.DeveloperName =&quot;DrinkingWaterSourceIntake&quot;) ||
+
+             (Account.RecordType.DeveloperName =&quot;PHOCSDairyFacility&quot;) ||
+
+             (Account.RecordType.DeveloperName =&quot;Facility&quot;),
+
+             (RelatedAccount.RecordType.DeveloperName =&quot;DrinkingWaterSystem&quot;) ||
+
+             (RelatedAccount.RecordType.DeveloperName =&quot;PHOCSDairyFacility&quot;) ||
+
+             (RelatedAccount.RecordType.DeveloperName = &quot;DrinkingWaterSourceIntake&quot;) ||
+
+             (RelatedAccount.RecordType.DeveloperName = &quot;Facility&quot;)
+
+        )
+
+    )
+
+)</errorConditionFormula>
+    <errorMessage>“Please select a water system, water source intake or facility account record to create a facility linkage.”</errorMessage>
+</ValidationRule>
