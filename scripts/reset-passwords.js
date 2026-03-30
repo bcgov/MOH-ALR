@@ -1,0 +1,170 @@
+#!/usr/bin/env node
+/**
+ * Bulk Password Reset — Sandbox Refresh
+ * ──────────────────────────────────────
+ * Reads sandbox-refresh-csvs/users.xlsx, picks the sheet matching the
+ * environment name, and sends a password reset email to every active user.
+ *
+ * Usage:
+ *   node scripts/reset-passwords.js --sheet Dev
+ *   node scripts/reset-passwords.js --sheet QA  --dry-run
+ *   node scripts/reset-passwords.js --sheet Dev --target-org PHOCS_Dev
+ *
+ * Options:
+ *   --sheet, -s        Sheet name (Dev | ST | QA | UAT | PreProd | ...)
+ *   --target-org, -o   SF CLI org alias — overrides SHEET_ORG_MAP below
+ *   --file             Override xlsx path (default: sandbox-refresh-csvs/users.xlsx)
+ *   --dry-run, -d      Preview Apex without executing
+ */
+'use strict';
+
+const { spawnSync } = require('child_process');
+const fs   = require('fs');
+const path = require('path');
+
+// ─── Configuration ──────────────────────────────────────────────────────────
+
+const SHEET_ORG_MAP = {
+  Dev:     'PHOCS_Dev',
+  Dev2:    'Phocs/Dev2',
+  ST:      'PHOCS_ST',
+  QA:      'PHOCS/QA',
+  UAT:     'PHOCS/UAT',
+  PreProd: 'Phocspreprod',
+};
+
+const ROOT_DIR     = path.resolve(__dirname, '..');
+const CSV_DIR      = path.join(ROOT_DIR, 'sandbox-refresh-csvs');
+const TMP_DIR      = path.join(CSV_DIR, '.tmp');
+const DEFAULT_XLSX = path.join(CSV_DIR, 'users.xlsx');
+
+// ─── CLI arg parsing ─────────────────────────────────────────────────────────
+
+const args    = process.argv.slice(2);
+const getArg  = (f) => { const i = args.indexOf(f); return i !== -1 ? args[i + 1] : null; };
+const hasFlag = (f) => args.includes(f);
+
+const sheet     = getArg('--sheet')      ?? getArg('-s');
+const targetOrg = getArg('--target-org') ?? getArg('-o') ?? SHEET_ORG_MAP[sheet];
+const xlsxFile  = getArg('--file')       ?? DEFAULT_XLSX;
+const dryRun    = hasFlag('--dry-run')   || hasFlag('-d');
+
+if (!sheet) {
+  console.error(`
+  Usage: node scripts/reset-passwords.js --sheet <name> [options]
+
+  Required:
+    --sheet, -s        Sheet name (Dev | ST | QA | UAT | PreProd)
+                       Org is auto-resolved from SHEET_ORG_MAP — override with --target-org
+
+  Optional:
+    --target-org, -o   SF CLI org alias
+    --file             Path to xlsx (default: sandbox-refresh-csvs/users.xlsx)
+    --dry-run, -d      Preview Apex without executing
+`);
+  process.exit(1);
+}
+
+// ─── Logging ─────────────────────────────────────────────────────────────────
+
+const log  = (m) => console.log(`[INFO]  ${m}`);
+const fail = (m) => { console.error(`[ERROR] ${m}`); process.exit(1); };
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+const apexStr = (s) => String(s).replace(/'/g, "\\'");
+
+function sfRun(sfArgs) {
+  if (dryRun) { log(`[DRY RUN] sf ${sfArgs.join(' ')}`); return null; }
+  log(`Running: sf ${sfArgs.join(' ')}`);
+  const [exe, exeArgs] = process.platform === 'win32'
+    ? ['cmd.exe', ['/c', 'sf.cmd', ...sfArgs]]
+    : ['sf', sfArgs];
+  const result = spawnSync(exe, exeArgs, { encoding: 'utf8' });
+  if (result.error) throw new Error(`Failed to spawn sf: ${result.error.message}`);
+  const out = result.stdout ?? '';
+  if (result.status !== 0) {
+    let msg = result.stderr ?? out;
+    try { const j = JSON.parse(out); msg = j.message ?? msg; } catch { /* ignore */ }
+    throw new Error(msg);
+  }
+  try { return JSON.parse(out); } catch { return null; }
+}
+
+function runApex(apexFile) {
+  const result = sfRun(['apex', 'run', '--file', apexFile, '--target-org', targetOrg, '--json']);
+  if (!result) return; // dry run
+  if (result.status !== 0) throw new Error(`Apex execute failed: ${result.message}`);
+  const logs = result.result?.logs ?? '';
+  logs.split('\n')
+    .filter(l => l.includes('USER_DEBUG'))
+    .forEach(l => log(`  Apex: ${l.split('DEBUG|').pop()?.trim() ?? l}`));
+}
+
+// ─── Main ─────────────────────────────────────────────────────────────────────
+
+function main() {
+  let xlsx;
+  try { xlsx = require('xlsx'); } catch {
+    fail('Missing dependency: xlsx\n  Fix: npm install --save-dev xlsx');
+  }
+
+  if (!targetOrg) {
+    fail(`No org mapped for sheet "${sheet}".\n  Either add it to SHEET_ORG_MAP or pass --target-org <alias>.`);
+  }
+
+  log('='.repeat(60));
+  log(`Sheet: ${sheet}  |  Org: ${targetOrg}  |  DryRun: ${dryRun}`);
+  log('='.repeat(60));
+
+  if (!fs.existsSync(xlsxFile)) fail(`File not found: ${xlsxFile}`);
+
+  const wb = xlsx.readFile(xlsxFile);
+  if (!wb.SheetNames.includes(sheet)) {
+    fail(`Sheet "${sheet}" not found.\n  Available: ${wb.SheetNames.join(', ')}`);
+  }
+
+  const rows = xlsx.utils.sheet_to_json(wb.Sheets[sheet], { defval: '' });
+  if (!rows.length) { log('Sheet is empty — nothing to do.'); return; }
+
+  const usernames = rows
+    .map(r => String(r.Username ?? '').trim().toLowerCase())
+    .filter(Boolean);
+
+  log(`Loaded ${usernames.length} username(s) from sheet "${sheet}"`);
+
+  const apexQuote = (arr) => arr.map(s => `'${apexStr(s)}'`).join(',');
+
+  const apexCode = [
+    `// Auto-generated by reset-passwords.js — sheet: ${sheet}`,
+    `// ${new Date().toISOString()}`,
+    `Integer ok = 0, fail = 0;`,
+    `for (User u : [SELECT Id, Username FROM User`,
+    `  WHERE Username IN (${apexQuote(usernames)}) AND IsActive = true]) {`,
+    `  try { System.resetPassword(u.Id, true); ok++; }`,
+    `  catch (Exception e) {`,
+    `    fail++;`,
+    `    System.debug('Reset failed for ' + u.Username + ': ' + e.getMessage());`,
+    `  }`,
+    `}`,
+    `System.debug('Password reset — sent: ' + ok + ' | failed: ' + fail);`,
+  ].join('\n');
+
+  fs.mkdirSync(TMP_DIR, { recursive: true });
+  const apexFile = path.join(TMP_DIR, `reset_pwd_${sheet}.apex`);
+  fs.writeFileSync(apexFile, apexCode, 'utf8');
+
+  if (dryRun) {
+    log('\n[DRY RUN] Apex that would execute:');
+    console.log(apexCode.split('\n').map(l => '    ' + l).join('\n'));
+    return;
+  }
+
+  log('\n--- Sending password reset emails ---');
+  runApex(apexFile);
+
+  log('\n' + '='.repeat(60));
+  log('Done.');
+}
+
+main();
