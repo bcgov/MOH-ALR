@@ -114,6 +114,7 @@ node scripts/create-users.js --sheet Dev
 node scripts/create-users.js --sheet Dev2
 node scripts/create-users.js --sheet QA
 node scripts/create-users.js --sheet UAT
+node scripts/create-users.js --sheet UAT_Test_Users
 node scripts/create-users.js --sheet PreProd
 ```
 
