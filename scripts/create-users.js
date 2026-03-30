@@ -41,6 +41,7 @@ const SHEET_ORG_MAP = {
   ST:      'PHOCS_ST',
   QA:      'PHOCS/QA',
   UAT:     'PHOCS/UAT',
+  UAT_Test_Users: 'PHOCS/UAT',
   PreProd: 'Phocspreprod',
 };
 
