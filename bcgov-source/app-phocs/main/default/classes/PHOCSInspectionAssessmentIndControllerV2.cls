@@ -491,4 +491,18 @@ public without sharing class PHOCSInspectionAssessmentIndControllerV2 {
         }
     }
     
+    /**
+	* @description: Opening Comments to save in inspection record
+	*/
+    
+    @AuraEnabled
+	public static void updateOpeningComments(Id visitId , String openingComments) {
+		 Visit inspcomt = [SELECT Id,Name,InstructionDescription FROM Visit WHERE Id =:visitId LIMIT 1];
+		 inspcomt.InstructionDescription = openingComments;
+		 Update inspcomt;
+	}
+    
+
+   
+    
 }
