@@ -194,7 +194,8 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 			),
 			naButtonClass: this.getButtonClass(RESULT_NA, result),
 			nsButtonClass: this.getButtonClass(RESULT_NS, result),
-			showChildren: result === RESULT_NON_COMPLIANT,
+			showChildren: result === RESULT_NON_COMPLIANT || result === RESULT_COMPLIANT,
+			showNonCompliantFields: result === RESULT_NON_COMPLIANT,
 		};
 	}
 
@@ -455,12 +456,13 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 				correctedDuringInspection: isNowNonCompliant ? parent.correctedDuringInspection : false,
 				actionDescription: isNowNonCompliant ? parent.actionDescription : "",
 
-				childQuestions: isNowNonCompliant ?
-					parent.childQuestions :
-					parent.childQuestions.map(child => ({
+				childQuestions:
+                   value === RESULT_NA || value === RESULT_NS
+                   ? parent.childQuestions.map(child => ({
                    ...child,
                    checkboxValue: false
                       }))
+                   : parent.childQuestions
 			});
 
 		});
@@ -720,7 +722,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 						parent.actionDescription || '' :
 						null,
 
-					childQuestionsForReview: isNonCompliant ?
+					childQuestionsForReview: (isNonCompliant || isCompliant) ?
 						(parent.childQuestions || []).map(child => ({
 							id: child.assessmentIndicatorDefinitionId,
 							questionText: child.questionText,
@@ -1001,16 +1003,13 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 						sectionsWithChanges.add(group.taskDefinitionId);
 					}
 
-					if (parent.result === RESULT_NON_COMPLIANT && parent.childQuestions?.length) {
-
-						const parentJustBecameNonCompliant =
-							parent.originalResult !== RESULT_NON_COMPLIANT;
+					if ((parent.result === RESULT_NON_COMPLIANT || parent.result === RESULT_COMPLIANT)&& parent.childQuestions?.length) {
 
 						const anyChildChanged = parent.childQuestions.some(
-							(c) => c.checkboxValue !== c.originalCheckboxValue
+								c => c.checkboxValue !== c.originalCheckboxValue
 								);
 								
-						if (parentJustBecameNonCompliant || anyChildChanged) {
+								if (anyChildChanged) {
 									sectionsWithChanges.add(group.taskDefinitionId);
 
 							for (const child of parent.childQuestions) {
@@ -1022,7 +1021,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 									assessmentTaskId: child.assessmentTaskId,
 									definitionId: child.assessmentIndicatorDefinitionId,
 									comment: "",
-									result: child.checkboxValue === true ? RESULT_NON_COMPLIANT : null,
+									result: child.checkboxValue === true ? parent.result : null,
 									checkboxValue: child.checkboxValue === true,
 								});
 							}
@@ -1326,18 +1325,10 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
 				// Children
 				if (
-					parent.result === RESULT_NON_COMPLIANT &&
+					(parent.result === RESULT_NON_COMPLIANT || parent.result === RESULT_COMPLIANT) &&
 					parent.childQuestions?.length
 				) {
-					const parentJustBecameNonCompliant =
-						parent.originalResult !== RESULT_NON_COMPLIANT;
-
-					const anyChildChanged = parent.childQuestions.some(
-						(c) => c.checkboxValue !== c.originalCheckboxValue
-					);
-
-					if (parentJustBecameNonCompliant || anyChildChanged) {
-						for (const child of parent.childQuestions) {
+					for (const child of parent.childQuestions) {
 							const key = `${child.assessmentTaskId}-${child.assessmentIndicatorDefinitionId}`;
 							if (seenChildren.has(key)) continue;
 							seenChildren.add(key);
@@ -1346,13 +1337,12 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 								assessmentTaskId: child.assessmentTaskId,
 								definitionId: child.assessmentIndicatorDefinitionId,
 								comment: "",
-								result: child.checkboxValue === true ? RESULT_NON_COMPLIANT : null,
+								result: child.checkboxValue === true ? parent.result : null,
 								checkboxValue: child.checkboxValue === true,
-								selectPriority: parent.selectPriority || null,
-								preferredDateTime: isNonCompliant && parent.preferredDateTime ? parent.preferredDateTime : null,
+								selectPriority: parent.result === RESULT_NON_COMPLIANT ? parent.selectPriority : null,
+								preferredDateTime: parent.result === RESULT_NON_COMPLIANT && parent.preferredDateTime ? parent.preferredDateTime : null,
 								correctedDuringInspection: parent.correctedDuringInspection || false,
 							});
-						}
 					}
 				}
 			}
