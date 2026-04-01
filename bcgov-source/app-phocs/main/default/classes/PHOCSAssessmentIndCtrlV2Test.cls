@@ -674,6 +674,23 @@ private class PHOCSAssessmentIndCtrlV2Test {
     System.assertEquals(null,updatedChild.Result,'Child Result should be reset when parent is Compliant');
     System.assertEquals(false,updatedChild.PHOCSCheckboxResponse__c,'Child checkbox should be reset to false');
 }
+    
+    
+    @isTest
+ 	static void test_inspopeningcomments() {
+
+			Visit inspopcmt = [SELECT Id,InstructionDescription FROM Visit LIMIT 1];
+			String openingComments = 'Inspection Opening Comment';
+		
+			Test.startTest();
+        	PHOCSInspectionAssessmentIndControllerV2.updateOpeningComments(inspopcmt.Id,openingComments);
+    		Test.stopTest();
+		
+		Visit updRecvisit = [SELECT Id, InstructionDescription FROM Visit WHERE Id =: inspopcmt.Id LIMIT 1];
+		
+		
+		System.assertEquals(openingComments, updRecvisit.InstructionDescription,'Opening comments should be saved');
+	}
       
 
     
