@@ -41,5 +41,17 @@ public class PHOCSInspectionsHelperTest {
         Test.stopTest();
         
         System.assertEquals(inspeciton.AccountId, [Select id, AccountId from visit].AccountId);
-    }    
+    }
+	@isTest
+	static void testGetInspection_ReturnNull() {
+
+    Visit v = [SELECT Id FROM Visit LIMIT 1];
+    delete v;
+
+    Test.startTest();
+    Visit result = PHOCSInspectionsHelper.getInspection(v.Id);
+    Test.stopTest();
+
+    System.assertEquals(null, result);
+}    
 }
