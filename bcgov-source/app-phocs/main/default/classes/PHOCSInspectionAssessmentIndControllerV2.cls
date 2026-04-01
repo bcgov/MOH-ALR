@@ -496,10 +496,19 @@ public without sharing class PHOCSInspectionAssessmentIndControllerV2 {
 	*/
     
     @AuraEnabled
-	public static void updateOpeningComments(Id visitId , String openingComments) {
-		 Visit inspcomt = [SELECT Id,Name,InstructionDescription FROM Visit WHERE Id =:visitId LIMIT 1];
-		 inspcomt.InstructionDescription = openingComments;
-		 Update inspcomt;
+	public static Visit updateOpeningComments(Id visitId , String openingComments) {
+        try{
+            List<Visit> inspcomt = [SELECT Id,Name,InstructionDescription FROM Visit WHERE Id =:visitId];
+            if(!inspcomt.isEmpty()){
+                Visit inp = inspcomt[0];
+                inp.InstructionDescription = openingComments;
+				update inp;
+				return inp;                  
+            }
+           return null; 
+        }catch(Exception ex){
+            throw new AuraHandledException(ex.getMessage());
+        }
 	}
     
 
