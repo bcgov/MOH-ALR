@@ -12,6 +12,7 @@ import validateResumeInspection from "@salesforce/apex/PHOCSInspectionAssessment
 import updateInspectionStatusToInProgress from "@salesforce/apex/InspectionQuestionsControllerV2.updateInspectionStatusToInProgress";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import getInspection from '@salesforce/apex/PHOCSInspectionsHelper.getInspection';
+import updateOpeningComments from "@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.updateOpeningComments";
 
 const RESULT_COMPLIANT = "Compliant";
 const RESULT_NON_COMPLIANT = "PHOCSNonCompliant";
@@ -51,6 +52,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 	closingCommentsMessage = "";
 	closingCommentsMessageClass = "";
 	isDraft = false;
+	inspectionOpeningComments = "";
 
 	regulatoryCodesCache = {};
 	uploadedFilesMap = {};
@@ -226,6 +228,9 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 			this.inspection = await getInspection({
 				visitId: this.recordId
 			});
+
+			this.inspectionOpeningComments = this.inspection.InstructionDescription || '';
+
 		} catch (error) {
 			console.error('Error fetching inspection:', error);
 		}
@@ -318,7 +323,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 					...progress,
 				};
 			});
-
+			
 			this.totalQuestions = questionCount;
 			this.answeredQuestions = answeredCount;
 			this.compliantCount = compliant;
@@ -453,9 +458,9 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 				childQuestions: isNowNonCompliant ?
 					parent.childQuestions :
 					parent.childQuestions.map(child => ({
-						...child,
-						checkboxValue: false
-					}))
+                   ...child,
+                   checkboxValue: false
+                      }))
 			});
 
 		});
@@ -563,6 +568,16 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 			};
 		});
 	}
+
+	// ========================================
+	// Inspection Opening Comments EVENT
+	// ========================================
+
+	handleinspectionOpenCommentsChange(event) {
+        this.inspectionOpeningComments = event.target.value;
+    }
+
+	
 
 	handleCommentChange(event) {
 		const definitionId = event.target.dataset.definitionid;
@@ -993,10 +1008,10 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
 						const anyChildChanged = parent.childQuestions.some(
 							(c) => c.checkboxValue !== c.originalCheckboxValue
-						);
-
+								);
+								
 						if (parentJustBecameNonCompliant || anyChildChanged) {
-							sectionsWithChanges.add(group.taskDefinitionId);
+									sectionsWithChanges.add(group.taskDefinitionId);
 
 							for (const child of parent.childQuestions) {
 								const key = `${child.assessmentTaskId}-${child.assessmentIndicatorDefinitionId}`;
@@ -1015,6 +1030,11 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 					}
 				}
 			}
+			
+			await updateOpeningComments({
+				visitId: this.recordId,
+				openingComments: this.inspectionOpeningComments
+			});
 
 			/*if (responsesToSave.length === 0) {
 			    this.setSectionSavingState(false);
@@ -1207,6 +1227,12 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 					responses: responsesToSave
 				});
 			}
+
+			await updateOpeningComments({
+				visitId: this.recordId,
+				openingComments: this.inspectionOpeningComments
+			});
+
 
 			await markInspectionAsDraft({
 				visitId: this.recordId
