@@ -378,6 +378,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             Account accRecord = (Account) record;
             Map<String, Object> result = new Map<String, Object>{
                 'Id' => accRecord.Id,
+                'Type'=> accRecord.Type,
                 'CategoryL1__c'=> accRecord.CategoryL1__c,
                 'CategoryL2__c'=> accRecord.CategoryL2__c,
                 'FacilityCHSAText__c'=> accRecord.FacilityCHSAText__c,
