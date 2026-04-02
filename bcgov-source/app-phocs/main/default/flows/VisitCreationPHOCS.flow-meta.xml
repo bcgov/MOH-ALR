@@ -3,8 +3,8 @@
     <actionCalls>
         <name>Page_Redirection</name>
         <label>Page Redirection</label>
-        <locationX>50</locationX>
-        <locationY>1106</locationY>
+        <locationX>314</locationX>
+        <locationY>1298</locationY>
         <actionName>c:OpenInspection</actionName>
         <actionType>component</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -21,8 +21,8 @@
     <actionCalls>
         <name>PageRedirection</name>
         <label>Page Redirection</label>
-        <locationX>842</locationX>
-        <locationY>1106</locationY>
+        <locationX>2426</locationX>
+        <locationY>1322</locationY>
         <actionName>c:OpenInspection</actionName>
         <actionType>component</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -39,8 +39,8 @@
     <actionCalls>
         <name>Redirect</name>
         <label>Page Redirection</label>
-        <locationX>578</locationX>
-        <locationY>1106</locationY>
+        <locationX>1898</locationX>
+        <locationY>1298</locationY>
         <actionName>c:OpenInspection</actionName>
         <actionType>component</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -57,8 +57,8 @@
     <actionCalls>
         <name>Redirection</name>
         <label>Redirection</label>
-        <locationX>314</locationX>
-        <locationY>1106</locationY>
+        <locationX>1106</locationX>
+        <locationY>1298</locationY>
         <actionName>c:OpenInspection</actionName>
         <actionType>component</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -75,8 +75,24 @@
     <apiVersion>61.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <choices>
+        <name>inspectionFollowUpChoice</name>
+        <choiceText>Follow-up&lt;p&gt;&lt;br&gt;&lt;/p&gt;</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>FollowUp</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>inspectionUpdateChoice</name>
+        <choiceText>Inspection Update</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>InspectionUpdate</stringValue>
+        </value>
+    </choices>
+    <choices>
         <name>ScheduledonSiteInspection</name>
-        <choiceText>Scheduled on Site Inspection</choiceText>
+        <choiceText>Scheduled On-site Inspection</choiceText>
         <dataType>String</dataType>
         <value>
             <stringValue>Scheduled on Site Inspection</stringValue>
@@ -84,7 +100,7 @@
     </choices>
     <choices>
         <name>UnannouncedonSiteInspection</name>
-        <choiceText>Unannounced on Site Inspection</choiceText>
+        <choiceText>Unannounced On-site Inspection</choiceText>
         <dataType>String</dataType>
         <value>
             <stringValue>Unannounced on Site Inspection</stringValue>
@@ -92,19 +108,202 @@
     </choices>
     <choices>
         <name>VirtualSiteInspection</name>
-        <choiceText>Virtual Site Inspection</choiceText>
+        <choiceText>Virtual Inspection</choiceText>
         <dataType>String</dataType>
         <value>
             <stringValue>Virtual Site Inspection</stringValue>
         </value>
     </choices>
     <decisions>
+        <name>AccountType</name>
+        <label>Account Type</label>
+        <locationX>314</locationX>
+        <locationY>890</locationY>
+        <defaultConnector>
+            <targetReference>Acc_New_Inspection_Inspection</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Dairy</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Account_Records.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Dairy</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>New_Inspection_DairyInspection</targetReference>
+            </connector>
+            <label>Dairy</label>
+        </rules>
+        <rules>
+            <name>Food_IndustrialCamps_PersonalServices_RecWater</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Account_Records.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Food</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Account_Records.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Industrial Camps</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Account_Records.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Personal Services</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Account_Records.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Recreational Water</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>New_Inspection_FIPRInspection</targetReference>
+            </connector>
+            <label>Food, Industrial Camps, Personal Services, Rec Water</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>BLA_AccountType</name>
+        <label>BLA Account Type</label>
+        <locationX>1106</locationX>
+        <locationY>890</locationY>
+        <defaultConnector>
+            <targetReference>BLA_New_Inspection_Inspection</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>BLA_Dairy</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_BLA_Record.Account.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Dairy</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>BLADairy_New_Inspection_Inspection</targetReference>
+            </connector>
+            <label>BLA-Dairy</label>
+        </rules>
+        <rules>
+            <name>BLA_Food_IndustrialCamps_PersonalServices_RecWater</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_BLA_Record.Account.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Food</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_BLA_Record.Account.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Industrial Camps</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_BLA_Record.Account.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Personal Services</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_BLA_Record.Account.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Recreational Water</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>BLA_FIPR_New_Inspection_Inspection</targetReference>
+            </connector>
+            <label>BLA-Food, Industrial Camps, Personal Services, Rec Water</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Case_AccountType</name>
+        <label>Case Account Type</label>
+        <locationX>1898</locationX>
+        <locationY>890</locationY>
+        <defaultConnector>
+            <targetReference>Case_New_Inspection_Inspection</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Case_Dairy</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Case_Record.Account.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Dairy</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>CaseDairy_New_Inspection_Inspection</targetReference>
+            </connector>
+            <label>Case - Dairy</label>
+        </rules>
+        <rules>
+            <name>Case_Food_IndustrialCamps_PersonalServices_RecWater</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Case_Record.Account.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Food</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Case_Record.Account.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Industrial Camps</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Case_Record.Account.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Personal Services</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Case_Record.Account.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Recreational Water</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>CaseFIPR_New_Inspection_Inspection</targetReference>
+            </connector>
+            <label>Case - Food, IndustrialCamps, PersonalServices, RecWater</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Decision_Based_on_Context</name>
         <label>Decision Based on Context</label>
-        <locationX>446</locationX>
+        <locationX>1370</locationX>
         <locationY>782</locationY>
         <defaultConnector>
-            <targetReference>Inspection_Creation</targetReference>
+            <targetReference>inspectionCreationType</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -118,7 +317,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Acc_New_Inspection_Inspection</targetReference>
+                <targetReference>AccountType</targetReference>
             </connector>
             <label>Account</label>
         </rules>
@@ -133,7 +332,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>BLA_New_Inspection_Inspection</targetReference>
+                <targetReference>BLA_AccountType</targetReference>
             </connector>
             <label>Business License Application</label>
         </rules>
@@ -148,12 +347,85 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Case_New_Inspection_Inspection</targetReference>
+                <targetReference>Case_AccountType</targetReference>
             </connector>
             <label>Case</label>
         </rules>
     </decisions>
-    <description>Clone from VisitCreation flow and update Screen elements to align with PHOCS requirements</description>
+    <description>Clone from VisitCreation flow and update Screen elements to align with PHOCS requirements
+
+V6 - Changes related to EHIS- 3087, 3066 &amp; 3259</description>
+    <dynamicChoiceSets>
+        <name>dairyInspTypeChoiceSet</name>
+        <dataType>String</dataType>
+        <displayField>Name</displayField>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SelectedProgramAreas__c</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>Dairy</stringValue>
+            </value>
+        </filters>
+        <object>InspectionType</object>
+        <outputAssignments>
+            <assignToReference>inspecTypeId</assignToReference>
+            <field>Id</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>inspecTypeLabel</assignToReference>
+            <field>Name</field>
+        </outputAssignments>
+        <sortField>Name</sortField>
+        <sortOrder>Asc</sortOrder>
+        <valueField>Id</valueField>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>foodIndustPersonalRecInspecTypeRecordChoiceSet</name>
+        <dataType>String</dataType>
+        <displayField>Name</displayField>
+        <filterLogic>or</filterLogic>
+        <filters>
+            <field>SelectedProgramAreas__c</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>Food</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>SelectedProgramAreas__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Industrial Camps</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>SelectedProgramAreas__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Personal Services</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>SelectedProgramAreas__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Recreational Water</stringValue>
+            </value>
+        </filters>
+        <object>InspectionType</object>
+        <outputAssignments>
+            <assignToReference>inspecTypeId</assignToReference>
+            <field>Id</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>inspecTypeLabel</assignToReference>
+            <field>Name</field>
+        </outputAssignments>
+        <sortField>Name</sortField>
+        <sortOrder>Asc</sortOrder>
+        <valueField>Id</valueField>
+    </dynamicChoiceSets>
     <dynamicChoiceSets>
         <name>InspMethodChoices</name>
         <dataType>Picklist</dataType>
@@ -171,6 +443,31 @@
         <picklistObject>Visit</picklistObject>
     </dynamicChoiceSets>
     <environments>Default</environments>
+    <formulas>
+        <name>FollowUpInspTypeName</name>
+        <dataType>String</dataType>
+        <expression>IF(UPPER({!inspectionFollowUpType}) = &quot;INSPECTION UPDATE&quot;, &quot;Inspection Update&quot;,
+
+  IF(UPPER({!Get_Insp_Record.VisitType.Name}) = &quot;ROUTINE&quot;, &quot;Routine Follow-up&quot;,
+
+    IF(UPPER({!Get_Insp_Record.VisitType.Name}) = &quot;IN-DEPTH&quot;, &quot;In-Depth Follow-up&quot;,
+
+      IF(UPPER({!Get_Insp_Record.VisitType.Name}) = &quot;PRE-LICENSING&quot;, &quot;Pre-licensing Follow-up&quot;,
+
+        IF(UPPER({!Get_Insp_Record.VisitType.Name}) = &quot;COMPLAINT&quot;, &quot;Complaint Follow-up&quot;,
+
+          IF(UPPER({!Get_Insp_Record.VisitType.Name}) = &quot;REQUEST&quot;, &quot;Request Follow-up&quot;,
+
+            IF(UPPER({!Get_Insp_Record.VisitType.Name}) = &quot;INITIAL&quot;, &quot;Initial Follow-up&quot;,
+              &quot;&quot;
+            )
+          )
+        )
+      )
+    )
+  )
+)</expression>
+    </formulas>
     <interviewLabel>VisitCreationPHOCS {!$Flow.CurrentDateTime}</interviewLabel>
     <label>VisitCreationPHOCS</label>
     <processMetadataValues>
@@ -195,8 +492,8 @@
     <recordCreates>
         <name>Acc_Visit_Record_Creation</name>
         <label>Acc Visit Record Creation</label>
-        <locationX>50</locationX>
-        <locationY>998</locationY>
+        <locationX>578</locationX>
+        <locationY>1106</locationY>
         <assignRecordIdToReference>visitId</assignRecordIdToReference>
         <connector>
             <targetReference>Page_Redirection</targetReference>
@@ -270,10 +567,164 @@
         <object>Visit</object>
     </recordCreates>
     <recordCreates>
+        <name>BLA_Dairy_Visit_Record_Creation</name>
+        <label>BLA Dairy Visit Record Creation</label>
+        <locationX>842</locationX>
+        <locationY>1106</locationY>
+        <assignRecordIdToReference>visitId</assignRecordIdToReference>
+        <connector>
+            <targetReference>Redirection</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>AccountId</field>
+            <value>
+                <elementReference>BLADairy_Account.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ActualVisitStartTime</field>
+            <value>
+                <elementReference>BLADairy_Actual_Start_Time</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ContextId</field>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InspectionMethod__c</field>
+            <value>
+                <elementReference>BLADairy_Inspection_Method</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InspectionTypeOtherSpecify__c</field>
+            <value>
+                <elementReference>BLADairy_InspectionTypeOther</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InstructionDescription</field>
+            <value>
+                <elementReference>BLADairy_Special_Instruction</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PlaceId</field>
+            <value>
+                <elementReference>BLADairy_Location.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PlannedVisitStartTime</field>
+            <value>
+                <elementReference>BLADairy_Actual_Start_Time</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <elementReference>Get_PHOCS_Inspection_RecordTypeID.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>VisitPriority</field>
+            <value>
+                <elementReference>BLADairy_Inspection_Priority</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>VisitTypeId</field>
+            <value>
+                <elementReference>inspecTypeId</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Visit</object>
+    </recordCreates>
+    <recordCreates>
+        <name>BLA_FIPR_Visit_Record_Creation</name>
+        <label>BLA FIPR Visit Record Creation</label>
+        <locationX>1106</locationX>
+        <locationY>1106</locationY>
+        <assignRecordIdToReference>visitId</assignRecordIdToReference>
+        <connector>
+            <targetReference>Redirection</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>AccountId</field>
+            <value>
+                <elementReference>BLA_FIPR_Account.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ActualVisitStartTime</field>
+            <value>
+                <elementReference>BLA_FIPR_Actual_Start_Time</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ContextId</field>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InspectionMethod__c</field>
+            <value>
+                <elementReference>BLA_FIPR_Inspection_Method</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InspectionTypeOtherSpecify__c</field>
+            <value>
+                <elementReference>BLA_FIPR_InspectionTypeOther</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InstructionDescription</field>
+            <value>
+                <elementReference>BLA_FIPR_Special_Instruction</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PlaceId</field>
+            <value>
+                <elementReference>BLA_FIPR_Location.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PlannedVisitStartTime</field>
+            <value>
+                <elementReference>BLA_FIPR_Actual_Start_Time</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <elementReference>Get_PHOCS_Inspection_RecordTypeID.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>VisitPriority</field>
+            <value>
+                <elementReference>BLA_FIPR_Inspection_Priority</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>VisitTypeId</field>
+            <value>
+                <elementReference>inspecTypeId</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Visit</object>
+    </recordCreates>
+    <recordCreates>
         <name>BLA_Visit_Record_Creation</name>
         <label>BLA Visit Record Creation</label>
-        <locationX>314</locationX>
-        <locationY>998</locationY>
+        <locationX>1370</locationX>
+        <locationY>1106</locationY>
         <assignRecordIdToReference>visitId</assignRecordIdToReference>
         <connector>
             <targetReference>Redirection</targetReference>
@@ -347,10 +798,164 @@
         <object>Visit</object>
     </recordCreates>
     <recordCreates>
+        <name>Case_Dairy_Visit_Record_Creation</name>
+        <label>Case - Dairy Visit Record Creation</label>
+        <locationX>1634</locationX>
+        <locationY>1106</locationY>
+        <assignRecordIdToReference>visitId</assignRecordIdToReference>
+        <connector>
+            <targetReference>Redirect</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>AccountId</field>
+            <value>
+                <elementReference>CaseDairy_Account.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ActualVisitStartTime</field>
+            <value>
+                <elementReference>CaseDairy_Actual_Start_Time</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ContextId</field>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InspectionMethod__c</field>
+            <value>
+                <elementReference>CaseDairy_Inspection_Method</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InspectionTypeOtherSpecify__c</field>
+            <value>
+                <elementReference>CaseDairy_InspectionTypeOther</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InstructionDescription</field>
+            <value>
+                <elementReference>CaseDairy_Special_Instruction</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PlaceId</field>
+            <value>
+                <elementReference>CaseDairy_Special_Instruction</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PlannedVisitStartTime</field>
+            <value>
+                <elementReference>CaseDairy_Actual_Start_Time</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <elementReference>Get_PHOCS_Inspection_RecordTypeID.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>VisitPriority</field>
+            <value>
+                <elementReference>CaseDairy_Inspection_Priority</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>VisitTypeId</field>
+            <value>
+                <elementReference>inspecTypeId</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Visit</object>
+    </recordCreates>
+    <recordCreates>
+        <name>Case_FIPR_Visit_Record_Creation</name>
+        <label>Case - FIPR Visit Record Creation</label>
+        <locationX>1898</locationX>
+        <locationY>1106</locationY>
+        <assignRecordIdToReference>visitId</assignRecordIdToReference>
+        <connector>
+            <targetReference>Redirect</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>AccountId</field>
+            <value>
+                <elementReference>CaseFIPR_Account.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ActualVisitStartTime</field>
+            <value>
+                <elementReference>CaseFIPR_Actual_Start_Time</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ContextId</field>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InspectionMethod__c</field>
+            <value>
+                <elementReference>CaseFIPR_Inspection_Method</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InspectionTypeOtherSpecify__c</field>
+            <value>
+                <elementReference>CaseFIPR_InspectionTypeOther</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InstructionDescription</field>
+            <value>
+                <elementReference>CaseFIPR_Special_Instruction</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PlaceId</field>
+            <value>
+                <elementReference>CaseFIPR_Location.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PlannedVisitStartTime</field>
+            <value>
+                <elementReference>CaseFIPR_Actual_Start_Time</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <elementReference>Get_PHOCS_Inspection_RecordTypeID.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>VisitPriority</field>
+            <value>
+                <elementReference>CaseFIPR_Inspection_Priority</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>VisitTypeId</field>
+            <value>
+                <elementReference>inspecTypeId</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Visit</object>
+    </recordCreates>
+    <recordCreates>
         <name>Case_Visit_Record_Creation</name>
         <label>Case Visit Record Creation</label>
-        <locationX>578</locationX>
-        <locationY>998</locationY>
+        <locationX>2162</locationX>
+        <locationY>1106</locationY>
         <assignRecordIdToReference>visitId</assignRecordIdToReference>
         <connector>
             <targetReference>Redirect</targetReference>
@@ -424,10 +1029,164 @@
         <object>Visit</object>
     </recordCreates>
     <recordCreates>
+        <name>Dairy_Acc_Visit_Record_Creation</name>
+        <label>Dairy Acc Visit Record Creation</label>
+        <locationX>50</locationX>
+        <locationY>1106</locationY>
+        <assignRecordIdToReference>visitId</assignRecordIdToReference>
+        <connector>
+            <targetReference>Page_Redirection</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>AccountId</field>
+            <value>
+                <elementReference>Dairy_Acc_Account.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ActualVisitStartTime</field>
+            <value>
+                <elementReference>Dairy_Acc_Actual_Start_Time</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ContextId</field>
+            <value>
+                <elementReference>Dairy_Acc_ContextId.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InspectionMethod__c</field>
+            <value>
+                <elementReference>Dairy_Acc_Inspection_Method</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InspectionTypeOtherSpecify__c</field>
+            <value>
+                <elementReference>Dairy_Acc_InspectionTypeOther</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InstructionDescription</field>
+            <value>
+                <elementReference>Dairy_Acc_Special_Instruction</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PlaceId</field>
+            <value>
+                <elementReference>Dairy_Acc_Location.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PlannedVisitStartTime</field>
+            <value>
+                <elementReference>Dairy_Acc_Actual_Start_Time</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <elementReference>Get_PHOCS_Inspection_RecordTypeID.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>VisitPriority</field>
+            <value>
+                <elementReference>Dairy_Acc_Inspection_Priority</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>VisitTypeId</field>
+            <value>
+                <elementReference>inspecTypeId</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Visit</object>
+    </recordCreates>
+    <recordCreates>
+        <name>FIPR_Acc_Visit_Record_Creation</name>
+        <label>FIPR Acc Visit Record Creation</label>
+        <locationX>314</locationX>
+        <locationY>1106</locationY>
+        <assignRecordIdToReference>visitId</assignRecordIdToReference>
+        <connector>
+            <targetReference>Page_Redirection</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>AccountId</field>
+            <value>
+                <elementReference>FIPR_Acc_Account.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ActualVisitStartTime</field>
+            <value>
+                <elementReference>FIPR_Acc_Actual_Start_Time</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ContextId</field>
+            <value>
+                <elementReference>FIPR_Acc_ContextId.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InspectionMethod__c</field>
+            <value>
+                <elementReference>FIPR_Acc_Inspection_Method</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InspectionTypeOtherSpecify__c</field>
+            <value>
+                <elementReference>FIPR_Acc_InspectionTypeOther</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InstructionDescription</field>
+            <value>
+                <elementReference>FIPR_Acc_Special_Instruction</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PlaceId</field>
+            <value>
+                <elementReference>FIPR_Acc_Location.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PlannedVisitStartTime</field>
+            <value>
+                <elementReference>FIPR_Acc_Actual_Start_Time</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <elementReference>Get_PHOCS_Inspection_RecordTypeID.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>VisitPriority</field>
+            <value>
+                <elementReference>FIPR_Acc_Inspection_Priority</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>VisitTypeId</field>
+            <value>
+                <elementReference>inspecTypeId</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Visit</object>
+    </recordCreates>
+    <recordCreates>
         <name>Visit_Record_Creation</name>
         <label>Visit Record Creation</label>
-        <locationX>842</locationX>
-        <locationY>998</locationY>
+        <locationX>2426</locationX>
+        <locationY>1214</locationY>
         <assignRecordIdToReference>visitId</assignRecordIdToReference>
         <connector>
             <targetReference>PageRedirection</targetReference>
@@ -509,7 +1268,7 @@
     <recordLookups>
         <name>Get_Account_Records</name>
         <label>Get Account Records</label>
-        <locationX>446</locationX>
+        <locationX>1370</locationX>
         <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -530,7 +1289,7 @@
     <recordLookups>
         <name>Get_Assosciated_Location</name>
         <label>Get Assosciated Location</label>
-        <locationX>446</locationX>
+        <locationX>1370</locationX>
         <locationY>566</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -572,7 +1331,7 @@
     <recordLookups>
         <name>Get_BLA_Record</name>
         <label>Get BLA Record</label>
-        <locationX>446</locationX>
+        <locationX>1370</locationX>
         <locationY>242</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -593,7 +1352,7 @@
     <recordLookups>
         <name>Get_Case_Record</name>
         <label>Get Case Record</label>
-        <locationX>446</locationX>
+        <locationX>1370</locationX>
         <locationY>350</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -614,7 +1373,7 @@
     <recordLookups>
         <name>Get_Insp_Record</name>
         <label>Get Insp Record</label>
-        <locationX>446</locationX>
+        <locationX>1370</locationX>
         <locationY>458</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -635,7 +1394,7 @@
     <recordLookups>
         <name>Get_PHOCS_Inspection_RecordTypeID</name>
         <label>Get PHOCS Inspection RecordTypeID</label>
-        <locationX>446</locationX>
+        <locationX>1370</locationX>
         <locationY>674</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -653,12 +1412,33 @@
         <object>RecordType</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <recordLookups>
+        <name>get_Related_Insp_Type_Record</name>
+        <label>get Related Insp Type Record</label>
+        <locationX>2426</locationX>
+        <locationY>998</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Inspection_Creation</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>FollowUpInspTypeName</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>InspectionType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <runInMode>DefaultMode</runInMode>
     <screens>
         <name>Acc_New_Inspection_Inspection</name>
         <label>New Inspection: Inspection</label>
-        <locationX>50</locationX>
-        <locationY>890</locationY>
+        <locationX>578</locationX>
+        <locationY>998</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -861,7 +1641,7 @@
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
+                    <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
                             <stringValue>top</stringValue>
@@ -997,10 +1777,335 @@
         <showHeader>true</showHeader>
     </screens>
     <screens>
+        <name>BLA_FIPR_New_Inspection_Inspection</name>
+        <label>New Inspection: Inspection</label>
+        <locationX>1106</locationX>
+        <locationY>998</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>BLA_FIPR_Visit_Record_Creation</targetReference>
+        </connector>
+        <fields>
+            <name>BLA_FIPR_InfoDisplay</name>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Please check if all applicable equipment are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>Get_BLA_Record.Account.RecordType.Name</leftValueReference>
+                    <operator>Contains</operator>
+                    <rightValue>
+                        <stringValue>Dairy</stringValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
+            <name>BLA_FIPR_New_Inspection_Inspection_Section1</name>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>BLA_FIPR_New_Inspection_Inspection_Section1_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>BLA_FIPR_Account</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>AccountId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Account</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>Get_BLA_Record.AccountId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>BLA_FIPR_Location</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>LocationId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Place</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>Get_Assosciated_Location.LocationId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>BLA_FIPR_InspectionTypeId</name>
+                    <choiceReferences>foodIndustPersonalRecInspecTypeRecordChoiceSet</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Type</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>BLA_FIPR_InspectionTypeOther</name>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Type Other- Specify</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>inspecTypeLabel</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <stringValue>Other</stringValue>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
+                <fields>
+                    <name>BLA_FIPR_Inspection_Method</name>
+                    <choiceReferences>ScheduledonSiteInspection</choiceReferences>
+                    <choiceReferences>UnannouncedonSiteInspection</choiceReferences>
+                    <choiceReferences>VirtualSiteInspection</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Method</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>BLA_FIPR_Actual_Start_Time</name>
+                    <dataType>DateTime</dataType>
+                    <fieldText>Actual Start Time</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>BLA_FIPR_New_Inspection_Inspection_Section1_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>BLA_FIPR_ContextId</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>BLAContextId__c</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Context</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>false</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>recordId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>BLA_FIPR_Inspection_Priority</name>
+                    <choiceReferences>VisitPriorityChoices</choiceReferences>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <stringValue>Medium</stringValue>
+                    </defaultValue>
+                    <fieldText>Inspection Priority</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>BLA_FIPR_Special_Instruction</name>
+                    <fieldText>Special Instruction</fieldText>
+                    <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithoutHeader</regionContainerType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
         <name>BLA_New_Inspection_Inspection</name>
         <label>New Inspection: Inspection</label>
-        <locationX>314</locationX>
-        <locationY>890</locationY>
+        <locationX>1370</locationX>
+        <locationY>998</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -1345,10 +2450,335 @@
         <showHeader>true</showHeader>
     </screens>
     <screens>
+        <name>BLADairy_New_Inspection_Inspection</name>
+        <label>New Inspection: Inspection</label>
+        <locationX>842</locationX>
+        <locationY>998</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>BLA_Dairy_Visit_Record_Creation</targetReference>
+        </connector>
+        <fields>
+            <name>BLADairy_InfoDisplay</name>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Please check if all applicable equipment are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>Get_BLA_Record.Account.RecordType.Name</leftValueReference>
+                    <operator>Contains</operator>
+                    <rightValue>
+                        <stringValue>Dairy</stringValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
+            <name>BLADairy_New_Inspection_Inspection_Section1</name>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>BLADairy_New_Inspection_Inspection_Section1_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>BLADairy_Account</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>AccountId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Account</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>Get_BLA_Record.AccountId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>BLADairy_Location</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>LocationId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Place</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>Get_Assosciated_Location.LocationId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>BLADairy_InspectionTypeId</name>
+                    <choiceReferences>dairyInspTypeChoiceSet</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Type</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>BLADairy_InspectionTypeOther</name>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Type Other- Specify</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>inspecTypeLabel</leftValueReference>
+                            <operator>Contains</operator>
+                            <rightValue>
+                                <stringValue>Other</stringValue>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
+                <fields>
+                    <name>BLADairy_Inspection_Method</name>
+                    <choiceReferences>ScheduledonSiteInspection</choiceReferences>
+                    <choiceReferences>UnannouncedonSiteInspection</choiceReferences>
+                    <choiceReferences>VirtualSiteInspection</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Method</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>BLADairy_Actual_Start_Time</name>
+                    <dataType>DateTime</dataType>
+                    <fieldText>Actual Start Time</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>BLADairy_New_Inspection_Inspection_Section1_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>BLADairy_ContextId</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>BLAContextId__c</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Context</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>false</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>recordId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>BLADairy_Inspection_Priority</name>
+                    <choiceReferences>VisitPriorityChoices</choiceReferences>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <stringValue>Medium</stringValue>
+                    </defaultValue>
+                    <fieldText>Inspection Priority</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>BLADairy_Special_Instruction</name>
+                    <fieldText>Special Instruction</fieldText>
+                    <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithoutHeader</regionContainerType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
         <name>Case_New_Inspection_Inspection</name>
         <label>New Inspection: Inspection</label>
-        <locationX>578</locationX>
-        <locationY>890</locationY>
+        <locationX>2162</locationX>
+        <locationY>998</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -1693,10 +3123,660 @@
         <showHeader>true</showHeader>
     </screens>
     <screens>
+        <name>CaseDairy_New_Inspection_Inspection</name>
+        <label>New Inspection: Inspection</label>
+        <locationX>1634</locationX>
+        <locationY>998</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Case_Dairy_Visit_Record_Creation</targetReference>
+        </connector>
+        <fields>
+            <name>CaseDairy_displayInfo</name>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Please check if all applicable equipment are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>Get_Case_Record.Account.RecordType.Name</leftValueReference>
+                    <operator>Contains</operator>
+                    <rightValue>
+                        <stringValue>Dairy</stringValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
+            <name>CaseDairy_New_Inspection_Inspection_Section1</name>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>CaseDairy_New_Inspection_Inspection_Section1_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>CaseDairy_Account</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>AccountId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Account</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>Get_Case_Record.AccountId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>CaseDairy_Location</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>LocationId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Place</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>Get_Assosciated_Location.LocationId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>CaseDairy_InspectionTypeId</name>
+                    <choiceReferences>dairyInspTypeChoiceSet</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Type</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>CaseDairy_InspectionTypeOther</name>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Type Other- Specify</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>inspecTypeLabel</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <stringValue>Other</stringValue>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
+                <fields>
+                    <name>CaseDairy_Inspection_Method</name>
+                    <choiceReferences>ScheduledonSiteInspection</choiceReferences>
+                    <choiceReferences>UnannouncedonSiteInspection</choiceReferences>
+                    <choiceReferences>VirtualSiteInspection</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Method</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>CaseDairy_Actual_Start_Time</name>
+                    <dataType>DateTime</dataType>
+                    <fieldText>Actual Start Time</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>CaseDairy_New_Inspection_Inspection_Section1_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>CaseDairy_ContextId</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>CaseContextId__c</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Context</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>false</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>recordId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>CaseDairy_Inspection_Priority</name>
+                    <choiceReferences>VisitPriorityChoices</choiceReferences>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <stringValue>Medium</stringValue>
+                    </defaultValue>
+                    <fieldText>Inspection Priority</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>CaseDairy_Special_Instruction</name>
+                    <fieldText>Special Instruction</fieldText>
+                    <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithoutHeader</regionContainerType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>CaseFIPR_New_Inspection_Inspection</name>
+        <label>New Inspection: Inspection</label>
+        <locationX>1898</locationX>
+        <locationY>998</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Case_FIPR_Visit_Record_Creation</targetReference>
+        </connector>
+        <fields>
+            <name>CaseFIPR_CaseDairy_displayInfo</name>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Please check if all applicable equipment are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>Get_Case_Record.Account.RecordType.Name</leftValueReference>
+                    <operator>Contains</operator>
+                    <rightValue>
+                        <stringValue>Dairy</stringValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
+            <name>CaseFIPR_New_Inspection_Inspection_Section1</name>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>CaseFIPR_New_Inspection_Inspection_Section1_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>CaseFIPR_Account</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>AccountId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Account</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>Get_Case_Record.AccountId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>CaseFIPR_Location</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>LocationId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Place</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>Get_Assosciated_Location.LocationId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>CaseFIPR_InspectionTypeId</name>
+                    <choiceReferences>foodIndustPersonalRecInspecTypeRecordChoiceSet</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Type</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>CaseFIPR_InspectionTypeOther</name>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Type Other- Specify</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>inspecTypeLabel</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <stringValue>Other</stringValue>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
+                <fields>
+                    <name>CaseFIPR_Inspection_Method</name>
+                    <choiceReferences>ScheduledonSiteInspection</choiceReferences>
+                    <choiceReferences>UnannouncedonSiteInspection</choiceReferences>
+                    <choiceReferences>VirtualSiteInspection</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Method</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>CaseFIPR_Actual_Start_Time</name>
+                    <dataType>DateTime</dataType>
+                    <fieldText>Actual Start Time</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>CaseFIPR_New_Inspection_Inspection_Section1_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>CaseFIPR_ContextId</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>CaseContextId__c</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Context</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>false</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>recordId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>CaseFIPR_Inspection_Priority</name>
+                    <choiceReferences>VisitPriorityChoices</choiceReferences>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <stringValue>Medium</stringValue>
+                    </defaultValue>
+                    <fieldText>Inspection Priority</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>CaseFIPR_Special_Instruction</name>
+                    <fieldText>Special Instruction</fieldText>
+                    <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithoutHeader</regionContainerType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
         <name>Inspection_Creation</name>
         <label>New Inspection: Inspection</label>
-        <locationX>842</locationX>
-        <locationY>890</locationY>
+        <locationX>2426</locationX>
+        <locationY>1106</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -1839,7 +3919,19 @@
                     <inputParameters>
                         <name>required</name>
                         <value>
+                            <booleanValue>false</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>disabled</name>
+                        <value>
                             <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>get_Related_Insp_Type_Record.Id</elementReference>
                         </value>
                     </inputParameters>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
@@ -1889,7 +3981,7 @@
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
+                    <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
                             <stringValue>top</stringValue>
@@ -2070,14 +4162,698 @@
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
     </screens>
+    <screens>
+        <name>inspectionCreationType</name>
+        <label>Inspection Creation Type</label>
+        <locationX>2426</locationX>
+        <locationY>890</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>get_Related_Insp_Type_Record</targetReference>
+        </connector>
+        <fields>
+            <name>inspectionFollowUpType</name>
+            <choiceReferences>inspectionFollowUpChoice</choiceReferences>
+            <choiceReferences>inspectionUpdateChoice</choiceReferences>
+            <dataType>String</dataType>
+            <fieldText>Select Inspection Type</fieldText>
+            <fieldType>DropdownBox</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>New_Inspection_DairyInspection</name>
+        <label>New Inspection: Inspection</label>
+        <locationX>50</locationX>
+        <locationY>998</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Dairy_Acc_Visit_Record_Creation</targetReference>
+        </connector>
+        <fields>
+            <name>Dairy_InfoHighlights</name>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Please check if all applicable equipment are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.&lt;span class=&quot;ql-cursor&quot;&gt;﻿&lt;/span&gt;&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>Get_Account_Records.RecordType.Name</leftValueReference>
+                    <operator>Contains</operator>
+                    <rightValue>
+                        <stringValue>Dairy</stringValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
+            <name>New_Inspection_DairyInspection_Section1</name>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>New_Inspection_DairyInspection_Section1_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Dairy_Acc_Account</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>AccountId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Account</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>recordId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Dairy_Acc_Location</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>LocationId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Place</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>Get_Assosciated_Location.LocationId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>DairyAcc_InspectionTypeId</name>
+                    <choiceReferences>dairyInspTypeChoiceSet</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Type</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Dairy_Acc_InspectionTypeOther</name>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Type Other- Specify</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>inspecTypeLabel</leftValueReference>
+                            <operator>Contains</operator>
+                            <rightValue>
+                                <stringValue>Other</stringValue>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
+                <fields>
+                    <name>Dairy_Acc_Inspection_Method</name>
+                    <choiceReferences>ScheduledonSiteInspection</choiceReferences>
+                    <choiceReferences>UnannouncedonSiteInspection</choiceReferences>
+                    <choiceReferences>VirtualSiteInspection</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Method</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Dairy_Acc_Actual_Start_Time</name>
+                    <dataType>DateTime</dataType>
+                    <fieldText>Actual Start Time</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>New_Inspection_DairyInspection_Section1_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Dairy_Acc_ContextId</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>ContextId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>ContextId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>false</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Dairy_Acc_Inspection_Priority</name>
+                    <choiceReferences>VisitPriorityChoices</choiceReferences>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <stringValue>Medium</stringValue>
+                    </defaultValue>
+                    <fieldText>Inspection Priority</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Dairy_Acc_Special_Instruction</name>
+                    <fieldText>Special Instruction</fieldText>
+                    <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithoutHeader</regionContainerType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>New_Inspection_FIPRInspection</name>
+        <label>New Inspection: Inspection</label>
+        <locationX>314</locationX>
+        <locationY>998</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>FIPR_Acc_Visit_Record_Creation</targetReference>
+        </connector>
+        <fields>
+            <name>FIPR_InfoHighlights</name>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Please check if all applicable equipment are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.&lt;span class=&quot;ql-cursor&quot;&gt;﻿&lt;/span&gt;&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>Get_Account_Records.RecordType.Name</leftValueReference>
+                    <operator>Contains</operator>
+                    <rightValue>
+                        <stringValue>Dairy</stringValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
+            <name>New_Inspection_FIPRInspection_Section1</name>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>New_Inspection_FIPRInspection_Section1_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>FIPR_Acc_Account</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>AccountId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Account</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>recordId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>FIPR_Acc_Location</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>LocationId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Place</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>Get_Assosciated_Location.LocationId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>FIPRAcc_InspectionTypeId</name>
+                    <choiceReferences>foodIndustPersonalRecInspecTypeRecordChoiceSet</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Type</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>FIPR_Acc_InspectionTypeOther</name>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Type Other- Specify</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>inspecTypeLabel</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <stringValue>Other</stringValue>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
+                <fields>
+                    <name>FIPR_Acc_Inspection_Method</name>
+                    <choiceReferences>ScheduledonSiteInspection</choiceReferences>
+                    <choiceReferences>UnannouncedonSiteInspection</choiceReferences>
+                    <choiceReferences>VirtualSiteInspection</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Method</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>FIPR_Acc_Actual_Start_Time</name>
+                    <dataType>DateTime</dataType>
+                    <fieldText>Actual Start Time</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>New_Inspection_FIPRInspection_Section1_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>FIPR_Acc_ContextId</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>ContextId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>ContextId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>false</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>FIPR_Acc_Inspection_Priority</name>
+                    <choiceReferences>VisitPriorityChoices</choiceReferences>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <stringValue>Medium</stringValue>
+                    </defaultValue>
+                    <fieldText>Inspection Priority</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>FIPR_Acc_Special_Instruction</name>
+                    <fieldText>Special Instruction</fieldText>
+                    <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithoutHeader</regionContainerType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
     <start>
-        <locationX>320</locationX>
+        <locationX>1244</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Account_Records</targetReference>
         </connector>
     </start>
     <status>Active</status>
+    <variables>
+        <name>inspecTypeId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>inspecTypeLabel</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
     <variables>
         <name>recordId</name>
         <dataType>String</dataType>

@@ -100,7 +100,7 @@
                                             Please select the applicable observation(s) or enter comments for the non-compliant question.
                                         </div>
                                     </template>                                    
-                                    <template if:true={parent.showChildren}>
+                                    <template if:true={parent.showNonCompliantFields}>
                                         <lightning-layout 
                                             multiple-rows="true"
                                             vertical-align="end"
@@ -147,7 +147,7 @@
                                                     label="Compliance Due Date"
                                                     type="datetime-local"
                                                     value={parent.preferredDateTime}
-                                                    required={parent.showChildren}
+                                                    required={parent.showNonCompliantFields}
                                                     data-definitionid={parent.assessmentIndicatorDefinitionId}
                                                     data-taskid={parent.assessmentTaskId}
                                                     data-question-id={parent.assessmentIndicatorDefinitionId}
@@ -190,7 +190,7 @@
                                             </template>
                                         </div>-->
                                     </div>
-                                        <template lwc:if={parent.showChildren}>
+                                        <template lwc:if={parent.showNonCompliantFields}>
                                             <div class="comments-container">
                                                 <lightning-textarea label="Corrective Action Description" data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} value={parent.actionDescription} onchange={handleCorrectiveActionDescriptionChange} placeholder="Additional action descriptions..." class="compact-textarea" disabled={isCompleted}></lightning-textarea>
                                             </div>
