@@ -51,7 +51,7 @@
                         <valueListItems>
                             <value>Visit.PHOCSNewInspection</value>
                             <visibilityRule>
-                                <booleanFilter>(1 OR 2) AND (3 OR 4)</booleanFilter>
+                                <booleanFilter>(1 OR 2) AND 3</booleanFilter>
                                 <criteria>
                                     <leftValue>{!$Permission.CustomPermission.PHOCSOfficer}</leftValue>
                                     <operator>EQUAL</operator>
@@ -63,14 +63,9 @@
                                     <rightValue>true</rightValue>
                                 </criteria>
                                 <criteria>
-                                    <leftValue>{!Record.VisitType.Name}</leftValue>
-                                    <operator>CONTAINS</operator>
-                                    <rightValue>Follow-up</rightValue>
-                                </criteria>
-                                <criteria>
-                                    <leftValue>{!Record.VisitType.Name}</leftValue>
-                                    <operator>CONTAINS</operator>
-                                    <rightValue>Inspection Update</rightValue>
+                                    <leftValue>{!Record.IsInspFollowUpOrUpdate__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>false</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
