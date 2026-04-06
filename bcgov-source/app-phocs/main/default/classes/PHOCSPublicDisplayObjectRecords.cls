@@ -249,7 +249,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 results.add(sObj);
             }
         }
-        return results;
+        return results; 
     }
     
      public static String getRecordDetailsQuery(Id recordId) {

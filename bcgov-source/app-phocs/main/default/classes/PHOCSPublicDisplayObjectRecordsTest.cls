@@ -177,7 +177,7 @@ private class PHOCSPublicDisplayObjectRecordsTest {
         handler.call('getRelatedList', args);
         System.assert(args.get('output') != null);
         System.assert(((Map<String, Object>)args.get('output')).containsKey('result'), 'Missing result in output for action: getRelatedList');
-    }
+    } 
 
     @isTest
     static void testGetFacilityList() {
