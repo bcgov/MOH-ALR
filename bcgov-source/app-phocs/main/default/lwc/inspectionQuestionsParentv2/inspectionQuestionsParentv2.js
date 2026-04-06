@@ -13,6 +13,8 @@ import updateInspectionStatusToInProgress from "@salesforce/apex/InspectionQuest
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import getInspection from '@salesforce/apex/PHOCSInspectionsHelper.getInspection';
 import updateOpeningComments from "@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.updateOpeningComments";
+import getParentQuestionsWithOpenViolations from "@salesforce/apex/PHOCSInspectionOpenViolationController.getParentQuestionsWithOpenViolations";
+
 
 const RESULT_COMPLIANT = "Compliant";
 const RESULT_NON_COMPLIANT = "PHOCSNonCompliant";
@@ -296,6 +298,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 						actionDescription: parent.actionDescription ?? "",
 						correctedDuringInspection: parent.correctedDuringInspection ?? false,
 						regcodvioId: parent.inspectionAssessmentIndId ?? null,
+						showViolationIcon: false,
 						questionCardClass: parent.showCriticalIcon ?
 							"question-card question-card--critical" : "question-card",
 						uploadedContentDocIds: [],
@@ -324,6 +327,8 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 					...progress,
 				};
 			});
+			
+			await this.loadViolationIcons();
 			
 			this.totalQuestions = questionCount;
 			this.answeredQuestions = answeredCount;
@@ -577,6 +582,46 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
 	handleinspectionOpenCommentsChange(event) {
         this.inspectionOpeningComments = event.target.value;
+    }
+
+	// ========================================
+	// Open Violation Incident Icon EVENT
+	// ========================================
+
+			async loadViolationIcons() {
+
+        try {
+            let parentIds = new Set();
+
+            this.groupedQuestions.forEach(group => {
+                group.parentQuestions.forEach(parent => {
+                    parentIds.add(parent.assessmentIndicatorDefinitionId);
+                });
+            });
+
+            const quewithopenvio = await getParentQuestionsWithOpenViolations({
+                visitId: this.recordId,
+                parentQuestionIds: Array.from(parentIds)
+            });
+
+            const violationSet = new Set(quewithopenvio);
+
+
+            this.groupedQuestions = this.groupedQuestions.map(group => {
+                return {
+                    ...group,
+                    parentQuestions: group.parentQuestions.map(parent => {
+                        return {
+                            ...parent,
+                            showViolationIcon: violationSet.has(parent.assessmentIndicatorDefinitionId)
+                        };
+                    })
+                };
+            });
+
+        } catch (error) {
+            console.error('Violation error:', error);
+        }
     }
 
 	
@@ -1005,7 +1050,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
 					if ((parent.result === RESULT_NON_COMPLIANT || parent.result === RESULT_COMPLIANT)&& parent.childQuestions?.length) {
 
-						const anyChildChanged = parent.childQuestions.some(
+							const anyChildChanged = parent.childQuestions.some(
 								c => c.checkboxValue !== c.originalCheckboxValue
 								);
 								
@@ -1328,7 +1373,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 					(parent.result === RESULT_NON_COMPLIANT || parent.result === RESULT_COMPLIANT) &&
 					parent.childQuestions?.length
 				) {
-					for (const child of parent.childQuestions) {
+						for (const child of parent.childQuestions) {
 							const key = `${child.assessmentTaskId}-${child.assessmentIndicatorDefinitionId}`;
 							if (seenChildren.has(key)) continue;
 							seenChildren.add(key);
@@ -1343,7 +1388,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 								preferredDateTime: parent.result === RESULT_NON_COMPLIANT && parent.preferredDateTime ? parent.preferredDateTime : null,
 								correctedDuringInspection: parent.correctedDuringInspection || false,
 							});
-					}
+						}
 				}
 			}
 		}
