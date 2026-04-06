@@ -108,7 +108,7 @@ public with sharing class InspectionQuestionsControllerV2 {
                 'Critical'.equalsIgnoreCase(indicatorRecord.AssessmentIndDefinition.Criticality__c),
                 indicatorRecord.DisplayOrder,
                 existingResp,
-                resolvedCountByAssessmentIndDefinition.get(indicatorRecord.AssessmentIndDefinitionId)
+                resolvedCountByAssessmentIndDefinition.get(indicatorRecord.Category__c + ':' + indicatorRecord.AssessmentIndDefinitionId)
             ));
         }
         
@@ -141,16 +141,16 @@ public with sharing class InspectionQuestionsControllerV2 {
             if (currentVisit == null || currentVisit.AccountId == null) return result;
 
             List<AggregateResult> agg = [
-                SELECT InspectionAssmntInd.AssessmentIndDefinitionId defId, COUNT(Id) violationsCount
+                SELECT InspectionAssmntInd.AssessmentIndDefinitionId defId, InspectionAssmntInd.Category__c category, COUNT(Id) violationsCount
                 FROM RegulatoryCodeViolation
                 WHERE Status = 'Resolved'
                 AND Inspection.AccountId = :currentVisit.AccountId
                 AND InspectionAssmntInd.AssessmentIndDefinitionId != null
-                GROUP BY InspectionAssmntInd.AssessmentIndDefinitionId
+                GROUP BY InspectionAssmntInd.AssessmentIndDefinitionId, InspectionAssmntInd.Category__c
             ];
 
             for (AggregateResult ar : agg) {
-                Id defId = (Id) ar.get('defId');
+                Id defId = (string) ar.get('category') + ':' + (Id) ar.get('defId');
                 Integer c = (Integer) ar.get('violationsCount');
                 result.put(defId, c);
             }
