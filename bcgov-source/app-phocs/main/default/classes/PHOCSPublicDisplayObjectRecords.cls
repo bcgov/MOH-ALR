@@ -244,7 +244,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         List<Object> results = new List<Object>();
         for (SObject sObj : Database.query(queryConfig.ObjectQuery__c)) {        // NOPMD
             if (wrapper != null) {
-                results.add(wrapper.wrap(sObj));
+                results.add(wrapper.wrap(sObj)); 
             } else {
                 results.add(sObj);
             }

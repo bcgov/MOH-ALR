@@ -38,6 +38,7 @@ private class PHOCSPublicDisplayObjectRecordsTest {
         Test.startTest();
         Account acc = createTestAccount();
         Map<String, Object> input = new Map<String, Object>{
+            'recordId' => acc.Id,
             'configName' => 'FacilitiesList'
         };
 		Test.stopTest();
@@ -179,7 +180,7 @@ private class PHOCSPublicDisplayObjectRecordsTest {
         System.assert(((Map<String, Object>)args.get('output')).containsKey('result'), 'Missing result in output for action: getRelatedList');
     } 
 
-    @isTest
+    @isTest 
     static void testGetFacilityList() {
         Test.startTest();
         createTestAccount(); // Ensure there's a facility of type Food
