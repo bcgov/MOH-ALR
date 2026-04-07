@@ -168,6 +168,16 @@
                 <identifier>RecordDescription_cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.IsThisaSecondaryPermit__c</fieldItem>
+                <identifier>RecordIsThisaSecondaryPermit__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-ea3e8e9b-1c02-4bf4-bf2d-7c02ce90f8cf</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -236,6 +246,29 @@
                         <leftValue>{!Record.LicenseType.Name}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>Residential Care Facility License</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.IsThisaSecondaryPermit__c</fieldItem>
+                <identifier>RecordIsThisaSecondaryPermit_cField</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.LicenseType.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Pool Operating Permit</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.RecordType.DeveloperName}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>OperatingPermitApplication</rightValue>
                     </criteria>
                 </visibilityRule>
             </fieldInstance>
