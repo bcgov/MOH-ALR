@@ -110,7 +110,7 @@ public with sharing class InspectionQuestionsControllerV2 {
                 'Critical'.equalsIgnoreCase(indicatorRecord.AssessmentIndDefinition.Criticality__c),
                 indicatorRecord.DisplayOrder,
                 existingResp,
-                resolvedCountByAssessmentIndDefinition.get((indicatorRecord.AssessmentIndDefinition.Category__c == null ? '' : indicatorRecord.AssessmentIndDefinition.Category__c) + ':' + String.valueOf(indicatorRecord.AssessmentIndDefinitionId))
+                resolvedCountByAssessmentIndDefinition.get((String.isNotBlank(indicatorRecord.AssessmentIndDefinition.Category__c) ?  indicatorRecord.AssessmentIndDefinition.Category__c : '') + ':' + String.valueOf(indicatorRecord.AssessmentIndDefinitionId))
             ));
         }
         
@@ -274,7 +274,7 @@ public with sharing class InspectionQuestionsControllerV2 {
             showCriticalIcon = showIcon;
             displayOrder = displayOrderValue;
             childQuestions = new List<QuestionWrapper>();
-            previouslyResolvedViolationsCount = resolvedCount == null ? 0 : resolvedCount;
+            previouslyResolvedViolationsCount = resolvedCount != null ? resolvedCount :0;
             
             // Populate existing response data if available
             if (existingResponse != null) {
