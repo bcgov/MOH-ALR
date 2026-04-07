@@ -598,6 +598,76 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
+                <fieldItem>Record.HealthandSafetyPlanRequired__c</fieldItem>
+                <identifier>RecordHealthandSafetyPlanRequired_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-404a3c59-1034-483f-8b6a-9d0e54bee7f7</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.DoesthePlanRequireMonitoring__c</fieldItem>
+                <identifier>RecordDoesthePlanRequireMonitoring_cField</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 OR 2 OR 3</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.HealthandSafetyPlanRequired__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Requested</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.HealthandSafetyPlanRequired__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Received</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.HealthandSafetyPlanRequired__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Accepted</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-fd0ec170-f519-4880-9995-307751b79a67</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-404a3c59-1034-483f-8b6a-9d0e54bee7f7</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column17</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-fd0ec170-f519-4880-9995-307751b79a67</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column20</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-80e1a291-7ed1-41d8-95fc-ac9400a30299</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.Risk__c</fieldItem>
                 <identifier>RecordRisk_cField</identifier>
             </fieldInstance>
@@ -1106,6 +1176,37 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>columns</name>
+                    <value>Facet-80e1a291-7ed1-41d8-95fc-ac9400a30299</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>horizontalAlignment</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Health and Safety Plan</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:fieldSection</componentName>
+                <identifier>flexipage_fieldSection11</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 OR 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.Topic__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Child Care</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Topic__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Residential Care</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>columns</name>
                     <value>Facet-1d1b287b-8729-41a5-befb-fe810015424f</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
@@ -1239,6 +1340,36 @@
             </componentInstance>
         </itemInstances>
         <name>Facet-39b804e5-0938-4032-ab5b-11d5187be2be</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>parentFieldApiName</name>
+                    <value>Case.Id</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListApiName</name>
+                    <value>DocumentChecklistItemPR</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListComponentOverride</name>
+                    <value>NONE</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>rowsToDisplay</name>
+                    <value>10</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>showActionBar</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentName>force:relatedListSingleContainer</componentName>
+                <identifier>force_relatedListSingleContainer2</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-6fca59dc-64ad-4798-b8b5-a3f81a3f1476</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -1520,6 +1651,20 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:tab</componentName>
                 <identifier>flexipage_tab2</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-6fca59dc-64ad-4798-b8b5-a3f81a3f1476</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>title</name>
+                    <value>Document Checklist Items</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:tab</componentName>
+                <identifier>flexipage_tab3</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
