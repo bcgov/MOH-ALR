@@ -244,12 +244,12 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         List<Object> results = new List<Object>();
         for (SObject sObj : Database.query(queryConfig.ObjectQuery__c)) {        // NOPMD
             if (wrapper != null) {
-                results.add(wrapper.wrap(sObj));
+                results.add(wrapper.wrap(sObj)); 
             } else {
                 results.add(sObj);
             }
         }
-        return results;
+        return results; 
     }
     
      public static String getRecordDetailsQuery(Id recordId) {
@@ -272,7 +272,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
     public static List<Object> getFacilityList(string programArea) {
         List<Object> results = new List<Object>();
         FacilityWrapper wrapper = new FacilityWrapper();
-        string query = 'SELECT Id,Name,Type, CategoryL1__c,CategoryL2__c,HealthAuthority__c,Phone,ParentAccount__r.Name,' +
+        string query = 'SELECT Id,Name,Type,Physical_Address__City__s, CategoryL1__c,CategoryL2__c,HealthAuthority__c,Phone,ParentAccount__r.Name,' +
                               'FacilityCHSAText__c,Physical_Address__c, PHOCSNumberOfInspections__c,' +
                               'PHOCSOutstandingViolations__c, LastInspectionDate__c ' +
                         'FROM Account';
@@ -287,34 +287,34 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
     private static string getFacilitiesFilter(string programArea){
         switch on programArea {
             when 'food' {
-               return ' Where RecordType.DeveloperName=\'Facility\' AND Type=\'Food\'';
+               return ' Where RecordType.DeveloperName=\'Facility\' AND Type=\'Food\' AND Status__c = \'Open\'';
             }	
             when 'drinking-water-system' {	
-               return ' Where RecordType.DeveloperName=\'DrinkingWaterSystem\'';
+               return ' Where RecordType.DeveloperName=\'DrinkingWaterSystem\' AND Type=\'Drinking Water\' AND Status__c = \'Open\'';
             }
             when 'residential-care' {
-               return ' Where RecordType.DeveloperName=\'Facility\' AND Type=\'Residential Care\' AND CategoryL1__c IN (\'Mental health\',\'Hospice\',\'Substance use\',\'Long-term care\',\'Community living\',\'Acquired injury\',\'Child and youth residential\',\'Operating without a licence\')';
+               return ' Where RecordType.DeveloperName=\'Facility\' AND  Status__c = \'Open\' AND Type=\'Residential Care\' AND CategoryL1__c IN (\'Licensing - Residential\',\'Unlawful – Residential Licensing\',\'Hospital Act\')';
             }
             when 'hospital' {
-               return ' Where RecordType.DeveloperName=\'Facility\' AND Type=\'Residential Care\' AND CategoryL1__c=\'Hospital Act\'';
+               return ' Where RecordType.DeveloperName=\'Facility\' AND  Status__c = \'Open\' AND Type=\'Residential Care\' AND CategoryL1__c=\'Hospital Act\'';
             }
             when 'child-care' {
-               return ' Where RecordType.DeveloperName=\'Facility\' AND Type=\'Child Care\'';
+               return ' Where RecordType.DeveloperName=\'Facility\' AND  Status__c = \'Open\' AND Type=\'Child Care\'';
             }
             when 'personal-services' {
-               return ' Where RecordType.DeveloperName=\'Facility\' AND Type=\'Personal Services\'';
+               return ' Where RecordType.DeveloperName=\'Facility\' AND  Status__c = \'Open\' AND Type=\'Personal Services\'';
             }	
             when 'tobacco-vapour' {		
-               return ' Where RecordType.DeveloperName=\'Facility\' AND Type=\'Tobacco and Vapour\'';
+               return ' Where RecordType.DeveloperName=\'Facility\' AND  Status__c = \'Open\' AND Type=\'Tobacco and Vapour\'';
             }
             when 'recreational-water' {
-               return ' Where RecordType.DeveloperName=\'Facility\' AND Type=\'Recreational Water\'';
+               return ' Where RecordType.DeveloperName=\'Facility\' AND Status__c = \'Open\' AND Type=\'Recreational Water\'';
             }
             when 'industrial-camps' {
-               return ' Where RecordType.DeveloperName=\'Facility\' AND Type=\'Industrial Camps\'';
+               return ' Where RecordType.DeveloperName=\'Facility\' AND Status__c = \'Open\' AND Type=\'Industrial Camps\'';
             }
             when 'sewerage-facilities' {
-               return ' Where RecordType.DeveloperName=\'Facility\' AND Type=\'Sewerage\'';
+               return ' Where RecordType.DeveloperName=\'Facility\' AND Status__c = \'Open\' AND Type=\'Sewerage\'';
             }
         }
         return '';
@@ -378,6 +378,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             Account accRecord = (Account) record;
             Map<String, Object> result = new Map<String, Object>{
                 'Id' => accRecord.Id,
+                'Type'=> accRecord.Type,
                 'CategoryL1__c'=> accRecord.CategoryL1__c,
                 'CategoryL2__c'=> accRecord.CategoryL2__c,
                 'FacilityCHSAText__c'=> accRecord.FacilityCHSAText__c,
@@ -386,6 +387,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 'Name' => accRecord.Name,
                 'PHOCSNumberOfInspections__c' => accRecord.PHOCSNumberOfInspections__c,
                 'PHOCSOutstandingViolations__c'=> accRecord.PHOCSOutstandingViolations__c,
+                'PhysicalAddress' => getAddress(accRecord.Physical_Address__c),
                 'PhysicalAddressStreet'=> accRecord.Physical_Address__c?.getStreet(),
                 'PhysicalAddressCity'=> accRecord.Physical_Address__c?.getCity(),
                 'PhysicalAddressState'=> accRecord.Physical_Address__c?.getState(),
