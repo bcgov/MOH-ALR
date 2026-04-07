@@ -968,7 +968,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 					isValid = false;
 				}
 
-				if (parent.showChildren && !parent.preferredDateTime) {
+				if (parent.result === RESULT_NON_COMPLIANT && !parent.preferredDateTime) {
 					duedateempty = true;
 					isValid = false;
 
