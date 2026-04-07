@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ALRStatusAndLicenceDetailValidationRule</fullName>
+    <active>true</active>
+    <description>For Residence record tyope</description>
+    <errorConditionFormula>AND(
+    RecordType.DeveloperName = &quot;Residence&quot;,
+    NOT(ISBLANK(TEXT(Status__c))),
+    TEXT(Status__c) = TEXT(LicenseDetail__c)
+)</errorConditionFormula>
+    <errorMessage>Enter a different value in the Status and License Details field to save this record</errorMessage>
+</ValidationRule>

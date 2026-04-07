@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ALRStatusValueBlankValidationRule</fullName>
+    <active>true</active>
+    <description>This rule will be fired when the status value is blank and license details is not blank for residence record type</description>
+    <errorConditionFormula>AND(
+    RecordType.DeveloperName = &quot;Residence&quot;,
+    ISBLANK(TEXT(Status__c)),
+    NOT(ISBLANK(TEXT(LicenseDetail__c)))
+)</errorConditionFormula>
+    <errorMessage>You must enter a Status in order to specify a License Detail value</errorMessage>
+</ValidationRule>

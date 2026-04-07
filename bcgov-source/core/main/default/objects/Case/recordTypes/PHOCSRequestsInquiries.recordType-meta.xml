@@ -1,0 +1,569 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PHOCSRequestsInquiries</fullName>
+    <active>true</active>
+    <businessProcess>PHOCS Requests %26 Inquiries Support Process</businessProcess>
+    <compactLayoutAssignment>PHOCSRequestsInquiriesCompactLayout</compactLayoutAssignment>
+    <description>Captures requests and inquiries</description>
+    <label>PHOCS Requests &amp; Inquiries</label>
+    <picklistValues>
+        <picklist>ClosureReason__c</picklist>
+        <values>
+            <fullName>Fulfilled</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not Applicable</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not Fulfilled</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>IsThisPartOfAnOutbreak__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>NeedFeedbackOnResolution__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unknown</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Origin</picklist>
+        <values>
+            <fullName>Email</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>In Person</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mail</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Phone</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Web</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>PlaceOfIncident__c</picklist>
+        <values>
+            <fullName>Common Area</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Resident%E2%80%99s Unit</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Priority</picklist>
+        <values>
+            <fullName>High</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Low</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Medium</fullName>
+            <default>true</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Reason</picklist>
+        <values>
+            <fullName>Complex functionality</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Existing problem</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Instructions not clear</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New problem</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>User didn%27t attend training</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Request_Subject__c</picklist>
+        <values>
+            <fullName>AL Placement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Act%2FRegulations</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Application%2FOpen a Site</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>COVID-19</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Criminal Record Check</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Eviction</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Funding</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>General Program Inquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Independent Living</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Legal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Licensing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Long-Term Care</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manager Change</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Others</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Renewals</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rent%2FRental Increases</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reportable Incident</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tenancy Issues</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>ResidentAwareofComplaint__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unknown</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>ResidentTypeInvolved__c</picklist>
+        <values>
+            <fullName>Private Pay Resident</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Publicly Subsidized Resident</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Resident Receiving per Diem Funding</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Risk__c</picklist>
+        <values>
+            <fullName>High</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Low</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Medium</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SubTopic__c</picklist>
+        <values>
+            <fullName>Appeal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Application</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Billing address</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Business license referral</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Care program</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Closure</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Contact information</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>FOI request</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facility capacity</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facility name</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facility status</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facility type%2Fcategory</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fee</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Floor plan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Info on health impediments</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Legislative or guideline</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Licensee</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mailing address</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manager</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Months of operation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No%2E of connections</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Outdoor activity area</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Owner</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Physical site address</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pre%2FPost care %26 sanitation review</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ROWP listing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reconsideration</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Request filing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Request plan review</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sampling</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Schedule B</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Services</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Signage%2Fmaterials</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Site plan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Structural</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Type of care</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Topic__c</picklist>
+        <values>
+            <fullName>Comfort Letter</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facility detail change</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Information</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Inspection</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Meeting</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reconsideration%2Fappeal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Referral</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Section 29 investigation report</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tech Report Review</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Type</picklist>
+        <values>
+            <fullName>Feature Request</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Problem</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Question</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>TypeOfIncident__c</picklist>
+        <values>
+            <fullName>Aggression Between Residents</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Aggressive or Unusual Behaviour</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Attempted Suicide</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Choking</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Death</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Disease Outbreak or Occurrence</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Emotional Abuse</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fall</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Financial Abuse</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Food Poisoning</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Medication Error</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Missing Person</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Motor Vehicle Injury</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Neglect</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other Injury</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Overdose</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Physical Abuse</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Poisoning</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Police Call</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Service Delivery Problem</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sexual Abuse</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unexpected Illness</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>WishtoRemainAnonymous__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unknown</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>
