@@ -99,7 +99,15 @@
                                         <div class="noncompliant-helper-text slds-text-color_error slds-m-top_xx-small">
                                             Please select the applicable observation(s) or enter comments for the non-compliant question.
                                         </div>
-                                    </template>                                    
+                                    </template>
+                                    <template lwc:if={parent.showViolationIcon}>
+                                        <div class="violation-indicator">
+                                            <lightning-icon icon-name="standard:incident" size="x-small" class="violation-icon"></lightning-icon>
+                                                <span class="violation-text">
+                                                    Open Violation
+                                                </span>        
+                                        </div>
+                                    </template>                        
                                     <template if:true={parent.showNonCompliantFields}>
                                         <lightning-layout 
                                             multiple-rows="true"
