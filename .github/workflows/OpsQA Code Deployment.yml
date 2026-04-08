@@ -1,10 +1,12 @@
-# Unique name for this workflow
 name: OpsQA Code Deployment
 
 # Definition when the workflow should run
 on:
   ## Deploy manually
   workflow_dispatch:
+  push:
+    branches:
+        - hotfixdev
     inputs:
       create-tag:
         type: boolean

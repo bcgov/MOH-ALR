@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PHOCSAllPersonalServicesFacilities</fullName>
+    <columns>ACCOUNT.NAME</columns>
+    <columns>CategoryL1__c</columns>
+    <columns>CategoryL2__c</columns>
+    <columns>HealthAuthority__c</columns>
+    <columns>Physical_Address__Street__s</columns>
+    <columns>Physical_Address__City__s</columns>
+    <columns>Physical_Address__StateCode__s</columns>
+    <columns>PHOCSOutstandingViolations__c</columns>
+    <columns>PHOCSLastInspectionDate__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>ACCOUNT.RECORDTYPE</field>
+        <operation>equals</operation>
+        <value>Account.Facility</value>
+    </filters>
+    <filters>
+        <field>ACCOUNT.TYPE</field>
+        <operation>equals</operation>
+        <value>Personal Services</value>
+    </filters>
+    <label>All Personal Services Facilities</label>
+    <sharedTo>
+        <group>EHISUsersPG</group>
+        <group>PHOCSReportingUserPG</group>
+    </sharedTo>
+</ListView>

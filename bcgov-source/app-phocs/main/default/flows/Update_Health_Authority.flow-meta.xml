@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>Apex action to pass hyperlink and get Salesforce Id from hyperlink</description>
+        <name>Extract_SF_ID_From_Hyperlink</name>
+        <label>Extract SF ID From Hyperlink</label>
+        <locationX>1172</locationX>
+        <locationY>923</locationY>
+        <actionName>PHOCSCustomConfiguration</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Check_Facility_Hierarchy_exists</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>htmlContent</name>
+            <value>
+                <elementReference>$Record.FacilityHA__c</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>PHOCSCustomConfiguration</nameSegment>
+        <offset>0</offset>
+        <outputParameters>
+            <assignToReference>getHyperlinkSFID</assignToReference>
+            <name>plainText</name>
+        </outputParameters>
+    </actionCalls>
+    <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <description>Assign Health Authority based on Facility HA</description>
+        <name>Assign_Health_Authority</name>
+        <label>Assign Health Authority</label>
+        <locationX>710</locationX>
+        <locationY>1247</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Interior</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Facility_Hierarchy.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Interior</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Interior_Health_IH</targetReference>
+            </connector>
+            <label>Interior</label>
+        </rules>
+        <rules>
+            <name>Fraser</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Facility_Hierarchy.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Fraser</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Fraser_Health_FH</targetReference>
+            </connector>
+            <label>Fraser</label>
+        </rules>
+        <rules>
+            <name>Vancouver_Coastal</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Facility_Hierarchy.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Vancouver Coastal</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Vancouver_Coastal_Health_VCH</targetReference>
+            </connector>
+            <label>Vancouver Coastal</label>
+        </rules>
+        <rules>
+            <name>Vancouver_Island</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Facility_Hierarchy.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Vancouver Island</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Island_Health_Island</targetReference>
+            </connector>
+            <label>Vancouver Island</label>
+        </rules>
+        <rules>
+            <name>Northern</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Facility_Hierarchy.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Northern</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Northern_Health_NH</targetReference>
+            </connector>
+            <label>Northern</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Update Health Authority Only if Facility Hierarchy is changed</description>
+        <name>Check_Facility_Hierarchy_Changed</name>
+        <label>Check Facility Hierarchy Changed</label>
+        <locationX>1887</locationX>
+        <locationY>431</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Facility_Hierarchy_Changed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.FacilityHierarchy__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>CheckFacilityHierarchy</targetReference>
+            </connector>
+            <label>Facility Hierarchy Changed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>To Check if Facility Hierarchy exists in Account</description>
+        <name>Check_Facility_Hierarchy_exists</name>
+        <label>Check Facility Hierarchy exists</label>
+        <locationX>1172</locationX>
+        <locationY>1031</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Outcome_1_of_Check_Facility_Hierarchy_exists</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>getHyperlinkSFID</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Facility_Hierarchy</targetReference>
+            </connector>
+            <label>Outcome 1 of Check Facility Hierarchy exists</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>CheckFacilityHierarchy</name>
+        <label>Check Facility Hierarchy</label>
+        <locationX>1667</locationX>
+        <locationY>815</locationY>
+        <defaultConnectorLabel>Default</defaultConnectorLabel>
+        <rules>
+            <name>FacilityHierarchyNotNull</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.FacilityHierarchy__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Extract_SF_ID_From_Hyperlink</targetReference>
+            </connector>
+            <label>Facility Hierarchy Not Null</label>
+        </rules>
+        <rules>
+            <name>FacilityHierarchyNull</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.FacilityHierarchy__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>UpdateHealthAuthorityToNull</targetReference>
+            </connector>
+            <label>Facility Hierarchy Null</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Check if record is created</description>
+        <name>CheckIsNew</name>
+        <label>CheckIsNew</label>
+        <locationX>1667</locationX>
+        <locationY>323</locationY>
+        <defaultConnector>
+            <targetReference>Check_Facility_Hierarchy_Changed</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Record Update</defaultConnectorLabel>
+        <rules>
+            <name>NewRecord</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>checkIsNewRecord</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Is_Facility_Hierarchy_Present</targetReference>
+            </connector>
+            <label>New Record</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_Facility_Hierarchy_Present</name>
+        <label>Is Facility Hierarchy Present</label>
+        <locationX>1447</locationX>
+        <locationY>431</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Facility_Hierarchy_Present</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.FacilityHierarchy__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>CheckFacilityHierarchy</targetReference>
+            </connector>
+            <label>Facility Hierarchy Present</label>
+        </rules>
+    </decisions>
+    <description>Bug Fix - 2520 Update record fix 
+Bug Fix - For New Record and Update Record
+Bug fix - On creation Facility Hierarchy Updates
+test -v8
+Flow to update Health Authority Field - EHIS-188 - Bug fix</description>
+    <environments>Default</environments>
+    <formulas>
+        <description>Check if record is created</description>
+        <name>checkIsNewRecord</name>
+        <dataType>Boolean</dataType>
+        <expression>ISNEW()</expression>
+    </formulas>
+    <interviewLabel>Update Health Authority {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Update Health Authority</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>To extract facility Hierarchy account record</description>
+        <name>Get_Facility_Hierarchy</name>
+        <label>Get Facility Hierarchy</label>
+        <locationX>710</locationX>
+        <locationY>1139</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_Health_Authority</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>getHyperlinkSFID</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Account</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <description>Update Account Field Health Authority to Fraser Health - FH</description>
+        <name>Fraser_Health_FH</name>
+        <label>Fraser Health - FH</label>
+        <locationX>314</locationX>
+        <locationY>1355</locationY>
+        <inputAssignments>
+            <field>HealthAuthority__c</field>
+            <value>
+                <stringValue>Fraser Health - FH</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <description>Update Account Field Health Authority to Interior Health - IH</description>
+        <name>Interior_Health_IH</name>
+        <label>Interior Health - IH</label>
+        <locationX>50</locationX>
+        <locationY>1355</locationY>
+        <inputAssignments>
+            <field>HealthAuthority__c</field>
+            <value>
+                <stringValue>Interior Health - IH</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <description>Update Account Field Health Authority - Island Health - Island</description>
+        <name>Island_Health_Island</name>
+        <label>Island Health - Island</label>
+        <locationX>842</locationX>
+        <locationY>1355</locationY>
+        <inputAssignments>
+            <field>HealthAuthority__c</field>
+            <value>
+                <stringValue>Island Health - Island</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <description>Update Account Field Health Authority to Northern Health - NH</description>
+        <name>Northern_Health_NH</name>
+        <label>Northern Health - NH</label>
+        <locationX>1106</locationX>
+        <locationY>1355</locationY>
+        <inputAssignments>
+            <field>HealthAuthority__c</field>
+            <value>
+                <stringValue>Northern Health - NH</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>UpdateHealthAuthorityToNull</name>
+        <label>Update Health Authority To Null</label>
+        <locationX>1898</locationX>
+        <locationY>923</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>HealthAuthority__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>HealthAuthority__c</field>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <description>Update Account Field  Health Authority to Vancouver Coastal Health - VCH</description>
+        <name>Vancouver_Coastal_Health_VCH</name>
+        <label>Vancouver Coastal Health - VCH</label>
+        <locationX>578</locationX>
+        <locationY>1355</locationY>
+        <inputAssignments>
+            <field>HealthAuthority__c</field>
+            <value>
+                <stringValue>Vancouver Coastal Health - VCH</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>1541</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>CheckIsNew</targetReference>
+        </connector>
+        <object>Account</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>Extract Salesforce ID from HyperLink</description>
+        <name>getHyperlinkSFID</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+</Flow>

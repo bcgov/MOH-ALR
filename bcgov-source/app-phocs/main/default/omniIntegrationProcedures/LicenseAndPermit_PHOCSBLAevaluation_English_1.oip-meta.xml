@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OmniIntegrationProcedure xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customJavaScript>{&quot;BusinessEntityAccountId&quot;:&quot;&quot;,&quot;omniscriptId&quot;:&quot;0jNbZ000000P8onUAC&quot;,&quot;language&quot;:&quot;English&quot;,&quot;type&quot;:&quot;LicensingAndPermitting&quot;,&quot;subType&quot;:&quot;WaterSourceEvaluation&quot;,&quot;sId&quot;:&quot;0jNbZ000000P8onUAC&quot;,&quot;runMode&quot;:&quot;preview&quot;,&quot;theme&quot;:&quot;lightning&quot;,&quot;LanguageCode&quot;:&quot;en_US&quot;,&quot;userProfile&quot;:&quot;System Administrator&quot;,&quot;timeStamp&quot;:&quot;2025-10-21T19:53:52.730Z&quot;,&quot;userTimeZoneName&quot;:&quot;America/Vancouver&quot;,&quot;userTimeZone&quot;:&quot;-420&quot;,&quot;userCurrencyCode&quot;:&quot;CAD&quot;,&quot;userName&quot;:&quot;w.a.cai@accenture.com.phocs.dev&quot;,&quot;userId&quot;:&quot;005bZ000005cbN3QAI&quot;,&quot;omniProcessId&quot;:&quot;0jNbZ000000P8onUAC&quot;,&quot;localTimeZoneName&quot;:&quot;America/Toronto&quot;,&quot;LogInUserContactId&quot;:&quot;&quot;,&quot;DrinkingWaterSystemStep&quot;:{&quot;WaterSystemNameText&quot;:&quot;Test 0353&quot;,&quot;PhocsDrinkingWaterSystemRadio&quot;:&quot;No&quot;},&quot;DRId_Account&quot;:&quot;001bZ00000I7ZJeQAN&quot;,&quot;PHOCSWaterSourceIntakeInformation&quot;:{&quot;AdditionalInformation&quot;:{&quot;DepthofIntakeNumber&quot;:null,&quot;WaterSupplierNameText&quot;:null,&quot;UseDescriptionSelect&quot;:&quot;Primary&quot;},&quot;GroundwaterInformation&quot;:null,&quot;BasicInformation&quot;:{&quot;TypeText&quot;:&quot;Drinking Water&quot;,&quot;AccountNameText&quot;:&quot;1021 0353&quot;},&quot;Category&quot;:{&quot;CategoryL1Select&quot;:&quot;Bulkwater&quot;}},&quot;PHOCSBLADetails&quot;:{&quot;ApplicationDetails&quot;:{&quot;LegalAgentOfOwnerCheckbox&quot;:false,&quot;ApplicantText&quot;:null}},&quot;PHOCSReview&quot;:{&quot;WaterSystemNameFormula&quot;:&quot;Test 0353&quot;,&quot;BasicInfoBlock&quot;:{&quot;AccountNameFormula&quot;:&quot;1021 0353&quot;,&quot;TypeFormula&quot;:&quot;Drinking Water&quot;},&quot;CategoryBlock&quot;:{&quot;CategoryL1Formula&quot;:&quot;Bulkwater&quot;,&quot;CategoryL2Formula&quot;:null},&quot;AddressBlock&quot;:{&quot;PhysicalAddressFormula&quot;:null,&quot;DrivingDirectionsFormula&quot;:null,&quot;MailingAddressFormula&quot;:null,&quot;BillingAddressFormula&quot;:null},&quot;AdditionalInfoBlock&quot;:{&quot;UseDescriptionFormula&quot;:null,&quot;DepthOfIntakeFormula&quot;:null,&quot;WaterSupplierNameFormula&quot;:null},&quot;GroundwaterInfoBlock&quot;:null,&quot;PrimaryOwnerFormula&quot;:null,&quot;LegalAgentOfOwnerTrueFalse&quot;:false,&quot;LegalAgentOfOwnerTrue&quot;:null,&quot;DescriptionFormula&quot;:null},&quot;BLALicenseType&quot;:&quot;&quot;,&quot;BLAApplicationId&quot;:&quot;&quot;}</customJavaScript>
+    <description>Create Water System account record as needed, Drinking Water System account, and BLA Water Source Evaluation record</description>
+    <elementTypeComponentMapping>{&quot;ElementTypeToHTMLTemplateList&quot;:[]}</elementTypeComponentMapping>
+    <isActive>true</isActive>
+    <isIntegProcdSignatureAvl>false</isIntegProcdSignatureAvl>
+    <isIntegrationProcedure>true</isIntegrationProcedure>
+    <isManagedUsingStdDesigner>false</isManagedUsingStdDesigner>
+    <isMetadataCacheDisabled>false</isMetadataCacheDisabled>
+    <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+    <isTestProcedure>false</isTestProcedure>
+    <isWebCompEnabled>false</isWebCompEnabled>
+    <language>English</language>
+    <name>PHOCS Water Source Evaluation IP</name>
+    <omniProcessElements>
+        <description>Data Mapper Post Action</description>
+        <isActive>true</isActive>
+        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+        <level>0.0</level>
+        <name>CreateBLAevaluation</name>
+        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+        <propertySetConfig>{
+  &quot;sendOnlyAdditionalInput&quot; : false,
+  &quot;returnOnlyAdditionalOutput&quot; : false,
+  &quot;elementValueMap&quot; : { },
+  &quot;failOnStepError&quot; : false,
+  &quot;internalNotes&quot; : &quot;&quot;,
+  &quot;isActive&quot; : true,
+  &quot;chainOnStep&quot; : &quot;&quot;,
+  &quot;returnOnlyFailureResponse&quot; : false,
+  &quot;responseJSONPath&quot; : &quot;&quot;,
+  &quot;responseJSONNode&quot; : &quot;&quot;,
+  &quot;executionConditionalFormula&quot; : &quot;&quot;,
+  &quot;actionMessage&quot; : &quot;&quot;,
+  &quot;additionalOutput&quot; : { },
+  &quot;sendJSONPath&quot; : &quot;&quot;,
+  &quot;failureConditionalFormula&quot; : &quot;&quot;,
+  &quot;failureResponse&quot; : { },
+  &quot;id&quot; : &quot;&quot;,
+  &quot;additionalInput&quot; : {
+    &quot;DMWaterSystemId&quot; : &quot;%waterSystemId%&quot;
+  },
+  &quot;restOptions&quot; : { },
+  &quot;bundle&quot; : &quot;PHOCSPortalCreateBLAevaluation&quot;,
+  &quot;sendJSONNode&quot; : &quot;&quot;
+}</propertySetConfig>
+        <sequenceNumber>1.0</sequenceNumber>
+        <type>DataRaptor Post Action</type>
+    </omniProcessElements>
+    <omniProcessElements>
+        <description>Data Mapper Extract Action</description>
+        <isActive>true</isActive>
+        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+        <level>0.0</level>
+        <name>ExtractBLACreated</name>
+        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+        <propertySetConfig>{
+  &quot;sendOnlyAdditionalInput&quot; : false,
+  &quot;returnOnlyAdditionalOutput&quot; : false,
+  &quot;elementValueMap&quot; : { },
+  &quot;failOnStepError&quot; : false,
+  &quot;internalNotes&quot; : &quot;&quot;,
+  &quot;isActive&quot; : true,
+  &quot;chainOnStep&quot; : false,
+  &quot;returnOnlyFailureResponse&quot; : false,
+  &quot;ignoreCache&quot; : false,
+  &quot;responseJSONPath&quot; : &quot;&quot;,
+  &quot;responseJSONNode&quot; : &quot;&quot;,
+  &quot;executionConditionalFormula&quot; : &quot;&quot;,
+  &quot;actionMessage&quot; : &quot;&quot;,
+  &quot;additionalOutput&quot; : { },
+  &quot;sendJSONPath&quot; : &quot;&quot;,
+  &quot;failureConditionalFormula&quot; : &quot;&quot;,
+  &quot;failureResponse&quot; : { },
+  &quot;id&quot; : &quot;&quot;,
+  &quot;additionalInput&quot; : {
+    &quot;BLARecId&quot; : &quot;%CreateBLAevaluation:BusinessLicenseApplication_2:Id%&quot;
+  },
+  &quot;restOptions&quot; : { },
+  &quot;bundle&quot; : &quot;PHOCSDMExtractBLARecordCreated&quot;,
+  &quot;sendJSONNode&quot; : &quot;&quot;
+}</propertySetConfig>
+        <sequenceNumber>2.0</sequenceNumber>
+        <type>DataRaptor Extract Action</type>
+    </omniProcessElements>
+    <omniProcessElements>
+        <description>Response Action</description>
+        <isActive>true</isActive>
+        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+        <level>0.0</level>
+        <name>OutputResponseForBLA</name>
+        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+        <propertySetConfig>{
+  &quot;returnFullDataJSON&quot; : false,
+  &quot;returnOnlyAdditionalOutput&quot; : false,
+  &quot;elementValueMap&quot; : { },
+  &quot;responseFormat&quot; : &quot;JSON&quot;,
+  &quot;isActive&quot; : true,
+  &quot;responseJSONPath&quot; : &quot;&quot;,
+  &quot;responseJSONNode&quot; : &quot;&quot;,
+  &quot;executionConditionalFormula&quot; : &quot;&quot;,
+  &quot;additionalOutput&quot; : {
+    &quot;BLAApplicationId&quot; : &quot;%ExtractBLACreated:BLAApplicationId%&quot;,
+    &quot;BLALicenseType&quot; : &quot;%ExtractBLACreated:BLALicenseTypeName%&quot;
+  },
+  &quot;sendJSONPath&quot; : &quot;&quot;,
+  &quot;id&quot; : &quot;&quot;,
+  &quot;restOptions&quot; : { },
+  &quot;sendJSONNode&quot; : &quot;&quot;
+}</propertySetConfig>
+        <sequenceNumber>3.0</sequenceNumber>
+        <type>Response Action</type>
+    </omniProcessElements>
+    <omniProcessKey>LicenseAndPermit_PHOCSBLAevaluation</omniProcessKey>
+    <omniProcessType>Integration Procedure</omniProcessType>
+    <propertySetConfig>{
+  &quot;linkToExternalObject&quot; : &quot;&quot;,
+  &quot;trackingCustomData&quot; : [ ],
+  &quot;includeAllActionsInResponse&quot; : false,
+  &quot;columnsPropertyMap&quot; : [ ],
+  &quot;relationshipFieldsMap&quot; : [ ],
+  &quot;labelSingular&quot; : &quot;&quot;,
+  &quot;labelPlural&quot; : &quot;&quot;,
+  &quot;description&quot; : &quot;&quot;,
+  &quot;nameColumn&quot; : &quot;&quot;,
+  &quot;rollbackOnError&quot; : false,
+  &quot;chainableQueriesLimit&quot; : 50,
+  &quot;chainableDMLStatementsLimit&quot; : null,
+  &quot;chainableCpuLimit&quot; : 2000,
+  &quot;chainableHeapSizeLimit&quot; : null,
+  &quot;chainableDMLRowsLimit&quot; : null,
+  &quot;chainableQueryRowsLimit&quot; : null,
+  &quot;chainableSoslQueriesLimit&quot; : null,
+  &quot;additionalChainableResponse&quot; : [ ],
+  &quot;chainableActualTimeLimit&quot; : null,
+  &quot;transientValues&quot; : {
+    &quot;activateOrDeactivateConsent&quot; : false
+  }
+}</propertySetConfig>
+    <subType>PHOCSBLAevaluation</subType>
+    <type>LicenseAndPermit</type>
+    <uniqueName>LicenseAndPermit_PHOCSBLAevaluation_English_1</uniqueName>
+    <versionNumber>1.0</versionNumber>
+</OmniIntegrationProcedure>

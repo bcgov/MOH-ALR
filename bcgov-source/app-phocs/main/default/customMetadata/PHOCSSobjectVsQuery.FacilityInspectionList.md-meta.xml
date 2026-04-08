@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Facility Inspection List</label>
+    <protected>false</protected>
+    <values>
+        <field>ChildSobjectAPIName__c</field>
+        <value xsi:type="xsd:string">Visit</value>
+    </values>
+    <values>
+        <field>ObjectQuery__c</field>
+        <value xsi:type="xsd:string">SELECT Id, Name, Account.Name, ActualVisitStartTime, VisitType.Name, PHOCSViolationCount__c
+FROM Visit
+WHERE Status = &apos;Completed&apos;
+  AND DoNotDiscloseToPublic__c = false
+  AND (
+         (Account.Type IN (&apos;Residential Care&apos;, &apos;Child Care&apos;))
+        OR
+        (Account.Type NOT IN (&apos;Residential Care&apos;, &apos;Child Care&apos;)
+         AND VisitType.Name NOT IN (&apos;Complaint&apos;, &apos;Complaint Follow-up&apos;))
+      )
+  AND AccountId = :recordId</value>
+    </values>
+    <values>
+        <field>ParentFieldAPIName__c</field>
+        <value xsi:type="xsd:string">AccountId</value>
+    </values>
+    <values>
+        <field>ParentSobjectAPIName__c</field>
+        <value xsi:type="xsd:string">Account</value>
+    </values>
+    <values>
+        <field>SobjectAPIName__c</field>
+        <value xsi:type="xsd:string">Visit</value>
+    </values>
+    <values>
+        <field>Type__c</field>
+        <value xsi:type="xsd:string">Related</value>
+    </values>
+</CustomMetadata>

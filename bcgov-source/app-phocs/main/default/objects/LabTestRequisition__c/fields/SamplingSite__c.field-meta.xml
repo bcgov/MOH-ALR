@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SamplingSite__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <inlineHelpText>Sampling site associated with this requisition, if applicable.</inlineHelpText>
+    <label>Sampling Site</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>$Source.FacilityName__c</field>
+            <operation>equals</operation>
+            <valueField>Location.ParentAccount__c</valueField>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>Location</referenceTo>
+    <relationshipLabel>Lab Test Requisitions</relationshipLabel>
+    <relationshipName>LabTestRequisitions</relationshipName>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

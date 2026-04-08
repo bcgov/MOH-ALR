@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Business License BLA Related List</label>
+    <protected>false</protected>
+    <values>
+        <field>ChildSobjectAPIName__c</field>
+        <value xsi:type="xsd:string">BusinessLicenseApplication</value>
+    </values>
+    <values>
+        <field>ObjectQuery__c</field>
+        <value xsi:type="xsd:string">SELECT Id, Name, LicenseType.Name, Account.Name, AppliedDate, LastModifiedDate, Status, ClosureReason__c FROM BusinessLicenseApplication WHERE Status = &apos;Closed&apos; AND RecordType.DeveloperName IN (&apos;ConstructionPermitApplication&apos;, &apos;Evaluation&apos;, &apos;OperatingPermitApplication&apos;) AND ClosureReason__c IN (&apos;Approved&apos;, &apos;Approved with Condition&apos;) AND LicensePermitNameId =:recordId</value>
+    </values>
+    <values>
+        <field>ParentFieldAPIName__c</field>
+        <value xsi:type="xsd:string">LicensePermitNameId</value>
+    </values>
+    <values>
+        <field>ParentSobjectAPIName__c</field>
+        <value xsi:type="xsd:string">BusinessLicense</value>
+    </values>
+    <values>
+        <field>SobjectAPIName__c</field>
+        <value xsi:type="xsd:string">BusinessLicenseApplication</value>
+    </values>
+    <values>
+        <field>Type__c</field>
+        <value xsi:type="xsd:string">Related</value>
+    </values>
+</CustomMetadata>

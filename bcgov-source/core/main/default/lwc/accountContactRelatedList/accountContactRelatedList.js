@@ -14,6 +14,7 @@ import ALR_Phone from '@salesforce/label/c.ALR_Phone';
 import ALR_Email from '@salesforce/label/c.ALR_Email';
 import { NavigationMixin } from 'lightning/navigation';
 import getAllRelatedContacts from '@salesforce/apex/AccountContactRelationController.getAllRelatedContacts';
+import hasPHOCSReportingUser from '@salesforce/customPermission/PHOCSReportingUser';
 
 export default class RelatedContactsLWC extends NavigationMixin(LightningElement) {
     @api recordId;
@@ -29,6 +30,10 @@ export default class RelatedContactsLWC extends NavigationMixin(LightningElement
             Phone: ALR_Phone,
             Email: ALR_Email
         };
+    }
+
+    get showManageContactButton() {
+        return !hasPHOCSReportingUser;
     }
 
     @wire(getAllRelatedContacts, { accountId: '$recordId' })
@@ -139,6 +144,6 @@ export default class RelatedContactsLWC extends NavigationMixin(LightningElement
     }
 
     get isBusinessEntityOrWaterSourceIntake() {
-        return this.accountRecordTypeName === 'Business Entity' || this.accountRecordTypeName === 'Water Source Intake' || this.accountRecordTypeName === 'Water System' || this.accountRecordTypeName === 'HA Hierarchy';
+        return this.accountRecordTypeName === 'PHOCS Business Entity' || this.accountRecordTypeName === 'PHOCS Drinking Water Source Intake' || this.accountRecordTypeName === 'PHOCS Drinking Water System' || this.accountRecordTypeName === 'PHOCS HA Hierarchy';
     }
 }

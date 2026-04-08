@@ -1,0 +1,422 @@
+<template>
+    <div class="inspection-container">
+        <lightning-card>
+            <div slot="title" class="slds-grid slds-grid_vertical-align-center">
+                <span>Inspection Form</span>
+
+                <template lwc:if={isDraft}>
+                    <span class="slds-badge slds-theme_warning slds-m-left_small">
+                        Draft
+                    </span>
+                </template>
+            </div>
+
+            <template lwc:if={showQuestions}>
+                <div class="progress-container" slot="actions">
+                    <span class="progress-text">{progressText}</span>
+                    <div class="progress-bar">
+                        <div class="progress-bar-fill" style={progressBarStyle}></div>
+                    </div>
+                </div>
+            </template>
+
+            <div class="slds-p-around_small">
+                <template lwc:if={showQuestions}>
+                </template>
+                <template lwc:else>
+                    <div class="button-progress-wrapper action-row">
+                        <template lwc:if={isCompleted}>
+                        <lightning-button label="View Responses" variant="brand" class="full-width-btn" onclick={handleViewOnly}></lightning-button>
+                        </template>
+                        <template lwc:else>
+                        <lightning-button label={startButtonLabel} variant="brand" class="full-width-btn" onclick={handleStart}></lightning-button>
+                        </template>
+                        <div class="progress-container progress-text-right" slot="actions">
+                        <span class="progress-text">{progressText}</span>
+                            <div class="progress-bar">
+                                <div class="progress-bar-fill" style={progressBarStyle}></div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <template lwc:if={showQuestions}>
+                <template for:each={groupedQuestions} for:item="taskGroup">
+                    <div key={taskGroup.taskDefinitionId} class="category-section">
+                        <div class="section-header" data-id={taskGroup.taskDefinitionId} onclick={handleToggleSection} role="button" tabindex="0" onkeydown={handleSectionKeydown}>
+                            <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-spread">
+                                <div class="slds-grid slds-grid_vertical-align-center">
+                                    <lightning-button-icon icon-name={taskGroup.iconName} alternative-text="Toggle Section" variant="bare" data-id={taskGroup.taskDefinitionId} class="slds-m-right_xx-small" disabled={isCompleted}></lightning-button-icon>
+                                    <span class="section-title">{taskGroup.taskDefinitionName}</span>
+                                    <span class="section-progress">{taskGroup.progressText}</span>
+                                </div>
+                                <div class="section-status-indicators">
+                                    <template lwc:if={taskGroup.isSaving}>
+                                        <div class="section-saving-indicator">
+                                            <lightning-spinner alternative-text="Saving" size="x-small"></lightning-spinner>
+                                            <span class="section-saving-text">Saving...</span>
+                                        </div>
+                                    </template>
+                                    <template lwc:elseif={taskGroup.hasSaved}>
+                                        <div class="section-saved-indicator">
+                                            <lightning-icon icon-name="utility:success" size="x-small" variant="success"></lightning-icon>
+                                            <span class="section-saved-text">Saved</span>
+                                        </div>
+                                    </template>
+                                    <template lwc:elseif={taskGroup.isComplete}>
+                                        <span class="section-complete-badge">Complete</span>
+                                    </template>
+                                    <template lwc:else>
+                                        <span class="section-pending-badge">{taskGroup.pendingCount} pending</span>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+
+                        <template lwc:if={taskGroup.isExpanded}>
+                            <template for:each={taskGroup.parentQuestions} for:item="parent">
+                                <div key={parent.assessmentIndicatorDefinitionId} class={parent.questionCardClass} data-question-id={parent.assessmentIndicatorDefinitionId}>
+                                    <div class="question-row">
+                                        <template lwc:if={parent.showCriticalIcon}>
+                                            <lightning-icon icon-name="utility:warning" variant="error" size="x-small" class="critical-icon"></lightning-icon>
+                                        </template>
+                                        <span class="question-text">{parent.questionText}</span>
+                                        <div class="question-controls">
+                                            <div class="compliance-button-group">
+                                                <button type="button" class={parent.compliantButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="Compliant" onclick={handleAssessmentChange} disabled={isCompleted}>Compliant</button>
+                                                <button type="button" class={parent.nonCompliantButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="PHOCSNonCompliant" onclick={handleAssessmentChange} disabled={isCompleted}>Non Compliant</button>
+                                                <button type="button" class={parent.naButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="Not Applicable" onclick={handleAssessmentChange} disabled={isCompleted}>Not Applicable</button>
+                                                <button type="button" class={parent.nsButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="Not Inspected" onclick={handleAssessmentChange} disabled={isCompleted}>Not Inspected</button>
+                                            </div>
+                                            <button type="button" class="regulatory-codes-btn" data-value={parent.assessmentIndicatorDefinitionId} onclick={handleViewRegulatoryCodes}>View Codes</button>
+                                        </div>
+                                    </div>
+                                    <template lwc:if={parent.showNonCompliantHelpText}>
+                                        <div class="noncompliant-helper-text slds-text-color_error slds-m-top_xx-small">
+                                            Please select the applicable observation(s) or enter comments for the non-compliant question.
+                                        </div>
+                                    </template>                                    
+                                    <template if:true={parent.showChildren}>
+                                        <lightning-layout 
+                                            multiple-rows="true"
+                                            vertical-align="end"
+                                            class="slds-p-horizontal_small">
+
+                                            <lightning-layout-item
+                                                size="12"
+                                                medium-device-size="4"
+                                                padding="around-small">
+
+                                                <lightning-input
+                                                    label="Corrected During Inspection"
+                                                    type="checkbox"
+                                                    checked={parent.correctedDuringInspection}
+                                                    data-definitionid={parent.assessmentIndicatorDefinitionId}
+                                                    data-taskid={parent.assessmentTaskId}
+                                                    onchange={handleCorrectedDuringInspectionChange}
+                                                    disabled={isCompleted}>
+                                                </lightning-input>
+                                            </lightning-layout-item>
+
+                                            <lightning-layout-item
+                                                size="12"
+                                                medium-device-size="4"
+                                                padding="around-small">
+
+                                                <lightning-combobox
+                                                    label="Priority"
+                                                    value={parent.selectPriority}
+                                                    options={priorityOptions}
+                                                    data-definitionid={parent.assessmentIndicatorDefinitionId}
+                                                    data-taskid={parent.assessmentTaskId}
+                                                    onchange={handlePriorityChange}
+                                                    disabled={isCompleted}>
+                                                </lightning-combobox>
+                                            </lightning-layout-item>
+
+                                            <lightning-layout-item
+                                                size="12"
+                                                medium-device-size="4"
+                                                padding="around-small">
+
+                                                <lightning-input
+                                                    label="Compliance Due Date"
+                                                    type="datetime-local"
+                                                    value={parent.preferredDateTime}
+                                                    required={parent.showChildren}
+                                                    data-definitionid={parent.assessmentIndicatorDefinitionId}
+                                                    data-taskid={parent.assessmentTaskId}
+                                                    data-question-id={parent.assessmentIndicatorDefinitionId}
+                                                    data-field="compduedate"
+                                                    onchange={handleDatetimeChange}
+                                                    disabled={isCompleted}>
+                                                </lightning-input>
+                                            </lightning-layout-item>
+
+                                        </lightning-layout>
+ 
+                                    </template>
+
+                                    
+                                    <template lwc:if={parent.showChildren}>
+                                        <div class="child-questions-container">
+                                            <div class="child-questions-header">Select applicable observations</div>
+                                            <template for:each={parent.childQuestions} for:item="child">
+                                                <div key={child.assessmentIndicatorDefinitionId} class="question-row">
+                                                    <div class="question-col">
+                                                        <c-inspection-question-childv2 question-text={child.questionText} field-type={child.dataType} ass-task-id={child.assessmentTaskId} assessment-indicator-definition-id={child.assessmentIndicatorDefinitionId} checked={child.checkboxValue} onvaluechange={handleChildValueChange} data-parent-id={parent.assessmentIndicatorDefinitionId} disabled-question={isCompleted}></c-inspection-question-childv2>
+                                                    </div>
+                                                    
+                                                    <div class="button-col">
+                                                        <button type="button" class="regulatory-codes-btn" data-value={child.assessmentIndicatorDefinitionId} onclick={handleViewRegulatoryCodes}>View Codes</button>  
+                                                    </div>                                                    
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </template>
+
+                                    <div class="comments-upload-row">
+                                        <div class="comments-container">
+                                            <lightning-textarea label="Comments" data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} value={parent.comment} onchange={handleCommentChange} placeholder="Additional observations..." class="compact-textarea" disabled={isCompleted}></lightning-textarea> 
+                                        </div>
+                                        <!--<div class="file-upload-container">
+                                            <lightning-file-upload label="Attach" name="fileUploader" accept={acceptedFormats} record-id={recordId} onuploadfinished={handleUploadFinished} data-definitionid={parent.assessmentIndicatorDefinitionId} multiple class="compact-upload"></lightning-file-upload>
+                                            <template lwc:if={parent.hasAttachments}>
+                                                <span class="attached-files-label">{parent.attachmentCount} file(s)</span>
+                                            </template>
+                                        </div>-->
+                                    </div>
+                                        <template lwc:if={parent.showChildren}>
+                                            <div class="comments-container">
+                                                <lightning-textarea label="Corrective Action Description" data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} value={parent.actionDescription} onchange={handleCorrectiveActionDescriptionChange} placeholder="Additional action descriptions..." class="compact-textarea" disabled={isCompleted}></lightning-textarea>
+                                            </div>
+                                        </template>
+                                </div>
+                            </template>
+                        </template>
+                    </div>
+                </template>
+                
+                <template lwc:if={isCompleted}>
+                </template>
+                <template lwc:else>
+                    <div class="submit-container slds-grid slds-grid_align-spread">
+                        <lightning-button label="Review Responses" variant="neutral" onclick={handleShowReview} icon-name="utility:preview"></lightning-button>
+                        <div class="slds-grid slds-grid_align-end">
+                            <lightning-button label="Save for Later" variant="neutral" class="slds-m-right_small" onclick={handleSaveForLater} disabled={isLoading}></lightning-button>
+                            <lightning-button label="Submit Inspection" variant="brand" onclick={handleSubmit} disabled={isSubmitDisabled}></lightning-button>
+                        </div>
+                    </div>
+                </template>
+            </template>
+
+            <template lwc:if={showReviewModal}>
+                <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="review-modal-heading" class="slds-modal slds-fade-in-open slds-modal_large">
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                            <h2 id="review-modal-heading" class="slds-text-heading_medium">Review Inspection Responses</h2>
+                            <button class="slds-button slds-button_icon slds-modal__close" onclick={closeReviewModal} title="Close">
+                                <lightning-icon icon-name="utility:close" size="small"></lightning-icon>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium modal-content-scrollable">
+                            <div class="review-summary">
+                                <div class="review-stat"><span class="review-stat-value">{totalQuestions}</span><span class="review-stat-label">Total</span></div>
+                                <div class="review-stat review-stat--success"><span class="review-stat-value">{compliantCount}</span><span class="review-stat-label">Compliant</span></div>
+                                <div class="review-stat review-stat--error"><span class="review-stat-value">{nonCompliantCount}</span><span class="review-stat-label">Non-Compliant</span></div>
+                                <div class="review-stat review-stat--warning"><span class="review-stat-value">{unansweredCount}</span><span class="review-stat-label">Unanswered</span></div>
+                            </div>
+                            <template for:each={reviewData} for:item="category">
+                                <div key={category.categoryId} class="review-category">
+                                    <div class="review-category-header">
+                                        <span class="review-category-name">{category.categoryName}</span>
+                                        <span class={category.progressClass}>{category.answeredCount}/{category.totalCount}</span>
+                                    </div>
+                                    <template for:each={category.questions} for:item="question">
+                                        <div key={question.questionId} class={question.reviewItemClass}>
+                                            <div class="review-question-row">
+                                                <div class="review-question-content">
+                                                    <span class="review-question-text">{question.questionText}</span>
+                                                    <div class="review-question-status">
+                                                        <lightning-icon icon-name={question.statusIcon} size="xx-small" class={question.statusIconClass}></lightning-icon>
+                                                        <span class={question.statusClass}>{question.statusLabel}</span>
+                                                    </div>
+                                                </div>
+                                                <button type="button" class="review-nav-btn" data-questionid={question.questionId} data-categoryid={category.categoryId} onclick={handleNavigateToQuestion} title="Go to question">
+                                                    <lightning-icon icon-name="utility:forward" size="xx-small"></lightning-icon>
+                                                </button>
+                                            </div>
+
+                                            <template if:true={question.isCompliant}>
+                                                <div class="review-noncompliant slds-m-top_small">  
+                                                    <template lwc:if={question.hasComment}>
+                                                        <div class="review-meta-row review-meta-row--block">
+                                                                    <span class="review-meta-label">Comment:</span>
+                                                        <div class="review-question-comment">{question.comment}</div>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </template>
+
+                                            <template if:true={question.isNonCompliant}>
+                                                <div class="review-noncompliant slds-m-top_small">                                                    
+
+                                                    <div class="review-meta-row review-meta-row--block slds-m-top_small">
+                                                        <span class="review-meta-label">Select applicable observations:</span>
+
+                                                        <div class="slds-m-top_x-small slds-m-left_medium">
+                                                            <template for:each={question.childQuestionsForReview} for:item="child">
+                                                                <lightning-input
+                                                                    key={child.id}
+                                                                    type="checkbox"
+                                                                    label={child.questionText}
+                                                                    checked={child.checked}
+                                                                    disabled
+                                                                    class="review-child-checkbox slds-m-bottom_x-small">
+                                                                </lightning-input>
+                                                            </template>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="review-meta-row">
+                                                        <span class="review-meta-label">Priority:</span>
+                                                        <span class="review-meta-value">{question.priority}</span>
+                                                    </div>
+
+                                                    <div class="review-meta-row compliance-due-date">
+                                                        <span class="review-meta-label">Compliance Due Date:</span>
+                                                        <span class="review-meta-value">
+                                                            <lightning-formatted-date-time
+                                                                value={question.complianceDueDate}
+                                                                year="numeric"
+                                                                month="long"
+                                                                day="2-digit"
+                                                                hour="2-digit"
+                                                                minute="2-digit"
+                                                                time-zone-name="short">
+                                                            </lightning-formatted-date-time>
+                                                        </span>
+                                                    </div>
+
+                                                    <template lwc:if={question.hasComment}>
+                                                        <div class="review-meta-row review-meta-row--block">
+                                                                    <span class="review-meta-label">Comment:</span>
+                                                        <div class="review-question-comment">{question.comment}</div>
+                                                        </div>
+                                                    </template>
+
+                                                    <template if:true={question.correctiveActionDescription}>
+                                                        <div class="review-meta-row review-meta-row--block">
+                                                            <span class="review-meta-label">Corrective Action:</span>
+                                                            <div class="review-question-comment">
+                                                                {question.correctiveActionDescription}
+                                                            </div>
+                                                        </div>
+                                                    </template>
+
+                                                </div>
+                                            </template>                                            
+
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+                        </div>
+                        <footer class="slds-modal__footer slds-grid slds-grid_align-spread">
+                            <lightning-button label="Back to Edit" variant="neutral" onclick={closeReviewModal}></lightning-button>
+                            <lightning-button label="Submit Inspection" variant="brand" onclick={handleSubmitFromReview} disabled={isSubmitDisabled}></lightning-button>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
+
+            <template lwc:if={isLoading}>
+                <div class="loading-overlay">
+                    <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                </div>
+            </template>
+        </lightning-card>
+
+        <template lwc:if={showRegulatoryModal}>
+            <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                        <h2 id="modal-heading" class="slds-text-heading_medium">Regulatory Codes</h2>
+                        <button class="slds-button slds-button_icon slds-modal__close" onclick={closeRegulatoryModal} title="Close">
+                            <lightning-icon icon-name="utility:close" size="small"></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium modal-content-scrollable">
+                        <template lwc:if={hasRegulatoryCodes}>
+                            <template for:each={regulatoryCodes} for:item="code">
+                                <div key={code.regulatoryCodeId} class="modal-code-item">
+                                    <div class="slds-text-heading_small">{code.regulatoryCodeName}</div>
+                                    <div class="slds-text-body_regular slds-m-bottom_x-small">{code.regulatoryCodeSubject}</div>
+                                    <p><strong>Status:</strong> {code.statusText}</p>
+                                    <p><strong>Validity:</strong> {code.validityText}</p>
+                                </div>
+                            </template>
+                        </template>
+                        <template lwc:else>
+                            <p>No regulatory codes are associated with this assessment question.</p>
+                        </template>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button label="Close" variant="brand" onclick={closeRegulatoryModal}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+        
+        <template lwc:if={showEndInspectionModal}>
+            <section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 class="slds-text-heading_medium">End Inspection?</h2>
+                    </header>
+
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <div class="slds-m-bottom_medium">
+                            <p>
+                                Do you want to complete the inspection?<br />
+                                No further edits will be possible once inspection is marked as completed.
+                            </p>
+                        </div>
+
+                        <div class="slds-grid slds-wrap slds-m-bottom_medium">
+
+        <div class="slds-col slds-size_1-of-2 slds-p-right_small">
+            <lightning-input type="text" label="Time Spent (HH:MM)" value={timeSpent} maxlength="5" required placeholder="HH:MM" data-field="timespent" onchange={handleTimeSpentChange}></lightning-input>
+        </div>
+
+        <!--<div class="slds-col slds-size_1-of-2 slds-align_absolute-center">
+            <lightning-input type="checkbox" label="Follow-up Inspection Required" checked={followUpInspectionRequired} onchange={handleFollowUpChange}></lightning-input>
+        </div> -->
+        
+    </div>
+
+                        <lightning-textarea label="Closing Comments" value={closingComments} maxlength="1000" onchange={handleClosingCommentsChange} placeholder="Additional comments..."></lightning-textarea>
+
+                        <template lwc:if={closingCommentsMessage}>
+                            <div class="slds-m-top_x-small">
+                                <span class={closingCommentsMessageClass}>{closingCommentsMessage}</span>
+                            </div>
+                        </template>
+                    </div>
+
+                    <footer class="slds-modal__footer slds-grid slds-grid_align-spread">
+                        <lightning-button label="Go Back" variant="neutral" onclick={handleGoBack}></lightning-button>
+                        <lightning-button label="Complete Inspection" variant="brand" onclick={handleCompleteInspection}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </div>
+</template>
