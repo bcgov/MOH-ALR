@@ -95,17 +95,24 @@
                                             <button type="button" class="regulatory-codes-btn" data-value={parent.assessmentIndicatorDefinitionId} onclick={handleViewRegulatoryCodes}>View Codes</button>
                                         </div>
                                     </div>
+                                    <div class="violation-details">
+                                        <template lwc:if={parent.showViolationIcon}>
+                                            <div class="violation-indicator">
+                                                <lightning-icon icon-name="standard:incident" size="x-small" class="violation-icon"></lightning-icon>
+                                                    <span class="violation-text">
+                                                        Open Violation
+                                                    </span>        
+                                            </div>
+                                        </template>
+                                        <div class="violation-history">
+                                            <div class="previous-violation-count">
+                                                Previously resolved violations: {parent.previouslyResolvedViolationsCount}
+                                            </div>
+                                        </div>
+                                    </div>
                                     <template lwc:if={parent.showNonCompliantHelpText}>
                                         <div class="noncompliant-helper-text slds-text-color_error slds-m-top_xx-small">
                                             Please select the applicable observation(s) or enter comments for the non-compliant question.
-                                        </div>
-                                    </template>
-                                    <template lwc:if={parent.showViolationIcon}>
-                                        <div class="violation-indicator">
-                                            <lightning-icon icon-name="standard:incident" size="x-small" class="violation-icon"></lightning-icon>
-                                                <span class="violation-text">
-                                                    Open Violation
-                                                </span>        
                                         </div>
                                     </template>                        
                                     <template if:true={parent.showNonCompliantFields}>
@@ -117,7 +124,7 @@
                                             <lightning-layout-item
                                                 size="12"
                                                 medium-device-size="4"
-                                                padding="around-small">
+                                                class="slds-p-around_small slds-p-top_none">
 
                                                 <lightning-input
                                                     label="Corrected During Inspection"
@@ -133,7 +140,7 @@
                                             <lightning-layout-item
                                                 size="12"
                                                 medium-device-size="4"
-                                                padding="around-small">
+                                                class="slds-p-around_small slds-p-top_none">
 
                                                 <lightning-combobox
                                                     label="Priority"
@@ -149,7 +156,7 @@
                                             <lightning-layout-item
                                                 size="12"
                                                 medium-device-size="4"
-                                                padding="around-small">
+                                               class="slds-p-around_small slds-p-top_none">
 
                                                 <lightning-input
                                                     label="Compliance Due Date"

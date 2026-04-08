@@ -22,7 +22,8 @@ public with sharing class InspectionQuestionsControllerV2 {
         
         // Map of AssessmentTaskDefinitionId -> AssessmentTaskId
         Map<Id, Id> definitionToTaskIdMap = new Map<Id, Id>();
-        List<AssessmentTask> orderedTasks = [SELECT Id, AssessmentTaskDefinitionId, AssessmentTaskDefinition.Name, sequenceNumber FROM AssessmentTask 
+        List<AssessmentTask> orderedTasks = [SELECT Id, AssessmentTaskDefinitionId, AssessmentTaskDefinition.Name, sequenceNumber 
+                                            FROM AssessmentTask 
                                              WHERE ParentId = :visitId AND AssessmentTaskDefinitionId != null WITH SECURITY_ENFORCED ORDER BY SequenceNumber ASC];
         
         for (AssessmentTask task : orderedTasks){
@@ -44,10 +45,14 @@ public with sharing class InspectionQuestionsControllerV2 {
         
         // Query indicator definitions
         List<AssessmentTaskIndDefinition> indicatorDefinitions = [SELECT Id, Name, DisplayOrder, AssessmentTaskDefinitionId,
-                                                                  AssessmentTaskDefinition.Name, AssessmentIndDefinitionId, AssessmentIndDefinition.Name, AssessmentIndDefinition.DataType, 
-                                                                  AssessmentIndDefinition.PHOCSParentId__c, AssessmentIndDefinition.Criticality__c FROM AssessmentTaskIndDefinition
+                                                                        AssessmentTaskDefinition.Name, AssessmentIndDefinitionId, AssessmentIndDefinition.Name, AssessmentIndDefinition.DataType, 
+                                                                        AssessmentIndDefinition.PHOCSParentId__c, AssessmentIndDefinition.Criticality__c,AssessmentIndDefinition.Category__c 
+                                                                  FROM AssessmentTaskIndDefinition
                                                                   WHERE AssessmentTaskDefinitionId IN :definitionToTaskIdMap.keySet() WITH SECURITY_ENFORCED];
                                                                   //ORDER BY  DisplayOrder ASC 
+        
+        // Build map of resolved violation counts per Assessment Indicator Definition for same facility
+        Map<String, Integer> resolvedCountByAssessmentIndDefinition = getResolvedViolationCountsByAssessmentDefinition(visitId);
         
         // Query existing responses for all tasks
         Map<String, InspectionAssessmentInd> existingResponses = new Map<String, InspectionAssessmentInd>();
@@ -104,7 +109,8 @@ public with sharing class InspectionQuestionsControllerV2 {
                 indicatorRecord.AssessmentIndDefinitionId,
                 'Critical'.equalsIgnoreCase(indicatorRecord.AssessmentIndDefinition.Criticality__c),
                 indicatorRecord.DisplayOrder,
-                existingResp
+                existingResp,
+                resolvedCountByAssessmentIndDefinition.get((String.isNotBlank(indicatorRecord.AssessmentIndDefinition.Category__c) ?  indicatorRecord.AssessmentIndDefinition.Category__c : '') + ':' + String.valueOf(indicatorRecord.AssessmentIndDefinitionId))
             ));
         }
         
@@ -125,6 +131,55 @@ public with sharing class InspectionQuestionsControllerV2 {
             }
         }
         return orderedTaskGroups;
+    }
+
+    @TestVisible
+    private static Map<String, Integer> getResolvedViolationCountsByAssessmentDefinition(Id visitId) {
+        Map<String, Integer> result = new Map<String, Integer>();
+        if (visitId == null) return result;
+
+        try {
+            Visit currentVisit = [
+                SELECT Id, AccountId
+                FROM Visit
+                WHERE Id = :visitId
+                LIMIT 1
+            ];
+
+            if (currentVisit == null || currentVisit.AccountId == null) {
+                return result;
+            }
+
+            List<AggregateResult> agg = [
+                SELECT 
+                    InspectionAssmntInd.AssessmentIndDefinitionId defId,
+                    InspectionAssmntInd.AssessmentIndDefinition.Category__c category,
+                    COUNT(Id) violationsCount
+                FROM RegulatoryCodeViolation
+                WHERE Status = 'Resolved'
+                AND Inspection.AccountId = :currentVisit.AccountId
+                AND InspectionAssmntInd.AssessmentIndDefinitionId != null
+                GROUP BY 
+                    InspectionAssmntInd.AssessmentIndDefinitionId,
+                    InspectionAssmntInd.AssessmentIndDefinition.Category__c
+            ];
+
+            for (AggregateResult ar : agg) {
+                String defId = String.valueOf(ar.get('defId'));
+                String category = (String) ar.get('category');
+                Integer count = (Integer) ar.get('violationsCount');
+
+                if (category != null) {
+                    String key = category + ':' + defId;
+                    result.put(key, count);
+                }
+            }
+
+        } catch (Exception ex) {
+            System.debug('Failed to compute resolved violation counts: ' + ex.getMessage());
+        }
+
+        return result;
     }
 
     /**
@@ -188,6 +243,7 @@ public with sharing class InspectionQuestionsControllerV2 {
         @AuraEnabled public Boolean showCriticalIcon { get; set; }
         @AuraEnabled public Integer displayOrder { get; set; }
         @AuraEnabled public List<QuestionWrapper> childQuestions { get; set; }
+        @AuraEnabled public Integer previouslyResolvedViolationsCount { get; set; }
         
         // Existing response fields
         @AuraEnabled public Id inspectionAssessmentIndId { get; set; }
@@ -207,7 +263,8 @@ public with sharing class InspectionQuestionsControllerV2 {
             Id indicatorDefinitionId,
             Boolean showIcon,
             Integer displayOrderValue,
-            InspectionAssessmentInd existingResponse
+            InspectionAssessmentInd existingResponse,
+            Integer resolvedCount
         ) {
             questionText = questionTextValue;
             assessmentTaskId = taskIdValue;
@@ -217,6 +274,7 @@ public with sharing class InspectionQuestionsControllerV2 {
             showCriticalIcon = showIcon;
             displayOrder = displayOrderValue;
             childQuestions = new List<QuestionWrapper>();
+            previouslyResolvedViolationsCount = resolvedCount != null ? resolvedCount :0;
             
             // Populate existing response data if available
             if (existingResponse != null) {
@@ -267,5 +325,4 @@ public with sharing class InspectionQuestionsControllerV2 {
             update vistRec;
         }
     }
-
 }

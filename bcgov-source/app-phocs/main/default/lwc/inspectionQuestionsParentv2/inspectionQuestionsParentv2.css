@@ -245,6 +245,52 @@
     margin-bottom: -6px !important;
 }
 
+.violation-details{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* keep items starting at left; we will push history to far right */
+    gap: 0.5rem;
+    width: 100%;
+    padding-top: 7px;
+    padding-bottom: 12px;
+    min-height: 29px;
+}
+
+.violation-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.violation-text {
+    color: var(--slds-g-color-brand-base-50);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.violation-icon {
+    --sds-c-icon-color-background: var(--slds-g-color-brand-base-50);
+    --sds-c-icon-color-foreground-default: white;
+}
+
+.violation-history{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-left: auto; 
+}
+
+/* Ensure history has reserved space so it doesn't overlap long question text */
+.violation-history {
+    min-width: 140px;
+    padding-right: 8px;
+    box-sizing: border-box;
+}
+
+.previous-violation-count{
+    margin-left: 8px;
+}
+
 
 /* Button styling (optional but recommended)
 .regulatory-codes-btn {
@@ -282,27 +328,8 @@
     .noncompliant-helper-text {
        font-size: 0.75rem;
        font-weight: 500;
+        display: block;
+        width: 100%;
+        clear: both; 
     }
-}
-
-.violation-indicator {
-    margin-top: 6px;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-
-    padding: 4px 10px;
-    border-radius: 6px;
-    background-color: var(--slds-g-color-brand-base-95);
-}
-
-.violation-text {
-    color: var(--slds-g-color-brand-base-50);
-    font-size: 12px;
-    font-weight: 500;
-}
-
-.violation-icon {
-    --sds-c-icon-color-background: var(--slds-g-color-brand-base-50);
-    --sds-c-icon-color-foreground-default: white;
 }
