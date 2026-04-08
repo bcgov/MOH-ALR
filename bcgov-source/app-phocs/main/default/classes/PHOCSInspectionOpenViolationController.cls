@@ -20,26 +20,32 @@ public with sharing class PHOCSInspectionOpenViolationController {
                     		
                                        
                     Set<Id> validParentIds = new Set<Id>();
+                    Map<Id, String> CategoryMap = new Map<Id, String>();
                     
                     for (AssessmentIndicatorDefinition def : [
-                        SELECT Id, PHOCSParentId__c
+                        SELECT Id, PHOCSParentId__c,Category__c
                         FROM AssessmentIndicatorDefinition 
                         WHERE Id IN :parentQuestionIds
                     ]) {
                         if(def.PHOCSParentId__c == null){
                             validParentIds.add(def.Id);
+                            CategoryMap.put(def.Id, def.Category__c);
                         }
                     }   		
-                    
-                    Set<Id> validIndicatorIds = new Set<Id>();
+                   
                     
                     Map<Id, Id> indicatorToDefinitionMap = new Map<Id, Id>();
                             for (InspectionAssessmentInd ind : [
-                                SELECT Id, AssessmentIndDefinitionId
+                                SELECT Id, AssessmentIndDefinitionId,AssessmentIndDefinition.Category__c
                                 FROM InspectionAssessmentInd
                                 WHERE AssessmentIndDefinitionId IN :validParentIds
                             ]) {
-                                indicatorToDefinitionMap.put(ind.Id, ind.AssessmentIndDefinitionId);
+                                String expectedCategory = CategoryMap.get(ind.AssessmentIndDefinitionId);
+                                if(expectedCategory == ind.AssessmentIndDefinition.Category__c){
+                                 indicatorToDefinitionMap.put(ind.Id, ind.AssessmentIndDefinitionId);   
+                                    
+                                }
+                    
                             }
                     
                 List<RegulatoryCodeViolation> violations = [
