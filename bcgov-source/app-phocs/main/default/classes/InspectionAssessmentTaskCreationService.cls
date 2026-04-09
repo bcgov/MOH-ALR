@@ -5,7 +5,9 @@
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
                 06 Jan -  PHOCS-2681        -  Accenture   -  InvocableMethod is to call from InspectionAssessmentTaskCreation flow.
                 05 Jan -  PHOCS-2681        -  Accenture   -  Create AssessmentTaskIndDefinition for PHOCS Inspections records.
-                05 Jan -  PHOCS-2681        -  Accenture   -  return ActionPlanTemplateNames.
+                05 Jan -  PHOCS-2681        -  Accenture   -  return Dairy ActionPlanTemplateNames.
+                06 Apr -  PHOCS-3459        -  Accenture   -  return PSE ActionPlanTemplateNames.
+                06 Apr -  PHOCS-3349        -  Accenture   -  return Food ActionPlanTemplateNames.
 ***********************************************************************************************/
 public without sharing class InspectionAssessmentTaskCreationService {
     public static String className = 'InspectionAssessmentTaskCreationService';
@@ -247,39 +249,127 @@ public without sharing class InspectionAssessmentTaskCreationService {
         Id dairyAssetRTId = Schema.SObjectType.Asset.getRecordTypeInfosByDeveloperName().get('PHOCSDairyPlantRoomsandEquipment').getRecordTypeId();
         
         try {
-            if(facilityAccountId == null ||String.isBlank(accountType) || String.isBlank(inspectionType)){
+            if(facilityAccountId == null || String.isBlank(accountType) || String.isBlank(inspectionType)){
                 return getAPTemplatesName;
             }
             
-            List<PHOCSActionPlanTemplateDecisionMap__mdt> decisionMaps = [SELECT ActionPlanTemplateName__c, InspectionFacilityType__c, InspectionCategory__c, AttributeType__c, Active__c
+            List<PHOCSActionPlanTemplateDecisionMap__mdt> decisionMaps = [SELECT ActionPlanTemplateName__c, InspectionFacilityType__c, InspectionCategory__c, AttributeType__c, Active__c,
+                                                                          CategoryL1__c, CategoryL2__c, CategoryL3__c
                                                                           FROM PHOCSActionPlanTemplateDecisionMap__mdt WHERE Active__c = true AND InspectionFacilityType__c =: accountType];
             
-            for (PHOCSActionPlanTemplateDecisionMap__mdt dm : decisionMaps) {
-                if(dm.InspectionCategory__c == inspectionType && dm.AttributeType__c == null){
-                    getAPTemplatesName.add(dm.ActionPlanTemplateName__c);
-                }
-            }
-            
             if(accountType == 'Dairy' && inspectionType != 'Inspection Update'){       
-                for (Asset assetObj : [SELECT PlantEquipment__c FROM Asset WHERE AccountId =: facilityAccountId AND RecordTypeId =: dairyAssetRTId AND Status = 'Active']) {
-                    if (String.isNotBlank(assetObj.PlantEquipment__c)) {
-                        attributeTypesFromAssets.add(assetObj.PlantEquipment__c);
-                    }
-                }
-                
-                if (!attributeTypesFromAssets.isEmpty()) {
-                    for (PHOCSActionPlanTemplateDecisionMap__mdt dm : decisionMaps) {
-                        if (dm.AttributeType__c != null && attributeTypesFromAssets.contains(dm.AttributeType__c)){
-                            getAPTemplatesName.add(dm.ActionPlanTemplateName__c);
-                        }
-                    }
-                }
+                getAPTemplatesName.addAll(getDairyTemplates(facilityAccountId, inspectionType, decisionMaps));
+            } else if (accountType == 'Personal Services') {
+                getAPTemplatesName.addAll(getPSETemplates(facilityAccountId, decisionMaps));
+            } else if (accountType == 'Food') {
+                getAPTemplatesName.addAll(getFoodTemplates(facilityAccountId, decisionMaps));
             }
             
         } catch(Exception e){
             LogService.logAndPublish(className, 'getActionPlanTemplateNames', 'Error in getActionPlanTemplateNames: ', e);
         }
         return getAPTemplatesName;
+    }
+
+/**
+* @author: Deepak
+* @date: 06 April 2026
+* @description: The purpose of this Method is to return Dairy ActionPlanTemplateNames.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/     
+    private static Set<String> getDairyTemplates(Id facilityAccountId, String inspectionType, List<PHOCSActionPlanTemplateDecisionMap__mdt> decisionMaps){
+        Set<String> templateNames = new Set<String>();
+        Set<String> attributeTypesFromAssets = new Set<String>();        
+        Id dairyAssetRTId = Schema.SObjectType.Asset.getRecordTypeInfosByDeveloperName().get('PHOCSDairyPlantRoomsandEquipment').getRecordTypeId();
+        
+        for (PHOCSActionPlanTemplateDecisionMap__mdt dm : decisionMaps) {
+            if (dm.InspectionCategory__c == inspectionType && dm.AttributeType__c == null) {                    
+                templateNames.add(dm.ActionPlanTemplateName__c);
+            }
+        }
+        
+        for (Asset assetObj : [SELECT PlantEquipment__c FROM Asset WHERE AccountId =: facilityAccountId AND RecordTypeId =: dairyAssetRTId AND Status = 'Active']) {
+            if (String.isNotBlank(assetObj.PlantEquipment__c)) {
+                attributeTypesFromAssets.add(assetObj.PlantEquipment__c);
+            }
+        }
+        
+        if (!attributeTypesFromAssets.isEmpty()) {
+            for (PHOCSActionPlanTemplateDecisionMap__mdt dm : decisionMaps) {
+                if (dm.AttributeType__c != null && attributeTypesFromAssets.contains(dm.AttributeType__c)) {                        
+                    templateNames.add(dm.ActionPlanTemplateName__c);
+                }
+            }
+        }        
+        return templateNames;
+    }
+ 
+/**
+* @author: Deepak
+* @date: 06 April 2026
+* @description: The purpose of this Method is to return PSE ActionPlanTemplateNames.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/     
+    private static Set<String> getPSETemplates(Id facilityAccountId, List<PHOCSActionPlanTemplateDecisionMap__mdt> decisionMaps){
+        Set<String> templateNames = new Set<String>();
+        Set<String> attributeTypesFromAssets = new Set<String>();        
+        Id pseAssetRTId = Schema.SObjectType.Asset.getRecordTypeInfosByDeveloperName().get('PHOCSPersonalServices').getRecordTypeId();
+        
+        for (PHOCSActionPlanTemplateDecisionMap__mdt dm : decisionMaps) {
+            if (dm.AttributeType__c == null) {
+                templateNames.add(dm.ActionPlanTemplateName__c);
+            }
+        }
+        
+        for (Asset assetObj : [SELECT ServiceType__c FROM Asset WHERE AccountId =: facilityAccountId AND RecordTypeId =: pseAssetRTId AND Status = 'Active']) {
+            if (String.isNotBlank(assetObj.ServiceType__c)) {
+                attributeTypesFromAssets.add(assetObj.ServiceType__c);
+            }
+        }
+        
+        if (!attributeTypesFromAssets.isEmpty()) {
+            for (PHOCSActionPlanTemplateDecisionMap__mdt dm : decisionMaps) {
+                if (dm.AttributeType__c != null && attributeTypesFromAssets.contains(dm.AttributeType__c)){                        
+                    templateNames.add(dm.ActionPlanTemplateName__c);
+                }
+            }
+        }
+        return templateNames;
+    }
+
+/**
+* @author: Deepak
+* @date: 06 April 2026
+* @description: The purpose of this Method is to return Food ActionPlanTemplateNames.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/         
+    private static Set<String> getFoodTemplates(Id facilityAccountId, List<PHOCSActionPlanTemplateDecisionMap__mdt> decisionMaps){
+        Set<String> templateNames = new Set<String>();
+        Set<String> foodFacilityServices = new Set<String>();
+        
+        Account facility = [SELECT CategoryL1__c, CategoryL2__c, CategoryL3__c, Service_s__c FROM Account WHERE Id = :facilityAccountId LIMIT 1];
+        
+        if (String.isNotBlank(facility.Service_s__c)) {
+            foodFacilityServices.addAll(facility.Service_s__c.split(';'));
+        }        
+        String facilityCategoryL1 = facility.CategoryL1__c;
+        String facilityCategoryL2 = facility.CategoryL2__c;
+        String facilityCategoryL3 = facility.CategoryL3__c;
+        
+        for (PHOCSActionPlanTemplateDecisionMap__mdt decisionMap : decisionMaps){            
+            if(decisionMap.CategoryL1__c == facilityCategoryL1 && decisionMap.CategoryL2__c == facilityCategoryL2 && decisionMap.CategoryL3__c == facilityCategoryL3){                
+                templateNames.add(decisionMap.ActionPlanTemplateName__c);
+            }
+        }
+        
+        if (!foodFacilityServices.isEmpty()) {
+            for (PHOCSActionPlanTemplateDecisionMap__mdt dm : decisionMaps) {
+                if (dm.AttributeType__c != null && foodFacilityServices.contains(dm.AttributeType__c)){                        
+                    templateNames.add(dm.ActionPlanTemplateName__c);
+                }
+            }
+        }
+        return templateNames;
     }
     
     public class FlowInputs {
