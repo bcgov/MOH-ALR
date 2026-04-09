@@ -46,7 +46,7 @@ public with sharing class InspectionQuestionsControllerV2 {
         // Query indicator definitions
         List<AssessmentTaskIndDefinition> indicatorDefinitions = [SELECT Id, Name, DisplayOrder, AssessmentTaskDefinitionId,
                                                                         AssessmentTaskDefinition.Name, AssessmentIndDefinitionId, AssessmentIndDefinition.Name, AssessmentIndDefinition.DataType, 
-                                                                        AssessmentIndDefinition.PHOCSParentId__c, AssessmentIndDefinition.Criticality__c,AssessmentIndDefinition.Category__c 
+                                                                        AssessmentIndDefinition.PHOCSParentId__c, AssessmentIndDefinition.Criticality__c,AssessmentIndDefinition.Category__c,AssessmentIndDefinition.InspectionQuestiontype__c
                                                                   FROM AssessmentTaskIndDefinition
                                                                   WHERE AssessmentTaskDefinitionId IN :definitionToTaskIdMap.keySet() WITH SECURITY_ENFORCED];
                                                                   //ORDER BY  DisplayOrder ASC 
@@ -110,7 +110,8 @@ public with sharing class InspectionQuestionsControllerV2 {
                 'Critical'.equalsIgnoreCase(indicatorRecord.AssessmentIndDefinition.Criticality__c),
                 indicatorRecord.DisplayOrder,
                 existingResp,
-                resolvedCountByAssessmentIndDefinition.get((String.isNotBlank(indicatorRecord.AssessmentIndDefinition.Category__c) ?  indicatorRecord.AssessmentIndDefinition.Category__c : '') + ':' + String.valueOf(indicatorRecord.AssessmentIndDefinitionId))
+                resolvedCountByAssessmentIndDefinition.get((String.isNotBlank(indicatorRecord.AssessmentIndDefinition.Category__c) ?  indicatorRecord.AssessmentIndDefinition.Category__c : '') + ':' + String.valueOf(indicatorRecord.AssessmentIndDefinitionId)),
+                indicatorRecord.AssessmentIndDefinition.InspectionQuestiontype__c
             ));
         }
         
@@ -244,6 +245,7 @@ public with sharing class InspectionQuestionsControllerV2 {
         @AuraEnabled public Integer displayOrder { get; set; }
         @AuraEnabled public List<QuestionWrapper> childQuestions { get; set; }
         @AuraEnabled public Integer previouslyResolvedViolationsCount { get; set; }
+        @AuraEnabled public String questionType { get; set; }
         
         // Existing response fields
         @AuraEnabled public Id inspectionAssessmentIndId { get; set; }
@@ -264,7 +266,8 @@ public with sharing class InspectionQuestionsControllerV2 {
             Boolean showIcon,
             Integer displayOrderValue,
             InspectionAssessmentInd existingResponse,
-            Integer resolvedCount
+            Integer resolvedCount,
+            String questionTypeValue
         ) {
             questionText = questionTextValue;
             assessmentTaskId = taskIdValue;
@@ -275,6 +278,7 @@ public with sharing class InspectionQuestionsControllerV2 {
             displayOrder = displayOrderValue;
             childQuestions = new List<QuestionWrapper>();
             previouslyResolvedViolationsCount = resolvedCount != null ? resolvedCount :0;
+            questionType = questionTypeValue;
             
             // Populate existing response data if available
             if (existingResponse != null) {
