@@ -257,7 +257,7 @@ public without sharing class InspectionAssessmentTaskCreationService {
                                                                           CategoryL1__c, CategoryL2__c, CategoryL3__c
                                                                           FROM PHOCSActionPlanTemplateDecisionMap__mdt WHERE Active__c = true AND InspectionFacilityType__c =: accountType];
             
-            if(accountType == 'Dairy' && inspectionType != 'Inspection Update'){       
+            if(accountType == 'Dairy'){       
                 getAPTemplatesName.addAll(getDairyTemplates(facilityAccountId, inspectionType, decisionMaps));
             } else if (accountType == 'Personal Services') {
                 getAPTemplatesName.addAll(getPSETemplates(facilityAccountId, decisionMaps));
@@ -294,7 +294,7 @@ public without sharing class InspectionAssessmentTaskCreationService {
             }
         }
         
-        if (!attributeTypesFromAssets.isEmpty()) {
+        if (!attributeTypesFromAssets.isEmpty() && inspectionType != 'Inspection Update') {
             for (PHOCSActionPlanTemplateDecisionMap__mdt dm : decisionMaps) {
                 if (dm.AttributeType__c != null && attributeTypesFromAssets.contains(dm.AttributeType__c)) {                        
                     templateNames.add(dm.ActionPlanTemplateName__c);
