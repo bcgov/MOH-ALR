@@ -348,8 +348,41 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.IncidentDate__c</fieldItem>
-                <identifier>RecordIncidentDate_cField</identifier>
+                <fieldItem>Record.IncidentTime__c</fieldItem>
+                <identifier>RecordIncidentTime_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.TimeSpentMinutes__c</fieldItem>
+                <identifier>RecordTimeSpentMinutes_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.RequiresFurtherInvestigation__c</fieldItem>
+                <identifier>RecordRequiresFurtherInvestigation_cField</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 OR 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.Topic__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Child Care</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Topic__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Residential Care</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <name>Facet-96fcacc8-05fe-49cf-8183-1d8216776db9</name>
@@ -659,6 +692,48 @@
             </componentInstance>
         </itemInstances>
         <name>Facet-80e1a291-7ed1-41d8-95fc-ac9400a30299</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.DetailsofInvestigation__c</fieldItem>
+                <identifier>RecordDetailsofInvestigation_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-6400bc2e-8a2c-4344-8f4b-7d51c6840982</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <name>Facet-c9973908-5966-45a7-8713-9535d422be82</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-6400bc2e-8a2c-4344-8f4b-7d51c6840982</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column21</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-c9973908-5966-45a7-8713-9535d422be82</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column22</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-29b85089-68b5-43a4-8b7f-4f461b39f539</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -1199,6 +1274,31 @@
                         <leftValue>{!Record.Topic__c}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>Residential Care</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>columns</name>
+                    <value>Facet-29b85089-68b5-43a4-8b7f-4f461b39f539</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>horizontalAlignment</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Investigation Details</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:fieldSection</componentName>
+                <identifier>flexipage_fieldSection12</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.RequiresFurtherInvestigation__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>true</rightValue>
                     </criteria>
                 </visibilityRule>
             </componentInstance>
