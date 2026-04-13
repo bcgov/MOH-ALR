@@ -20,8 +20,6 @@ const RESULT_COMPLIANT = "Compliant";
 const RESULT_NON_COMPLIANT = "PHOCSNonCompliant";
 const RESULT_NA = "Not Applicable";
 const RESULT_NS = "Not Inspected";
-const RESULT_YES = "Yes";
-const RESULT_NO = "No";
 const ROUTINE_INSPECTION ="Routine";
 
 const STATUS_CONFIG = {
@@ -29,8 +27,6 @@ const STATUS_CONFIG = {
     [RESULT_NON_COMPLIANT]: { label: 'Non-Compliant', icon: 'utility:error', iconClass: 'slds-icon-text-error', itemClass: 'review-item review-item--noncompliant', statusClass: 'review-status-noncompliant' },
     [RESULT_NA]: { label: RESULT_NA, icon: 'utility:dash', iconClass: 'slds-icon-text-default', itemClass: 'review-item review-item--neutral', statusClass: 'review-status-neutral' },
     [RESULT_NS]: { label: RESULT_NS, icon: 'utility:dash', iconClass: 'slds-icon-text-default', itemClass: 'review-item review-item--neutral', statusClass: 'review-status-neutral' },
-    [RESULT_YES]: { label: 'Yes', icon: 'utility:success', iconClass: 'slds-icon-text-success', itemClass: 'review-item review-item--compliant', statusClass: 'review-status-compliant' },
-	[RESULT_NO]: { label: 'No', icon: 'utility:error', iconClass: 'slds-icon-text-error', itemClass: 'review-item review-item--noncompliant', statusClass: 'review-status-noncompliant' },
 	default: { label: 'Not Answered', icon: 'utility:warning', iconClass: 'slds-icon-text-warning', itemClass: 'review-item review-item--unanswered', statusClass: 'review-status-unanswered' }
 };
 
@@ -150,8 +146,6 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 			[RESULT_NON_COMPLIANT]: "compliance-btn compliance-btn--selected-noncompliant",
 			[RESULT_NA]: "compliance-btn compliance-btn--selected-na",
 			[RESULT_NS]: "compliance-btn compliance-btn--selected-ns",
-			[RESULT_YES]: "compliance-btn compliance-btn--selected-compliant",
-			[RESULT_NO]: "compliance-btn compliance-btn--selected-noncompliant",
 		};
 		return classMap[buttonValue] || "compliance-btn";
 	}
@@ -204,8 +198,6 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 			),
 			naButtonClass: this.getButtonClass(RESULT_NA, result),
 			nsButtonClass: this.getButtonClass(RESULT_NS, result),
-			yesButtonClass: this.getButtonClass(RESULT_YES, result),
-			noButtonClass: this.getButtonClass(RESULT_NO, result),
 			showChildren: result === RESULT_NON_COMPLIANT || result === RESULT_COMPLIANT,
 			showNonCompliantFields: result === RESULT_NON_COMPLIANT,
 		};
@@ -290,8 +282,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 						originalResult: parent.originalResult ?? currentResult,
 						comment: savedComment,
 						originalComment: parent.originalComment ?? savedComment,
-						showRegulationButtons: parent.questionType === 'Regulation',
-						showBestPracticeButtons: parent.questionType === 'Best Practice/Guidelines' || parent.questionType === 'None',
+						showRegulationButtons: !parent.questionType || parent.questionType === 'Regulation',
 						originalSelectPriority: parent.originalSelectPriority !== undefined ?
 							parent.originalSelectPriority : (parent.selectPriority ?? null),
 
@@ -818,8 +809,8 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 				return parent;
 			});
         return { ...group, parentQuestions: updatedParentQuestions };
-		});
-		this.answeredQuestions = (this.answeredQuestions || 0) + updatedCount;
+    });
+	this.answeredQuestions = (this.answeredQuestions || 0) + updatedCount;
 	}
 
 
