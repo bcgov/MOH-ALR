@@ -22,6 +22,7 @@ const RESULT_NA = "Not Applicable";
 const RESULT_NS = "Not Inspected";
 const RESULT_YES = "Yes";
 const RESULT_NO = "No";
+const ROUTINE_INSPECTION ="Routine";
 
 const STATUS_CONFIG = {
     [RESULT_COMPLIANT]: { label: 'Compliant', icon: 'utility:success', iconClass: 'slds-icon-text-success', itemClass: 'review-item review-item--compliant', statusClass: 'review-status-compliant' },
@@ -47,12 +48,13 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 	autoOpenedReview = false;
 	timeSpent = '';
     followUpInspectionRequired = false;
+	routineInspection = false;
 
 	totalQuestions = 0;
 	answeredQuestions = 0;
 	compliantCount = 0;
 	nonCompliantCount = 0;
-
+	 
 	showEndInspectionModal = false;
 	closingComments = "";
 	closingCommentsMessage = "";
@@ -257,6 +259,8 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
 			this.isDraft = visit.PHOCSIsDraft__c === true;
 			this.showQuestions = false;
+
+			this.routineInspection = visit.VisitType.Name === ROUTINE_INSPECTION;
 
 			const result = await getInspectionQuestions({
 				visitId: this.recordId
@@ -800,6 +804,24 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 		});
 		this.showReviewModal = true;
 	}
+	handleMarkNotInspected() {		
+		let updatedCount = 0;		
+    	this.groupedQuestions = (this.groupedQuestions || []).map(group => {
+			const updatedParentQuestions = (group.parentQuestions || []).map(parent => {
+				const currentValue = parent.result ?? "";
+				if (currentValue === "") {				
+					updatedCount += 1;
+					return this.updateParentQuestion(parent, {
+						result: RESULT_NS,
+					});
+				}
+				return parent;
+			});
+        return { ...group, parentQuestions: updatedParentQuestions };
+		});
+		this.answeredQuestions = (this.answeredQuestions || 0) + updatedCount;
+	}
+
 
 	closeReviewModal() {
 		this.showReviewModal = false;
@@ -1405,5 +1427,10 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
 		return responses;
 	}
-
+	
+	get showMarkNotInspectedButton() {
+			return (
+				this.routineInspection === false && this.compliantCount > 0
+			);
+	}
 }

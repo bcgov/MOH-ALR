@@ -230,7 +230,12 @@
                 </template>
                 <template lwc:else>
                     <div class="submit-container slds-grid slds-grid_align-spread">
-                        <lightning-button label="Review Responses" variant="neutral" onclick={handleShowReview} icon-name="utility:preview"></lightning-button>
+                        <div class="slds-grid slds-grid_align-start">
+                            <lightning-button label="Review Responses" variant="neutral" class="slds-m-right_small" onclick={handleShowReview} icon-name="utility:preview"></lightning-button>
+                             <template lwc:if={showMarkNotInspectedButton}>                
+                                <lightning-button label="Mark Remaining as Not Inspected" variant="neutral" onclick={handleMarkNotInspected}></lightning-button>
+                            </template>
+                        </div>
                         <div class="slds-grid slds-grid_align-end">
                             <lightning-button label="Save for Later" variant="neutral" class="slds-m-right_small" onclick={handleSaveForLater} disabled={isLoading}></lightning-button>
                             <lightning-button label="Submit Inspection" variant="brand" onclick={handleSubmit} disabled={isSubmitDisabled}></lightning-button>
