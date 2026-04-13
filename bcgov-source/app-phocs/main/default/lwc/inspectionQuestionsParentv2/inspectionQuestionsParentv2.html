@@ -86,22 +86,12 @@
                                         </template>
                                         <span class="question-text">{parent.questionText}</span>
                                         <div class="question-controls">
-                                            <template lwc:if={parent.showRegulationButtons}>
                                               <div class="compliance-button-group">
-                                                    <button type="button" class={parent.compliantButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="Compliant" onclick={handleAssessmentChange} disabled={isCompleted}>Compliant</button>
-                                                    <button type="button" class={parent.nonCompliantButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="PHOCSNonCompliant" onclick={handleAssessmentChange} disabled={isCompleted}>Non Compliant</button>
+                                                    <button type="button" class={parent.compliantButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="Compliant" onclick={handleAssessmentChange} disabled={isCompleted}><template lwc:if={parent.showRegulationButtons}>Compliant</template><template lwc:else>Yes</template></button>
+                                                    <button type="button" class={parent.nonCompliantButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="PHOCSNonCompliant" onclick={handleAssessmentChange} disabled={isCompleted}><template lwc:if={parent.showRegulationButtons}>Non Compliant</template><template lwc:else>No</template></button>
                                                     <button type="button" class={parent.naButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="Not Applicable" onclick={handleAssessmentChange} disabled={isCompleted}>Not Applicable</button>
                                                     <button type="button" class={parent.nsButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="Not Inspected" onclick={handleAssessmentChange} disabled={isCompleted}>Not Inspected</button>
                                               </div>
-                                            </template>
-                                            <template lwc:if={parent.showBestPracticeButtons}>
-                                              <div class="compliance-button-group">
-                                                    <button type="button" class={parent.yesButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="Yes" onclick={handleAssessmentChange} disabled={isCompleted}>Yes</button>
-                                                    <button type="button" class={parent.noButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="No" onclick={handleAssessmentChange} disabled={isCompleted}>No</button>
-                                                    <button type="button" class={parent.naButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="Not Applicable" onclick={handleAssessmentChange} disabled={isCompleted}>Not Applicable</button>
-                                                    <button type="button" class={parent.nsButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="Not Inspected" onclick={handleAssessmentChange} disabled={isCompleted}>Not Inspected</button>
-                                              </div>
-                                            </template>
                                             <button type="button" class="regulatory-codes-btn" data-value={parent.assessmentIndicatorDefinitionId} onclick={handleViewRegulatoryCodes}>View Codes</button>
                                         </div>
                                     </div>
@@ -230,7 +220,12 @@
                 </template>
                 <template lwc:else>
                     <div class="submit-container slds-grid slds-grid_align-spread">
-                        <lightning-button label="Review Responses" variant="neutral" onclick={handleShowReview} icon-name="utility:preview"></lightning-button>
+                        <div class="slds-grid slds-grid_align-start">
+                            <lightning-button label="Review Responses" variant="neutral" class="slds-m-right_small" onclick={handleShowReview} icon-name="utility:preview"></lightning-button>
+                             <template lwc:if={showMarkNotInspectedButton}>                
+                                <lightning-button label="Mark Remaining as Not Inspected" variant="neutral" onclick={handleMarkNotInspected}></lightning-button>
+                            </template>
+                        </div>
                         <div class="slds-grid slds-grid_align-end">
                             <lightning-button label="Save for Later" variant="neutral" class="slds-m-right_small" onclick={handleSaveForLater} disabled={isLoading}></lightning-button>
                             <lightning-button label="Submit Inspection" variant="brand" onclick={handleSubmit} disabled={isSubmitDisabled}></lightning-button>
