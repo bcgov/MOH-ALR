@@ -21,8 +21,8 @@
     <actionCalls>
         <name>PageRedirection</name>
         <label>Page Redirection</label>
-        <locationX>2426</locationX>
-        <locationY>1322</locationY>
+        <locationX>2558</locationX>
+        <locationY>1622</locationY>
         <actionName>c:OpenInspection</actionName>
         <actionType>component</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -74,6 +74,22 @@
     </actionCalls>
     <apiVersion>61.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>followUpInspectionTypeAssignment</name>
+        <label>followUpInspectionTypeAssignment</label>
+        <locationX>2558</locationX>
+        <locationY>1190</locationY>
+        <assignmentItems>
+            <assignToReference>selectedFollowUpInspectionType</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>followUpInspectionTypeSelected</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>get_Related_Insp_Type_Record</targetReference>
+        </connector>
+    </assignments>
     <choices>
         <name>inspectionFollowUpChoice</name>
         <choiceText>Follow-up&lt;p&gt;&lt;br&gt;&lt;/p&gt;</choiceText>
@@ -300,10 +316,10 @@
     <decisions>
         <name>Decision_Based_on_Context</name>
         <label>Decision Based on Context</label>
-        <locationX>1370</locationX>
+        <locationX>1436</locationX>
         <locationY>782</locationY>
         <defaultConnector>
-            <targetReference>inspectionCreationType</targetReference>
+            <targetReference>Insp_Type_for_facility</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -352,10 +368,36 @@
             <label>Case</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>Insp_Type_for_facility</name>
+        <label>Insp Type for facility</label>
+        <locationX>2558</locationX>
+        <locationY>890</locationY>
+        <defaultConnector>
+            <targetReference>Other_Inspection_Creation_Type</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>For_Dairy</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Insp_Record.Account.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Dairy</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>inspectionCreationType</targetReference>
+            </connector>
+            <label>For Dairy</label>
+        </rules>
+    </decisions>
     <description>Clone from VisitCreation flow and update Screen elements to align with PHOCS requirements
 
 V6 - Changes related to EHIS- 3087, 3066 &amp; 3259
-V7 - Changes to Inspection Method Labels</description>
+V7 - Changes to Inspection Method Labels
+V8 - Insp Type Update on flows</description>
     <dynamicChoiceSets>
         <name>dairyInspTypeChoiceSet</name>
         <dataType>String</dataType>
@@ -444,6 +486,36 @@ V7 - Changes to Inspection Method Labels</description>
         <picklistObject>Visit</picklistObject>
     </dynamicChoiceSets>
     <environments>Default</environments>
+    <formulas>
+        <name>followUpInspectionTypeNameSelected</name>
+        <dataType>String</dataType>
+        <expression>IF(UPPER({!followUpInspectionTypeSelected}) = &quot;INSPECTION UPDATE&quot;, &quot;Inspection Update&quot;,
+
+  IF(UPPER({!Get_Insp_Record.VisitType.Name}) = &quot;ROUTINE&quot;, &quot;Routine Follow-up&quot;,
+
+    IF(UPPER({!Get_Insp_Record.VisitType.Name}) = &quot;IN-DEPTH&quot;, &quot;In-Depth Follow-up&quot;,
+
+      IF(UPPER({!Get_Insp_Record.VisitType.Name}) = &quot;PRE-LICENSING&quot;, &quot;Pre-licensing Follow-up&quot;,
+
+        IF(UPPER({!Get_Insp_Record.VisitType.Name}) = &quot;COMPLAINT&quot;, &quot;Complaint Follow-up&quot;,
+
+          IF(UPPER({!Get_Insp_Record.VisitType.Name}) = &quot;REQUEST&quot;, &quot;Request Follow-up&quot;,
+
+            IF(UPPER({!Get_Insp_Record.VisitType.Name}) = &quot;INITIAL&quot;, &quot;Initial Follow-up&quot;,
+              &quot;&quot;
+            )
+          )
+        )
+      )
+    )
+  )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>followUpInspectionTypeSelected</name>
+        <dataType>String</dataType>
+        <expression>IF(!ISBLANK({!inspectionFollowUpType}), {!inspectionFollowUpType}, {!OtherFacility_inspectionFollowUpType})</expression>
+    </formulas>
     <formulas>
         <name>FollowUpInspTypeName</name>
         <dataType>String</dataType>
@@ -1186,8 +1258,8 @@ V7 - Changes to Inspection Method Labels</description>
     <recordCreates>
         <name>Visit_Record_Creation</name>
         <label>Visit Record Creation</label>
-        <locationX>2426</locationX>
-        <locationY>1214</locationY>
+        <locationX>2558</locationX>
+        <locationY>1514</locationY>
         <assignRecordIdToReference>visitId</assignRecordIdToReference>
         <connector>
             <targetReference>PageRedirection</targetReference>
@@ -1269,7 +1341,7 @@ V7 - Changes to Inspection Method Labels</description>
     <recordLookups>
         <name>Get_Account_Records</name>
         <label>Get Account Records</label>
-        <locationX>1370</locationX>
+        <locationX>1436</locationX>
         <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -1290,7 +1362,7 @@ V7 - Changes to Inspection Method Labels</description>
     <recordLookups>
         <name>Get_Assosciated_Location</name>
         <label>Get Assosciated Location</label>
-        <locationX>1370</locationX>
+        <locationX>1436</locationX>
         <locationY>566</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -1332,7 +1404,7 @@ V7 - Changes to Inspection Method Labels</description>
     <recordLookups>
         <name>Get_BLA_Record</name>
         <label>Get BLA Record</label>
-        <locationX>1370</locationX>
+        <locationX>1436</locationX>
         <locationY>242</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -1353,7 +1425,7 @@ V7 - Changes to Inspection Method Labels</description>
     <recordLookups>
         <name>Get_Case_Record</name>
         <label>Get Case Record</label>
-        <locationX>1370</locationX>
+        <locationX>1436</locationX>
         <locationY>350</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -1374,7 +1446,7 @@ V7 - Changes to Inspection Method Labels</description>
     <recordLookups>
         <name>Get_Insp_Record</name>
         <label>Get Insp Record</label>
-        <locationX>1370</locationX>
+        <locationX>1436</locationX>
         <locationY>458</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -1395,7 +1467,7 @@ V7 - Changes to Inspection Method Labels</description>
     <recordLookups>
         <name>Get_PHOCS_Inspection_RecordTypeID</name>
         <label>Get PHOCS Inspection RecordTypeID</label>
-        <locationX>1370</locationX>
+        <locationX>1436</locationX>
         <locationY>674</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -1416,8 +1488,8 @@ V7 - Changes to Inspection Method Labels</description>
     <recordLookups>
         <name>get_Related_Insp_Type_Record</name>
         <label>get Related Insp Type Record</label>
-        <locationX>2426</locationX>
-        <locationY>998</locationY>
+        <locationX>2558</locationX>
+        <locationY>1298</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Inspection_Creation</targetReference>
@@ -1427,7 +1499,7 @@ V7 - Changes to Inspection Method Labels</description>
             <field>Name</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>FollowUpInspTypeName</elementReference>
+                <elementReference>followUpInspectionTypeNameSelected</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
@@ -3776,8 +3848,8 @@ V7 - Changes to Inspection Method Labels</description>
     <screens>
         <name>Inspection_Creation</name>
         <label>New Inspection: Inspection</label>
-        <locationX>2426</locationX>
-        <locationY>1106</locationY>
+        <locationX>2558</locationX>
+        <locationY>1406</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -4167,12 +4239,12 @@ V7 - Changes to Inspection Method Labels</description>
         <name>inspectionCreationType</name>
         <label>Inspection Creation Type</label>
         <locationX>2426</locationX>
-        <locationY>890</locationY>
+        <locationY>998</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <connector>
-            <targetReference>get_Related_Insp_Type_Record</targetReference>
+            <targetReference>followUpInspectionTypeAssignment</targetReference>
         </connector>
         <fields>
             <name>inspectionFollowUpType</name>
@@ -4833,8 +4905,39 @@ V7 - Changes to Inspection Method Labels</description>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
     </screens>
+    <screens>
+        <name>Other_Inspection_Creation_Type</name>
+        <label>Other Inspection Creation Type</label>
+        <locationX>2690</locationX>
+        <locationY>998</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>followUpInspectionTypeAssignment</targetReference>
+        </connector>
+        <fields>
+            <name>OtherFacility_inspectionFollowUpType</name>
+            <choiceReferences>inspectionFollowUpChoice</choiceReferences>
+            <dataType>String</dataType>
+            <fieldText>Select Inspection Type</fieldText>
+            <fieldType>DropdownBox</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
     <start>
-        <locationX>1244</locationX>
+        <locationX>1310</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Account_Records</targetReference>
@@ -4871,6 +4974,13 @@ V7 - Changes to Inspection Method Labels</description>
         <value>
             <elementReference>$User.ProfileId</elementReference>
         </value>
+    </variables>
+    <variables>
+        <name>selectedFollowUpInspectionType</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
     </variables>
     <variables>
         <description>To store Visit Id</description>
