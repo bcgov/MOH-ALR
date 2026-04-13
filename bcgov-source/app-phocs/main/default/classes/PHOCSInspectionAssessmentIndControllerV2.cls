@@ -407,7 +407,7 @@ public without sharing class PHOCSInspectionAssessmentIndControllerV2 {
 */     
     @AuraEnabled(cacheable=true)
     public static Visit getVisitMeta(Id visitId) {
-        return [SELECT Id, PHOCSIsDraft__c, Status, ownerId FROM Visit WHERE Id = :visitId LIMIT 1];
+        return [SELECT Id, PHOCSIsDraft__c, Status, ownerId,VisitType.Name FROM Visit WHERE Id = :visitId LIMIT 1];
     }
     
     
