@@ -82,9 +82,9 @@ jobs:
       # Authenticate HFOpsCI sandbox
       - name: 'Authenticate HFOpsCI Sandbox'
         run: |
-            echo "${{ secrets.HFOpsCI_SFDXAUTHURL }}" > ./authfile
-            sf org login sfdx-url -f authfile -a HFOpsCI
+            echo "${{ secrets.HFOPSCI_SFDXAUTHURL }}" > ./authfile
+            sf org login sfdx-url -f authfile -a HFOPSCI
 
       - name: Validate Code
         id: run_code_validation
-        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --checkonly --testlevel RunLocalTests -g --targetusername HFOpsCI
+        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --checkonly --testlevel RunLocalTests -g --targetusername HFOPSCI
