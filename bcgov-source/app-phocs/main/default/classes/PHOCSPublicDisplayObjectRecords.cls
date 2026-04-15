@@ -32,7 +32,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             output.put('result', lstSobjects);
             return output;
         }
-		 if(action == 'getRecordDetailsPortal'){
+         if(action == 'getRecordDetailsPortal'){
             List<Object> lstSobjects = PHOCSOperatorPortalDisplayRecords.getRecordDetails(String.valueof(input.get('recordId')), String.valueof(input.get('configName')));
             output.put('result',lstSobjects);
             return output;
@@ -142,7 +142,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         List<SObject> results = Database.query(soqlQuery);// NOPMD
         return results;
     }
-	
+    
      // === Record Details with Wrapper ==
      public static List<Object> getRecordDetails(Id recordId, string configName) {
         if (recordId == null) {
@@ -162,7 +162,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
          
          String soqlQuery;        
          if(string.isNotBlank(configName)){
-         	PHOCSSobjectVsQuery__mdt queryConfig = [
+            PHOCSSobjectVsQuery__mdt queryConfig = [
                  SELECT ObjectQuery__c 
                  FROM PHOCSSobjectVsQuery__mdt 
                  WHERE Type__c = 'Record' AND DeveloperName= :configName 
@@ -176,7 +176,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         List<SObject> queryResults = Database.query(soqlQuery);// NOPMD
         if(!queryResults.isEmpty()){
             if(wrapper != null){
-            	results.add(wrapper.wrap(queryResults[0]));
+                results.add(wrapper.wrap(queryResults[0]));
             }else{
                 results.add(queryResults[0]);
             }
@@ -222,7 +222,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         }
         return results;
     }
-	
+    
     // === RELATED LIST QUERY WITH WRAPPER ===
     public static List<Object> getRecordsList(string configName) {
 
@@ -277,10 +277,11 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                               'PHOCSOutstandingViolations__c, LastInspectionDate__c ' +
                         'FROM Account';
 
-        query += getFacilitiesFilter(programArea);
+            query += getFacilitiesFilter(programArea);
         for (Account sObj : Database.query(query)) {  // NOPMD      
            results.add(wrapper.wrap(sObj));
         }
+        system.debug('----->'+results);
         return results;
     }
                                                                 
@@ -288,26 +289,26 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         switch on programArea {
             when 'food' {
                return ' Where RecordType.DeveloperName=\'Facility\' AND Type=\'Food\' AND Status__c = \'Open\'';
-            }	
-            when 'drinking-water-system' {	
+            }   
+            when 'drinkingwatersystem' {    
                return ' Where RecordType.DeveloperName=\'DrinkingWaterSystem\' AND Type=\'Drinking Water\' AND Status__c = \'Open\'';
             }
-            when 'residential-care' {
-               return ' Where RecordType.DeveloperName=\'Facility\' AND  Status__c = \'Open\' AND Type=\'Residential Care\' AND CategoryL1__c IN (\'Licensing - Residential\',\'Unlawful – Residential Licensing\',\'Hospital Act\')';
+            when 'residentialcare' {
+               return ' Where RecordType.DeveloperName=\'Facility\' AND  Status__c = \'Open\' AND Type=\'Residential Care\''; // Rahul Patle : 13-04-26 :  removed as part of 3165 - AND CategoryL1__c IN (\'Licensing - Residential\',\'Unlawful – Residential Licensing\',\'Hospital Act\')
             }
             when 'hospital' {
                return ' Where RecordType.DeveloperName=\'Facility\' AND  Status__c = \'Open\' AND Type=\'Residential Care\' AND CategoryL1__c=\'Hospital Act\'';
             }
-            when 'child-care' {
+            when 'childcare' {
                return ' Where RecordType.DeveloperName=\'Facility\' AND  Status__c = \'Open\' AND Type=\'Child Care\'';
             }
-            when 'personal-services' {
+            when 'personalservices' {
                return ' Where RecordType.DeveloperName=\'Facility\' AND  Status__c = \'Open\' AND Type=\'Personal Services\'';
-            }	
-            when 'tobacco-vapour' {		
+            }   
+            when 'tobaccovapour' {      
                return ' Where RecordType.DeveloperName=\'Facility\' AND  Status__c = \'Open\' AND Type=\'Tobacco and Vapour\'';
             }
-            when 'recreational-water' {
+            when 'recreationalwater' {
                return ' Where RecordType.DeveloperName=\'Facility\' AND Status__c = \'Open\' AND Type=\'Recreational Water\'';
             }
             when 'industrial-camps' {
@@ -319,7 +320,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         }
         return '';
     }
-	
+    
     private static string getAddress(Address physicalAddress){
         string[] returnAddress = new string[]{};
         if(physicalAddress != null){
