@@ -282,7 +282,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 						originalResult: parent.originalResult ?? currentResult,
 						comment: savedComment,
 						originalComment: parent.originalComment ?? savedComment,
-						showRegulationButtons: !parent.questionType || parent.questionType === 'Regulation',
+						showRegulationButtons: parent.questionType === 'Regulation',
 						originalSelectPriority: parent.originalSelectPriority !== undefined ?
 							parent.originalSelectPriority : (parent.selectPriority ?? null),
 
