@@ -87,4 +87,5 @@ jobs:
 
       - name: Validate Code
         id: run_code_validation
-        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --checkonly --testlevel RunLocalTests -g --targetusername HFOPSCI
+        run: sf project deploy start --source-dir bcgov-source/app-phocs/main/default --source-dir bcgov-source/core/main/default --source-dir bcgov-source/app-alr/main/default --wait 60 --dry-run --test-level RunLocalTests -g --target-org HFOPSCI
+       # run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --checkonly --testlevel RunLocalTests -g --targetusername HFOPSCI
