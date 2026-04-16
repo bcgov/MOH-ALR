@@ -6,7 +6,7 @@
       "externalId": "Name",
       "updateWithNull": false,
       "excludedFields": ["CreatedDate", "CreatedById", "LastModifiedDate", "LastModifiedById"],
-      "csvFileName": "Inspectiontype.csv"
+      "csvFileName": "InspectionType.csv"
     },
     {
       "query": "SELECT Id, Name, RecordType.DeveloperName, CreatedDate, CreatedBy.Name, LastModifiedDate FROM RegulatoryAuthority WHERE Name IN ('BCCDC', 'Food and Drug Regulation', 'Milk Industry Act', 'Milk Industry Standards Regulation') AND RecordType.DeveloperName = 'PHOCSRegulatoryAuthority'",
@@ -17,7 +17,7 @@
       "csvFileName": "RegulatoryAuthority.csv"
     },
     {
-      "query": "SELECT Id, Name, RegulatoryAuthCategory, IssuingDepartment.Name , IssuingDepartmentId, RecordType.DeveloperName, CreatedDate, CreatedBy.Name, LastModifiedDate FROM RegulatoryAuthorizationType WHERE IssuingDepartment.Name IN ('BCCDC') AND RecordType.DeveloperName = 'PHOCSRegulatoryAuthorizationType'",
+      "query": "SELECT Id, Name, RegulatoryAuthCategory, IssuingDepartment.Name, RecordType.DeveloperName, CreatedDate, CreatedBy.Name, LastModifiedDate FROM RegulatoryAuthorizationType WHERE IssuingDepartment.Name IN ('BCCDC') AND RecordType.DeveloperName = 'PHOCSRegulatoryAuthorizationType'",
       "operation": "Upsert",
       "externalId": "Name;IssuingDepartment.Name",
       "updateWithNull": false,
@@ -25,7 +25,7 @@
       "csvFileName": "RegulatoryAuthorizationType.csv"
     },
     {
-      "query": "SELECT Id, Name, Subject, Description, EffectiveFrom, RegulatoryAuthorityId, RegulatoryAuthority.Name, RecordType.DeveloperName, CreatedDate, CreatedBy.Name, LastModifiedDate FROM RegulatoryCode WHERE RegulatoryAuthority.Name IN ('Food and Drug Regulation', 'Milk Industry Act', 'Milk Industry Standards Regulation') AND RecordType.DeveloperName = 'PHOCSRegulatoryCode'",
+      "query": "SELECT Id, Name, Subject, Description, EffectiveFrom, RegulatoryAuthority.Name, RecordType.DeveloperName, CreatedDate, CreatedBy.Name, LastModifiedDate FROM RegulatoryCode WHERE RegulatoryAuthority.Name IN ('BCCDC', 'Food and Drug Regulation', 'Milk Industry Act', 'Milk Industry Standards Regulation') AND RecordType.DeveloperName = 'PHOCSRegulatoryCode'",
       "operation": "Upsert",
       "externalId": "Name;RegulatoryAuthority.Name",
       "updateWithNull": false,
@@ -35,15 +35,15 @@
     {
       "query": "SELECT Id, Name, Category__c, DataType, Criticality__c, InspectionQuestiontype__c, PHOCSParentId__c, PHOCSParentId__r.Name, RecordType.DeveloperName, CreatedDate, CreatedBy.Name, LastModifiedDate FROM AssessmentIndicatorDefinition WHERE Category__c IN ('Approved activities', 'Environmental Swabbing', 'Equipment', 'Exterior', 'Hygiene', 'Ingredients', 'Interior', 'Licensing', 'Packaging and Labelling', 'Pasteurization - General', 'Pasteurization - HTST', 'Pasteurization - UHT', 'Pasteurization - Vat/holder', 'Pest control', 'Product safety and quality', 'Product Testing', 'Programs and plans', 'Raw milk receiving', 'Sanitation') AND RecordType.DeveloperName = 'PHOCSAssessmentIndicatorDefinition' ORDER BY PHOCSParentId__c NULLS FIRST",
       "operation": "Upsert",
-      "externalId": "Name;Category__c",
+      "externalId": "Name;Category__c;PHOCSParentId__r.Name",
       "updateWithNull": false,
       "excludedFields": ["CreatedDate", "CreatedById", "LastModifiedDate", "LastModifiedById"],
       "csvFileName": "AssessmentIndicatorDefinition.csv"
     },
     {
-      "query": "SELECT Id, AssessmentIndDefinitionId, AssessmentIndDefinition.Name, AssessmentIndDefinition.Category__c, RegulatoryCodeId, RegulatoryCode.Name, CreatedDate, CreatedBy.Name, LastModifiedDate FROM RegulatoryCodeAssessmentInd WHERE AssessmentIndDefinition.Category__c IN ('Approved activities', 'Environmental Swabbing', 'Equipment', 'Exterior', 'Hygiene', 'Ingredients', 'Interior', 'Licensing', 'Packaging and Labelling', 'Pasteurization - General', 'Pasteurization - HTST', 'Pasteurization - UHT', 'Pasteurization - Vat/holder', 'Pest control', 'Product safety and quality', 'Product Testing', 'Programs and plans', 'Raw milk receiving', 'Sanitation')",
+      "query": "SELECT Id, AssessmentIndDefinitionId, AssessmentIndDefinition.Name, AssessmentIndDefinition.Category__c, AssessmentIndDefinition.PHOCSParentId__r.Name, RegulatoryCodeId, RegulatoryCode.Name, CreatedDate, CreatedBy.Name, LastModifiedDate FROM RegulatoryCodeAssessmentInd WHERE AssessmentIndDefinition.Category__c IN ('Approved activities', 'Environmental Swabbing', 'Equipment', 'Exterior', 'Hygiene', 'Ingredients', 'Interior', 'Licensing', 'Packaging and Labelling', 'Pasteurization - General', 'Pasteurization - HTST', 'Pasteurization - UHT', 'Pasteurization - Vat/holder', 'Pest control', 'Product safety and quality', 'Product Testing', 'Programs and plans', 'Raw milk receiving', 'Sanitation')",
       "operation": "Upsert",
-      "externalId": "AssessmentIndDefinition.Name;AssessmentIndDefinition.Category__c;RegulatoryCode.Name",
+      "externalId": "AssessmentIndDefinition.Name;AssessmentIndDefinition.Category__c;AssessmentIndDefinition.PHOCSParentId__r.Name;RegulatoryCode.Name",
       "updateWithNull": false,
       "excludedFields": ["CreatedDate", "CreatedById", "LastModifiedDate", "LastModifiedById"],
       "csvFileName": "RegulatoryCodeAssessmentInd.csv"
@@ -57,9 +57,9 @@
       "csvFileName": "AssessmentTaskDefinition.csv"
     },
     {
-      "query": "SELECT Id, AssessmentTaskDefinitionId, AssessmentTaskDefinition.Name, AssessmentIndDefinitionId, AssessmentIndDefinition.Name, CreatedDate, CreatedBy.Name, LastModifiedDate FROM AssessmentTaskIndDefinition WHERE AssessmentTaskDefinition.Name IN ('Approved activities', 'Environmental Swabbing', 'Equipment', 'Exterior', 'Hygiene', 'Ingredients', 'Interior', 'Licensing', 'Packaging and Labelling', 'Pasteurization - General', 'Pasteurization - HTST', 'Pasteurization - UHT', 'Pasteurization - Vat/holder', 'Pest control', 'Product safety and quality', 'Product Testing', 'Programs and plans', 'Raw milk receiving', 'Sanitation')",
+      "query": "SELECT Id, AssessmentTaskDefinitionId, AssessmentTaskDefinition.Name, AssessmentIndDefinitionId, AssessmentIndDefinition.Name, AssessmentIndDefinition.Category__c, AssessmentIndDefinition.PHOCSParentId__r.Name, CreatedDate, CreatedBy.Name, LastModifiedDate FROM AssessmentTaskIndDefinition WHERE AssessmentTaskDefinition.Name IN ('Approved activities', 'Environmental Swabbing', 'Equipment', 'Exterior', 'Hygiene', 'Ingredients', 'Interior', 'Licensing', 'Packaging and Labelling', 'Pasteurization - General', 'Pasteurization - HTST', 'Pasteurization - UHT', 'Pasteurization - Vat/holder', 'Pest control', 'Product safety and quality', 'Product Testing', 'Programs and plans', 'Raw milk receiving', 'Sanitation')",
       "operation": "Upsert",
-      "externalId": "AssessmentTaskDefinition.Name;AssessmentIndDefinition.Name",
+      "externalId": "AssessmentTaskDefinition.Name;AssessmentIndDefinition.Name;AssessmentIndDefinition.Category__c;AssessmentIndDefinition.PHOCSParentId__r.Name",
       "updateWithNull": false,
       "excludedFields": ["CreatedDate", "CreatedById", "LastModifiedDate", "LastModifiedById"],
       "csvFileName": "AssessmentTaskIndDefinition.csv"
