@@ -1,0 +1,21 @@
+{
+  "objects": [
+    {
+      "query": "SELECT Id, Name, RecordType.DeveloperName, TestCategory__c, Active__c, CreatedDate, CreatedBy.Name, LastModifiedDate FROM LabTestMasterlist__c WHERE RecordType.DeveloperName = 'PHOCSDairyProductEnvironmentalSwabTest' ORDER BY Name",
+      "operation": "Upsert",
+      "externalId": "Name;RecordType.DeveloperName",
+      "updateWithNull": false,
+      "excludedFields": ["CreatedDate", "CreatedById", "LastModifiedDate", "LastModifiedById"],
+      "csvFileName": "LabTestMasterlist__c.csv"
+    }
+    ,
+    {
+      "query": "SELECT Id, Name, Family, IsActive, RecordType.DeveloperName, CreatedDate, CreatedBy.Name, LastModifiedDate FROM Product2 WHERE RecordType.DeveloperName = 'Products' ORDER BY Family, Name",
+      "operation": "Upsert",
+      "externalId": "Name;Family",
+      "updateWithNull": false,
+      "excludedFields": ["CreatedDate", "CreatedById", "LastModifiedDate", "LastModifiedById"],
+      "csvFileName": "Product2.csv"
+    }
+  ]
+}
