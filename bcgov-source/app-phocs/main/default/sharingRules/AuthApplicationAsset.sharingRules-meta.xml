@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingCriteriaRules>
+        <fullName>ShareAAAWithPHOCSReportingUser</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>Share AAA Read access With PHOCS ReportingUser</description>
+        <label>ShareAAAWithPHOCSReportingUser</label>
+        <sharedTo>
+            <group>PHOCSReportingUserPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Authorization Application Asset</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>ShareAAAwithPHOCSAdminOfficer</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>Share Read/Edit access with PHOCS Admin and Officers</description>
+        <label>ShareAAAwithPHOCSAdminOfficer</label>
+        <sharedTo>
+            <group>EHISUsersPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Authorization Application Asset</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+</SharingRules>
