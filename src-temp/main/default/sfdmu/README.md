@@ -26,7 +26,7 @@ sf org list
 Migrates data directly from source org to target org in memory. Fastest option. Use for Dev2 → QA → UAT → PreProd.
 
 ```bash
-sf sfdmu run export --sourceusername "Phocs/Dev2" --targetusername "PHOCS/QA" --path "sfdmu/food-inspection-data"
+sf sfdmu run export --sourceusername "Phocs/Dev2" --targetusername "PHOCS/QA" --path "src-temp/main/default/sfdmu/food-inspection-data"
 ```
 
 Replace `PHOCS/QA` with any target alias: `PHOCS/UAT`, `Phocspreprod`, etc.
@@ -34,13 +34,24 @@ Replace `PHOCS/QA` with any target alias: `PHOCS/UAT`, `Phocspreprod`, etc.
 ---
 
 ### 2. Org → Local (export org data to CSV files)
-Reads from the source org and writes each object's data into a CSV file in this folder. Use this to snapshot Dev2 data or to review before importing.
+Reads from the source org and writes each object's data into a CSV file. Always export directly into the `seed/` subdirectory so the files are ready for the Local → Org import without any copying.
 
+**Dairy:**
 ```bash
-sf sfdmu run export --sourceusername "Phocs/Dev2" --targetusername csvfile --path "sfdmu/food-inspection-data"
+sf sfdmu run export --sourceusername "Phocs/Dev2" --targetusername csvfile --path "src-temp/main/default/sfdmu/dairy-data/seed"
 ```
 
-Writes these files into `sfdmu/food-inspection-data/`:
+**Food:**
+```bash
+sf sfdmu run export --sourceusername "Phocs/Dev2" --targetusername csvfile --path "src-temp/main/default/sfdmu/food-inspection-data/seed"
+```
+
+**PSE:**
+```bash
+sf sfdmu run export --sourceusername "Phocs/Dev2" --targetusername csvfile --path "src-temp/main/default/sfdmu/pse-inspection-data/seed"
+```
+
+Writes these files into the `seed/` folder:
 - `RegulatoryAuthority.csv`
 - `RegulatoryCode.csv`
 - `AssessmentIndicatorDefinition.csv`
@@ -53,30 +64,35 @@ Writes these files into `sfdmu/food-inspection-data/`:
 ### 3. Local → Org (import CSV files into target org)
 Reads data from the CSV files in this folder and upserts into the target org. Use this for Production where you want a reviewable paper trail before import.
 
-Uses `export-seed.json` (not `export.json`) — the seed file uses a 2-field `externalId` on `AssessmentIndicatorDefinition` (`Name;Category__c`) so SFDMU can match child records correctly without needing to resolve parent IDs from the CSV.
+Uses a `seed/` subdirectory under each pipeline folder. SFDMU requires the config to always be named `export.json` — the `seed/export.json` has the 2-field AID externalId safe for csv-to-org. CSV files are exported directly into `seed/` (Section 2 above), so no copying is needed.
 
-**Dairy:**
+Dairy:
 ```bash
-sf sfdmu run export --sourceusername csvfile --targetusername "Phocs/UAT" --path "sfdmu/dairy-data" --config "export-seed.json"
+sf sfdmu run export --sourceusername csvfile --targetusername "Phocs/UAT" --path "src-temp/main/default/sfdmu/dairy-data/seed"
 ```
 
-**Food:**
+Food:
 ```bash
-sf sfdmu run export --sourceusername csvfile --targetusername "Phocs/UAT" --path "sfdmu/food-inspection-data" --config "export-seed.json"
+sf sfdmu run export --sourceusername csvfile --targetusername "Phocs/UAT" --path "src-temp/main/default/sfdmu/food-inspection-data/seed"
 ```
 
-**PSE:**
+PSE:
 ```bash
-sf sfdmu run export --sourceusername csvfile --targetusername "Phocs/UAT" --path "sfdmu/pse-inspection-data" --config "export-seed.json"
+sf sfdmu run export --sourceusername csvfile --targetusername "Phocs/UAT" --path "src-temp/main/default/sfdmu/pse-inspection-data/seed"
 ```
 
 Replace `Phocs/UAT` with any target alias: `Phocspreprod`, etc.
 
-> **Note:** CSV files must exist in the pipeline folder before running. Either run the Org → Local command first, or export each sheet from the Excel as CSV and place them here.
-
-> **Why two config files?**  
-> `export.json` — org-to-org migrations (Dev2 → QA → UAT). Uses 3-field AID externalId (`Name;Category__c;PHOCSParentId__r.Name`) because SFDMU can resolve parent IDs live from the source org.  
-> `export-seed.json` — CSV-to-org / Production seeding. Uses 2-field AID externalId (`Name;Category__c`) because SFDMU cannot resolve relationship-based parent IDs from static CSV files.
+> **Why two export.json files (root vs seed/)?**
+>
+> **`export.json`** (pipeline root) — org-to-org only (Dev2 → QA → UAT → PreProd).  
+> AID externalId is 3-field: `Name;Category__c;PHOCSParentId__r.Name`.  
+> This works because SFDMU queries the source org live and builds an internal source-ID → target-ID map. When it processes a child AID, it can resolve `PHOCSParentId__r.Name` by looking up the parent in that live map. Safe to use because the same parent name can appear under different parent AIDs within a category — the 3-field key tells SFDMU exactly which child belongs to which parent.
+>
+> **`seed/export.json`** — CSV-to-org only (Production seeding / UAT from files).  
+> AID externalId is 2-field: `Name;Category__c`.  
+> When source is `csvfile`, SFDMU has no live org to query — it only has the CSV rows. The CSV stores QA Salesforce IDs in `PHOCSParentId__c`. SFDMU cannot map those QA IDs to UAT IDs when matching existing records, so the `PHOCSParentId__r.Name` component of the externalId always resolves to null. This causes every child AID to fail matching → SFDMU inserts them as new records on every run → duplicates accumulate.  
+> Dropping to 2-field (`Name;Category__c`) removes the unresolvable component. SFDMU matches child AIDs correctly and upserts without duplicates. The parent FK (`PHOCSParentId__c`) is still set correctly on insert because SFDMU translates it using the QA-ID → UAT-ID map it builds during the same run.
 
 ---
 
@@ -88,8 +104,8 @@ TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 sf sfdmu run export \
   --sourceusername "Phocs/Dev2" \
   --targetusername "$TARGET" \
-  --path "sfdmu/food-inspection-data" \
-  2>&1 | tee "sfdmu/food-inspection-data/migration_${TARGET//\//-}_${TIMESTAMP}.log"
+  --path "src-temp/main/default/sfdmu/food-inspection-data" \
+  2>&1 | tee "src-temp/main/default/sfdmu/food-inspection-data/migration_${TARGET//\//-}_${TIMESTAMP}.log"
 ```
 
 ---
