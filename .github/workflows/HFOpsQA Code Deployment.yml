@@ -1,12 +1,10 @@
+# Unique name for this workflow
 name: HFOpsQA Code Deployment
 
 # Definition when the workflow should run
 on:
   ## Deploy manually
   workflow_dispatch:
-  push:
-    branches:
-        - hotfixdev
     inputs:
       create-tag:
         type: boolean
@@ -15,9 +13,8 @@ on:
 
 # Jobs to be executed
 jobs:
-  Code-Deploy-Run-HFOpsQA:
+  Code-Deploy-Run:
     runs-on: ubuntu-24.04
-    if: ${{ github.event.inputs.HFOpsQA == 'true'}}
     environment: HFOpsQA
     env:
         SFDXAUTHURL: ${{ secrets.SFDXAUTHURL }}
@@ -45,7 +42,7 @@ jobs:
 
       # deploy code without running test classes
       - name: 'Deploy source code'
-        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose -g --testlevel RunLocalTests --targetusername HFOpsQA
+        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --testlevel RunLocalTests --targetusername HFOpsQA
 
   Git-Tag-Run:
     needs: Code-Deploy-Run
@@ -66,9 +63,9 @@ jobs:
         id: newtag
         run: |
           LATEST_TAG=${{ steps.latesttag.outputs.LATEST_TAG }}
-          NUMBER=${LATEST_TAG#HFOpsQA.}
+          NUMBER=${LATEST_TAG#OpsQA.}
           NEW_NUMBER=$((NUMBER + 1))
-          NEW_TAG=HFOpsQA.${NEW_NUMBER}
+          NEW_TAG=OpsQA.${NEW_NUMBER}
           echo "NEW_TAG=$NEW_TAG" >> $GITHUB_OUTPUT
 
       - name: 'Push new tag'
