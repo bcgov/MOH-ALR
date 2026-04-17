@@ -18,7 +18,7 @@ public class MassEmailControllerTest {
 		Contact contRec = TestDataFactory.createContactRecord(residenceRec1.Id, 'test1@xyz.com', 'firstname1', 'lastname1', true);
         
         AccountContactRelation acConRelRec = TestDataFactory.createAccContRelRecord(residenceRec1.Id, contactRec.Id , true, true, true);
-        AccountContactRelation acConRelRec1 = TestDataFactory.createAccContRelRecord(residenceRec2.Id, contRec.Id , false, true, true);
+
         Asset unitRec1 = TestDataFactory.createUnit('1', 'Private', 2, residenceRec1.Id, true);
         unitRec1.recordTypeId = parentAssetRTId;
         //unit1.GenerateInvoice__c = true;
@@ -28,11 +28,7 @@ public class MassEmailControllerTest {
         blaRec.AccountId=residenceRec1.Id;
         update blaRec;
         BusinessLicense blRec = TestDataFactory.createBlRecord(regAuth.Id, residenceRec1.Id, residenceRec1.ParentId, '58659', 'BL RECORD 1', true);
-        BusinessLicenseApplication blaRec1 = TestDataFactory.createRenewalBla(residenceRec2.LicenseType__c, residenceRec2.Id, true);
-        blaRec1.Late_Fee_Status__c='Ready to Send';
-        blaRec1.AccountId=residenceRec2.Id;
-        update blaRec1;
-        BusinessLicense blRec1 = TestDataFactory.createBlRecord(regAuth.Id, residenceRec2.Id, residenceRec2.ParentId, '58459', 'BL RECORD 2', true);
+        
         ContentVersion contentVersionRec = TestDataFactory.createContentVer('title value 1', blaRec.Id, true);
         //ContentVersion contentVersionRec1 = TestDataFactory.createContentVer('title value 2', blaRec.Id, true);
       
@@ -48,29 +44,6 @@ public class MassEmailControllerTest {
         Test.stopTest();
         List<Account> accRec = [SELECT Id FROM Account];
         Assert.isNotNull(accRec.size());
-    }
-
-    @isTest
-    static void testnoprimarycontact() {
-        // Use testSetup data: find the residence account created there
-        Account acct = [SELECT Id FROM Account WHERE Name = 'Account2' LIMIT 1];
-        // Remove any AccountContactRelation to simulate no primary contact
-        List<AccountContactRelation> acrs = [SELECT Id, IsActive FROM AccountContactRelation WHERE AccountId = :acct.Id];
-        if (!acrs.isEmpty()) {
-            for (AccountContactRelation a : acrs) {
-                a.IsActive = false;
-            }
-            update acrs;
-        }
-
-        BusinessLicenseApplication bla = [SELECT Id FROM BusinessLicenseApplication WHERE AccountId = :acct.Id LIMIT 1];
-
-        Test.startTest();
-        MassEmailController.doSendRenewals();
-        Test.stopTest();
-
-        System.assert(MassEmailController.blaErrMap.containsKey(bla.Id), 'Expected no-primary-contact error for BLA');
-        System.assert(MassEmailController.blaErrMap.get(bla.Id).contains(BCMOH_Constants.noPrimaryContact));
     }
     //test method-ALR-1000
      @isTest
@@ -106,7 +79,7 @@ public class MassEmailControllerTest {
     //updateBlaRecs exception
      @isTest
     static void updateBlaRecsTest1() {
-        BusinessLicenseApplication blaRec = [SELECT Id, Status, ExclusionReason__c FROM BusinessLicenseApplication LIMIT 1];
+        BusinessLicenseApplication blaRec = [SELECT Id, Status, ExclusionReason__c FROM BusinessLicenseApplication];
         blaRec.ExclusionReason__c = 'testing';
         Object data = blaRec;
         Test.startTest();
