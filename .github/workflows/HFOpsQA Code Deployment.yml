@@ -15,8 +15,9 @@ on:
 
 # Jobs to be executed
 jobs:
-  Code-Deploy-Run:
+  Code-Deploy-Run-HFOpsQA:
     runs-on: ubuntu-24.04
+    if: ${{ github.event.inputs.HFOpsQA == 'true'}}
     environment: HFOpsQA
     env:
         SFDXAUTHURL: ${{ secrets.SFDXAUTHURL }}
