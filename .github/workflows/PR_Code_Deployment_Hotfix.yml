@@ -16,8 +16,8 @@ on:
 # Jobs to be executed
 jobs:
   Code-Deploy-Run:
-    runs-on: ubuntu-24.04
-    environment: HOTFIXCI
+    runs-on: ubuntu-latest
+    environment: HFOpsCI
     env:
       SFDXAUTHURL: ${{ secrets.SFDXAUTHURL }}
     steps:
@@ -37,8 +37,8 @@ jobs:
       - name: 'Authenticate Sandbox'
         run: |
             echo "${{ env.SFDXAUTHURL }}" > ./authfile
-            sf org login sfdx-url -f authfile -a HOTFIXCI
+            sf org login sfdx-url -f authfile -a HFOpsCI
 
       # deploy code without running test classes
       - name: 'Deploy source code'
-        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --targetusername HOTFIXCI
+        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 -g --targetusername HFOpsCI
