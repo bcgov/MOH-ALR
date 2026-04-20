@@ -1,0 +1,23 @@
+<template>
+    <div style="display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap;">
+
+        <!-- Dynamic Filters -->
+        <template for:each={filterConfig} for:item="filter">
+            <lightning-combobox
+                key={filter.field}
+                label={filter.label}
+                options={filter.options}
+                data-field={filter.field}
+                value={filter.value}
+                onchange={handleChange}>
+            </lightning-combobox>
+        </template>
+
+        <!-- Reset Button -->
+        <lightning-button
+            label="Reset"
+            onclick={handleReset}>
+        </lightning-button>
+
+    </div>
+</template>
