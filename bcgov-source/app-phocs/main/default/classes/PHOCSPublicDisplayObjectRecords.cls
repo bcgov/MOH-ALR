@@ -409,9 +409,13 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
     }
     public class FacilityWrapper implements SObjectWrapper {
         public Object wrap(SObject record) {
+            Date phocsLastInspectionDate ;
             Account accRecord = (Account) record;
-            Datetime dt =  accRecord.PHOCSLastInspectionDate__c;
-			Date phocsLastInspectionDate = dt.date();
+            if(accRecord.PHOCSLastInspectionDate__c != null){
+                Datetime dt =  accRecord.PHOCSLastInspectionDate__c;
+                phocsLastInspectionDate = dt.date();
+            }
+           
 	            Map<String, Object> result = new Map<String, Object>{
                 'Id' => accRecord.Id,
                 'Type'=> accRecord.Type,
