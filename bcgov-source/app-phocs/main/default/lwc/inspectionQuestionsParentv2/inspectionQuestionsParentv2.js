@@ -1,4 +1,4 @@
-import { LightningElement, api } from "lwc";
+import { LightningElement, api, track } from "lwc";
 import getInspectionQuestions from "@salesforce/apex/InspectionQuestionsControllerV2.getInspectionQuestions";
 import getRegulatoryCodesByIndicator from "@salesforce/apex/InspectionQuestionsControllerV2.getRegulatoryCodesByIndicator";
 import saveAssessmentResponses from "@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.saveAssessmentResponses";
@@ -32,6 +32,7 @@ const STATUS_CONFIG = {
 
 export default class InspectionQuestionsParentv2 extends LightningElement {
 	@api recordId;
+	@track showPreviouslyResolvedViolationsCount;
 
 	inspection = {};
 	groupedQuestions = [];
@@ -304,6 +305,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 						correctedDuringInspection: parent.correctedDuringInspection ?? false,
 						regcodvioId: parent.inspectionAssessmentIndId ?? null,
 						showViolationIcon: false,
+						showPreviouslyResolvedViolationsCount : parent.previouslyResolvedViolationsCount > 0,
 						questionCardClass: parent.showCriticalIcon ?
 							"question-card question-card--critical" : "question-card",
 						uploadedContentDocIds: [],
