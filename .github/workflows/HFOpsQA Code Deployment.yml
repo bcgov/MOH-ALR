@@ -1,12 +1,10 @@
+# Unique name for this workflow
 name: HFOpsQA Code Deployment
 
 # Definition when the workflow should run
 on:
   ## Deploy manually
   workflow_dispatch:
-  push:
-    branches:
-        - hotfixdev
     inputs:
       create-tag:
         type: boolean
@@ -15,9 +13,8 @@ on:
 
 # Jobs to be executed
 jobs:
-  Code-Deploy-Run-HFOpsQA:
+  Code-Deploy-Run:
     runs-on: ubuntu-24.04
-    if: ${{ github.event.inputs.HFOpsQA == 'true'}}
     environment: HFOpsQA
     env:
         SFDXAUTHURL: ${{ secrets.SFDXAUTHURL }}
