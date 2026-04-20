@@ -274,7 +274,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         FacilityWrapper wrapper = new FacilityWrapper();
         string query = 'SELECT Id,Name,Type,Physical_Address__City__s, CategoryL1__c,CategoryL2__c,HealthAuthority__c,Phone,ParentAccount__r.Name,' +
                               'FacilityCHSAText__c,Physical_Address__c, PHOCSNumberOfInspections__c,' +
-                              'PHOCSOutstandingViolations__c, LastInspectionDate__c ' +
+                              'PHOCSOutstandingViolations__c, PHOCSLastInspectionDate__c ' +
                         'FROM Account';
 
             query += getFacilitiesFilter(programArea);
@@ -377,6 +377,13 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
     public class FacilityWrapper implements SObjectWrapper {
         public Object wrap(SObject record) {
             Account accRecord = (Account) record;
+             Date phocsLastInspectionDate;
+            if(accRecord.PHOCSLastInspectionDate__c != null){
+                Datetime dt =  accRecord.PHOCSLastInspectionDate__c;
+                phocsLastInspectionDate = dt.date();
+            }
+           
+
             Map<String, Object> result = new Map<String, Object>{
                 'Id' => accRecord.Id,
                 'Type'=> accRecord.Type,
@@ -384,7 +391,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 'CategoryL2__c'=> accRecord.CategoryL2__c,
                 'FacilityCHSAText__c'=> accRecord.FacilityCHSAText__c,
                 'HealthAuthority__c'=> accRecord.HealthAuthority__c, 
-                'LastInspectionDate__c ' => accRecord.LastInspectionDate__c,
+                'LastInspectionDate__c ' => phocsLastInspectionDate,
                 'Name' => accRecord.Name,
                 'PHOCSNumberOfInspections__c' => accRecord.PHOCSNumberOfInspections__c,
                 'PHOCSOutstandingViolations__c'=> accRecord.PHOCSOutstandingViolations__c,
