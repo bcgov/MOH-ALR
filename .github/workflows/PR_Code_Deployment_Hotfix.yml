@@ -17,7 +17,7 @@ on:
 jobs:
   Code-Deploy-Run:
     runs-on: ubuntu-latest
-    environment: HFOpsCI
+    environment: HFOPSCI
     env:
       SFDXAUTHURL: ${{ secrets.SFDXAUTHURL }}
     steps:
@@ -37,8 +37,8 @@ jobs:
       - name: 'Authenticate Sandbox'
         run: |
             echo "${{ env.SFDXAUTHURL }}" > ./authfile
-            sf org login sfdx-url -f authfile -a HFOpsCI
+            sf org login sfdx-url -f authfile -a HFOPSCI
 
       # deploy code without running test classes
       - name: 'Deploy source code'
-        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 -g --targetusername HFOpsCI
+        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 -g --targetusername HFOPSCI
