@@ -104,11 +104,13 @@
                                                     </span>        
                                             </div>
                                         </template>
-                                        <div class="violation-history">
-                                            <div class="previous-violation-count">
-                                                Previously resolved violations: {parent.previouslyResolvedViolationsCount}
+                                        <template lwc:if={parent.showPreviouslyResolvedViolationsCount}>
+                                            <div class="violation-history">
+                                                <div class="previous-violation-count">
+                                                    Previously resolved violations: {parent.previouslyResolvedViolationsCount}
+                                                </div>
                                             </div>
-                                        </div>
+                                        </template>
                                     </div>
                                     <template lwc:if={parent.showNonCompliantHelpText}>
                                         <div class="noncompliant-helper-text slds-text-color_error slds-m-top_xx-small">

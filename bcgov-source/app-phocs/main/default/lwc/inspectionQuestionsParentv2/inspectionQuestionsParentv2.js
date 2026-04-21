@@ -1,4 +1,4 @@
-import { LightningElement, api } from "lwc";
+import { LightningElement, api, track } from "lwc";
 import getInspectionQuestions from "@salesforce/apex/InspectionQuestionsControllerV2.getInspectionQuestions";
 import getRegulatoryCodesByIndicator from "@salesforce/apex/InspectionQuestionsControllerV2.getRegulatoryCodesByIndicator";
 import saveAssessmentResponses from "@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.saveAssessmentResponses";
@@ -32,6 +32,7 @@ const STATUS_CONFIG = {
 
 export default class InspectionQuestionsParentv2 extends LightningElement {
 	@api recordId;
+	@track showPreviouslyResolvedViolationsCount;
 
 	inspection = {};
 	groupedQuestions = [];
@@ -304,6 +305,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 						correctedDuringInspection: parent.correctedDuringInspection ?? false,
 						regcodvioId: parent.inspectionAssessmentIndId ?? null,
 						showViolationIcon: false,
+						showPreviouslyResolvedViolationsCount : parent.previouslyResolvedViolationsCount > 0,
 						questionCardClass: parent.showCriticalIcon ?
 							"question-card question-card--critical" : "question-card",
 						uploadedContentDocIds: [],
@@ -1071,7 +1073,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 						sectionsWithChanges.add(group.taskDefinitionId);
 					}
 
-					if ((parent.result === RESULT_NON_COMPLIANT || parent.result === RESULT_COMPLIANT)&& parent.childQuestions?.length) {
+					if ((parent.result === RESULT_NON_COMPLIANT || parent.result === RESULT_COMPLIANT) && parent.childQuestions?.length) {
 
 							const anyChildChanged = parent.childQuestions.some(
 								c => c.checkboxValue !== c.originalCheckboxValue
@@ -1089,8 +1091,8 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 									assessmentTaskId: child.assessmentTaskId,
 									definitionId: child.assessmentIndicatorDefinitionId,
 									comment: "",
-									result: child.checkboxValue === true ? parent.result : null,
-									checkboxValue: child.checkboxValue === true,
+									result: child.checkboxValue ? (parent.result ?? null) : null,
+									checkboxValue: child.checkboxValue,
 								});
 							}
 						}
@@ -1165,9 +1167,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 			this.uploadedFilesMap = {};
 			this.setSectionSavedState(sectionsWithChanges);
 			if (saveResult?.success) {
-				await resetChildResponsesForCompliantParents({
-					visitId: this.recordId
-				});
+				//await resetChildResponsesForCompliantParents({ visitId: this.recordId });
 			}
 			this.inspection = {
 				...(this.inspection || {}),
@@ -1405,8 +1405,8 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 								assessmentTaskId: child.assessmentTaskId,
 								definitionId: child.assessmentIndicatorDefinitionId,
 								comment: "",
-								result: child.checkboxValue === true ? parent.result : null,
-								checkboxValue: child.checkboxValue === true,
+								result: child.checkboxValue ? (parent.result ?? null) : null,
+								checkboxValue: child.checkboxValue,
 								selectPriority: parent.result === RESULT_NON_COMPLIANT ? parent.selectPriority : null,
 								preferredDateTime: parent.result === RESULT_NON_COMPLIANT && parent.preferredDateTime ? parent.preferredDateTime : null,
 								correctedDuringInspection: parent.correctedDuringInspection || false,

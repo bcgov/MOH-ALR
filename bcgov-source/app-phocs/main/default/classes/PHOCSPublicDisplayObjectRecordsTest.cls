@@ -15,6 +15,7 @@ private class PHOCSPublicDisplayObjectRecordsTest {
         acc.Physical_Address__StateCode__s = 'BC';
         acc.Physical_Address__PostalCode__s = 'V9A1A1';
         acc.Physical_Address__CountryCode__s = 'CA';
+        acc.PHOCSLastInspectionDate__c = Date.newInstance(2024, 12, 31);
         insert acc;
 
         return acc;
