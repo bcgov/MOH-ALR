@@ -206,6 +206,34 @@
                 <identifier>RecordEffectiveTo_cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ExemptionSubType__c</fieldItem>
+                <identifier>RecordExemptionSubType__cField</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 AND (2 OR 3)</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.ExemptionType__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Regulation/Act requirement</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.LicenseType.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Child Care License</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.LicenseType.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Residential Care Facility License</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-8710ad56-d24c-4347-8244-4868f8f0d353</name>
         <type>Facet</type>
     </flexiPageRegions>
