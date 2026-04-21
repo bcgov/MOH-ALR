@@ -30,7 +30,7 @@
         <connector>
             <targetReference>Roll_up_Child_Inspections</targetReference>
         </connector>
-        <filterLogic>and</filterLogic>
+        <filterLogic>1 AND 2 AND 3 AND (4 OR 5 OR 6)</filterLogic>
         <filters>
             <field>Status</field>
             <operator>IsChanged</operator>
@@ -50,6 +50,27 @@
             <operator>Contains</operator>
             <value>
                 <stringValue>Follow-up</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Status</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Abandoned</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Status</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Unscheduled</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Status</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Error</stringValue>
             </value>
         </filters>
         <object>Visit</object>

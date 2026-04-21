@@ -1073,7 +1073,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 						sectionsWithChanges.add(group.taskDefinitionId);
 					}
 
-					if ((parent.result === RESULT_NON_COMPLIANT || parent.result === RESULT_COMPLIANT)&& parent.childQuestions?.length) {
+					if ((parent.result === RESULT_NON_COMPLIANT || parent.result === RESULT_COMPLIANT) && parent.childQuestions?.length) {
 
 							const anyChildChanged = parent.childQuestions.some(
 								c => c.checkboxValue !== c.originalCheckboxValue
@@ -1091,8 +1091,8 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 									assessmentTaskId: child.assessmentTaskId,
 									definitionId: child.assessmentIndicatorDefinitionId,
 									comment: "",
-									result: child.checkboxValue === true ? parent.result : null,
-									checkboxValue: child.checkboxValue === true,
+									result: child.checkboxValue ? (parent.result ?? null) : null,
+									checkboxValue: child.checkboxValue,
 								});
 							}
 						}
@@ -1167,9 +1167,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 			this.uploadedFilesMap = {};
 			this.setSectionSavedState(sectionsWithChanges);
 			if (saveResult?.success) {
-				await resetChildResponsesForCompliantParents({
-					visitId: this.recordId
-				});
+				//await resetChildResponsesForCompliantParents({ visitId: this.recordId });
 			}
 			this.inspection = {
 				...(this.inspection || {}),
@@ -1407,8 +1405,8 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 								assessmentTaskId: child.assessmentTaskId,
 								definitionId: child.assessmentIndicatorDefinitionId,
 								comment: "",
-								result: child.checkboxValue === true ? parent.result : null,
-								checkboxValue: child.checkboxValue === true,
+								result: child.checkboxValue ? (parent.result ?? null) : null,
+								checkboxValue: child.checkboxValue,
 								selectPriority: parent.result === RESULT_NON_COMPLIANT ? parent.selectPriority : null,
 								preferredDateTime: parent.result === RESULT_NON_COMPLIANT && parent.preferredDateTime ? parent.preferredDateTime : null,
 								correctedDuringInspection: parent.correctedDuringInspection || false,
