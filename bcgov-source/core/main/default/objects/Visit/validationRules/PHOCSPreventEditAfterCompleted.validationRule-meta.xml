@@ -9,7 +9,8 @@
     OR(
         AND(
             ISPICKVAL(Status, &quot;Completed&quot;),
-            NOT(ISCHANGED(Status))
+            NOT(ISCHANGED(Status)),
+												NOT(ISCHANGED(NumberofFollowups__c))
         ),
         AND(
             ISCHANGED(Status),

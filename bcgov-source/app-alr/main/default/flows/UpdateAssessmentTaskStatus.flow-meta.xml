@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
         <name>countalliaiRecords</name>
         <label>countalliaiRecords</label>
         <locationX>314</locationX>
-        <locationY>1055</locationY>
+        <locationY>1163</locationY>
         <assignmentItems>
             <assignToReference>CountAllRecords</assignToReference>
             <operator>AssignCount</operator>
@@ -21,7 +22,7 @@
         <name>CountTextFieldResponse</name>
         <label>CountTextFieldResponse</label>
         <locationX>314</locationX>
-        <locationY>1487</locationY>
+        <locationY>1595</locationY>
         <assignmentItems>
             <assignToReference>CountTextField</assignToReference>
             <operator>AssignCount</operator>
@@ -37,7 +38,7 @@
         <name>GetAllCompletedIAIRecords</name>
         <label>GetAllCompletedIAIRecords</label>
         <locationX>314</locationX>
-        <locationY>1271</locationY>
+        <locationY>1379</locationY>
         <assignmentItems>
             <assignToReference>CompletedCount</assignToReference>
             <operator>AssignCount</operator>
@@ -53,7 +54,7 @@
         <name>UpdateFieldToBlank</name>
         <label>UpdateFieldToBlank</label>
         <locationX>314</locationX>
-        <locationY>623</locationY>
+        <locationY>731</locationY>
         <assignmentItems>
             <assignToReference>UpdateToBlank</assignToReference>
             <operator>Assign</operator>
@@ -73,10 +74,32 @@
         </value>
     </constants>
     <decisions>
+        <name>ALR_RecordType_Check</name>
+        <label>ALR RecordType Check</label>
+        <locationX>534</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>ALR_RecordType</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>ALRInspectionAssessmentIndicator</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_Result</targetReference>
+            </connector>
+            <label>ALR RecordType</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Check_Result</name>
         <label>Check Result</label>
         <locationX>314</locationX>
-        <locationY>323</locationY>
+        <locationY>431</locationY>
         <defaultConnector>
             <targetReference>UpdateFieldToBlank</targetReference>
         </defaultConnector>
@@ -137,7 +160,7 @@
         <name>CheckIfAllCompleted</name>
         <label>CheckIfAllCompleted</label>
         <locationX>314</locationX>
-        <locationY>1595</locationY>
+        <locationY>1703</locationY>
         <defaultConnector>
             <targetReference>UpdateInProgress</targetReference>
         </defaultConnector>
@@ -176,7 +199,7 @@
         <name>Decision_on_Refresh</name>
         <label>Decision on Refresh</label>
         <locationX>314</locationX>
-        <locationY>1895</locationY>
+        <locationY>2003</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Refresh_Activity</name>
@@ -223,6 +246,7 @@
             <label>Refresh NA</label>
         </rules>
     </decisions>
+    <description>V2: Adding the recordtype for ALR</description>
     <environments>Default</environments>
     <interviewLabel>UpdateAssessmentStatus {!$Flow.CurrentDateTime}</interviewLabel>
     <label>UpdateAssessmentTaskStatus</label>
@@ -249,7 +273,7 @@
         <name>Publish_Tab_Refresh_Event</name>
         <label>Publish Tab Refresh Event</label>
         <locationX>314</locationX>
-        <locationY>2195</locationY>
+        <locationY>2303</locationY>
         <inputAssignments>
             <field>RecordIDs__c</field>
             <value>
@@ -263,7 +287,7 @@
         <name>GetALLAIAIRecords</name>
         <label>GetALLAIAIRecords</label>
         <locationX>314</locationX>
-        <locationY>947</locationY>
+        <locationY>1055</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>countalliaiRecords</targetReference>
@@ -284,7 +308,7 @@
         <name>getALLInspectionRecord</name>
         <label>getALLInspectionRecord</label>
         <locationX>314</locationX>
-        <locationY>731</locationY>
+        <locationY>839</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>updateInspectionAssessmentIndicator</targetReference>
@@ -319,7 +343,7 @@
         <name>GetALLTextFieldResponse</name>
         <label>GetALLTextFieldResponse</label>
         <locationX>314</locationX>
-        <locationY>1379</locationY>
+        <locationY>1487</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>CountTextFieldResponse</targetReference>
@@ -347,7 +371,7 @@
         <name>GetCompletedIAIRecords</name>
         <label>GetCompletedIAIRecords</label>
         <locationX>314</locationX>
-        <locationY>1163</locationY>
+        <locationY>1271</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>GetAllCompletedIAIRecords</targetReference>
@@ -375,7 +399,7 @@
         <name>Update_Response_as_Compliant</name>
         <label>Update Response as Compliant</label>
         <locationX>50</locationX>
-        <locationY>431</locationY>
+        <locationY>539</locationY>
         <connector>
             <targetReference>UpdateFieldToBlank</targetReference>
         </connector>
@@ -399,7 +423,7 @@
         <name>Update_TextResponse_Blank</name>
         <label>Update TextResponse Blank</label>
         <locationX>314</locationX>
-        <locationY>431</locationY>
+        <locationY>539</locationY>
         <connector>
             <targetReference>UpdateFieldToBlank</targetReference>
         </connector>
@@ -423,7 +447,7 @@
         <name>UpdateInProgress</name>
         <label>UpdateInProgress</label>
         <locationX>446</locationX>
-        <locationY>1703</locationY>
+        <locationY>1811</locationY>
         <connector>
             <targetReference>Decision_on_Refresh</targetReference>
         </connector>
@@ -447,7 +471,7 @@
         <name>updateInspectionAssessmentIndicator</name>
         <label>updateInspectionAssessmentIndicator</label>
         <locationX>314</locationX>
-        <locationY>839</locationY>
+        <locationY>947</locationY>
         <connector>
             <targetReference>GetALLAIAIRecords</targetReference>
         </connector>
@@ -485,7 +509,7 @@
         <name>UPDATETOCOMPLETED</name>
         <label>UPDATETOCOMPLETED</label>
         <locationX>182</locationX>
-        <locationY>1703</locationY>
+        <locationY>1811</locationY>
         <connector>
             <targetReference>Decision_on_Refresh</targetReference>
         </connector>
@@ -506,10 +530,10 @@
         <object>AssessmentTask</object>
     </recordUpdates>
     <start>
-        <locationX>188</locationX>
+        <locationX>408</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Check_Result</targetReference>
+            <targetReference>ALR_RecordType_Check</targetReference>
         </connector>
         <filterLogic>or</filterLogic>
         <filters>
