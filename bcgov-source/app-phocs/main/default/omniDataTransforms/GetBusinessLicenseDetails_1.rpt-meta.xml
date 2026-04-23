@@ -334,6 +334,23 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:BusinessLicense:Conditions var:$Vlocity.Null &lt;&gt; true false IF</formulaConverted>
+        <formulaExpression>IF(%BusinessLicense:Conditions% &lt;&gt; $Vlocity.Null , true , false)</formulaExpression>
+        <formulaResultPath>isConditionPresent</formulaResultPath>
+        <formulaSequence>11.0</formulaSequence>
+        <globalKey>49e75677-7cda-4b8b-9fa3-1f2d17231604</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <globalKey>GetBusinessLicenseDetailsCustom57</globalKey>
         <inputFieldName>BLAccount:AccountNumberRTPrefixed__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
@@ -521,7 +538,7 @@
         <formulaConverted>| var:FacilitiesDWT:Physical_Address__Street__s &quot;/\/\/&quot; var:FacilitiesDWT:Physical_Address__City__s &quot;/\/\/&quot; var:FacilitiesDWT:Physical_Address__StateCode__s &quot;/\/\/&quot; var:FacilitiesDWT:Physical_Address__PostalCode__s &quot;/\/\/&quot; var:FacilitiesDWT:Physical_Address__CountryCode__s CONCAT</formulaConverted>
         <formulaExpression>CONCAT(%FacilitiesDWT:Physical_Address__Street__s%, &quot; &quot;,%FacilitiesDWT:Physical_Address__City__s%, &quot; &quot;,%FacilitiesDWT:Physical_Address__StateCode__s%, &quot; &quot;,%FacilitiesDWT:Physical_Address__PostalCode__s%, &quot; &quot;,%FacilitiesDWT:Physical_Address__CountryCode__s%)</formulaExpression>
         <formulaResultPath>FacilitiesDWTPhysicalAddress</formulaResultPath>
-        <formulaSequence>11.0</formulaSequence>
+        <formulaSequence>12.0</formulaSequence>
         <globalKey>2f65802c-9775-4fcc-9c3f-865fa46f1553</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
@@ -572,7 +589,7 @@
         <formulaConverted>| var:BLA:EngineeringDesignFirmAddress__Street__s &quot;/\/\/&quot; var:BLA:EngineeringDesignFirmAddress__City__s &quot;/\/\/&quot; var:BLA:EngineeringDesignFirmAddress__StateCode__s &quot;/\/\/&quot; var:BLA:EngineeringDesignFirmAddress__PostalCode__s &quot;/\/\/&quot; var:BLA:EngineeringDesignFirmAddress__CountryCode__s CONCAT</formulaConverted>
         <formulaExpression>CONCAT(%BLA:EngineeringDesignFirmAddress__Street__s%, &quot; &quot;,%BLA:EngineeringDesignFirmAddress__City__s%, &quot; &quot;,%BLA:EngineeringDesignFirmAddress__StateCode__s%, &quot; &quot;,%BLA:EngineeringDesignFirmAddress__PostalCode__s%, &quot; &quot;,%BLA:EngineeringDesignFirmAddress__CountryCode__s%)</formulaExpression>
         <formulaResultPath>BLAEngineeringDesignFirmAddress</formulaResultPath>
-        <formulaSequence>13.0</formulaSequence>
+        <formulaSequence>14.0</formulaSequence>
         <globalKey>d35ea0ee-20f7-426d-90b6-33d13a118879</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
@@ -1037,10 +1054,25 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <globalKey>206e45d9-a3cd-41cf-89d3-a80a6bac42c8</globalKey>
+        <inputFieldName>isConditionPresent</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>GetBusinessLicenseDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>isConditionPresent</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <formulaConverted>| var:BLAccount:FacilityHA__c | var:BLAccount:FacilityHA__c &quot;&gt;&quot; STRINGINDEXOF 1 + | var:BLAccount:FacilityHA__c &quot;&lt;/a&gt;&quot; STRINGINDEXOF SUBSTRING</formulaConverted>
         <formulaExpression>SUBSTRING(%BLAccount:FacilityHA__c%, STRINGINDEXOF(%BLAccount:FacilityHA__c%, &quot;&gt;&quot;)+1, STRINGINDEXOF(%BLAccount:FacilityHA__c%, &quot;&lt;/a&gt;&quot;))</formulaExpression>
         <formulaResultPath>BLAccountFacilityHAName</formulaResultPath>
-        <formulaSequence>12.0</formulaSequence>
+        <formulaSequence>13.0</formulaSequence>
         <globalKey>3ce0d736-c056-4bd5-8b67-e1197aec493f</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
