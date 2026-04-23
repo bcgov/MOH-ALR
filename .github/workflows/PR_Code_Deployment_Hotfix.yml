@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: HFOPSCI
     env:
-      SFDXAUTHURL: ${{ secrets.HFOPSCI_SFDXAUTHURL }}
+      SFDXAUTHURL: ${{ secrets.SFDXAUTHURL }}
     steps:
       # Install Salesforce CLI
       - name: 'Install Salesforce CLI'
@@ -36,7 +36,7 @@ jobs:
       # Authenticate sandbox
       - name: 'Authenticate Sandbox'
         run: |
-            echo "${{ env.HFOPSCI_SFDXAUTHURL }}" > ./authfile
+            echo "${{ env.SFDXAUTHURL }}" > ./authfile
             sf org login sfdx-url -f authfile -a HFOPSCI
 
       # deploy code without running test classes
