@@ -8,11 +8,16 @@
                 05 Jan -  PHOCS-2681        -  Accenture   -  return Dairy ActionPlanTemplateNames.
                 06 Apr -  PHOCS-3459        -  Accenture   -  return PSE ActionPlanTemplateNames.
                 06 Apr -  PHOCS-3349        -  Accenture   -  return Food ActionPlanTemplateNames.
+                21 Apr -  PHOCS-3490        -  Accenture   -  return Drinking Water ActionPlanTemplateNames.
 ***********************************************************************************************/
 public without sharing class InspectionAssessmentTaskCreationService {
     public static String className = 'InspectionAssessmentTaskCreationService';
     public static Boolean forceSignatureProcessingInTest = false;
     public static Set<Id> testSignatureItemIds = new Set<Id>();
+    public static String DAIRY_ACCOUNTTYPE = 'Dairy';
+    public static String PSE_ACCOUNTTYPE = 'Personal Services';
+    public static String FOOD_ACCOUNTTYPE = 'Food';
+    public static String DRINKINGWATER_ACCOUNTTYPE = 'Drinking Water'; 
     public static Id recordTypePHOCSInspection = Schema.SObjectType.Visit.getRecordTypeInfosByDeveloperName().get('PHOCSInspection').getRecordTypeId();
 /**
 * @author: Deepak
@@ -257,12 +262,14 @@ public without sharing class InspectionAssessmentTaskCreationService {
                                                                           CategoryL1__c, CategoryL2__c, CategoryL3__c
                                                                           FROM PHOCSActionPlanTemplateDecisionMap__mdt WHERE Active__c = true AND InspectionFacilityType__c =: accountType];
             
-            if(accountType == 'Dairy'){       
+            if(accountType == DAIRY_ACCOUNTTYPE){       
                 getAPTemplatesName.addAll(getDairyTemplates(facilityAccountId, inspectionType, decisionMaps));
-            } else if (accountType == 'Personal Services') {
+            } else if (accountType == PSE_ACCOUNTTYPE) {
                 getAPTemplatesName.addAll(getPSETemplates(facilityAccountId, decisionMaps));
-            } else if (accountType == 'Food') {
+            } else if (accountType == FOOD_ACCOUNTTYPE) {
                 getAPTemplatesName.addAll(getFoodTemplates(facilityAccountId, decisionMaps));
+            } else if (accountType == DRINKINGWATER_ACCOUNTTYPE) {
+                getAPTemplatesName.addAll(getDrinkingWaterTemplates(facilityAccountId, decisionMaps));
             }
             
         } catch(Exception e){
@@ -367,6 +374,23 @@ public without sharing class InspectionAssessmentTaskCreationService {
                 if (dm.AttributeType__c != null && foodFacilityServices.contains(dm.AttributeType__c)){                        
                     templateNames.add(dm.ActionPlanTemplateName__c);
                 }
+            }
+        }
+        return templateNames;
+    }
+    
+/**
+* @author: Deepak
+* @date: 21 April 2026
+* @description: The purpose of this Method is to return Drinking Water ActionPlanTemplateNames.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/     
+    private static Set<String> getDrinkingWaterTemplates(Id facilityAccountId, List<PHOCSActionPlanTemplateDecisionMap__mdt> decisionMaps){
+        Set<String> templateNames = new Set<String>();
+        
+        for (PHOCSActionPlanTemplateDecisionMap__mdt dm : decisionMaps) {
+            if (dm.AttributeType__c == null) {
+                templateNames.add(dm.ActionPlanTemplateName__c);
             }
         }
         return templateNames;
