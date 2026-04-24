@@ -1,0 +1,114 @@
+.container {
+    position: relative;
+    min-height: 240px;
+}
+
+.loading-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.92);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 240px;
+    border-radius: 0.25rem;
+}
+
+.loading-text {
+    margin-top: 0.75rem;
+    color: #514f4d;
+    font-size: 0.875rem;
+}
+
+.error-state {
+    padding: 1rem;
+    border: 1px solid #c23934;
+    background: #fef1ee;
+    color: #ba0517;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+}
+
+.form-hidden {
+    visibility: hidden;
+}
+
+.section {
+    border: 1px solid #dddbda;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    background: #fff;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    background-color: #f3f2f2;
+    border-bottom: 1px solid #dddbda;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #3e3e3c;
+    cursor: pointer;
+    user-select: none;
+}
+
+.section-header:hover {
+    background-color: #ecebea;
+}
+
+.section-body {
+    padding: 0.75rem 0.75rem 0.25rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.chevron {
+    --slds-c-icon-color-foreground-default: #706e6b;
+    flex-shrink: 0;
+}
+
+.two-col {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.col {
+    flex: 1;
+    min-width: 0;
+}
+
+.col lightning-input-field {
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.slds-form-element__static a {
+    color: #0176d3;
+    text-decoration: none;
+}
+
+.slds-form-element__static a:hover {
+    text-decoration: underline;
+}
+
+:host {
+    --sds-c-input-color-border: #c9c7c5;
+    --sds-c-textarea-color-border: #c9c7c5;
+    --sds-c-input-radius-border: 0.25rem;
+    --sds-c-textarea-radius-border: 0.25rem;
+}
+
+@media (max-width: 768px) {
+    .two-col {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .system-field .value {
+        white-space: normal;
+    }
+}

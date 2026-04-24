@@ -1,0 +1,104 @@
+<template>
+    <div class="container">
+        <template if:true={isLoading}>
+            <div class="loading-overlay">
+                <lightning-spinner
+                    alternative-text="Loading inspection details"
+                    size="medium">
+                </lightning-spinner>
+                <div class="loading-text">Loading inspection details...</div>
+            </div>
+        </template>
+
+        <template if:true={hasError}>
+            <div class="error-state">
+                {errorMessage}
+            </div>
+        </template>
+
+        <template if:true={recordId}>
+            <lightning-record-edit-form
+                record-id={recordId}
+                object-api-name="Visit"
+                onload={handleLoad}
+                onerror={handleError}
+                class={formClass}>
+
+                <div class="section">
+                    <div class="section-header" onclick={handleToggleInspectionInfo}>
+                        <lightning-icon
+                            icon-name={inspectionInfoIcon}
+                            size="xx-small"
+                            class="chevron">
+                        </lightning-icon>
+                        <span>Inspection Information</span>
+                    </div>
+
+                    <template if:true={inspectionInfoExpanded}>
+                        <div class="section-body">
+                            <div class="two-col">
+                                <div class="col">
+                                    <lightning-input-field field-name="AccountId" disabled></lightning-input-field>
+                                    <lightning-input-field field-name="PlaceId" disabled></lightning-input-field>
+                                    <lightning-input-field field-name="VisitTypeId" disabled></lightning-input-field>
+                                    <lightning-input-field field-name="InspectionMethod__c" disabled></lightning-input-field>
+                                    <lightning-input-field field-name="OwnerId" disabled></lightning-input-field>
+                                    <lightning-input-field field-name="PlannedVisitStartTime" disabled></lightning-input-field>
+                                    <lightning-input-field field-name="TimeSpentMinutes__c" disabled></lightning-input-field>
+                                    <lightning-input-field field-name="NumberofFollowups__c" disabled></lightning-input-field>
+
+                                    <template if:true={isStatusCompleted}>
+                                        <lightning-input-field field-name="StatusRemarks" disabled></lightning-input-field>
+                                    </template>
+                                </div>
+
+                                <div class="col">
+                                    <lightning-input-field field-name="ParentVisitId" disabled></lightning-input-field>
+                                    <lightning-input-field field-name="ContextId" disabled></lightning-input-field>
+                                    <lightning-input-field field-name="InspectionTypeOtherSpecify__c" disabled></lightning-input-field>
+                                    <lightning-input-field field-name="InstructionDescription" disabled></lightning-input-field>
+                                    <lightning-input-field field-name="Hazard_Rating__c" disabled></lightning-input-field>
+
+                                    <template if:true={isAccountTypeDairy}>
+                                        <lightning-input-field field-name="PHOCSRiskRatingScore__c" disabled></lightning-input-field>
+                                    </template>
+
+                                    <lightning-input-field field-name="ActualVisitStartTime" disabled></lightning-input-field>
+                                    <lightning-input-field field-name="FollowUpInspectionRequired__c" disabled></lightning-input-field>
+
+                                    <template if:true={isAccountTypeDairy}>
+                                        <lightning-input-field field-name="EnvironmentalSwabsTaken__c" disabled></lightning-input-field>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <template if:true={showWebPostingSection}>
+                    <div class="section">
+                        <div class="section-header" onclick={handleToggleWebPosting}>
+                            <lightning-icon
+                                icon-name={webPostingIcon}
+                                size="xx-small"
+                                class="chevron">
+                            </lightning-icon>
+                            <span>Web Posting Information</span>
+                        </div>
+
+                        <template if:true={webPostingExpanded}>
+                            <div class="section-body">
+                                <div class="two-col">
+                                    <div class="col">
+                                        <lightning-input-field field-name="DoNotDiscloseToPublic__c" disabled></lightning-input-field>
+                                    </div>
+                                    <div class="col"></div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+            </lightning-record-edit-form>
+        </template>
+    </div>
+</template>
