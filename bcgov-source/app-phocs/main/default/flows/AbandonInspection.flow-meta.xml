@@ -3,6 +3,22 @@
     <apiVersion>66.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
+        <name>AddToInspectionAssessmentIndicatorRecords</name>
+        <label>AddToInspectionAssessmentIndicatorRecords</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>inspectionAssessmentIndicatorRecords</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>IterateInspectionAssessmentIndicatorRecords</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>IterateInspectionAssessmentIndicatorRecords</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>SetAssesmentTaskRecordIds</name>
         <label>Set Assesment Task Record Ids</label>
         <locationX>0</locationX>
@@ -31,7 +47,7 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>IterateInspectionAssessmentIndicatorRecords</targetReference>
+            <targetReference>AddToInspectionAssessmentIndicatorRecords</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -211,7 +227,7 @@
         <label>Update Inspection Assessment Indicator</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <inputReference>GetInspectionAssessmentIndicatorRrecords</inputReference>
+        <inputReference>inspectionAssessmentIndicatorRecords</inputReference>
     </recordUpdates>
     <screens>
         <name>AbandonInspectionError</name>
@@ -296,6 +312,14 @@
         <isCollection>true</isCollection>
         <isInput>true</isInput>
         <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>inspectionAssessmentIndicatorRecords</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>InspectionAssessmentInd</objectType>
     </variables>
     <variables>
         <name>inspectionRecord</name>
