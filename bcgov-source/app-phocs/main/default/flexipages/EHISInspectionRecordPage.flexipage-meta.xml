@@ -104,10 +104,16 @@
                         <valueListItems>
                             <value>Visit.AbandonInspection</value>
                             <visibilityRule>
+                                <booleanFilter>1 OR 2</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.Status}</leftValue>
-                                    <operator>NE</operator>
-                                    <rightValue>Abandoned</rightValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Planned</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Status}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>InProgress</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
@@ -234,6 +240,34 @@
                         <leftValue>{!Record.Status}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>Completed</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.InspectionStatusReason__c</fieldItem>
+                <identifier>RecordInspectionStatusReason_cField</identifier>
+                <visibilityRule>
+                    <booleanFilter>(1 OR 2) AND 3</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Completed</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Abandoned</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Account.Type}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Dairy</rightValue>
                     </criteria>
                 </visibilityRule>
             </fieldInstance>
@@ -454,19 +488,6 @@
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentName>phocsInspectionDetailsReadOnly</componentName>
-                <identifier>c_phocsInspectionDetailsReadOnly</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.Status}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Abandoned</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </componentInstance>
-        </itemInstances>
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>

@@ -26,7 +26,6 @@ public class DeleteAbandonedInspectionsScheduler implements Schedulable {
                 WHERE Status = 'Abandoned' 
                 AND RecordTypeId =:phocsInspectionRecordTypeId 
                 AND ActualVisitEndTime <= :targetDate
-                LIMIT 10000
             ]);
             
             if (!abandonedInspectionsMap.isEmpty()){
