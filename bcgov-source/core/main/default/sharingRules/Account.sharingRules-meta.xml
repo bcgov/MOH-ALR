@@ -972,4 +972,29 @@
         </criteriaItems>
         <includeHVUOwnedRecords>false</includeHVUOwnedRecords>
     </sharingGuestRules>
+    <sharingGuestRules>
+        <fullName>PHOCSGuestUserOWLRetentionSharingRule</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>EHIS-3375: Guest users retain Read access to Closed OWL Child Care and Residential Care facilities within the 5-year OperationStartDate retention window.</description>
+        <label>PHOCS Guest User OWL Retention Sharing Rule</label>
+        <sharedTo>
+            <guestUser>phocsservices</guestUser>
+        </sharedTo>
+        <criteriaItems>
+            <field>Status__c</field>
+            <operation>equals</operation>
+            <value>Closed</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>OWLPublicRetentionActive__c</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Facility</value>
+        </criteriaItems>
+        <includeHVUOwnedRecords>false</includeHVUOwnedRecords>
+    </sharingGuestRules>
 </SharingRules>
