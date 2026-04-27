@@ -350,6 +350,16 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
 			   returnQuery = addFlexCardFilters(filterItems,returnQuery);
                return returnQuery;
             }
+            when 'childcareowl'{
+               returnQuery = ' Where RecordType.DeveloperName=\'Facility\' AND Status__c = \'closed\' AND Type=\'Child Care\' AND OWLPublicRetentionActive__c = true';
+			   returnQuery = addFlexCardFilters(filterItems,returnQuery);
+               return returnQuery;
+            }
+            when 'residentialcareowl'{
+               returnQuery = ' Where RecordType.DeveloperName=\'Facility\' AND Status__c = \'closed\' AND Type=\'Residential Care\' AND OWLPublicRetentionActive__c = true';
+			   returnQuery = addFlexCardFilters(filterItems,returnQuery);
+               return returnQuery;
+            }
         }
         return '';
     }
@@ -415,7 +425,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 Datetime dt =  accRecord.PHOCSLastInspectionDate__c;
                 phocsLastInspectionDate = dt.date();
             }
-           
+
 	            Map<String, Object> result = new Map<String, Object>{
                 'Id' => accRecord.Id,
                 'Type'=> accRecord.Type,
