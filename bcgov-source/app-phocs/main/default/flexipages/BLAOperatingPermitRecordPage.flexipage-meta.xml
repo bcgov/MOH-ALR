@@ -168,6 +168,23 @@
                 <identifier>RecordDescription_cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ValidMobilePermit__c</fieldItem>
+                <identifier>RecordValidMobilePermit_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.LicenseType.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Temporary Food Service Permit</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-ea3e8e9b-1c02-4bf4-bf2d-7c02ce90f8cf</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -236,6 +253,34 @@
                         <leftValue>{!Record.LicenseType.Name}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>Residential Care Facility License</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.NameAndHealthAuthority__c</fieldItem>
+                <identifier>RecordNameAndHealthAuthority_cField</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 AND ( 2 OR 3)</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.LicenseType.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Temporary Food Service Permit</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.ValidMobilePermit__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Yes</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.ValidMobilePermit__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Yes, but different mobile/have ancillary set up</rightValue>
                     </criteria>
                 </visibilityRule>
             </fieldInstance>
@@ -582,6 +627,79 @@
                 <identifier>RecordEventAddress_cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ExpectedAttendance__c</fieldItem>
+                <identifier>RecordExpectedAttendance_cField</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 AND ( 2 OR 3 OR 4)</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.LicenseType.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Temporary Food Service Permit</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.ValidMobilePermit__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Yes</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.ValidMobilePermit__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>No</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.ValidMobilePermit__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Yes, but different mobile/have ancillary set up</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.NameOfOnSiteContact__c</fieldItem>
+                <identifier>RecordNameOfOnSiteContact_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.HeatingCookingHotHoldingRequired__c</fieldItem>
+                <identifier>RecordHeatingCookingHotHoldingRequired_cField2</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Sanitizer__c</fieldItem>
+                <identifier>RecordSanitizer_cField2</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.FoodSafeLevel1Certification__c</fieldItem>
+                <identifier>RecordFoodSafeLevel1Certification_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-d36caae8-8545-4ce7-9581-2929e511c05f</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -602,6 +720,16 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
+                <fieldItem>Record.EventCoordinatorEmail__c</fieldItem>
+                <identifier>RecordEventCoordinatorEmail_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.EventLocationName__c</fieldItem>
                 <identifier>RecordEventLocationName_cField2</identifier>
             </fieldInstance>
@@ -614,6 +742,46 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.DescriptionOfServices__c</fieldItem>
                 <identifier>RecordDescriptionOfServices_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.FoodsNeedAssembly__c</fieldItem>
+                <identifier>RecordFoodsNeedAssembly_cField2</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.SpecifyFoods__c</fieldItem>
+                <identifier>RecordSpecifyFoods_cField2</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.SpecifyNumberOfOperatedBooths__c</fieldItem>
+                <identifier>RecordSpecifyNumberOfOperatedBooths_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.OnSiteFoodPrepStoragePremise__c</fieldItem>
+                <identifier>RecordOnSiteFoodPrepStoragePremise_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-b6a52eb7-c0a3-491c-ab0a-aee565e61492</name>
@@ -641,135 +809,6 @@
             </componentInstance>
         </itemInstances>
         <name>Facet-cb4a3b91-39f8-42cb-87a9-294b5ac71aa5</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.NameOfEvent__c</fieldItem>
-                <identifier>RecordNameOfEvent_cField2</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.EventOrganizerPhoneNumber__c</fieldItem>
-                <identifier>RecordEventOrganizerPhoneNumber_cField2</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.EventAddress__c</fieldItem>
-                <identifier>RecordEventAddress_cField2</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.HeatingCookingHotHoldingRequired__c</fieldItem>
-                <identifier>RecordHeatingCookingHotHoldingRequired_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Sanitizer__c</fieldItem>
-                <identifier>RecordSanitizer_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-4fef327b-5b41-4423-9a38-75eb11dd9adb</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.EventOrganizer__c</fieldItem>
-                <identifier>RecordEventOrganizer_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.EventLocationName__c</fieldItem>
-                <identifier>RecordEventLocationName_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.FoodsNeedAssembly__c</fieldItem>
-                <identifier>RecordFoodsNeedAssembly_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.SpecifyFoods__c</fieldItem>
-                <identifier>RecordSpecifyFoods_cField</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.HeatingCookingHotHoldingRequired__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>true</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-9ff03dd0-5aa0-45f8-9f9f-363d541685fd</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-4fef327b-5b41-4423-9a38-75eb11dd9adb</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column17</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-9ff03dd0-5aa0-45f8-9f9f-363d541685fd</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column18</identifier>
-            </componentInstance>
-        </itemInstances>
-        <name>Facet-dfe81f22-2378-46cb-9b6c-9518c92a18d6</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -1039,32 +1078,7 @@
                     <criteria>
                         <leftValue>{!Record.LicenseType.Name}</leftValue>
                         <operator>EQUAL</operator>
-                        <rightValue>High Risk Temporary Food Service Operating Permit</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>columns</name>
-                    <value>Facet-dfe81f22-2378-46cb-9b6c-9518c92a18d6</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>horizontalAlignment</name>
-                    <value>false</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>label</name>
-                    <value>Additional Information</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:fieldSection</componentName>
-                <identifier>flexipage_fieldSection9</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.LicenseType.Name}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Low Risk Temporary Food Service Operating Permit</rightValue>
+                        <rightValue>Temporary Food Service Permit</rightValue>
                     </criteria>
                 </visibilityRule>
             </componentInstance>
