@@ -1,0 +1,39 @@
+<template>
+    <!-- This wrapper NEVER disappears -->
+    <div class="slds-card slds-card_boundary">
+        <!-- Header (matches related list style) -->
+        <header class="slds-card__header slds-grid">
+            <div class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <lightning-icon
+                        icon-name="standard:record"
+                        size="small">
+                    </lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        <span>Related Canned Comments</span>
+                    </h2>
+                </div>
+            </div>
+        </header>
+
+        <!-- Body -->
+        <div class="slds-card__body slds-card__body_inner">
+            <template if:true={hasRecords}>
+                <lightning-datatable
+                    key-field="Id"
+                    data={violations}
+                    columns={columns}
+                    hide-checkbox-column>
+                </lightning-datatable>
+            </template>
+
+            <template if:false={hasRecords}>
+                <div class="slds-text-color_weak slds-p-vertical_small">
+                    No related canned comments found.
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

@@ -79,12 +79,13 @@ jobs:
         id: lint_tests
         run: sfdx scanner:run --engine eslint-lwc --target "${{ vars.RELEASE_PIPELINE_SOURCEPATH }}"
 
-      # Authenticate HOTFIXCI sandbox
-      - name: 'Authenticate HOTFIXCI Sandbox'
+      # Authenticate HFOpsCI sandbox
+      - name: 'Authenticate HFOpsCI Sandbox'
         run: |
-            echo "${{ secrets.HOTFIXCI_SFDXAUTHURL }}" > ./authfile
-            sf org login sfdx-url -f authfile -a HOTFIXCI
+            echo "${{ secrets.HFOPSCI_SFDXAUTHURL }}" > ./authfile
+            sf org login sfdx-url -f authfile -a HFOPSCI
 
       - name: Validate Code
         id: run_code_validation
-        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --checkonly --testlevel RunLocalTests --targetusername HOTFIXCI
+        run: sf project deploy start --source-dir bcgov-source/app-phocs/main/default --source-dir bcgov-source/core/main/default --source-dir bcgov-source/app-alr/main/default --wait 60 --dry-run --test-level RunLocalTests -g --target-org HFOPSCI
+       # run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --checkonly --testlevel RunLocalTests -g --targetusername HFOPSCI

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ALRPreventUsingPHOCSResultValues</fullName>
+    <active>true</active>
+    <description>Prevents ALR users from selecting &quot;N/A (Not Applicable)&quot;, &quot;N/S (Not Assessed)&quot;, or &quot;PHOCSNonCompliant&quot; in the Result field for the ALR Inspection Assessment Indicator record type unless they have the EHIS Bypass Validation Rule Custom Permission.</description>
+    <errorConditionFormula>AND(
+RecordType.DeveloperName = &quot;ALRInspectionAssessmentIndicator&quot;,
+NOT($Permission.EHISBypassValidationRuleCustomPermission),
+OR(
+ISPICKVAL(Result, &quot;N/A (Not Applicable)&quot;),
+ISPICKVAL(Result, &quot;N/S (Not Assessed)&quot;),
+ISPICKVAL(Result, &quot;PHOCSNonCompliant&quot;)
+)
+)</errorConditionFormula>
+    <errorMessage>You can only select Compliant, Non-compliant, NA as Assessment Result. Please correct the value.</errorMessage>
+</ValidationRule>

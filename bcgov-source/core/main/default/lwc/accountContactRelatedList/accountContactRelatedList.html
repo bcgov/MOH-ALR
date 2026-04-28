@@ -6,10 +6,12 @@
                     <h2 class="slds-text-heading_medium slds-m-bottom_medium">
                         <a href="#" onclick={navigateToAccountContactRelation} data-account-id={recordId} class="custom-heading-link">Related Contacts</a>
                     </h2>
-                    <div>
-                        <lightning-button-icon icon-name="utility:refresh" alternative-text="Refresh" onclick={handleRefresh} class="slds-m-right_small"></lightning-button-icon>
-                        <lightning-button label="Manage Contact" onclick={callOmniScript}></lightning-button>
-                    </div>
+                    <template if:true={showManageContactButton}>
+                        <div>
+                            <lightning-button-icon icon-name="utility:refresh" alternative-text="Refresh" onclick={handleRefresh} class="slds-m-right_small"></lightning-button-icon>
+                            <lightning-button label="Manage Contact" onclick={callOmniScript}></lightning-button>
+                        </div>
+                    </template>
                 </div>
             </div>
         </div>

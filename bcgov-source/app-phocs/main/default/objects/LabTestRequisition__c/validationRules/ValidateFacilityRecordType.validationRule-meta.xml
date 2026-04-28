@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ValidateFacilityRecordType</fullName>
+    <active>true</active>
+    <errorConditionFormula>OR(
+(RecordType.DeveloperName = &apos;PHOCSWaterLabTestRequisition&apos; &amp;&amp; 
+ FacilityName__r.RecordTypeName__c != &apos;DrinkingWaterSystem&apos; &amp;&amp;
+ FacilityName__r.RecordTypeName__c != &apos;DrinkingWaterSourceIntake&apos; &amp;&amp;
+ (FacilityName__r.RecordTypeName__c = &apos;Facility&apos; &amp;&amp;(
+     ISPICKVAL(FacilityName__r.Type, &apos;Sewerage&apos;) || ISPICKVAL(FacilityName__r.Type, &apos;Child Care&apos;)
+    )
+  )
+ ),
+
+(RecordType.DeveloperName = &apos;PHOCSDyeTestRequisition&apos; &amp;&amp; 
+ (FacilityName__r.RecordTypeName__c != &apos;Facility&apos; ||  NOT(ISPICKVAL(FacilityName__r.Type, &apos;Sewerage&apos;)))),
+
+(RecordType.DeveloperName = &apos;PHOCSLeadWaterTestRequisition&apos; &amp;&amp; 
+ (FacilityName__r.RecordTypeName__c != &apos;Facility&apos; || NOT(ISPICKVAL(FacilityName__r.Type, &apos;Child Care&apos;)))),
+
+(RecordType.DeveloperName = &apos;PHOCSRadonTestRequisition&apos; &amp;&amp; 
+ (FacilityName__r.RecordTypeName__c != &apos;Facility&apos; || NOT(ISPICKVAL(FacilityName__r.Type, &apos;Child Care&apos;))))
+)</errorConditionFormula>
+    <errorDisplayField>FacilityName__c</errorDisplayField>
+    <errorMessage>Facility is not eligible for this Lab Test Requisition</errorMessage>
+</ValidationRule>

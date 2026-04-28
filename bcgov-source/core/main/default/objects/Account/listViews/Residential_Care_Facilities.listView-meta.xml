@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Residential_Care_Facilities</fullName>
+    <columns>ACCOUNT.NAME</columns>
+    <columns>CategoryL1__c</columns>
+    <columns>CategoryL2__c</columns>
+    <columns>HealthAuthority__c</columns>
+    <columns>Physical_Address__Street__s</columns>
+    <columns>Physical_Address__City__s</columns>
+    <columns>PHOCSNumberOfInspections__c</columns>
+    <columns>PHOCSOutstandingViolations__c</columns>
+    <columns>PHOCSLastInspectionDate__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>ACCOUNT.RECORDTYPE</field>
+        <operation>equals</operation>
+        <value>Account.Facility</value>
+    </filters>
+    <filters>
+        <field>ACCOUNT.TYPE</field>
+        <operation>equals</operation>
+        <value>Residential Care</value>
+    </filters>
+    <filters>
+        <field>CategoryL1__c</field>
+        <operation>equals</operation>
+        <value>Hospice,Mental health,Substance use,Long-term care,Community living,Acquired injury,Child and youth residential,Operating without a licence</value>
+    </filters>
+    <label>Residential Care Facilities</label>
+    <sharedTo>
+        <group>EHISUsersPG</group>
+        <group>PHOCSReportingUserPG</group>
+    </sharedTo>
+</ListView>

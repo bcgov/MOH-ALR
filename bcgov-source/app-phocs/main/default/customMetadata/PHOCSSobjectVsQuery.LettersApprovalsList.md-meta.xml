@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Letters Approvals List</label>
+    <protected>false</protected>
+    <values>
+        <field>ChildSobjectAPIName__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>ObjectQuery__c</field>
+        <value xsi:type="xsd:string">SELECT Id, Identifier, RegulatoryAuthorizationType.Name, Account__r.Name, PeriodStart, PeriodEnd, Status FROM BusinessLicense WHERE Recordtype.DeveloperName = &apos;PHOCSPermitLicense&apos; AND Status = &apos;Active&apos; AND RegulatoryAuthorizationType.Name IN (&apos;Sewerage System Letter of Certification&apos;, &apos;Personal Service Establishment Health Approval&apos;, &apos;Tobacco and Vapour Retailer Information&apos;) ORDER By CreatedDate DESC</value>
+    </values>
+    <values>
+        <field>ParentFieldAPIName__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>ParentSobjectAPIName__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>SobjectAPIName__c</field>
+        <value xsi:type="xsd:string">BusinessLicense</value>
+    </values>
+    <values>
+        <field>Type__c</field>
+        <value xsi:type="xsd:string">List</value>
+    </values>
+</CustomMetadata>
