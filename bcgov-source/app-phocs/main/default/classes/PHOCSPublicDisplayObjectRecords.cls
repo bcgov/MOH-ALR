@@ -278,12 +278,12 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         if(filterItems == null){
          query = 'SELECT Id,Name,Type,Physical_Address__City__s, CategoryL1__c,CategoryL2__c,HealthAuthority__c,Phone,ParentAccount__r.Name,' +
                               'FacilityCHSAText__c,Physical_Address__c, PHOCSNumberOfInspections__c,' +
-                              'PHOCSOutstandingViolations__c, PHOCSLastInspectionDate__c ' +
+                              'PHOCSOutstandingViolations__c, PHOCSLastInspectionDate__c, HideAddressonPublicSite__c ' +
                         'FROM Account';
         }else{
             query = 'SELECT Id, Name, Type, Physical_Address__City__s, CategoryL1__c, CategoryL2__c, HealthAuthority__c, Phone, ParentAccount__r.Name, ' +
                 'Physical_Address__c, FacilityCHSAText__c,PHOCSNumberOfInspections__c, ' +
-                'PHOCSOutstandingViolations__c, PHOCSLastInspectionDate__c ' +
+                'PHOCSOutstandingViolations__c, PHOCSLastInspectionDate__c, HideAddressonPublicSite__c  ' +
                 'FROM Account ' ;
         }
             system.debug('-----query---'+query);
@@ -390,19 +390,20 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 'CategoryL1__c'=> accRecord.CategoryL1__c,
                 'CategoryL2__c'=> accRecord.CategoryL2__c,
                 'HealthAuthority__c'=> accRecord.HealthAuthority__c,
-                'Phone'=> accRecord.Phone,
+                'Phone' => accRecord.HidePhoneonPublicSite__c ? '' : accRecord.Phone,
                 'ParentAccount' => accRecord.ParentAccount__r.Name,
                 'PHOCSOutstandingViolations__c'=> accRecord.PHOCSOutstandingViolations__c,
                 'OperatingMonths__c'=> accRecord.OperatingMonths__c,
                 'FacilityCHSAText__c'=> accRecord.FacilityCHSAText__c,
-                'PhysicalAddress' => getAddress(accRecord.Physical_Address__c),
+                'PhysicalAddress' => accRecord.HideAddressonPublicSite__c ? '' : getAddress(accRecord.Physical_Address__c),
                 'PhysicalAddressStreet'=> accRecord.Physical_Address__c?.getStreet(),
                 'PhysicalAddressPostalCode'=> accRecord.Physical_Address__c?.getPostalCode(),
                 'PhysicalAddressCity'=> accRecord.Physical_Address__c?.getCity(),
                 'PhysicalAddressState'=> accRecord.Physical_Address__c?.getState(),
                 'PhysicalAddressStateCode'=> accRecord.Physical_Address__c?.getStateCode(),
                 'PhysicalAddressCountry'=> accRecord.Physical_Address__c?.getCountry(),
-                'PhysicalAddressCountryCode'=> accRecord.Physical_Address__c?.getCountryCode()
+                'PhysicalAddressCountryCode'=> accRecord.Physical_Address__c?.getCountryCode(),
+                'HideAddressonPublicSite__c' => accRecord.HideAddressonPublicSite__c
             };
             return result;
         }
@@ -411,11 +412,13 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         public Object wrap(SObject record) {
             Date phocsLastInspectionDate ;
             Account accRecord = (Account) record;
+        
             if(accRecord.PHOCSLastInspectionDate__c != null){
                 Datetime dt =  accRecord.PHOCSLastInspectionDate__c;
                 phocsLastInspectionDate = dt.date();
             }
-           
+
+
 	            Map<String, Object> result = new Map<String, Object>{
                 'Id' => accRecord.Id,
                 'Type'=> accRecord.Type,
@@ -427,9 +430,9 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 'Name' => accRecord.Name,
                 'PHOCSNumberOfInspections__c' => accRecord.PHOCSNumberOfInspections__c,
                 'PHOCSOutstandingViolations__c'=> accRecord.PHOCSOutstandingViolations__c,
-                'PhysicalAddress' => getAddress(accRecord.Physical_Address__c),
+                'PhysicalAddress' => accRecord.HideAddressonPublicSite__c ? '' : getAddress(accRecord.Physical_Address__c),
                 'PhysicalAddressStreet'=> accRecord.Physical_Address__c?.getStreet(),
-                'PhysicalAddressCity'=> accRecord.Physical_Address__c?.getCity(),
+                'PhysicalAddressCity' => accRecord.HideAddressonPublicSite__c ? '' : accRecord.Physical_Address__c?.getCity(),
                 'PhysicalAddressState'=> accRecord.Physical_Address__c?.getState(),
                 'PhysicalAddressCountry'=> accRecord.Physical_Address__c?.getCountry(),
                 'PhysicalAddressPostalCode'=> accRecord.Physical_Address__c?.getPostalCode()
