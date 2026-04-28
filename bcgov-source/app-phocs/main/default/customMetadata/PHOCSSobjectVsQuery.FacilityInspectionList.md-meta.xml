@@ -11,7 +11,7 @@
         <value xsi:type="xsd:string">SELECT Id, Name, Account.Name, ActualVisitStartTime, VisitType.Name, PHOCSViolationCount__c
 FROM Visit
 WHERE Status = &apos;Completed&apos;
-  AND DoNotDiscloseToPublic__c = false
+  AND DiscloseToPublic__c = true
   AND (
          (Account.Type IN (&apos;Residential Care&apos;, &apos;Child Care&apos;))
         OR
