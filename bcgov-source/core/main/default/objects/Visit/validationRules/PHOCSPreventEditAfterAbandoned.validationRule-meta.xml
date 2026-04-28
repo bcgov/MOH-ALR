@@ -2,12 +2,12 @@
 <ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>PHOCSPreventEditAfterAbandoned</fullName>
     <active>true</active>
-    <description>Prevents updates to PHOCS Inspection records when Status is Abandoned, unless the user has the EHIS Bypass Validation Rule custom permission.</description>
+    <description>Prevents updates to PHOCS Inspection records after Status is already Abandoned, unless the user has the EHIS Bypass Validation Rule custom permission.</description>
     <errorConditionFormula>AND(
     RecordType.DeveloperName = &quot;PHOCSInspection&quot;,
     NOT($Permission.EHISBypassValidationRuleCustomPermission),
-    ISPICKVAL(Status, &quot;Abandoned&quot;),
-    NOT(ISNEW())
+    NOT(ISNEW()),
+    ISPICKVAL(PRIORVALUE(Status), &quot;Abandoned&quot;)
 )</errorConditionFormula>
     <errorMessage>Inspection record cannot be edited once the status is marked as Abandoned</errorMessage>
 </ValidationRule>
