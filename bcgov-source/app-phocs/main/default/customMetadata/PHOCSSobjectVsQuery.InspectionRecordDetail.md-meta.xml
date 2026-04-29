@@ -8,7 +8,29 @@
     </values>
     <values>
         <field>ObjectQuery__c</field>
-        <value xsi:type="xsd:string">select Account.Name, Account.Type, Account.CategoryL1__c, Account.CategoryL2__c, Account.HealthAuthority__c, Account.FacilityCHSAText__c, Account.PHOCSParentAccount__c, Account.Phone, Account.PHOCSOutstandingViolations__c, Account.OperatingMonths__c, Account.Physical_Address__c, Name, ActualVisitStartTime, TestInspType__c, PHOCSViolationCount__c,Account.PhysicalLocation__c,Account.HideAddressonPublicSite__c,Account.HidePhoneonPublicSite__c From visit WHERE Id = :recordId LIMIT 1</value>
+        <value xsi:type="xsd:string">SELECT 
+Account.Name,
+Account.Type,
+Account.CategoryL1__c,
+Account.CategoryL2__c,
+Account.HealthAuthority__c,
+Account.FacilityCHSAText__c,
+Account.PHOCSParentAccount__c,
+Account.Phone,
+Account.PHOCSOutstandingViolations__c,
+Account.OperatingMonths__c,
+Account.Physical_Address__c,
+Account.RecordTypeName__c,
+Name,
+ActualVisitStartTime,
+TestInspType__c,
+PHOCSViolationCount__c,
+Account.PhysicalLocation__c,
+Account.HideAddressonPublicSite__c,
+Account.HidePhoneonPublicSite__c
+FROM Visit
+WHERE Id = :recordId
+LIMIT 1</value>
     </values>
     <values>
         <field>ParentFieldAPIName__c</field>
