@@ -380,31 +380,76 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         Object wrap(SObject record);
     }
 
-   public class AccountDetailsWrapper implements SObjectWrapper {
+    public class AccountDetailsWrapper implements SObjectWrapper {
         public Object wrap(SObject record) {
             Account accRecord = (Account) record;
+
+            String waterAdvisoryHeadline = '';
+            String waterAdvisoryReasonSummary = '';
+            Boolean hasWaterAdvisories = false;
+
+            if (accRecord.RecordTypeName__c == 'DrinkingWaterSystem') {
+
+                List<String> advisoryTypes = new List<String>();
+                List<String> reasons = new List<String>();
+
+                for (Case advisory : [
+                    SELECT Id, TypeOfAdvisory__c, ReasonForAdvisory__c
+                    FROM Case
+                    WHERE AccountId = :accRecord.Id
+                    AND RecordType.DeveloperName = 'PHOCSWaterAdvisories'
+                    AND Status = 'Open'
+                    ORDER BY LastModifiedDate DESC
+                ]) {
+                    hasWaterAdvisories = true;
+
+                    if (String.isNotBlank(advisory.TypeOfAdvisory__c)) {
+                        advisoryTypes.add(advisory.TypeOfAdvisory__c);
+                    }
+
+                    if (String.isNotBlank(advisory.ReasonForAdvisory__c)) {
+                        reasons.addAll(advisory.ReasonForAdvisory__c.split(';'));
+                    }
+                }
+
+                if (hasWaterAdvisories) {
+                    waterAdvisoryHeadline =
+                        'This facility is currently going under a ' +
+                        String.join(new List<String>(new Set<String>(advisoryTypes)), ' / ');
+
+                    waterAdvisoryReasonSummary =
+                        'Underlying Problems: ' +
+                        String.join(new List<String>(new Set<String>(reasons)), ' - ');
+                }
+            }
+
             Map<String, Object> result = new Map<String, Object>{
                 'Id' => accRecord.Id,
                 'Name' => accRecord.Name,
-                'Type'=> accRecord.Type,
-                'CategoryL1__c'=> accRecord.CategoryL1__c,
-                'CategoryL2__c'=> accRecord.CategoryL2__c,
-                'HealthAuthority__c'=> accRecord.HealthAuthority__c,
+                'Type' => accRecord.Type,
+                'CategoryL1__c' => accRecord.CategoryL1__c,
+                'CategoryL2__c' => accRecord.CategoryL2__c,
+                'HealthAuthority__c' => accRecord.HealthAuthority__c,
                 'Phone' => accRecord.HidePhoneonPublicSite__c ? '' : accRecord.Phone,
                 'ParentAccount' => accRecord.ParentAccount__r.Name,
-                'PHOCSOutstandingViolations__c'=> accRecord.PHOCSOutstandingViolations__c,
-                'OperatingMonths__c'=> accRecord.OperatingMonths__c,
-                'FacilityCHSAText__c'=> accRecord.FacilityCHSAText__c,
+                'PHOCSOutstandingViolations__c' => accRecord.PHOCSOutstandingViolations__c,
+                'OperatingMonths__c' => accRecord.OperatingMonths__c,
+                'FacilityCHSAText__c' => accRecord.FacilityCHSAText__c,
                 'PhysicalAddress' => accRecord.HideAddressonPublicSite__c ? '' : getAddress(accRecord.Physical_Address__c),
-                'PhysicalAddressStreet'=> accRecord.Physical_Address__c?.getStreet(),
-                'PhysicalAddressPostalCode'=> accRecord.Physical_Address__c?.getPostalCode(),
-                'PhysicalAddressCity'=> accRecord.Physical_Address__c?.getCity(),
-                'PhysicalAddressState'=> accRecord.Physical_Address__c?.getState(),
-                'PhysicalAddressStateCode'=> accRecord.Physical_Address__c?.getStateCode(),
-                'PhysicalAddressCountry'=> accRecord.Physical_Address__c?.getCountry(),
-                'PhysicalAddressCountryCode'=> accRecord.Physical_Address__c?.getCountryCode(),
-                'HideAddressonPublicSite__c' => accRecord.HideAddressonPublicSite__c
+                'PhysicalAddressStreet' => accRecord.Physical_Address__c?.getStreet(),
+                'PhysicalAddressPostalCode' => accRecord.Physical_Address__c?.getPostalCode(),
+                'PhysicalAddressCity' => accRecord.Physical_Address__c?.getCity(),
+                'PhysicalAddressState' => accRecord.Physical_Address__c?.getState(),
+                'PhysicalAddressStateCode' => accRecord.Physical_Address__c?.getStateCode(),
+                'PhysicalAddressCountry' => accRecord.Physical_Address__c?.getCountry(),
+                'PhysicalAddressCountryCode' => accRecord.Physical_Address__c?.getCountryCode(),
+                'HideAddressonPublicSite__c' => accRecord.HideAddressonPublicSite__c,
+
+                'HasWaterAdvisories' => hasWaterAdvisories,
+                'WaterAdvisoryHeadline' => waterAdvisoryHeadline,
+                'WaterAdvisoryReasonSummary' => waterAdvisoryReasonSummary
             };
+
             return result;
         }
     }
