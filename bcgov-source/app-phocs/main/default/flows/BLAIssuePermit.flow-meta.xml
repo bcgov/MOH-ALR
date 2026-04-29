@@ -8,6 +8,28 @@
             <stringValue>{&quot;location&quot;:&quot;top&quot;,&quot;type&quot;:&quot;simple&quot;}</stringValue>
         </value>
     </customProperties>
+    <decisions>
+        <name>Check_AAA</name>
+        <label>Check AAA</label>
+        <locationX>182</locationX>
+        <locationY>674</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Not_Null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Related_AAA.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_AAA</targetReference>
+            </connector>
+            <label>Not Null</label>
+        </rules>
+    </decisions>
     <description>EHIS-2615</description>
     <environments>Default</environments>
     <formulas>
@@ -66,7 +88,7 @@
     <recordCreates>
         <name>CreateBusinessLicenseRecord</name>
         <label>Create  Business License Record</label>
-        <locationX>176</locationX>
+        <locationX>182</locationX>
         <locationY>350</locationY>
         <connector>
             <targetReference>UpdateBLA</targetReference>
@@ -120,9 +142,32 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
     <recordLookups>
+        <name>Get_Related_AAA</name>
+        <label>Get Related AAA</label>
+        <locationX>182</locationX>
+        <locationY>566</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_AAA</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>RgltyAuthApplicationId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>AuthApplicationAsset</object>
+        <sortField>CreatedDate</sortField>
+        <sortOrder>Desc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>GetPermitRecordTypeId</name>
         <label>Get Permit RecordType Id</label>
-        <locationX>176</locationX>
+        <locationX>182</locationX>
         <locationY>242</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -148,10 +193,34 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordUpdates>
+        <name>Update_AAA</name>
+        <label>Update AAA</label>
+        <locationX>50</locationX>
+        <locationY>782</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Related_AAA.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>LicensePermitNameId</field>
+            <value>
+                <elementReference>CreateBusinessLicenseRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <object>AuthApplicationAsset</object>
+    </recordUpdates>
+    <recordUpdates>
         <name>UpdateBLA</name>
         <label>Update BLA</label>
-        <locationX>176</locationX>
+        <locationX>182</locationX>
         <locationY>458</locationY>
+        <connector>
+            <targetReference>Get_Related_AAA</targetReference>
+        </connector>
         <faultConnector>
             <isGoTo>true</isGoTo>
             <targetReference>Error</targetReference>
@@ -175,7 +244,7 @@
     <screens>
         <name>Error</name>
         <label>Error</label>
-        <locationX>704</locationX>
+        <locationX>754</locationX>
         <locationY>458</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
@@ -199,7 +268,7 @@
     <screens>
         <name>IssuePermit</name>
         <label>Issue Permit</label>
-        <locationX>176</locationX>
+        <locationX>182</locationX>
         <locationY>134</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
@@ -226,7 +295,7 @@
         <showHeader>true</showHeader>
     </screens>
     <start>
-        <locationX>50</locationX>
+        <locationX>56</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>IssuePermit</targetReference>
