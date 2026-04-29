@@ -95,36 +95,32 @@ public without sharing class InspectionAssessmentTaskCreationService {
             }
             System.debug('###signatureItemIds'+ signatureItemIds); */
             
-            Map<Id, String> templateItemIdToDefName = new Map<Id, String>();
+            Map<Id, Id> templateItemIdToDefId = new Map<Id, Id>();
             if (!assessmentItemIds.isEmpty()) {
                 List<ActionPlanTemplateItemValue> aPTemplateItemValueList = [SELECT Id, ItemEntityFieldName, ValueLiteral, ValueFormula, ActionPlanTemplateItemId FROM ActionPlanTemplateItemValue
-                                                                             WHERE ActionPlanTemplateItemId IN :assessmentItemIds AND ItemEntityFieldName = :BCMOH_Constants.ItemEntityName];
+                                                                             WHERE ActionPlanTemplateItemId IN :assessmentItemIds AND ItemEntityFieldName = :BCMOH_Constants.ItemEntityAssessmentTaskDefinitionId];
                 for (ActionPlanTemplateItemValue v : aPTemplateItemValueList){
-                    if(String.isNotBlank(v.ValueLiteral)){
-                        templateItemIdToDefName.put(v.ActionPlanTemplateItemId, v.ValueLiteral);
+                    if (!templateItemIdToDefId.containsKey(v.ActionPlanTemplateItemId) && !String.isBlank(v.ValueLiteral)) {
+                        try {
+                            Id defId = (Id) v.ValueLiteral;
+                            templateItemIdToDefId.put(v.ActionPlanTemplateItemId, defId);
+                        } catch (Exception e) {
+                            LogService.logAndPublish(className, 'runForVisit', 'Invalid AssessmentTaskDefinitionId in ActionPlanTemplateItemValue. ItemId: ' + v.ActionPlanTemplateItemId + ' ValueLiteral: ' + v.ValueLiteral, e);
+                        }
                     }
                 }
             }
             
-            //if (templateItemIdToDefName.isEmpty() && signatureItemIds.isEmpty()) {
-            if (templateItemIdToDefName.isEmpty()) {
-                return;
-            }
+            if (templateItemIdToDefId.isEmpty()) return;
             
-            List<AssessmentTaskDefinition> taskDefs = new List<AssessmentTaskDefinition>();
-            if (!templateItemIdToDefName.isEmpty()) {
-                taskDefs = [SELECT Id, Name, Category__c FROM AssessmentTaskDefinition WHERE Name IN :templateItemIdToDefName.Values()];
-            }
-            
-            Map<String, AssessmentTaskDefinition> defByName = new Map<String, AssessmentTaskDefinition>();
-            for (AssessmentTaskDefinition def : taskDefs) {
-                defByName.put(def.Name, def);
+            Map<Id, AssessmentTaskDefinition> defById = new Map<Id, AssessmentTaskDefinition>();            
+            if(!templateItemIdToDefId.isEmpty()) {
+                defById = new Map<Id, AssessmentTaskDefinition>([SELECT Id, Name, Category__c FROM AssessmentTaskDefinition WHERE Id IN: templateItemIdToDefId.values()]);
             }
             
             Id assessmentTaskRecordTypeId;
             if (visit.AccountId != null) {
                 try {
-                    String acctDevName = visit.Account.Type;
                     AssesmentTaskRecrdTypeMapping__mdt mapping = AssesmentTaskRecrdTypeMapping__mdt.getInstance((visit.Account.RecordType != null) ? visit.Account.RecordType.DeveloperName.deleteWhitespace() : null);
                     if (mapping != null && String.isNotBlank(mapping.AssesmentTaskRecordType__c)) {
                         Map<String, Schema.RecordTypeInfo> rtMap = Schema.SObjectType.AssessmentTask.getRecordTypeInfosByName();
@@ -137,16 +133,14 @@ public without sharing class InspectionAssessmentTaskCreationService {
                 }
             }
             
-            List<AssessmentTask> tasksToInsert = new List<AssessmentTask>();
-            
-            for (ActionPlanTemplateItem item : assessmentItems) {
-                
-                String defName = templateItemIdToDefName.get(item.Id);
-                if (String.isBlank(defName) || !defByName.containsKey(defName)) {
+            List<AssessmentTask> tasksToInsert = new List<AssessmentTask>();            
+            for (ActionPlanTemplateItem item : assessmentItems){                
+                Id defId = templateItemIdToDefId.get(item.Id);
+                if (defId == null || !defById.containsKey(defId)) {
                     continue;
                 }
                 
-                AssessmentTaskDefinition def = defByName.get(defName);
+                AssessmentTaskDefinition def = defById.get(defId);
                 AssessmentTask newTask = new AssessmentTask();
                 newTask.Name = String.isNotBlank(def.Category__c) ? def.Category__c : def.Name;
                 newTask.AssessmentTaskDefinitionId = def.Id;
