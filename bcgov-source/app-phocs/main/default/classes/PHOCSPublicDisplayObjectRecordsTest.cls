@@ -242,6 +242,15 @@ private class PHOCSPublicDisplayObjectRecordsTest {
         };
         runTestCallMethod('getFacilityList', input);
         
+        input = new Map<String, Object>{
+            'programArea' => 'childcareowl'
+        };
+        runTestCallMethod('getFacilityList', input);
+
+        input = new Map<String, Object>{
+            'programArea' => 'residentialcareowl'
+        };
+        runTestCallMethod('getFacilityList', input);
         
         input = new Map<String, Object>{
             'programArea' => ''

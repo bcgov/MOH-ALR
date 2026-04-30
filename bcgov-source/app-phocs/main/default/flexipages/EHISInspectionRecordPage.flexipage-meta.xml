@@ -7,6 +7,38 @@
                     <name>actionNames</name>
                     <valueList>
                         <valueListItems>
+                            <value>Visit.PHOCSPublishInspToPDS</value>
+                            <visibilityRule>
+                                <booleanFilter>1 AND 2</booleanFilter>
+                                <criteria>
+                                    <leftValue>{!Record.Status}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Completed</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.DiscloseToPublic__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>false</rightValue>
+                                </criteria>
+                            </visibilityRule>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Visit.PHOCSUnpublishToPDS</value>
+                            <visibilityRule>
+                                <booleanFilter>1 AND 2</booleanFilter>
+                                <criteria>
+                                    <leftValue>{!Record.Status}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Completed</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.DiscloseToPublic__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>true</rightValue>
+                                </criteria>
+                            </visibilityRule>
+                        </valueListItems>
+                        <valueListItems>
                             <value>CustomButton.Visit.PHOCSInspectionWorksheet</value>
                             <visibilityRule>
                                 <booleanFilter>1 AND (2 OR 3)</booleanFilter>
