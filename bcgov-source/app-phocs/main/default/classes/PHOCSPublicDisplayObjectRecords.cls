@@ -330,11 +330,11 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         if (details.hasWaterAdvisories) {
             details.waterAdvisoryHeadline =
                 'This facility is currently going under a ' +
-                String.join(new List<String>(new Set<String>(advisoryTypes)), ' / ');
+                String.join(new List<String>(new Set<String>(advisoryTypes)), ' | ');
 
             details.waterAdvisoryReasonSummary =
                 'Underlying Problems: ' +
-                String.join(new List<String>(new Set<String>(reasons)), ' - ');
+                String.join(new List<String>(new Set<String>(reasons)), ' , ');
         }
 
         return details;
