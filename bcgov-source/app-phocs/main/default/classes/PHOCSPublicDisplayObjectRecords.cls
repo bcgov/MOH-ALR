@@ -25,6 +25,11 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             output.put('result', lstSobjects);
             return output;
         }
+        if (action == 'getInspectionResults') {
+            List<Object> results = getInspectionResults(String.valueOf(input.get('recordId')));
+            output.put('result', results);
+            return output;
+        }
         // METHODS FOR PORTAL USERS
         // Methods to call for Portal user in class PHOCSOperatorPortalDisplayRecords  to imply portal user sharing rules.
          if(action == 'getRecordsListPortal'){
@@ -295,6 +300,111 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
            results.add(wrapper.wrap(sObj));
         }
         system.debug('----->'+results);
+        return results;
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static List<Object> getInspectionResults(Id inspectionId) {
+        if (inspectionId == null) {
+            throw new AuraHandledException('Inspection ID is required.');
+        }
+
+        List<Object> results = new List<Object>();
+
+        List<InspectionAssessmentInd> parentQuestions = [
+            SELECT Id,
+                AssessmentIndDefinition.Name,
+                AssessmentIndDefinition.Category__c,
+                AssessmentIndDefinition.RelatedRegulatoryCodes__c,
+                AssessmentIndDefinitionId,
+                AssessmentTaskId,
+                Result
+            FROM InspectionAssessmentInd
+            WHERE AssessmentTask.ParentId = :inspectionId
+            AND AssessmentIndDefinition.PHOCSParentId__c = null
+            ORDER BY AssessmentIndDefinition.Category__c, AssessmentIndDefinition.Name
+        ];
+
+        if (parentQuestions.isEmpty()) {
+            return results;
+        }
+
+        Set<Id> parentDefIds = new Set<Id>();
+        Set<Id> nonCompliantParentDefIds = new Set<Id>();
+
+        for (InspectionAssessmentInd parent : parentQuestions) {
+            parentDefIds.add(parent.AssessmentIndDefinitionId);
+
+            if (parent.Result == 'PHOCSNonCompliant') {
+                nonCompliantParentDefIds.add(parent.AssessmentIndDefinitionId);
+            }
+        }
+
+        List<InspectionAssessmentInd> cannedComments = [
+            SELECT AssessmentIndDefinition.Name,
+                AssessmentIndDefinition.PHOCSParentId__c,
+                AssessmentTaskId
+            FROM InspectionAssessmentInd
+            WHERE AssessmentTask.ParentId = :inspectionId
+            AND AssessmentIndDefinition.PHOCSParentId__c IN :parentDefIds
+            AND PHOCSCheckboxResponse__c = true
+            ORDER BY AssessmentIndDefinition.Name
+        ];
+
+        Map<String, List<String>> cannedCommentsByKey = new Map<String, List<String>>();
+
+        for (InspectionAssessmentInd cc : cannedComments) {
+            if (cc.AssessmentIndDefinition == null || cc.AssessmentIndDefinition.PHOCSParentId__c == null) {
+                continue;
+            }
+
+            String key = cc.AssessmentTaskId + '_' + cc.AssessmentIndDefinition.PHOCSParentId__c;
+            String commentName = cc.AssessmentIndDefinition.Name;
+
+            if (
+                nonCompliantParentDefIds.contains(cc.AssessmentIndDefinition.PHOCSParentId__c) &&
+                String.isNotBlank(commentName)
+            ) {
+                if (!cannedCommentsByKey.containsKey(key)) {
+                    cannedCommentsByKey.put(key, new List<String>());
+                }
+
+                cannedCommentsByKey.get(key).add(commentName.trim());
+            }
+        }
+
+        for (InspectionAssessmentInd parent : parentQuestions) {
+            String key = parent.AssessmentTaskId + '_' + parent.AssessmentIndDefinitionId;
+            Boolean isNonCompliant = parent.Result == 'PHOCSNonCompliant';
+
+            String questionAndComments = parent.AssessmentIndDefinition != null
+                ? parent.AssessmentIndDefinition.Name
+                : '';
+
+            if (
+                parent.AssessmentIndDefinition != null &&
+                String.isNotBlank(parent.AssessmentIndDefinition.RelatedRegulatoryCodes__c)
+            ) {
+                questionAndComments += ' [' +
+                    parent.AssessmentIndDefinition.RelatedRegulatoryCodes__c +
+                    ']';
+            }
+
+            if (
+                isNonCompliant &&
+                cannedCommentsByKey.containsKey(key) &&
+                !cannedCommentsByKey.get(key).isEmpty()
+            ) {
+                questionAndComments += '\n\n' + String.join(cannedCommentsByKey.get(key), '\n');
+            }
+
+            results.add(new Map<String, Object>{
+                'Id' => parent.Id,
+                'QuestionandComments' => questionAndComments,
+                'Status' => isNonCompliant ? 'Not Compliant' : 'Compliant'
+            });
+        }
+
         return results;
     }
 
