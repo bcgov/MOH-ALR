@@ -110,21 +110,11 @@ Logic: Summary count of all Regulatory Code Violation records (any status) tied 
         <connector>
             <targetReference>Get_All_Child_RCV_Records</targetReference>
         </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>InspectionId</field>
-            <operator>IsNull</operator>
-            <value>
-                <booleanValue>false</booleanValue>
-            </value>
-        </filters>
-        <filters>
-            <field>PHOCSIsBelongsToPHOCS__c</field>
-            <operator>EqualTo</operator>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </filters>
+        <filterFormula>AND(
+    NOT(ISBLANK({!$Record.Inspection.Id})),
+    CONTAINS({!$Record.RecordType.DeveloperName}, &quot;PHOCS&quot;),
+    TEXT({!$Record.Inspection.Status}) &lt;&gt; &quot;Abandoned&quot;
+)</filterFormula>
         <object>RegulatoryCodeViolation</object>
         <recordTriggerType>Delete</recordTriggerType>
         <triggerType>RecordBeforeDelete</triggerType>
