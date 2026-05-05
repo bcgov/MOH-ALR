@@ -25,6 +25,11 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             output.put('result', lstSobjects);
             return output;
         }
+        if (action == 'getInspectionResults') {
+            List<Object> results = getInspectionResults(String.valueOf(input.get('recordId')));
+            output.put('result', results);
+            return output;
+        }
         // METHODS FOR PORTAL USERS
         // Methods to call for Portal user in class PHOCSOperatorPortalDisplayRecords  to imply portal user sharing rules.
          if(action == 'getRecordsListPortal'){
@@ -152,6 +157,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         List<Object> results = new List<Object>(); 
         Map<String, SObjectWrapper> wrapperRegistry = new Map<String, SObjectWrapper>{
             'Account' => new AccountDetailsWrapper(),
+            'Visit' => new InspectionDetailsWrapper(),
             'LabTestRequisition__c' => new LabTestRequisitionDetailsWrapper(),
             'Case' => new CaseDetailsWrapper(),
             'RegulatoryTrxnFeeItem' => new RegulatoryTrxnFeeItemDetailsWrapper()
@@ -171,7 +177,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
              soqlQuery = queryConfig.ObjectQuery__c;
          }else{
              soqlQuery = getRecordDetailsQuery(recordId);
-         }
+        }
 
         List<SObject> queryResults = Database.query(soqlQuery);// NOPMD
         if(!queryResults.isEmpty()){
@@ -296,6 +302,153 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         system.debug('----->'+results);
         return results;
     }
+
+    @AuraEnabled(cacheable=true)
+    public static List<Object> getInspectionResults(Id inspectionId) {
+        if (inspectionId == null) {
+            throw new AuraHandledException('Inspection ID is required.');
+        }
+
+        List<Object> results = new List<Object>();
+
+        List<InspectionAssessmentInd> parentQuestions = [
+            SELECT Id,
+                AssessmentIndDefinition.Name,
+                AssessmentIndDefinition.Category__c,
+                AssessmentIndDefinition.RelatedRegulatoryCodes__c,
+                AssessmentIndDefinitionId,
+                AssessmentTaskId,
+                Result
+            FROM InspectionAssessmentInd
+            WHERE AssessmentTask.ParentId = :inspectionId
+            AND AssessmentIndDefinition.PHOCSParentId__c = null
+            ORDER BY AssessmentIndDefinition.Category__c, AssessmentIndDefinition.Name
+        ];
+
+        if (parentQuestions.isEmpty()) {
+            return results;
+        }
+
+        Set<Id> parentDefIds = new Set<Id>();
+        Set<Id> nonCompliantParentDefIds = new Set<Id>();
+
+        for (InspectionAssessmentInd parent : parentQuestions) {
+            parentDefIds.add(parent.AssessmentIndDefinitionId);
+
+            if (parent.Result == 'PHOCSNonCompliant') {
+                nonCompliantParentDefIds.add(parent.AssessmentIndDefinitionId);
+            }
+        }
+
+        List<InspectionAssessmentInd> cannedComments = [
+            SELECT AssessmentIndDefinition.Name,
+                AssessmentIndDefinition.PHOCSParentId__c,
+                AssessmentTaskId
+            FROM InspectionAssessmentInd
+            WHERE AssessmentTask.ParentId = :inspectionId
+            AND AssessmentIndDefinition.PHOCSParentId__c IN :parentDefIds
+            AND PHOCSCheckboxResponse__c = true
+            ORDER BY AssessmentIndDefinition.Name
+        ];
+
+        Map<String, List<String>> cannedCommentsByKey = new Map<String, List<String>>();
+
+        for (InspectionAssessmentInd cc : cannedComments) {
+            if (cc.AssessmentIndDefinition == null || cc.AssessmentIndDefinition.PHOCSParentId__c == null) {
+                continue;
+            }
+
+            String key = cc.AssessmentTaskId + '_' + cc.AssessmentIndDefinition.PHOCSParentId__c;
+            String commentName = cc.AssessmentIndDefinition.Name;
+
+            if (
+                nonCompliantParentDefIds.contains(cc.AssessmentIndDefinition.PHOCSParentId__c) &&
+                String.isNotBlank(commentName)
+            ) {
+                if (!cannedCommentsByKey.containsKey(key)) {
+                    cannedCommentsByKey.put(key, new List<String>());
+                }
+
+                cannedCommentsByKey.get(key).add(commentName.trim());
+            }
+        }
+
+        for (InspectionAssessmentInd parent : parentQuestions) {
+            String key = parent.AssessmentTaskId + '_' + parent.AssessmentIndDefinitionId;
+            Boolean isNonCompliant = parent.Result == 'PHOCSNonCompliant';
+
+            String questionAndComments = parent.AssessmentIndDefinition != null
+                ? parent.AssessmentIndDefinition.Name
+                : '';
+
+            if (
+                parent.AssessmentIndDefinition != null &&
+                String.isNotBlank(parent.AssessmentIndDefinition.RelatedRegulatoryCodes__c)
+            ) {
+                questionAndComments += ' [' +
+                    parent.AssessmentIndDefinition.RelatedRegulatoryCodes__c +
+                    ']';
+            }
+
+            if (
+                isNonCompliant &&
+                cannedCommentsByKey.containsKey(key) &&
+                !cannedCommentsByKey.get(key).isEmpty()
+            ) {
+                questionAndComments += '\n\n' + String.join(cannedCommentsByKey.get(key), '\n');
+            }
+
+            results.add(new Map<String, Object>{
+                'Id' => parent.Id,
+                'QuestionandComments' => questionAndComments,
+                'Status' => isNonCompliant ? 'Not Compliant' : 'Compliant'
+            });
+        }
+
+        return results;
+    }
+
+     private static WaterAdvisoryDetails getWaterAdvisoryDetails(Account accRecord) {
+        WaterAdvisoryDetails details = new WaterAdvisoryDetails();
+
+        if (accRecord == null || accRecord.RecordTypeName__c != 'DrinkingWaterSystem') {
+            return details;
+        }
+
+        List<String> advisoryTypes = new List<String>();
+        List<String> reasons = new List<String>();
+
+        for (Case advisory : [
+            SELECT Id, TypeOfAdvisory__c, ReasonForAdvisory__c
+            FROM Case
+            WHERE AccountId = :accRecord.Id
+            AND RecordType.DeveloperName = 'PHOCSWaterAdvisories'
+            AND Status = 'Open'
+            ORDER BY LastModifiedDate DESC
+        ]) {
+            details.hasWaterAdvisories = true;
+
+            if (String.isNotBlank(advisory.TypeOfAdvisory__c)) {
+                advisoryTypes.add(advisory.TypeOfAdvisory__c);
+            }
+
+            if (String.isNotBlank(advisory.ReasonForAdvisory__c)) {
+                reasons.addAll(advisory.ReasonForAdvisory__c.split(';'));
+            }
+        }
+
+        if (details.hasWaterAdvisories) {
+            details.waterAdvisoryHeadline =
+                'This facility is currently going under a ' +
+                String.join(new List<String>(new Set<String>(advisoryTypes)), ' | ');
+
+            details.waterAdvisoryReasonSummary =
+                'Underlying Problems: ' +
+                String.join(new List<String>(new Set<String>(reasons)), ' , ');
+        }
+
+        return details;
+    }
                                                                 
     private static string getFacilitiesFilter(string programArea, String filterItems){
         String returnQuery;
@@ -350,7 +503,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
 			   returnQuery = addFlexCardFilters(filterItems,returnQuery);
                return returnQuery;
             }
-            when 'childcareowl'{
+			when 'childcareowl'{
                returnQuery = ' Where RecordType.DeveloperName=\'Facility\' AND Status__c = \'closed\' AND Type=\'Child Care\' AND OWLPublicRetentionActive__c = true';
 			   returnQuery = addFlexCardFilters(filterItems,returnQuery);
                return returnQuery;
@@ -390,31 +543,45 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         Object wrap(SObject record);
     }
 
+    public class WaterAdvisoryDetails {
+        public Boolean hasWaterAdvisories = false;
+        public String waterAdvisoryHeadline = '';
+        public String waterAdvisoryReasonSummary = '';
+    }
+
     public class AccountDetailsWrapper implements SObjectWrapper {
         public Object wrap(SObject record) {
             Account accRecord = (Account) record;
+
+            WaterAdvisoryDetails advisoryDetails = getWaterAdvisoryDetails(accRecord);
+
             Map<String, Object> result = new Map<String, Object>{
                 'Id' => accRecord.Id,
                 'Name' => accRecord.Name,
-                'Type'=> accRecord.Type,
-                'CategoryL1__c'=> accRecord.CategoryL1__c,
-                'CategoryL2__c'=> accRecord.CategoryL2__c,
-                'HealthAuthority__c'=> accRecord.HealthAuthority__c,
+                'Type' => accRecord.Type,
+                'CategoryL1__c' => accRecord.CategoryL1__c,
+                'CategoryL2__c' => accRecord.CategoryL2__c,
+                'HealthAuthority__c' => accRecord.HealthAuthority__c,
                 'Phone' => accRecord.HidePhoneonPublicSite__c ? '' : accRecord.Phone,
                 'ParentAccount' => accRecord.ParentAccount__r.Name,
-                'PHOCSOutstandingViolations__c'=> accRecord.PHOCSOutstandingViolations__c,
-                'OperatingMonths__c'=> accRecord.OperatingMonths__c,
-                'FacilityCHSAText__c'=> accRecord.FacilityCHSAText__c,
+                'PHOCSOutstandingViolations__c' => accRecord.PHOCSOutstandingViolations__c,
+                'OperatingMonths__c' => accRecord.OperatingMonths__c,
+                'FacilityCHSAText__c' => accRecord.FacilityCHSAText__c,
                 'PhysicalAddress' => accRecord.HideAddressonPublicSite__c ? '' : getAddress(accRecord.Physical_Address__c),
-                'PhysicalAddressStreet'=> accRecord.Physical_Address__c?.getStreet(),
-                'PhysicalAddressPostalCode'=> accRecord.Physical_Address__c?.getPostalCode(),
-                'PhysicalAddressCity'=> accRecord.Physical_Address__c?.getCity(),
-                'PhysicalAddressState'=> accRecord.Physical_Address__c?.getState(),
-                'PhysicalAddressStateCode'=> accRecord.Physical_Address__c?.getStateCode(),
-                'PhysicalAddressCountry'=> accRecord.Physical_Address__c?.getCountry(),
-                'PhysicalAddressCountryCode'=> accRecord.Physical_Address__c?.getCountryCode(),
-                'HideAddressonPublicSite__c' => accRecord.HideAddressonPublicSite__c
+                'PhysicalAddressStreet' => accRecord.Physical_Address__c?.getStreet(),
+                'PhysicalAddressPostalCode' => accRecord.Physical_Address__c?.getPostalCode(),
+                'PhysicalAddressCity' => accRecord.Physical_Address__c?.getCity(),
+                'PhysicalAddressState' => accRecord.Physical_Address__c?.getState(),
+                'PhysicalAddressStateCode' => accRecord.Physical_Address__c?.getStateCode(),
+                'PhysicalAddressCountry' => accRecord.Physical_Address__c?.getCountry(),
+                'PhysicalAddressCountryCode' => accRecord.Physical_Address__c?.getCountryCode(),
+                'HideAddressonPublicSite__c' => accRecord.HideAddressonPublicSite__c,
+
+                'HasWaterAdvisories' => advisoryDetails.hasWaterAdvisories,
+                'WaterAdvisoryHeadline' => advisoryDetails.waterAdvisoryHeadline,
+                'WaterAdvisoryReasonSummary' => advisoryDetails.waterAdvisoryReasonSummary
             };
+
             return result;
         }
     }
@@ -499,6 +666,49 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 'RegulatoryTrxnFeeName'=> regulatoryTrxnFeeItemRecord.RegulatoryTrxnFee.Name,
                 'Comments'=> regulatoryTrxnFeeItemRecord.Comments
             };
+            return result;
+        }
+    }
+
+    public class InspectionDetailsWrapper implements SObjectWrapper {
+        public Object wrap(SObject record) {
+            Visit inspection = (Visit) record;
+            WaterAdvisoryDetails advisoryDetails = getWaterAdvisoryDetails(inspection.Account);
+
+            Map<String, Object> result = new Map<String, Object>{
+                'Id' => inspection.Id,
+                'Name' => inspection.Name,
+                'ActualVisitStartTime' => inspection.ActualVisitStartTime,
+                'InspectionType' => inspection.TestInspType__c,
+                'PHOCSViolationCount' => inspection.PHOCSViolationCount__c,
+
+                'AccountName' => inspection.Account?.Name,
+                'AccountType' => inspection.Account?.Type,
+                'CategoryL1' => inspection.Account?.CategoryL1__c,
+                'CategoryL2' => inspection.Account?.CategoryL2__c,
+                'HealthAuthority' => inspection.Account?.HealthAuthority__c,
+                'FacilityCHSAText' => inspection.Account?.FacilityCHSAText__c,
+                'PHOCSParentAccount' => inspection.Account?.PHOCSParentAccount__c,
+                'HidePhoneonPublicSite' => inspection.Account?.HidePhoneonPublicSite__c,
+                'Phone' =>  inspection.Account?.Phone,
+                'PHOCSOutstandingViolations' => inspection.Account?.PHOCSOutstandingViolations__c,
+                'OperatingMonths' => inspection.Account?.OperatingMonths__c,
+                'PhysicalLocation' => inspection.Account?.PhysicalLocation__c,
+                'HideAddressonPublicSite' => inspection.Account?.HideAddressonPublicSite__c,
+            
+                'PhysicalAddress' => inspection.Account?.HideAddressonPublicSite__c == true ? '' 
+                    : getAddress(inspection.Account?.Physical_Address__c),
+                'PhysicalAddressStreet' => inspection.Account?.Physical_Address__c?.getStreet(),
+                'PhysicalAddressCity' => inspection.Account?.Physical_Address__c?.getCity(),
+                'PhysicalAddressState' => inspection.Account?.Physical_Address__c?.getState(),
+                'PhysicalAddressPostalCode' => inspection.Account?.Physical_Address__c?.getPostalCode(),
+                'PhysicalAddressCountry' => inspection.Account?.Physical_Address__c?.getCountry(),
+
+                'HasWaterAdvisories' => advisoryDetails.hasWaterAdvisories,
+                'WaterAdvisoryHeadline' => advisoryDetails.waterAdvisoryHeadline,
+                'WaterAdvisoryReasonSummary' => advisoryDetails.waterAdvisoryReasonSummary
+            };
+
             return result;
         }
     }
