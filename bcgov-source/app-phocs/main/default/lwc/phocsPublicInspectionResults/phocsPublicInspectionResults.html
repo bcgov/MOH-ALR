@@ -1,0 +1,49 @@
+<template>
+    <template if:true={hasRows}>
+        <div class="inspection-results-table-wrapper">
+            <table class="slds-table slds-table_cell-buffer inspection-results-table">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th class="question-column slds-theme_shade">
+                            <div class="slds-truncate">
+                                Inspection Questions and Comments
+                            </div>
+                        </th>
+
+                        <th class="status-column slds-theme_shade">
+                            <div class="slds-truncate">
+                                Compliance Status
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <template for:each={rows} for:item="row">
+                        <tr key={row.Id}>
+                            <td class="question-column">
+                                <div class="question">
+                                    {row.question}
+                                </div>
+
+                                <template if:true={row.comments.length}>
+                                    <ul class="comments-list">
+                                        <template for:each={row.comments} for:item="comment">
+                                            <li key={comment}>
+                                                {comment}
+                                            </li>
+                                        </template>
+                                    </ul>
+                                </template>
+                            </td>
+
+                            <td class="status-column">
+                                {row.Status}
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+    </template>
+</template>

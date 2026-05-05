@@ -17,75 +17,27 @@ public class DeleteAbandonedInspectionsScheduler implements Schedulable {
 
     public static void deleteAbandonedInspections() {
         try {
-            Id phocsInspectionRecordTypeId = Schema.SObjectType.Visit
-                .getRecordTypeInfosByDeveloperName()
-                .get('PHOCSInspection')
-                .getRecordTypeId();
-
-            Datetime targetDate = Datetime.now().addDays(-30);
-
+            
+            Id phocsInspectionRecordTypeId = Schema.SObjectType.Visit.getRecordTypeInfosByDeveloperName().get('PHOCSInspection').getRecordTypeId();
+            Datetime targetDate = Datetime.now().addDays(-30);         
             Map<Id, Visit> abandonedInspectionsMap = new Map<Id, Visit>([
                 SELECT Id, Name, Status, ActualVisitEndTime
                 FROM Visit
-                WHERE Status = 'Abandoned'
-                AND RecordTypeId = :phocsInspectionRecordTypeId
+                WHERE Status = 'Abandoned' 
+                AND RecordTypeId =:phocsInspectionRecordTypeId 
                 AND ActualVisitEndTime <= :targetDate
             ]);
-
-            if (!abandonedInspectionsMap.isEmpty()) {
-                Set<Id> parentVisitIds = abandonedInspectionsMap.keySet();
-
-                List<Visit> childVisits = [
-                    SELECT Id, Name
-                    FROM Visit
-                    WHERE ParentVisitId IN :parentVisitIds
-                ];
-
-                Set<Id> allVisitIds = new Set<Id>();
-                allVisitIds.addAll(parentVisitIds);
-
-                for (Visit childVisit : childVisits) {
-                    allVisitIds.add(childVisit.Id);
-                }
-
-                List<RegulatoryCodeViolation> rcvList = [
-                    SELECT Id
-                    FROM RegulatoryCodeViolation
-                    WHERE InspectionId IN :allVisitIds
-                ];
-
-                if (!rcvList.isEmpty()) {
-                    Database.delete(rcvList, false);
-                }
-
+            
+            if (!abandonedInspectionsMap.isEmpty()){
                 List<InspectionAssessmentInd> insAssessmentIndicators = [
                     SELECT Id
                     FROM InspectionAssessmentInd
-                    WHERE AssessmentTask.ParentId IN :allVisitIds
+                    WHERE AssessmentTask.ParentId IN :abandonedInspectionsMap.keySet()
                 ];
-
                 if (!insAssessmentIndicators.isEmpty()) {
                     Database.delete(insAssessmentIndicators, false);
                 }
-
-                if (!childVisits.isEmpty()) {
-                    Database.delete(childVisits, false);
-                }
-
-                List<Visit> visitsToDelete = abandonedInspectionsMap.values();
-                Database.DeleteResult[] results = Database.delete(visitsToDelete, false);
-
-                for (Integer i = 0; i < results.size(); i++) {
-                    if (!results[i].isSuccess()) {
-                        for (Database.Error err : results[i].getErrors()) {
-                            System.debug(
-                                LoggingLevel.ERROR,
-                                'Failed to delete Visit ' + visitsToDelete[i].Id +
-                                ' - ' + err.getStatusCode() + ': ' + err.getMessage()
-                            );
-                        }
-                    }
-                }
+                Database.DeleteResult[] results = Database.delete(abandonedInspectionsMap.values(), false);
             }
         } catch (Exception e) {
             throw e;
