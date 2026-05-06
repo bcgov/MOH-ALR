@@ -736,8 +736,12 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 'UnitOfMeasure' => lab.UnitOfMeasure__c,
                 'ResultValue' => lab.ResultValue__c,
                 'TestId' => lab.Test__c,
-                'TestName' => lab.Test__r?.Name
-            };
+                'TestName' => lab.Test__r ?.Name,			
+				'SamplingSiteName'   => lab.LabTestRequisition__r?.SamplingSite__r?.Name,				
+				'SampleTestType'     => lab.Test__r?.SampleTestType__c,
+				'ParameterType'      => lab.Test__r?.ParameterType__c,	
+                'CollectionDateTime' => lab.LabTestRequisition__r?.CollectionDateTime__c
+            };            
             return result;
         }
     }
