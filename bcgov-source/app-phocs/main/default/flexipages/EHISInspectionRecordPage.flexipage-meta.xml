@@ -9,7 +9,7 @@
                         <valueListItems>
                             <value>Visit.PHOCSPublishInspToPDS</value>
                             <visibilityRule>
-                                <booleanFilter>1 AND 2</booleanFilter>
+                                <booleanFilter>1 AND 2 AND 3</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.Status}</leftValue>
                                     <operator>EQUAL</operator>
@@ -20,12 +20,17 @@
                                     <operator>EQUAL</operator>
                                     <rightValue>false</rightValue>
                                 </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Account.Status__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Open</rightValue>
+                                </criteria>
                             </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>Visit.PHOCSUnpublishToPDS</value>
                             <visibilityRule>
-                                <booleanFilter>1 AND 2</booleanFilter>
+                                <booleanFilter>1 AND 2 AND 3</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.Status}</leftValue>
                                     <operator>EQUAL</operator>
@@ -35,6 +40,11 @@
                                     <leftValue>{!Record.DiscloseToPublic__c}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>true</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Account.Status__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Open</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
