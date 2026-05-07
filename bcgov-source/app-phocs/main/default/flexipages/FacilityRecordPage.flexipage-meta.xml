@@ -962,6 +962,16 @@
                 <identifier>RecordWasteDisposal_cField2</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.SewageWasteDisposalOtherSpecify__c</fieldItem>
+                <identifier>RecordSewageWasteDisposalOtherSpecify_cField2</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-58039c4c-1bb2-4ebc-bbf9-dd4ddb20b8b1</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -1413,8 +1423,15 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.NonPermittedFoodService__c</fieldItem>
-                <identifier>RecordNonPermittedFoodService_cField</identifier>
+                <fieldItem>Record.SewageWasteDisposalOtherSpecify__c</fieldItem>
+                <identifier>RecordSewageWasteDisposalOtherSpecify_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.WasteDisposal__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Other</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <name>Facet-21fd6c71-9bd9-4674-96a7-cb59fe0b0d09</name>
@@ -1474,6 +1491,16 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
+                <fieldItem>Record.NonPermittedFoodService__c</fieldItem>
+                <identifier>RecordNonPermittedFoodService_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.WaterSupply__c</fieldItem>
                 <identifier>RecordWaterSupply_cField3</identifier>
             </fieldInstance>
@@ -1489,23 +1516,6 @@
                 <visibilityRule>
                     <criteria>
                         <leftValue>{!Record.WaterSupply__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Other</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.SewageWasteDisposalOtherSpecify__c</fieldItem>
-                <identifier>RecordSewageWasteDisposalOtherSpecify_cField</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.WasteDisposal__c}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>Other</rightValue>
                     </criteria>
