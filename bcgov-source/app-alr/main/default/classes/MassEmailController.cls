@@ -261,7 +261,7 @@ public with sharing class MassEmailController {
                 }
                 //Fetch all contacts in a single query
                 Map<Id, List<AccountContactRelation>> allContacts = getAllContacts(accountIds);
-                Integer maxBlaToProcess = 50;
+                Integer maxBlaToProcess = 10;
                 Integer blaCount=0;
                 for(Account activeAccRec : activeAccounts){
                     isValidAcc = true;
