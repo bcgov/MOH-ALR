@@ -377,6 +377,17 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             String key = parent.AssessmentTaskId + '_' + parent.AssessmentIndDefinitionId;
             Boolean isNonCompliant = parent.Result == 'PHOCSNonCompliant';
 
+            String status;
+            if (parent.Result == 'PHOCSNonCompliant') {
+                status = 'Not Compliant';
+            } else if (parent.Result == 'Compliant') {
+                status = 'Compliant';
+            } else if (parent.Result == 'N/A (Not Applicable)') {
+                status = 'N/A (Not Applicable)';
+            } else {
+                status = parent.Result;
+            }
+
             String questionAndComments = parent.AssessmentIndDefinition != null
                 ? parent.AssessmentIndDefinition.Name
                 : '';
@@ -401,22 +412,21 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             results.add(new Map<String, Object>{
                 'Id' => parent.Id,
                 'QuestionandComments' => questionAndComments,
-                'Status' => isNonCompliant ? 'Not Compliant' : 'Compliant'
+                'Status' => status
             });
         }
 
         return results;
     }
 
-     private static WaterAdvisoryDetails getWaterAdvisoryDetails(Account accRecord) {
+    private static WaterAdvisoryDetails getWaterAdvisoryDetails(Account accRecord) {
         WaterAdvisoryDetails details = new WaterAdvisoryDetails();
 
         if (accRecord == null || accRecord.RecordTypeName__c != 'DrinkingWaterSystem') {
             return details;
         }
 
-        List<String> advisoryTypes = new List<String>();
-        List<String> reasons = new List<String>();
+        List<String> advisoryBlocks = new List<String>();
 
         for (Case advisory : [
             SELECT Id, TypeOfAdvisory__c, ReasonForAdvisory__c
@@ -425,26 +435,74 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             AND RecordType.DeveloperName = 'PHOCSWaterAdvisories'
             AND Status = 'Open'
             ORDER BY LastModifiedDate DESC
-        ]) {
+        ]){
             details.hasWaterAdvisories = true;
 
-            if (String.isNotBlank(advisory.TypeOfAdvisory__c)) {
-                advisoryTypes.add(advisory.TypeOfAdvisory__c);
-            }
+            List<String> reasonLines = new List<String>();
 
             if (String.isNotBlank(advisory.ReasonForAdvisory__c)) {
-                reasons.addAll(advisory.ReasonForAdvisory__c.split(';'));
+                for (String reason : advisory.ReasonForAdvisory__c.split(';')) {
+                    if (String.isNotBlank(reason)) {
+                        reasonLines.add('&bull; ' + reason.trim());
+                    }
+                }
             }
+
+            String advisoryBlock =
+                '<div style="' +
+                    'display:flex;' +
+                    'align-items:flex-start;' +
+                    'gap:12px;' +
+                    'margin-bottom:12px;' +
+                    'padding:14px 16px;' +
+                    'background:#fdb913;' +
+                    'border-radius:4px;' +
+                    'border:none;' +
+                    'box-shadow:0 1px 2px rgba(0,0,0,0.15);' +
+                '">' +
+
+                   '<div style="' +
+                        'font-size:20px;' +
+                        'line-height:1;' +
+                        'margin-top:2px;' +
+                        'flex-shrink:0;' +
+                    '">' +
+                        '⚠' +
+                    '</div>' +
+                    
+                    '<div style="color:#111;">' +
+
+                        '<div style="' +
+                            'font-weight:700;' +
+                            'margin-bottom:8px;' +
+                            'font-size:16px;' +
+                        '">' +
+                            'This facility is currently going under a ' +
+                            advisory.TypeOfAdvisory__c +
+                        '</div>' +
+
+                        '<div style="' +
+                            'font-weight:600;' +
+                            'margin-bottom:4px;' +
+                        '">' +
+                            'Underlying Problems:' +
+                        '</div>' +
+
+                        '<div style="' +
+                            'line-height:1.7;' +
+                        '">' +
+                            String.join(reasonLines, '<br/>') +
+                        '</div>' +
+
+                    '</div>' +
+
+                '</div>';
+
+            advisoryBlocks.add(advisoryBlock);
         }
 
         if (details.hasWaterAdvisories) {
-            details.waterAdvisoryHeadline =
-                'This facility is currently going under a ' +
-                String.join(new List<String>(new Set<String>(advisoryTypes)), ' | ');
-
-            details.waterAdvisoryReasonSummary =
-                'Underlying Problems: ' +
-                String.join(new List<String>(new Set<String>(reasons)), ' , ');
+            details.waterAdvisoryReasonSummary = String.join(advisoryBlocks, '');
         }
 
         return details;
@@ -539,13 +597,33 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         }
         return '';
     }
+
+    private static String formatPhoneNumber(String phone) {
+        if (String.isBlank(phone)) {
+            return '';
+        }
+
+        String digits = phone.replaceAll('[^0-9]', '');
+
+        if (digits.length() == 11 && digits.startsWith('1')) {
+            digits = digits.substring(1);
+        }
+
+        if (digits.length() == 10) {
+            return '(' + digits.substring(0, 3) + ') ' +
+                digits.substring(3, 6) + '-' +
+                digits.substring(6, 10);
+        }
+
+        return phone;
+    }
+
     public interface SObjectWrapper {
         Object wrap(SObject record);
     }
 
     public class WaterAdvisoryDetails {
         public Boolean hasWaterAdvisories = false;
-        public String waterAdvisoryHeadline = '';
         public String waterAdvisoryReasonSummary = '';
     }
 
@@ -578,7 +656,6 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 'HideAddressonPublicSite__c' => accRecord.HideAddressonPublicSite__c,
 
                 'HasWaterAdvisories' => advisoryDetails.hasWaterAdvisories,
-                'WaterAdvisoryHeadline' => advisoryDetails.waterAdvisoryHeadline,
                 'WaterAdvisoryReasonSummary' => advisoryDetails.waterAdvisoryReasonSummary
             };
 
@@ -678,7 +755,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             Map<String, Object> result = new Map<String, Object>{
                 'Id' => inspection.Id,
                 'Name' => inspection.Name,
-                'ActualVisitStartTime' => inspection.ActualVisitStartTime,
+                'ActualVisitStartTime' => inspection.ActualVisitStartTime != null ? inspection.ActualVisitStartTime.format('yyyy-MM-dd')  : '',
                 'InspectionType' => inspection.TestInspType__c,
                 'PHOCSViolationCount' => inspection.PHOCSViolationCount__c,
 
@@ -690,7 +767,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 'FacilityCHSAText' => inspection.Account?.FacilityCHSAText__c,
                 'PHOCSParentAccount' => inspection.Account?.PHOCSParentAccount__c,
                 'HidePhoneonPublicSite' => inspection.Account?.HidePhoneonPublicSite__c,
-                'Phone' =>  inspection.Account?.Phone,
+                'Phone' => inspection.Account?.HidePhoneonPublicSite__c == true ? '' : formatPhoneNumber(inspection.Account?.Phone),
                 'PHOCSOutstandingViolations' => inspection.Account?.PHOCSOutstandingViolations__c,
                 'OperatingMonths' => inspection.Account?.OperatingMonths__c,
                 'PhysicalLocation' => inspection.Account?.PhysicalLocation__c,
@@ -705,7 +782,6 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 'PhysicalAddressCountry' => inspection.Account?.Physical_Address__c?.getCountry(),
 
                 'HasWaterAdvisories' => advisoryDetails.hasWaterAdvisories,
-                'WaterAdvisoryHeadline' => advisoryDetails.waterAdvisoryHeadline,
                 'WaterAdvisoryReasonSummary' => advisoryDetails.waterAdvisoryReasonSummary
             };
 
