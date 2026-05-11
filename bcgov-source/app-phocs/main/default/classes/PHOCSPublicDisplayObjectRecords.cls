@@ -309,6 +309,16 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             throw new AuraHandledException('Inspection ID is required.');
         }
 
+        Map<String, String> statusMap = new Map<String, String>{
+            'Compliant' => 'Compliant',
+            'Non-compliant' => 'Non-compliant',
+            'NA' => 'NA',
+            'N/A (Not Applicable)' => 'Not Applicable',
+            'N/S (Not Assessed)' => 'Not Inspected',
+            'PHOCSNonCompliant' => 'Non Compliant',
+            'Abandoned' => 'Abandoned'
+        };
+
         List<Object> results = new List<Object>();
 
         List<InspectionAssessmentInd> parentQuestions = [
@@ -377,16 +387,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             String key = parent.AssessmentTaskId + '_' + parent.AssessmentIndDefinitionId;
             Boolean isNonCompliant = parent.Result == 'PHOCSNonCompliant';
 
-            String status;
-            if (parent.Result == 'PHOCSNonCompliant') {
-                status = 'Not Compliant';
-            } else if (parent.Result == 'Compliant') {
-                status = 'Compliant';
-            } else if (parent.Result == 'N/A (Not Applicable)') {
-                status = 'N/A (Not Applicable)';
-            } else {
-                status = parent.Result;
-            }
+            String status = statusMap.containsKey(parent.Result) ? statusMap.get(parent.Result) : parent.Result;
 
             String questionAndComments = parent.AssessmentIndDefinition != null
                 ? parent.AssessmentIndDefinition.Name
