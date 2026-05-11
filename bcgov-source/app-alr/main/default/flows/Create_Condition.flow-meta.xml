@@ -2,6 +2,49 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <apiVersion>61.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Only_ALRConditions</name>
+        <label>Only ALRConditions</label>
+        <locationX>182</locationX>
+        <locationY>242</locationY>
+        <assignmentItems>
+            <assignToReference>varNewCondition.RecordTypeId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_ALRConditions_Record_Type.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>New_Condition</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <description>To make sure that Condition Name is not blank</description>
+        <name>Check_Condition_Name</name>
+        <label>Check Condition Name</label>
+        <locationX>182</locationX>
+        <locationY>458</locationY>
+        <defaultConnector>
+            <targetReference>Create_Condition_Record</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Condition Name Provided</defaultConnectorLabel>
+        <rules>
+            <name>Missing_Condition_Name</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varNewCondition.Condition_Name__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Name_Required_Message</targetReference>
+            </connector>
+            <label>Missing Condition Name</label>
+        </rules>
+    </decisions>
+    <description>ALRConditions Record Type onlyv6</description>
     <dynamicChoiceSets>
         <name>ConiditionName</name>
         <dataType>Picklist</dataType>
@@ -40,8 +83,8 @@
     <recordCreates>
         <name>Create_Condition_Record</name>
         <label>Create Condition Record</label>
-        <locationX>176</locationX>
-        <locationY>242</locationY>
+        <locationX>314</locationX>
+        <locationY>566</locationY>
         <connector>
             <targetReference>GetCurrentRecord</targetReference>
         </connector>
@@ -54,7 +97,7 @@
         <inputAssignments>
             <field>Condition_Name__c</field>
             <value>
-                <elementReference>Condition_Name</elementReference>
+                <elementReference>varNewCondition.Condition_Name__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -79,10 +122,39 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
     <recordLookups>
+        <description>To make sure that only ALRConditions Record Type picklist values are visible.</description>
+        <name>Get_ALRConditions_Record_Type</name>
+        <label>Get ALRConditions Record Type</label>
+        <locationX>182</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Only_ALRConditions</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SobjectType</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Conditions__c</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>ALRConditions</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>RecordType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>GetCurrentRecord</name>
         <label>GetCurrentRecord</label>
-        <locationX>176</locationX>
-        <locationY>350</locationY>
+        <locationX>314</locationX>
+        <locationY>674</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Success</targetReference>
@@ -109,15 +181,43 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <screens>
+        <name>Name_Required_Message</name>
+        <label>Name Required Message</label>
+        <locationX>50</locationX>
+        <locationY>566</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <isGoTo>true</isGoTo>
+            <targetReference>New_Condition</targetReference>
+        </connector>
+        <fields>
+            <name>NameRequiredMessage</name>
+            <fieldText>&lt;p&gt;Name is mandatory. Please select a value.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
         <name>New_Condition</name>
         <label>New Condition</label>
-        <locationX>176</locationX>
-        <locationY>134</locationY>
+        <locationX>182</locationX>
+        <locationY>350</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <connector>
-            <targetReference>Create_Condition_Record</targetReference>
+            <targetReference>Check_Condition_Name</targetReference>
         </connector>
         <fields>
             <name>Condition_Details</name>
@@ -127,21 +227,33 @@
                 <name>Condition_Details_Column1</name>
                 <fieldType>Region</fieldType>
                 <fields>
-                    <name>Condition_Name</name>
-                    <choiceReferences>ConiditionName</choiceReferences>
-                    <dataType>String</dataType>
-                    <fieldText>Condition Name</fieldText>
-                    <fieldType>DropdownBox</fieldType>
+                    <fieldType>ObjectProvided</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
+                    <isRequired>false</isRequired>
+                    <objectFieldReference>varNewCondition.Condition_Name__c</objectFieldReference>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
                 </fields>
                 <fields>
                     <name>Description</name>
                     <dataType>String</dataType>
                     <fieldText>Description</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
                 </fields>
                 <inputParameters>
                     <name>width</name>
@@ -159,16 +271,30 @@
                     <dataType>Date</dataType>
                     <fieldText>Effective From</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
                 </fields>
                 <fields>
                     <name>Effective_To</name>
                     <dataType>Date</dataType>
                     <fieldText>Effective To</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
                 </fields>
                 <inputParameters>
                     <name>width</name>
@@ -180,6 +306,14 @@
             </fields>
             <isRequired>false</isRequired>
             <regionContainerType>SectionWithHeader</regionContainerType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
         </fields>
         <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
         <showFooter>true</showFooter>
@@ -188,8 +322,8 @@
     <screens>
         <name>Success</name>
         <label>Success</label>
-        <locationX>176</locationX>
-        <locationY>458</locationY>
+        <locationX>314</locationX>
+        <locationY>782</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -197,15 +331,23 @@
             <name>SuccessMessage</name>
             <fieldText>&lt;p&gt;&lt;strong style=&quot;color: rgb(8, 153, 31);&quot;&gt;{!SuccessMsg}&lt;/strong&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
         </fields>
         <showFooter>true</showFooter>
         <showHeader>false</showHeader>
     </screens>
     <start>
-        <locationX>50</locationX>
+        <locationX>56</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>New_Condition</targetReference>
+            <targetReference>Get_ALRConditions_Record_Type</targetReference>
         </connector>
     </start>
     <status>Active</status>
@@ -222,5 +364,13 @@
         <isCollection>false</isCollection>
         <isInput>true</isInput>
         <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varNewCondition</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Conditions__c</objectType>
     </variables>
 </Flow>
