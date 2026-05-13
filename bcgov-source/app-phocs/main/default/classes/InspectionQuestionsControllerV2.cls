@@ -138,48 +138,40 @@ public with sharing class InspectionQuestionsControllerV2 {
     private static Map<String, Integer> getResolvedViolationCountsByAssessmentDefinition(Id visitId) {
         Map<String, Integer> result = new Map<String, Integer>();
         if (visitId == null) return result;
-
+        
         try {
-            Visit currentVisit = [
-                SELECT Id, AccountId
-                FROM Visit
-                WHERE Id = :visitId
-                LIMIT 1
-            ];
-
+            Visit currentVisit = [SELECT Id, AccountId, ContextId, Account.Type FROM Visit WHERE Id = :visitId LIMIT 1];
+            
             if (currentVisit == null || currentVisit.AccountId == null) {
                 return result;
             }
-
-            List<AggregateResult> agg = [
-                SELECT 
-                    InspectionAssmntInd.AssessmentIndDefinitionId defId,
-                    InspectionAssmntInd.AssessmentIndDefinition.Category__c category,
-                    COUNT(Id) violationsCount
-                FROM RegulatoryCodeViolation
-                WHERE Status = 'Resolved'
-                AND Inspection.AccountId = :currentVisit.AccountId
-                AND InspectionAssmntInd.AssessmentIndDefinitionId != null
-                GROUP BY 
-                    InspectionAssmntInd.AssessmentIndDefinitionId,
-                    InspectionAssmntInd.AssessmentIndDefinition.Category__c
-            ];
-
+            Boolean isRecreationalWater = currentVisit.Account.Type == 'Recreational Water';
+            
+            List<AggregateResult> agg;
+            
+            if(isRecreationalWater && currentVisit.ContextId != null){
+                agg = [SELECT InspectionAssmntInd.AssessmentIndDefinitionId defId, InspectionAssmntInd.AssessmentIndDefinition.Category__c category, COUNT(Id) violationsCount
+                       FROM RegulatoryCodeViolation WHERE Status = 'Resolved' AND Asset__c =: currentVisit.ContextId AND InspectionAssmntInd.AssessmentIndDefinitionId != null
+                       GROUP BY InspectionAssmntInd.AssessmentIndDefinitionId, InspectionAssmntInd.AssessmentIndDefinition.Category__c];
+            } else{
+                agg = [SELECT InspectionAssmntInd.AssessmentIndDefinitionId defId, InspectionAssmntInd.AssessmentIndDefinition.Category__c category, COUNT(Id) violationsCount
+                       FROM RegulatoryCodeViolation WHERE Status = 'Resolved' AND Inspection.AccountId =: currentVisit.AccountId AND InspectionAssmntInd.AssessmentIndDefinitionId != null
+                       GROUP BY InspectionAssmntInd.AssessmentIndDefinitionId, InspectionAssmntInd.AssessmentIndDefinition.Category__c];}
+            
             for (AggregateResult ar : agg) {
                 String defId = String.valueOf(ar.get('defId'));
                 String category = (String) ar.get('category');
                 Integer count = (Integer) ar.get('violationsCount');
-
+                
                 if (category != null) {
                     String key = category + ':' + defId;
                     result.put(key, count);
                 }
-            }
-
+            }            
         } catch (Exception ex) {
             System.debug('Failed to compute resolved violation counts: ' + ex.getMessage());
         }
-
+        
         return result;
     }
 

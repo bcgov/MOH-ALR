@@ -9,6 +9,7 @@
                 06 Apr -  PHOCS-3459        -  Accenture   -  return PSE ActionPlanTemplateNames.
                 06 Apr -  PHOCS-3349        -  Accenture   -  return Food ActionPlanTemplateNames.
                 21 Apr -  PHOCS-3490        -  Accenture   -  return Drinking Water ActionPlanTemplateNames.
+                11 May -  PHOCS-3948        -  Accenture   -  return Recreational Water ActionPlanTemplateNames.
 ***********************************************************************************************/
 public without sharing class InspectionAssessmentTaskCreationService {
     public static String className = 'InspectionAssessmentTaskCreationService';
@@ -17,7 +18,8 @@ public without sharing class InspectionAssessmentTaskCreationService {
     public static String DAIRY_ACCOUNTTYPE = 'Dairy';
     public static String PSE_ACCOUNTTYPE = 'Personal Services';
     public static String FOOD_ACCOUNTTYPE = 'Food';
-    public static String DRINKINGWATER_ACCOUNTTYPE = 'Drinking Water'; 
+    public static String DRINKINGWATER_ACCOUNTTYPE = 'Drinking Water';
+    public static String RECREATIONALWATER_ACCOUNTTYPE = 'Recreational Water';
     public static Id recordTypePHOCSInspection = Schema.SObjectType.Visit.getRecordTypeInfosByDeveloperName().get('PHOCSInspection').getRecordTypeId();
 /**
 * @author: Deepak
@@ -50,7 +52,7 @@ public without sharing class InspectionAssessmentTaskCreationService {
             return;
         } 
         try {
-            Visit visit = [SELECT Id, RecordType.DeveloperName, AccountId, Account.Type, Account.RecordType.DeveloperName, VisitType.Name FROM Visit WHERE Id = :visitId LIMIT 1];
+            Visit visit = [SELECT Id, RecordType.DeveloperName, AccountId, Account.Type, Account.RecordType.DeveloperName, VisitType.Name, ContextId FROM Visit WHERE Id = :visitId LIMIT 1];
             
             if (visit.RecordTypeId != recordTypePHOCSInspection){
                 return;
@@ -59,9 +61,10 @@ public without sharing class InspectionAssessmentTaskCreationService {
             Id facilityAccountId = visit.AccountId != null ? visit.AccountId : null;
             String accountType = visit.Account != null ? visit.Account.Type : null;
             String inspectionType = visit.VisitType != null ? visit.VisitType.Name : null;
+            Id relatedAssetId = visit.ContextId;
             
             Set<String> templateNames = new Set<String>();
-            templateNames = getActionPlanTemplateNames(facilityAccountId, accountType, inspectionType);
+            templateNames = getActionPlanTemplateNames(facilityAccountId, accountType, inspectionType, relatedAssetId);
             
             if (templateNames.isEmpty()) return;
             
@@ -242,7 +245,7 @@ public without sharing class InspectionAssessmentTaskCreationService {
 * @description: The purpose of this Method is to return ActionPlanTemplateNames.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */    
-    public static Set<String> getActionPlanTemplateNames(Id facilityAccountId, String accountType, String inspectionType){
+    public static Set<String> getActionPlanTemplateNames(Id facilityAccountId, String accountType, String inspectionType, Id relatedAssetId){
         Set<String> getAPTemplatesName = new Set<String>();
         Set<String> attributeTypesFromAssets = new Set<String>();
         Id dairyAssetRTId = Schema.SObjectType.Asset.getRecordTypeInfosByDeveloperName().get('PHOCSDairyPlantRoomsandEquipment').getRecordTypeId();
@@ -253,17 +256,19 @@ public without sharing class InspectionAssessmentTaskCreationService {
             }
             
             List<PHOCSActionPlanTemplateDecisionMap__mdt> decisionMaps = [SELECT ActionPlanTemplateName__c, InspectionFacilityType__c, InspectionCategory__c, AttributeType__c, Active__c,
-                                                                          CategoryL1__c, CategoryL2__c, CategoryL3__c
+                                                                          CategoryL1__c, CategoryL2__c, CategoryL3__c, PoolType__c, PoolSubType__c
                                                                           FROM PHOCSActionPlanTemplateDecisionMap__mdt WHERE Active__c = true AND InspectionFacilityType__c =: accountType];
             
             if(accountType == DAIRY_ACCOUNTTYPE){       
                 getAPTemplatesName.addAll(getDairyTemplates(facilityAccountId, inspectionType, decisionMaps));
-            } else if (accountType == PSE_ACCOUNTTYPE) {
+            } else if (accountType == PSE_ACCOUNTTYPE){
                 getAPTemplatesName.addAll(getPSETemplates(facilityAccountId, decisionMaps));
-            } else if (accountType == FOOD_ACCOUNTTYPE) {
+            } else if (accountType == FOOD_ACCOUNTTYPE){
                 getAPTemplatesName.addAll(getFoodTemplates(facilityAccountId, decisionMaps));
-            } else if (accountType == DRINKINGWATER_ACCOUNTTYPE) {
+            } else if (accountType == DRINKINGWATER_ACCOUNTTYPE){
                 getAPTemplatesName.addAll(getDrinkingWaterTemplates(facilityAccountId, decisionMaps));
+            } else if (accountType == RECREATIONALWATER_ACCOUNTTYPE){
+                getAPTemplatesName.addAll(getRecreationalWaterTemplates(facilityAccountId, decisionMaps, relatedAssetId));
             }
             
         } catch(Exception e){
@@ -387,6 +392,48 @@ public without sharing class InspectionAssessmentTaskCreationService {
                 templateNames.add(dm.ActionPlanTemplateName__c);
             }
         }
+        return templateNames;
+    }
+    
+/**
+* @author: Deepak
+* @date: 11 May 2026
+* @description: The purpose of this Method is to return Recreational Water ActionPlanTemplateNames.
+* @Modification Log:
+* [Date] - [Change Reference] - [Changed By] - [Description]
+*/
+    private static Set<String> getRecreationalWaterTemplates(Id facilityAccountId, List<PHOCSActionPlanTemplateDecisionMap__mdt> decisionMaps, Id relatedAssetId){
+        Set<String> templateNames = new Set<String>();
+        Id recWaterAssetRTId = Schema.SObjectType.Asset.getRecordTypeInfosByDeveloperName().get('PHOCSRecreationalWater').getRecordTypeId();
+        
+        if (relatedAssetId == null){
+            return templateNames;
+        }        
+        Asset recreationalAsset = [SELECT Type__c, PoolType__c, PoolSubtype__c, HeatTrace__c FROM Asset WHERE Id =: relatedAssetId AND RecordTypeId =: recWaterAssetRTId  LIMIT 1];         
+        
+        String assetType = recreationalAsset.Type__c;
+        String assetPoolType = recreationalAsset.PoolType__c;
+        String assetPoolSubType = recreationalAsset.PoolSubtype__c;
+        
+        if (assetType == 'Beach'){
+            return templateNames;
+        }
+        
+        for (PHOCSActionPlanTemplateDecisionMap__mdt decisionMap : decisionMaps){ 
+            if (decisionMap.AttributeType__c == null) {
+                templateNames.add(decisionMap.ActionPlanTemplateName__c);
+            }
+            if(decisionMap.AttributeType__c == assetType && decisionMap.PoolType__c == assetPoolType && decisionMap.PoolSubType__c == assetPoolSubType){                
+                templateNames.add(decisionMap.ActionPlanTemplateName__c);
+            }
+            if (recreationalAsset.HeatTrace__c == true && decisionMap.AttributeType__c == 'Heat Trace'){
+                templateNames.add(decisionMap.ActionPlanTemplateName__c);
+            }
+            if (assetType == 'Public' && decisionMap.AttributeType__c == 'Public' && String.isBlank(decisionMap.PoolType__c) && String.isBlank(decisionMap.PoolSubType__c)){
+                templateNames.add(decisionMap.ActionPlanTemplateName__c);
+            }
+        }      
+        
         return templateNames;
     }
     
