@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <actionCalls>
+        <name>assetVisit_PageRedirection</name>
+        <label>Page Redirection</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>c:OpenInspection</actionName>
+        <actionType>component</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>recordId</name>
+            <value>
+                <elementReference>visitId</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>c:OpenInspection</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <actionCalls>
         <name>Page_Redirection</name>
         <label>Page Redirection</label>
         <locationX>0</locationX>
@@ -215,6 +233,28 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Asset_Account_Type</name>
+        <label>Asset Account Type</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Asset_RecWater</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Asset_Record.Account.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Recreational Water</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Asset_RW_New_Inspection_Inspection</targetReference>
+            </connector>
+            <label>Asset - Rec Water</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>BLA_AccountType</name>
         <label>BLA Account Type</label>
         <locationX>0</locationX>
@@ -371,9 +411,6 @@
         <label>Decision Based on Context</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <defaultConnector>
-            <targetReference>Insp_Type_for_facility</targetReference>
-        </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>FromAccount</name>
@@ -420,6 +457,36 @@
             </connector>
             <label>Case</label>
         </rules>
+        <rules>
+            <name>Inspection</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Insp_Record.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Insp_Type_for_facility</targetReference>
+            </connector>
+            <label>Inspection</label>
+        </rules>
+        <rules>
+            <name>Asset</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Asset_Record.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Asset_Account_Type</targetReference>
+            </connector>
+            <label>Asset</label>
+        </rules>
     </decisions>
     <decisions>
         <name>Insp_Type_for_facility</name>
@@ -449,7 +516,8 @@
     <description>Clone from VisitCreation flow and update Screen elements to align with PHOCS requirements
 
 V9 - Adding Insp types to Drinking Water
-V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
+V10- Removing the banner Msg for Non-Dairy in Insp path.
+V12- Adding Asset path for Rec water as part of EHIS-3692.</description>
     <dynamicChoiceSets>
         <name>dairyInspTypeChoiceSet</name>
         <dataType>String</dataType>
@@ -715,6 +783,83 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
             <field>VisitTypeId</field>
             <value>
                 <elementReference>Acc_InspectionTypeId.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Visit</object>
+    </recordCreates>
+    <recordCreates>
+        <name>Asset_RW_Visit_Record_Creation</name>
+        <label>Visit Record Creation</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignRecordIdToReference>visitId</assignRecordIdToReference>
+        <connector>
+            <targetReference>assetVisit_PageRedirection</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>AccountId</field>
+            <value>
+                <elementReference>Asset_RW_Account.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ActualVisitStartTime</field>
+            <value>
+                <elementReference>Asset_RW_Actual_Start_Time</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ContextId</field>
+            <value>
+                <elementReference>Asset_RW_ContextId.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InspectionMethod__c</field>
+            <value>
+                <elementReference>Asset_RW_Inspection_Method</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InspectionTypeOtherSpecify__c</field>
+            <value>
+                <elementReference>Asset_RW_InspectionTypeOther</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InstructionDescription</field>
+            <value>
+                <elementReference>Asset_RW_Special_Instruction</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PlaceId</field>
+            <value>
+                <elementReference>Asset_RW_Location.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PlannedVisitStartTime</field>
+            <value>
+                <elementReference>Asset_RW_Actual_Start_Time</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <elementReference>Get_PHOCS_Inspection_RecordTypeID.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>VisitPriority</field>
+            <value>
+                <elementReference>Asset_RW_Inspection_Priority</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>VisitTypeId</field>
+            <value>
+                <elementReference>inspecTypeId</elementReference>
             </value>
         </inputAssignments>
         <object>Visit</object>
@@ -1671,6 +1816,27 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
+        <name>Get_Asset_Record</name>
+        <label>Get Asset Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Assosciated_Location</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Asset</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>Get_Assosciated_Location</name>
         <label>Get Assosciated Location</label>
         <locationX>0</locationX>
@@ -1706,6 +1872,13 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
             <operator>EqualTo</operator>
             <value>
                 <elementReference>Get_Insp_Record.AccountId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>ParentRecordId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Asset_Record.AccountId</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
@@ -1761,7 +1934,7 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Get_Assosciated_Location</targetReference>
+            <targetReference>Get_Asset_Record</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -1995,7 +2168,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -2025,7 +2197,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -2041,7 +2212,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -2112,7 +2282,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -2127,7 +2296,303 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <name>Acc_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithoutHeader</regionContainerType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Asset_RW_New_Inspection_Inspection</name>
+        <label>New Inspection: Inspection</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Asset_RW_Visit_Record_Creation</targetReference>
+        </connector>
+        <fields>
+            <name>Asset_RW_New_Inspection_Inspection_Section1</name>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Asset_RW_New_Inspection_Inspection_Section1_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Asset_RW_Account</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>AccountId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Account</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>Get_Asset_Record.AccountId</elementReference>
+                        </value>
+                    </inputParameters>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Asset_RW_Location</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>LocationId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Place</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>Get_Assosciated_Location.LocationId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Asset_RW_InspectionTypeId</name>
+                    <choiceReferences>foodIndustPersonalRecInspecTypeRecordChoiceSet</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Type</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Asset_RW_InspectionTypeOther</name>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Type Other- Specify</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>inspecTypeLabel</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <stringValue>Other</stringValue>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
+                <fields>
+                    <name>Asset_RW_Inspection_Method</name>
+                    <choiceReferences>VirtualSiteInspection</choiceReferences>
+                    <choiceReferences>ScheduledonSiteInspection</choiceReferences>
+                    <choiceReferences>UnannouncedonSiteInspection</choiceReferences>
+                    <choiceReferences>OffsiteInspection</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Method</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Asset_RW_Actual_Start_Time</name>
+                    <dataType>DateTime</dataType>
+                    <fieldText>Actual Start Time</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>Asset_RW_New_Inspection_Inspection_Section1_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Asset_RW_ContextId</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>ContextId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>ContextId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>false</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>recordId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Asset_RW_Inspection_Priority</name>
+                    <choiceReferences>VisitPriorityChoices</choiceReferences>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <stringValue>Medium</stringValue>
+                    </defaultValue>
+                    <fieldText>Inspection Priority</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Asset_RW_Special_Instruction</name>
+                    <fieldText>Special Instruction</fieldText>
+                    <fieldType>LargeTextArea</fieldType>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -2299,7 +2764,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -2315,7 +2779,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -2345,7 +2808,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -2361,7 +2823,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -2438,7 +2899,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -2453,7 +2913,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <name>BLA_FIPR_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -2664,7 +3123,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -2694,7 +3152,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -2710,7 +3167,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -2787,7 +3243,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -2802,7 +3257,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <name>BLA_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -2974,7 +3428,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -2990,7 +3443,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3020,7 +3472,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3036,7 +3487,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3113,7 +3563,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3128,7 +3577,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <name>BLADairy_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3277,7 +3725,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3293,7 +3740,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3323,7 +3769,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3339,7 +3784,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3416,7 +3860,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3431,7 +3874,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <name>BLADW_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3642,7 +4084,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3672,7 +4113,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3688,7 +4128,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3765,7 +4204,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3780,7 +4218,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <name>Case_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3952,7 +4389,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3968,7 +4404,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3998,7 +4433,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4014,7 +4448,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4091,7 +4524,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4106,7 +4538,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <name>CaseDairy_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4255,7 +4686,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4271,7 +4701,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4301,7 +4730,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4317,7 +4745,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4394,7 +4821,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4409,7 +4835,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <name>CaseDW_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4581,7 +5006,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4597,7 +5021,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4627,7 +5050,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4643,7 +5065,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4720,7 +5141,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4735,7 +5155,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <name>CaseFIPR_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4884,7 +5303,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4900,7 +5318,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4930,7 +5347,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4946,7 +5362,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5017,7 +5432,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5032,7 +5446,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <name>DW_Acc_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5255,7 +5668,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5285,7 +5697,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5301,7 +5712,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5397,6 +5807,12 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                             <booleanValue>false</booleanValue>
                         </value>
                     </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>Get_Insp_Record.ContextId</elementReference>
+                        </value>
+                    </inputParameters>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <storeOutputAutomatically>true</storeOutputAutomatically>
@@ -5418,7 +5834,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5433,7 +5848,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <name>Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5485,7 +5899,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
             <dataType>String</dataType>
             <fieldText>Select Inspection Type</fieldText>
             <fieldType>DropdownBox</fieldType>
-            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <styleProperties>
                 <verticalAlignment>
@@ -5637,7 +6050,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5653,7 +6065,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5683,7 +6094,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5699,7 +6109,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5770,7 +6179,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5785,7 +6193,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <name>Dairy_Acc_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5957,7 +6364,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5973,7 +6379,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -6003,7 +6408,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -6019,7 +6423,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -6090,7 +6493,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -6105,7 +6507,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
                     <name>FIPR_Acc_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -6156,7 +6557,6 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.</description>
             <dataType>String</dataType>
             <fieldText>Select Inspection Type</fieldText>
             <fieldType>DropdownBox</fieldType>
-            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <styleProperties>
                 <verticalAlignment>

@@ -316,7 +316,7 @@ public with sharing class InspectionViolationService {
                 return result;
             }
             
-            Map<Id, AssessmentTask> taskMap = new Map<Id, AssessmentTask>([SELECT Id, ParentId, Parent.AccountId FROM AssessmentTask WHERE Id IN :assessmentTaskIds]);           
+            Map<Id, AssessmentTask> taskMap = new Map<Id, AssessmentTask>([SELECT Id, ParentId, Parent.AccountId, Parent.ContextId FROM AssessmentTask WHERE Id IN :assessmentTaskIds]);           
             
             List<RegulatoryCodeAssessmentInd> regCodeAsmntList = [SELECT Id, AssessmentIndDefinitionId, RegulatoryCodeId FROM RegulatoryCodeAssessmentInd WHERE AssessmentIndDefinitionId IN :assessmentIndDefIds];
             
@@ -337,6 +337,7 @@ public with sharing class InspectionViolationService {
                 }
                 Id inspectionId = taskMap.get(ind.AssessmentTaskId)?.ParentId;
                 Id inspectionAccountId = taskMap.get(ind.AssessmentTaskId)?.Parent?.AccountId;
+                Id inspectionAssetId = taskMap.get(ind.AssessmentTaskId)?.Parent?.ContextId;
                 
                 for (RegulatoryCodeAssessmentInd mapItem : mappings) {
                     RegulatoryCodeViolation vio = new RegulatoryCodeViolation();
@@ -344,6 +345,7 @@ public with sharing class InspectionViolationService {
                     vio.InspectionAssmntIndId = ind.Id;
                     vio.InspectionId = inspectionId;
                     vio.PHOCSParentAccountID__c = inspectionAccountId;
+                    vio.Asset__c = inspectionAssetId;
                     vio.DateCreated = System.now();
                     vio.RegulatoryCodeId = mapItem.RegulatoryCodeId;
                     vio.Corrected_During_Inspection__c = ind.CorrectedDuringInspection__c;
