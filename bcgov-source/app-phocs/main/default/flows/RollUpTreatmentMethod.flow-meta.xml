@@ -12,7 +12,7 @@
             <name>Account_Updated</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>$Record.AccountId</leftValueReference>
+                <leftValueReference>$Record.ParentId</leftValueReference>
                 <operator>IsChanged</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
@@ -134,7 +134,7 @@
         <inputAssignments>
             <name>AccountId</name>
             <value>
-                <elementReference>$Record__Prior.AccountId</elementReference>
+                <elementReference>$Record__Prior.ParentId</elementReference>
             </value>
         </inputAssignments>
     </subflows>
@@ -147,7 +147,7 @@
         <inputAssignments>
             <name>AccountId</name>
             <value>
-                <elementReference>$Record.AccountId</elementReference>
+                <elementReference>$Record.ParentId</elementReference>
             </value>
         </inputAssignments>
     </subflows>
