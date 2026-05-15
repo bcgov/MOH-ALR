@@ -5,6 +5,7 @@
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
 ALR -560             Sweta          Renewal verification and renewal mass email
 * @Updated by        : Liliane Nassar (CGi) -BCMOHAM-22939  ,BCMOHAD-28112
+* @Updated by        : Nikhil Jeenru (CGi) - BCMOHAD-30953
 ***********************************************************************************************/
 public with sharing class MassEmailController {
     Public Static Id templateId = NULL;
@@ -117,8 +118,14 @@ public with sharing class MassEmailController {
                     
                     accMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, activeAccRec);
                     
-                    accContactMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, 
-                                        activeAccRec.AccountContactRelations[0]);
+                    // check if valid contact exists for the Active Account Record.
+                    if(activeAccRec.AccountContactRelations.size() != 0) {
+                        accContactMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, 
+                                                activeAccRec.AccountContactRelations[0]);
+                    }
+                   else {
+                        blaErrMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, BCMOH_Constants.noPrimaryContact);
+                    }
                     if(activeAccRec.Assets.size() != 0) {
                         Integer unitCounter = 0;
                         for(Asset parentAsset : activeAccRec.Assets) {
@@ -137,16 +144,23 @@ public with sharing class MassEmailController {
                         else {
                             tmpAccId = blaRec.Account.ParentId;
                         }
-                        
-                        for (AccountContactRelation cont : allContacts.get(tmpAccId)) {
-                            contactIdList.add(cont.ContactId);
-                            
-                            if (blaContactMap.containsKey(blaRecord)) {
-                                blaContactMap.get(blaRecord).add(cont.ContactId);
-                            } else {
-                                blaContactMap.put(blaRecord, new List<Id> { cont.ContactId });
-                            }
+
+                        List<AccountContactRelation> acrList = allContacts.get(tmpAccId);
+
+                        if (acrList == null || acrList.isEmpty()) {
+                            // No related contacts for this account → safely skip
+                            continue;
                         }
+
+                        for (AccountContactRelation cont : acrList) {
+                            contactIdList.add(cont.ContactId);
+
+                            if (!blaContactMap.containsKey(blaRecord)) {
+                                blaContactMap.put(blaRecord, new List<Id>());
+                            }
+                            blaContactMap.get(blaRecord).add(cont.ContactId);
+                        }
+
                     }
                 }
 
