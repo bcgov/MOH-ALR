@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <OmniScript xmlns="http://soap.sforce.com/2006/04/metadata">
-    <description>Omni Script to capture  Food Premise Operating Permit request from Operating Portal.</description>
+    <description>Omni Script to capture  Low-Risk or High Risk Temporary Food Service Operating Permit request from Operating Portal.</description>
     <elementTypeComponentMapping>{&quot;ElementTypeToHTMLTemplateList&quot;:[]}</elementTypeComponentMapping>
-    <isActive>false</isActive>
+    <isActive>true</isActive>
     <isIntegrationProcedure>false</isIntegrationProcedure>
-    <isManagedUsingStdDesigner>false</isManagedUsingStdDesigner>
+    <isManagedUsingStdDesigner>true</isManagedUsingStdDesigner>
     <isMetadataCacheDisabled>false</isMetadataCacheDisabled>
     <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
     <isTestProcedure>false</isTestProcedure>
     <isWebCompEnabled>true</isWebCompEnabled>
     <language>English</language>
-    <name>PHOCS Food Premise Operating Permit</name>
+    <name>PHOCS Low or High Risk Temporary Food Service Operating Permit</name>
     <omniProcessElements>
         <childElements>
             <isActive>true</isActive>
@@ -21,7 +21,7 @@
             <propertySetConfig>{
   &quot;controlWidth&quot; : 12,
   &quot;label&quot; : &quot;TextBlock1&quot;,
-  &quot;text&quot; : &quot;&lt;div class=\&quot;slds-form-element slds-form-element_stacked\&quot;&gt;\n&lt;div class=\&quot;slds-form-element__control odc-rich-text\&quot; title=\&quot;edit\&quot;&gt;\n&lt;div class=\&quot;slds-box odc-rich-text-action\&quot;&gt;\n&lt;p&gt;&lt;span style=\&quot;mso-fareast-font-family: &apos;Times New Roman&apos;;\&quot;&gt;&lt;em data-renderer-mark=\&quot;true\&quot;&gt;Thank you. Your application has been submitted successfully. Application Number: %BLAApplicationId%.&lt;/em&gt;&lt;/span&gt;&lt;/p&gt;\n&lt;/div&gt;\n&lt;/div&gt;\n&lt;/div&gt;&quot;,
+  &quot;text&quot; : &quot;&lt;div class=\&quot;slds-form-element slds-form-element_stacked\&quot;&gt;\n&lt;div class=\&quot;slds-form-element__control odc-rich-text\&quot; title=\&quot;edit\&quot;&gt;\n&lt;div class=\&quot;slds-box odc-rich-text-action\&quot;&gt;\n&lt;p&gt;&lt;span style=\&quot;mso-fareast-font-family: &apos;Times New Roman&apos;;\&quot;&gt;&lt;em data-renderer-mark=\&quot;true\&quot;&gt;Thank you. Your application has been submitted successfully. Application Number: %BLAApplicationId%.&lt;/em&gt;&lt;br&gt;&lt;/span&gt;&lt;/p&gt;\n&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n&lt;/div&gt;\n&lt;/div&gt;\n&lt;/div&gt;&quot;,
   &quot;show&quot; : null,
   &quot;dataJSON&quot; : false,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
@@ -83,7 +83,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>9.0</sequenceNumber>
+        <sequenceNumber>10.0</sequenceNumber>
         <type>Step</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -91,11 +91,11 @@
             <isActive>true</isActive>
             <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
             <level>1.0</level>
-            <name>OtherServicesAtThisAddressSelect</name>
+            <name>DescriptionOfServicesText</name>
             <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
             <propertySetConfig>{
   &quot;controlWidth&quot; : 12,
-  &quot;label&quot; : &quot;Other Services at this Address&quot;,
+  &quot;label&quot; : &quot;Description of Services&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
   &quot;required&quot; : false,
@@ -106,22 +106,90 @@
   &quot;defaultValue&quot; : null,
   &quot;help&quot; : false,
   &quot;helpText&quot; : &quot;&quot;,
-  &quot;options&quot; : [ {
-    &quot;name&quot; : &quot;Recreational Water Facility&quot;,
-    &quot;value&quot; : &quot;Recreational Water Facility&quot;,
-    &quot;autoAdv&quot; : null
-  }, {
-    &quot;name&quot; : &quot;Spa / Tattoo / Piercing / Hair&quot;,
-    &quot;value&quot; : &quot;Spa / Tattoo / Piercing / Hair&quot;,
-    &quot;autoAdv&quot; : null
-  }, {
-    &quot;name&quot; : &quot;Sell Tobacco / Vapour Products&quot;,
-    &quot;value&quot; : &quot;Sell Tobacco / Vapour Products&quot;,
-    &quot;autoAdv&quot; : null
-  } ],
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;maxLength&quot; : 255,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;hrtfs&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;field&quot; : &quot;requestType&quot;
+      } ]
+    }
+  },
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>15.0</sequenceNumber>
+            <type>Text Area</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>EventAddressCityText</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Event Address (City)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : null,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;maxLength&quot; : 255,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>8.0</sequenceNumber>
+            <type>Text</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>EventAddressCountrySelect</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Event Address (Country)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : null,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;options&quot; : [ ],
   &quot;optionSource&quot; : {
     &quot;type&quot; : &quot;SObject&quot;,
-    &quot;source&quot; : &quot;BusinessLicenseApplication.OtherServicesAtThisAddress__c&quot;
+    &quot;source&quot; : &quot;BusinessLicenseApplication.EventAddress__CountryCode__s&quot;
   },
   &quot;controllingField&quot; : {
     &quot;element&quot; : &quot;&quot;,
@@ -135,8 +203,332 @@
   &quot;hide&quot; : false,
   &quot;disOnTplt&quot; : false
 }</propertySetConfig>
-            <sequenceNumber>1.0</sequenceNumber>
+            <sequenceNumber>7.0</sequenceNumber>
             <type>Select</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>EventAddressStateSelect</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Event Address (State/Province)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : null,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;options&quot; : [ ],
+  &quot;optionSource&quot; : {
+    &quot;type&quot; : &quot;SObject&quot;,
+    &quot;source&quot; : &quot;BusinessLicenseApplication.EventAddress__StateCode__s&quot;
+  },
+  &quot;controllingField&quot; : {
+    &quot;element&quot; : &quot;EventAddressCountrySelect&quot;,
+    &quot;type&quot; : &quot;SObject&quot;,
+    &quot;source&quot; : &quot;BusinessLicenseApplication.EventAddress__CountryCode__s&quot;
+  },
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>9.0</sequenceNumber>
+            <type>Select</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>EventAddressStreetText</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;Event Address (Street)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : null,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;maxLength&quot; : 255,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>6.0</sequenceNumber>
+            <type>Text</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>EventAddressZipPostalCodeText</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Event Address (ZIP/Postal Code)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : null,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;maxLength&quot; : 255,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>10.0</sequenceNumber>
+            <type>Text</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>EventLocationNameText</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Event Location Name&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : null,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;maxLength&quot; : 255,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>4.0</sequenceNumber>
+            <type>Text</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>EventOrganizerPhone</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Event Organizer Phone Number&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : null,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;(999) 999-9999&quot;,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;maxLength&quot; : 255,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>3.0</sequenceNumber>
+            <type>Telephone</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>EventOrganizerText</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;required&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;repeat&quot; : false,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;repeatClone&quot; : false,
+  &quot;readOnly&quot; : false,
+  &quot;label&quot; : &quot;Event Organizer&quot;,
+  &quot;inputWidth&quot; : 12,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;maxLength&quot; : 255,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;
+}</propertySetConfig>
+            <sequenceNumber>2.0</sequenceNumber>
+            <type>Text</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>FoodNeedsAssemblyCheckBox</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Checkbox1&quot;,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : false,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;checkLabel&quot; : &quot;Food Needs Assembly&quot;,
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;lrtfs&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;field&quot; : &quot;requestType&quot;
+      } ]
+    }
+  },
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>14.0</sequenceNumber>
+            <type>Checkbox</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>HeatinCookingHotHoldingReqCheckBox</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Checkbox1&quot;,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : false,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;checkLabel&quot; : &quot;Heating / Cooking / Hot Holding Required&quot;,
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;lrtfs&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;field&quot; : &quot;requestType&quot;
+      } ]
+    }
+  },
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>12.0</sequenceNumber>
+            <type>Checkbox</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>NameOfEventText</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Name of Event&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : null,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;maxLength&quot; : 255,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>1.0</sequenceNumber>
+            <type>Text</type>
         </childElements>
         <childElements>
             <isActive>true</isActive>
@@ -200,6 +592,103 @@
 }</propertySetConfig>
             <sequenceNumber>0.0</sequenceNumber>
             <type>Lookup</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>SanitizerMultiSelect</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Sanitizer&quot;,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;horizontalMode&quot; : false,
+  &quot;defaultValue&quot; : null,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;options&quot; : [ {
+    &quot;name&quot; : &quot;Chlorine Bleach 100 ppm Solution&quot;,
+    &quot;developerName&quot; : null,
+    &quot;value&quot; : &quot;Chlorine Bleach 100 ppm Solution&quot;
+  }, {
+    &quot;name&quot; : &quot;Quaternary Ammonia 200 ppm Solution&quot;,
+    &quot;developerName&quot; : null,
+    &quot;value&quot; : &quot;Quaternary Ammonia 200 ppm Solution&quot;
+  } ],
+  &quot;optionSource&quot; : {
+    &quot;type&quot; : &quot;&quot;,
+    &quot;source&quot; : &quot;&quot;
+  },
+  &quot;controllingField&quot; : {
+    &quot;element&quot; : &quot;&quot;,
+    &quot;type&quot; : &quot;&quot;,
+    &quot;source&quot; : &quot;&quot;
+  },
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;lrtfs&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;field&quot; : &quot;requestType&quot;
+      } ]
+    }
+  },
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;optionWidth&quot; : 100,
+  &quot;optionHeight&quot; : 100,
+  &quot;imageCountInRow&quot; : 3,
+  &quot;enableCaption&quot; : true,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>13.0</sequenceNumber>
+            <type>Multi-select</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>TextBlock10</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 10,
+  &quot;label&quot; : &quot;TextBlock10&quot;,
+  &quot;text&quot; : &quot;&quot;,
+  &quot;show&quot; : null,
+  &quot;dataJSON&quot; : false,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;textKey&quot; : &quot;&quot;,
+  &quot;sanitize&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>11.0</sequenceNumber>
+            <type>Text Block</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>TextBlock9</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;TextBlock9&quot;,
+  &quot;text&quot; : &quot;&quot;,
+  &quot;show&quot; : null,
+  &quot;dataJSON&quot; : false,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;textKey&quot; : &quot;&quot;,
+  &quot;sanitize&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>5.0</sequenceNumber>
+            <type>Text Block</type>
         </childElements>
         <isActive>true</isActive>
         <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
@@ -272,7 +761,7 @@
   &quot;ssm&quot; : false,
   &quot;pubsub&quot; : false,
   &quot;message&quot; : { },
-  &quot;targetType&quot; : &quot;Record&quot;,
+  &quot;targetType&quot; : &quot;Web Page&quot;,
   &quot;objectAction&quot; : &quot;home&quot;,
   &quot;recordAction&quot; : &quot;view&quot;,
   &quot;loginAction&quot; : &quot;login&quot;,
@@ -285,7 +774,9 @@
   &quot;replace&quot; : false,
   &quot;targetLWCLayout&quot; : &quot;lightning&quot;,
   &quot;businessCategory&quot; : &quot;&quot;,
-  &quot;businessEvent&quot; : &quot;&quot;
+  &quot;businessEvent&quot; : &quot;&quot;,
+  &quot;showCancelPrompt&quot; : true,
+  &quot;targetUrl&quot; : &quot;/phocsportal/s/apply-license-permit&quot;
 }</propertySetConfig>
         <sequenceNumber>0.0</sequenceNumber>
         <type>Navigate Action</type>
@@ -339,6 +830,345 @@
 }</propertySetConfig>
         <sequenceNumber>1.0</sequenceNumber>
         <type>DataRaptor Extract Action</type>
+    </omniProcessElements>
+    <omniProcessElements>
+        <childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>EventContactLookUp</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Contact&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : null,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;dataSource&quot; : {
+    &quot;type&quot; : &quot;SObject&quot;,
+    &quot;mapItems&quot; : {
+      &quot;phase1MapItems&quot; : [ {
+        &quot;InterfaceObjectName__c&quot; : &quot;Contact&quot;,
+        &quot;InterfaceFieldAPIName__c&quot; : &quot;AccountId&quot;,
+        &quot;FilterOperator__c&quot; : &quot;=&quot;,
+        &quot;FilterValue__c&quot; : &quot;searchKey&quot;,
+        &quot;InterfaceObjectLookupOrder__c&quot; : 1,
+        &quot;DomainObjectFieldAPIName__c&quot; : &quot;eventContact&quot;
+      } ],
+      &quot;phase2MapItems&quot; : [ {
+        &quot;DomainObjectFieldAPIName__c&quot; : &quot;name&quot;,
+        &quot;InterfaceFieldAPIName__c&quot; : &quot;eventContact:Name&quot;,
+        &quot;DomainObjectAPIName__c&quot; : &quot;JSON&quot;,
+        &quot;DomainObjectCreationOrder__c&quot; : 1
+      }, {
+        &quot;DomainObjectFieldAPIName__c&quot; : &quot;value&quot;,
+        &quot;InterfaceFieldAPIName__c&quot; : &quot;eventContact:Name&quot;,
+        &quot;DomainObjectAPIName__c&quot; : &quot;JSON&quot;,
+        &quot;DomainObjectCreationOrder__c&quot; : 1
+      } ],
+      &quot;inputParameters&quot; : [ {
+        &quot;element&quot; : &quot;BusinessEntityAccountId&quot;,
+        &quot;inputParam&quot; : &quot;searchKey&quot;
+      } ]
+    }
+  },
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false,
+  &quot;clearValue&quot; : true,
+  &quot;errorMessage&quot; : {
+    &quot;custom&quot; : [ ],
+    &quot;default&quot; : null
+  }
+}</propertySetConfig>
+                <sequenceNumber>4.0</sequenceNumber>
+                <type>Lookup</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>EventDescriptionText</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;Description&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : null,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;maxLength&quot; : 255,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+                <sequenceNumber>3.0</sequenceNumber>
+                <type>Text</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>EventEndDateTime</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;End Date &amp; Time&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : null,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;timeFormat&quot; : &quot;hh:mm a&quot;,
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false,
+  &quot;timezone&quot; : &quot;Local&quot;,
+  &quot;minDate&quot; : &quot;&quot;,
+  &quot;maxDate&quot; : &quot;&quot;,
+  &quot;timeInterval&quot; : 30
+}</propertySetConfig>
+                <sequenceNumber>2.0</sequenceNumber>
+                <type>Date/Time (Local)</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>EventLocationText</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;Location&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : null,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;maxLength&quot; : 255,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+                <sequenceNumber>0.0</sequenceNumber>
+                <type>Text</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>EventStartDateTime</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Start Date &amp; Time&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : null,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;timeFormat&quot; : &quot;hh:mm a&quot;,
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false,
+  &quot;timezone&quot; : &quot;Local&quot;,
+  &quot;minDate&quot; : &quot;&quot;,
+  &quot;maxDate&quot; : &quot;&quot;,
+  &quot;timeInterval&quot; : 30
+}</propertySetConfig>
+                <sequenceNumber>1.0</sequenceNumber>
+                <type>Date/Time (Local)</type>
+            </childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>HiddenText</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Hidden Text&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : &quot;DefaultValue&quot;,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;pattern&quot; : &quot;&quot;,
+  &quot;ptrnErrText&quot; : &quot;&quot;,
+  &quot;minLength&quot; : 0,
+  &quot;maxLength&quot; : 255,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : true,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+                <sequenceNumber>5.0</sequenceNumber>
+                <type>Text</type>
+            </childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>EventBlock</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;Event&quot;,
+  &quot;collapse&quot; : false,
+  &quot;repeat&quot; : true,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : 10,
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;ariaLevel&quot; : 3
+}</propertySetConfig>
+            <sequenceNumber>0.0</sequenceNumber>
+            <type>Block</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>TextBlock11</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;TextBlock11&quot;,
+  &quot;text&quot; : &quot;&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;:&amp;nbsp;&lt;span data-teams=\&quot;true\&quot;&gt;Click Add to create another event&lt;/span&gt;&lt;/p&gt;&quot;,
+  &quot;show&quot; : null,
+  &quot;dataJSON&quot; : false,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;textKey&quot; : &quot;&quot;,
+  &quot;sanitize&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>1.0</sequenceNumber>
+            <type>Text Block</type>
+        </childElements>
+        <isActive>true</isActive>
+        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+        <level>0.0</level>
+        <name>EventInformationStep</name>
+        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+        <propertySetConfig>{
+  &quot;label&quot; : &quot;Event Information&quot;,
+  &quot;validationRequired&quot; : true,
+  &quot;previousLabel&quot; : &quot;Previous&quot;,
+  &quot;previousWidth&quot; : 3,
+  &quot;nextLabel&quot; : &quot;Next&quot;,
+  &quot;nextWidth&quot; : 3,
+  &quot;cancelLabel&quot; : &quot;Cancel&quot;,
+  &quot;cancelMessage&quot; : &quot;Are you sure?&quot;,
+  &quot;saveLabel&quot; : &quot;Save for later&quot;,
+  &quot;saveChangesLabel&quot; : &quot;Save Changes&quot;,
+  &quot;saveMessage&quot; : &quot;Are you sure you want to save it for later?&quot;,
+  &quot;completeLabel&quot; : &quot;Complete&quot;,
+  &quot;completeMessage&quot; : &quot;Are you sure you want to complete the script?&quot;,
+  &quot;instruction&quot; : &quot;&quot;,
+  &quot;showPersistentComponent&quot; : [ true, false ],
+  &quot;remoteClass&quot; : &quot;&quot;,
+  &quot;remoteMethod&quot; : &quot;&quot;,
+  &quot;remoteTimeout&quot; : 30000,
+  &quot;remoteOptions&quot; : { },
+  &quot;knowledgeOptions&quot; : {
+    &quot;language&quot; : &quot;English&quot;,
+    &quot;publishStatus&quot; : &quot;Online&quot;,
+    &quot;keyword&quot; : &quot;&quot;,
+    &quot;dataCategoryCriteria&quot; : &quot;&quot;,
+    &quot;remoteTimeout&quot; : 30000,
+    &quot;typeFilter&quot; : &quot;&quot;
+  },
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;instructionKey&quot; : &quot;&quot;,
+  &quot;chartLabel&quot; : null,
+  &quot;allowSaveForLater&quot; : true,
+  &quot;allowSaveChanges&quot; : false,
+  &quot;errorMessage&quot; : {
+    &quot;custom&quot; : [ ],
+    &quot;default&quot; : null
+  },
+  &quot;wpm&quot; : false,
+  &quot;ssm&quot; : false,
+  &quot;message&quot; : { },
+  &quot;pubsub&quot; : false,
+  &quot;ariaLevel&quot; : 2,
+  &quot;businessCategory&quot; : &quot;&quot;,
+  &quot;businessEvent&quot; : &quot;&quot;
+}</propertySetConfig>
+        <sequenceNumber>6.0</sequenceNumber>
+        <type>Step</type>
     </omniProcessElements>
     <omniProcessElements>
         <childElements>
@@ -717,7 +1547,7 @@
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
   &quot;controlWidth&quot; : 6,
-  &quot;label&quot; : &quot;Size of Portable Water Tank (Litres)&quot;,
+  &quot;label&quot; : &quot;Size of Potable Water Tank (Litres)&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
   &quot;required&quot; : false,
@@ -902,7 +1732,7 @@
             <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
             <propertySetConfig>{
   &quot;controlWidth&quot; : 12,
-  &quot;label&quot; : &quot;Additional Food Facility Information&quot;,
+  &quot;label&quot; : &quot;Additional Facility Information&quot;,
   &quot;collapse&quot; : false,
   &quot;repeat&quot; : false,
   &quot;repeatClone&quot; : false,
@@ -1135,28 +1965,28 @@
                 <name>MailingAddressCityText</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
-  &quot;controlWidth&quot; : 6,
   &quot;ptrnErrText&quot; : &quot;&quot;,
   &quot;minLength&quot; : 0,
   &quot;pattern&quot; : &quot;&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;required&quot; : false,
+  &quot;debounceValue&quot; : 0,
+  &quot;repeat&quot; : false,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;mask&quot; : &quot;&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 6,
   &quot;repeatClone&quot; : false,
   &quot;readOnly&quot; : false,
   &quot;label&quot; : &quot;Mailing Address (City)&quot;,
-  &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
   &quot;help&quot; : false,
   &quot;hide&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;repeat&quot; : false,
   &quot;disOnTplt&quot; : false,
   &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;maxLength&quot; : &quot;40&quot;,
+  &quot;maxLength&quot; : 255,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;mask&quot; : &quot;&quot;,
   &quot;defaultValue&quot; : &quot;%ReasonForApplyingStep:AccFacilitySearch-Block:facilityAccShippingCity%&quot;
 }</propertySetConfig>
                 <sequenceNumber>10.0</sequenceNumber>
@@ -1169,31 +1999,34 @@
                 <name>MailingAddressCountrySelect</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Mailing Address (Country)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : false,
+  &quot;defaultValue&quot; : null,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;options&quot; : [ ],
   &quot;optionSource&quot; : {
     &quot;type&quot; : &quot;SObject&quot;,
     &quot;source&quot; : &quot;Account.Physical_Address__CountryCode__s&quot;
   },
-  &quot;helpText&quot; : &quot;&quot;,
-  &quot;controlWidth&quot; : 6.0,
-  &quot;repeatClone&quot; : false,
   &quot;controllingField&quot; : {
     &quot;element&quot; : &quot;&quot;,
     &quot;type&quot; : &quot;&quot;,
     &quot;source&quot; : &quot;&quot;
   },
-  &quot;readOnly&quot; : false,
-  &quot;label&quot; : &quot;Mailing Address (Country)&quot;,
-  &quot;showInputWidth&quot; : false,
-  &quot;inputWidth&quot; : 12.0,
-  &quot;required&quot; : false,
-  &quot;help&quot; : false,
-  &quot;hide&quot; : false,
-  &quot;repeat&quot; : false,
-  &quot;options&quot; : [ ],
-  &quot;disOnTplt&quot; : false,
+  &quot;show&quot; : null,
   &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>8.0</sequenceNumber>
                 <type>Select</type>
@@ -1296,7 +2129,7 @@
   &quot;disOnTplt&quot; : false,
   &quot;conditionType&quot; : &quot;Hide if False&quot;,
   &quot;placeholder&quot; : &quot;&quot;,
-  &quot;maxLength&quot; : &quot;255&quot;,
+  &quot;maxLength&quot; : 255,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;mask&quot; : &quot;&quot;,
   &quot;defaultValue&quot; : &quot;%ReasonForApplyingStep:AccFacilitySearch-Block:facilityAccShippingPostalCode%&quot;
@@ -2084,7 +2917,7 @@
   &quot;controllingField&quot; : {
     &quot;element&quot; : &quot;&quot;,
     &quot;type&quot; : &quot;&quot;,
-    &quot;source&quot; : &quot;&quot;
+    &quot;source&quot; : &quot;Account.&quot;
   },
   &quot;readOnly&quot; : false,
   &quot;label&quot; : &quot;Friday Close&quot;,
@@ -2217,131 +3050,6 @@
                 <isActive>true</isActive>
                 <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
                 <level>2.0</level>
-                <name>MonthsOfOperationMultiSelect</name>
-                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-                <propertySetConfig>{
-  &quot;controlWidth&quot; : 12,
-  &quot;label&quot; : &quot;Months of Operation&quot;,
-  &quot;required&quot; : false,
-  &quot;repeat&quot; : false,
-  &quot;repeatClone&quot; : false,
-  &quot;repeatLimit&quot; : null,
-  &quot;readOnly&quot; : false,
-  &quot;horizontalMode&quot; : true,
-  &quot;defaultValue&quot; : null,
-  &quot;help&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
-  &quot;options&quot; : [ {
-    &quot;name&quot; : &quot;January&quot;,
-    &quot;developerName&quot; : null,
-    &quot;value&quot; : &quot;January&quot;
-  }, {
-    &quot;name&quot; : &quot;February&quot;,
-    &quot;developerName&quot; : null,
-    &quot;value&quot; : &quot;February&quot;
-  }, {
-    &quot;name&quot; : &quot;March&quot;,
-    &quot;developerName&quot; : null,
-    &quot;value&quot; : &quot;March&quot;
-  }, {
-    &quot;name&quot; : &quot;April&quot;,
-    &quot;developerName&quot; : null,
-    &quot;value&quot; : &quot;April&quot;
-  }, {
-    &quot;name&quot; : &quot;May&quot;,
-    &quot;developerName&quot; : null,
-    &quot;value&quot; : &quot;May&quot;
-  }, {
-    &quot;name&quot; : &quot;June&quot;,
-    &quot;developerName&quot; : null,
-    &quot;value&quot; : &quot;June&quot;
-  }, {
-    &quot;name&quot; : &quot;July&quot;,
-    &quot;developerName&quot; : null,
-    &quot;value&quot; : &quot;July&quot;
-  }, {
-    &quot;name&quot; : &quot;August&quot;,
-    &quot;developerName&quot; : null,
-    &quot;value&quot; : &quot;August&quot;
-  }, {
-    &quot;name&quot; : &quot;September&quot;,
-    &quot;developerName&quot; : null,
-    &quot;value&quot; : &quot;September&quot;
-  }, {
-    &quot;name&quot; : &quot;October&quot;,
-    &quot;developerName&quot; : null,
-    &quot;value&quot; : &quot;October&quot;
-  }, {
-    &quot;name&quot; : &quot;November&quot;,
-    &quot;developerName&quot; : null,
-    &quot;value&quot; : &quot;November&quot;
-  }, {
-    &quot;name&quot; : &quot;December&quot;,
-    &quot;developerName&quot; : null,
-    &quot;value&quot; : &quot;December&quot;
-  } ],
-  &quot;optionSource&quot; : {
-    &quot;type&quot; : &quot;SObject&quot;,
-    &quot;source&quot; : &quot;Account.OperatingMonths__c&quot;
-  },
-  &quot;controllingField&quot; : {
-    &quot;element&quot; : &quot;&quot;,
-    &quot;type&quot; : &quot;&quot;,
-    &quot;source&quot; : &quot;&quot;
-  },
-  &quot;show&quot; : null,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;hide&quot; : false,
-  &quot;optionWidth&quot; : 100,
-  &quot;optionHeight&quot; : 100,
-  &quot;imageCountInRow&quot; : 3,
-  &quot;enableCaption&quot; : true,
-  &quot;disOnTplt&quot; : false
-}</propertySetConfig>
-                <sequenceNumber>14.0</sequenceNumber>
-                <type>Multi-select</type>
-            </childElements>
-            <childElements>
-                <isActive>true</isActive>
-                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-                <level>2.0</level>
-                <name>OperatingHoursExceptionsText</name>
-                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-                <propertySetConfig>{
-  &quot;controlWidth&quot; : 12,
-  &quot;label&quot; : &quot;Operating Hours Exceptions&quot;,
-  &quot;showInputWidth&quot; : false,
-  &quot;inputWidth&quot; : 12,
-  &quot;required&quot; : false,
-  &quot;repeat&quot; : false,
-  &quot;repeatClone&quot; : false,
-  &quot;repeatLimit&quot; : null,
-  &quot;readOnly&quot; : false,
-  &quot;defaultValue&quot; : &quot;%ReasonForApplyingStep:AccFacilitySearch-Block:facilityAccOperatingHoursexception%&quot;,
-  &quot;help&quot; : false,
-  &quot;helpText&quot; : &quot;&quot;,
-  &quot;pattern&quot; : &quot;&quot;,
-  &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;minLength&quot; : 0,
-  &quot;maxLength&quot; : 255,
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;show&quot; : null,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;accessibleInFutureSteps&quot; : false,
-  &quot;debounceValue&quot; : 0,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;hide&quot; : false,
-  &quot;disOnTplt&quot; : false
-}</propertySetConfig>
-                <sequenceNumber>15.0</sequenceNumber>
-                <type>Text Area</type>
-            </childElements>
-            <childElements>
-                <isActive>true</isActive>
-                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-                <level>2.0</level>
                 <name>SaturdayCloseSelect</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
@@ -2431,7 +3139,7 @@
     &quot;source&quot; : &quot;&quot;
   },
   &quot;readOnly&quot; : false,
-  &quot;label&quot; : &quot;Sunday  Close&quot;,
+  &quot;label&quot; : &quot;Sunday Close&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
   &quot;required&quot; : false,
@@ -2464,7 +3172,7 @@
   &quot;controllingField&quot; : {
     &quot;element&quot; : &quot;&quot;,
     &quot;type&quot; : &quot;&quot;,
-    &quot;source&quot; : &quot;&quot;
+    &quot;source&quot; : &quot;Account.&quot;
   },
   &quot;readOnly&quot; : false,
   &quot;label&quot; : &quot;Sunday Open&quot;,
@@ -2500,7 +3208,7 @@
   &quot;controllingField&quot; : {
     &quot;element&quot; : &quot;&quot;,
     &quot;type&quot; : &quot;&quot;,
-    &quot;source&quot; : &quot;&quot;
+    &quot;source&quot; : &quot;Account.&quot;
   },
   &quot;readOnly&quot; : false,
   &quot;label&quot; : &quot;Thursday Close&quot;,
@@ -2621,7 +3329,8 @@
   &quot;options&quot; : [ ],
   &quot;disOnTplt&quot; : false,
   &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;lwcComponentOverride&quot; : &quot;&quot;
 }</propertySetConfig>
                 <sequenceNumber>2.0</sequenceNumber>
                 <type>Select</type>
@@ -2693,7 +3402,8 @@
   &quot;options&quot; : [ ],
   &quot;disOnTplt&quot; : false,
   &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;lwcComponentOverride&quot; : &quot;&quot;
 }</propertySetConfig>
                 <sequenceNumber>4.0</sequenceNumber>
                 <type>Select</type>
@@ -2782,7 +3492,7 @@
         <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
         <propertySetConfig>{
   &quot;controlWidth&quot; : 12,
-  &quot;label&quot; : &quot;IP - Upsert Facility And Create Food Permit BLA&quot;,
+  &quot;label&quot; : &quot;IP - Upsert Facility And Create Low Risk Food Service BLA&quot;,
   &quot;integrationProcedureKey&quot; : &quot;LicensingAndPermitting_FoodPremiseOperatingPermit&quot;,
   &quot;useContinuation&quot; : false,
   &quot;remoteOptions&quot; : {
@@ -2830,7 +3540,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>8.0</sequenceNumber>
+        <sequenceNumber>9.0</sequenceNumber>
         <type>Integration Procedure Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -2841,9 +3551,9 @@
         <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
         <propertySetConfig>{
   &quot;controlWidth&quot; : 12,
-  &quot;label&quot; : &quot;Data Mapper - Extract Look Up Fields&quot;,
+  &quot;label&quot; : &quot;Data Mapper - Extract PrimaryContact&quot;,
   &quot;bundle&quot; : &quot;PHOCSFoodPremiseLookUpDataMapper&quot;,
-  &quot;ignoreCache&quot; : false,
+  &quot;ignoreCache&quot; : true,
   &quot;dataRaptor Input Parameters&quot; : [ {
     &quot;element&quot; : &quot;PrimaryOwnerLookup&quot;,
     &quot;inputParam&quot; : &quot;contactId&quot;
@@ -2880,7 +3590,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>6.0</sequenceNumber>
+        <sequenceNumber>7.0</sequenceNumber>
         <type>DataRaptor Extract Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -2915,7 +3625,7 @@
   &quot;businessEvent&quot; : &quot;&quot;,
   &quot;targetName&quot; : &quot;Home&quot;
 }</propertySetConfig>
-        <sequenceNumber>10.0</sequenceNumber>
+        <sequenceNumber>11.0</sequenceNumber>
         <type>Navigate Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -3429,7 +4139,7 @@
             <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
             <propertySetConfig>{
   &quot;controlWidth&quot; : 12,
-  &quot;label&quot; : &quot;Additional Food Facility Information&quot;,
+  &quot;label&quot; : &quot;Additional Facility Information&quot;,
   &quot;collapse&quot; : false,
   &quot;repeat&quot; : false,
   &quot;repeatClone&quot; : false,
@@ -3466,7 +4176,7 @@
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;disOnTplt&quot; : false
 }</propertySetConfig>
-                <sequenceNumber>16.0</sequenceNumber>
+                <sequenceNumber>15.0</sequenceNumber>
                 <type>Formula</type>
             </childElements>
             <childElements>
@@ -3514,7 +4224,7 @@
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;disOnTplt&quot; : false
 }</propertySetConfig>
-                <sequenceNumber>15.0</sequenceNumber>
+                <sequenceNumber>16.0</sequenceNumber>
                 <type>Formula</type>
             </childElements>
             <childElements>
@@ -3607,7 +4317,7 @@
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;disOnTplt&quot; : false
 }</propertySetConfig>
-                <sequenceNumber>10.0</sequenceNumber>
+                <sequenceNumber>9.0</sequenceNumber>
                 <type>Formula</type>
             </childElements>
             <childElements>
@@ -3655,7 +4365,7 @@
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;disOnTplt&quot; : false
 }</propertySetConfig>
-                <sequenceNumber>9.0</sequenceNumber>
+                <sequenceNumber>10.0</sequenceNumber>
                 <type>Formula</type>
             </childElements>
             <childElements>
@@ -4202,6 +4912,429 @@
             <type>Block</type>
         </childElements>
         <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>DescriptionofServicesFormula</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;Description of Services&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;expression&quot; : &quot;%DescriptionOfServicesText%&quot;,
+  &quot;hide&quot; : false,
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;hrtfs&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;field&quot; : &quot;requestType&quot;
+      } ]
+    }
+  },
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>22.0</sequenceNumber>
+            <type>Formula</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>DisplayEventDetailsOnReviewScreen</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;DisplayEventDetailsOnReviewScreen&quot;,
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;hide&quot; : false,
+  &quot;lwcName&quot; : &quot;cfPHOCSDisplayEventDetailsForOperator&quot;,
+  &quot;bStandalone&quot; : true,
+  &quot;customAttributes&quot; : [ {
+    &quot;name&quot; : &quot;parent-data&quot;,
+    &quot;source&quot; : &quot;true&quot;
+  }, {
+    &quot;name&quot; : &quot;records&quot;,
+    &quot;source&quot; : &quot;%EventInformationStep:EventBlock%&quot;
+  } ]
+}</propertySetConfig>
+            <sequenceNumber>24.0</sequenceNumber>
+            <type>Custom Lightning Web Component</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>EventAddressCityFormula</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;hideGroupSep&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;expression&quot; : &quot;%EventAddressCityText%&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;disOnTplt&quot; : false,
+  &quot;label&quot; : &quot;Event Address (City)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;
+}</propertySetConfig>
+            <sequenceNumber>13.0</sequenceNumber>
+            <type>Formula</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>EventAddressCountryFormula</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;hideGroupSep&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;expression&quot; : &quot;%EventAddressCountry%&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;disOnTplt&quot; : false,
+  &quot;label&quot; : &quot;Event Address (Country)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;
+}</propertySetConfig>
+            <sequenceNumber>14.0</sequenceNumber>
+            <type>Formula</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>EventAddressPostalCodeFormula</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;hideGroupSep&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;expression&quot; : &quot;%EventAddressZipPostalCodeText%&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;disOnTplt&quot; : false,
+  &quot;label&quot; : &quot;Event Address (ZIP/Postal Code)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;
+}</propertySetConfig>
+            <sequenceNumber>16.0</sequenceNumber>
+            <type>Formula</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>EventAddressStateFormula</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;hideGroupSep&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;expression&quot; : &quot;%EventAddressStateSelect%&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;disOnTplt&quot; : false,
+  &quot;label&quot; : &quot;Event Address (State)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;
+}</propertySetConfig>
+            <sequenceNumber>15.0</sequenceNumber>
+            <type>Formula</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>EventAddressStreetFormula</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;hideGroupSep&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;expression&quot; : &quot;%EventAddressStreetText%&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;disOnTplt&quot; : false,
+  &quot;label&quot; : &quot;Event Address (Street)&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;
+}</propertySetConfig>
+            <sequenceNumber>12.0</sequenceNumber>
+            <type>Formula</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>EventInformationReviewBlock</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;TextBlock2&quot;,
+  &quot;text&quot; : &quot;&lt;h2&gt;Event Information&lt;/h2&gt;&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;dataJSON&quot; : false,
+  &quot;textKey&quot; : &quot;&quot;,
+  &quot;sanitize&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>23.0</sequenceNumber>
+            <type>Text Block</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>EventLocationNameFormula</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;hideGroupSep&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;expression&quot; : &quot;%EventLocationNameText%&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;disOnTplt&quot; : false,
+  &quot;label&quot; : &quot;Event Location Name&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;
+}</propertySetConfig>
+            <sequenceNumber>11.0</sequenceNumber>
+            <type>Formula</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>EventOrganizerFormula</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;hideGroupSep&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;expression&quot; : &quot;%EventOrganizerText%&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;disOnTplt&quot; : false,
+  &quot;label&quot; : &quot;Event Organizer&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;
+}</propertySetConfig>
+            <sequenceNumber>9.0</sequenceNumber>
+            <type>Formula</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>EventOrganizerPhoneFormula</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;hideGroupSep&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;expression&quot; : &quot;%EventOrganizerPhone%&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;disOnTplt&quot; : false,
+  &quot;label&quot; : &quot;Event Organizer Phone Number&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;
+}</propertySetConfig>
+            <sequenceNumber>10.0</sequenceNumber>
+            <type>Formula</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>FoodNeedsAssemblyFalseCheckbox</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;defaultValue&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;false&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;field&quot; : &quot;FoodNeedsAssemblyCheckBox&quot;
+      }, {
+        &quot;field&quot; : &quot;requestType&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;data&quot; : &quot;lrtfs&quot;
+      } ]
+    }
+  },
+  &quot;readOnly&quot; : true,
+  &quot;checkLabel&quot; : &quot;Food Needs Assembly&quot;,
+  &quot;label&quot; : &quot;Checkbox1&quot;,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;
+}</propertySetConfig>
+            <sequenceNumber>21.0</sequenceNumber>
+            <type>Checkbox</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>FoodNeedsAssemblyTrueCheckBox</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Checkbox1&quot;,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : true,
+  &quot;defaultValue&quot; : true,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;checkLabel&quot; : &quot;Food Needs Assembly&quot;,
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;true&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;field&quot; : &quot;FoodNeedsAssemblyCheckBox&quot;
+      }, {
+        &quot;field&quot; : &quot;requestType&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;data&quot; : &quot;lrtfs&quot;
+      } ]
+    }
+  },
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>20.0</sequenceNumber>
+            <type>Checkbox</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>HeatingCookingHotHoldingReqReviewFalseCheckBox</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;defaultValue&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;false&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;field&quot; : &quot;HeatinCookingHotHoldingReqCheckBox&quot;
+      }, {
+        &quot;field&quot; : &quot;requestType&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;data&quot; : &quot;lrtfs&quot;
+      } ]
+    }
+  },
+  &quot;readOnly&quot; : true,
+  &quot;checkLabel&quot; : &quot;Heating / Cooking / Hot Holding Required&quot;,
+  &quot;label&quot; : &quot;Checkbox1&quot;,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;
+}</propertySetConfig>
+            <sequenceNumber>18.0</sequenceNumber>
+            <type>Checkbox</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>HeatingCookingHotHoldingReqReviewTrueCheckBox</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Checkbox1&quot;,
+  &quot;repeat&quot; : false,
+  &quot;repeatClone&quot; : false,
+  &quot;repeatLimit&quot; : null,
+  &quot;readOnly&quot; : true,
+  &quot;defaultValue&quot; : true,
+  &quot;help&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;checkLabel&quot; : &quot;Heating / Cooking / Hot Holding Required&quot;,
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;true&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;field&quot; : &quot;HeatinCookingHotHoldingReqCheckBox&quot;
+      }, {
+        &quot;field&quot; : &quot;requestType&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;data&quot; : &quot;lrtfs&quot;
+      } ]
+    }
+  },
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>17.0</sequenceNumber>
+            <type>Checkbox</type>
+        </childElements>
+        <childElements>
+            <childElements>
+                <isActive>true</isActive>
+                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+                <level>2.0</level>
+                <name>Formula1</name>
+                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+                <propertySetConfig>{
+  &quot;hideGroupSep&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;expression&quot; : &quot;%ThursdayOpenSelect%&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;disOnTplt&quot; : false,
+  &quot;label&quot; : &quot;Thursday Open&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;
+}</propertySetConfig>
+                <sequenceNumber>6.0</sequenceNumber>
+                <type>Formula</type>
+            </childElements>
             <childElements>
                 <isActive>true</isActive>
                 <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
@@ -4251,16 +5384,19 @@
                 <name>MondayCloseFormula</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;expression&quot; : &quot;%MondayCloseSelect%&quot;,
   &quot;controlWidth&quot; : 6,
-  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
-  &quot;label&quot; : &quot;MondayClose&quot;,
+  &quot;label&quot; : &quot;Monday Close&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;hideGroupSep&quot; : false,
+  &quot;expression&quot; : &quot;%MondayCloseSelect%&quot;,
   &quot;hide&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>1.0</sequenceNumber>
                 <type>Formula</type>
@@ -4287,54 +5423,6 @@
   &quot;disOnTplt&quot; : false
 }</propertySetConfig>
                 <sequenceNumber>0.0</sequenceNumber>
-                <type>Formula</type>
-            </childElements>
-            <childElements>
-                <isActive>true</isActive>
-                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-                <level>2.0</level>
-                <name>MonthsOfOperationFormula</name>
-                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-                <propertySetConfig>{
-  &quot;controlWidth&quot; : 12,
-  &quot;label&quot; : &quot;Months of Operation&quot;,
-  &quot;showInputWidth&quot; : false,
-  &quot;inputWidth&quot; : 12,
-  &quot;expression&quot; : &quot;%MonthsOfOperationMultiSelect%&quot;,
-  &quot;hide&quot; : false,
-  &quot;show&quot; : null,
-  &quot;mask&quot; : null,
-  &quot;dataType&quot; : null,
-  &quot;hideGroupSep&quot; : false,
-  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;disOnTplt&quot; : false
-}</propertySetConfig>
-                <sequenceNumber>14.0</sequenceNumber>
-                <type>Formula</type>
-            </childElements>
-            <childElements>
-                <isActive>true</isActive>
-                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-                <level>2.0</level>
-                <name>OperatingHoursExceptionsFormula</name>
-                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-                <propertySetConfig>{
-  &quot;controlWidth&quot; : 12,
-  &quot;label&quot; : &quot;Operating Hours Exceptions&quot;,
-  &quot;showInputWidth&quot; : false,
-  &quot;inputWidth&quot; : 12,
-  &quot;expression&quot; : &quot;%OperatingHoursExceptionsText%&quot;,
-  &quot;hide&quot; : false,
-  &quot;show&quot; : null,
-  &quot;mask&quot; : null,
-  &quot;dataType&quot; : null,
-  &quot;hideGroupSep&quot; : false,
-  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;disOnTplt&quot; : false
-}</propertySetConfig>
-                <sequenceNumber>15.0</sequenceNumber>
                 <type>Formula</type>
             </childElements>
             <childElements>
@@ -4446,28 +5534,7 @@
                 <isActive>true</isActive>
                 <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
                 <level>2.0</level>
-                <name>ThursdayOpenFormula</name>
-                <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-                <propertySetConfig>{
-  &quot;hideGroupSep&quot; : false,
-  &quot;hide&quot; : false,
-  &quot;expression&quot; : &quot;%ThursdayOpenSelect%&quot;,
-  &quot;controlWidth&quot; : 6,
-  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
-  &quot;disOnTplt&quot; : false,
-  &quot;label&quot; : &quot;Thursday Open&quot;,
-  &quot;showInputWidth&quot; : false,
-  &quot;inputWidth&quot; : 12,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;
-}</propertySetConfig>
-                <sequenceNumber>6.0</sequenceNumber>
-                <type>Formula</type>
-            </childElements>
-            <childElements>
-                <isActive>true</isActive>
-                <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-                <level>2.0</level>
-                <name>TuesdayCloseFormula</name>
+                <name>TuesdayCloseFormula1</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
   &quot;hideGroupSep&quot; : false,
@@ -4491,15 +5558,15 @@
                 <name>TuesdayOpenFormula</name>
                 <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
                 <propertySetConfig>{
-  &quot;hideGroupSep&quot; : false,
-  &quot;hide&quot; : false,
   &quot;expression&quot; : &quot;%TuesdayOpenSelect%&quot;,
   &quot;controlWidth&quot; : 6,
   &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
-  &quot;disOnTplt&quot; : false,
   &quot;label&quot; : &quot;Tuesday Open&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
+  &quot;hideGroupSep&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false,
   &quot;HTMLTemplateId&quot; : &quot;&quot;
 }</propertySetConfig>
                 <sequenceNumber>2.0</sequenceNumber>
@@ -4585,29 +5652,26 @@
   &quot;textKey&quot; : &quot;&quot;,
   &quot;sanitize&quot; : false
 }</propertySetConfig>
-            <sequenceNumber>10.0</sequenceNumber>
+            <sequenceNumber>25.0</sequenceNumber>
             <type>Text Block</type>
         </childElements>
         <childElements>
             <isActive>true</isActive>
             <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
             <level>1.0</level>
-            <name>OtherServicesAtThisAddressFormula</name>
+            <name>NameOfEventFormula</name>
             <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
             <propertySetConfig>{
-  &quot;controlWidth&quot; : 12,
-  &quot;label&quot; : &quot;Other Services at this Address&quot;,
+  &quot;expression&quot; : &quot;%NameOfEventText%&quot;,
+  &quot;controlWidth&quot; : 6,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;label&quot; : &quot;Name of Event&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;expression&quot; : &quot;%OtherServicesAtThisAddressSelect%&quot;,
-  &quot;hide&quot; : false,
-  &quot;show&quot; : null,
-  &quot;mask&quot; : null,
-  &quot;dataType&quot; : null,
   &quot;hideGroupSep&quot; : false,
-  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;disOnTplt&quot; : false
+  &quot;hide&quot; : false,
+  &quot;disOnTplt&quot; : false,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;
 }</propertySetConfig>
             <sequenceNumber>8.0</sequenceNumber>
             <type>Formula</type>
@@ -4634,6 +5698,39 @@
   &quot;disOnTplt&quot; : false
 }</propertySetConfig>
             <sequenceNumber>7.0</sequenceNumber>
+            <type>Formula</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>SanitizerFormula</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Sanitizer&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;expression&quot; : &quot;%SanitizerMultiSelect%&quot;,
+  &quot;hide&quot; : false,
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;lrtfs&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;field&quot; : &quot;requestType&quot;
+      } ]
+    }
+  },
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>19.0</sequenceNumber>
             <type>Formula</type>
         </childElements>
         <childElements>
@@ -4671,7 +5768,7 @@
   &quot;textKey&quot; : &quot;&quot;,
   &quot;sanitize&quot; : false
 }</propertySetConfig>
-            <sequenceNumber>9.0</sequenceNumber>
+            <sequenceNumber>26.0</sequenceNumber>
             <type>Text Block</type>
         </childElements>
         <isActive>true</isActive>
@@ -4726,7 +5823,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>7.0</sequenceNumber>
+        <sequenceNumber>8.0</sequenceNumber>
         <type>Step</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -4737,12 +5834,14 @@
         <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
         <propertySetConfig>{
   &quot;controlWidth&quot; : 12,
-  &quot;label&quot; : &quot;SetValues&quot;,
+  &quot;label&quot; : &quot;Declare Constants&quot;,
   &quot;elementValueMap&quot; : {
-    &quot;FoodPermitBLARecordType&quot; : &quot;OperatingPermitApplication&quot;,
     &quot;RecordtypeForBLApplication&quot; : &quot;OperatingPermitApplication&quot;,
-    &quot;LicenseTypeNameForBLApplication&quot; : &quot;Food Premise Operating Permit&quot;,
-    &quot;FacilityType&quot; : &quot;Food&quot;
+    &quot;FacilityType&quot; : &quot;Food&quot;,
+    &quot;EventRecordType&quot; : &quot;PHOCSTemporaryFoodService&quot;,
+    &quot;InputLicenceType&quot; : &quot;%requestType%&quot;,
+    &quot;LicenseTypeNameForHighRiskBLApplication&quot; : &quot;High Risk Temporary Food Service Operating Permit&quot;,
+    &quot;LicenseTypeNameForBLApplication&quot; : &quot;=IF(%requestType% = \&quot;lrtfs\&quot;, \&quot;Low Risk Temporary Food Service Operating Permit\&quot;, \n   IF(%requestType% = \&quot;hrtfs\&quot;, \&quot;High Risk Temporary Food Service Operating Permit\&quot;, \n      \&quot;Low Risk Temporary Food Service Operating Permit\&quot;))&quot;
   },
   &quot;showPersistentComponent&quot; : [ true, false ],
   &quot;show&quot; : null,
@@ -4757,8 +5856,8 @@
     </omniProcessElements>
     <omniProcessType>OmniScript</omniProcessType>
     <propertySetConfig>{&quot;persistentComponent&quot;:[{&quot;render&quot;:false,&quot;label&quot;:&quot;&quot;,&quot;remoteClass&quot;:&quot;&quot;,&quot;remoteMethod&quot;:&quot;&quot;,&quot;remoteTimeout&quot;:30000,&quot;remoteOptions&quot;:{&quot;preTransformBundle&quot;:&quot;&quot;,&quot;postTransformBundle&quot;:&quot;&quot;},&quot;preTransformBundle&quot;:&quot;&quot;,&quot;postTransformBundle&quot;:&quot;&quot;,&quot;sendJSONPath&quot;:&quot;&quot;,&quot;sendJSONNode&quot;:&quot;&quot;,&quot;responseJSONPath&quot;:&quot;&quot;,&quot;responseJSONNode&quot;:&quot;&quot;,&quot;id&quot;:&quot;vlcCart&quot;,&quot;itemsKey&quot;:&quot;cartItems&quot;,&quot;modalConfigurationSetting&quot;:{&quot;modalHTMLTemplateId&quot;:&quot;vlcProductConfig.html&quot;,&quot;modalController&quot;:&quot;ModalProductCtrl&quot;,&quot;modalSize&quot;:&quot;lg&quot;}},{&quot;render&quot;:false,&quot;dispOutsideOmni&quot;:false,&quot;label&quot;:&quot;&quot;,&quot;remoteClass&quot;:&quot;&quot;,&quot;remoteMethod&quot;:&quot;&quot;,&quot;remoteTimeout&quot;:30000,&quot;remoteOptions&quot;:{&quot;preTransformBundle&quot;:&quot;&quot;,&quot;postTransformBundle&quot;:&quot;&quot;},&quot;preTransformBundle&quot;:&quot;&quot;,&quot;postTransformBundle&quot;:&quot;&quot;,&quot;id&quot;:&quot;vlcKnowledge&quot;,&quot;itemsKey&quot;:&quot;knowledgeItems&quot;,&quot;modalConfigurationSetting&quot;:{&quot;modalHTMLTemplateId&quot;:&quot;&quot;,&quot;modalController&quot;:&quot;&quot;,&quot;modalSize&quot;:&quot;lg&quot;}}],&quot;accessibilityToggle&quot;:true,&quot;allowSaveForLater&quot;:false,&quot;allowSaveChanges&quot;:false,&quot;saveNameTemplate&quot;:null,&quot;saveExpireInDays&quot;:null,&quot;saveForLaterRedirectPageName&quot;:&quot;sflRedirect&quot;,&quot;saveForLaterRedirectTemplateUrl&quot;:&quot;vlcSaveForLaterAcknowledge.html&quot;,&quot;saveContentEncoded&quot;:false,&quot;saveObjectId&quot;:&quot;%ContextId%&quot;,&quot;saveURLPatterns&quot;:{},&quot;autoSaveOnStepNext&quot;:false,&quot;elementTypeToHTMLTemplateMapping&quot;:{},&quot;seedDataJSON&quot;:{},&quot;trackingCustomData&quot;:{},&quot;enableKnowledge&quot;:false,&quot;bLK&quot;:false,&quot;lkObjName&quot;:null,&quot;knowledgeArticleTypeQueryFieldsMap&quot;:{},&quot;timeTracking&quot;:false,&quot;hideStepChart&quot;:false,&quot;mergeSavedData&quot;:false,&quot;visualforcePagesAvailableInPreview&quot;:{},&quot;cancelType&quot;:&quot;SObject&quot;,&quot;allowCancel&quot;:true,&quot;cancelSource&quot;:&quot;%ContextId%&quot;,&quot;cancelRedirectPageName&quot;:&quot;OmniScriptCancelled&quot;,&quot;cancelRedirectTemplateUrl&quot;:&quot;vlcCancelled.html&quot;,&quot;consoleTabLabel&quot;:&quot;&quot;,&quot;wpm&quot;:false,&quot;ssm&quot;:false,&quot;message&quot;:{},&quot;pubsub&quot;:false,&quot;autoFocus&quot;:false,&quot;currencyCode&quot;:&quot;&quot;,&quot;showInputWidth&quot;:false,&quot;rtpSeed&quot;:false,&quot;consoleTabTitle&quot;:null,&quot;consoleTabIcon&quot;:&quot;custom:custom18&quot;,&quot;errorMessage&quot;:{&quot;custom&quot;:[]},&quot;stylesheet&quot;:{&quot;newport&quot;:&quot;&quot;,&quot;lightning&quot;:&quot;&quot;,&quot;newportRtl&quot;:&quot;&quot;,&quot;lightningRtl&quot;:&quot;&quot;},&quot;stepChartPlacement&quot;:&quot;right&quot;,&quot;disableUnloadWarn&quot;:true,&quot;scrollBehavior&quot;:&quot;auto&quot;,&quot;currentLanguage&quot;:&quot;en_US&quot;}</propertySetConfig>
-    <subType>FoodServiceOperatingPermit</subType>
+    <subType>TemporaryFoodServiceOperatingPermit</subType>
     <type>LicensingAndPermitting</type>
-    <uniqueName>LicensingAndPermitting_FoodServiceOperatingPermit_English_7</uniqueName>
-    <versionNumber>7.0</versionNumber>
+    <uniqueName>LicensingAndPermitting_TemporaryFoodServiceOperatingPermit_English_2</uniqueName>
+    <versionNumber>2.0</versionNumber>
 </OmniScript>
