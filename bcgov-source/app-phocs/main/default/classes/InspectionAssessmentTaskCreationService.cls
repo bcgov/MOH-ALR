@@ -353,7 +353,7 @@ public without sharing class InspectionAssessmentTaskCreationService {
         Set<String> templateNames = new Set<String>();
         Set<String> foodFacilityServices = new Set<String>();
         
-        Account facility = [SELECT CategoryL1__c, CategoryL2__c, CategoryL3__c, Service_s__c FROM Account WHERE Id = :facilityAccountId LIMIT 1];
+        Account facility = [SELECT CategoryL1__c, CategoryL2__c, CategoryL3__c, Service_s__c FROM Account WHERE Id =: facilityAccountId LIMIT 1];
         
         if (String.isNotBlank(facility.Service_s__c)) {
             foodFacilityServices.addAll(facility.Service_s__c.split(';'));
@@ -420,9 +420,6 @@ public without sharing class InspectionAssessmentTaskCreationService {
         }
         
         for (PHOCSActionPlanTemplateDecisionMap__mdt decisionMap : decisionMaps){ 
-            if (decisionMap.AttributeType__c == null) {
-                templateNames.add(decisionMap.ActionPlanTemplateName__c);
-            }
             if(decisionMap.AttributeType__c == assetType && decisionMap.PoolType__c == assetPoolType && decisionMap.PoolSubType__c == assetPoolSubType){                
                 templateNames.add(decisionMap.ActionPlanTemplateName__c);
             }
