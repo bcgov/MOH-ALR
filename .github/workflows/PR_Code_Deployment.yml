@@ -3,15 +3,10 @@ name: PR Code Deployment
 # Definition when the workflow should run
 on:
   workflow_dispatch:
-  push:
-    branches:
-        - dev
-    paths:
-        - 'bcgov-source/app-phocs/main/default**'
-        - 'bcgov-source/core/main/default**'
-        - 'bcgov-source/app-alr/main/default**'             
-        - '.github/workflows/PR_Code_Deployment.yml'
-        - '!sfdx-project.json'
+  # Scheduled daily deployment at 6 PM Eastern.
+  # NOTE: GitHub cron is UTC and does NOT observe DST. 22:00 UTC = 6 PM EDT (summer) / 5 PM EST (winter).
+  schedule:
+    - cron: '0 22 * * *'
 
 # Jobs to be executed
 jobs:
