@@ -10,6 +10,12 @@ on:
       - 'bcgov-source/app-alr/main/default**'  
       - '.github/workflows/PR_Code_Validation.yml'
       - '!sfdx-project.json'
+
+# Keep only one validation run per PR. A new commit cancels the older, still-running validation.
+concurrency:
+  group: pr-validation-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   Code-Validation-Run:
     runs-on: ubuntu-latest
