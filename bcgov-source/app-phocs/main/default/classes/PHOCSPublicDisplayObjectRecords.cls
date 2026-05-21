@@ -21,7 +21,9 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             return output;
         }
         if(action == 'getFacilityList'){
-            List<Object> lstSobjects =  getFacilityList(String.valueof(input.get('programArea')) , String.valueof(input.get('filterItems')));
+            List<Object> lstSobjects =  getFacilityList(String.valueof(input.get('programArea')) , 
+                                                        String.valueof(input.get('filterItems')),
+                                                        String.valueof(input.get('operatingWithoutLicence')));
             output.put('result', lstSobjects);
             return output;
         }
@@ -275,31 +277,25 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
     }
     
     
-    public static List<Object> getFacilityList(string programArea,string filterItems) {
-        system.debug('filterItems--------->'+ filterItems);
+    public static List<Object> getFacilityList(String programArea, String filterItems, String operatingWithoutLicence) {      
         List<Object> results = new List<Object>();
         FacilityWrapper wrapper = new FacilityWrapper();
-        String query;
-        system.debug('-----filterItems---'+filterItems);
-        if(filterItems == null){
-         query = 'SELECT Id,Name,Type,Physical_Address__City__s, CategoryL1__c,CategoryL2__c,HealthAuthority__c,Phone,ParentAccount__r.Name,' +
-                              'FacilityCHSAText__c,Physical_Address__c, PHOCSNumberOfInspections__c,' +
-                              'PHOCSOutstandingViolations__c, PHOCSLastInspectionDate__c, HideAddressonPublicSite__c ' +
-                        'FROM Account';
-        }else{
-            query = 'SELECT Id, Name, Type, Physical_Address__City__s, CategoryL1__c, CategoryL2__c, HealthAuthority__c, Phone, ParentAccount__r.Name, ' +
-                'Physical_Address__c, FacilityCHSAText__c,PHOCSNumberOfInspections__c, ' +
-                'PHOCSOutstandingViolations__c, PHOCSLastInspectionDate__c, HideAddressonPublicSite__c  ' +
-                'FROM Account ' ;
-        }
-            system.debug('-----query---'+query);
-            query += getFacilitiesFilter(programArea,filterItems);
-                    system.debug('-----query---'+query);
 
-        for (Account sObj : Database.query(query)) {  // NOPMD      
-           results.add(wrapper.wrap(sObj));
+        String query =
+            'SELECT Id, Name, Type, Physical_Address__City__s, CategoryL1__c, CategoryL2__c, ' +
+            'HealthAuthority__c, Phone, ParentAccount__r.Name, FacilityCHSAText__c, Physical_Address__c, ' +
+            'PHOCSNumberOfInspections__c, PHOCSOutstandingViolations__c, PHOCSLastInspectionDate__c, ' +
+            'HideAddressonPublicSite__c, OWLPublicRetentionActive__c ' +
+            'FROM Account';
+
+        query += getFacilitiesFilter(programArea, filterItems, operatingWithoutLicence);
+        System.debug('-----query---' + query);
+        System.debug('filterItems--------->' + filterItems);
+
+        for (Account sObj : Database.query(query)) {
+            results.add(wrapper.wrap(sObj));
         }
-        system.debug('----->'+results);
+
         return results;
     }
 
@@ -509,71 +505,68 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         return details;
     }
                                                                 
-    private static string getFacilitiesFilter(string programArea, String filterItems){
+    private static String getFacilitiesFilter(String programArea, String filterItems, String operatingWithoutLicence) {
         String returnQuery;
+        Boolean isOWLListing = operatingWithoutLicence == 'true';
+
         switch on programArea {
             when 'food' {
-               returnQuery = ' Where RecordType.DeveloperName=\'Facility\' AND Type=\'Food\' AND Status__c = \'Open\'';
-               returnQuery = addFlexCardFilters(filterItems,returnQuery);
-               return returnQuery;
-            }   
-            when 'drinkingwatersystem' { 
-               returnQuery = ' Where RecordType.DeveloperName=\'DrinkingWaterSystem\' AND Type=\'Drinking Water\' AND Status__c = \'Open\'';
-               returnQuery = addFlexCardFilters(filterItems,returnQuery);
-               return returnQuery;
+                returnQuery = ' WHERE RecordType.DeveloperName = \'Facility\' AND Type = \'Food\' AND Status__c = \'Open\'';
+            }
+            when 'drinkingwatersystem' {
+                returnQuery = ' WHERE RecordType.DeveloperName = \'DrinkingWaterSystem\' AND Type = \'Drinking Water\' AND Status__c = \'Open\'';
             }
             when 'residentialcare' {
-               returnQuery = ' Where RecordType.DeveloperName=\'Facility\' AND  Status__c = \'Open\' AND Type=\'Residential Care\''; // Rahul Patle : 13-04-26 :  removed as part of 3165 - AND CategoryL1__c IN (\'Licensing - Residential\',\'Unlawful – Residential Licensing\',\'Hospital Act\')
-               returnQuery = addFlexCardFilters(filterItems,returnQuery);
-			   return returnQuery;
+                returnQuery = getCareFacilityWhereClause('Residential Care', isOWLListing);
             }
             when 'hospital' {
-                returnQuery =' Where RecordType.DeveloperName=\'Facility\' AND  Status__c = \'Open\' AND Type=\'Residential Care\' AND CategoryL1__c=\'Hospital Act\''; 
-				returnQuery = addFlexCardFilters(filterItems,returnQuery);
-                return returnQuery;
+                returnQuery = ' WHERE RecordType.DeveloperName = \'Facility\' AND Status__c = \'Open\' AND Type = \'Residential Care\' AND CategoryL1__c = \'Hospital Act\'';
             }
             when 'childcare' {
-               returnQuery =  ' Where RecordType.DeveloperName=\'Facility\' AND  Status__c = \'Open\' AND Type=\'Child Care\'';
-			   returnQuery = addFlexCardFilters(filterItems,returnQuery);
-               return returnQuery;
+                returnQuery = getCareFacilityWhereClause('Child Care', isOWLListing);
             }
             when 'personalservices' {
-               returnQuery = ' Where RecordType.DeveloperName=\'Facility\' AND  Status__c = \'Open\' AND Type=\'Personal Services\'';
-			   returnQuery = addFlexCardFilters(filterItems,returnQuery);
-               return returnQuery;
-            }   
-            when 'tobaccovapour' {     
-               returnQuery = ' Where RecordType.DeveloperName=\'Facility\' AND  Status__c = \'Open\' AND Type=\'Tobacco and Vapour\'';
-			   returnQuery = addFlexCardFilters(filterItems,returnQuery);
-               return returnQuery;
+                returnQuery = ' WHERE RecordType.DeveloperName = \'Facility\' AND Status__c = \'Open\' AND Type = \'Personal Services\'';
+            }
+            when 'tobaccovapour' {
+                returnQuery = ' WHERE RecordType.DeveloperName = \'Facility\' AND Status__c = \'Open\' AND Type = \'Tobacco and Vapour\'';
             }
             when 'recreationalwater' {
-               returnQuery =  ' Where RecordType.DeveloperName=\'Facility\' AND Status__c = \'Open\' AND Type=\'Recreational Water\'';
-			   returnQuery = addFlexCardFilters(filterItems,returnQuery);
-               return returnQuery;
+                returnQuery = ' WHERE RecordType.DeveloperName = \'Facility\' AND Status__c = \'Open\' AND Type = \'Recreational Water\'';
             }
             when 'industrial-camps' {
-               returnQuery = ' Where RecordType.DeveloperName=\'Facility\' AND Status__c = \'Open\' AND Type=\'Industrial Camps\'';
-			   returnQuery = addFlexCardFilters(filterItems,returnQuery);
-               return returnQuery;
+                returnQuery = ' WHERE RecordType.DeveloperName = \'Facility\' AND Status__c = \'Open\' AND Type = \'Industrial Camps\'';
             }
             when 'sewerage-facilities' {
-               returnQuery = ' Where RecordType.DeveloperName=\'Facility\' AND Status__c = \'Open\' AND Type=\'Sewerage\'';
-			   returnQuery = addFlexCardFilters(filterItems,returnQuery);
-               return returnQuery;
+                returnQuery = ' WHERE RecordType.DeveloperName = \'Facility\' AND Status__c = \'Open\' AND Type = \'Sewerage\'';
             }
-			when 'childcareowl'{
-               returnQuery = ' Where RecordType.DeveloperName=\'Facility\' AND Status__c = \'closed\' AND Type=\'Child Care\' AND OWLPublicRetentionActive__c = true';
-			   returnQuery = addFlexCardFilters(filterItems,returnQuery);
-               return returnQuery;
-            }
-            when 'residentialcareowl'{
-               returnQuery = ' Where RecordType.DeveloperName=\'Facility\' AND Status__c = \'closed\' AND Type=\'Residential Care\' AND OWLPublicRetentionActive__c = true';
-			   returnQuery = addFlexCardFilters(filterItems,returnQuery);
-               return returnQuery;
+            when else {
+                return '';
             }
         }
-        return '';
+        returnQuery = addFlexCardFilters(filterItems, returnQuery);
+        return returnQuery;
+    }
+
+    private static String getCareFacilityWhereClause(String facilityType, Boolean isOWLListing) {
+        String whereClause =
+           ' WHERE RecordType.DeveloperName = \'Facility\' ' +
+            'AND Type = \'' + String.escapeSingleQuotes(facilityType) + '\' ' +
+            'AND (';
+
+        if (isOWLListing) {
+            whereClause +=
+                '(Status__c = \'Open\' AND LicenseDetail__c = \'Operating Without Licence\') ' +
+                'OR ' +
+                '(Status__c = \'Closed\' AND OWLPublicRetentionActive__c = true)';
+        } else {
+            whereClause +=
+                '(Status__c = \'Open\') ' +
+                'OR ' +
+                '(Status__c = \'Closed\' AND OWLPublicRetentionActive__c = true)';
+        }
+        whereClause += ')';
+        return whereClause;
     }
     
     private static string getAddress(Address physicalAddress){
