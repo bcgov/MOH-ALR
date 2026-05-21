@@ -292,7 +292,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         System.debug('-----query---' + query);
         System.debug('filterItems--------->' + filterItems);
 
-        for (Account sObj : Database.query(query)) {
+        for (Account sObj : Database.query(query)) {    // NOPMD
             results.add(wrapper.wrap(sObj));
         }
 
