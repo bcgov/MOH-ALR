@@ -289,9 +289,6 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             'FROM Account';
 
         query += getFacilitiesFilter(programArea, filterItems, operatingWithoutLicence);
-        System.debug('-----query---' + query);
-        System.debug('filterItems--------->' + filterItems);
-
         for (Account sObj : Database.query(query)) {    // NOPMD
             results.add(wrapper.wrap(sObj));
         }
