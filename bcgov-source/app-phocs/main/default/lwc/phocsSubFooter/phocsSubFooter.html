@@ -1,0 +1,41 @@
+<!-- accountHealthAuthorityCard.html -->
+<template>
+        <template lwc:if={recordId}>
+
+    <lightning-card>
+        <div class="container">
+
+            <!-- LEFT SIDE -->
+            <div class="lhs">
+                <div class="title">
+                    Health Authority Information
+                </div>
+
+                <div class="links">
+                    <a href={websiteUrl}
+                       target="_blank"
+                       class="link">
+                        Visit website
+                    </a>
+
+                    <a href={contactUrl}
+                       target="_blank"
+                       class="link">
+                        Contact
+                    </a>
+                </div>
+            </div>
+
+            <!-- RIGHT SIDE -->
+            <div class="rhs">
+                <template if:true={logoUrl}>
+                    <img src={logoUrl}
+                         alt="Health Authority Logo"
+                         class="logo" />
+                </template>
+            </div>
+
+        </div>
+    </lightning-card>
+        </template>
+</template>
