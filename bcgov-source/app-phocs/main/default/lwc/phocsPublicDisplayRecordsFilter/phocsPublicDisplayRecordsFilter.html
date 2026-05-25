@@ -1,8 +1,9 @@
 <template>
-    <div style="display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap;">
+    <div style="display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap; text:bold;">
 
         <!-- Dynamic Filters -->
         <template for:each={filterConfig} for:item="filter">
+             <template if:true={filter.visible}>
             <lightning-combobox
                 key={filter.field}
                 label={filter.label}
@@ -11,6 +12,7 @@
                 value={filter.value}
                 onchange={handleChange}>
             </lightning-combobox>
+             </template>
         </template>
 
         <!-- Reset Button -->

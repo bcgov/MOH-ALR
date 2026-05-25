@@ -1,11 +1,13 @@
-import { LightningElement, api, track } from 'lwc';
+import { LightningElement, api, track, wire } from 'lwc';
 import pubsub from 'omnistudio/pubsub'; 
+import { CurrentPageReference } from 'lightning/navigation';
+
 export default class GenericFilter extends LightningElement {
 
     // Full data from FlexCard
     @api data = [];
     // Config for filters (dynamic)
-    @api filterConfig = [   { "label": "Health Authority", "field": "HealthAuthority__c", "value": "All" },   { "label": "City", "field": "PhysicalAddressCity" , "value": "All" } ];
+    @api filterConfig = [   { "label": "Filter by Health Authority", "field": "HealthAuthority__c", "value": "All", "visible":true },   { "label": "Filter by City", "field": "PhysicalAddressCity" , "value": "All" , "visible":true},   { "label": "License Detail", "field": "LicenseDetail__c" , "value": "All" , "visible":false} ];
     @track originalData = [];
     // Filtered result
     @track filteredData = [];
@@ -13,8 +15,15 @@ export default class GenericFilter extends LightningElement {
     // Store selected values
     @track selectedFilters = {};
     @api selectedValue;
+    @track paValue;
     
-
+ @wire(CurrentPageReference)
+    getStateParameters(currentPageReference) {
+        if (currentPageReference) {
+            this.paValue = currentPageReference.state?.PA;
+            console.log('pa value => ', this.paValue);
+        }
+    }
     // Initialize
  connectedCallback() {
         console.log('RAW DATA FROM FLEXCARD:', this.data);
@@ -37,6 +46,11 @@ export default class GenericFilter extends LightningElement {
         };
         });
         //
+        if(this.paValue == 'childcareowl' || this.paValue == 'residentialcareowl' || this.paValue == 'residentialcare' || this.paValue == 'childcare'){
+            this.showSpecialFilter();
+        }
+            this.setDefaultFilters();
+
         this.initialize();
 
 }
@@ -47,7 +61,7 @@ export default class GenericFilter extends LightningElement {
         this.data = newData;
         this.initialize();
     }
-
+   
     initialize() {
     console.log('Initializing.......');
     this.data = Array.isArray(this.data) ? this.data : [];
@@ -163,4 +177,18 @@ export default class GenericFilter extends LightningElement {
         filterData: this.selectedValue
     });
     }
+    showSpecialFilter() {
+    this.filterConfig = this.filterConfig.map(filter => {
+        if (filter.field === 'LicenseDetail__c') {
+            return { ...filter, visible: true };
+        }
+        return filter;
+    });
+}
+setDefaultFilters() {
+    this.filterConfig = this.filterConfig.map(filter => ({
+        ...filter,
+        value: filter.value || 'All'
+    }));
+}
 }
