@@ -37,7 +37,7 @@ public with sharing class EnforcementActionViolationHandler {
                 String key = rec.ViolationEnforcementAction__c + '-' + rec.RegulatoryCodeViolation__c;
                 
                 if (uniqueKeys.contains(key)) {
-                    rec.addError('Duplicate record exists for the selected Violation Enforcement Action and Regulatory Code Violation.');
+                    rec.addError(label.PHOCS_EAV_InsertErrorMsg);
                 }
                 uniqueKeys.add(key);
             }
@@ -74,7 +74,7 @@ public with sharing class EnforcementActionViolationHandler {
                 }
                 
                 if (existingKeys.contains(key) && !isSelfUpdate) {
-                    rec.addError('A record already exists for this Violation Enforcement Action and Regulatory Code Violation combination.');
+                    rec.addError(label.PHOCS_EAV_UpdateErrorMsg);
                 }
             }
         }catch(Exception ex){        
