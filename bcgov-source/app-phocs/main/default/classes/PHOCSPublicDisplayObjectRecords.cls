@@ -282,13 +282,15 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         FacilityWrapper wrapper = new FacilityWrapper();
 
         String query =
-            'SELECT Id, Name, Type, Physical_Address__City__s, CategoryL1__c, CategoryL2__c, ' +
+            'SELECT Id, Name, Type, Physical_Address__City__s,LicenseDetail__c,  CategoryL1__c, CategoryL2__c, ' +
             'HealthAuthority__c, Phone, ParentAccount__r.Name, FacilityCHSAText__c, Physical_Address__c, ' +
             'PHOCSNumberOfInspections__c, PHOCSOutstandingViolations__c, PHOCSLastInspectionDate__c, ' +
             'HideAddressonPublicSite__c, OWLPublicRetentionActive__c ' +
             'FROM Account';
 
         query += getFacilitiesFilter(programArea, filterItems, operatingWithoutLicence);
+        
+
         for (Account sObj : Database.query(query)) {    // NOPMD
             results.add(wrapper.wrap(sObj));
         }
@@ -680,6 +682,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 'PhysicalAddressCity' => accRecord.HideAddressonPublicSite__c ? '' : accRecord.Physical_Address__c?.getCity(),
                 'PhysicalAddressState'=> accRecord.Physical_Address__c?.getState(),
                 'PhysicalAddressCountry'=> accRecord.Physical_Address__c?.getCountry(),
+                'LicenseDetail__c' => accRecord.LicenseDetail__c,
                 'PhysicalAddressPostalCode'=> accRecord.Physical_Address__c?.getPostalCode()
             };
             return result;
@@ -826,7 +829,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         }
     }
     private static String addFlexCardFilters(String filterItems, String returnQuery){
-        String filters  = filterItems == null ? returnQuery : returnQuery + ' AND ( HealthAuthority__c = \''+filterItems+'\' OR Physical_Address__city__s  = \''+filterItems+'\')';
+        String filters  = filterItems == null ? returnQuery : returnQuery + ' AND ( HealthAuthority__c = \''+filterItems+'\' OR Physical_Address__city__s  = \''+filterItems+'\'  OR LicenseDetail__c  = \''+filterItems+'\')';
         return filters;
     }
 }
