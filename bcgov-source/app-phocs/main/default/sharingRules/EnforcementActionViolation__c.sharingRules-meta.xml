@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingCriteriaRules>
+        <fullName>PHOCSEnforcementActionViolationReportingUser</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS Enforcement Action Violation Reporting User</label>
+        <sharedTo>
+            <group>PHOCSReportingUserPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Enforcement Action Violation</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSEnforcementAction_ViolationOfficerBusinessAdmin</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>EHIS-3688</description>
+        <label>PHOCS Enforcement Action Violation Officer-BusinessAdmin</label>
+        <sharedTo>
+            <group>EHISUsersPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Enforcement Action Violation</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+</SharingRules>
