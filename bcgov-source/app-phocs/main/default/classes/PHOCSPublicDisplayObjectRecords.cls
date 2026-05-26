@@ -753,6 +753,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 'InspectionType' => inspection.TestInspType__c,
                 'PHOCSViolationCount' => inspection.PHOCSViolationCount__c,
 
+                'AccountId' => inspection.Account?.Id,
                 'AccountName' => inspection.Account?.Name,
                 'AccountType' => inspection.Account?.Type,
                 'CategoryL1' => inspection.Account?.CategoryL1__c,
