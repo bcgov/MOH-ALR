@@ -36,6 +36,7 @@ const FIELDS = [
 
 export default class AccountHealthAuthorityCard extends LightningElement {
     @api recordId;
+    @api isHAExists;
     account;
     logoUrl;
 
@@ -72,31 +73,38 @@ export default class AccountHealthAuthorityCard extends LightningElement {
                 this.logoUrl = vchLogo;
                  this.websiteUrl = vchWebLink;
                 this.contactUrl = vchContactLink;
+                this.isHAExists = true;
                 break;
 
             case 'Fraser Health - FH':
                 this.logoUrl = fraserLogo;
                   this.websiteUrl = fraserWebLink;
                 this.contactUrl = fraserContactLink;
+                this.isHAExists = true;
+
                 break;
 
             case 'Island Health - Island':
                 this.logoUrl = islandLogo;
                   this.websiteUrl = islandWebLink;
                 this.contactUrl = islandContactLink;
+                this.isHAExists = true;
+
                 break;
 
             case 'Interior Health - IH':
                 this.logoUrl = InterierLogo;
                   this.websiteUrl = interierWebLink;
                 this.contactUrl = interierContactLink;
+                this.isHAExists = true;
+
                 break;
 
              case 'Northern Health - NH':
                 this.logoUrl = northernLogo;
                   this.websiteUrl = northernWebLink;
                 this.contactUrl = northernContactLink;
-               
+                this.isHAExists = true;
                 break;
 
             default:
