@@ -67,7 +67,7 @@ export default class PHOCSEnforcementActionViolationRelatedList extends Navigati
                 rowActions: [
                     { label: 'View', name: 'view' },
                     { label: 'Edit', name: 'edit' },
-                    { label: 'Delete', name: 'delete' }
+                    { label: 'Remove', name: 'delete' }
                 ],
                 menuAlignment: 'auto'
             }
