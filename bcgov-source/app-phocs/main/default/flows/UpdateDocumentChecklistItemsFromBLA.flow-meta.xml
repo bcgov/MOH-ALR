@@ -10,7 +10,7 @@
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>PHOCS_BLA_Record_Types</name>
-            <conditionLogic>(1 OR 2 OR 3 OR 5 OR 6) AND 4</conditionLogic>
+            <conditionLogic>(1 OR 2 OR 3 OR 5 OR 6 OR 7) AND 4</conditionLogic>
             <conditions>
                 <leftValueReference>Get_BLA.RecordType.DeveloperName</leftValueReference>
                 <operator>EqualTo</operator>
@@ -51,6 +51,13 @@
                 <operator>EqualTo</operator>
                 <rightValue>
                     <elementReference>Get_Dairy_Plant.DeveloperName</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_BLA.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>PHOCSRecordofSewerageSystem</stringValue>
                 </rightValue>
             </conditions>
             <connector>
