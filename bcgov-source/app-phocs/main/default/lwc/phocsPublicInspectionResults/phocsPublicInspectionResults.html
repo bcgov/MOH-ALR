@@ -4,16 +4,32 @@
             <table class="slds-table slds-table_cell-buffer inspection-results-table">
                 <thead>
                     <tr class="slds-line-height_reset">
-                        <th class="question-column slds-theme_shade">
-                            <div class="slds-truncate">
-                                Inspection Questions and Comments
-                            </div>
+                        <th class="question-column slds-theme_shade" scope="col" aria-sort={questionAriaSort}>
+                            <button class="sort-button" type="button" data-field="question" onclick={handleSort}>
+                                <span class="slds-truncate">
+                                    Inspection Questions and Comments
+                                </span>
+                                <lightning-icon
+                                    class="sort-icon"
+                                    icon-name={questionSortIcon}
+                                    size="xx-small"
+                                    alternative-text={questionSortAlternativeText}>
+                                </lightning-icon>
+                            </button>
                         </th>
 
-                        <th class="status-column slds-theme_shade">
-                            <div class="slds-truncate">
-                                Compliance Status
-                            </div>
+                        <th class="status-column slds-theme_shade" scope="col" aria-sort={statusAriaSort}>
+                            <button class="sort-button" type="button" data-field="Status" onclick={handleSort}>
+                                <span class="slds-truncate">
+                                    Compliance Status
+                                </span>
+                                <lightning-icon
+                                    class="sort-icon"
+                                    icon-name={statusSortIcon}
+                                    size="xx-small"
+                                    alternative-text={statusSortAlternativeText}>
+                                </lightning-icon>
+                            </button>
                         </th>
                     </tr>
                 </thead>

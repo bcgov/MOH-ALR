@@ -107,7 +107,7 @@ global without sharing class PHOCSPortalRecordShare implements Callable {
         for (Account acc : children) {
             if (!resultSet.contains(acc.Id)) {
                 resultSet.add(acc.Id);
-                collectChildAccounts(acc.Id, resultSet);
+               // collectChildAccounts(acc.Id, resultSet);
             }
         }
     }
