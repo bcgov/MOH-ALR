@@ -1,4 +1,4 @@
-name: OpsQA Code Deployment
+name: HFOpsQA Code Deployment
 
 # Definition when the workflow should run
 on:
@@ -15,9 +15,10 @@ on:
 
 # Jobs to be executed
 jobs:
-  Code-Deploy-Run:
+  Code-Deploy-Run-HFOpsQA:
     runs-on: ubuntu-24.04
-    environment: OpsQA
+    if: ${{ github.event.inputs.HFOpsQA == 'true'}}
+    environment: HFOpsQA
     env:
         SFDXAUTHURL: ${{ secrets.SFDXAUTHURL }}
     steps:
@@ -40,11 +41,11 @@ jobs:
       - name: 'Authenticate Sandbox'
         run: |
             echo "${{ env.SFDXAUTHURL }}" > ./authfile
-            sf org login sfdx-url -f authfile -a OpsQA
+            sf org login sfdx-url -f authfile -a HFOpsQA
 
       # deploy code without running test classes
       - name: 'Deploy source code'
-        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --testlevel RunLocalTests --targetusername OpsQA
+        run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose -g --testlevel RunLocalTests --targetusername HFOpsQA
 
   Git-Tag-Run:
     needs: Code-Deploy-Run
@@ -59,15 +60,15 @@ jobs:
 
       - name: 'Get latest tag'
         id: latesttag
-        run: echo "LATEST_TAG=$(git describe --tags --match "OpsQA*" --abbrev=0 HEAD)" >> $GITHUB_OUTPUT
+        run: echo "LATEST_TAG=$(git describe --tags --match "HFOpsQA*" --abbrev=0 HEAD)" >> $GITHUB_OUTPUT
 
       - name: 'Increment Tag'
         id: newtag
         run: |
           LATEST_TAG=${{ steps.latesttag.outputs.LATEST_TAG }}
-          NUMBER=${LATEST_TAG#OpsQA.}
+          NUMBER=${LATEST_TAG#HFOpsQA.}
           NEW_NUMBER=$((NUMBER + 1))
-          NEW_TAG=OpsQA.${NEW_NUMBER}
+          NEW_TAG=HFOpsQA.${NEW_NUMBER}
           echo "NEW_TAG=$NEW_TAG" >> $GITHUB_OUTPUT
 
       - name: 'Push new tag'
