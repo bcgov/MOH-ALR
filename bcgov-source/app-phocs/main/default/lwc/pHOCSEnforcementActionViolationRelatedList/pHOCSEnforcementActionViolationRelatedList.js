@@ -3,76 +3,89 @@ import { NavigationMixin } from 'lightning/navigation';
 import { deleteRecord } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { encodeDefaultFieldValues } from 'lightning/pageReferenceUtils';
+import hasReportingUserPermission from '@salesforce/customPermission/PHOCSReportingUser';
 
 import getRelatedViolations from '@salesforce/apex/EnforcementActionViolationRelController.getRelatedViolations';
 
 export default class PHOCSEnforcementActionViolationRelatedList extends NavigationMixin(LightningElement) {
     @api recordId;
     @track violations = [];
+    @track isTableVisible = true;
 
-    columns = [
-        {
-            label: 'Violation ID',
-            fieldName: 'violationUrl',
-            type: 'url',
-            initialWidth: 150,
-            typeAttributes: {
-                label: { fieldName: 'violationName' },
-                target: '_self'
-            }
-        },
-        {
-            label: 'Inspection',
-            fieldName: 'inspectionUrl',
-            type: 'url',
-            initialWidth: 140,
-            typeAttributes: {
-                label: { fieldName: 'inspectionName' },
-                target: '_self'
-            }
-        },
-        {
-            label: 'Assessment Indicator Definition',
-            fieldName: 'assessmentIndicatorName',
-            type: 'text',
-            wrapText: true
-        },
-        {
-            label: 'Status',
-            fieldName: 'status',
-            type: 'text',
-            initialWidth: 110
-        },
-        {
-            label: 'Compliance Due Date',
-            fieldName: 'complianceDueDate',
-            type: 'date',
-            initialWidth: 170,
-            typeAttributes: {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit'
-            }
-        },
-        {
-            label: 'Days Open',
-            fieldName: 'daysOpen',
-            type: 'number',
-            initialWidth: 100
-        },
-        {
-            type: 'action',
-            fixedWidth: 70,
-            typeAttributes: {
-                rowActions: [
-                    { label: 'View', name: 'view' },
-                    { label: 'Edit', name: 'edit' },
-                    { label: 'Remove', name: 'delete' }
-                ],
-                menuAlignment: 'auto'
-            }
+    get isReadOnly() {
+        return hasReportingUserPermission;
+    }
+
+    get columns() {
+        const rowActions = [{ label: 'View', name: 'view' }];
+
+        if (!this.isReadOnly) {
+            rowActions.push(
+                { label: 'Edit', name: 'edit' },
+                { label: 'Remove', name: 'delete' }
+            );
         }
-    ];
+
+        return [
+            {
+                label: 'Violation ID',
+                fieldName: 'violationUrl',
+                type: 'url',
+                initialWidth: 150,
+                typeAttributes: {
+                    label: { fieldName: 'violationName' },
+                    target: '_self'
+                }
+            },
+            {
+                label: 'Inspection',
+                fieldName: 'inspectionUrl',
+                type: 'url',
+                initialWidth: 140,
+                typeAttributes: {
+                    label: { fieldName: 'inspectionName' },
+                    target: '_self'
+                }
+            },
+            {
+                label: 'Assessment Indicator Definition',
+                fieldName: 'assessmentIndicatorName',
+                type: 'text',
+                wrapText: true
+            },
+            {
+                label: 'Status',
+                fieldName: 'status',
+                type: 'text',
+                initialWidth: 110
+            },
+            {
+                label: 'Compliance Due Date',
+                fieldName: 'complianceDueDate',
+                type: 'date',
+                initialWidth: 170,
+                typeAttributes: {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit'
+                }
+            },
+            {
+                label: 'Days Open',
+                fieldName: 'daysOpen',
+                type: 'number',
+                initialWidth: 100
+            },
+            {
+                type: 'action',
+                fixedWidth: 70,
+                typeAttributes: {
+                    rowActions: rowActions,
+                    menuAlignment: 'auto'
+                }
+            }
+        ];
+    }
 
     connectedCallback() {
         this.loadData();
@@ -109,6 +122,9 @@ export default class PHOCSEnforcementActionViolationRelatedList extends Navigati
                         daysOpen: violation.DaysOpen
                     };
                 });
+
+            this.isTableVisible = false;
+            setTimeout(() => { this.isTableVisible = true; }, 0);
 
         } catch (error) {
             console.error('Load Error:', error);
