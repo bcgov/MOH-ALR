@@ -39,13 +39,15 @@
         <!-- Datatable -->
         <template if:true={hasRecords}>
             <div class="table-wrapper">
-                <lightning-datatable
-                    key-field="Id"
-                    data={violations}
-                    columns={columns}
-                    hide-checkbox-column
-                    onrowaction={handleRowAction}>
-                </lightning-datatable>
+                <template if:true={isTableVisible}>
+                    <lightning-datatable
+                        key-field="Id"
+                        data={violations}
+                        columns={columns}
+                        hide-checkbox-column
+                        onrowaction={handleRowAction}>
+                    </lightning-datatable>
+                </template>
             </div>
         </template>
 
