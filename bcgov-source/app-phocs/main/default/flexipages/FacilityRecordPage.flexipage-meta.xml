@@ -940,16 +940,6 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.WaterSourceName__c</fieldItem>
-                <identifier>RecordSource_Of_Portable_Water_For_Filling_Tan_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
                 <fieldItem>Record.SizeofWastewaterTankLitres__c</fieldItem>
                 <identifier>RecordSize_of_Wastewater_Tank_Litres_cField</identifier>
             </fieldInstance>
@@ -1014,16 +1004,6 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.ApprovedMenu__c</fieldItem>
-                <identifier>RecordApproved_Menu_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
                 <fieldItem>Record.PowerSourceDuringTransportation__c</fieldItem>
                 <identifier>RecordPower_Source_During_Transportation_cField</identifier>
             </fieldInstance>
@@ -1046,6 +1026,19 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.NumberOfSeats__c</fieldItem>
                 <identifier>RecordNumberOfSeats_cField</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.CategoryL1__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Food service establishment</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.CategoryL2__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Institutional</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
