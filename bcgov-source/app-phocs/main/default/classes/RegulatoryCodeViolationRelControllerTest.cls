@@ -4,12 +4,13 @@
 * @Description: The purpose of this class is to cover Code coverage of RegulatoryCodeViolationRelatedController.
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
                 17 Dec -  PHOCS-2873        -  Accenture   -  Display selected canned comments details on parent violation.
+                03 Jun -  EHIS-2668         -  Accenture   -  Fetch child violation hierarchy with associated canned comments.
 ***********************************************************************************************/
 @isTest
 public class RegulatoryCodeViolationRelControllerTest{
     
     //Test Data Setup
-    private static void createTestData() {
+    public static void createTestData() {
         Id rtPHOCSInspectionAssessmentInd = Schema.SObjectType.InspectionAssessmentInd.getRecordTypeInfosByDeveloperName().get('PHOCSInspectionAssessmentInd').getRecordTypeId();
         Id rtPHOCSRegulatoryCodeViolation = Schema.SObjectType.RegulatoryCodeViolation.getRecordTypeInfosByDeveloperName().get('PHOCSRegulatoryCodeViolation').getRecordTypeId();
         Id recordTypePHOCSRegulatoryCodeViolation = Schema.SObjectType.RegulatoryCodeViolation.getRecordTypeInfosByDeveloperName().get('PHOCSRegulatoryCodeViolation').getRecordTypeId();
@@ -69,8 +70,7 @@ public class RegulatoryCodeViolationRelControllerTest{
             indMap.put(ia.AssessmentIndDefinitionId, ia);
         }        
         
-        List<RegulatoryCodeViolation> violationsToInsert = new List<RegulatoryCodeViolation>();
-        
+        List<RegulatoryCodeViolation> violationsToInsert = new List<RegulatoryCodeViolation>();        
         for (RegulatoryCodeAssessmentInd mapItem : mappings) {
             InspectionAssessmentInd ind = indMap.get(mapItem.AssessmentIndDefinitionId);
             
@@ -90,6 +90,21 @@ public class RegulatoryCodeViolationRelControllerTest{
         if(!violationsToInsert.isEmpty()){
             insert violationsToInsert;
         }
+        
+        List<RegulatoryCodeViolation> childViolationsToInsert = new List<RegulatoryCodeViolation>();
+        for (RegulatoryCodeViolation rCVRec : [SELECT Id, InspectionAssmntIndId FROM RegulatoryCodeViolation LIMIT 1]){            
+            childViolationsToInsert.add(new RegulatoryCodeViolation(RecordTypeId = recordTypePHOCSRegulatoryCodeViolation, InspectionId =  insp.Id,
+                                                                    InspectionAssmntIndId = rCVRec.InspectionAssmntIndId, ComplianceDueDate = System.now().addDays(2),
+                                                                    DateCreated = System.now(), Status = 'Open', PHOCSParentId__c = rCVRec.Id));
+            childViolationsToInsert.add(new RegulatoryCodeViolation(RecordTypeId = recordTypePHOCSRegulatoryCodeViolation, InspectionId =  insp.Id,
+                                                                    InspectionAssmntIndId = rCVRec.InspectionAssmntIndId, ComplianceDueDate = System.now().addDays(3),
+                                                                    DateCreated = System.now(), Status = 'Open', PHOCSParentId__c = rCVRec.Id));
+        } 
+        
+        if(!childViolationsToInsert.isEmpty()){
+            insert childViolationsToInsert;
+        }
+        
     }
      
 /**
@@ -126,5 +141,25 @@ public class RegulatoryCodeViolationRelControllerTest{
         Test.stopTest();
         
         Assert.areEqual(0, results.size(), 'Related violations should not be returned');
+    }
+    
+/**
+* @author: Deepak
+* @date: 03 Jun 2026
+* @description: The purpose of this method is to cover Testcoverage of getViolationHierarchy.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/      
+    @isTest
+    public static void getViolationHierarchyTest(){
+        
+        createTestData();
+        RegulatoryCodeViolation getParentRCV = [SELECT Id FROM RegulatoryCodeViolation WHERE InspectionAssmntInd.AssessmentIndDefinition.PHOCSParentId__c = NULL LIMIT 1];
+       
+        Test.startTest();        
+        RegulatoryCodeViolationRelatedController.getViolationHierarchy(getParentRCV.Id);
+        Test.stopTest();
+        
+        //Assert.areEqual(1, results.size(), 'Related violations should be returned');
+        //Assert.areNotEqual(null, results[0].RegulatoryCode.Name, 'Regulatory Code Name should be populated');
     }
 }
