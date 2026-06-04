@@ -154,12 +154,16 @@ public class RegulatoryCodeViolationRelControllerTest{
         
         createTestData();
         RegulatoryCodeViolation getParentRCV = [SELECT Id FROM RegulatoryCodeViolation WHERE InspectionAssmntInd.AssessmentIndDefinition.PHOCSParentId__c = NULL LIMIT 1];
-       
+        
         Test.startTest();        
-        RegulatoryCodeViolationRelatedController.getViolationHierarchy(getParentRCV.Id);
+        List<RegulatoryCodeViolationRelatedController.ViolationHierarchyWrapper> results = RegulatoryCodeViolationRelatedController.getViolationHierarchy(getParentRCV.Id);
         Test.stopTest();
         
-        //Assert.areEqual(1, results.size(), 'Related violations should be returned');
-        //Assert.areNotEqual(null, results[0].RegulatoryCode.Name, 'Regulatory Code Name should be populated');
+        RegulatoryCodeViolationRelatedController.ViolationHierarchyWrapper wrapper = results[0];
+        
+        Assert.areNotEqual(0, results.size(), 'Related violations should be returned');
+        Assert.areNotEqual(null, wrapper.violationId, 'Violation Id should be populated');
+        
     }
+   
 }
