@@ -12,7 +12,7 @@ public with sharing class EnforcementActionViolationRelController {
 * @description: The purpose of this method is to fetch the related records to display in lwc.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */ 
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled
     public static List<EnforcementActionViolation__c> getRelatedViolations(Id recordId) {
         List<EnforcementActionViolation__c> violations = new List<EnforcementActionViolation__c>();
         
