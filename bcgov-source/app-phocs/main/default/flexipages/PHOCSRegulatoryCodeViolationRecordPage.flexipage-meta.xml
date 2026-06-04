@@ -211,6 +211,22 @@
                 <identifier>RecordPriorityField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.PHOCSParentId__c</fieldItem>
+                <identifier>RecordPHOCSParentId_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.PHOCSParentId__r.Name}</leftValue>
+                        <operator>NE</operator>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-e15215d0-a3c2-4e9c-a9cc-98a130de2d59</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -279,6 +295,24 @@
             <componentInstance>
                 <componentName>pHOCSRegCodeViolationRelatedList</componentName>
                 <identifier>c_pHOCSRegCodeViolationRelatedList</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentName>phocsViolationHierarchy</componentName>
+                <identifier>c_phocsViolationHierarchy</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.PHOCSParentId__r.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.RecurrenceCount}</leftValue>
+                        <operator>GE</operator>
+                        <rightValue>1</rightValue>
+                    </criteria>
+                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <mode>Replace</mode>

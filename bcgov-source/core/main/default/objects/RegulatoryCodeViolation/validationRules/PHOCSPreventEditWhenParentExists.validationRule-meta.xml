@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PHOCSPreventEditWhenParentExists</fullName>
+    <active>true</active>
+    <description>Prevents updates to PHOCS Regulatory Code Violation records when PHOCSParentId__c is populated, unless the user has the EHIS Bypass Validation Rule custom permission. Users may only update the Status field to Resolved.</description>
+    <errorConditionFormula>AND(
+    RecordType.DeveloperName = &quot;PHOCSRegulatoryCodeViolation&quot;,
+    NOT($Permission.EHISBypassValidationRuleCustomPermission),
+    NOT(ISBLANK(PHOCSParentId__c)),
+    NOT(AND(
+            ISCHANGED(Status),
+            ISPICKVAL(Status, &quot;Resolved&quot;)
+        )
+    )
+)</errorConditionFormula>
+    <errorMessage>This record cannot be edited because it is linked to a parent violation record.</errorMessage>
+</ValidationRule>

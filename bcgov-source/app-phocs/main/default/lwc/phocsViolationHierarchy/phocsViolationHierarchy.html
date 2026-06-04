@@ -1,0 +1,106 @@
+<template>
+	<div class="slds-card slds-card_boundary">
+		<!-- Header -->
+		<header class="slds-card__header slds-grid">
+			<div class="slds-media slds-media_center slds-has-flexi-truncate">
+				<div class="slds-media__figure">
+					<lightning-icon icon-name="standard:record" size="small"> </lightning-icon>
+				</div>
+				<div class="slds-media__body">
+					<h2 class="slds-card__header-title">
+                        <span>
+                            Violation History
+                        </span>
+                    </h2> </div>
+			</div>
+		</header>
+		<!-- Body -->
+		<div class="slds-card__body slds-card__body_inner">
+			<template if:true={hasRecords}>
+				<lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
+					<template for:each={violations} for:item="item">
+						<lightning-accordion-section key={item.violationId} name={item.violationId} label="">
+							<div slot="actions" class="accordion-header"> <span class="inspection-header">
+            Inspection {item.inspectionName}
+        </span> <span class="inspection-date">
+            <lightning-formatted-date-time
+                value={item.createdDate}
+                year="numeric"
+                month="2-digit"
+                day="2-digit">
+            </lightning-formatted-date-time>
+        </span> </div>
+							<!-- Details -->
+							<div class="violation-details-grid">
+								<div class="detail-item"> <span class="detail-label">
+                                        Inspection:
+                                    </span> <a href={item.inspectionUrl} target="_blank">
+
+                                        {item.inspectionName}
+
+                                    </a> </div>
+								<div class="detail-item"> <span class="detail-label">
+                                        Violation:
+                                    </span> <a href={item.violationUrl} target="_blank">
+
+                                        {item.violationName}
+
+                                    </a> </div>
+								<div class="detail-item"> <span class="detail-label">
+                                        Officer:
+                                    </span> <span>
+                                        {item.officerName}
+                                    </span> </div>
+								<div class="detail-item"> <span class="detail-label">
+                                        Compliance Due Date:
+                                    </span>
+									<lightning-formatted-date-time value={item.complianceDueDate} year="numeric" month="short" day="2-digit"> </lightning-formatted-date-time>
+								</div>
+							</div>
+							<!-- Associated Canned Comments -->
+							<div class="slds-m-top_small">
+								<template if:true={item.hasComments}>
+									<lightning-datatable key-field="rowId" data={item.cannedComments} columns={columns} hide-checkbox-column> </lightning-datatable>
+								</template>
+								<template if:false={item.hasComments}>
+									<table class="slds-table
+                                               slds-table_cell-buffer
+                                               slds-table_bordered">
+										<thead>
+											<tr>
+												<th> Observations </th>
+												<th> Regulatory Code </th>
+												<th> Regulatory Code Description </th>
+											</tr>
+										</thead>
+									</table>
+									<div class="empty-table-message"> No data entered </div>
+								</template>
+							</div>
+							<!-- Comments -->
+							<div class="text-section">
+								<div class="text-section-label"> Comments </div>
+								<div class="text-section-value">
+									<template if:true={item.observations}> {item.observations} </template>
+									<template if:false={item.observations}> No comments entered </template>
+								</div>
+							</div>
+							<!-- Corrective Action Description -->
+							<div class="text-section">
+								<div class="text-section-label"> Corrective Action Description </div>
+								<div class="text-section-value">
+									<template if:true={item.correctiveActionDescription}> {item.correctiveActionDescription} </template>
+									<template if:false={item.correctiveActionDescription}> No corrective action description entered </template>
+								</div>
+							</div>
+						</lightning-accordion-section>
+					</template>
+				</lightning-accordion>
+			</template>
+			<template if:false={hasRecords}>
+				<div class="slds-text-color_weak
+                           slds-p-vertical_small"> No child violations found. </div>
+			</template>
+		</div>
+	</div>
+</template>
