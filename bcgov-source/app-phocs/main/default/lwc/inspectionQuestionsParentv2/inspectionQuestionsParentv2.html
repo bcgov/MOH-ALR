@@ -88,9 +88,13 @@
                                         <div class="question-controls">
                                               <div class="compliance-button-group">
                                                     <button type="button" class={parent.compliantButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="Compliant" onclick={handleAssessmentChange} disabled={isCompleted}><template lwc:if={parent.showRegulationButtons}>Compliant</template><template lwc:else>Yes</template></button>
+                                                    <template lwc:if={parent.hideButtonForChecklist}>
                                                     <button type="button" class={parent.nonCompliantButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="PHOCSNonCompliant" onclick={handleAssessmentChange} disabled={isCompleted}><template lwc:if={parent.showRegulationButtons}>Non Compliant</template><template lwc:else>No</template></button>
+                                                    </template>
                                                     <button type="button" class={parent.naButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="Not Applicable" onclick={handleAssessmentChange} disabled={isCompleted}>Not Applicable</button>
+                                                    <template lwc:if={parent.hideButtonForChecklist}>
                                                     <button type="button" class={parent.nsButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="Not Inspected" onclick={handleAssessmentChange} disabled={isCompleted}>Not Inspected</button>
+                                                    </template>
                                               </div>
                                             <button type="button" class="regulatory-codes-btn" data-value={parent.assessmentIndicatorDefinitionId} onclick={handleViewRegulatoryCodes}>View Codes</button>
                                         </div>

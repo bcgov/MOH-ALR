@@ -294,6 +294,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 						comment: savedComment,
 						originalComment: parent.originalComment ?? savedComment,
 						showRegulationButtons: parent.questionType === 'Regulation',
+						hideButtonForChecklist: parent.questionType !== 'Checklist',
 						originalSelectPriority: parent.originalSelectPriority !== undefined ?
 							parent.originalSelectPriority : (parent.selectPriority ?? null),
 
