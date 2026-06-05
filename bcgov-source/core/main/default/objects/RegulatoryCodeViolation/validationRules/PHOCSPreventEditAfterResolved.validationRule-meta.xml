@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PHOCSPreventEditAfterResolved</fullName>
+    <active>true</active>
+    <description>Prevents updates to PHOCS Violation records when Status is Resolved, unless the user has the EHIS Bypass Validation Rule custom permission.</description>
+    <errorConditionFormula>AND(
+RecordType.DeveloperName = &quot;PHOCSRegulatoryCodeViolation&quot;,
+NOT($Permission.EHISBypassValidationRuleCustomPermission),
+OR(
+AND(
+ISPICKVAL(Status, &quot;Resolved&quot;),
+NOT(ISCHANGED(Status)),
+NOT(ISCHANGED(DateResolved))
+),
+AND(
+ISPICKVAL(PRIORVALUE(Status), &quot;Resolved&quot;),
+NOT(ISPICKVAL(Status, &quot;Resolved&quot;))
+)
+)
+)</errorConditionFormula>
+    <errorMessage>Violation record cannot be edited once the status is marked as Resolved</errorMessage>
+</ValidationRule>

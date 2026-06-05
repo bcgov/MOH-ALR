@@ -88,21 +88,33 @@
                                         <div class="question-controls">
                                               <div class="compliance-button-group">
                                                     <button type="button" class={parent.compliantButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="Compliant" onclick={handleAssessmentChange} disabled={isCompleted}><template lwc:if={parent.showRegulationButtons}>Compliant</template><template lwc:else>Yes</template></button>
+                                                    <template lwc:if={parent.hideButtonForChecklist}>
                                                     <button type="button" class={parent.nonCompliantButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="PHOCSNonCompliant" onclick={handleAssessmentChange} disabled={isCompleted}><template lwc:if={parent.showRegulationButtons}>Non Compliant</template><template lwc:else>No</template></button>
+                                                    </template>
                                                     <button type="button" class={parent.naButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="Not Applicable" onclick={handleAssessmentChange} disabled={isCompleted}>Not Applicable</button>
+                                                    <template lwc:if={parent.hideButtonForChecklist}>
                                                     <button type="button" class={parent.nsButtonClass} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-value="Not Inspected" onclick={handleAssessmentChange} disabled={isCompleted}>Not Inspected</button>
+                                                    </template>
                                               </div>
                                             <button type="button" class="regulatory-codes-btn" data-value={parent.assessmentIndicatorDefinitionId} onclick={handleViewRegulatoryCodes}>View Codes</button>
                                         </div>
                                     </div>
                                     <div class="violation-details">
                                         <template lwc:if={parent.showViolationIcon}>
-                                            <div class="violation-indicator">
-                                                <lightning-icon icon-name="standard:incident" size="x-small" class="violation-icon"></lightning-icon>
-                                                    <span class="violation-text">
-                                                        Open Violation
-                                                    </span>        
-                                            </div>
+                                            <button
+                                                type="button"
+                                                class="violation-indicator violation-button"
+                                                data-id={parent.parentViolationId}
+                                                onclick={handleOpenViolation}>
+                                                
+                                            <lightning-icon
+                                                icon-name="standard:incident"
+                                                size="x-small"
+                                                class="violation-icon">
+                                            </lightning-icon>
+                                            
+                                        <span class="violation-text"> Open Violation </span>
+                                        </button>
                                         </template>
                                         <template lwc:if={parent.showPreviouslyResolvedViolationsCount}>
                                             <div class="violation-history">
@@ -417,23 +429,29 @@
 
         <div class="slds-col slds-size_1-of-2 slds-p-right_small">
             <lightning-input type="text" label="Time Spent (HH:MM)" value={timeSpent} maxlength="5" required placeholder="HH:MM" data-field="timespent" onchange={handleTimeSpentChange}></lightning-input>
-        </div>
-
-        <!--<div class="slds-col slds-size_1-of-2 slds-align_absolute-center">
+            <div class="slds-col slds-size_1-of-1 slds-m-vertical_small"></div>
             <lightning-input type="checkbox" label="Follow-up Inspection Required" checked={followUpInspectionRequired} onchange={handleFollowUpChange}></lightning-input>
-        </div> -->
-        
-    </div>
-
-                        <lightning-textarea label="Closing Comments" value={closingComments} maxlength="1000" onchange={handleClosingCommentsChange} placeholder="Additional comments..."></lightning-textarea>
-
-                        <template lwc:if={closingCommentsMessage}>
-                            <div class="slds-m-top_x-small">
-                                <span class={closingCommentsMessageClass}>{closingCommentsMessage}</span>
-                            </div>
-                        </template>
+            <div class="slds-col slds-size_1-of-1 slds-m-vertical_small"></div>
+            <template lwc:if={isDairyFacility}>
+            <lightning-input type="checkbox" label="Environmental Swabs Taken" checked={environmentalSwabsTaken} onchange={handleEnvironmentalSwabChange}> </lightning-input>
+            </template>
+        </div>
+        <div class="slds-col slds-size_1-of-2 slds-p-left_small">
+            <lightning-combobox label="Delivery Method" value={deliveryMethod} options={deliveryMethodOptions} onchange={handleDeliveryMethodChange}
+                field-level-help="Indicates the method used to provide the inspection results to the operator"> </lightning-combobox>
+                <div class="slds-col slds-size_1-of-1 slds-m-vertical_small"></div>
+            <lightning-input type="checkbox" label="Signature Refusal" checked={signatureRefusal} onchange={handleSignatureRefusalChange} 
+            field-level-help="Indicates that the operator declined to sign or formally acknowledge receipt of the inspection results"> </lightning-input> 
+            <div class="slds-col slds-size_1-of-1 slds-m-vertical_small"></div>
+        </div>
+        </div>
+            <lightning-textarea label="Closing Comments" value={closingComments} maxlength="1000" onchange={handleClosingCommentsChange} placeholder="Additional comments..."></lightning-textarea>
+                <template lwc:if={closingCommentsMessage}>
+                    <div class="slds-m-top_x-small">
+                        <span class={closingCommentsMessageClass}>{closingCommentsMessage}</span>
                     </div>
-
+                </template>
+        </div>
                     <footer class="slds-modal__footer slds-grid slds-grid_align-spread">
                         <lightning-button label="Go Back" variant="neutral" onclick={handleGoBack}></lightning-button>
                         <lightning-button label="Complete Inspection" variant="brand" onclick={handleCompleteInspection}></lightning-button>

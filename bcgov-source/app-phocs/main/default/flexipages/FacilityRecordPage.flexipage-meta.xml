@@ -989,6 +989,13 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.SewageWasteDisposalOtherSpecify__c</fieldItem>
                 <identifier>RecordSewageWasteDisposalOtherSpecify_cField2</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.WasteDisposal__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Other</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <name>Facet-58039c4c-1bb2-4ebc-bbf9-dd4ddb20b8b1</name>
@@ -1043,19 +1050,6 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.NumberOfSeats__c</fieldItem>
                 <identifier>RecordNumberOfSeats_cField</identifier>
-                <visibilityRule>
-                    <booleanFilter>1 AND 2</booleanFilter>
-                    <criteria>
-                        <leftValue>{!Record.CategoryL1__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Food service establishment</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.CategoryL2__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Institutional</rightValue>
-                    </criteria>
-                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -2682,6 +2676,9 @@
                         <valueListItems>
                             <value>IsChildViolation__c|EQUALS|false</value>
                         </valueListItems>
+                        <valueListItems>
+                            <value>PHOCSParentId__c|EQUALS|</value>
+                        </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
@@ -4057,6 +4054,13 @@
                 </componentInstanceProperties>
                 <componentName>lst:dynamicRelatedList</componentName>
                 <identifier>lst_dynamicRelatedList</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!$User.Profile.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>System Administrator</rightValue>
+                    </criteria>
+                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -4118,6 +4122,13 @@
                 </componentInstanceProperties>
                 <componentName>lst:dynamicRelatedList</componentName>
                 <identifier>lst_dynamicRelatedList2</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!$User.Profile.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>System Administrator</rightValue>
+                    </criteria>
+                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <itemInstances>
