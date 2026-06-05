@@ -310,9 +310,9 @@ public with sharing class InspectionViolationService {
             
             // Get all InspectionAssessmentInd records for this visit with their definitions
             // Including both parent (non-compliant) and child (selected canned comments) records
-            List<InspectionAssessmentInd> allResponses = [SELECT Id, RecordTypeId, AssessmentTaskId, AssessmentTask.Name, AssessmentTask.ParentId, AssessmentIndDefinitionId,
+            List<InspectionAssessmentInd> allResponses = [SELECT Id, RecordTypeId, AssessmentTaskId, AssessmentTask.Name, AssessmentTask.ParentId, AssessmentIndDefinitionId, ComplianceDueDate__c,
                                                           AssessmentIndDefinition.Name, AssessmentIndDefinition.PHOCSParentId__c, Result, PHOCSInspectionComments__c,CorrectedDuringInspection__c,
-                                                          PHOCSCheckboxResponse__c FROM InspectionAssessmentInd WHERE AssessmentTask.ParentId =: visitId ];
+                                                          Priority__c, CorrectiveActionDescription__c, PHOCSCheckboxResponse__c FROM InspectionAssessmentInd WHERE AssessmentTask.ParentId =: visitId];
             
             if (allResponses.isEmpty()) {
                 result.success = true;
@@ -381,8 +381,11 @@ public with sharing class InspectionViolationService {
                     vio.Asset__c = inspectionAssetId;
                     vio.DateCreated = System.now();
                     vio.RegulatoryCodeId = mapItem.RegulatoryCodeId;
+                    vio.ComplianceDueDate = ind.ComplianceDueDate__c;
+                    vio.CorrectiveActionDescription = ind.CorrectiveActionDescription__c;
+                    vio.Priority = ind.Priority__c;
                     vio.Corrected_During_Inspection__c = ind.CorrectedDuringInspection__c;
-                    vio.Status = 'Open';
+                    vio.Status = ind.CorrectedDuringInspection__c == true ? 'Resolved' : 'Open';
                     if (parentViolationId != null && validParentViolationMap.containsKey(parentViolationId)){
                         vio.PHOCSParentId__c = parentViolationId;
                     }
