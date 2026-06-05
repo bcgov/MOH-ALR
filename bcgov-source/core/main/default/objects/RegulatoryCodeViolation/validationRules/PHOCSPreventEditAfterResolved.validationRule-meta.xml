@@ -13,8 +13,8 @@ NOT(ISCHANGED(Status)),
 NOT(ISCHANGED(DateResolved))
 ),
 AND(
-ISCHANGED(Status),
-ISPICKVAL(PRIORVALUE(Status), &quot;Resolved&quot;)
+ISPICKVAL(PRIORVALUE(Status), &quot;Resolved&quot;),
+NOT(ISPICKVAL(Status, &quot;Resolved&quot;))
 )
 )
 )</errorConditionFormula>

@@ -2,7 +2,33 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>66.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
-    <description>Update the resolved date on the parent RCV record and all child RCV records when the status is changed to ‘Resolved’.</description>
+    <decisions>
+        <name>Check_Is_date_resolved_is_blank</name>
+        <label>Check Is date resolved is blank</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Update_All_child_RCV_Records</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Is_Resolved_Date_Blank</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.DateResolved</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_ResolvedDate</targetReference>
+            </connector>
+            <label>Is Resolved Date Blank</label>
+        </rules>
+    </decisions>
+    <description>Update the resolved date on the parent RCV record and all child RCV records when the status is changed to ‘Resolved’.
+V2: Changes related to EHIS-2668</description>
     <environments>Default</environments>
     <interviewLabel>PHOCS Update Resolved Date {!$Flow.CurrentDateTime}</interviewLabel>
     <label>PHOCS Update Resolved Date</label>
@@ -30,7 +56,7 @@
         <label>Update All child RCV Records</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <filterLogic>1 AND (2 OR (3 AND 4 AND 5))</filterLogic>
+        <filterLogic>1 AND (2 OR (3 AND 4 AND 5)) AND 6 AND 7</filterLogic>
         <filters>
             <field>PHOCSIsBelongsToPHOCS__c</field>
             <operator>EqualTo</operator>
@@ -64,6 +90,20 @@
             <operator>EqualTo</operator>
             <value>
                 <elementReference>$Record.PHOCSAssessmentIndDefinitionId__c</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Status</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Resolved</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>DateResolved</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
             </value>
         </filters>
         <inputAssignments>
@@ -100,7 +140,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Update_ResolvedDate</targetReference>
+            <targetReference>Check_Is_date_resolved_is_blank</targetReference>
         </connector>
         <filterLogic>(1 OR (5 AND 6 AND 7)) AND 2 AND 3 AND 4</filterLogic>
         <filters>
