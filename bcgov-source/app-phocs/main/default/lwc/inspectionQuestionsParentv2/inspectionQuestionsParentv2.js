@@ -50,6 +50,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
     signatureRefusal = false;
     isDairyFacility = false;
 	routineInspection = false;
+	actualStartDate;
 
 	totalQuestions = 0;
 	answeredQuestions = 0;
@@ -246,7 +247,9 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
 			this.inspectionOpeningComments = this.inspection.InstructionDescription || '';
 			this.isDairyFacility = this.inspection?.Account?.Type === 'Dairy';
-
+			if (this.inspection?.ActualVisitStartTime) {
+            this.actualStartDate = this.formatDatetimeForInput(this.inspection.ActualVisitStartTime);
+			}
 		} catch (error) {
 			console.error('Error fetching inspection:', error);
 		}
@@ -373,6 +376,10 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 		this.showQuestions = true;
 
 	}
+
+	handleActualStartDateChange(event) {
+        this.actualStartDate = event.target.value;
+    }
 
 	handleTimeSpentChange(event) {
     const input = event.target;
@@ -1216,7 +1223,8 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 				visitId: this.recordId,
 				closingComments: this.closingComments,
 				timeSpent: this.timeSpent,
-                followUpInspectionRequired: this.followUpInspectionRequired,
+				actualStartDate: this.actualStartDate,
+				followUpInspectionRequired: this.followUpInspectionRequired,
 				environmentalSwabsTaken: this.environmentalSwabsTaken,
 				deliveryMethod: this.deliveryMethod,
 				signatureRefusal: this.signatureRefusal
