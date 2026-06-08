@@ -542,25 +542,24 @@ private class PHOCSAssessmentIndCtrlV2Test {
         System.assertEquals(1, 1, 'Should have 2 InspectionAssessmentInd records');
     }*/
     @isTest
- 	static void test_completeInspection() {
-
-			Visit inspection = [SELECT Id FROM Visit LIMIT 1];
-			String closingComments = 'Inspection completed successfully';
-		
-
-			Test.startTest();
-        	PHOCSInspectionAssessmentIndControllerV2.completeInspection(inspection.Id,closingComments, null, false);
-    		Test.stopTest();
-		
-		Visit updRecv = [SELECT Id, Status, StatusRemarks, ActualVisitEndTime, PHOCSIsDraft__c FROM Visit WHERE Id =: inspection.Id LIMIT 1];
-		
-		System.assertEquals('Completed', updRecv.Status,'Visit status should be Completed');
-		System.assertEquals(closingComments, updRecv.StatusRemarks,'Closing comments should be saved');
-		System.assertNotEquals(null, updRecv.ActualVisitEndTime,'ActualVisitEndTime should be set');
-		System.assertEquals(false, updRecv.PHOCSIsDraft__c,'Draft should be false');
-
-
-}
+    static void test_completeInspection() {
+        
+        Visit inspection = [SELECT Id FROM Visit LIMIT 1];
+        String closingComments = 'Inspection completed successfully';
+        Datetime startDt = System.now().addHours(-2);
+        
+        Test.startTest();
+        PHOCSInspectionAssessmentIndControllerV2.completeInspection(inspection.Id,closingComments, null, startDt, false);
+        Test.stopTest();
+        
+        Visit updRecv = [SELECT Id, Status, StatusRemarks, ActualVisitEndTime, PHOCSIsDraft__c FROM Visit WHERE Id =: inspection.Id LIMIT 1];
+        
+        System.assertEquals('Completed', updRecv.Status,'Visit status should be Completed');
+        System.assertEquals(closingComments, updRecv.StatusRemarks,'Closing comments should be saved');
+        System.assertNotEquals(null, updRecv.ActualVisitEndTime,'ActualVisitEndTime should be set');
+        System.assertEquals(false, updRecv.PHOCSIsDraft__c,'Draft should be false');
+    }
+    
     @IsTest
 	static void testMarkInspectionAsDraft() {
   
