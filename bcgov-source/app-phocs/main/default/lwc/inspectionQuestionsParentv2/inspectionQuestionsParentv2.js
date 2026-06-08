@@ -40,6 +40,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 	autoOpenedReview = false;
 	timeSpent = '';
     followUpInspectionRequired = false;
+	actualStartDate;
 
 	totalQuestions = 0;
 	answeredQuestions = 0;
@@ -226,6 +227,10 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 			this.inspection = await getInspection({
 				visitId: this.recordId
 			});
+
+			if (this.inspection?.ActualVisitStartTime) {
+             this.actualStartDate = this.formatDatetimeForInput(this.inspection.ActualVisitStartTime);
+        }
 		} catch (error) {
 			console.error('Error fetching inspection:', error);
 		}
@@ -342,7 +347,10 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
 	handleViewOnly() {
 		this.showQuestions = true;
+	}
 
+	handleActualStartTimeChange(event) {
+		this.actualStartDate = event.target.value;
 	}
 
 	handleTimeSpentChange(event) {
@@ -1092,6 +1100,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 				visitId: this.recordId,
 				closingComments: this.closingComments,
 				timeSpent: this.timeSpent,
+				actualStartDate: this.actualStartDate,
                 followUpInspectionRequired: this.followUpInspectionRequired
 			});
 			this.isDraft = false;
