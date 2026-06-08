@@ -322,7 +322,6 @@
                     <dataType>String</dataType>
                     <fieldText>Latitude</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -338,7 +337,6 @@
                     <dataType>String</dataType>
                     <fieldText>Longitude</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -388,6 +386,20 @@
                         </width>
                     </styleProperties>
                 </fields>
+                <fields>
+                    <fieldType>ObjectProvided</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <objectFieldReference>newSamplingSiteDetails.SiteTreatment__c</objectFieldReference>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
                 <inputParameters>
                     <name>width</name>
                     <value>
@@ -418,13 +430,13 @@
                     <fieldType>ObjectProvided</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
-                    <objectFieldReference>newSamplingSiteDetails.SamplingFrequency__c</objectFieldReference>
+                    <objectFieldReference>newSamplingSiteDetails.Description</objectFieldReference>
                     <styleProperties>
                         <verticalAlignment>
                             <stringValue>top</stringValue>
                         </verticalAlignment>
                         <width>
-                            <stringValue>12</stringValue>
+                            <stringValue>6</stringValue>
                         </width>
                     </styleProperties>
                 </fields>
@@ -432,63 +444,7 @@
                     <fieldType>ObjectProvided</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
-                    <objectFieldReference>newSamplingSiteDetails.SamplingMonths__c</objectFieldReference>
-                    <styleProperties>
-                        <verticalAlignment>
-                            <stringValue>top</stringValue>
-                        </verticalAlignment>
-                        <width>
-                            <stringValue>12</stringValue>
-                        </width>
-                    </styleProperties>
-                </fields>
-                <fields>
-                    <fieldType>ObjectProvided</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <objectFieldReference>newSamplingSiteDetails.SampleAnalysisType__c</objectFieldReference>
-                    <styleProperties>
-                        <verticalAlignment>
-                            <stringValue>top</stringValue>
-                        </verticalAlignment>
-                        <width>
-                            <stringValue>12</stringValue>
-                        </width>
-                    </styleProperties>
-                </fields>
-                <fields>
-                    <fieldType>ObjectProvided</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <objectFieldReference>newSamplingSiteDetails.TestingLab__c</objectFieldReference>
-                    <styleProperties>
-                        <verticalAlignment>
-                            <stringValue>top</stringValue>
-                        </verticalAlignment>
-                        <width>
-                            <stringValue>12</stringValue>
-                        </width>
-                    </styleProperties>
-                </fields>
-                <fields>
-                    <fieldType>ObjectProvided</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <objectFieldReference>newSamplingSiteDetails.NumberOfSamplesPerYear__c</objectFieldReference>
-                    <styleProperties>
-                        <verticalAlignment>
-                            <stringValue>top</stringValue>
-                        </verticalAlignment>
-                        <width>
-                            <stringValue>12</stringValue>
-                        </width>
-                    </styleProperties>
-                </fields>
-                <fields>
-                    <fieldType>ObjectProvided</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <objectFieldReference>newSamplingSiteDetails.SubmittedForDWPA__c</objectFieldReference>
+                    <objectFieldReference>newSamplingSiteDetails.AutomatedMonitoring__c</objectFieldReference>
                     <styleProperties>
                         <verticalAlignment>
                             <stringValue>top</stringValue>
@@ -522,20 +478,6 @@
                         </conditions>
                     </visibilityRule>
                 </fields>
-                <fields>
-                    <fieldType>ObjectProvided</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <objectFieldReference>newSamplingSiteDetails.Description</objectFieldReference>
-                    <styleProperties>
-                        <verticalAlignment>
-                            <stringValue>top</stringValue>
-                        </verticalAlignment>
-                        <width>
-                            <stringValue>6</stringValue>
-                        </width>
-                    </styleProperties>
-                </fields>
                 <inputParameters>
                     <name>width</name>
                     <value>
@@ -551,90 +493,10 @@
                     <fieldType>ObjectProvided</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
-                    <objectFieldReference>newSamplingSiteDetails.OtherSamplingFrequency__c</objectFieldReference>
-                    <styleProperties>
-                        <verticalAlignment>
-                            <stringValue>top</stringValue>
-                        </verticalAlignment>
-                        <width>
-                            <stringValue>12</stringValue>
-                        </width>
-                    </styleProperties>
-                    <visibilityRule>
-                        <conditionLogic>and</conditionLogic>
-                        <conditions>
-                            <leftValueReference>newSamplingSiteDetails.SamplingFrequency__c</leftValueReference>
-                            <operator>EqualTo</operator>
-                            <rightValue>
-                                <stringValue>Other</stringValue>
-                            </rightValue>
-                        </conditions>
-                    </visibilityRule>
-                </fields>
-                <fields>
-                    <fieldType>ObjectProvided</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <objectFieldReference>newSamplingSiteDetails.SamplingReason__c</objectFieldReference>
-                    <styleProperties>
-                        <verticalAlignment>
-                            <stringValue>top</stringValue>
-                        </verticalAlignment>
-                        <width>
-                            <stringValue>12</stringValue>
-                        </width>
-                    </styleProperties>
-                </fields>
-                <fields>
-                    <fieldType>ObjectProvided</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <objectFieldReference>newSamplingSiteDetails.TypeOfTesting__c</objectFieldReference>
-                    <styleProperties>
-                        <verticalAlignment>
-                            <stringValue>top</stringValue>
-                        </verticalAlignment>
-                        <width>
-                            <stringValue>12</stringValue>
-                        </width>
-                    </styleProperties>
-                </fields>
-                <fields>
-                    <fieldType>ObjectProvided</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <objectFieldReference>newSamplingSiteDetails.NumberOfSamples__c</objectFieldReference>
-                    <styleProperties>
-                        <verticalAlignment>
-                            <stringValue>top</stringValue>
-                        </verticalAlignment>
-                        <width>
-                            <stringValue>12</stringValue>
-                        </width>
-                    </styleProperties>
-                </fields>
-                <fields>
-                    <fieldType>ObjectProvided</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
                     <objectFieldReference>newSamplingSiteDetails.ProvinciallyFundedSampling__c</objectFieldReference>
                     <styleProperties>
                         <verticalAlignment>
                             <stringValue>bottom</stringValue>
-                        </verticalAlignment>
-                        <width>
-                            <stringValue>12</stringValue>
-                        </width>
-                    </styleProperties>
-                </fields>
-                <fields>
-                    <fieldType>ObjectProvided</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <objectFieldReference>newSamplingSiteDetails.AutomatedMonitoring__c</objectFieldReference>
-                    <styleProperties>
-                        <verticalAlignment>
-                            <stringValue>top</stringValue>
                         </verticalAlignment>
                         <width>
                             <stringValue>12</stringValue>
@@ -659,156 +521,6 @@
                     <name>width</name>
                     <value>
                         <stringValue>6</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <isRequired>false</isRequired>
-            <regionContainerType>SectionWithHeader</regionContainerType>
-            <styleProperties>
-                <verticalAlignment>
-                    <stringValue>top</stringValue>
-                </verticalAlignment>
-                <width>
-                    <stringValue>12</stringValue>
-                </width>
-            </styleProperties>
-        </fields>
-        <fields>
-            <name>ComplianceInformationSection</name>
-            <fieldText>Compliance Information</fieldText>
-            <fieldType>RegionContainer</fieldType>
-            <fields>
-                <name>ComplianceInformationSection_Column1</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <fieldType>ObjectProvided</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <objectFieldReference>newSamplingSiteDetails.CompliantWith43210Objectives__c</objectFieldReference>
-                    <styleProperties>
-                        <verticalAlignment>
-                            <stringValue>middle</stringValue>
-                        </verticalAlignment>
-                        <width>
-                            <stringValue>6</stringValue>
-                        </width>
-                    </styleProperties>
-                </fields>
-                <fields>
-                    <fieldType>ObjectProvided</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <objectFieldReference>newSamplingSiteDetails.MeetsFiltrationExclusionConditions__c</objectFieldReference>
-                    <styleProperties>
-                        <verticalAlignment>
-                            <stringValue>top</stringValue>
-                        </verticalAlignment>
-                        <width>
-                            <stringValue>6</stringValue>
-                        </width>
-                    </styleProperties>
-                </fields>
-                <fields>
-                    <fieldType>ObjectProvided</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <objectFieldReference>newSamplingSiteDetails.MeetsProvincialTreatmentObjectives__c</objectFieldReference>
-                    <styleProperties>
-                        <verticalAlignment>
-                            <stringValue>bottom</stringValue>
-                        </verticalAlignment>
-                        <width>
-                            <stringValue>6</stringValue>
-                        </width>
-                    </styleProperties>
-                </fields>
-                <fields>
-                    <fieldType>ObjectProvided</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <objectFieldReference>newSamplingSiteDetails.MeetsTreatmentObjectiveEntireWS__c</objectFieldReference>
-                    <styleProperties>
-                        <verticalAlignment>
-                            <stringValue>top</stringValue>
-                        </verticalAlignment>
-                        <width>
-                            <stringValue>6</stringValue>
-                        </width>
-                    </styleProperties>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>12</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <isRequired>false</isRequired>
-            <regionContainerType>SectionWithHeader</regionContainerType>
-            <styleProperties>
-                <verticalAlignment>
-                    <stringValue>top</stringValue>
-                </verticalAlignment>
-                <width>
-                    <stringValue>12</stringValue>
-                </width>
-            </styleProperties>
-        </fields>
-        <fields>
-            <name>RecommendedActionsSection</name>
-            <fieldText>Recommended Actions</fieldText>
-            <fieldType>RegionContainer</fieldType>
-            <fields>
-                <name>RecommendedActionsSection_Column1</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <fieldType>ObjectProvided</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <objectFieldReference>newSamplingSiteDetails.RecommendedAction__c</objectFieldReference>
-                    <styleProperties>
-                        <verticalAlignment>
-                            <stringValue>top</stringValue>
-                        </verticalAlignment>
-                        <width>
-                            <stringValue>6</stringValue>
-                        </width>
-                    </styleProperties>
-                </fields>
-                <fields>
-                    <fieldType>ObjectProvided</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <objectFieldReference>newSamplingSiteDetails.RecommendedActionStatus__c</objectFieldReference>
-                    <styleProperties>
-                        <verticalAlignment>
-                            <stringValue>top</stringValue>
-                        </verticalAlignment>
-                        <width>
-                            <stringValue>6</stringValue>
-                        </width>
-                    </styleProperties>
-                </fields>
-                <fields>
-                    <fieldType>ObjectProvided</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <objectFieldReference>newSamplingSiteDetails.RecommendedActionStatusDate__c</objectFieldReference>
-                    <styleProperties>
-                        <verticalAlignment>
-                            <stringValue>top</stringValue>
-                        </verticalAlignment>
-                        <width>
-                            <stringValue>6</stringValue>
-                        </width>
-                    </styleProperties>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>12</stringValue>
                     </value>
                 </inputParameters>
                 <isRequired>false</isRequired>
