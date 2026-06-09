@@ -70,7 +70,7 @@ public without sharing class PHOCSInspectionAssessmentIndControllerV2 {
                 if (resp.result != null) {
                     String normalized = resp.result.trim();
                     
-                    Map<String, String> valueMap = new Map<String, String>{'Not Applicable' => 'N/A (Not Applicable)', 'Not Inspected' => 'N/S (Not Assessed)','Non-compliant'=> 'PHOCSNonCompliant'};
+                    Map<String, String> valueMap = new Map<String, String>{'Not Applicable' => 'N/A (Not Applicable)', 'Not Inspected' => 'N/S (Not Assessed)','Non-compliant'=> 'PHOCSNonCompliant','Compliant' => 'Compliant'};
                         
                         if (valueMap.containsKey(normalized)) {
                             normalized = valueMap.get(normalized);
@@ -390,15 +390,21 @@ public without sharing class PHOCSInspectionAssessmentIndControllerV2 {
 * @description Update the inspection status to complete & closing comments.
 */    
     @AuraEnabled
-    public static void completeInspection(Id visitId, String closingComments, String timeSpent, Boolean followUpInspectionRequired) {
-        Visit visitRec = [SELECT Id, Status, StatusRemarks, ActualVisitEndTime FROM Visit WHERE Id =: visitId LIMIT 1];
+    public static void completeInspection(Id visitId, String closingComments, String timeSpent, Datetime actualStartDate, Boolean followUpInspectionRequired, Boolean environmentalSwabsTaken, String deliveryMethod, Boolean signatureRefusal){
+        Visit visitRec = [SELECT Id, Status, StatusRemarks, ActualVisitStartTime, ActualVisitEndTime, FollowUpInspectionRequired__c, EnvironmentalSwabsTaken__c, 
+                          PHOCSIsDraft__c, TimeSpentMinutes__c, DeliveryMethod__c, SignatureRefusal__c FROM Visit WHERE Id =: visitId LIMIT 1];
         
         visitRec.Status = 'Completed';
         visitRec.StatusRemarks = closingComments;
+        visitRec.ActualVisitStartTime = actualStartDate;
         visitRec.ActualVisitEndTime = System.now();
         visitRec.PHOCSIsDraft__c = false; 
         visitRec.TimeSpentMinutes__c = timeSpent;
-        //visitRec.FollowUpInspectionRequired__c = followUpInspectionRequired;
+        visitRec.FollowUpInspectionRequired__c = followUpInspectionRequired;
+        visitRec.EnvironmentalSwabsTaken__c = environmentalSwabsTaken;
+        visitRec.DeliveryMethod__c = deliveryMethod;
+        visitRec.SignatureRefusal__c = signatureRefusal;
+        
         update visitRec;
     }    
     

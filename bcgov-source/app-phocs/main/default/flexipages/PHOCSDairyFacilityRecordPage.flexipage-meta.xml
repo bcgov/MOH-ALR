@@ -1345,6 +1345,9 @@
                         <valueListItems>
                             <value>IsChildViolation__c|EQUALS|false</value>
                         </valueListItems>
+                        <valueListItems>
+                            <value>PHOCSParentId__c|EQUALS|</value>
+                        </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
@@ -2220,6 +2223,13 @@
                 </componentInstanceProperties>
                 <componentName>lst:dynamicRelatedList</componentName>
                 <identifier>lst_dynamicRelatedList</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!$User.Profile.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>System Administrator</rightValue>
+                    </criteria>
+                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -2281,6 +2291,13 @@
                 </componentInstanceProperties>
                 <componentName>lst:dynamicRelatedList</componentName>
                 <identifier>lst_dynamicRelatedList2</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!$User.Profile.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>System Administrator</rightValue>
+                    </criteria>
+                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <itemInstances>

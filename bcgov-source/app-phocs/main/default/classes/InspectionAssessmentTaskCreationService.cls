@@ -10,6 +10,8 @@
                 06 Apr -  PHOCS-3349        -  Accenture   -  return Food ActionPlanTemplateNames.
                 21 Apr -  PHOCS-3490        -  Accenture   -  return Drinking Water ActionPlanTemplateNames.
                 11 May -  PHOCS-3948        -  Accenture   -  return Recreational Water ActionPlanTemplateNames.
+                04 Jun -  PHOCS-3523        -  Accenture   -  return Industrial Camps ActionPlanTemplateNames.
+                04 Jun -  PHOCS-3530        -  Accenture   -  return Tobacco and Vapour ActionPlanTemplateNames.
 ***********************************************************************************************/
 public without sharing class InspectionAssessmentTaskCreationService {
     public static String className = 'InspectionAssessmentTaskCreationService';
@@ -20,6 +22,8 @@ public without sharing class InspectionAssessmentTaskCreationService {
     public static String FOOD_ACCOUNTTYPE = 'Food';
     public static String DRINKINGWATER_ACCOUNTTYPE = 'Drinking Water';
     public static String RECREATIONALWATER_ACCOUNTTYPE = 'Recreational Water';
+    public static String INDUSTRIALCAMPS_ACCOUNTTYPE = 'Industrial Camps';
+    public static String TOBACCONVAPOUR_ACCOUNTTYPE = 'Tobacco and Vapour';
     public static Id recordTypePHOCSInspection = Schema.SObjectType.Visit.getRecordTypeInfosByDeveloperName().get('PHOCSInspection').getRecordTypeId();
 /**
 * @author: Deepak
@@ -101,7 +105,7 @@ public without sharing class InspectionAssessmentTaskCreationService {
             Map<Id, Id> templateItemIdToDefId = new Map<Id, Id>();
             if (!assessmentItemIds.isEmpty()) {
                 List<ActionPlanTemplateItemValue> aPTemplateItemValueList = [SELECT Id, ItemEntityFieldName, ValueLiteral, ValueFormula, ActionPlanTemplateItemId FROM ActionPlanTemplateItemValue
-                                                                             WHERE ActionPlanTemplateItemId IN :assessmentItemIds AND ItemEntityFieldName = :BCMOH_Constants.ItemEntityAssessmentTaskDefinitionId];
+                                                                             WHERE ActionPlanTemplateItemId IN: assessmentItemIds AND ItemEntityFieldName =: BCMOH_Constants.ItemEntityAssessmentTaskDefinitionId];
                 for (ActionPlanTemplateItemValue v : aPTemplateItemValueList){
                     if (!templateItemIdToDefId.containsKey(v.ActionPlanTemplateItemId) && !String.isBlank(v.ValueLiteral)) {
                         try {
@@ -269,6 +273,10 @@ public without sharing class InspectionAssessmentTaskCreationService {
                 getAPTemplatesName.addAll(getDrinkingWaterTemplates(facilityAccountId, decisionMaps));
             } else if (accountType == RECREATIONALWATER_ACCOUNTTYPE){
                 getAPTemplatesName.addAll(getRecreationalWaterTemplates(facilityAccountId, decisionMaps, relatedAssetId));
+            } else if (accountType == INDUSTRIALCAMPS_ACCOUNTTYPE){
+                getAPTemplatesName.addAll(getIndustrialCampTemplates(facilityAccountId, decisionMaps));
+            } else if (accountType == TOBACCONVAPOUR_ACCOUNTTYPE){
+                getAPTemplatesName.addAll(getTobaccoNVapourTemplates(facilityAccountId, decisionMaps));
             }
             
         } catch(Exception e){
@@ -399,8 +407,7 @@ public without sharing class InspectionAssessmentTaskCreationService {
 * @author: Deepak
 * @date: 11 May 2026
 * @description: The purpose of this Method is to return Recreational Water ActionPlanTemplateNames.
-* @Modification Log:
-* [Date] - [Change Reference] - [Changed By] - [Description]
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     private static Set<String> getRecreationalWaterTemplates(Id facilityAccountId, List<PHOCSActionPlanTemplateDecisionMap__mdt> decisionMaps, Id relatedAssetId){
         Set<String> templateNames = new Set<String>();
@@ -431,6 +438,47 @@ public without sharing class InspectionAssessmentTaskCreationService {
             }
         }      
         
+        return templateNames;
+    }
+    
+/**
+* @author: Deepak
+* @date: 04 Jun 2026
+* @description: The purpose of this Method is to return Industrial Camps ActionPlanTemplateNames.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
+    private static Set<String> getIndustrialCampTemplates(Id facilityAccountId, List<PHOCSActionPlanTemplateDecisionMap__mdt> decisionMaps){
+        Set<String> templateNames = new Set<String>();
+        Account iCfacility = [SELECT CategoryL1__c, CategoryL2__c, CategoryL3__c, NonPermittedFoodService__c FROM Account WHERE Id =: facilityAccountId LIMIT 1];
+        
+        for (PHOCSActionPlanTemplateDecisionMap__mdt dm : decisionMaps) {
+            if (dm.AttributeType__c == null && dm.CategoryL1__c == null && dm.CategoryL2__c == null) {
+                templateNames.add(dm.ActionPlanTemplateName__c);
+            }
+            if (dm.AttributeType__c == 'Non Permitted Food Service' && iCfacility.NonPermittedFoodService__c == true) {
+                templateNames.add(dm.ActionPlanTemplateName__c);
+            }
+            if(dm.CategoryL1__c == iCfacility.CategoryL1__c && dm.CategoryL2__c == iCfacility.CategoryL2__c){                
+                templateNames.add(dm.ActionPlanTemplateName__c);
+            }
+        }
+        return templateNames;
+    }
+
+/**
+* @author: Deepak
+* @date: 04 Jun 2026
+* @description: The purpose of this Method is to return Tobacco and Vapour ActionPlanTemplateNames.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
+    private static Set<String> getTobaccoNVapourTemplates(Id facilityAccountId, List<PHOCSActionPlanTemplateDecisionMap__mdt> decisionMaps){
+        Set<String> templateNames = new Set<String>();
+        
+        for (PHOCSActionPlanTemplateDecisionMap__mdt dm : decisionMaps) {
+            if (dm.AttributeType__c == null) {
+                templateNames.add(dm.ActionPlanTemplateName__c);
+            }
+        }
         return templateNames;
     }
     

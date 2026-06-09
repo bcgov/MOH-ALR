@@ -45,7 +45,12 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 	autoOpenedReview = false;
 	timeSpent = '';
     followUpInspectionRequired = false;
+    environmentalSwabsTaken = false;
+    deliveryMethod = '';
+    signatureRefusal = false;
+    isDairyFacility = false;
 	routineInspection = false;
+	actualStartDate;
 
 	totalQuestions = 0;
 	answeredQuestions = 0;
@@ -119,6 +124,11 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
       { label: "Low", value: "Low" },
     ];
 
+	deliveryMethodOptions = [
+      { label: 'Email', value: 'Email' },
+      { label: 'On-site review', value: 'On-site review' }
+    ];
+
 	connectedCallback() {
 		this.getInspection();
 		this.loadInspectionQuestions();
@@ -172,6 +182,10 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 		const hasCannedComment = effectiveChildren.some(child => child.checkboxValue === true);
 		const hasComment = effectiveComment && effectiveComment.trim().length > 0;
 		const showNonCompliantHelpText = result === RESULT_NON_COMPLIANT && !hasCannedComment && !hasComment;
+		const hasObservations = effectiveChildren && effectiveChildren.length > 0;
+		const nonCompliantHelpMessage = hasObservations 
+		? 'Please select the applicable observation(s) or enter comments for the non-compliant question.' 
+		: 'Please enter comments for the non-compliant question.';
 
 		return {
 			...parent,
@@ -191,6 +205,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 			...updates,
 
 			showNonCompliantHelpText,
+			nonCompliantHelpMessage,
 
 			compliantButtonClass: this.getButtonClass(RESULT_COMPLIANT, result),
 			nonCompliantButtonClass: this.getButtonClass(
@@ -236,7 +251,10 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 			});
 
 			this.inspectionOpeningComments = this.inspection.InstructionDescription || '';
-
+			this.isDairyFacility = this.inspection?.Account?.Type === 'Dairy';
+			if (this.inspection?.ActualVisitStartTime) {
+            this.actualStartDate = this.formatDatetimeForInput(this.inspection.ActualVisitStartTime);
+			}
 		} catch (error) {
 			console.error('Error fetching inspection:', error);
 		}
@@ -284,6 +302,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 						comment: savedComment,
 						originalComment: parent.originalComment ?? savedComment,
 						showRegulationButtons: parent.questionType === 'Regulation',
+						hideButtonForChecklist: parent.questionType !== 'Checklist',
 						originalSelectPriority: parent.originalSelectPriority !== undefined ?
 							parent.originalSelectPriority : (parent.selectPriority ?? null),
 
@@ -362,6 +381,10 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 		this.showQuestions = true;
 
 	}
+
+	handleActualStartDateChange(event) {
+        this.actualStartDate = event.target.value;
+    }
 
 	handleTimeSpentChange(event) {
     const input = event.target;
@@ -597,39 +620,64 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
 			async loadViolationIcons() {
 
-        try {
-            let parentIds = new Set();
+    try {
+        const parentIds = [];
 
-            this.groupedQuestions.forEach(group => {
-                group.parentQuestions.forEach(parent => {
-                    parentIds.add(parent.assessmentIndicatorDefinitionId);
-                });
+        this.groupedQuestions.forEach(group => {
+            group.parentQuestions.forEach(parent => {
+                if (parent.assessmentIndicatorDefinitionId) {
+                    parentIds.push(
+                        parent.assessmentIndicatorDefinitionId
+                    );
+                }
             });
+        });
 
-            const quewithopenvio = await getParentQuestionsWithOpenViolations({
-                visitId: this.recordId,
-                parentQuestionIds: Array.from(parentIds)
-            });
-
-            const violationSet = new Set(quewithopenvio);
-
-
-            this.groupedQuestions = this.groupedQuestions.map(group => {
-                return {
-                    ...group,
-                    parentQuestions: group.parentQuestions.map(parent => {
-                        return {
-                            ...parent,
-                            showViolationIcon: violationSet.has(parent.assessmentIndicatorDefinitionId)
-                        };
-                    })
-                };
-            });
-
-        } catch (error) {
-            console.error('Violation error:', error);
+        if (!parentIds.length) {
+            return;
         }
+
+        const openViolations =
+            await getParentQuestionsWithOpenViolations({
+                visitId: this.recordId,
+                parentQuestionIds: parentIds
+            });
+
+        this.groupedQuestions =
+            this.groupedQuestions.map(group => {
+
+            return {
+                ...group,
+                parentQuestions:
+                    group.parentQuestions.map(parent => {
+
+                    const violation =
+                        openViolations?.[
+                            parent.assessmentIndicatorDefinitionId
+                        ];
+
+                    return {
+                        ...parent,
+
+                        // button visibility
+                        showViolationIcon:
+                            !!violation,
+
+                        // needed for button click
+                        parentViolationId:
+                            violation?.parentViolationId || null
+                    };
+                })
+            };
+        });
+
+    } catch (error) {
+        console.error(
+            'Violation error:',
+            error
+        );
     }
+}
 
 	
 
@@ -1068,6 +1116,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 							preferredDateTime: parent.preferredDateTime ? this.convertToSalesforceDatetime(parent.preferredDateTime) : null,
 							actionDescription: parent.actionDescription || null,
 							correctedDuringInspection: parent.correctedDuringInspection || false,
+							parentViolationId: parent.parentViolationId || null
 						});
 
 						sectionsWithChanges.add(group.taskDefinitionId);
@@ -1179,7 +1228,11 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 				visitId: this.recordId,
 				closingComments: this.closingComments,
 				timeSpent: this.timeSpent,
-                followUpInspectionRequired: this.followUpInspectionRequired
+				actualStartDate: this.actualStartDate,
+				followUpInspectionRequired: this.followUpInspectionRequired,
+				environmentalSwabsTaken: this.environmentalSwabsTaken,
+				deliveryMethod: this.deliveryMethod,
+				signatureRefusal: this.signatureRefusal
 			});
 			this.isDraft = false;
 
@@ -1218,8 +1271,30 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
 	async createViolationsAndNotify() {
 		try {
+			const definitionToParentViolationMap = {};
+			const violationStatusMap = {};
+			
+			this.groupedQuestions.forEach(group => {
+				group.parentQuestions.forEach(parent => {
+					const definitionId = parent.assessmentIndicatorDefinitionId;
+					
+					definitionToParentViolationMap[
+						definitionId
+					] = parent.parentViolationId || null;
+
+					if (parent.parentViolationId) {
+
+					violationStatusMap[
+						parent.parentViolationId
+					] = parent.result;
+				   }
+				});
+		    });
+
 			const violationResult = await createViolationsForInspection({
 				visitId: this.recordId,
+				definitionToParentViolationMap,
+				violationStatusMap
 			});
 
 			if (violationResult?.success) {
@@ -1382,12 +1457,9 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 						checkboxValue: null,
 						selectPriority: isNonCompliant ? parent.selectPriority : null,
 						preferredDateTime: isNonCompliant && parent.preferredDateTime ? parent.preferredDateTime : null,
-						correctedDuringInspection: isNonCompliant ?
-							parent.correctedDuringInspection :
-							false,
-						actionDescription: isNonCompliant ?
-							parent.actionDescription || null :
-							null,
+						correctedDuringInspection: isNonCompliant ? parent.correctedDuringInspection : false,
+						actionDescription: isNonCompliant ? parent.actionDescription || null : null,
+						parentViolationId: parent.parentViolationId || null
 					});
 				}
 
@@ -1418,6 +1490,31 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
 		return responses;
 	}
+
+	handleOpenViolation(event) {
+    const violationId = event.currentTarget.dataset.id;
+
+    if (!violationId) {
+        return;
+    }
+
+    window.open(
+        `/lightning/r/RegulatoryCodeViolation/${violationId}/view`,
+        '_blank'
+    );
+    }
+
+	handleEnvironmentalSwabChange(event) {
+    this.environmentalSwabsTaken = event.target.checked;
+    }
+
+    handleDeliveryMethodChange(event) {
+    this.deliveryMethod = event.detail.value;
+    }
+
+    handleSignatureRefusalChange(event) {
+    this.signatureRefusal = event.target.checked;
+    }
 	
 	get showMarkNotInspectedButton() {
 			return (

@@ -6,7 +6,8 @@
 public with sharing class InspectionViolationService {
     public static Id recordTypePHOCSInspectionAssessmentInd = Schema.SObjectType.InspectionAssessmentInd.getRecordTypeInfosByDeveloperName().get('PHOCSInspectionAssessmentInd').getRecordTypeId();
     public static Id recordTypePHOCSRegulatoryCodeViolation = Schema.SObjectType.RegulatoryCodeViolation.getRecordTypeInfosByDeveloperName().get('PHOCSRegulatoryCodeViolation').getRecordTypeId();
-    public static final String RESULT_NON_COMPLIANT = 'PHOCSNonCompliant';    
+    public static final String RESULT_NON_COMPLIANT = 'PHOCSNonCompliant';  
+    public static final String RESULT_COMPLIANT = 'Compliant';  
     public static String className = 'InspectionViolationService';
 
     /**
@@ -274,23 +275,44 @@ public with sharing class InspectionViolationService {
 * @date: 19 Jan 2026
 * @description: The purpose of this method is to Create Violations for PHOCS InspectionAssessmentInd records.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+                     28 May -  EHIS-2668         -  Accenture   -  Create Hierarchy Chain Violations.
 */
     @AuraEnabled
-    public static ViolationResult createRegulatoryCodeViolationsForInspection(Id visitId) {
+    public static ViolationResult createRegulatoryCodeViolationsForInspection(Id visitId, Map<Id, Id> definitionToParentViolationMap, Map<Id, String> violationStatusMap) {
         ViolationResult result = new ViolationResult();
+        Set<Id> parentViolationIds = new Set<Id>();
+        List<RegulatoryCodeViolation> parentViolationsToClose = new List<RegulatoryCodeViolation>();
         
-        if (visitId == null) {
-            result.success = false;
-            result.message = 'Visit ID is required';
-            return result;
-        }
-        
-        try {            
+        try { 
+            if(violationStatusMap != null && !violationStatusMap.isEmpty()){
+                List<RegulatoryCodeViolation> existingViolations = [SELECT Id, Status, PHOCSParentId__c FROM RegulatoryCodeViolation WHERE Id IN :violationStatusMap.keySet()
+                                                                    AND Status = 'Open' AND PHOCSParentId__c = NULL];
+                
+                for (RegulatoryCodeViolation vio : existingViolations){
+                    String status = violationStatusMap.get(vio.Id);
+                    
+                    if (status == RESULT_COMPLIANT){
+                        vio.Status = 'Resolved';
+                        parentViolationsToClose.add(vio);
+                    }
+                }
+                
+                if (!parentViolationsToClose.isEmpty()) {
+                    update parentViolationsToClose;
+                }
+            }
+            
+            if (visitId == null) {
+                result.success = false;
+                result.message = 'Visit ID is required';
+                return result;
+            }    
+            
             // Get all InspectionAssessmentInd records for this visit with their definitions
             // Including both parent (non-compliant) and child (selected canned comments) records
-            List<InspectionAssessmentInd> allResponses = [SELECT Id, RecordTypeId, AssessmentTaskId, AssessmentTask.Name, AssessmentTask.ParentId, AssessmentIndDefinitionId,
-                AssessmentIndDefinition.Name, AssessmentIndDefinition.PHOCSParentId__c, Result, PHOCSInspectionComments__c,CorrectedDuringInspection__c,
-                PHOCSCheckboxResponse__c FROM InspectionAssessmentInd WHERE AssessmentTask.ParentId = :visitId ];
+            List<InspectionAssessmentInd> allResponses = [SELECT Id, RecordTypeId, AssessmentTaskId, AssessmentTask.Name, AssessmentTask.ParentId, AssessmentIndDefinitionId, ComplianceDueDate__c,
+                                                          AssessmentIndDefinition.Name, AssessmentIndDefinition.PHOCSParentId__c, Result, PHOCSInspectionComments__c,CorrectedDuringInspection__c,
+                                                          Priority__c, CorrectiveActionDescription__c, PHOCSCheckboxResponse__c FROM InspectionAssessmentInd WHERE AssessmentTask.ParentId =: visitId];
             
             if (allResponses.isEmpty()) {
                 result.success = true;
@@ -316,7 +338,17 @@ public with sharing class InspectionViolationService {
                 return result;
             }
             
-            Map<Id, AssessmentTask> taskMap = new Map<Id, AssessmentTask>([SELECT Id, ParentId, Parent.AccountId, Parent.ContextId FROM AssessmentTask WHERE Id IN :assessmentTaskIds]);           
+            Map<Id, AssessmentTask> taskMap = new Map<Id, AssessmentTask>([SELECT Id, ParentId, Parent.AccountId, Parent.ContextId FROM AssessmentTask WHERE Id IN :assessmentTaskIds]); 
+            
+            if (definitionToParentViolationMap != null) {
+                parentViolationIds.addAll(definitionToParentViolationMap.values());
+            }            
+            parentViolationIds.remove(null);
+            
+            Map<Id, RegulatoryCodeViolation> validParentViolationMap = parentViolationIds.isEmpty() 
+                ? new Map<Id, RegulatoryCodeViolation>() 
+                : new Map<Id, RegulatoryCodeViolation>([SELECT Id, Status, PHOCSParentId__c FROM RegulatoryCodeViolation 
+                                                        WHERE Id IN :parentViolationIds AND Status = 'Open' AND PHOCSParentId__c = NULL]);
             
             List<RegulatoryCodeAssessmentInd> regCodeAsmntList = [SELECT Id, AssessmentIndDefinitionId, RegulatoryCodeId FROM RegulatoryCodeAssessmentInd WHERE AssessmentIndDefinitionId IN :assessmentIndDefIds];
             
@@ -338,6 +370,7 @@ public with sharing class InspectionViolationService {
                 Id inspectionId = taskMap.get(ind.AssessmentTaskId)?.ParentId;
                 Id inspectionAccountId = taskMap.get(ind.AssessmentTaskId)?.Parent?.AccountId;
                 Id inspectionAssetId = taskMap.get(ind.AssessmentTaskId)?.Parent?.ContextId;
+                Id parentViolationId = definitionToParentViolationMap != null ? definitionToParentViolationMap.get(ind.AssessmentIndDefinitionId) : null;
                 
                 for (RegulatoryCodeAssessmentInd mapItem : mappings) {
                     RegulatoryCodeViolation vio = new RegulatoryCodeViolation();
@@ -348,8 +381,14 @@ public with sharing class InspectionViolationService {
                     vio.Asset__c = inspectionAssetId;
                     vio.DateCreated = System.now();
                     vio.RegulatoryCodeId = mapItem.RegulatoryCodeId;
+                    vio.ComplianceDueDate = ind.ComplianceDueDate__c;
+                    vio.CorrectiveActionDescription = ind.CorrectiveActionDescription__c;
+                    vio.Priority = ind.Priority__c;
                     vio.Corrected_During_Inspection__c = ind.CorrectedDuringInspection__c;
-                    vio.Status = 'Open'; //ind.CorrectedDuringInspection__c == true ? 'Resolved' :'Open';
+                    vio.Status = ind.CorrectedDuringInspection__c == true ? 'Resolved' : 'Open';
+                    if (parentViolationId != null && validParentViolationMap.containsKey(parentViolationId)){
+                        vio.PHOCSParentId__c = parentViolationId;
+                    }
                     
                     violationsToInsert.add(vio);
                     violationSourceInds.add(ind);
