@@ -396,10 +396,10 @@ public without sharing class PHOCSInspectionAssessmentIndControllerV2 {
         
         visitRec.Status = 'Completed';
         visitRec.StatusRemarks = closingComments;
-        visitRec.ActualVisitEndTime = System.now();
         visitRec.PHOCSIsDraft__c = false; 
         visitRec.TimeSpentMinutes__c = timeSpent;
         visitRec.ActualVisitStartTime = actualStartDate;
+        visitRec.ActualVisitEndTime = System.now().addMinutes(2);
         //visitRec.FollowUpInspectionRequired__c = followUpInspectionRequired;
         update visitRec;
     }    
