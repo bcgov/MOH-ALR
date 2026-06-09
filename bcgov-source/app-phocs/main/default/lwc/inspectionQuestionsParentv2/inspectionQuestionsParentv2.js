@@ -182,6 +182,10 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 		const hasCannedComment = effectiveChildren.some(child => child.checkboxValue === true);
 		const hasComment = effectiveComment && effectiveComment.trim().length > 0;
 		const showNonCompliantHelpText = result === RESULT_NON_COMPLIANT && !hasCannedComment && !hasComment;
+		const hasObservations = effectiveChildren && effectiveChildren.length > 0;
+		const nonCompliantHelpMessage = hasObservations 
+		? 'Please select the applicable observation(s) or enter comments for the non-compliant question.' 
+		: 'Please enter comments for the non-compliant question.';
 
 		return {
 			...parent,
@@ -201,6 +205,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 			...updates,
 
 			showNonCompliantHelpText,
+			nonCompliantHelpMessage,
 
 			compliantButtonClass: this.getButtonClass(RESULT_COMPLIANT, result),
 			nonCompliantButtonClass: this.getButtonClass(
