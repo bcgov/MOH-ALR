@@ -87,7 +87,7 @@ global without sharing class CustomTokenInspectionData
     reportMap.put('inspector', visitRec.Owner.Name);
     reportMap.put('dairyPlant', visitRec.Account.Name);
     reportMap.put('address', buildAddress(visitRec.Account));
-    reportMap.put('inspectionDate', visitRec.ActualVisitEndTime != null ? visitRec.ActualVisitEndTime.date() : null);
+    reportMap.put('inspectionDate', visitRec.ActualVisitStartTime != null ? visitRec.ActualVisitStartTime.date() : null);
     reportMap.put('inspectionType', visitRec.VisitType.Name);
     reportMap.put('timeSpent',  visitRec.TimeSpentMinutes__c != null ? String.valueOf(visitRec.TimeSpentMinutes__c) : null);
         
