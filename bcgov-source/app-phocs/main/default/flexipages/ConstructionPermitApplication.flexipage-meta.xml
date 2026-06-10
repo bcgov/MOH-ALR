@@ -964,18 +964,8 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.EstimatedDailySewageFlowLday__c</fieldItem>
-                <identifier>RecordEstimatedDailySewageFlowLday_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.TankWeight__c</fieldItem>
-                <identifier>RecordTankWeight_cField</identifier>
+                <fieldItem>Record.DesignEngineerOfRecord__c</fieldItem>
+                <identifier>RecordDesignEngineerOfRecord_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -994,8 +984,8 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.SewerageOptionReview__c</fieldItem>
-                <identifier>RecordSewerageOptionReview_cField</identifier>
+                <fieldItem>Record.TankWeight__c</fieldItem>
+                <identifier>RecordTankWeight_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -1045,8 +1035,8 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.CSAB66Standard__c</fieldItem>
-                <identifier>RecordCSAB66Standard_cField</identifier>
+                <fieldItem>Record.HoldingTankWillServe__c</fieldItem>
+                <identifier>RecordHoldingTankWillServe_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -1055,8 +1045,32 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.HoldingTankBylaw__c</fieldItem>
-                <identifier>RecordHoldingTankBylaw_cField</identifier>
+                <fieldItem>Record.HoldingTankWillServeSpecify__c</fieldItem>
+                <identifier>RecordHoldingTankWillServeSpecify_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.HoldingTankWillServe__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Other</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ResidentialNoOfBedrooms__c</fieldItem>
+                <identifier>RecordResidentialNoOfBedrooms_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.HoldingTankWillServe__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Residential</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <name>Facet-5c056e90-7040-40f7-9a61-b6025740290c</name>

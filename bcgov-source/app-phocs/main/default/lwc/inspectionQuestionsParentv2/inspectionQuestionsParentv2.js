@@ -15,7 +15,6 @@ import getInspection from '@salesforce/apex/PHOCSInspectionsHelper.getInspection
 import updateOpeningComments from "@salesforce/apex/PHOCSInspectionAssessmentIndControllerV2.updateOpeningComments";
 import getParentQuestionsWithOpenViolations from "@salesforce/apex/PHOCSInspectionOpenViolationController.getParentQuestionsWithOpenViolations";
 
-
 const RESULT_COMPLIANT = "Compliant";
 const RESULT_NON_COMPLIANT = "PHOCSNonCompliant";
 const RESULT_NA = "Not Applicable";
@@ -215,6 +214,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 			naButtonClass: this.getButtonClass(RESULT_NA, result),
 			nsButtonClass: this.getButtonClass(RESULT_NS, result),
 			showChildren: result === RESULT_NON_COMPLIANT || result === RESULT_COMPLIANT,
+			showChildQuestions: result === RESULT_NON_COMPLIANT || result === RESULT_COMPLIANT,
 			showNonCompliantFields: result === RESULT_NON_COMPLIANT,
 		};
 	}
