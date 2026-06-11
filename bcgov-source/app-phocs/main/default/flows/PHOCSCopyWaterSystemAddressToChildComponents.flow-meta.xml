@@ -131,7 +131,7 @@
         <connector>
             <targetReference>IterateChildComponents</targetReference>
         </connector>
-        <filterLogic>1 AND (2 OR 3 OR 4)</filterLogic>
+        <filterLogic>1 AND 5 AND (2 OR 3 OR 4)</filterLogic>
         <filters>
             <field>RecordTypeName__c</field>
             <operator>EqualTo</operator>
@@ -158,6 +158,13 @@
             <operator>EqualTo</operator>
             <value>
                 <stringValue>Distribution</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>AccountId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>false</getFirstRecordOnly>
