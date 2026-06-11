@@ -31,7 +31,7 @@
                         <valueListItems>
                             <value>Account.PHOCSNewInspection</value>
                             <visibilityRule>
-                                <booleanFilter>1 OR 2</booleanFilter>
+                                <booleanFilter>(1 OR 2) AND 3</booleanFilter>
                                 <criteria>
                                     <leftValue>{!$Permission.CustomPermission.PHOCSOfficer}</leftValue>
                                     <operator>EQUAL</operator>
@@ -41,6 +41,11 @@
                                     <leftValue>{!$Permission.CustomPermission.PHOCSAdmin}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>true</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Type}</leftValue>
+                                    <operator>NE</operator>
+                                    <rightValue>Recreational Water</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
@@ -273,8 +278,8 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Description</fieldItem>
-                <identifier>RecordDescriptionField</identifier>
+                <fieldItem>Record.RiskRating__c</fieldItem>
+                <identifier>RecordRiskRating_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -283,15 +288,8 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.EstablishmentDuration__c</fieldItem>
-                <identifier>RecordEstablishmentDuration_cField</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.Type}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Personal Services</rightValue>
-                    </criteria>
-                </visibilityRule>
+                <fieldItem>Record.Description</fieldItem>
+                <identifier>RecordDescriptionField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -323,13 +321,13 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.NumberofBedrooms__c</fieldItem>
-                <identifier>RecordNumber_of_Bedrooms_cField</identifier>
+                <fieldItem>Record.CategoryL3Specify__c</fieldItem>
+                <identifier>RecordCategoryL3Specify_cField</identifier>
                 <visibilityRule>
                     <criteria>
-                        <leftValue>{!Record.CategoryL2__c}</leftValue>
+                        <leftValue>{!Record.CategoryL3__c}</leftValue>
                         <operator>EQUAL</operator>
-                        <rightValue>Residential (e.g., Single family/duplex)</rightValue>
+                        <rightValue>Other</rightValue>
                     </criteria>
                 </visibilityRule>
             </fieldInstance>
@@ -340,13 +338,30 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.CategoryL3Specify__c</fieldItem>
-                <identifier>RecordCategoryL3Specify_cField</identifier>
+                <fieldItem>Record.NumberofBedrooms__c</fieldItem>
+                <identifier>RecordNumberofBedrooms_cField</identifier>
                 <visibilityRule>
                     <criteria>
-                        <leftValue>{!Record.CategoryL3__c}</leftValue>
+                        <leftValue>{!Record.CategoryL2__c}</leftValue>
                         <operator>EQUAL</operator>
-                        <rightValue>Other</rightValue>
+                        <rightValue>Single family/duplex</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.EstablishmentDuration__c</fieldItem>
+                <identifier>RecordEstablishmentDuration_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.Type}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Personal Services</rightValue>
                     </criteria>
                 </visibilityRule>
             </fieldInstance>
@@ -991,6 +1006,16 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
+                <fieldItem>Record.WaterSourceName__c</fieldItem>
+                <identifier>RecordWaterSourceName_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.SizeofWastewaterTankLitres__c</fieldItem>
                 <identifier>RecordSize_of_Wastewater_Tank_Litres_cField</identifier>
             </fieldInstance>
@@ -1054,6 +1079,16 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.DesignatedNumberOfHandwashingSinks__c</fieldItem>
                 <identifier>RecordDesignated_Number_Of_Handwashing_Sinks_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ApprovedMenu__c</fieldItem>
+                <identifier>RecordApprovedMenu_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
