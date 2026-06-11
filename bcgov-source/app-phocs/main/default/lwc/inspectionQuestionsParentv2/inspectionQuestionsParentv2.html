@@ -263,11 +263,13 @@
 						</div>
 						<div class="slds-grid slds-wrap slds-m-bottom_medium">
 							<div class="slds-col slds-size_1-of-1">
-								<lightning-input type="datetime-local" label="Actual Start Time" value={actualStartDate} required onchange={handleActualStartTimeChange}></lightning-input>
+								<lightning-input type="datetime-local" label="Actual Start Time" value={actualStartDate} max={currentDateTime} required onchange={handleActualStartTimeChange}></lightning-input>
 							</div>
-							<div class="slds-col slds-size_1-of-1 slds-m-top_small">
+							<div class="slds-col slds-size_1-of-2 slds-p-right_small slds-m-top_small">
 								<lightning-input type="text" label="Time Spent (HH:MM)" value={timeSpent} maxlength="5" required placeholder="HH:MM" data-field="timespent" onchange={handleTimeSpentChange}></lightning-input>
 							</div>
+							<div class="slds-col slds-size_1-of-2 slds-m-top_small">
+                            </div>
 							<!--<div class="slds-col slds-size_1-of-2 slds-align_absolute-center">
                                 <lightning-input type="checkbox" label="Follow-up Inspection Required" checked={followUpInspectionRequired} onchange={handleFollowUpChange}></lightning-input>
                             </div> -->
