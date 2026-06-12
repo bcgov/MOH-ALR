@@ -10,7 +10,7 @@
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Populate_Parent_Account_Id</name>
-            <conditionLogic>(1 AND 4) OR (2 AND 3)</conditionLogic>
+            <conditionLogic>1 OR (2 AND 3)</conditionLogic>
             <conditions>
                 <leftValueReference>IsNew</leftValueReference>
                 <operator>EqualTo</operator>
@@ -28,13 +28,6 @@
             <conditions>
                 <leftValueReference>$Record.ParentAccount__r.Id</leftValueReference>
                 <operator>IsChanged</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.ParentId</leftValueReference>
-                <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
                 </rightValue>
