@@ -3,22 +3,21 @@
 
         <!-- Dynamic Filters -->
         <template for:each={filterConfig} for:item="filter">
-             <template if:true={filter.visible}>
-            <lightning-combobox
-                key={filter.field}
-                label={filter.label}
-                options={filter.options}
-                data-field={filter.field}
-                value={filter.value}
-                onchange={handleChange}>
-            </lightning-combobox>
-             </template>
+            <template if:true={filter.visible}>
+                <div key={filter.field} class="filterContainer">
+
+                    <div class="customLabel">
+                        {filter.label}
+                    </div>
+                    <lightning-combobox variant="label-hidden" options={filter.options} data-field={filter.field}
+                        value={filter.value} onchange={handleChange}>
+                    </lightning-combobox>
+                </div>
+            </template>
         </template>
 
         <!-- Reset Button -->
-        <lightning-button
-            label="Reset"
-            onclick={handleReset}>
+        <lightning-button label="Reset" onclick={handleReset}>
         </lightning-button>
 
     </div>
