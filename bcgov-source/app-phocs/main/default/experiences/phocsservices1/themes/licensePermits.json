@@ -1,6 +1,6 @@
 {
   "activeBrandingSetId" : "ce4292d4-4fe5-49bd-8b17-9c125cf8d2be",
-  "customCSS" : ".slds-checkbox .slds-checkbox_faux, .slds-checkbox .slds-checkbox--faux {\n    visibility: hidden !important;\n}\n.custom-btn {\n    transition: all 0.25s ease;\n}\n\n/* Hover state */\n.custom-btn:hover {\n    background-color: #003366 !important;  /* Salesforce blue */\n    color: #ffffff !important;             /* white text */\n    border-color: #0070d2 !important;\n}\n\n\n/********* header****/\n.themeLogo{\n    position: relative;\n    display: flex;\n    align-items: center;\n    gap: 15px;\n}\n\n.themeLogo:after{\n    content: \"Environmental Health Inspection Reports\";\n    color: #fff;\n    font-size: 20px;\n    position: relative;\n    left: 0;\n    top: 0;\n    white-space: nowrap;\n}",
+  "customCSS" : ".slds-checkbox .slds-checkbox_faux, .slds-checkbox .slds-checkbox--faux {\n    visibility: hidden !important;\n}\n.custom-btn {\n    transition: all 0.25s ease;\n}\n\n/* Hover state */\n.custom-btn:hover {\n    background-color: #003366 !important;  /* Salesforce blue */\n    color: #ffffff !important;             /* white text */\n    border-color: #0070d2 !important;\n}\n\n\n/********* header****/\n.themeLogo{\n    position: relative;\n    display: flex;\n    align-items: center;\n  \n}\n\n.themeLogo:after{\n    content: \"Environmental Health Inspection Reports\";\n    color: #fff;\n    font-size: 22pt;\n    position: relative;\n    left: 0;\n    top: 0;\n    white-space: nowrap;\n      padding-left: 20px;\n}\n/********* Mobile *********/\n@media only screen and (max-width: 768px){\n\n    /* Increase blue header height */\n    .forceCommunityThemeHeaderBase,\n    .themeHeader,\n    .comm-navigation {\n        min-height: 90px !important;\n        height: 90px !important;\n        position: relative;\n    }\n\n    /* Keep logo in original location */\n    .themeLogo{\n        position: relative;\n    }\n\n    /* Title row */\n    .themeLogo:after{\n        content: \"Environmental Health Inspection Reports\";\n\n        position: absolute;\n\n        /* Push title below logo row */\n        top: 32px;\n\n        /* Full header width */\n        left: -120px;\n        width: 100vw;\n\n        text-align: center;\n        color: #fff;\n\n        font-size: 13px;\n        line-height: 1.2;\n\n        white-space: normal;\n        word-break: normal;\n\n        padding: 0 50px; /* leave room for hamburger/search */\n        box-sizing: border-box;\n\n        pointer-events: none;\n    }\n}\n/* Mobile Phones */\n@media only screen and (max-width: 767px){\n\n    .mobileHeaderTitle{\n        background:#003366;\n        color:#fff;\n        text-align:center;\n        padding:8px 50px;\n        font-size:13px;\n        line-height:1.2;\n        font-weight:600;\n    }\n}\n\n@media only screen and (min-width: 768px) and (max-width: 1024px){\n\n    .themeLogo:after{\n        content: \"Environmental Health\\A Inspection Reports\";\n        white-space: pre-line;\n\n        font-size: 18pt;\n        line-height: 1.2;\n    }\n}",
   "developerName" : "lpi",
   "id" : "8eddad7c-baa2-4715-a2f2-f75ff0626fb0",
   "label" : "License Permits",
@@ -32,13 +32,13 @@
     "type" : "view"
   }, {
     "componentAttributes" : {
-      "fixedPageWidth" : 1440,
+      "fixedPageWidth" : 1321,
       "headerBgColor" : "rgba(0, 0, 0, 0)",
-      "isHeaderPinned" : true,
+      "isHeaderPinned" : false,
       "isHeroUnderHeader" : false,
       "isPageWidthFixed" : true,
       "showHeader" : true,
-      "showHero" : true
+      "showHero" : false
     },
     "componentName" : "siteforce:themeLayoutStarter",
     "id" : "4b95e151-a614-4e03-8e2b-7ede70d468bd",
@@ -48,15 +48,15 @@
         "componentAttributes" : {
           "background" : "background: rgb(0,51,102)",
           "backgroundOverlayColor" : "rgb(0, 51, 102)",
-          "borderBottomColor" : "",
-          "borderTopColor" : "rgb(255, 255, 255)",
-          "bottomRowHeight" : 5,
-          "bottomRowOverlayColor" : "rgb(35, 80, 125)",
-          "containHeader" : false,
-          "containHeaderWidth" : 1920,
-          "dropdownBackgroundColor" : "#008080",
-          "dropdownBackgroundHoverColor" : "#004d4c",
-          "dropdownBorderColor" : "#008080",
+          "borderBottomColor" : "rgb(255, 255, 255)",
+          "borderTopColor" : "rgb(252, 186, 25)",
+          "bottomRowHeight" : 3,
+          "bottomRowOverlayColor" : "rgb(26, 90, 150)",
+          "containHeader" : true,
+          "containHeaderWidth" : 1440,
+          "dropdownBackgroundColor" : "rgb(26, 90, 150)",
+          "dropdownBackgroundHoverColor" : "rgb(0, 51, 102)",
+          "dropdownBorderColor" : "rgb(0, 51, 102)",
           "dropdownTextColor" : "rgb(255, 255, 255)",
           "dropdownTextHoverColor" : "rgb(255, 255, 255)",
           "iconLinkColor" : "rgb(255, 255, 255)",
@@ -73,7 +73,7 @@
           "showNotifications" : false,
           "showProfileMenu" : false,
           "showSearch" : true,
-          "topRowHeight" : 20
+          "topRowHeight" : 13
         },
         "componentName" : "forceCommunity:themeHeaderStacked",
         "id" : "e7409c2d-a75e-439b-a312-25c722010bf0",
@@ -115,7 +115,7 @@
         }, {
           "components" : [ {
             "componentAttributes" : {
-              "backgroundColor" : "rgb(0, 51, 102)",
+              "backgroundColor" : "rgb(251, 243, 243)",
               "borderColor" : "rgba(255, 255, 255, 1)",
               "borderRadius" : 12,
               "borderStyle" : "bottomborder",
@@ -134,12 +134,12 @@
                 "isPublic" : true,
                 "name" : "ViolationEnforcementAction"
               } ],
-              "iconColor" : "rgba(255, 255, 255, 1)",
+              "iconColor" : "rgb(116, 116, 116)",
               "placeholderText" : "Search by facility name or address",
-              "placeholderTextColor" : "rgba(255, 255, 255, 1)",
+              "placeholderTextColor" : "rgb(116, 116, 116)",
               "showInputFocusOutline" : true,
               "showSearchButton" : false,
-              "textColor" : "rgb(255, 255, 255)",
+              "textColor" : "rgba(238, 238, 238, 0.91)",
               "typeaheadResultMax" : 5,
               "useTypeahead" : true
             },
@@ -186,7 +186,7 @@
         "type" : "component"
       }, {
         "componentAttributes" : {
-          "richTextValue" : "<div style=\"\nbackground-color:#003366;\nmin-height:200px;\npadding:50px 130px;\ntext-align:center;\nWidth: 1440px\nborder-top:2px solid #FCBA19;\nborder-bottom:2px solid #FCBA19;\">\n    \n    <!-- Top Text -->\n    <p style=\"color:#ffffff; font-size:14px; margin-bottom:20px; text-align:left;\">\n        Thanks to our health authority partners and endorsers:\n    </p>\n\n    <!-- Logos Row -->\n    <div style=\"display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:20px;\">\n        \n        <a href=\"https://www.northernhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/NorthernHealthLogo\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.islandhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/IslandHealth\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.vch.ca/en/health-topics/health-protection-permits-and-licensing\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/VancouverCoastalHealth\" style=\"height:30px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.fraserhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/FraserHealth\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.interiorhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/InterierHealth\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.bccdc.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/BCCDC\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n    </div>\n</div>\n\n\n<div style=\"background-color:#FAFAFA; padding:20px 40px; font-size:13px; color:#201F1E; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; border-top:1px solid #F3F2F1; gap:10px;\">\n    \n    <!-- Left Links -->\n    <div>\n        <a href=\"/phocsservices/s/contact-us\" style=\"margin-right:15px; color:#201F1E; text-decoration:none;\">Contact Us</a>   <span style=\"color:#CCCCCC; padding:0 8px;\">|</span>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/home/copyright/\" target=\"_blank\" style=\"margin-right:15px; color:#333; text-decoration:none;\">Copyright</a>   <span style=\"color:#CCCCCC; padding:0 8px;\">|</span>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/home/disclaimer/\" target=\"_blank\" style=\"margin-right:15px; color:#333; text-decoration:none;\">Disclaimer</a>   <span style=\"color:#CCCCCC; padding:0 8px;\">|</span>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/home/privacy/\" target=\"_blank\" style=\"color:#333; text-decoration:none;\">Privacy</a>\n    </div>\n\n    <!-- Right Copyright -->\n    <div style=\"color:#666;\">\n        Copyright © 2026 Province of British Columbia. All rights reserved.\n    </div>\n\n</div>"
+          "richTextValue" : "<div style=\"\nbackground-color:#003366;\npadding:25px 130px;\ntext-align:center;\nWidth: 100%;\nborder-top:2px solid #FCBA19;\nborder-bottom:2px solid #FCBA19;\">\n    \n    <!-- Top Text -->\n    <p style=\"color:#ffffff; font-size:14px; margin-bottom:20px; text-align:left;\">\n        Thanks to our health authority partners and endorsers:\n    </p>\n\n    <!-- Logos Row -->\n    <div style=\"display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:20px;\">\n        \n        <a href=\"https://www.northernhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/NorthernHealthLogo\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.islandhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/IslandHealth\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.vch.ca/en/health-topics/health-protection-permits-and-licensing\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/VancouverCoastalHealth\" style=\"height:30px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.fraserhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/FraserHealth\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.interiorhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/InterierHealth\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.bccdc.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/BCCDC\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n    </div>\n</div>\n\n\n<div style=\"background-color:#FAFAFA; padding:10px 40px; font-size:13px; color:#201F1E; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; border-top:1px solid #F3F2F1; gap:10px;\">\n    \n    <!-- Left Links -->\n    <div>\n        <a href=\"/phocsservices/s/contact-us\" style=\"margin-right:15px; color:#201F1E; text-decoration:none;\">Contact Us</a>   <span style=\"color:#CCCCCC; padding:0 8px;\">|</span>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/home/copyright/\" target=\"_blank\" style=\"margin-right:15px; color:#333; text-decoration:none;\">Copyright</a>   <span style=\"color:#CCCCCC; padding:0 8px;\">|</span>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/home/disclaimer/\" target=\"_blank\" style=\"margin-right:15px; color:#333; text-decoration:none;\">Disclaimer</a>   <span style=\"color:#CCCCCC; padding:0 8px;\">|</span>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/home/privacy/\" target=\"_blank\" style=\"color:#333; text-decoration:none;\">Privacy</a>\n    </div>\n\n    <!-- Right Copyright -->\n    <div style=\"color:#666;\">\n        Copyright © 2026 Province of British Columbia. All rights reserved.\n    </div>\n\n</div>"
         },
         "componentName" : "forceCommunity:htmlBlock",
         "id" : "e9c2192c-aea4-4baf-9f5c-7ad9a748adb5",
@@ -202,11 +202,11 @@
     "componentAttributes" : {
       "fixedPageWidth" : 1440,
       "headerBgColor" : "rgba(0, 0, 0, 0)",
-      "isHeaderPinned" : false,
+      "isHeaderPinned" : true,
       "isHeroUnderHeader" : false,
       "isPageWidthFixed" : true,
       "showHeader" : true,
-      "showHero" : true
+      "showHero" : false
     },
     "componentName" : "siteforce:lpiLayoutStarter",
     "id" : "b2437692-f22d-4573-80d0-17b8d825eb18",
@@ -217,14 +217,14 @@
           "background" : "background: rgb(0,51,102)",
           "backgroundOverlayColor" : "rgb(0, 51, 102)",
           "borderBottomColor" : "rgb(255, 255, 255)",
-          "borderTopColor" : "rgb(255, 255, 255)",
-          "bottomRowHeight" : 1,
-          "bottomRowOverlayColor" : "rgb(35, 80, 125)",
+          "borderTopColor" : "rgb(252, 186, 25)",
+          "bottomRowHeight" : 3,
+          "bottomRowOverlayColor" : "rgb(26, 90, 150)",
           "containHeader" : false,
-          "containHeaderWidth" : 1027,
-          "dropdownBackgroundColor" : "rgb(35, 80, 125)",
-          "dropdownBackgroundHoverColor" : "rgb(53, 92, 132)",
-          "dropdownBorderColor" : "rgb(35, 80, 125)",
+          "containHeaderWidth" : 1440,
+          "dropdownBackgroundColor" : "rgb(26, 90, 150)",
+          "dropdownBackgroundHoverColor" : "rgb(0, 51, 102)",
+          "dropdownBorderColor" : "rgb(0, 51, 102)",
           "dropdownTextColor" : "rgb(255, 255, 255)",
           "dropdownTextHoverColor" : "rgb(255, 255, 255)",
           "iconLinkColor" : "rgb(255, 255, 255)",
@@ -241,7 +241,7 @@
           "showNotifications" : false,
           "showProfileMenu" : false,
           "showSearch" : true,
-          "topRowHeight" : 12
+          "topRowHeight" : 13
         },
         "componentName" : "forceCommunity:themeHeaderStacked",
         "id" : "8c5f8484-fd00-4cbf-9f51-fa3fd3952945",
@@ -269,7 +269,7 @@
         }, {
           "components" : [ {
             "componentAttributes" : {
-              "backgroundColor" : "rgb(0, 51, 102)",
+              "backgroundColor" : "rgb(251, 243, 243)",
               "borderColor" : "rgba(255, 255, 255, 1)",
               "borderRadius" : 12,
               "borderStyle" : "bottomborder",
@@ -288,12 +288,12 @@
                 "isPublic" : true,
                 "name" : "ViolationEnforcementAction"
               } ],
-              "iconColor" : "rgb(255, 255, 255)",
+              "iconColor" : "rgb(116, 116, 116)",
               "placeholderText" : "Search by facility name or address",
-              "placeholderTextColor" : "rgba(255, 255, 255, 1)",
+              "placeholderTextColor" : "rgb(116, 116, 116)",
               "showInputFocusOutline" : true,
               "showSearchButton" : false,
-              "textColor" : "rgb(255, 255, 255)",
+              "textColor" : "rgba(238, 238, 238, 0.91)",
               "typeaheadResultMax" : 5,
               "useTypeahead" : true
             },
@@ -335,7 +335,7 @@
           "captionText" : "Inspection Reports and Regulatory Compliance",
           "captionTextColor" : "#007f88",
           "captionTextShadowColor" : "rgba(0, 0, 0, 0)",
-          "contentAlignment" : "left",
+          "contentAlignment" : "center",
           "contentWidth" : 25,
           "ctaBtnOneBgColor" : "#007f88",
           "ctaBtnOneBgHoverColor" : "#004d4c",
@@ -362,7 +362,7 @@
           "showCaption" : false,
           "showSubtitle" : false,
           "showTitle" : false,
-          "subtitleText" : "Inspection Reports and Regulatory Compliance",
+          "subtitleText" : "Environmental Health Inspection Reports",
           "subtitleTextColor" : "rgb(0, 51, 102)",
           "subtitleTextShadowColor" : "rgba(0, 0, 0, 0)",
           "titleText" : "Public Disclosure",
@@ -414,7 +414,7 @@
     }, {
       "components" : [ {
         "componentAttributes" : {
-          "richTextValue" : "<div style=\"\nbackground-color:#003366;\nmin-height:200px;\npadding:50px 130px;\ntext-align:center;\nWidth: 1440px\nborder-top:2px solid #FCBA19;\nborder-bottom:2px solid #FCBA19;\">\n    \n    <!-- Top Text -->\n    <p style=\"color:#ffffff; font-size:14px; margin-bottom:20px; text-align:left;\">\n        Thanks to our health authority partners and endorsers:\n    </p>\n\n    <!-- Logos Row -->\n    <div style=\"display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:20px;\">\n        \n        <a href=\"https://www.northernhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/NorthernHealthLogo\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.islandhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/IslandHealth\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.vch.ca/en/health-topics/health-protection-permits-and-licensing\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/VancouverCoastalHealth\" style=\"height:30px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.fraserhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/FraserHealth\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.interiorhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/InterierHealth\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.bccdc.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/BCCDC\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n    </div>\n</div>\n\n\n<div style=\"background-color:#FAFAFA; padding:20px 40px; font-size:13px; color:#201F1E; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; border-top:1px solid #F3F2F1; gap:10px;\">\n    \n    <!-- Left Links -->\n    <div>\n        <a href=\"/phocsservices/s/contact-us\" style=\"margin-right:15px; color:#201F1E; text-decoration:none;\">Contact Us</a>   <span style=\"color:#CCCCCC; padding:0 8px;\">|</span>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/home/copyright/\" target=\"_blank\" style=\"margin-right:15px; color:#333; text-decoration:none;\">Copyright</a>   <span style=\"color:#CCCCCC; padding:0 8px;\">|</span>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/home/disclaimer/\" target=\"_blank\" style=\"margin-right:15px; color:#333; text-decoration:none;\">Disclaimer</a>   <span style=\"color:#CCCCCC; padding:0 8px;\">|</span>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/home/privacy/\" target=\"_blank\" style=\"color:#333; text-decoration:none;\">Privacy</a>\n    </div>\n\n    <!-- Right Copyright -->\n    <div style=\"color:#666;\">\n        Copyright © 2026 Province of British Columbia. All rights reserved.\n    </div>\n\n</div>"
+          "richTextValue" : "<div style=\"\nbackground-color:#003366;\npadding:25px 130px;\ntext-align:center;\nWidth: 100%;\nborder-top:2px solid #FCBA19;\nborder-bottom:2px solid #FCBA19;\">\n    \n    <!-- Top Text -->\n    <p style=\"color:#ffffff; font-size:14px; margin-bottom:20px; text-align:left;\">\n        Thanks to our health authority partners and endorsers:\n    </p>\n\n    <!-- Logos Row -->\n    <div style=\"display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:20px;\">\n        \n        <a href=\"https://www.northernhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/NorthernHealthLogo\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.islandhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/IslandHealth\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.vch.ca/en/health-topics/health-protection-permits-and-licensing\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/VancouverCoastalHealth\" style=\"height:30px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.fraserhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/FraserHealth\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.interiorhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/InterierHealth\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.bccdc.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/BCCDC\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n    </div>\n</div>\n\n\n<div style=\"background-color:#FAFAFA; padding:10px 40px; font-size:13px; color:#201F1E; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; border-top:1px solid #F3F2F1; gap:10px;\">\n    \n    <!-- Left Links -->\n    <div>\n        <a href=\"/phocsservices/s/contact-us\" style=\"margin-right:15px; color:#201F1E; text-decoration:none;\">Contact Us</a>   <span style=\"color:#CCCCCC; padding:0 8px;\">|</span>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/home/copyright/\" target=\"_blank\" style=\"margin-right:15px; color:#333; text-decoration:none;\">Copyright</a>   <span style=\"color:#CCCCCC; padding:0 8px;\">|</span>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/home/disclaimer/\" target=\"_blank\" style=\"margin-right:15px; color:#333; text-decoration:none;\">Disclaimer</a>   <span style=\"color:#CCCCCC; padding:0 8px;\">|</span>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/home/privacy/\" target=\"_blank\" style=\"color:#333; text-decoration:none;\">Privacy</a>\n    </div>\n\n    <!-- Right Copyright -->\n    <div style=\"color:#666;\">\n        Copyright © 2026 Province of British Columbia. All rights reserved.\n    </div>\n\n</div>"
         },
         "componentName" : "forceCommunity:htmlBlock",
         "id" : "af22ca8a-2d86-4d9e-ae5a-58e9dcbc1b4b",
