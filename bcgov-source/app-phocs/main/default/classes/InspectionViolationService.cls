@@ -386,6 +386,7 @@ public with sharing class InspectionViolationService {
                     vio.Priority = ind.Priority__c;
                     vio.Corrected_During_Inspection__c = ind.CorrectedDuringInspection__c;
                     vio.Status = ind.CorrectedDuringInspection__c == true ? 'Resolved' : 'Open';
+                    vio.DateResolved = ind.CorrectedDuringInspection__c == true ? System.Now() : null;
                     if (parentViolationId != null && validParentViolationMap.containsKey(parentViolationId)){
                         vio.PHOCSParentId__c = parentViolationId;
                     }

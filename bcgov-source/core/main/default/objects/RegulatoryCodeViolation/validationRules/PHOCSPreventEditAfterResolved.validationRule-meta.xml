@@ -5,6 +5,7 @@
     <description>Prevents updates to PHOCS Violation records when Status is Resolved, unless the user has the EHIS Bypass Validation Rule custom permission.</description>
     <errorConditionFormula>AND(
 RecordType.DeveloperName = &quot;PHOCSRegulatoryCodeViolation&quot;,
+NOT(ISNEW()),
 NOT($Permission.EHISBypassValidationRuleCustomPermission),
 OR(
 AND(
