@@ -1134,11 +1134,13 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 			};
 			await this.createViolationsAndNotify();
 
+			const actualStartDateToSend = typeof this.actualStartDate === 'string' ? new Date(this.actualStartDate) : this.actualStartDate;
+
 			await completeInspection({
 				visitId: this.recordId,
 				closingComments: this.closingComments,
 				timeSpent: this.timeSpent,
-				actualStartDate: this.actualStartDate,
+				actualStartDate: actualStartDateToSend,
                 followUpInspectionRequired: this.followUpInspectionRequired
 			});
 			this.isDraft = false;
