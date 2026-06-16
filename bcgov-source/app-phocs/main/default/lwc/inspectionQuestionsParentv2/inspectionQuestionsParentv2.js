@@ -1134,7 +1134,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 			};
 			await this.createViolationsAndNotify();
 
-			const actualStartDateToSend = typeof this.actualStartDate === 'string' ? new Date(this.actualStartDate) : this.actualStartDate;
+			const actualStartDateToSend = this.actualStartDate ? (typeof this.actualStartDate === 'string' ? new Date(this.actualStartDate) : this.actualStartDate) : null;
 
 			await completeInspection({
 				visitId: this.recordId,
