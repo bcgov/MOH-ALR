@@ -4,6 +4,7 @@ Description - "Mini release runboom for June 18 deployment"
 
 - Package.xml for the PR 's raised to hotfixdev branch
 - Pull Request Number - 2664, 2666 , 2689,2682, 2683, 2695
+
 <types>
 		<members>CustomTokenInspectionData</members>
 		<members>PHOCSAssessmentIndCtrlV2Test</members>
@@ -53,12 +54,23 @@ Description - "Mini release runboom for June 18 deployment"
 		<name>ReportType</name>
 	</types>
 
+> Security settings deployment : [EHIS-4567]
+ [] Configuration step on SF UI:
+         Setup -> Search 'Identity Verification' -> Look for 'Reports and Dashboards' -> Select 'Require periodic step-up authentication'
+         Click 'Save'
+
+ [] Deploy these files manually 
+     "src-env-specific\production\main\default\transactionSecurityPolicies"
+	 "src-env-specific\production\main\default\FileUploadAndDownloadSecurity.settings-meta.xml"
+	 "src-env-specific\production\main\default\PlatformEncryption.settings-meta.xml"
+	 "src-env-specific\production\main\default\Security.settings-meta.xml"
+
 > Post Deployment Steps
 
-> EHIS- 4566
-- Go to setup - search for omni studio - document template designer - search for Phocs Dairy Inspection Report Template - "BCCDC_Dairy_Inspection_Template_Redesign - V6.0.docx"
-- Open the active version and click on deactivate - replace file - upload the given file 
-"" - save details and then Activate 
+ [] Document Template Upload [EHIS- 4566]
+		Go to App launcher -> Search for omnistudio -> Document template designer -> Search for 'PhocsDairyInspectionReport Template'.
+		Open the 'Active' version -> Click on 'deactivate' -> replace file with "BCCDC_Dairy_Inspection_Template_Redesign - V6.0.docx"
+		Save and Activate 
 
 
 
