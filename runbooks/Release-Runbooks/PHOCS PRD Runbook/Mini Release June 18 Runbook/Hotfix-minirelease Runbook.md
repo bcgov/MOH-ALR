@@ -5,7 +5,7 @@ Description - "Mini release runboom for June 18 deployment"
 - Package.xml for the PR 's raised to hotfixdev branch
 - Pull Request Number - 2664, 2666 , 2689,2682, 2683, 2695
 
-<types>
+	<types>
 		<members>CustomTokenInspectionData</members>
 		<members>PHOCSAssessmentIndCtrlV2Test</members>
 		<members>PHOCSInspectionAssessmentIndControllerV2</members>
