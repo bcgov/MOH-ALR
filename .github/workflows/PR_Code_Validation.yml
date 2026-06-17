@@ -20,6 +20,9 @@ jobs:
     steps:
       # === Setup. We need to get the code, set up nodejs, and create the results directory. ===
       - uses: actions/checkout@v4
+        with:
+          # Full history is required so sfdx-git-delta can diff against the PR base commit.
+          fetch-depth: 0
     #  ✅ Set correct Node.js version (required by scanner)
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -87,6 +90,60 @@ jobs:
             echo "${{ secrets.CI_SFDXAUTHURL }}" > ./authfile
             sf org login sfdx-url -f authfile -a CI01
 
-      - name: Validate Code
+      # === Generate a delta package containing only the components changed in this PR ===
+      - name: Install sfdx-git-delta plugin
+        run: sf plugins install sfdx-git-delta
+
+      - name: Generate delta package
+        id: delta
+        run: |
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          # Fallback for workflow_dispatch runs (no PR context): diff against dev.
+          if [ -z "$BASE_SHA" ]; then BASE_SHA="origin/dev"; fi
+          echo "Generating delta from $BASE_SHA to HEAD"
+          mkdir -p changed-sources
+          sf sgd source delta --to HEAD --from "$BASE_SHA" \
+            --output-dir changed-sources --generate-delta --source bcgov-source
+          echo "----- Delta package.xml -----"
+          cat changed-sources/package/package.xml
+          if grep -q "<types>" changed-sources/package/package.xml; then
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Validate Code (delta)
+        if: steps.delta.outputs.has_changes == 'true'
         id: run_code_validation
-        run: sf project deploy start --source-dir bcgov-source/app-phocs/main/default --source-dir bcgov-source/core/main/default --source-dir bcgov-source/app-alr/main/default --wait 60 --dry-run --test-level RunLocalTests -g --target-org CI01
+        run: |
+          set -o pipefail
+          sf project deploy start --manifest changed-sources/package/package.xml \
+            --wait 60 --dry-run --test-level RunLocalTests -g --target-org CI01 --json \
+            | tee deploy-result.json
+
+      - name: Upload delta package & components
+        if: always() && steps.delta.outputs.has_changes == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: delta-package
+          path: changed-sources/
+
+      - name: Upload validation result
+        if: always() && steps.delta.outputs.has_changes == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-result
+          path: deploy-result.json
+
+      - name: Publish validation summary
+        if: always() && steps.delta.outputs.has_changes == 'true'
+        run: |
+          echo "## Delta Validation Summary" >> "$GITHUB_STEP_SUMMARY"
+          echo "### Components" >> "$GITHUB_STEP_SUMMARY"
+          jq -r '.result.files[]? | "- \(.type): \(.fullName)"' deploy-result.json >> "$GITHUB_STEP_SUMMARY" || true
+          echo "### Apex Tests" >> "$GITHUB_STEP_SUMMARY"
+          jq -r '.result.details.runTestResult | "Run: \(.numTestsRun // 0) | Failures: \(.numFailures // 0)"' deploy-result.json >> "$GITHUB_STEP_SUMMARY" || true
+
+      - name: No deployable changes detected
+        if: steps.delta.outputs.has_changes == 'false'
+        run: echo "No deployable metadata changes detected in this PR — delta validation skipped."
