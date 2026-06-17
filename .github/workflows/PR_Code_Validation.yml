@@ -92,7 +92,11 @@ jobs:
 
       # === Generate a delta package containing only the components changed in this PR ===
       - name: Install sfdx-git-delta plugin
-        run: sf plugins install sfdx-git-delta
+        run: |
+          # sfdx-git-delta is unsigned; pre-approve it so the CLI doesn't prompt (no TTY in CI).
+          mkdir -p ~/.config/sf
+          echo '["sfdx-git-delta"]' > ~/.config/sf/unsignedPluginAllowList.json
+          sf plugins install sfdx-git-delta
 
       - name: Generate delta package
         id: delta
