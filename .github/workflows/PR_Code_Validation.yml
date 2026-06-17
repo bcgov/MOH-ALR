@@ -114,6 +114,7 @@ jobs:
             echo "has_changes=true" >> "$GITHUB_OUTPUT"
           else
             echo "has_changes=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=Delta validation::No deployable metadata changes under bcgov-source — validation skipped."
           fi
 
       - name: Validate Code (delta)
@@ -142,12 +143,21 @@ jobs:
       - name: Publish validation summary
         if: always() && steps.delta.outputs.has_changes == 'true'
         run: |
-          echo "## Delta Validation Summary" >> "$GITHUB_STEP_SUMMARY"
-          echo "### Components" >> "$GITHUB_STEP_SUMMARY"
-          jq -r '.result.files[]? | "- \(.type): \(.fullName)"' deploy-result.json >> "$GITHUB_STEP_SUMMARY" || true
-          echo "### Apex Tests" >> "$GITHUB_STEP_SUMMARY"
-          jq -r '.result.details.runTestResult | "Run: \(.numTestsRun // 0) | Failures: \(.numFailures // 0)"' deploy-result.json >> "$GITHUB_STEP_SUMMARY" || true
-
-      - name: No deployable changes detected
-        if: steps.delta.outputs.has_changes == 'false'
-        run: echo "No deployable metadata changes detected in this PR — delta validation skipped."
+          COUNT=$(jq -r '[.result.files[]?] | length' deploy-result.json 2>/dev/null || echo 0)
+          RUN=$(jq -r '.result.details.runTestResult.numTestsRun // 0' deploy-result.json 2>/dev/null || echo 0)
+          FAIL=$(jq -r '.result.details.runTestResult.numFailures // 0' deploy-result.json 2>/dev/null || echo 0)
+          {
+            echo "## Delta Validation Summary"
+            echo ""
+            echo "| Metric | Value |"
+            echo "| --- | --- |"
+            echo "| Components validated | $COUNT |"
+            echo "| Apex tests run | $RUN |"
+            echo "| Test failures | $FAIL |"
+            echo ""
+            echo "### Components"
+            echo ""
+            echo "| Type | Component |"
+            echo "| --- | --- |"
+            jq -r '.result.files[]? | "| \(.type) | \(.fullName) |"' deploy-result.json 2>/dev/null || true
+          } >> "$GITHUB_STEP_SUMMARY"
