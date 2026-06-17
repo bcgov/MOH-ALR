@@ -1,6 +1,14 @@
 name: PR Code Validation
 on:
   workflow_dispatch:
+    inputs:
+      validation_mode:
+        description: 'Validation scope (manual runs only)'
+        type: choice
+        options:
+          - delta
+          - full
+        default: delta
   pull_request:
     branches:
       - dev
@@ -91,7 +99,10 @@ jobs:
             sf org login sfdx-url -f authfile -a CI01
 
       # === Generate a delta package containing only the components changed in this PR ===
+      # Delta path runs for PRs and for manual runs left on the default 'delta' mode.
+      # A manual run with validation_mode=full skips these and uses "Validate Code (full)" below.
       - name: Install sfdx-git-delta plugin
+        if: github.event_name != 'workflow_dispatch' || inputs.validation_mode != 'full'
         run: |
           # sfdx-git-delta is unsigned; pre-approve it so the CLI doesn't prompt (no TTY in CI).
           mkdir -p ~/.config/sf
@@ -100,6 +111,7 @@ jobs:
 
       - name: Generate delta package
         id: delta
+        if: github.event_name != 'workflow_dispatch' || inputs.validation_mode != 'full'
         run: |
           BASE_SHA="${{ github.event.pull_request.base.sha }}"
           # Fallback for workflow_dispatch runs (no PR context): diff against dev.
@@ -147,17 +159,22 @@ jobs:
           RUN=$(jq -r '.result.details.runTestResult.numTestsRun // 0' deploy-result.json 2>/dev/null || echo 0)
           FAIL=$(jq -r '.result.details.runTestResult.numFailures // 0' deploy-result.json 2>/dev/null || echo 0)
           {
-            echo "## Delta Validation Summary"
+            echo "### Delta Validation Summary"
             echo ""
             echo "| Metric | Value |"
             echo "| --- | --- |"
-            echo "| Components validated | $COUNT |"
-            echo "| Apex tests run | $RUN |"
-            echo "| Test failures | $FAIL |"
+            echo "| <sub>Components validated</sub> | <sub>$COUNT</sub> |"
+            echo "| <sub>Apex tests run</sub> | <sub>$RUN</sub> |"
+            echo "| <sub>Test failures</sub> | <sub>$FAIL</sub> |"
             echo ""
-            echo "### Components"
+            echo "#### Components"
             echo ""
             echo "| Type | Component |"
             echo "| --- | --- |"
-            jq -r '.result.files[]? | "| \(.type) | \(.fullName) |"' deploy-result.json 2>/dev/null || true
+            jq -r '.result.files[]? | "| <sub>\(.type)</sub> | <sub>\(.fullName)</sub> |"' deploy-result.json 2>/dev/null || true
           } >> "$GITHUB_STEP_SUMMARY"
+
+      # === Full validation: manual runs only, when validation_mode=full. Validates the entire codebase. ===
+      - name: Validate Code (full)
+        if: github.event_name == 'workflow_dispatch' && inputs.validation_mode == 'full'
+        run: sf project deploy start --source-dir bcgov-source/app-phocs/main/default --source-dir bcgov-source/core/main/default --source-dir bcgov-source/app-alr/main/default --wait 60 --dry-run --test-level RunLocalTests -g --target-org CI01
