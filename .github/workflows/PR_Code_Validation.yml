@@ -138,6 +138,56 @@ jobs:
             --wait 60 --dry-run --test-level RunLocalTests -g --target-org CI01 --json \
             | tee deploy-result.json
 
+      # === Convert the raw JSON result into a human-readable Markdown report ===
+      - name: Build validation report
+        if: always() && steps.delta.outputs.has_changes == 'true'
+        run: |
+          COUNT=$(jq -r '[.result.files[]?] | length' deploy-result.json 2>/dev/null || echo 0)
+          RUN=$(jq -r '.result.details.runTestResult.numTestsRun // 0' deploy-result.json 2>/dev/null || echo 0)
+          FAIL=$(jq -r '.result.details.runTestResult.numFailures // 0' deploy-result.json 2>/dev/null || echo 0)
+          TIME=$(jq -r '.result.details.runTestResult.totalTime // 0' deploy-result.json 2>/dev/null || echo 0)
+          STATUS=$(jq -r 'if .result.success then "Succeeded" else "Failed" end' deploy-result.json 2>/dev/null || echo Unknown)
+          {
+            echo "# Salesforce Delta Validation Report"
+            echo ""
+            echo "| Field | Value |"
+            echo "| --- | --- |"
+            echo "| Status | $STATUS (dry-run) |"
+            echo "| Target org | CI01 |"
+            echo "| Test level | RunLocalTests |"
+            echo "| Components validated | $COUNT |"
+            echo "| Apex tests run | $RUN |"
+            echo "| Test failures | $FAIL |"
+            echo "| Test time (ms) | $TIME |"
+            echo ""
+            echo "## Components Validated"
+            echo ""
+            echo "| Type | Component | State |"
+            echo "| --- | --- | --- |"
+            jq -r '.result.files[]? | "| \(.type) | \(.fullName) | \(.state // "n/a") |"' deploy-result.json 2>/dev/null || true
+            echo ""
+            echo "## Apex Test Failures"
+            echo ""
+            FAILROWS=$(jq -r '.result.details.runTestResult.failures[]? | "| \(.name) | \(.methodName) | \(.message | gsub("[\\r\\n|]"; " ")) |"' deploy-result.json 2>/dev/null || true)
+            if [ -n "$FAILROWS" ]; then
+              echo "| Class | Method | Message |"
+              echo "| --- | --- | --- |"
+              echo "$FAILROWS"
+            else
+              echo "_No test failures._"
+            fi
+            echo ""
+            echo "## Code Coverage Warnings"
+            echo ""
+            COVWARN=$(jq -r '.result.details.runTestResult.codeCoverageWarnings[]? | "- \(.name // "Overall"): \(.message)"' deploy-result.json 2>/dev/null || true)
+            if [ -n "$COVWARN" ]; then
+              echo "$COVWARN"
+            else
+              echo "_None._"
+            fi
+          } > validation-report.md
+          echo "Wrote validation-report.md"
+
       - name: Upload delta package & components
         if: always() && steps.delta.outputs.has_changes == 'true'
         uses: actions/upload-artifact@v4
@@ -150,7 +200,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: validation-result
-          path: deploy-result.json
+          path: |
+            validation-report.md
+            deploy-result.json
 
       - name: Publish validation summary
         if: always() && steps.delta.outputs.has_changes == 'true'
