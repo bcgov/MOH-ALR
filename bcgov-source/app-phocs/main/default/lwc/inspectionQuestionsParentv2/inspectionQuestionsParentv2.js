@@ -228,6 +228,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 			showChildren: result === RESULT_NON_COMPLIANT || result === RESULT_COMPLIANT,
 			showChildQuestions: result === RESULT_NON_COMPLIANT || result === RESULT_COMPLIANT,
 			showNonCompliantFields: result === RESULT_NON_COMPLIANT,
+			hasChildQuestions: (result === RESULT_NON_COMPLIANT || result === RESULT_COMPLIANT) && effectiveChildren.length > 0
 		};
 	}
 
