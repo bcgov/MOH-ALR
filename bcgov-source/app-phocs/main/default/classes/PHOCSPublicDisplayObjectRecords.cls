@@ -282,15 +282,13 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         FacilityWrapper wrapper = new FacilityWrapper();
 
         String query =
-            'SELECT Id, Name, Type, Physical_Address__City__s,LicenseDetail__c,  CategoryL1__c, CategoryL2__c, ' +
+            'SELECT Id, Name, Type, Physical_Address__City__s, CategoryL1__c, CategoryL2__c, ' +
             'HealthAuthority__c, Phone, ParentAccount__r.Name, FacilityCHSAText__c, Physical_Address__c, ' +
             'PHOCSNumberOfInspections__c, PHOCSOutstandingViolations__c, PHOCSLastInspectionDate__c, ' +
-            'HideAddressonPublicSite__c, OWLPublicRetentionActive__c ' +
+            'HideAddressonPublicSite__c,HidePhoneonPublicSite__c, OWLPublicRetentionActive__c ' +
             'FROM Account';
 
         query += getFacilitiesFilter(programArea, filterItems, operatingWithoutLicence);
-        
-
         for (Account sObj : Database.query(query)) {    // NOPMD
             results.add(wrapper.wrap(sObj));
         }
@@ -633,7 +631,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 'CategoryL1__c' => accRecord.CategoryL1__c,
                 'CategoryL2__c' => accRecord.CategoryL2__c,
                 'HealthAuthority__c' => accRecord.HealthAuthority__c,
-                'Phone' => accRecord.HidePhoneonPublicSite__c ? '' : accRecord.Phone,
+                'Phone' => accRecord.HidePhoneonPublicSite__c ? '' : formatPhoneNumber(accRecord.Phone),
                 'ParentAccount' => accRecord.ParentAccount__r.Name,
                 'PHOCSOutstandingViolations__c' => accRecord.PHOCSOutstandingViolations__c,
                 'OperatingMonths__c' => accRecord.OperatingMonths__c,
@@ -647,7 +645,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 'PhysicalAddressCountry' => accRecord.Physical_Address__c?.getCountry(),
                 'PhysicalAddressCountryCode' => accRecord.Physical_Address__c?.getCountryCode(),
                 'HideAddressonPublicSite__c' => accRecord.HideAddressonPublicSite__c,
-
+                 'HidePhoneonPublicSite__c' => accRecord.HidePhoneonPublicSite__c,
                 'HasWaterAdvisories' => advisoryDetails.hasWaterAdvisories,
                 'WaterAdvisoryReasonSummary' => advisoryDetails.waterAdvisoryReasonSummary
             };
@@ -666,7 +664,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             }
 
 
-	            Map<String, Object> result = new Map<String, Object>{
+                Map<String, Object> result = new Map<String, Object>{
                 'Id' => accRecord.Id,
                 'Type'=> accRecord.Type,
                 'CategoryL1__c'=> accRecord.CategoryL1__c,
@@ -682,7 +680,6 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 'PhysicalAddressCity' => accRecord.HideAddressonPublicSite__c ? '' : accRecord.Physical_Address__c?.getCity(),
                 'PhysicalAddressState'=> accRecord.Physical_Address__c?.getState(),
                 'PhysicalAddressCountry'=> accRecord.Physical_Address__c?.getCountry(),
-                'LicenseDetail__c' => accRecord.LicenseDetail__c,
                 'PhysicalAddressPostalCode'=> accRecord.Physical_Address__c?.getPostalCode()
             };
             return result;
@@ -807,10 +804,10 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 'UnitOfMeasure' => lab.UnitOfMeasure__c,
                 'ResultValue' => lab.ResultValue__c,
                 'TestId' => lab.Test__c,
-                'TestName' => lab.Test__r ?.Name,			
-				'SamplingSiteName'   => lab.LabTestRequisition__r?.SamplingSite__r?.Name,				
-				'SampleTestType'     => lab.Test__r?.SampleTestType__c,
-				'ParameterType'      => lab.Test__r?.ParameterType__c,	
+                'TestName' => lab.Test__r ?.Name,           
+                'SamplingSiteName'   => lab.LabTestRequisition__r?.SamplingSite__r?.Name,               
+                'SampleTestType'     => lab.Test__r?.SampleTestType__c,
+                'ParameterType'      => lab.Test__r?.ParameterType__c,  
                 'CollectionDateTime' => lab.LabTestRequisition__r?.CollectionDateTime__c
             };            
             return result;
@@ -830,7 +827,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         }
     }
     private static String addFlexCardFilters(String filterItems, String returnQuery){
-        String filters  = filterItems == null ? returnQuery : returnQuery + ' AND ( HealthAuthority__c = \''+filterItems+'\' OR Physical_Address__city__s  = \''+filterItems+'\'  OR LicenseDetail__c  = \''+filterItems+'\')';
+        String filters  = filterItems == null ? returnQuery : returnQuery + ' AND ( HealthAuthority__c = \''+filterItems+'\' OR Physical_Address__city__s  = \''+filterItems+'\')';
         return filters;
     }
 }
