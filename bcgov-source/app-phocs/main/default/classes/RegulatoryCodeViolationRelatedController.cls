@@ -88,9 +88,9 @@ public with sharing class RegulatoryCodeViolationRelatedController {
             }
             
             List<RegulatoryCodeViolation> relatedViolations = [SELECT Id, InspectionId, RegulatoryCodeId, RegulatoryCode.Name, RegulatoryCode.Subject, InspectionAssmntIndId,
-                                                               InspectionAssmntInd.AssessmentIndDefinitionId, InspectionAssmntInd.AssessmentIndDefinition.Name,
-                                                               InspectionAssmntInd.AssessmentIndDefinition.PHOCSParentId__c FROM RegulatoryCodeViolation 
-                                                               WHERE InspectionId IN :inspectionToChildDefIds.keySet() AND 
+                                                               InspectionAssmntInd.AssessmentIndDefinitionId, InspectionAssmntInd.AssessmentIndDefinition.Name, Inspection.Owner.Name,
+                                                               InspectionAssmntInd.AssessmentIndDefinition.Description, InspectionAssmntInd.AssessmentIndDefinition.PHOCSParentId__c 
+                                                               FROM RegulatoryCodeViolation WHERE InspectionId IN: inspectionToChildDefIds.keySet() AND 
                                                                InspectionAssmntInd.AssessmentIndDefinition.PHOCSParentId__c IN :allAssessmentDefIds ORDER BY CreatedDate DESC];
             
             for (RegulatoryCodeViolation rv : relatedViolations) {
@@ -144,7 +144,7 @@ public with sharing class RegulatoryCodeViolationRelatedController {
             return results;
             
         } catch (Exception ex) {
-           LogService.logAndPublish(className, 'getViolationHierarchy', 'recordId=' + String.valueOf(recordId), ex);            
+            LogService.logAndPublish(className, 'getViolationHierarchy', 'recordId=' + String.valueOf(recordId), ex);            
             return new List<ViolationHierarchyWrapper>();
         }
     }
