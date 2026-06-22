@@ -274,4 +274,4 @@ jobs:
       # === Full validation: manual runs only, when validation_mode=full. Validates the entire codebase. ===
       - name: Validate Code (full)
         if: github.event_name == 'workflow_dispatch' && inputs.validation_mode == 'full'
-        run: sf project deploy start --source-dir bcgov-source/app-phocs/main/default --source-dir bcgov-source/core/main/default --source-dir bcgov-source/app-alr/main/default --wait 60 --dry-run --test-level RunLocalTests -g --target-org CI01
+        run: sf project deploy start --source-dir bcgov-source/app-phocs/main/default --source-dir bcgov-source/core/main/default --source-dir bcgov-source/app-alr/main/default --wait 60 --dry-run --test-level RunLocalTests --verbose -g --target-org CI01
