@@ -129,12 +129,39 @@ jobs:
             echo "::notice title=Delta validation::No deployable metadata changes under bcgov-source — validation skipped."
           fi
 
-      - name: Validate Code (delta)
+      - name: Validate Code (delta + object dependencies)
         if: steps.delta.outputs.has_changes == 'true'
         id: run_code_validation
         run: |
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          if [ -z "$BASE_SHA" ]; then BASE_SHA="origin/dev"; fi
+          # Build the set of deployable paths from changed files. Directory-based components
+          # (objects, lwc, aura bundles) are expanded to their FULL folder so dependent
+          # metadata is validated together — e.g. changing a field also re-validates the
+          # record types that reference it (catches inactive-picklist-value style errors).
+          declare -A PATHS
+          while IFS= read -r f; do
+            [ -z "$f" ] && continue
+            case "$f" in
+              */objects/*) unit=$(echo "$f" | sed -E 's#(.*/objects/[^/]+)/.*#\1#') ;;
+              */lwc/*)     unit=$(echo "$f" | sed -E 's#(.*/lwc/[^/]+)/.*#\1#') ;;
+              */aura/*)    unit=$(echo "$f" | sed -E 's#(.*/aura/[^/]+)/.*#\1#') ;;
+              *)           unit="$f" ;;
+            esac
+            PATHS["$unit"]=1
+          done < <(git diff --name-only --diff-filter=ACMR "$BASE_SHA" HEAD -- 'bcgov-source/')
+
+          if [ ${#PATHS[@]} -eq 0 ]; then
+            echo "No added/modified deployable paths after expansion — nothing to validate."
+            exit 0
+          fi
+
+          ARGS=()
+          echo "Validating these paths (objects/lwc/aura expanded for dependency checks):"
+          for p in "${!PATHS[@]}"; do echo "  - $p"; ARGS+=(--source-dir "$p"); done
+
           # Native, human-readable output (--verbose, no --json) — same style as ST_Code_Deployment.
-          sf project deploy start --manifest changed-sources/package/package.xml \
+          sf project deploy start "${ARGS[@]}" \
             --wait 60 --dry-run --test-level RunLocalTests --verbose -g --target-org CI01
 
       # === Capture the just-completed validation as JSON for the report/artifacts/summary ===
@@ -147,7 +174,7 @@ jobs:
       - name: Build validation report
         if: always() && steps.delta.outputs.has_changes == 'true'
         run: |
-          COUNT=$(jq -r '[.result.files[]?] | length' deploy-result.json 2>/dev/null || echo 0)
+          COUNT=$(jq -r '[.result.files[]? | "\(.type)/\(.fullName)"] | unique | length' deploy-result.json 2>/dev/null || echo 0)
           RUN=$(jq -r '.result.details.runTestResult.numTestsRun // 0' deploy-result.json 2>/dev/null || echo 0)
           FAIL=$(jq -r '.result.details.runTestResult.numFailures // 0' deploy-result.json 2>/dev/null || echo 0)
           TIME=$(jq -r '.result.details.runTestResult.totalTime // 0' deploy-result.json 2>/dev/null || echo 0)
@@ -169,7 +196,7 @@ jobs:
             echo ""
             echo "| Type | Component | State |"
             echo "| --- | --- | --- |"
-            jq -r '.result.files[]? | "| \(.type) | \(.fullName) | \(.state // "n/a") |"' deploy-result.json 2>/dev/null || true
+            jq -r '[.result.files[]?] | unique_by("\(.type)/\(.fullName)") | .[] | "| \(.type) | \(.fullName) | \(.state // "n/a") |"' deploy-result.json 2>/dev/null || true
             echo ""
             echo "## Component Errors"
             echo ""
@@ -225,7 +252,7 @@ jobs:
       - name: Publish validation summary
         if: always() && steps.delta.outputs.has_changes == 'true'
         run: |
-          COUNT=$(jq -r '[.result.files[]?] | length' deploy-result.json 2>/dev/null || echo 0)
+          COUNT=$(jq -r '[.result.files[]? | "\(.type)/\(.fullName)"] | unique | length' deploy-result.json 2>/dev/null || echo 0)
           RUN=$(jq -r '.result.details.runTestResult.numTestsRun // 0' deploy-result.json 2>/dev/null || echo 0)
           FAIL=$(jq -r '.result.details.runTestResult.numFailures // 0' deploy-result.json 2>/dev/null || echo 0)
           {
@@ -241,7 +268,7 @@ jobs:
             echo ""
             echo "| Type | Component |"
             echo "| --- | --- |"
-            jq -r '.result.files[]? | "| <sub>\(.type)</sub> | <sub>\(.fullName)</sub> |"' deploy-result.json 2>/dev/null || true
+            jq -r '[.result.files[]?] | unique_by("\(.type)/\(.fullName)") | .[] | "| <sub>\(.type)</sub> | <sub>\(.fullName)</sub> |"' deploy-result.json 2>/dev/null || true
           } >> "$GITHUB_STEP_SUMMARY"
 
       # === Full validation: manual runs only, when validation_mode=full. Validates the entire codebase. ===
