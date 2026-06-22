@@ -171,6 +171,17 @@ jobs:
             echo "| --- | --- | --- |"
             jq -r '.result.files[]? | "| \(.type) | \(.fullName) | \(.state // "n/a") |"' deploy-result.json 2>/dev/null || true
             echo ""
+            echo "## Component Errors"
+            echo ""
+            ERRROWS=$(jq -r '.result.details.componentFailures[]? | "| \(.componentType) | \(.fullName) | \(.problem | gsub("[\\r\\n|]"; " ")) | \(.fileName // "n/a"):\(.lineNumber // "?") |"' deploy-result.json 2>/dev/null || true)
+            if [ -n "$ERRROWS" ]; then
+              echo "| Type | Component | Problem | Location |"
+              echo "| --- | --- | --- | --- |"
+              echo "$ERRROWS"
+            else
+              echo "_No component errors._"
+            fi
+            echo ""
             echo "## Apex Test Failures"
             echo ""
             FAILROWS=$(jq -r '.result.details.runTestResult.failures[]? | "| \(.name) | \(.methodName) | \(.message | gsub("[\\r\\n|]"; " ")) |"' deploy-result.json 2>/dev/null || true)
