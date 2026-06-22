@@ -193,6 +193,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: delta-package
+          retention-days: 21
           path: changed-sources/
 
       - name: Upload validation result
@@ -200,6 +201,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: validation-result
+          retention-days: 21
           path: |
             validation-report.md
             deploy-result.json
