@@ -1,6 +1,14 @@
 name: PR Code Validation
 on:
   workflow_dispatch:
+    inputs:
+      validation_mode:
+        description: 'Validation scope (manual runs only)'
+        type: choice
+        options:
+          - delta
+          - full
+        default: delta
   pull_request:
     branches:
       - dev
@@ -20,6 +28,9 @@ jobs:
     steps:
       # === Setup. We need to get the code, set up nodejs, and create the results directory. ===
       - uses: actions/checkout@v4
+        with:
+          # Full history is required so sfdx-git-delta can diff against the PR base commit.
+          fetch-depth: 0
     #  ✅ Set correct Node.js version (required by scanner)
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -87,6 +98,135 @@ jobs:
             echo "${{ secrets.CI_SFDXAUTHURL }}" > ./authfile
             sf org login sfdx-url -f authfile -a CI01
 
-      - name: Validate Code
+      # === Generate a delta package containing only the components changed in this PR ===
+      # Delta path runs for PRs and for manual runs left on the default 'delta' mode.
+      # A manual run with validation_mode=full skips these and uses "Validate Code (full)" below.
+      - name: Install sfdx-git-delta plugin
+        if: github.event_name != 'workflow_dispatch' || inputs.validation_mode != 'full'
+        run: |
+          # sfdx-git-delta is unsigned; pre-approve it so the CLI doesn't prompt (no TTY in CI).
+          mkdir -p ~/.config/sf
+          echo '["sfdx-git-delta"]' > ~/.config/sf/unsignedPluginAllowList.json
+          sf plugins install sfdx-git-delta
+
+      - name: Generate delta package
+        id: delta
+        if: github.event_name != 'workflow_dispatch' || inputs.validation_mode != 'full'
+        run: |
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          # Fallback for workflow_dispatch runs (no PR context): diff against dev.
+          if [ -z "$BASE_SHA" ]; then BASE_SHA="origin/dev"; fi
+          echo "Generating delta from $BASE_SHA to HEAD"
+          mkdir -p changed-sources
+          sf sgd source delta --to HEAD --from "$BASE_SHA" \
+            --output-dir changed-sources --generate-delta --source bcgov-source
+          echo "----- Delta package.xml -----"
+          cat changed-sources/package/package.xml
+          if grep -q "<types>" changed-sources/package/package.xml; then
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=Delta validation::No deployable metadata changes under bcgov-source — validation skipped."
+          fi
+
+      - name: Validate Code (delta)
+        if: steps.delta.outputs.has_changes == 'true'
         id: run_code_validation
+        run: |
+          set -o pipefail
+          sf project deploy start --manifest changed-sources/package/package.xml \
+            --wait 60 --dry-run --test-level RunLocalTests -g --target-org CI01 --json \
+            | tee deploy-result.json
+
+      # === Convert the raw JSON result into a human-readable Markdown report ===
+      - name: Build validation report
+        if: always() && steps.delta.outputs.has_changes == 'true'
+        run: |
+          COUNT=$(jq -r '[.result.files[]?] | length' deploy-result.json 2>/dev/null || echo 0)
+          RUN=$(jq -r '.result.details.runTestResult.numTestsRun // 0' deploy-result.json 2>/dev/null || echo 0)
+          FAIL=$(jq -r '.result.details.runTestResult.numFailures // 0' deploy-result.json 2>/dev/null || echo 0)
+          TIME=$(jq -r '.result.details.runTestResult.totalTime // 0' deploy-result.json 2>/dev/null || echo 0)
+          STATUS=$(jq -r 'if .result.success then "Succeeded" else "Failed" end' deploy-result.json 2>/dev/null || echo Unknown)
+          {
+            echo "# Salesforce Delta Validation Report"
+            echo ""
+            echo "| Field | Value |"
+            echo "| --- | --- |"
+            echo "| Status | $STATUS (dry-run) |"
+            echo "| Target org | CI01 |"
+            echo "| Test level | RunLocalTests |"
+            echo "| Components validated | $COUNT |"
+            echo "| Apex tests run | $RUN |"
+            echo "| Test failures | $FAIL |"
+            echo "| Test time (ms) | $TIME |"
+            echo ""
+            echo "## Components Validated"
+            echo ""
+            echo "| Type | Component | State |"
+            echo "| --- | --- | --- |"
+            jq -r '.result.files[]? | "| \(.type) | \(.fullName) | \(.state // "n/a") |"' deploy-result.json 2>/dev/null || true
+            echo ""
+            echo "## Apex Test Failures"
+            echo ""
+            FAILROWS=$(jq -r '.result.details.runTestResult.failures[]? | "| \(.name) | \(.methodName) | \(.message | gsub("[\\r\\n|]"; " ")) |"' deploy-result.json 2>/dev/null || true)
+            if [ -n "$FAILROWS" ]; then
+              echo "| Class | Method | Message |"
+              echo "| --- | --- | --- |"
+              echo "$FAILROWS"
+            else
+              echo "_No test failures._"
+            fi
+            echo ""
+            echo "## Code Coverage Warnings"
+            echo ""
+            COVWARN=$(jq -r '.result.details.runTestResult.codeCoverageWarnings[]? | "- \(.name // "Overall"): \(.message)"' deploy-result.json 2>/dev/null || true)
+            if [ -n "$COVWARN" ]; then
+              echo "$COVWARN"
+            else
+              echo "_None._"
+            fi
+          } > validation-report.md
+          echo "Wrote validation-report.md"
+
+      - name: Upload delta package & components
+        if: always() && steps.delta.outputs.has_changes == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: delta-package
+          path: changed-sources/
+
+      - name: Upload validation result
+        if: always() && steps.delta.outputs.has_changes == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-result
+          path: |
+            validation-report.md
+            deploy-result.json
+
+      - name: Publish validation summary
+        if: always() && steps.delta.outputs.has_changes == 'true'
+        run: |
+          COUNT=$(jq -r '[.result.files[]?] | length' deploy-result.json 2>/dev/null || echo 0)
+          RUN=$(jq -r '.result.details.runTestResult.numTestsRun // 0' deploy-result.json 2>/dev/null || echo 0)
+          FAIL=$(jq -r '.result.details.runTestResult.numFailures // 0' deploy-result.json 2>/dev/null || echo 0)
+          {
+            echo "### Delta Validation Summary"
+            echo ""
+            echo "| Metric | Value |"
+            echo "| --- | --- |"
+            echo "| <sub>Components validated</sub> | <sub>$COUNT</sub> |"
+            echo "| <sub>Apex tests run</sub> | <sub>$RUN</sub> |"
+            echo "| <sub>Test failures</sub> | <sub>$FAIL</sub> |"
+            echo ""
+            echo "#### Components"
+            echo ""
+            echo "| Type | Component |"
+            echo "| --- | --- |"
+            jq -r '.result.files[]? | "| <sub>\(.type)</sub> | <sub>\(.fullName)</sub> |"' deploy-result.json 2>/dev/null || true
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # === Full validation: manual runs only, when validation_mode=full. Validates the entire codebase. ===
+      - name: Validate Code (full)
+        if: github.event_name == 'workflow_dispatch' && inputs.validation_mode == 'full'
         run: sf project deploy start --source-dir bcgov-source/app-phocs/main/default --source-dir bcgov-source/core/main/default --source-dir bcgov-source/app-alr/main/default --wait 60 --dry-run --test-level RunLocalTests -g --target-org CI01
