@@ -160,7 +160,7 @@ jobs:
           echo "Validating these paths (objects/lwc/aura expanded for dependency checks):"
           for p in "${!PATHS[@]}"; do echo "  - $p"; ARGS+=(--source-dir "$p"); done
 
-          # Native, human-readable output (--verbose, no --json) — same style as ST_Code_Deployment.
+          # Native, human-readable output (--verbose, no --json)
           sf project deploy start "${ARGS[@]}" \
             --wait 60 --dry-run --test-level RunLocalTests --verbose -g --target-org CI01
 
