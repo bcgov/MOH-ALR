@@ -542,7 +542,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             }
         }
         returnQuery = addFlexCardFilters(filterItems, returnQuery);
-        return returnQuery;
+        return returnQuery; 
     }
 
     private static String getCareFacilityWhereClause(String facilityType, Boolean isOWLListing) {
@@ -584,7 +584,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             if(string.isNotBlank(physicalAddress.getPostalCode())){
                 returnAddress.add(physicalAddress.getPostalCode()); 
             }
-            return String.join(returnAddress, ',');
+            return String.join(returnAddress, ', ');
         }
         return '';
     }
