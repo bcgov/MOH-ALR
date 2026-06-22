@@ -44,10 +44,10 @@ public with sharing class InspectionQuestionsControllerV2 {
         }
         
         // Query indicator definitions
-        List<AssessmentTaskIndDefinition> indicatorDefinitions = [SELECT Id, Name, DisplayOrder, AssessmentTaskDefinitionId,
-                                                                        AssessmentTaskDefinition.Name, AssessmentIndDefinitionId, AssessmentIndDefinition.Name, AssessmentIndDefinition.DataType, 
-                                                                        AssessmentIndDefinition.PHOCSParentId__c, AssessmentIndDefinition.Criticality__c,AssessmentIndDefinition.Category__c,AssessmentIndDefinition.InspectionQuestiontype__c
-                                                                  FROM AssessmentTaskIndDefinition
+        List<AssessmentTaskIndDefinition> indicatorDefinitions = [SELECT Id, Name, DisplayOrder, AssessmentTaskDefinitionId, AssessmentIndDefinition.Description,
+                                                                  AssessmentTaskDefinition.Name, AssessmentIndDefinitionId, AssessmentIndDefinition.Name, AssessmentIndDefinition.DataType, 
+                                                                  AssessmentIndDefinition.PHOCSParentId__c, AssessmentIndDefinition.Criticality__c,AssessmentIndDefinition.Category__c,
+                                                                  AssessmentIndDefinition.InspectionQuestiontype__c FROM AssessmentTaskIndDefinition
                                                                   WHERE AssessmentTaskDefinitionId IN :definitionToTaskIdMap.keySet() WITH SECURITY_ENFORCED];
                                                                   //ORDER BY  DisplayOrder ASC 
         
@@ -100,9 +100,12 @@ public with sharing class InspectionQuestionsControllerV2 {
             // Look up existing response for this question
             String responseKey = String.valueOf(indicatorRecord.AssessmentIndDefinitionId) + '|' + String.valueOf(actualTaskId);
             InspectionAssessmentInd existingResp = existingResponses.get(responseKey);
+            String concatQuestionText = !String.isBlank(indicatorRecord.AssessmentIndDefinition.Description) 
+                                        ? indicatorRecord.AssessmentIndDefinition.Name + ' ' + indicatorRecord.AssessmentIndDefinition.Description 
+                                        : indicatorRecord.AssessmentIndDefinition.Name;
             
             taskGroup.allQuestions.add(new QuestionWrapper(
-                indicatorRecord.AssessmentIndDefinition.Name,
+                concatQuestionText,
                 actualTaskId, 
                 indicatorRecord.AssessmentIndDefinition.DataType,
                 indicatorRecord.AssessmentIndDefinition.PHOCSParentId__c,
