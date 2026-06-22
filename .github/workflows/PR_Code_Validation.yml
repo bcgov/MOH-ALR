@@ -133,10 +133,20 @@ jobs:
         if: steps.delta.outputs.has_changes == 'true'
         id: run_code_validation
         run: |
-          set -o pipefail
+          # Capture JSON to file silently (no raw-JSON spam in the log).
+          set +e
           sf project deploy start --manifest changed-sources/package/package.xml \
             --wait 60 --dry-run --test-level RunLocalTests -g --target-org CI01 --json \
-            | tee deploy-result.json
+            > deploy-result.json
+          DEPLOY_RC=$?
+          set -e
+          # Render component errors and test failures as readable text in the log.
+          echo "===== Component Errors ====="
+          jq -r '.result.details.componentFailures[]? | "❌ \(.componentType) \(.fullName)\n     \(.problem)\n     (\(.fileName // "n/a"), line \(.lineNumber // "?"))"' deploy-result.json 2>/dev/null || true
+          echo "===== Apex Test Failures ====="
+          jq -r '.result.details.runTestResult.failures[]? | "❌ \(.name).\(.methodName)\n     \(.message)"' deploy-result.json 2>/dev/null || true
+          # Preserve the real outcome so the check goes red on failure.
+          exit $DEPLOY_RC
 
       # === Convert the raw JSON result into a human-readable Markdown report ===
       - name: Build validation report
@@ -165,6 +175,17 @@ jobs:
             echo "| Type | Component | State |"
             echo "| --- | --- | --- |"
             jq -r '.result.files[]? | "| \(.type) | \(.fullName) | \(.state // "n/a") |"' deploy-result.json 2>/dev/null || true
+            echo ""
+            echo "## Component Errors"
+            echo ""
+            ERRROWS=$(jq -r '.result.details.componentFailures[]? | "| \(.componentType) | \(.fullName) | \(.problem | gsub("[\\r\\n|]"; " ")) | \(.fileName // "n/a"):\(.lineNumber // "?") |"' deploy-result.json 2>/dev/null || true)
+            if [ -n "$ERRROWS" ]; then
+              echo "| Type | Component | Problem | Location |"
+              echo "| --- | --- | --- | --- |"
+              echo "$ERRROWS"
+            else
+              echo "_No component errors._"
+            fi
             echo ""
             echo "## Apex Test Failures"
             echo ""
