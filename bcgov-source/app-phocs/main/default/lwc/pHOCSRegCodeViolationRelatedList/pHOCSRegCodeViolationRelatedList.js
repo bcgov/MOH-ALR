@@ -9,7 +9,8 @@ export default class PHOCSRegCodeViolationRelatedList extends LightningElement {
     {
         label: 'Name',
         fieldName: 'assessmentIndicatorName',
-        type: 'text'
+        type: 'text',
+        wrapText: true
     },
     {
         label: 'Regulatory Code',
@@ -49,7 +50,9 @@ export default class PHOCSRegCodeViolationRelatedList extends LightningElement {
     recordUrl: '/' + row.Id,
     regulatoryCodeName: row.RegulatoryCode?.Name || '',
     regulatoryCodeDescription: row.RegulatoryCode?.Subject || '',
-    assessmentIndicatorName: row.InspectionAssmntInd?.AssessmentIndDefinition?.Name || ''
+    assessmentIndicatorName: row.InspectionAssmntInd?.AssessmentIndDefinition?.Description
+        ? `${row.InspectionAssmntInd.AssessmentIndDefinition.Name} ${row.InspectionAssmntInd.AssessmentIndDefinition.Description}`
+        : row.InspectionAssmntInd?.AssessmentIndDefinition?.Name || ''
 }));
 
         } catch (error) {

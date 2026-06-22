@@ -27,8 +27,11 @@ public with sharing class RegulatoryCodeViolationRelatedController {
             Id inspectionId = parentViolation.InspectionId;
             Id parentAssessmentDefId = parentViolation.InspectionAssmntInd.AssessmentIndDefinitionId;
             
-            List<RegulatoryCodeViolation> relatedViolations = [SELECT Id, Name, InspectionId, InspectionAssmntIndId, RegulatoryCodeId, RegulatoryCode.Name, RegulatoryCode.Subject, RegulatoryCode.Description, InspectionAssmntInd.AssessmentIndDefinitionId, InspectionAssmntInd.AssessmentIndDefinition.Name
-                                                               FROM RegulatoryCodeViolation WHERE InspectionId =: inspectionId AND InspectionAssmntInd.AssessmentIndDefinition.PHOCSParentId__c =: parentAssessmentDefId 
+            List<RegulatoryCodeViolation> relatedViolations = [SELECT Id, Name, InspectionId, InspectionAssmntIndId, RegulatoryCodeId, RegulatoryCode.Name,
+                                                               RegulatoryCode.Subject, RegulatoryCode.Description, InspectionAssmntInd.AssessmentIndDefinitionId,
+                                                               InspectionAssmntInd.AssessmentIndDefinition.Name, InspectionAssmntInd.AssessmentIndDefinition.Description 
+                                                               FROM RegulatoryCodeViolation WHERE InspectionId =: inspectionId
+                                                               AND InspectionAssmntInd.AssessmentIndDefinition.PHOCSParentId__c =: parentAssessmentDefId 
                                                                ORDER BY CreatedDate DESC];
             
             return relatedViolations;
@@ -57,7 +60,8 @@ public with sharing class RegulatoryCodeViolationRelatedController {
             
             List<RegulatoryCodeViolation> childViolations = [SELECT Id, Name, CreatedDate, ComplianceDueDate, InspectionId, Inspection.Name, DaysOpen, Inspection.Owner.Name,
                                                              Status, CorrectiveActionDescription, InspectionAssmntIndId, InspectionAssmntInd.AssessmentIndDefinitionId, 
-                                                             InspectionAssmntInd.PHOCSInspectionComments__c, InspectionAssmntInd.AssessmentIndDefinition.Name FROM RegulatoryCodeViolation 
+                                                             InspectionAssmntInd.PHOCSInspectionComments__c, InspectionAssmntInd.AssessmentIndDefinition.Name,
+                                                             InspectionAssmntInd.AssessmentIndDefinition.Description FROM RegulatoryCodeViolation 
                                                              WHERE PHOCSParentId__c = :recordId ORDER BY CreatedDate DESC];
             
             if (childViolations.isEmpty()) {
@@ -84,9 +88,9 @@ public with sharing class RegulatoryCodeViolationRelatedController {
             }
             
             List<RegulatoryCodeViolation> relatedViolations = [SELECT Id, InspectionId, RegulatoryCodeId, RegulatoryCode.Name, RegulatoryCode.Subject, InspectionAssmntIndId,
-                                                               InspectionAssmntInd.AssessmentIndDefinitionId, InspectionAssmntInd.AssessmentIndDefinition.Name,
-                                                               InspectionAssmntInd.AssessmentIndDefinition.PHOCSParentId__c FROM RegulatoryCodeViolation 
-                                                               WHERE InspectionId IN :inspectionToChildDefIds.keySet() AND 
+                                                               InspectionAssmntInd.AssessmentIndDefinitionId, InspectionAssmntInd.AssessmentIndDefinition.Name, Inspection.Owner.Name,
+                                                               InspectionAssmntInd.AssessmentIndDefinition.Description, InspectionAssmntInd.AssessmentIndDefinition.PHOCSParentId__c 
+                                                               FROM RegulatoryCodeViolation WHERE InspectionId IN: inspectionToChildDefIds.keySet() AND 
                                                                InspectionAssmntInd.AssessmentIndDefinition.PHOCSParentId__c IN :allAssessmentDefIds ORDER BY CreatedDate DESC];
             
             for (RegulatoryCodeViolation rv : relatedViolations) {
@@ -99,9 +103,11 @@ public with sharing class RegulatoryCodeViolationRelatedController {
                 List<Id> childAssmntIndIds = inspectionDefToAssmntIndIds.get(childKey);
                 
                 CannedCommentWrapper cc = new CannedCommentWrapper();
-                cc.assessmentIndicatorName   = rv.InspectionAssmntInd.AssessmentIndDefinition.Name;
-                cc.regulatoryCodeName        = rv.RegulatoryCode != null ? rv.RegulatoryCode.Name    : '';
+                cc.regulatoryCodeName = rv.RegulatoryCode != null ? rv.RegulatoryCode.Name    : '';
                 cc.regulatoryCodeDescription = rv.RegulatoryCode != null ? rv.RegulatoryCode.Subject : '';
+                cc.assessmentIndicatorName = !String.isBlank(rv.InspectionAssmntInd.AssessmentIndDefinition.Description)
+                                             ? rv.InspectionAssmntInd.AssessmentIndDefinition.Name + ' ' + rv.InspectionAssmntInd.AssessmentIndDefinition.Description
+                                             : rv.InspectionAssmntInd.AssessmentIndDefinition.Name;
                 
                 for (Id childAssmntIndId : childAssmntIndIds) {
                     String key = rv.InspectionId + '-' + phOCSParentId + '-' + childAssmntIndId;
@@ -138,7 +144,7 @@ public with sharing class RegulatoryCodeViolationRelatedController {
             return results;
             
         } catch (Exception ex) {
-           LogService.logAndPublish(className, 'getViolationHierarchy', 'recordId=' + String.valueOf(recordId), ex);            
+            LogService.logAndPublish(className, 'getViolationHierarchy', 'recordId=' + String.valueOf(recordId), ex);            
             return new List<ViolationHierarchyWrapper>();
         }
     }

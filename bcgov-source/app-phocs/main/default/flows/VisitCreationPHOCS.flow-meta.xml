@@ -232,7 +232,7 @@
             <label>Drinking Water</label>
         </rules>
         <rules>
-            <name>Child_Care_Residential_Care</name>
+            <name>Child_Care</name>
             <conditionLogic>or</conditionLogic>
             <conditions>
                 <leftValueReference>Get_Account_Records.Type</leftValueReference>
@@ -241,6 +241,14 @@
                     <stringValue>Child Care</stringValue>
                 </rightValue>
             </conditions>
+            <connector>
+                <targetReference>New_Inspection_CCRCInspection</targetReference>
+            </connector>
+            <label>Child Care</label>
+        </rules>
+        <rules>
+            <name>Residential_Care</name>
+            <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>Get_Account_Records.Type</leftValueReference>
                 <operator>EqualTo</operator>
@@ -249,9 +257,9 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>New_Inspection_CCRCInspection</targetReference>
+                <targetReference>New_Inspection_RC_Inspection</targetReference>
             </connector>
-            <label>Child Care, Residential Care</label>
+            <label>Residential Care</label>
         </rules>
         <rules>
             <name>Tobacco_and_Vapour</name>
@@ -367,7 +375,7 @@
             <label>BLA-Drinking Water</label>
         </rules>
         <rules>
-            <name>BLA_Child_Care_Residential_Care</name>
+            <name>BLA_Child_Care</name>
             <conditionLogic>or</conditionLogic>
             <conditions>
                 <leftValueReference>Get_BLA_Record.Account.Type</leftValueReference>
@@ -376,6 +384,14 @@
                     <stringValue>Child Care</stringValue>
                 </rightValue>
             </conditions>
+            <connector>
+                <targetReference>BLACCRC_New_Inspection_Inspection</targetReference>
+            </connector>
+            <label>BLA-Child Care</label>
+        </rules>
+        <rules>
+            <name>BLA_Residential_Care</name>
+            <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>Get_BLA_Record.Account.Type</leftValueReference>
                 <operator>EqualTo</operator>
@@ -384,9 +400,9 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>BLACCRC_New_Inspection_Inspection</targetReference>
+                <targetReference>BLARC_New_Inspection_Inspection</targetReference>
             </connector>
-            <label>BLA-Child Care, Residential Care</label>
+            <label>BLA-Residential Care</label>
         </rules>
         <rules>
             <name>BLA_Tobacco_and_Vapour</name>
@@ -480,7 +496,7 @@
             <label>Case - Drinking Water</label>
         </rules>
         <rules>
-            <name>Case_Child_Care_Residential_Care</name>
+            <name>Case_Child_Care</name>
             <conditionLogic>or</conditionLogic>
             <conditions>
                 <leftValueReference>Get_Case_Record.Account.Type</leftValueReference>
@@ -489,6 +505,14 @@
                     <stringValue>Child Care</stringValue>
                 </rightValue>
             </conditions>
+            <connector>
+                <targetReference>CaseCCRC_New_Inspection_Inspection</targetReference>
+            </connector>
+            <label>Case - Child Care</label>
+        </rules>
+        <rules>
+            <name>Case_Residential_Care</name>
+            <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>Get_Case_Record.Account.Type</leftValueReference>
                 <operator>EqualTo</operator>
@@ -497,9 +521,9 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>CaseCCRC_New_Inspection_Inspection</targetReference>
+                <targetReference>Case_RC_New_Inspection_Inspection</targetReference>
             </connector>
-            <label>Case - Child Care, Residential Care</label>
+            <label>Case - Residential Care</label>
         </rules>
         <rules>
             <name>Case_Tobacco_and_Vapour</name>
@@ -609,8 +633,8 @@
         </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
-            <name>For_Dairy</name>
-            <conditionLogic>and</conditionLogic>
+            <name>For_Dairy_Child_Care</name>
+            <conditionLogic>or</conditionLogic>
             <conditions>
                 <leftValueReference>Get_Insp_Record.Account.Type</leftValueReference>
                 <operator>EqualTo</operator>
@@ -618,10 +642,17 @@
                     <stringValue>Dairy</stringValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>Get_Insp_Record.Account.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Child Care</stringValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>inspectionCreationType</targetReference>
             </connector>
-            <label>Dairy</label>
+            <label>Dairy &amp; Child Care</label>
         </rules>
     </decisions>
     <description>Clone from VisitCreation flow and update Screen elements to align with PHOCS requirements
@@ -629,7 +660,9 @@
 V9 - Adding Insp types to Drinking Water
 V10- Removing the banner Msg for Non-Dairy in Insp path.
 V12- Adding Asset path for Rec water as part of EHIS-3692.
-V14- Adding Planned Started Time as part of EHIS-4313.</description>
+V14- Adding Planned Started Time as part of EHIS-4313.
+V15- Adding Inspection Update to ChildCare as part of EHIS-4523.
+V16- Separating Child Care &amp; Residential Care Inspections as part of EHIS-4523.</description>
     <dynamicChoiceSets>
         <name>CCRCInspTypeChoiceSet</name>
         <dataType>String</dataType>
@@ -640,13 +673,6 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
             <operator>Contains</operator>
             <value>
                 <stringValue>Child Care</stringValue>
-            </value>
-        </filters>
-        <filters>
-            <field>SelectedProgramAreas__c</field>
-            <operator>Contains</operator>
-            <value>
-                <stringValue>Residential Care</stringValue>
             </value>
         </filters>
         <object>InspectionType</object>
@@ -765,6 +791,31 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
         <object xsi:nil="true"/>
         <picklistField>InspectionMethod__c</picklistField>
         <picklistObject>Visit</picklistObject>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>ResCareInspTypeChoiceSet</name>
+        <dataType>String</dataType>
+        <displayField>Name</displayField>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SelectedProgramAreas__c</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>Residential Care</stringValue>
+            </value>
+        </filters>
+        <object>InspectionType</object>
+        <outputAssignments>
+            <assignToReference>inspecTypeId</assignToReference>
+            <field>Id</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>inspecTypeLabel</assignToReference>
+            <field>Name</field>
+        </outputAssignments>
+        <sortField>Name</sortField>
+        <sortOrder>Asc</sortOrder>
+        <valueField>Id</valueField>
     </dynamicChoiceSets>
     <dynamicChoiceSets>
         <name>TVInspTypeChoiceSet</name>
@@ -1357,6 +1408,83 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
         <object>Visit</object>
     </recordCreates>
     <recordCreates>
+        <name>BLA_RC_Visit_Record_Creation</name>
+        <label>BLA RC Visit Record Creation</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignRecordIdToReference>visitId</assignRecordIdToReference>
+        <connector>
+            <targetReference>Redirection</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>AccountId</field>
+            <value>
+                <elementReference>BLARC_Account.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ActualVisitStartTime</field>
+            <value>
+                <elementReference>BLARC_Actual_Start_Time</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ContextId</field>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InspectionMethod__c</field>
+            <value>
+                <elementReference>BLARC_Inspection_Method</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InspectionTypeOtherSpecify__c</field>
+            <value>
+                <elementReference>BLARC_InspectionTypeOther</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InstructionDescription</field>
+            <value>
+                <elementReference>BLARC_Special_Instruction</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PlaceId</field>
+            <value>
+                <elementReference>BLARC_Location.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PlannedVisitStartTime</field>
+            <value>
+                <elementReference>BLARC_Planned_Start_Time</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <elementReference>Get_PHOCS_Inspection_RecordTypeID.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>VisitPriority</field>
+            <value>
+                <elementReference>BLARC_Inspection_Priority</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>VisitTypeId</field>
+            <value>
+                <elementReference>inspecTypeId</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Visit</object>
+    </recordCreates>
+    <recordCreates>
         <name>BLA_TV_Visit_Record_Creation</name>
         <label>BLA TV Visit Record Creation</label>
         <locationX>0</locationX>
@@ -1808,6 +1936,83 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
             <field>VisitPriority</field>
             <value>
                 <elementReference>CaseFIPR_Inspection_Priority</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>VisitTypeId</field>
+            <value>
+                <elementReference>inspecTypeId</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Visit</object>
+    </recordCreates>
+    <recordCreates>
+        <name>Case_RC_Visit_Record_Creation</name>
+        <label>Case RC Visit Record Creation</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignRecordIdToReference>visitId</assignRecordIdToReference>
+        <connector>
+            <targetReference>Redirect</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>AccountId</field>
+            <value>
+                <elementReference>CaseRC_Account.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ActualVisitStartTime</field>
+            <value>
+                <elementReference>CaseRC_Actual_Start_Time</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ContextId</field>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InspectionMethod__c</field>
+            <value>
+                <elementReference>Copy_1_of_CaseCCRC_Inspection_Method</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InspectionTypeOtherSpecify__c</field>
+            <value>
+                <elementReference>CaseRC_InspectionTypeOther</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InstructionDescription</field>
+            <value>
+                <elementReference>CaseRC_Special_Instruction</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PlaceId</field>
+            <value>
+                <elementReference>CaseRC_Location.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PlannedVisitStartTime</field>
+            <value>
+                <elementReference>CaseRC_Planned_Start_Time</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <elementReference>Get_PHOCS_Inspection_RecordTypeID.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>VisitPriority</field>
+            <value>
+                <elementReference>CaseRC_Inspection_Priority</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -2281,6 +2486,83 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
         <object>Visit</object>
     </recordCreates>
     <recordCreates>
+        <name>RC_Acc_Visit_Record_Creation</name>
+        <label>RC Acc Visit Record Creation</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignRecordIdToReference>visitId</assignRecordIdToReference>
+        <connector>
+            <targetReference>Page_Redirection</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>AccountId</field>
+            <value>
+                <elementReference>RC_Acc_Account.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ActualVisitStartTime</field>
+            <value>
+                <elementReference>RC_Acc_Actual_Start_Time</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ContextId</field>
+            <value>
+                <elementReference>RC_Acc_ContextId.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InspectionMethod__c</field>
+            <value>
+                <elementReference>RC_Acc_Inspection_Method</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InspectionTypeOtherSpecify__c</field>
+            <value>
+                <elementReference>RC_Acc_InspectionTypeOther</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InstructionDescription</field>
+            <value>
+                <elementReference>RC_Acc_Special_Instruction</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PlaceId</field>
+            <value>
+                <elementReference>RC_Acc_Location.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PlannedVisitStartTime</field>
+            <value>
+                <elementReference>RC_Acc_Planned_Start_Time</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <elementReference>Get_PHOCS_Inspection_RecordTypeID.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>VisitPriority</field>
+            <value>
+                <elementReference>RC_Acc_Inspection_Priority</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>VisitTypeId</field>
+            <value>
+                <elementReference>inspecTypeId</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Visit</object>
+    </recordCreates>
+    <recordCreates>
         <name>TV_Acc_Visit_Record_Creation</name>
         <label>TV Acc Visit Record Creation</label>
         <locationX>0</locationX>
@@ -2649,29 +2931,6 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
             <targetReference>Acc_Visit_Record_Creation</targetReference>
         </connector>
         <fields>
-            <name>InfoHighlights</name>
-            <fieldText>&lt;p&gt;&lt;strong&gt;Please check if all applicable equipment are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.&lt;span class=&quot;ql-cursor&quot;&gt;﻿&lt;/span&gt;&lt;/strong&gt;&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
-            <styleProperties>
-                <verticalAlignment>
-                    <stringValue>top</stringValue>
-                </verticalAlignment>
-                <width>
-                    <stringValue>12</stringValue>
-                </width>
-            </styleProperties>
-            <visibilityRule>
-                <conditionLogic>and</conditionLogic>
-                <conditions>
-                    <leftValueReference>Get_Account_Records.RecordType.Name</leftValueReference>
-                    <operator>Contains</operator>
-                    <rightValue>
-                        <stringValue>Dairy</stringValue>
-                    </rightValue>
-                </conditions>
-            </visibilityRule>
-        </fields>
-        <fields>
             <name>Acc_New_Inspection_Inspection_Section1</name>
             <fieldType>RegionContainer</fieldType>
             <fields>
@@ -2814,6 +3073,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -2843,6 +3103,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -2858,6 +3119,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Planned Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -2928,6 +3190,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -2942,6 +3205,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <name>Acc_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -2957,6 +3221,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3105,6 +3370,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3120,6 +3386,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3149,6 +3416,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3164,6 +3432,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Planned Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3240,6 +3509,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3254,6 +3524,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <name>Asset_RW_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3269,6 +3540,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3440,6 +3712,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3455,6 +3728,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3484,6 +3758,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3499,6 +3774,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Planned Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3575,6 +3851,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3589,6 +3866,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <name>BLA_FIPR_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3604,6 +3882,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3648,29 +3927,6 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
         <connector>
             <targetReference>BLA_Visit_Record_Creation</targetReference>
         </connector>
-        <fields>
-            <name>InfoDisplay</name>
-            <fieldText>&lt;p&gt;&lt;strong&gt;Please check if all applicable equipment are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.&lt;/strong&gt;&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
-            <styleProperties>
-                <verticalAlignment>
-                    <stringValue>top</stringValue>
-                </verticalAlignment>
-                <width>
-                    <stringValue>12</stringValue>
-                </width>
-            </styleProperties>
-            <visibilityRule>
-                <conditionLogic>and</conditionLogic>
-                <conditions>
-                    <leftValueReference>Get_BLA_Record.Account.RecordType.Name</leftValueReference>
-                    <operator>Contains</operator>
-                    <rightValue>
-                        <stringValue>Dairy</stringValue>
-                    </rightValue>
-                </conditions>
-            </visibilityRule>
-        </fields>
         <fields>
             <name>BLA_New_Inspection_Inspection_Section1</name>
             <fieldType>RegionContainer</fieldType>
@@ -3814,6 +4070,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3843,6 +4100,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3858,6 +4116,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Planned Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3934,6 +4193,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3948,6 +4208,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <name>BLA_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -3963,6 +4224,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4009,7 +4271,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
         </connector>
         <fields>
             <name>BLACCRC_InfoDisplay</name>
-            <fieldText>&lt;p&gt;&lt;strong&gt;Please check if all applicable equipment are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Please check if all applicable programs are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.&lt;/strong&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <styleProperties>
                 <verticalAlignment>
@@ -4141,6 +4403,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4156,6 +4419,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4185,6 +4449,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4200,6 +4465,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Planned Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4276,6 +4542,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4290,6 +4557,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <name>BLACCRC_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4305,6 +4573,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4476,6 +4745,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4491,6 +4761,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4520,6 +4791,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4535,6 +4807,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Planned Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4611,6 +4884,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4625,6 +4899,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <name>BLADairy_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4640,6 +4915,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4788,6 +5064,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4803,6 +5080,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4832,6 +5110,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4847,6 +5126,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Planned Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4923,6 +5203,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4937,6 +5218,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <name>BLADW_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4952,6 +5234,356 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithoutHeader</regionContainerType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>BLARC_New_Inspection_Inspection</name>
+        <label>New Inspection: Inspection</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>BLA_RC_Visit_Record_Creation</targetReference>
+        </connector>
+        <fields>
+            <name>BLARC_InfoDisplay</name>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Please check if all applicable programs are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <visibilityRule>
+                <conditionLogic>or</conditionLogic>
+                <conditions>
+                    <leftValueReference>Get_BLA_Record.Account.Type</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>Child Care</stringValue>
+                    </rightValue>
+                </conditions>
+                <conditions>
+                    <leftValueReference>Get_BLA_Record.Account.Type</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>Residential Care</stringValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
+            <name>BLARC_New_Inspection_Inspection_Section1</name>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>BLARC_New_Inspection_Inspection_Section1_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>BLARC_Account</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>AccountId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Account</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>Get_BLA_Record.AccountId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>BLARC_Location</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>LocationId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Place</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>Get_Assosciated_Location.LocationId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>BLARC_InspectionTypeId</name>
+                    <choiceReferences>ResCareInspTypeChoiceSet</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Type</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>BLARC_InspectionTypeOther</name>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Type Other- Specify</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>inspecTypeLabel</leftValueReference>
+                            <operator>Contains</operator>
+                            <rightValue>
+                                <stringValue>Other</stringValue>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
+                <fields>
+                    <name>BLARC_Inspection_Method</name>
+                    <choiceReferences>VirtualSiteInspection</choiceReferences>
+                    <choiceReferences>ScheduledonSiteInspection</choiceReferences>
+                    <choiceReferences>UnannouncedonSiteInspection</choiceReferences>
+                    <choiceReferences>OffsiteInspection</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Method</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>BLARC_Planned_Start_Time</name>
+                    <dataType>DateTime</dataType>
+                    <fieldText>Planned Start Time</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>BLARC_New_Inspection_Inspection_Section1_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>BLARC_ContextId</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>BLAContextId__c</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Context</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>false</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>recordId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>BLARC_Inspection_Priority</name>
+                    <choiceReferences>VisitPriorityChoices</choiceReferences>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <stringValue>Medium</stringValue>
+                    </defaultValue>
+                    <fieldText>Inspection Priority</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>BLARC_Special_Instruction</name>
+                    <fieldText>Special Instruction</fieldText>
+                    <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>BLARC_Actual_Start_Time</name>
+                    <dataType>DateTime</dataType>
+                    <fieldText>Actual Start Time</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -4996,29 +5628,6 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
         <connector>
             <targetReference>BLA_TV_Visit_Record_Creation</targetReference>
         </connector>
-        <fields>
-            <name>BLATV_InfoDisplay</name>
-            <fieldText>&lt;p&gt;&lt;strong&gt;Please check if all applicable equipment are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.&lt;/strong&gt;&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
-            <styleProperties>
-                <verticalAlignment>
-                    <stringValue>top</stringValue>
-                </verticalAlignment>
-                <width>
-                    <stringValue>12</stringValue>
-                </width>
-            </styleProperties>
-            <visibilityRule>
-                <conditionLogic>and</conditionLogic>
-                <conditions>
-                    <leftValueReference>Get_BLA_Record.Account.Type</leftValueReference>
-                    <operator>EqualTo</operator>
-                    <rightValue>
-                        <stringValue>Tobacco and Vapour</stringValue>
-                    </rightValue>
-                </conditions>
-            </visibilityRule>
-        </fields>
         <fields>
             <name>BLATV_New_Inspection_Inspection_Section1</name>
             <fieldType>RegionContainer</fieldType>
@@ -5123,6 +5732,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5138,6 +5748,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5167,6 +5778,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5182,6 +5794,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Planned Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5258,6 +5871,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5272,6 +5886,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <name>BLATV_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5287,6 +5902,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5331,29 +5947,6 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
         <connector>
             <targetReference>Case_Visit_Record_Creation</targetReference>
         </connector>
-        <fields>
-            <name>displayInfo</name>
-            <fieldText>&lt;p&gt;&lt;strong&gt;Please check if all applicable equipment are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.&lt;/strong&gt;&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
-            <styleProperties>
-                <verticalAlignment>
-                    <stringValue>top</stringValue>
-                </verticalAlignment>
-                <width>
-                    <stringValue>12</stringValue>
-                </width>
-            </styleProperties>
-            <visibilityRule>
-                <conditionLogic>and</conditionLogic>
-                <conditions>
-                    <leftValueReference>Get_Case_Record.Account.RecordType.Name</leftValueReference>
-                    <operator>Contains</operator>
-                    <rightValue>
-                        <stringValue>Dairy</stringValue>
-                    </rightValue>
-                </conditions>
-            </visibilityRule>
-        </fields>
         <fields>
             <name>Case_New_Inspection_Inspection_Section1</name>
             <fieldType>RegionContainer</fieldType>
@@ -5497,6 +6090,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5526,6 +6120,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5541,6 +6136,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Planned Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5617,6 +6213,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5631,6 +6228,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <name>Case_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5646,6 +6244,349 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithoutHeader</regionContainerType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Case_RC_New_Inspection_Inspection</name>
+        <label>New Inspection: Inspection</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Case_RC_Visit_Record_Creation</targetReference>
+        </connector>
+        <fields>
+            <name>CaseRC_displayInfo</name>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Please check if all applicable programs are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <visibilityRule>
+                <conditionLogic>or</conditionLogic>
+                <conditions>
+                    <leftValueReference>Get_Case_Record.Account.Type</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>Residential Care</stringValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
+            <name>Case_RC_New_Inspection_Inspection_Section1</name>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Case_RC_New_Inspection_Inspection_Section1_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>CaseRC_Account</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>AccountId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Account</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>Get_Case_Record.AccountId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>CaseRC_Location</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>LocationId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Place</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>Get_Assosciated_Location.LocationId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>CaseRC_InspectionTypeId</name>
+                    <choiceReferences>ResCareInspTypeChoiceSet</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Type</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>CaseRC_InspectionTypeOther</name>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Type Other- Specify</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>inspecTypeLabel</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <stringValue>Other</stringValue>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
+                <fields>
+                    <name>Copy_1_of_CaseCCRC_Inspection_Method</name>
+                    <choiceReferences>VirtualSiteInspection</choiceReferences>
+                    <choiceReferences>ScheduledonSiteInspection</choiceReferences>
+                    <choiceReferences>UnannouncedonSiteInspection</choiceReferences>
+                    <choiceReferences>OffsiteInspection</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Method</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>CaseRC_Planned_Start_Time</name>
+                    <dataType>DateTime</dataType>
+                    <fieldText>Planned Start Time</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>Case_RC_New_Inspection_Inspection_Section1_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>CaseRC_ContextId</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>CaseContextId__c</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Context</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>false</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>recordId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>CaseRC_Inspection_Priority</name>
+                    <choiceReferences>VisitPriorityChoices</choiceReferences>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <stringValue>Medium</stringValue>
+                    </defaultValue>
+                    <fieldText>Inspection Priority</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>CaseRC_Special_Instruction</name>
+                    <fieldText>Special Instruction</fieldText>
+                    <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>CaseRC_Actual_Start_Time</name>
+                    <dataType>DateTime</dataType>
+                    <fieldText>Actual Start Time</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5824,6 +6765,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5839,6 +6781,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5868,6 +6811,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5883,6 +6827,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Planned Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5959,6 +6904,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5973,6 +6919,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <name>CaseCCRC_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -5988,6 +6935,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -6159,6 +7107,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -6174,6 +7123,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -6203,6 +7153,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -6218,6 +7169,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Planned Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -6294,6 +7246,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -6308,6 +7261,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <name>CaseDairy_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -6323,6 +7277,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -6471,6 +7426,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -6486,6 +7442,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -6515,6 +7472,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -6530,6 +7488,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Planned Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -6606,6 +7565,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -6620,6 +7580,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <name>CaseDW_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -6635,6 +7596,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -6806,6 +7768,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -6821,6 +7784,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -6850,6 +7814,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -6865,6 +7830,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Planned Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -6941,6 +7907,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -6955,6 +7922,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <name>CaseFIPR_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -6970,6 +7938,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -7014,29 +7983,6 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
         <connector>
             <targetReference>Case_TV_Visit_Record_Creation</targetReference>
         </connector>
-        <fields>
-            <name>CaseTV_displayInfo</name>
-            <fieldText>&lt;p&gt;&lt;strong&gt;Please check if all applicable equipment are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.&lt;/strong&gt;&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
-            <styleProperties>
-                <verticalAlignment>
-                    <stringValue>top</stringValue>
-                </verticalAlignment>
-                <width>
-                    <stringValue>12</stringValue>
-                </width>
-            </styleProperties>
-            <visibilityRule>
-                <conditionLogic>and</conditionLogic>
-                <conditions>
-                    <leftValueReference>Get_Case_Record.Account.Type</leftValueReference>
-                    <operator>EqualTo</operator>
-                    <rightValue>
-                        <stringValue>Tobacco and Vapour</stringValue>
-                    </rightValue>
-                </conditions>
-            </visibilityRule>
-        </fields>
         <fields>
             <name>CaseTV_New_Inspection_Inspection_Section1</name>
             <fieldType>RegionContainer</fieldType>
@@ -7141,6 +8087,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -7156,6 +8103,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -7185,6 +8133,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -7200,6 +8149,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Planned Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -7276,6 +8226,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -7290,6 +8241,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <name>CaseTV_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -7305,6 +8257,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -7453,6 +8406,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -7468,6 +8422,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -7497,6 +8452,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -7512,6 +8468,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Planned Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -7582,6 +8539,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -7596,6 +8554,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <name>DW_Acc_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -7611,6 +8570,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -7674,6 +8634,29 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <operator>EqualTo</operator>
                     <rightValue>
                         <stringValue>Dairy</stringValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
+            <name>displayTextChildCare</name>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;Please check if all applicable programs are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>Get_Insp_Record.Account.Type</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>Child Care</stringValue>
                     </rightValue>
                 </conditions>
             </visibilityRule>
@@ -7833,6 +8816,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -7862,6 +8846,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -7877,6 +8862,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Planned Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -7999,6 +8985,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -8013,6 +9000,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <name>Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -8028,6 +9016,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -8079,6 +9068,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
             <dataType>String</dataType>
             <fieldText>Select Inspection Type</fieldText>
             <fieldType>DropdownBox</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <styleProperties>
                 <verticalAlignment>
@@ -8105,7 +9095,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
         </connector>
         <fields>
             <name>CCRC_InfoHighlights</name>
-            <fieldText>&lt;p&gt;&lt;strong&gt;Please check if all applicable equipment are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.&lt;span class=&quot;ql-cursor&quot;&gt;﻿&lt;/span&gt;&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Please check if all applicable programs are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.﻿&lt;/strong&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <styleProperties>
                 <verticalAlignment>
@@ -8237,6 +9227,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -8252,6 +9243,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -8281,6 +9273,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -8296,6 +9289,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Planned Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -8366,6 +9360,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -8380,6 +9375,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <name>CCRC_Acc_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -8395,6 +9391,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -8566,6 +9563,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -8581,6 +9579,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -8610,6 +9609,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -8625,6 +9625,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Planned Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -8695,6 +9696,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -8709,6 +9711,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <name>Dairy_Acc_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -8724,6 +9727,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -8895,6 +9899,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -8910,6 +9915,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -8939,6 +9945,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -8954,6 +9961,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Planned Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -9024,6 +10032,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -9038,6 +10047,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <name>FIPR_Acc_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -9053,6 +10063,350 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithoutHeader</regionContainerType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>New_Inspection_RC_Inspection</name>
+        <label>New Inspection: Inspection</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>RC_Acc_Visit_Record_Creation</targetReference>
+        </connector>
+        <fields>
+            <name>RC_InfoHighlights</name>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Please check if all applicable programs are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.﻿&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <visibilityRule>
+                <conditionLogic>or</conditionLogic>
+                <conditions>
+                    <leftValueReference>Get_Account_Records.Type</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>Child Care</stringValue>
+                    </rightValue>
+                </conditions>
+                <conditions>
+                    <leftValueReference>Get_Account_Records.Type</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>Residential Care</stringValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
+            <name>New_Inspection_RC_Inspection_Section1</name>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>New_Inspection_RC_Inspection_Section1_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>RC_Acc_Account</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>AccountId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Account</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>recordId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>RC_Acc_Location</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>LocationId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Place</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>Get_Assosciated_Location.LocationId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>RCAcc_InspectionTypeId</name>
+                    <choiceReferences>ResCareInspTypeChoiceSet</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Type</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>RC_Acc_InspectionTypeOther</name>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Type Other- Specify</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>inspecTypeLabel</leftValueReference>
+                            <operator>Contains</operator>
+                            <rightValue>
+                                <stringValue>Other</stringValue>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
+                <fields>
+                    <name>RC_Acc_Inspection_Method</name>
+                    <choiceReferences>VirtualSiteInspection</choiceReferences>
+                    <choiceReferences>ScheduledonSiteInspection</choiceReferences>
+                    <choiceReferences>UnannouncedonSiteInspection</choiceReferences>
+                    <choiceReferences>OffsiteInspection</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Inspection Method</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>RC_Acc_Planned_Start_Time</name>
+                    <dataType>DateTime</dataType>
+                    <fieldText>Planned Start Time</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>New_Inspection_RC_Inspection_Section1_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>RC_Acc_ContextId</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>ContextId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>ContextId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>false</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>RC_Acc_Inspection_Priority</name>
+                    <choiceReferences>VisitPriorityChoices</choiceReferences>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <stringValue>Medium</stringValue>
+                    </defaultValue>
+                    <fieldText>Inspection Priority</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>RC_Acc_Special_Instruction</name>
+                    <fieldText>Special Instruction</fieldText>
+                    <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>RC_Acc_Actual_Start_Time</name>
+                    <dataType>DateTime</dataType>
+                    <fieldText>Actual Start Time</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -9097,29 +10451,6 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
         <connector>
             <targetReference>TV_Acc_Visit_Record_Creation</targetReference>
         </connector>
-        <fields>
-            <name>TV_InfoHighlights</name>
-            <fieldText>&lt;p&gt;&lt;strong&gt;Please check if all applicable equipment are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.&lt;span class=&quot;ql-cursor&quot;&gt;﻿&lt;/span&gt;&lt;/strong&gt;&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
-            <styleProperties>
-                <verticalAlignment>
-                    <stringValue>top</stringValue>
-                </verticalAlignment>
-                <width>
-                    <stringValue>12</stringValue>
-                </width>
-            </styleProperties>
-            <visibilityRule>
-                <conditionLogic>and</conditionLogic>
-                <conditions>
-                    <leftValueReference>Get_Account_Records.Type</leftValueReference>
-                    <operator>EqualTo</operator>
-                    <rightValue>
-                        <stringValue>Tobacco and Vapour</stringValue>
-                    </rightValue>
-                </conditions>
-            </visibilityRule>
-        </fields>
         <fields>
             <name>New_Inspection_TVInspection_Section1</name>
             <fieldType>RegionContainer</fieldType>
@@ -9224,6 +10555,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -9239,6 +10571,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -9268,6 +10601,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -9283,6 +10617,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Planned Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -9353,6 +10688,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -9367,6 +10703,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <name>TV_Acc_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -9382,6 +10719,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
                     <dataType>DateTime</dataType>
                     <fieldText>Actual Start Time</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -9432,6 +10770,7 @@ V14- Adding Planned Started Time as part of EHIS-4313.</description>
             <dataType>String</dataType>
             <fieldText>Select Inspection Type</fieldText>
             <fieldType>DropdownBox</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <styleProperties>
                 <verticalAlignment>

@@ -12,6 +12,8 @@
                 11 May -  PHOCS-3948        -  Accenture   -  return Recreational Water ActionPlanTemplateNames.
                 04 Jun -  PHOCS-3523        -  Accenture   -  return Industrial Camps ActionPlanTemplateNames.
                 04 Jun -  PHOCS-3530        -  Accenture   -  return Tobacco and Vapour ActionPlanTemplateNames.
+                17 Jun -  PHOCS-4523        -  Accenture   -  return Child Care ActionPlanTemplateNames.
+                22 Jun -  PHOCS-4307        -  Accenture   -  return Residential Care ActionPlanTemplateNames.
 ***********************************************************************************************/
 public without sharing class InspectionAssessmentTaskCreationService {
     public static String className = 'InspectionAssessmentTaskCreationService';
@@ -24,6 +26,9 @@ public without sharing class InspectionAssessmentTaskCreationService {
     public static String RECREATIONALWATER_ACCOUNTTYPE = 'Recreational Water';
     public static String INDUSTRIALCAMPS_ACCOUNTTYPE = 'Industrial Camps';
     public static String TOBACCONVAPOUR_ACCOUNTTYPE = 'Tobacco and Vapour';
+    public static String CHILDCARE_ACCOUNTTYPE = 'Child Care';
+    public static String RESIDENTIALCARE_ACCOUNTTYPE = 'Residential Care';
+    public static final String INSPECTION_UPDATE = 'Inspection Update';
     public static Id recordTypePHOCSInspection = Schema.SObjectType.Visit.getRecordTypeInfosByDeveloperName().get('PHOCSInspection').getRecordTypeId();
 /**
 * @author: Deepak
@@ -277,6 +282,10 @@ public without sharing class InspectionAssessmentTaskCreationService {
                 getAPTemplatesName.addAll(getIndustrialCampTemplates(facilityAccountId, decisionMaps));
             } else if (accountType == TOBACCONVAPOUR_ACCOUNTTYPE){
                 getAPTemplatesName.addAll(getTobaccoNVapourTemplates(facilityAccountId, decisionMaps));
+            } else if (accountType == CHILDCARE_ACCOUNTTYPE){
+                getAPTemplatesName.addAll(getChildCareTemplates(facilityAccountId, inspectionType, decisionMaps));
+            } else if (accountType == RESIDENTIALCARE_ACCOUNTTYPE){
+                getAPTemplatesName.addAll(getResidentialCareTemplates(facilityAccountId, decisionMaps));
             }
             
         } catch(Exception e){
@@ -308,7 +317,7 @@ public without sharing class InspectionAssessmentTaskCreationService {
             }
         }
         
-        if (!attributeTypesFromAssets.isEmpty() && inspectionType != 'Inspection Update') {
+        if (!attributeTypesFromAssets.isEmpty() && inspectionType != INSPECTION_UPDATE) {
             for (PHOCSActionPlanTemplateDecisionMap__mdt dm : decisionMaps) {
                 if (dm.AttributeType__c != null && attributeTypesFromAssets.contains(dm.AttributeType__c)) {                        
                     templateNames.add(dm.ActionPlanTemplateName__c);
@@ -472,6 +481,56 @@ public without sharing class InspectionAssessmentTaskCreationService {
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     private static Set<String> getTobaccoNVapourTemplates(Id facilityAccountId, List<PHOCSActionPlanTemplateDecisionMap__mdt> decisionMaps){
+        Set<String> templateNames = new Set<String>();
+        
+        for (PHOCSActionPlanTemplateDecisionMap__mdt dm : decisionMaps) {
+            if (dm.AttributeType__c == null) {
+                templateNames.add(dm.ActionPlanTemplateName__c);
+            }
+        }
+        return templateNames;
+    }
+    
+/**
+* @author: Deepak
+* @date: 17 Jun 2026
+* @description: The purpose of this Method is to return Child Care ActionPlanTemplateNames.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/     
+    private static Set<String> getChildCareTemplates(Id facilityAccountId, String inspectionType, List<PHOCSActionPlanTemplateDecisionMap__mdt> decisionMaps){
+        Set<String> templateNames = new Set<String>();
+        Set<String> attributeTypesFromAssets = new Set<String>();        
+        Id childCareAssetRTId = Schema.SObjectType.Asset.getRecordTypeInfosByDeveloperName().get('ChildCareService').getRecordTypeId();
+        
+        for (PHOCSActionPlanTemplateDecisionMap__mdt dm : decisionMaps) {
+            if(dm.AttributeType__c == null && ((dm.InspectionCategory__c == inspectionType && inspectionType == INSPECTION_UPDATE) || dm.InspectionCategory__c == null)){                    
+                templateNames.add(dm.ActionPlanTemplateName__c);
+            }
+        }
+        
+        for (Asset assetObj : [SELECT Type__c FROM Asset WHERE AccountId =: facilityAccountId AND RecordTypeId =: childCareAssetRTId AND Status = 'Active']) {
+            if (String.isNotBlank(assetObj.Type__c)) {
+                attributeTypesFromAssets.add(assetObj.Type__c);
+            }
+        }
+        
+        if (!attributeTypesFromAssets.isEmpty() && inspectionType != INSPECTION_UPDATE) {
+            for (PHOCSActionPlanTemplateDecisionMap__mdt dm : decisionMaps) {
+                if (dm.AttributeType__c != null && attributeTypesFromAssets.contains(dm.AttributeType__c)) {                        
+                    templateNames.add(dm.ActionPlanTemplateName__c);
+                }
+            }
+        }        
+        return templateNames;
+    }
+    
+/**
+* @author: Deepak
+* @date: 22 June 2026
+* @description: The purpose of this Method is to return Residential Care ActionPlanTemplateNames.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/     
+    private static Set<String> getResidentialCareTemplates(Id facilityAccountId, List<PHOCSActionPlanTemplateDecisionMap__mdt> decisionMaps){
         Set<String> templateNames = new Set<String>();
         
         for (PHOCSActionPlanTemplateDecisionMap__mdt dm : decisionMaps) {
