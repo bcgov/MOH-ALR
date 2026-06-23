@@ -1779,6 +1779,22 @@
                 <identifier>RecordSeptage_Hauling_Company_cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentName>flexipage:blankSpace</componentName>
+                <identifier>flexipage_blankSpace2</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.TanksinSeries__c</fieldItem>
+                <identifier>RecordTanksinSeries_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-1f3977c7-8d8f-483a-8089-ce4011802fa1</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -1885,6 +1901,46 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.PowerSource__c</fieldItem>
                 <identifier>RecordPower_Source_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentName>flexipage:blankSpace</componentName>
+                <identifier>flexipage_blankSpace3</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.NumberofConnectedTanks__c</fieldItem>
+                <identifier>RecordNumberofConnectedTanks_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.TanksinSeries__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Yes</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ConnectedTankDetails__c</fieldItem>
+                <identifier>RecordConnectedTankDetails_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.TanksinSeries__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Yes</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <name>Facet-345c61ae-30ae-427b-ac9f-b051975ab499</name>
