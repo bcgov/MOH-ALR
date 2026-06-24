@@ -49,7 +49,8 @@ public with sharing class PHOCSOperatorPortalDisplayRecords{
         }
         List<Object> results = new List<Object>(); 
         Map<String, SObjectWrapper> wrapperRegistry = new Map<String, SObjectWrapper>{
-            'PortalBLADetail' => new BusinessLicenseListApplicationDetailWrapper()
+            'PortalBLADetail' => new BusinessLicenseListApplicationDetailWrapper(),
+            'PortalFacilityDetail' => new PortalFacilityDetailWrapper()
         };
             
         SObjectWrapper wrapper = wrapperRegistry.get(configName);
@@ -80,7 +81,8 @@ public with sharing class PHOCSOperatorPortalDisplayRecords{
          public static List<Object> getRelatedList(Id recordId, string configName) {
 
         Map<String, SObjectWrapper> wrapperRegistry = new Map<String, SObjectWrapper>{
-            'BusinessLicenseApplication' => new BusinessLicenseApplicationListWrapper()
+            'BusinessLicenseApplication' => new BusinessLicenseApplicationListWrapper(),
+            'PortalFacilityBLAList' => new PortalFacilityBLAListWrapper()
         };
         
         if (recordId == null) {
@@ -136,6 +138,26 @@ public with sharing class PHOCSOperatorPortalDisplayRecords{
         }
         return '';
     }
+
+    private static String formatPhoneNumber(String phone) {
+        if (String.isBlank(phone)) {
+            return '';
+        }
+
+        String digits = phone.replaceAll('[^0-9]', '');
+
+        if (digits.length() == 11 && digits.startsWith('1')) {
+            digits = digits.substring(1);
+        }
+
+        if (digits.length() == 10) {
+            return '(' + digits.substring(0, 3) + ')-' +
+                digits.substring(3, 6) + '-' +
+                digits.substring(6, 10);
+        }
+
+        return phone;
+    }
 	
     private static string getBLAStatusSummary(string status){
         Map<string, string> statusSummary = new Map<string,string>{
@@ -153,6 +175,24 @@ public with sharing class PHOCSOperatorPortalDisplayRecords{
     
     public interface SObjectWrapper {
         Object wrap(SObject record);
+    }
+
+    public class PortalFacilityDetailWrapper implements SObjectWrapper {
+         public Object wrap(SObject record) {
+            Account account = (Account) record;
+            Map<String, Object> result = new Map<String, Object>{
+            	'Id' => account.Id,
+            	'Name' => account.Name,
+            	'Type' => account.Type,
+           		'Status' => account.Status__c,
+                'PhysicalAddress' => getAddress(account.Physical_Address__c),
+                'Category'=> account.CategoryL1__c,
+            	'OperationStartDate' => account.OperationStartDate__c,
+                'Phone' => formatPhoneNumber(account.Phone),
+            	'FacilityHierarchy' =>  account.FacilityHierarchy__r.Name
+            };
+            return result;
+        }
     }
     
     public class BusinessLicenseListWrapper implements SObjectWrapper {
@@ -240,6 +280,21 @@ public with sharing class PHOCSOperatorPortalDisplayRecords{
                 'LastModifiedDate' => BLA.LastModifiedDate,
                 'Status' => BLA.Status,
                 'ClosureReason' => BLA.ClosureReason__c
+            };
+            return result;
+        }
+    }  
+
+    public class PortalFacilityBLAListWrapper implements SObjectWrapper {
+        public Object wrap(SObject record) {
+            BusinessLicenseApplication BLA = (BusinessLicenseApplication) record;
+            Map<String, Object> result = new Map<String, Object>{
+                'Id' => BLA.Id,
+                'Name' => BLA.Name,
+                'LicenseTypeName' => BLA.LicenseType.Name,
+                'AppliedDate' => BLA.AppliedDate,
+                'LastModifiedDate' => BLA.LastModifiedDate != null ? BLA.LastModifiedDate.format('yyyy-MM-dd') : null,
+                'Status' => BLA.Status
             };
             return result;
         }
