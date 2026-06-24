@@ -503,7 +503,8 @@ public without sharing class InspectionAssessmentTaskCreationService {
         Id childCareAssetRTId = Schema.SObjectType.Asset.getRecordTypeInfosByDeveloperName().get('ChildCareService').getRecordTypeId();
         
         for (PHOCSActionPlanTemplateDecisionMap__mdt dm : decisionMaps) {
-            if(dm.AttributeType__c == null && ((dm.InspectionCategory__c == inspectionType && inspectionType == INSPECTION_UPDATE) || dm.InspectionCategory__c == null)){                    
+            if(dm.AttributeType__c == null && ((dm.InspectionCategory__c == inspectionType && inspectionType == INSPECTION_UPDATE) 
+                                               || (dm.InspectionCategory__c == null && inspectionType != INSPECTION_UPDATE))){                    
                 templateNames.add(dm.ActionPlanTemplateName__c);
             }
         }
