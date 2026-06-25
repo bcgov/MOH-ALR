@@ -292,7 +292,7 @@ public with sharing class PHOCSOperatorPortalDisplayRecords{
                 'Id' => BLA.Id,
                 'Name' => BLA.Name,
                 'LicenseTypeName' => BLA.LicenseType.Name,
-                'AppliedDate' => BLA.AppliedDate,
+                'AppliedDate' => BLA.AppliedDate != null ? BLA.AppliedDate.format('yyyy-MM-dd') : null,
                 'LastModifiedDate' => BLA.LastModifiedDate != null ? BLA.LastModifiedDate.format('yyyy-MM-dd') : null,
                 'Status' => BLA.Status
             };
