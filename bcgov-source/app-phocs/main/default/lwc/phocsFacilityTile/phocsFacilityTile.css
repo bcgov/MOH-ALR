@@ -7,7 +7,7 @@
 
 .tile {
 	width: 100%;
-	min-height: 300px;
+	min-height: 260px;
 	background: #ffffff;
 	border: 1px solid #d8dde6;
 	border-radius: 8px;
@@ -70,7 +70,7 @@
 }
 
 .pending {
-	background: #FFBF00;
+	background: #ffbf00;
 	/* yellow */
 	color: #000;
 }
@@ -93,20 +93,32 @@
 	word-break: break-word;
 }
 
-
-/* Tablet */
+/* Tablet - 2 tiles per row */
 @media screen and (max-width: 1199px) {
-	.tile {
-		width: calc(50% - 10px);
-	}
+
+    .tiles-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
 }
 
-/* Mobile */
+/* Mobile - 1 tile per row */
 @media screen and (max-width: 767px) {
-	.tile {
-		width: 100%;
-	}
+
+    .tiles-container {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    .tile-image {
+        height: 140px;
+    }
+
+    .overlay-count {
+        font-size: 28px;
+    }
 }
+
 
 .page-title {
 	font-size: 24px;
@@ -167,4 +179,23 @@
 
 .account-link:hover {
 	color: #0176d3;
+}
+
+.address-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.address-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #444;
+    margin-bottom: 2px;
+}
+
+.address-text {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.4;
+    word-break: break-word;
 }
