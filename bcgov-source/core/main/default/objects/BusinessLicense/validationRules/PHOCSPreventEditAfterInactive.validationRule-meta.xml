@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PHOCSPreventEditAfterInactive</fullName>
+    <active>true</active>
+    <description>Prevents PHOCS Officers and PHOCS Business Admins from editing a Business License, once its Status is already Inactive or Revoked</description>
+    <errorConditionFormula>AND(
+RecordType.DeveloperName = &quot;PHOCSPermitLicense&quot;,
+NOT(ISNEW()),
+NOT($Permission.EHISBypassValidationRuleCustomPermission),
+ISPICKVAL(PRIORVALUE(Status), &quot;Inactive&quot;)
+)</errorConditionFormula>
+    <errorMessage>This Business License is inactive and cannot be edited. Contact administrator for any queries.</errorMessage>
+</ValidationRule>
