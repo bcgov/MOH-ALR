@@ -10,6 +10,14 @@
         AND(
             ISPICKVAL(Status, &quot;Completed&quot;),
             NOT(ISCHANGED(Status)),
+            OR(
+                ISCHANGED(ActionsRequiredByLicenseeOperator__c),
+                ISCHANGED(ActionsRequiredByLOMHO__c)
+            )
+        ),
+        AND(
+            ISPICKVAL(Status, &quot;Completed&quot;),
+            NOT(ISCHANGED(Status)),
 												NOT(ISCHANGED(NumberofFollowups__c)),
 												NOT(ISCHANGED(DiscloseToPublic__c)) 
         ),

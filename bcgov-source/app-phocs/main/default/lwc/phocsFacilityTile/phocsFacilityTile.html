@@ -1,0 +1,59 @@
+<template>
+    <h1 class="page-title">My Facilities</h1>
+    <template if:true={hasAccounts}>
+        <div class="tiles-container">
+            <template for:each={accounts} for:item="acc">
+                <div key={acc.Id} class={acc.tileClass}>
+
+                    <!-- Banner Image -->
+                    <div class="tile-image">
+                        <div class="image-overlay">
+                            <div class="overlay-title">Actions Required</div>
+                            <div class="overlay-count">0</div>
+                        </div>
+                        <img src={bannerUrl} alt="Facility Banner"/>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="tile-content">
+
+                        <div class="header-row">
+                            <lightning-icon icon-name="standard:account_info" size="small">
+                            </lightning-icon>
+                            <div class="account-name">
+                                <span
+                                data-id={acc.Id}
+                            onclick={navigateToFacility}
+                            class="account-link">
+                            {acc.Name}
+                            </span>
+                            </div>
+
+                            <div class={acc.statusClass}>
+                                {acc.status}
+                            </div>
+                        </div>
+
+                        <div class="address-row">
+                            <lightning-icon icon-name="utility:checkin" size="x-small">
+                            </lightning-icon>
+
+                            <div class="address-content">
+                                <div class="address-label">Address</div>
+                                <div class="address-text">{acc.fullAddress}</div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </template>
+        </div>
+    </template>
+
+    <template if:false={hasAccounts}>
+        <div class="no-records-message">
+            You do not have any open facilities.
+        </div>
+    </template>
+</template>

@@ -253,7 +253,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>required</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.TimeSpentMinutes__c</fieldItem>
                 <identifier>RecordTimeSpentMinutes_cField</identifier>
@@ -474,6 +474,58 @@
     </flexiPageRegions>
     <flexiPageRegions>
         <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ActionsRequiredByLicenseeOperator__c</fieldItem>
+                <identifier>RecordActionsRequiredByLicenseeOperator_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-1a69f476-7e4d-4c2b-9781-2f8ff52f7c4a</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ActionsRequiredByLOMHO__c</fieldItem>
+                <identifier>RecordActionsRequiredByLOMHO_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-3d83e22c-3525-49f9-a5f7-21da1a8fb3a6</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-1a69f476-7e4d-4c2b-9781-2f8ff52f7c4a</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_columnActionsRequired1</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-3d83e22c-3525-49f9-a5f7-21da1a8fb3a6</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_columnActionsRequired2</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-c4ba5306-a6fd-41b3-8f86-ec1b1ba090df</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
@@ -593,6 +645,62 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection4</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>columns</name>
+                    <value>Facet-c4ba5306-a6fd-41b3-8f86-ec1b1ba090df</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>horizontalAlignment</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Actions Required</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:fieldSection</componentName>
+                <identifier>flexipage_fieldSectionActionsRequired</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 AND (2 OR 3) AND 4 AND 5 AND 6 AND 7</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Completed</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Account.Type}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Child Care</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Account.Type}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Residential Care</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.TestInspType__c}</leftValue>
+                        <operator>NE</operator>
+                        <rightValue>Complaint</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.TestInspType__c}</leftValue>
+                        <operator>NE</operator>
+                        <rightValue>Complaint Follow-up</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.TestInspType__c}</leftValue>
+                        <operator>NE</operator>
+                        <rightValue>Reportable Incident</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.TestInspType__c}</leftValue>
+                        <operator>NE</operator>
+                        <rightValue>Reportable Incident Follow-up</rightValue>
+                    </criteria>
+                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <itemInstances>
