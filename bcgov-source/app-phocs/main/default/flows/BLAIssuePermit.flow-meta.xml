@@ -30,6 +30,45 @@
             <label>Not Null</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>Has_Active_Current_BL</name>
+        <label>Has Active Current BL</label>
+        <locationX>380</locationX>
+        <locationY>350</locationY>
+        <defaultConnector>
+            <targetReference>GetPermitRecordTypeId</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Active Current BL</defaultConnectorLabel>
+        <rules>
+            <name>Current_BL_Active</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Current_BL.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Current_BL.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Active</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Current_BL.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>PHOCSPermitLicense</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Inactivate_Old_BL</targetReference>
+            </connector>
+            <label>Current BL Active</label>
+        </rules>
+    </decisions>
     <description>EHIS-2615</description>
     <environments>Default</environments>
     <formulas>
@@ -121,6 +160,12 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>PeriodStart</field>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>RecordTypeId</field>
             <value>
                 <elementReference>GetPermitRecordTypeId.Id</elementReference>
@@ -141,6 +186,31 @@
         <object>BusinessLicense</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
+    <recordLookups>
+        <name>Get_Current_BL</name>
+        <label>Get Current BL</label>
+        <locationX>380</locationX>
+        <locationY>242</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Has_Active_Current_BL</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Error</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.LicensePermitNameId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>BusinessLicense</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <recordLookups>
         <name>Get_Related_AAA</name>
         <label>Get Related AAA</label>
@@ -192,6 +262,41 @@
         <object>RecordType</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <recordUpdates>
+        <name>Inactivate_Old_BL</name>
+        <label>Inactivate Old BL</label>
+        <locationX>50</locationX>
+        <locationY>458</locationY>
+        <connector>
+            <isGoTo>true</isGoTo>
+            <targetReference>GetPermitRecordTypeId</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Error</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Current_BL.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>PeriodEnd</field>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Inactive</stringValue>
+            </value>
+        </inputAssignments>
+        <object>BusinessLicense</object>
+    </recordUpdates>
     <recordUpdates>
         <name>Update_AAA</name>
         <label>Update AAA</label>
@@ -275,7 +380,7 @@
         <allowPause>false</allowPause>
         <backButtonLabel>Cancel</backButtonLabel>
         <connector>
-            <targetReference>GetPermitRecordTypeId</targetReference>
+            <targetReference>Get_Current_BL</targetReference>
         </connector>
         <fields>
             <name>confirmationMessage</name>

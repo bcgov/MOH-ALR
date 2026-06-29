@@ -70,7 +70,7 @@ public without sharing class PHOCSInspectionAssessmentIndControllerV2 {
                 if (resp.result != null) {
                     String normalized = resp.result.trim();
                     
-                    Map<String, String> valueMap = new Map<String, String>{'Not Applicable' => 'N/A (Not Applicable)', 'Not Inspected' => 'N/S (Not Assessed)','Non-compliant'=> 'PHOCSNonCompliant'};
+                    Map<String, String> valueMap = new Map<String, String>{'Not Applicable' => 'N/A (Not Applicable)', 'Not Inspected' => 'N/S (Not Assessed)','Non-compliant'=> 'PHOCSNonCompliant','Compliant' => 'Compliant'};
                         
                         if (valueMap.containsKey(normalized)) {
                             normalized = valueMap.get(normalized);
@@ -390,17 +390,21 @@ public without sharing class PHOCSInspectionAssessmentIndControllerV2 {
 * @description Update the inspection status to complete & closing comments.
 */    
     @AuraEnabled
-    public static void completeInspection(Id visitId, String closingComments, String timeSpent, DateTime actualStartDate, Boolean followUpInspectionRequired) {
+    public static void completeInspection(Id visitId, String closingComments, String timeSpent, Datetime actualStartDate, Boolean followUpInspectionRequired, Boolean environmentalSwabsTaken, String deliveryMethod, Boolean signatureRefusal){
         Visit visitRec = [SELECT Id, Status, StatusRemarks, ActualVisitStartTime, ActualVisitEndTime, FollowUpInspectionRequired__c, EnvironmentalSwabsTaken__c, 
-                          PHOCSIsDraft__c, TimeSpentMinutes__c FROM Visit WHERE Id =: visitId LIMIT 1];
+                          PHOCSIsDraft__c, TimeSpentMinutes__c, DeliveryMethod__c, SignatureRefusal__c FROM Visit WHERE Id =: visitId LIMIT 1];
         
         visitRec.Status = 'Completed';
         visitRec.StatusRemarks = closingComments;
-        visitRec.PHOCSIsDraft__c = false; 
-        visitRec.TimeSpentMinutes__c = timeSpent;
         visitRec.ActualVisitStartTime = actualStartDate;
         visitRec.ActualVisitEndTime = System.now().addMinutes(2);
-        //visitRec.FollowUpInspectionRequired__c = followUpInspectionRequired;
+        visitRec.PHOCSIsDraft__c = false; 
+        visitRec.TimeSpentMinutes__c = timeSpent;
+        visitRec.FollowUpInspectionRequired__c = followUpInspectionRequired;
+        visitRec.EnvironmentalSwabsTaken__c = environmentalSwabsTaken;
+        visitRec.DeliveryMethod__c = deliveryMethod;
+        visitRec.SignatureRefusal__c = signatureRefusal;
+        
         update visitRec;
     }    
     
@@ -409,7 +413,7 @@ public without sharing class PHOCSInspectionAssessmentIndControllerV2 {
 */     
     @AuraEnabled(cacheable=true)
     public static Visit getVisitMeta(Id visitId) {
-        return [SELECT Id, PHOCSIsDraft__c, Status, ownerId FROM Visit WHERE Id = :visitId LIMIT 1];
+        return [SELECT Id, PHOCSIsDraft__c, Status, ownerId,VisitType.Name FROM Visit WHERE Id = :visitId LIMIT 1];
     }
     
     
@@ -492,5 +496,28 @@ public without sharing class PHOCSInspectionAssessmentIndControllerV2 {
             throw new AuraHandledException('Only the Officer who started the inspection can resume this inspection');
         }
     }
+    
+    /**
+	* @description: Opening Comments to save in inspection record
+	*/
+    
+    @AuraEnabled
+	public static Visit updateOpeningComments(Id visitId , String openingComments) {
+        try{
+            List<Visit> inspcomt = [SELECT Id,Name,InstructionDescription FROM Visit WHERE Id =:visitId];
+            if(!inspcomt.isEmpty()){
+                Visit inp = inspcomt[0];
+                inp.InstructionDescription = openingComments;
+				update inp;
+				return inp;                  
+            }
+           return null; 
+        }catch(Exception ex){
+            throw new AuraHandledException(ex.getMessage());
+        }
+	}
+    
+
+   
     
 }

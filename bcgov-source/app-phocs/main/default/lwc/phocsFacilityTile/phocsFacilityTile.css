@@ -1,0 +1,201 @@
+.tiles-container {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 20px;
+	width: 100%;
+}
+
+.tile {
+	width: 100%;
+	min-height: 260px;
+	background: #ffffff;
+	border: 1px solid #d8dde6;
+	border-radius: 8px;
+	overflow: hidden;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* Top Banner Image */
+.tile-image {
+	position: relative;
+	width: 100%;
+	height: 130px;
+	overflow: hidden;
+}
+
+.tile-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+/* Bottom Section */
+.tile-content {
+	padding: 14px;
+}
+
+/* Account Name + Status Button */
+.header-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 10px;
+	margin-bottom: 12px;
+}
+
+.account-name {
+	flex: 1;
+	font-size: 14px;
+	font-weight: 700;
+	color: #1f3b5b;
+	line-height: 1.3;
+	text-transform: uppercase;
+	word-break: break-word;
+}
+
+/* Status Button */
+.status-pill {
+	color: white;
+	font-size: 11px;
+	font-weight: 600;
+	padding: 4px 16px;
+	border-radius: 4px;
+	white-space: nowrap;
+}
+
+.open {
+	background: #2e844a;
+	/* Green */
+}
+
+.pending {
+	background: #ffbf00;
+	/* yellow */
+	color: #000;
+}
+
+/* Address Section */
+.address-row {
+	display: flex;
+	align-items: flex-start;
+	gap: 6px;
+}
+
+.address-row lightning-icon {
+	margin-top: 2px;
+}
+
+.address-row span {
+	font-size: 12px;
+	color: #555555;
+	line-height: 1.5;
+	word-break: break-word;
+}
+
+/* Tablet - 2 tiles per row */
+@media screen and (max-width: 1199px) {
+
+    .tiles-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+}
+
+/* Mobile - 1 tile per row */
+@media screen and (max-width: 767px) {
+
+    .tiles-container {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    .tile-image {
+        height: 140px;
+    }
+
+    .overlay-count {
+        font-size: 28px;
+    }
+}
+
+
+.page-title {
+	font-size: 24px;
+	font-weight: 700;
+	color: #032d60;
+	margin-bottom: 12px;
+	padding-left: 4px;
+}
+
+.pending-tile {
+	opacity: 0.65;
+	background-color: #f5f5f5;
+}
+
+.no-records-message {
+	text-align: center;
+	margin-top: 40px;
+	padding: 20px;
+	font-size: 16px;
+	font-style: italic;
+	color: #555;
+}
+
+.image-overlay {
+	position: absolute;
+	top: 12px;
+	left: 14px;
+	z-index: 10;
+
+	color: #FFFFFF;
+	font-size: 15px;
+	font-weight: 900;
+	line-height: 1;
+
+	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.overlay-title {
+	color: #ffffff;
+	font-size: 15px;
+	font-weight: 600;
+	margin-bottom: 42px;
+}
+
+.overlay-count {
+	color: #ffffff;
+	font-size: 18px;
+	font-weight: 700;
+	line-height: 1;
+}
+
+.account-link {
+	color: #1f3b5b;
+	font-weight: 700;
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+.account-link:hover {
+	color: #0176d3;
+}
+
+.address-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.address-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #444;
+    margin-bottom: 2px;
+}
+
+.address-text {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.4;
+    word-break: break-word;
+}

@@ -458,10 +458,9 @@ private class PHOCSAssessmentIndCtrlV2Test {
     Visit inspection = [SELECT Id FROM Visit LIMIT 1];
 
     // Call method
-    Test.startTest();
-    	Map<Id, RegulatoryCodeViolation> result =
-        PHOCSInspectionAssessmentIndControllerV2.getViolationsFromInspection(inspection.Id);
-    Test.stopTest();
+        Test.startTest();
+        Map<Id, RegulatoryCodeViolation> result = PHOCSInspectionAssessmentIndControllerV2.getViolationsFromInspection(inspection.Id);
+        Test.stopTest();
 
     // Assertions
    // System.assertNotEquals(0,result.size(),'Violation map should not be empty');
@@ -543,13 +542,12 @@ private class PHOCSAssessmentIndCtrlV2Test {
     }*/
     @isTest
     static void test_completeInspection() {
-        
         Visit inspection = [SELECT Id FROM Visit LIMIT 1];
         String closingComments = 'Inspection completed successfully';
         Datetime startDt = System.now().addHours(-2);
         
         Test.startTest();
-        PHOCSInspectionAssessmentIndControllerV2.completeInspection(inspection.Id,closingComments, null, startDt, false);
+        PHOCSInspectionAssessmentIndControllerV2.completeInspection(inspection.Id, closingComments, null, startDt, false, true, null, false);
         Test.stopTest();
         
         Visit updRecv = [SELECT Id, Status, StatusRemarks, ActualVisitEndTime, PHOCSIsDraft__c FROM Visit WHERE Id =: inspection.Id LIMIT 1];
@@ -673,7 +671,22 @@ private class PHOCSAssessmentIndCtrlV2Test {
     System.assertEquals(null,updatedChild.Result,'Child Result should be reset when parent is Compliant');
     System.assertEquals(false,updatedChild.PHOCSCheckboxResponse__c,'Child checkbox should be reset to false');
 }
-      
+    
+    
+    @isTest
+ 	static void test_inspopeningcomments() {
 
+			Visit inspopcmt = [SELECT Id,InstructionDescription FROM Visit LIMIT 1];
+			String openingComments = 'Inspection Opening Comment';
+		
+			Test.startTest();
+        	PHOCSInspectionAssessmentIndControllerV2.updateOpeningComments(inspopcmt.Id,openingComments);
+    		Test.stopTest();
+		
+		Visit updRecvisit = [SELECT Id, InstructionDescription FROM Visit WHERE Id =: inspopcmt.Id LIMIT 1];
+		
+		
+		System.assertEquals(openingComments, updRecvisit.InstructionDescription,'Opening comments should be saved');
+	}
     
 }
