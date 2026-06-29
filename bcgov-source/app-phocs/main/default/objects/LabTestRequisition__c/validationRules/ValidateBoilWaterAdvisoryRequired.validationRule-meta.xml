@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ValidateBoilWaterAdvisoryRequired</fullName>
+    <active>true</active>
+    <description>Makes Boil Water Advisory mandatory when Sample Type is Drinking Water or Drinking Water Sample.</description>
+    <errorConditionFormula>AND(
+  $RecordType.DeveloperName = &quot;PHOCSWaterLabTestRequisition&quot;,
+  OR(
+    ISPICKVAL(SampleType__c, &quot;Drinking Water&quot;),
+    ISPICKVAL(SampleType__c, &quot;Drinking Water Sample&quot;)
+  ),
+  ISPICKVAL(BoilAdvisory__c, &quot;&quot;)
+)</errorConditionFormula>
+    <errorDisplayField>BoilAdvisory__c</errorDisplayField>
+    <errorMessage>Select a value for Boil Water Advisory when the Sample Type is Drinking water</errorMessage>
+</ValidationRule>
