@@ -3,8 +3,14 @@
     <fullName>SystemType__c</fullName>
     <externalId>false</externalId>
     <formula>IF(
-  FacilityName__r.RecordType.DeveloperName = &quot;DrinkingWaterSystem&quot;,
+  AND(
+    FacilityName__r.RecordType.DeveloperName = &quot;DrinkingWaterSystem&quot;,
+    OR(
+      ISPICKVAL(SampleType__c, &quot;Drinking Water&quot;)
+    )
+  ),
 
+  
   IF( ISPICKVAL(FacilityName__r.CategoryL1__c, &quot;Bulk Water Hauler&quot;), &quot;Drinking Water Hauler&quot;,
     CASE( TEXT(FacilityName__r.NoofConnections__c),
       &quot;1 (WS4)&quot;,             &quot;Public&quot;,
@@ -16,7 +22,7 @@
       &quot;&quot;
     )
   ),
-
+  
   CASE( TEXT(SampleType__c),
     &quot;Marine Water Beach Sample&quot;, &quot;Bathing Beach&quot;,
     &quot;Fresh Water Beach Sample&quot;,  &quot;Bathing Beach&quot;,
