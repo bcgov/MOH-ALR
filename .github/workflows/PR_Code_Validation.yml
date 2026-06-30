@@ -252,23 +252,42 @@ jobs:
       - name: Publish validation summary
         if: always() && steps.delta.outputs.has_changes == 'true'
         run: |
-          COUNT=$(jq -r '[.result.files[]? | "\(.type)/\(.fullName)"] | unique | length' deploy-result.json 2>/dev/null || echo 0)
           RUN=$(jq -r '.result.details.runTestResult.numTestsRun // 0' deploy-result.json 2>/dev/null || echo 0)
           FAIL=$(jq -r '.result.details.runTestResult.numFailures // 0' deploy-result.json 2>/dev/null || echo 0)
+          # Failure detail rows (component errors + Apex test failures), shown only when present.
+          CFAIL=$(jq -r '.result.details.componentFailures[]? | "| <sub>\(.componentType) \(.fullName)</sub> | <sub>\(.problem | gsub("[\\r\\n|]"; " "))</sub> |"' deploy-result.json 2>/dev/null || true)
+          TFAIL=$(jq -r '.result.details.runTestResult.failures[]? | "| <sub>\(.name).\(.methodName)</sub> | <sub>\(.message | gsub("[\\r\\n|]"; " "))</sub> |"' deploy-result.json 2>/dev/null || true)
+          # Summary lists ONLY the components changed in this PR (from the sgd delta package.xml),
+          # not the expanded set that was validated. The full validated set stays in the report.
+          mapfile -t CHANGED < <(awk '
+            /<members>/ { v=$0; sub(/.*<members>/,"",v); sub(/<\/members>.*/,"",v); m[++n]=v }
+            /<name>/    { v=$0; sub(/.*<name>/,"",v);    sub(/<\/name>.*/,"",v);    for (i=1;i<=n;i++) print v"\t"m[i]; n=0 }
+          ' changed-sources/package/package.xml 2>/dev/null)
           {
             echo "### Delta Validation Summary"
             echo ""
             echo "| Metric | Value |"
             echo "| --- | --- |"
-            echo "| <sub>Components validated</sub> | <sub>$COUNT</sub> |"
+            echo "| <sub>Components changed</sub> | <sub>${#CHANGED[@]}</sub> |"
             echo "| <sub>Apex tests run</sub> | <sub>$RUN</sub> |"
             echo "| <sub>Test failures</sub> | <sub>$FAIL</sub> |"
             echo ""
-            echo "#### Components"
+            echo "#### Changed Components"
             echo ""
             echo "| Type | Component |"
             echo "| --- | --- |"
-            jq -r '[.result.files[]?] | unique_by("\(.type)/\(.fullName)") | .[] | "| <sub>\(.type)</sub> | <sub>\(.fullName)</sub> |"' deploy-result.json 2>/dev/null || true
+            for row in "${CHANGED[@]}"; do
+              echo "| <sub>${row%%$'\t'*}</sub> | <sub>${row#*$'\t'}</sub> |"
+            done
+            if [ -n "$CFAIL" ] || [ -n "$TFAIL" ]; then
+              echo ""
+              echo "#### Failures"
+              echo ""
+              echo "| Component / Test | Problem |"
+              echo "| --- | --- |"
+              if [ -n "$CFAIL" ]; then echo "$CFAIL"; fi
+              if [ -n "$TFAIL" ]; then echo "$TFAIL"; fi
+            fi
           } >> "$GITHUB_STEP_SUMMARY"
 
       # === Full validation: manual runs only, when validation_mode=full. Validates the entire codebase. ===
