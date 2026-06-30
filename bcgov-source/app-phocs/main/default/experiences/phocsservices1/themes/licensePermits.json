@@ -1,6 +1,6 @@
 {
   "activeBrandingSetId" : "ce4292d4-4fe5-49bd-8b17-9c125cf8d2be",
-  "customCSS" : ".slds-checkbox .slds-checkbox_faux, .slds-checkbox .slds-checkbox--faux {\n    visibility: hidden !important;\n}\n.custom-btn {\n    transition: all 0.25s ease;\n}\n\n/* Hover state */\n.custom-btn:hover {\n    background-color: #003366 !important;  /* Salesforce blue */\n    color: #ffffff !important;             /* white text */\n    border-color: #0070d2 !important;\n}\n\n\n/********* header****/\n.themeLogo{\n    position: relative;\n    display: flex;\n    align-items: center;\n    gap: 15px;\n}\n\n.themeLogo:after{\n    content: \"Environmental Health Inspection Reports\";\n    color: #fff;\n    font-size: 20px;\n    position: relative;\n    left: 0;\n    top: 0;\n    white-space: nowrap;\n}\n.siteforceServiceBody {\n    display: flex;\n    flex-direction: column;\n    min-height: 100vh;\n}\n\n.siteforceContentArea {\n    flex: 1 0 auto;\n}\n\n.cFooterContainer, footer {\n    flex-shrink: 0;\n}\n.slds-card{\n    border:none !important ;\n}",
+  "customCSS" : "body {\n    width: 100%;\n    overflow-x: hidden;\n    margin: 0;\n    padding: 0;\n}\n.slds-checkbox .slds-checkbox_faux, .slds-checkbox .slds-checkbox--faux {\n    visibility: hidden !important;\n}\n.custom-btn {\n    transition: all 0.25s ease;\n}\n\n/* Hover state */\n.custom-btn:hover {\n    background-color: #003366 !important;  /* Salesforce blue */\n    color: #ffffff !important;             /* white text */\n    border-color: #0070d2 !important;\n}\n\n/********* header****/\n.themeLogo { \n       display: flex; \n       align-items: center; \n       /*gap: 10px; */\n       width: 50%; \n    }\n\n.siteforceServiceBody {\n    display: flex;\n    flex-direction: column;\n    min-height: 100vh;\n}\n\n.siteforceContentArea {\n    flex: 1 0 auto;\n}\n\n.cFooterContainer, footer {\n    flex-shrink: 0;\n}\n.slds-card{\n    border:none !important ; \n}\n.custom-partner-bar {\n        background-color: #003366;\n        text-align: center;\n        width: 100%;\n        border-bottom: 2px solid #FCBA19;\n        border-top: 2px solid #FCBA19;\n        padding: 25px 130px; /* Keeps your text indented on Desktop */\n        box-sizing: border-box; /* Prevents the padding from causing horizontal scrolling */\n   }\n    \n    .custom-partner-text {\n        color: #ffffff; \n        font-size: 14px; \n        margin-bottom: 20px; \n        text-align: left;\n    }\n.partner-logos-container {\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    flex-wrap: wrap;\n    gap: 30px; /* This handles the spacing cleanly instead of using margins */\n}\n\n.partner-logo {\n    height: 40px;\n}\n\n.vch-logo {\n    height: 30px; /* Maintains the slightly smaller height you had for Vancouver Coastal */\n}\n@media (max-width: 1024px) {\n    .themeLogo {\n        flex-direction: column;\n        justify-content: center;\n        align-items: center;\n        text-align: center;\n    }\n    .footer-container {\n        justify-content: center !important;\n        text-align: center !important;\n    }\n\n    .footer-links,\n    .footer-copyright {\n        width: 100%;\n        text-align: center !important;\n    }\n   .custom-partner-bar {\n            padding: 25px 20px !important; /* Shrinks the padding only on smaller screens */\n       }\n       .custom-partner-text {\n            width: 100% !important; /* Forces the text to use the full width, preventing squishing */\n            text-align: center !important;\n       }\n    .partner-logos-container {\n        gap: 20px; /* Slightly tighter spacing for small screens */\n         padding: 25px 90px;\n    }\n}\n@media only screen and (max-width: 767px){\n    .comm-navigation,\n    .forceCommunityNavigationMenu,\n    .slds-context-bar,\n    .slds-context-bar__primary {\n        display: block !important;\n        visibility: visible !important;\n        opacity: 1 !important;\n        height: auto !important;\n        max-height: none !important;\n        overflow: visible !important;\n    }\n\n    .slds-context-bar__item {\n        display: block !important;\n    }\n    \n}",
   "developerName" : "lpi",
   "id" : "8eddad7c-baa2-4715-a2f2-f75ff0626fb0",
   "label" : "License Permits",
@@ -32,9 +32,9 @@
     "type" : "view"
   }, {
     "componentAttributes" : {
-      "fixedPageWidth" : 1321,
+      "fixedPageWidth" : 1440,
       "headerBgColor" : "rgba(0, 0, 0, 0)",
-      "isHeaderPinned" : false,
+      "isHeaderPinned" : true,
       "isHeroUnderHeader" : false,
       "isPageWidthFixed" : true,
       "showHeader" : true,
@@ -72,7 +72,7 @@
           "showAppLauncher" : true,
           "showNotifications" : false,
           "showProfileMenu" : false,
-          "showSearch" : true,
+          "showSearch" : false,
           "topRowHeight" : 13
         },
         "componentName" : "forceCommunity:themeHeaderStacked",
@@ -186,7 +186,7 @@
         "type" : "component"
       }, {
         "componentAttributes" : {
-          "richTextValue" : "<div style=\"\nbackground-color:#003366;\npadding:25px 130px;\ntext-align:center;\nWidth: 100%;\nborder-top:2px solid #FCBA19;\nborder-bottom:2px solid #FCBA19;\">\n    \n    <!-- Top Text -->\n    <p style=\"color:#ffffff; font-size:14px; margin-bottom:20px; text-align:left;\">\n        Thanks to our health authority partners and endorsers:\n    </p>\n\n    <!-- Logos Row -->\n    <div style=\"display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:20px;\">\n        \n        <a href=\"https://www.northernhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/NorthernHealthLogo\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.islandhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/IslandHealth\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.vch.ca/en/health-topics/health-protection-permits-and-licensing\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/VancouverCoastalHealth\" style=\"height:30px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.fraserhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/FraserHealth\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.interiorhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/InterierHealth\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.bccdc.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/BCCDC\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n    </div>\n</div>\n\n\n<div style=\"background-color:#FAFAFA; padding:10px 40px; font-size:13px; color:#201F1E; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; border-top:1px solid #F3F2F1; gap:10px;\">\n    \n    <!-- Left Links -->\n    <div>\n        <a href=\"/phocsservices/s/contact-us\" style=\"margin-right:15px; color:#201F1E; text-decoration:none;\">Contact Us</a>   <span style=\"color:#CCCCCC; padding:0 8px;\">|</span>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/home/copyright/\" target=\"_blank\" style=\"margin-right:15px; color:#333; text-decoration:none;\">Copyright</a>   <span style=\"color:#CCCCCC; padding:0 8px;\">|</span>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/home/disclaimer/\" target=\"_blank\" style=\"margin-right:15px; color:#333; text-decoration:none;\">Disclaimer</a>   <span style=\"color:#CCCCCC; padding:0 8px;\">|</span>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/home/privacy/\" target=\"_blank\" style=\"color:#333; text-decoration:none;\">Privacy</a>\n    </div>\n\n    <!-- Right Copyright -->\n    <div style=\"color:#666;\">\n        Copyright © 2026 Province of British Columbia. All rights reserved.\n    </div>\n\n</div>"
+          "richTextValue" : "<div class=\"custom-partner-bar\">\n    \n    <!-- Top Text -->\n   <div>\n    <p class=\"custom-partner-text\">\n        Thanks to our health authority partners and endorsers:\n    </p>\n    </div>\n    \n\n    <!-- Logos Row -->\n    <div class=\"partner-logos-container\" style=\"display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:20px;\">\n        \n        <a href=\"https://www.northernhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/NorthernHealthLogo\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.islandhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/IslandHealth\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.vch.ca/en/health-topics/health-protection-permits-and-licensing\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/VancouverCoastalHealth\" style=\"height:30px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.fraserhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/FraserHealth\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.interiorhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/InterierHealth\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.bccdc.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/BCCDC\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n    </div>\n</div>\n\n\n<div class=\"footer-container\" style=\"background-color:#FAFAFA; padding:10px 40px; font-size:13px; color:#201F1E; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;row-gap:10px; border-top:1px solid #F3F2F1; gap:10px;\">\n    \n    <!-- Left Links -->\n    <div class=\"footer-links\">\n        <a href=\"/phocsservices/s/contact-us\" style=\"margin-right:15px; color:#201F1E; text-decoration:none;\">Contact Us</a>   <span style=\"color:#CCCCCC; padding:0 8px;\">|</span>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/home/copyright/\" target=\"_blank\" style=\"margin-right:15px; color:#333; text-decoration:none;\">Copyright</a>   <span style=\"color:#CCCCCC; padding:0 8px;\">|</span>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/home/disclaimer/\" target=\"_blank\" style=\"margin-right:15px; color:#333; text-decoration:none;\">Disclaimer</a>   <span style=\"color:#CCCCCC; padding:0 8px;\">|</span>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/home/privacy/\" target=\"_blank\" style=\"color:#333; text-decoration:none;\">Privacy</a>\n    </div>\n\n    <!-- Right Copyright -->\n    <div class=\"footer-copyright\" style=\"color:#666;\">\n        Copyright © 2026 Province of British Columbia. All rights reserved.\n    </div>\n\n</div>"
         },
         "componentName" : "forceCommunity:htmlBlock",
         "id" : "e9c2192c-aea4-4baf-9f5c-7ad9a748adb5",
@@ -220,7 +220,7 @@
           "borderTopColor" : "rgb(252, 186, 25)",
           "bottomRowHeight" : 3,
           "bottomRowOverlayColor" : "rgb(26, 90, 150)",
-          "containHeader" : false,
+          "containHeader" : true,
           "containHeaderWidth" : 1440,
           "dropdownBackgroundColor" : "rgb(26, 90, 150)",
           "dropdownBackgroundHoverColor" : "rgb(0, 51, 102)",
@@ -235,12 +235,12 @@
           "linkHoverColor" : "rgb(255, 255, 255)",
           "linkTextShadowColor" : "rgba(0, 0, 0, 0.5)",
           "logoWidth" : 250,
-          "searchPosition" : "right",
+          "searchPosition" : "left",
           "searchStyle" : "expanded",
           "showAppLauncher" : false,
           "showNotifications" : false,
           "showProfileMenu" : false,
-          "showSearch" : true,
+          "showSearch" : false,
           "topRowHeight" : 13
         },
         "componentName" : "forceCommunity:themeHeaderStacked",
@@ -267,41 +267,6 @@
           "regionName" : "themeHeaderProfileMenu",
           "type" : "region"
         }, {
-          "components" : [ {
-            "componentAttributes" : {
-              "backgroundColor" : "rgb(251, 243, 243)",
-              "borderColor" : "rgba(255, 255, 255, 1)",
-              "borderRadius" : 12,
-              "borderStyle" : "bottomborder",
-              "buttonColor" : "",
-              "buttonHoverColor" : "",
-              "crossObjectTypeaheadApiNames" : [ {
-                "isPublic" : true,
-                "name" : "Account"
-              }, {
-                "isPublic" : true,
-                "name" : "Visit"
-              }, {
-                "isPublic" : true,
-                "name" : "RegulatoryCodeViolation"
-              }, {
-                "isPublic" : true,
-                "name" : "ViolationEnforcementAction"
-              } ],
-              "iconColor" : "rgb(116, 116, 116)",
-              "placeholderText" : "Search by facility name or address",
-              "placeholderTextColor" : "rgb(116, 116, 116)",
-              "showInputFocusOutline" : true,
-              "showSearchButton" : false,
-              "textColor" : "rgba(238, 238, 238, 0.91)",
-              "typeaheadResultMax" : 5,
-              "useTypeahead" : true
-            },
-            "componentName" : "forceCommunity:themeSearch",
-            "id" : "ad04b389-638f-4775-9bb5-db68486a91a8",
-            "renditionMap" : { },
-            "type" : "component"
-          } ],
           "id" : "80252e1d-387f-4838-9643-7b06cd6b0cbf",
           "regionName" : "search",
           "type" : "region"
@@ -414,7 +379,7 @@
     }, {
       "components" : [ {
         "componentAttributes" : {
-          "richTextValue" : "<div style=\"\nbackground-color:#003366;\npadding:25px 130px;\ntext-align:center;\nWidth: 100%;\nborder-top:2px solid #FCBA19;\nborder-bottom:2px solid #FCBA19;\">\n    \n    <!-- Top Text -->\n    <p style=\"color:#ffffff; font-size:14px; margin-bottom:20px; text-align:left;\">\n        Thanks to our health authority partners and endorsers:\n    </p>\n\n    <!-- Logos Row -->\n    <div style=\"display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:20px;\">\n        \n        <a href=\"https://www.northernhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/NorthernHealthLogo\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.islandhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/IslandHealth\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.vch.ca/en/health-topics/health-protection-permits-and-licensing\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/VancouverCoastalHealth\" style=\"height:30px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.fraserhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/FraserHealth\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.interiorhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/InterierHealth\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.bccdc.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/BCCDC\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n    </div>\n</div>\n\n\n<div style=\"background-color:#FAFAFA; padding:10px 40px; font-size:13px; color:#201F1E; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; border-top:1px solid #F3F2F1; gap:10px;\">\n    \n    <!-- Left Links -->\n    <div>\n        <a href=\"/phocsservices/s/contact-us\" style=\"margin-right:15px; color:#201F1E; text-decoration:none;\">Contact Us</a>   <span style=\"color:#CCCCCC; padding:0 8px;\">|</span>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/home/copyright/\" target=\"_blank\" style=\"margin-right:15px; color:#333; text-decoration:none;\">Copyright</a>   <span style=\"color:#CCCCCC; padding:0 8px;\">|</span>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/home/disclaimer/\" target=\"_blank\" style=\"margin-right:15px; color:#333; text-decoration:none;\">Disclaimer</a>   <span style=\"color:#CCCCCC; padding:0 8px;\">|</span>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/home/privacy/\" target=\"_blank\" style=\"color:#333; text-decoration:none;\">Privacy</a>\n    </div>\n\n    <!-- Right Copyright -->\n    <div style=\"color:#666;\">\n        Copyright © 2026 Province of British Columbia. All rights reserved.\n    </div>\n\n</div>"
+          "richTextValue" : "<div class=\"custom-partner-bar\">\n    \n    <!-- Top Text -->\n   <div>\n    <p class=\"custom-partner-text\">\n        Thanks to our health authority partners and endorsers:\n    </p>\n    </div>\n    \n\n    <!-- Logos Row -->\n    <div class=\"partner-logos-container\" style=\"display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:20px;\">\n        \n        <a href=\"https://www.northernhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/NorthernHealthLogo\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.islandhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/IslandHealth\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.vch.ca/en/health-topics/health-protection-permits-and-licensing\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/VancouverCoastalHealth\" style=\"height:30px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.fraserhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/FraserHealth\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.interiorhealth.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/InterierHealth\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n        <a href=\"https://www.bccdc.ca/\" target=\"_blank\">\n            <img src=\"/sfsites/c/resource/BCCDC\" style=\"height:40px;margin:0 15px;\" />\n        </a>\n\n    </div>\n</div>\n\n\n<div class=\"footer-container\" style=\"background-color:#FAFAFA; padding:10px 40px; font-size:13px; color:#201F1E; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;row-gap:10px; border-top:1px solid #F3F2F1; gap:10px;\">\n    \n    <!-- Left Links -->\n    <div class=\"footer-links\">\n        <a href=\"/phocsservices/s/contact-us\" style=\"margin-right:15px; color:#201F1E; text-decoration:none;\">Contact Us</a>   <span style=\"color:#CCCCCC; padding:0 8px;\">|</span>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/home/copyright/\" target=\"_blank\" style=\"margin-right:15px; color:#333; text-decoration:none;\">Copyright</a>   <span style=\"color:#CCCCCC; padding:0 8px;\">|</span>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/home/disclaimer/\" target=\"_blank\" style=\"margin-right:15px; color:#333; text-decoration:none;\">Disclaimer</a>   <span style=\"color:#CCCCCC; padding:0 8px;\">|</span>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/home/privacy/\" target=\"_blank\" style=\"color:#333; text-decoration:none;\">Privacy</a>\n    </div>\n\n    <!-- Right Copyright -->\n    <div class=\"footer-copyright\" style=\"color:#666;\">\n        Copyright © 2026 Province of British Columbia. All rights reserved.\n    </div>\n\n</div>"
         },
         "componentName" : "forceCommunity:htmlBlock",
         "id" : "af22ca8a-2d86-4d9e-ae5a-58e9dcbc1b4b",
