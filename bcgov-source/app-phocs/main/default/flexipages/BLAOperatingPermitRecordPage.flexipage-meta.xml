@@ -648,26 +648,6 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.HeatingCookingHotHoldingRequired__c</fieldItem>
-                <identifier>RecordHeatingCookingHotHoldingRequired_cField2</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Sanitizer__c</fieldItem>
-                <identifier>RecordSanitizer_cField2</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
                 <fieldItem>Record.FoodSafeLevel1Certification__c</fieldItem>
                 <identifier>RecordFoodSafeLevel1Certification_cField</identifier>
             </fieldInstance>
@@ -742,26 +722,6 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.DescriptionOfServices__c</fieldItem>
                 <identifier>RecordDescriptionOfServices_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.FoodsNeedAssembly__c</fieldItem>
-                <identifier>RecordFoodsNeedAssembly_cField2</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.SpecifyFoods__c</fieldItem>
-                <identifier>RecordSpecifyFoods_cField2</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -1851,10 +1811,16 @@
                 <componentName>lst:dynamicRelatedList</componentName>
                 <identifier>lst_dynamicRelatedList2</identifier>
                 <visibilityRule>
+                    <booleanFilter>1 OR 2</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.LicenseType.Name}</leftValue>
-                        <operator>CONTAINS</operator>
+                        <operator>EQUAL</operator>
                         <rightValue>Temporary Food Service Permit</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.LicenseType.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Food Premise Operating Permit</rightValue>
                     </criteria>
                 </visibilityRule>
             </componentInstance>
