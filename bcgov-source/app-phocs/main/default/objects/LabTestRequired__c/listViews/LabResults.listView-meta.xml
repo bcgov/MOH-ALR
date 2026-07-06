@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LabResults</fullName>
+    <columns>NAME</columns>
+    <columns>LabTestRequisition__c</columns>
+    <columns>ResultValue__c</columns>
+    <columns>Test__c</columns>
+    <columns>TestDate__c</columns>
+    <columns>Method__c</columns>
+    <columns>UnitOfMeasure__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>CREATED_DATE</field>
+        <operation>equals</operation>
+        <value>LAST_N_DAYS:30</value>
+    </filters>
+    <label>Lab Results</label>
+    <sharedTo>
+        <group>EHISUsersPG</group>
+        <group>EHIS_Officer_Users_PG</group>
+        <group>EHIS_Water_Admin_Users_PG</group>
+    </sharedTo>
+</ListView>
