@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_DWS_From_Account</name>
+        <label>DWS Is Account</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <assignmentItems>
+            <assignToReference>dwsId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.AccountId</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Needs_Sync</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_DWS_From_Related</name>
+        <label>DWS Is Related Account</label>
+        <locationX>314</locationX>
+        <locationY>431</locationY>
+        <assignmentItems>
+            <assignToReference>dwsId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.RelatedAccountId</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Needs_Sync</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Check_DWS_Side</name>
+        <label>Which Side Is The DWS</label>
+        <locationX>182</locationX>
+        <locationY>323</locationY>
+        <defaultConnector>
+            <targetReference>Assign_DWS_From_Related</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Related Account is the DWS</defaultConnectorLabel>
+        <rules>
+            <name>Account_Is_DWS</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RelatedAccountRecordType__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>DrinkingWaterSourceIntake</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_DWS_From_Account</targetReference>
+            </connector>
+            <label>Account is the DWS</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Needs_Sync</name>
+        <label>Inverse Needs Sync</label>
+        <locationX>182</locationX>
+        <locationY>623</locationY>
+        <defaultConnector>
+            <targetReference>Call_Recalculate</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Already In Sync</defaultConnectorLabel>
+        <rules>
+            <name>Needs_Sync</name>
+            <conditionLogic>1 AND 2</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RelatedInverseRecordId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RelatedInverseRecordIsActive__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>$Record.IsActive</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Inverse</targetReference>
+            </connector>
+            <label>Needs Sync</label>
+        </rules>
+    </decisions>
+    <description>EHIS-4616: On an intake-DWS AAR IsActive change (either record), syncs the inverse record&apos;s IsActive and recalculates the DWS&apos;s Water Source Category.</description>
+    <environments>Default</environments>
+    <interviewLabel>PHOCS AAR Recalculate Water Source Category {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>PHOCS AAR Recalculate Water Source Category</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_Inverse</name>
+        <label>Sync Inverse IsActive</label>
+        <locationX>50</locationX>
+        <locationY>731</locationY>
+        <connector>
+            <targetReference>Call_Recalculate</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.RelatedInverseRecordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>IsActive</field>
+            <value>
+                <elementReference>$Record.IsActive</elementReference>
+            </value>
+        </inputAssignments>
+        <object>AccountAccountRelation</object>
+    </recordUpdates>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_DWS_Side</targetReference>
+        </connector>
+        <filterLogic>1 OR 2</filterLogic>
+        <filters>
+            <field>RelatedAccountRecordType__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>DrinkingWaterSourceIntake</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>RelatedAccountRecordType__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>DrinkingWaterSystem</stringValue>
+            </value>
+        </filters>
+        <object>AccountAccountRelation</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>Call_Recalculate</name>
+        <label>Call Recalculate</label>
+        <locationX>182</locationX>
+        <locationY>923</locationY>
+        <flowName>PHOCS_Recalculate_Water_Source_Category</flowName>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>dwsId</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <variables>
+        <name>dwsId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>
