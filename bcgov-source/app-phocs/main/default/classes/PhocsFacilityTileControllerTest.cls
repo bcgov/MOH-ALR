@@ -1,29 +1,131 @@
-@isTest(SeeAllData=true)
+@isTest
 private class PhocsFacilityTileControllerTest {
-    
-    @isTest
-    static void getAccounts() {
-        
-        User portalUser = [
-            SELECT Id, AccountId
+    @TestSetup
+    static void setupData() {
+
+        User owner = [
+            SELECT Id
             FROM User
-            WHERE Profile.Name = 'Customer Community Operator'
+            WHERE UserRoleId != null
             LIMIT 1
         ];
-        
+
+        RegulatoryAuthorizationType reg =
+            new RegulatoryAuthorizationType(
+                Name = 'Test Reg Type'
+            );
+        insert reg;
+
+        RecordType businessEntityRT = [
+            SELECT Id
+            FROM RecordType
+            WHERE SObjectType='Account'
+            AND DeveloperName='Business_Entity'
+            LIMIT 1
+        ];
+
+        RecordType facilityRT = [
+            SELECT Id
+            FROM RecordType
+            WHERE SObjectType='Account'
+            AND DeveloperName='Facility'
+            LIMIT 1
+        ];
+
+        // Business Entity
+        Account businessEntity = new Account(
+            Name='Business Entity',
+            RecordTypeId=businessEntityRT.Id,
+            Status__c='Open',
+            LicenseType__c=reg.Id,
+            OwnerId=owner.Id
+        );
+        insert businessEntity;
+
+        // Facility 1
+        Account facility1 = new Account(
+            Name='Facility One',
+            RecordTypeId=facilityRT.Id,
+            Status__c='Pending',
+            LicenseType__c=reg.Id,
+            ParentAccount__c=businessEntity.Id,
+            OwnerId=owner.Id
+        );
+
+        // Facility 2
+        Account facility2 = new Account(
+            Name='Facility Two',
+            RecordTypeId=facilityRT.Id,
+            Status__c='Pending',
+            LicenseType__c=reg.Id,
+            ParentAccount__c=businessEntity.Id,
+            OwnerId=owner.Id
+        );
+
+        insert new List<Account>{facility1,facility2};
+   
+
+        Contact con = new Contact(
+            LastName='Portal User',
+            AccountId=businessEntity.Id,
+            Email='portal@test.com'
+        );
+        insert con;
+
+        Profile p = [
+            SELECT Id
+            FROM Profile
+            WHERE Name='Customer Community Operator'
+            LIMIT 1
+        ];
+
+        String unique = String.valueOf(System.currentTimeMillis());
+
+        User portalUser = new User(
+            Alias='ptur',
+            Email='portal'+unique+'@test.com',
+            EmailEncodingKey='UTF-8',
+            LastName='Portal',
+            LanguageLocaleKey='en_US',
+            LocaleSidKey='en_US',
+            ProfileId=p.Id,
+            TimeZoneSidKey='America/New_York',
+            CommunityNickname='portal'+unique,
+            Username='portal'+unique+'@test.com',
+            ContactId=con.Id
+        );
+
+        insert portalUser;
+    }
+
+    @isTest
+    static void getFacilitiesTest() {
+
+        User portalUser = [
+            SELECT Id
+            FROM User
+            WHERE Alias='ptur'
+            LIMIT 1
+        ];
+		PermissionSetGroup psg = [SELECT Id, DeveloperName FROM PermissionSetGroup WHERE DeveloperName = 'PHOCSOperatorPSG' LIMIT 1];
+		PermissionSetAssignment psa = new PermissionSetAssignment(
+                AssigneeId = portalUser.Id,
+                PermissionSetGroupId = psg.Id
+            );
+        insert psa;
+		Test.calculatePermissionSetGroup(new Id[] { psg.Id });
+
         Test.startTest();
-        
-        System.runAs(portalUser) {
-            List<Account> facilities = PhocsFacilityTileController.getfacilities();
-            
-            System.assert(facilities.size() > 0,'Expected at least one facility.');
-            
-            for (Account acc : facilities) {
-                System.assertNotEquals(null, acc.Id);
-                System.assertNotEquals(null, acc.Name);
-            }
+
+        System.runAs(portalUser){
+
+            List<Account> facilities =
+                PhocsFacilityTileController.getfacilities();
+
+            System.assertEquals(2, facilities.size());
+
         }
-        
+
         Test.stopTest();
     }
 }
