@@ -160,9 +160,22 @@ jobs:
           echo "Validating these paths (objects/lwc/aura expanded for dependency checks):"
           for p in "${!PATHS[@]}"; do echo "  - $p"; ARGS+=(--source-dir "$p"); done
 
-          # Native, human-readable output (--verbose, no --json)
+          # Native, human-readable output (--verbose, no --json).
+          set +e
           sf project deploy start "${ARGS[@]}" \
             --wait 60 --dry-run --test-level RunLocalTests --verbose -g --target-org CI01
+          RC=$?
+          set -e
+          # On failure, print component errors + Apex test failures right here in the log
+          # (the --verbose deploy output doesn't always surface the assertion detail clearly).
+          if [ $RC -ne 0 ]; then
+            echo "===== FAILURES ====="
+            sf project deploy report --use-most-recent --json 2>/dev/null | jq -r '
+              .result.details.componentFailures[]? | "\(.componentType) \(.fullName): \(.problem)",
+              .result.details.runTestResult.failures[]?  | "\(.name).\(.methodName): \(.message)"
+            ' || true
+          fi
+          exit $RC
 
       # === Capture the just-completed validation as JSON for the report/artifacts/summary ===
       - name: Capture validation result (JSON)
