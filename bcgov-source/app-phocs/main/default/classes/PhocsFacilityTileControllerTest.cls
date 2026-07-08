@@ -1,6 +1,6 @@
 @isTest
 private class PhocsFacilityTileControllerTest {
-     @TestSetup
+    @TestSetup
     static void setupData() {
         
         User owner = [
@@ -106,15 +106,18 @@ private class PhocsFacilityTileControllerTest {
             WHERE Alias='ptur'
             LIMIT 1
         ];
-        PermissionSetGroup psg = [SELECT Id, DeveloperName FROM PermissionSetGroup WHERE DeveloperName = 'PHOCSOperatorPSG' LIMIT 1];
         
-        PermissionSetAssignment psa = new PermissionSetAssignment(
+        PermissionSet ps = [
+            SELECT Id
+            FROM PermissionSet
+            WHERE Name = 'PHOCSOperatorUserCREPS'
+            LIMIT 1
+        ];
+        
+        insert new PermissionSetAssignment(
             AssigneeId = portalUser.Id,
-            PermissionSetGroupId = psg.Id
+            PermissionSetId = ps.Id
         );
-        insert psa;
-        Test.calculatePermissionSetGroup(new Id[] { psg.Id });
-        
         Test.startTest();
         
         System.runAs(portalUser){
@@ -128,5 +131,5 @@ private class PhocsFacilityTileControllerTest {
         
         Test.stopTest();
     }
-
+    
 }
