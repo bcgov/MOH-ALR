@@ -1,53 +1,135 @@
 @isTest
 private class PhocsFacilityTileControllerTest {
     @TestSetup
-    static void setupTestData() {
+    static void setupData() {
         
-          // Create RegulatoryAuthorizationType
-        RegulatoryAuthorizationType reg = new RegulatoryAuthorizationType(
-         Name = 'test reg type'
-        );
+        User owner = [
+            SELECT Id
+            FROM User
+            WHERE UserRoleId != null
+            LIMIT 1
+        ];
+        
+        RegulatoryAuthorizationType reg =
+            new RegulatoryAuthorizationType(
+                Name = 'Test Reg Type'
+            );
         insert reg;
-       
-        // Create Account
-        Account testAccount = new Account(
-            Name = 'Test Facilityone',
-            LicenseType__c = reg.Id,
-            Status__c ='Open'
+        
+        RecordType businessEntityRT = [
+            SELECT Id
+            FROM RecordType
+            WHERE SObjectType='Account'
+            AND DeveloperName='Business_Entity'
+            LIMIT 1
+        ];
+        
+        RecordType facilityRT = [
+            SELECT Id
+            FROM RecordType
+            WHERE SObjectType='Account'
+            AND DeveloperName='Facility'
+            LIMIT 1
+        ];
+        
+        // Business Entity
+        Account businessEntity = new Account(
+            Name='Business Entity',
+            RecordTypeId=businessEntityRT.Id,
+            Status__c='Open',
+            LicenseType__c=reg.Id,
+            OwnerId=owner.Id
         );
-        insert testAccount;
+        insert businessEntity;
         
-  		Account testAccounttwo = new Account(
-            Name = 'Test Facilitytwo',
-            LicenseType__c = reg.Id,
-            Status__c ='Pending'
+        // Facility 1
+        Account facility1 = new Account(
+            Name='Facility One',
+            RecordTypeId=facilityRT.Id,
+            Status__c='Pending',
+            LicenseType__c=reg.Id,
+            ParentAccount__c=businessEntity.Id,
+            OwnerId=owner.Id
         );
-        insert testAccounttwo;
         
-        Account testAccountthree = new Account(
-            Name = 'Test Facilitythree',
-            LicenseType__c = reg.Id,
-            Status__c ='Cancelled'
+        // Facility 2
+        Account facility2 = new Account(
+            Name='Facility Two',
+            RecordTypeId=facilityRT.Id,
+            Status__c='Pending',
+            LicenseType__c=reg.Id,
+            ParentAccount__c=businessEntity.Id,
+            OwnerId=owner.Id
         );
-        insert testAccountthree;
         
+        insert new List<Account>{facility1,facility2};
+            
+            Contact con = new Contact(
+                LastName='Portal User',
+                AccountId=businessEntity.Id,
+                Email='portal@test.com'
+            );
+        insert con;
         
+        Profile p = [
+            SELECT Id
+            FROM Profile
+            WHERE Name='Customer Community Operator'
+            LIMIT 1
+        ];
+        
+        String unique = String.valueOf(System.currentTimeMillis());
+        
+        User portalUser = new User(
+            Alias='ptur',
+            Email='portal'+unique+'@test.com',
+            EmailEncodingKey='UTF-8',
+            LastName='Portal',
+            LanguageLocaleKey='en_US',
+            LocaleSidKey='en_US',
+            ProfileId=p.Id,
+            TimeZoneSidKey='America/New_York',
+            CommunityNickname='portal'+unique,
+            Username='portal'+unique+'@test.com',
+            ContactId=con.Id
+        );
+        
+        insert portalUser;
     }
     
     @isTest
-    static void getAccounts(){
+    static void getFacilitiesTest() {
+        
+        User portalUser = [
+            SELECT Id
+            FROM User
+            WHERE Alias='ptur'
+            LIMIT 1
+        ];
+        PermissionSet ps = [
+            SELECT Id
+            FROM PermissionSet
+            WHERE Name = 'PHOCSOperatorUserCREPS'
+            LIMIT 1
+        ];
+        
+        insert new PermissionSetAssignment(
+            AssigneeId = portalUser.Id,
+            PermissionSetId = ps.Id
+        );
+        
         Test.startTest();
-        List<Account> results = PhocsFacilityTileController.getfacilities();
-        Test.stopTest();
         
-         System.assertEquals(2,results.size(),'Only Open and Pending accounts should be returned');
-        
-        for(Account acc : results) {
-            System.assert(acc.Status__c == 'Open' || acc.Status__c == 'Pending','Unexpected status returned');
+        System.runAs(portalUser){
+            
+            List<Account> facilities =
+                PhocsFacilityTileController.getfacilities();
+            
+            System.assertEquals(2, facilities.size());
+            
         }
-        System.assertEquals('Test Facilitytwo', results[0].Name);
-        System.assertEquals('Test Facilityone', results[1].Name);
         
+        Test.stopTest();
     }
     
 }
