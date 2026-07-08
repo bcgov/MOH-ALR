@@ -64,7 +64,6 @@ private class PhocsFacilityTileControllerTest {
         
         insert new List<Account>{facility1,facility2};
             
-            
             Contact con = new Contact(
                 LastName='Portal User',
                 AccountId=businessEntity.Id,
@@ -108,13 +107,13 @@ private class PhocsFacilityTileControllerTest {
             LIMIT 1
         ];
         PermissionSetGroup psg = [SELECT Id, DeveloperName FROM PermissionSetGroup WHERE DeveloperName = 'PHOCSOperatorPSG' LIMIT 1];
-        Test.calculatePermissionSetGroup(new Id[] { psg.Id });
+        
         PermissionSetAssignment psa = new PermissionSetAssignment(
             AssigneeId = portalUser.Id,
             PermissionSetGroupId = psg.Id
         );
         insert psa;
-        
+        Test.calculatePermissionSetGroup(new Id[] { psg.Id });
         
         Test.startTest();
         
