@@ -2,20 +2,20 @@
 private class PhocsFacilityTileControllerTest {
     @TestSetup
     static void setupData() {
-
+        
         User owner = [
             SELECT Id
             FROM User
             WHERE UserRoleId != null
             LIMIT 1
         ];
-
+        
         RegulatoryAuthorizationType reg =
             new RegulatoryAuthorizationType(
                 Name = 'Test Reg Type'
             );
         insert reg;
-
+        
         RecordType businessEntityRT = [
             SELECT Id
             FROM RecordType
@@ -23,7 +23,7 @@ private class PhocsFacilityTileControllerTest {
             AND DeveloperName='Business_Entity'
             LIMIT 1
         ];
-
+        
         RecordType facilityRT = [
             SELECT Id
             FROM RecordType
@@ -31,7 +31,7 @@ private class PhocsFacilityTileControllerTest {
             AND DeveloperName='Facility'
             LIMIT 1
         ];
-
+        
         // Business Entity
         Account businessEntity = new Account(
             Name='Business Entity',
@@ -41,7 +41,7 @@ private class PhocsFacilityTileControllerTest {
             OwnerId=owner.Id
         );
         insert businessEntity;
-
+        
         // Facility 1
         Account facility1 = new Account(
             Name='Facility One',
@@ -51,7 +51,7 @@ private class PhocsFacilityTileControllerTest {
             ParentAccount__c=businessEntity.Id,
             OwnerId=owner.Id
         );
-
+        
         // Facility 2
         Account facility2 = new Account(
             Name='Facility Two',
@@ -61,26 +61,26 @@ private class PhocsFacilityTileControllerTest {
             ParentAccount__c=businessEntity.Id,
             OwnerId=owner.Id
         );
-
+        
         insert new List<Account>{facility1,facility2};
-   
-
-        Contact con = new Contact(
-            LastName='Portal User',
-            AccountId=businessEntity.Id,
-            Email='portal@test.com'
-        );
+            
+            
+            Contact con = new Contact(
+                LastName='Portal User',
+                AccountId=businessEntity.Id,
+                Email='portal@test.com'
+            );
         insert con;
-
+        
         Profile p = [
             SELECT Id
             FROM Profile
             WHERE Name='Customer Community Operator'
             LIMIT 1
         ];
-
+        
         String unique = String.valueOf(System.currentTimeMillis());
-
+        
         User portalUser = new User(
             Alias='ptur',
             Email='portal'+unique+'@test.com',
@@ -94,38 +94,39 @@ private class PhocsFacilityTileControllerTest {
             Username='portal'+unique+'@test.com',
             ContactId=con.Id
         );
-
+        
         insert portalUser;
     }
-
+    
     @isTest
     static void getFacilitiesTest() {
-
+        
         User portalUser = [
             SELECT Id
             FROM User
             WHERE Alias='ptur'
             LIMIT 1
         ];
-		PermissionSetGroup psg = [SELECT Id, DeveloperName FROM PermissionSetGroup WHERE DeveloperName = 'PHOCSOperatorPSG' LIMIT 1];
-		PermissionSetAssignment psa = new PermissionSetAssignment(
-                AssigneeId = portalUser.Id,
-                PermissionSetGroupId = psg.Id
-            );
+        PermissionSetGroup psg = [SELECT Id, DeveloperName FROM PermissionSetGroup WHERE DeveloperName = 'PHOCSOperatorPSG' LIMIT 1];
+        Test.calculatePermissionSetGroup(new Id[] { psg.Id });
+        PermissionSetAssignment psa = new PermissionSetAssignment(
+            AssigneeId = portalUser.Id,
+            PermissionSetGroupId = psg.Id
+        );
         insert psa;
-		Test.calculatePermissionSetGroup(new Id[] { psg.Id });
-
+        
+        
         Test.startTest();
-
+        
         System.runAs(portalUser){
-
+            
             List<Account> facilities =
                 PhocsFacilityTileController.getfacilities();
-
+            
             System.assertEquals(2, facilities.size());
-
+            
         }
-
+        
         Test.stopTest();
     }
 }
