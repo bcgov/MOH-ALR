@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>TotalFeePaid__c</fullName>
+    <label>Total Fee Paid</label>
+    <summarizedField>RegulatoryTrxnFeeItem.FeeAmount</summarizedField>
+    <summaryFilterItems>
+        <field>RegulatoryTrxnFeeItem.Status__c</field>
+        <operation>equals</operation>
+        <value>Paid</value>
+    </summaryFilterItems>
+    <summaryForeignKey>RegulatoryTrxnFeeItem.RegulatoryTrxnFeeId</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <type>Summary</type>
+</CustomField>
