@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RestrictChildResidentialCareCaseByHA</fullName>
+    <active>true</active>
+    <description>Blocks PHOCS Admin and Officer users from creating or updating Child Care and Residential Care investigation Cases outside their authorized Health Authority.</description>
+    <errorConditionFormula>AND(
+    NOT($Permission.EHISBypassValidationRuleCustomPermission),
+    OR(
+        RecordType.DeveloperName = &apos;PHOCSComplaint&apos;,
+        RecordType.DeveloperName = &apos;PHOCSReportableIncident&apos;
+    ),
+    OR(
+        ISPICKVAL(Topic__c, "Child Care"),
+        ISPICKVAL(Topic__c, "Residential Care")
+    ),
+    NOT(
+        OR(
+            AND(
+                ISPICKVAL(Account.HealthAuthority__c, &apos;Fraser Health - FH&apos;),
+                $Permission.PHOCSFHAChildCareResidentialCareAccess
+            ),
+            AND(
+                ISPICKVAL(Account.HealthAuthority__c, &apos;Interior Health - IH&apos;),
+                $Permission.PHOCSIHAChildCareResidentialCareAccess
+            ),
+            AND(
+                ISPICKVAL(Account.HealthAuthority__c, &apos;Northern Health - NH&apos;),
+                $Permission.PHOCSNHAChildCareResidentialCareAccess
+            ),
+            AND(
+                ISPICKVAL(Account.HealthAuthority__c, &apos;Vancouver Coastal Health - VCH&apos;),
+                $Permission.PHOCSVCHChildCareResidentialCareAccess
+            ),
+            AND(
+                ISPICKVAL(Account.HealthAuthority__c, &apos;Island Health - Island&apos;),
+                $Permission.PHOCSVIHAChildCareResidentialCareAccess
+            )
+        )
+    )
+)</errorConditionFormula>
+    <errorMessage>You do not have permission to create or edit a Case for this Health Authority.</errorMessage>
+</ValidationRule>
