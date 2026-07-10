@@ -49,6 +49,7 @@ public with sharing class ContentDocumentLinkTriggerHandler {
             Schema.SObjectType.BusinessLicenseApplication.getRecordTypeInfosByDeveloperName().get('OperatingPermitApplication').getRecordTypeId(),
             //RegulatoryTrxnFee
             Schema.SObjectType.RegulatoryTrxnFee.getRecordTypeInfosByDeveloperName().get('PHOCSTransactionFee').getRecordTypeId(),
+            Schema.SObjectType.RegulatoryTrxnFee.getRecordTypeInfosByDeveloperName().get('PHOCSNonDairyTransactionFee').getRecordTypeId(),
             //DocumentChecklistItem
             Schema.SObjectType.DocumentChecklistItem.getRecordTypeInfosByDeveloperName().get('PHOCSDocumentChecklist').getRecordTypeId(),
             Schema.SObjectType.DocumentChecklistItem.getRecordTypeInfosByDeveloperName().get('PHOCSDrawingPlanDocumentChecklist').getRecordTypeId(),     

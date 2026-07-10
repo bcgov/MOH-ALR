@@ -8,7 +8,7 @@
     </values>
     <values>
         <field>ObjectQuery__c</field>
-        <value xsi:type="xsd:string">SELECT Name, AccountName__c, Status, TotalFeeAmount, RecordType.DeveloperName FROM RegulatoryTrxnFee WHERE Status IN (&apos;Due&apos;, &apos;Paid&apos;) AND RecordType.DeveloperName = &apos;PHOCSTransactionFee&apos; ORDER BY Status ASC</value>
+        <value xsi:type="xsd:string">SELECT Name, AccountName__c, Status, TotalFeeAmount, Account.Type , RecordType.DeveloperName FROM RegulatoryTrxnFee WHERE Status IN (&apos;Due&apos;, &apos;Paid&apos;)  AND RecordType.DeveloperName IN (&apos;PHOCSTransactionFee&apos;,&apos;PHOCSNonDairyTransactionFee&apos;) ORDER BY Status ASC</value>
     </values>
     <values>
         <field>ParentFieldAPIName__c</field>
