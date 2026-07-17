@@ -1,0 +1,159 @@
+<template>
+    <div class="slds-grid slds-grid_align-end slds-m-bottom_medium">
+        <lightning-button
+            label="Add Regulatory Code"
+            title="Add Regulatory Code"
+            variant="brand"
+            icon-name="utility:add"
+            onclick={handleOpenModal}>
+        </lightning-button>
+    </div>
+
+    <template if:true={isModalOpen}>
+        <section
+            role="dialog"
+            tabindex="-1"
+            aria-modal="true"
+            aria-labelledby="regulatory-code-modal-heading"
+            class="slds-modal slds-fade-in-open slds-modal_large">
+
+            <div class="slds-modal__container">
+                <!-- Modal Header -->
+                <header class="slds-modal__header">
+                    <lightning-button-icon
+                        class="slds-modal__close"
+                        icon-name="utility:close"
+                        alternative-text="Close"
+                        title="Close"
+                        variant="bare"
+                        onclick={handleCloseModal}>
+                    </lightning-button-icon>
+
+                    <h2
+                        id="regulatory-code-modal-heading"
+                        class="slds-text-heading_medium">
+                        Add Regulatory Code
+                    </h2>
+
+                    <template if:true={accountType}>
+                        <p class="slds-m-top_x-small slds-text-body_small">
+                            Account Type: <strong>{accountType}</strong>
+                        </p>
+                    </template>
+                </header>
+
+                <!-- Modal Body -->
+                <div class="slds-modal__content slds-p-around_medium">
+                    <template if:true={isLoading}>
+                        <lightning-spinner
+                            alternative-text="Loading Regulatory Codes"
+                            size="medium">
+                        </lightning-spinner>
+                    </template>
+
+                    <template if:false={isLoading}>
+                        <!-- Search and Filters -->
+                        <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-3">
+                                <lightning-input
+                                    type="search"
+                                    label="Search Regulatory Codes"
+                                    placeholder="Search Regulatory Code or Description"
+                                    value={searchTerm}
+                                    onchange={handleSearchChange}>
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                <lightning-combobox
+                                    name="regulatoryAuthority"
+                                    label="Regulatory Authority"
+                                    value={selectedAuthority}
+                                    options={authorityOptions}
+                                    onchange={handleAuthorityChange}>
+                                </lightning-combobox>
+                            </div>
+                        </div>
+
+                        <!-- Result Information -->
+                        <div class="slds-grid slds-wrap slds-grid_align-spread slds-m-bottom_x-small">
+                            <div>
+                                <span>{filteredRecordCount} Regulatory Code(s)</span>
+                            </div>
+                            <div>
+                                <span>{selectedRecordCount} selected</span>
+                            </div>
+                        </div>
+
+                        <!-- Data Table -->
+                        <template if:true={hasRecords}>
+                            <lightning-datatable
+                                key-field="regulatoryCodeId"
+                                data={paginatedRecords}
+                                columns={columns}
+                                selected-rows={selectedRowsOnCurrentPage}
+                                sorted-by={sortBy}
+                                sorted-direction={sortDirection}
+                                onsort={handleSort}
+                                onrowselection={handleRowSelection}>
+                            </lightning-datatable>
+
+                            <!-- Pagination -->
+                            <div class="slds-grid slds-wrap slds-grid_align-spread slds-grid_vertical-align-center slds-m-top_medium">
+                                <div>
+                                    <lightning-button
+                                        label="Previous"
+                                        icon-name="utility:chevronleft"
+                                        disabled={disablePrevious}
+                                        onclick={handlePrevious}>
+                                    </lightning-button>
+                                </div>
+
+                                <div>
+                                    Page {currentPage} of {totalPages}
+                                </div>
+
+                                <div>
+                                    <lightning-button
+                                        label="Next"
+                                        icon-name="utility:chevronright"
+                                        icon-position="right"
+                                        disabled={disableNext}
+                                        onclick={handleNext}>
+                                    </lightning-button>
+                                </div>
+                            </div>
+                        </template>
+
+                        <!-- No Records -->
+                        <template if:false={hasRecords}>
+                            <div class="slds-align_absolute-center slds-p-around_large">
+                                No eligible Regulatory Codes were found.
+                            </div>
+                        </template>
+                    </template>
+                </div>
+
+                <!-- Modal Footer -->
+                <footer class="slds-modal__footer">
+                    <lightning-button
+                        label="Cancel"
+                        title="Cancel"
+                        onclick={handleCloseModal}>
+                    </lightning-button>
+
+                    <lightning-button
+                        class="slds-m-left_small"
+                        label="Save"
+                        title="Save"
+                        variant="brand"
+                        disabled={disableSave}
+                        onclick={handleSave}>
+                    </lightning-button>
+                </footer>
+            </div>
+        </section>
+
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

@@ -81,7 +81,6 @@
                 <identifier>runtime_sales_pathassistant_pathAssistant</identifier>
             </componentInstance>
         </itemInstances>
-        <mode>Replace</mode>
         <name>header</name>
         <type>Region</type>
     </flexiPageRegions>
@@ -552,6 +551,19 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.SectionOfActRegulation__c</fieldItem>
                 <identifier>RecordSectionOfActRegulation_cField</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.Account.Type}</leftValue>
+                        <operator>NE</operator>
+                        <rightValue>Residential Care</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Account.Type}</leftValue>
+                        <operator>NE</operator>
+                        <rightValue>Child Care</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <name>Facet-b9b3100f-a29b-48c7-960a-7576a8115d29</name>
@@ -944,7 +956,6 @@
                 <identifier>force_recordDetailPanelMobile</identifier>
             </componentInstance>
         </itemInstances>
-        <mode>Replace</mode>
         <name>detailTabContent</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -1055,7 +1066,6 @@
                 <identifier>flexipage_tab2</identifier>
             </componentInstance>
         </itemInstances>
-        <mode>Replace</mode>
         <name>maintabs</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -1074,11 +1084,118 @@
                 <identifier>flexipage_tabset</identifier>
             </componentInstance>
         </itemInstances>
-        <mode>Replace</mode>
-        <name>main</name>
+        <name>leftcol</name>
         <type>Region</type>
     </flexiPageRegions>
     <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentName>phocsAddRegulatoryCode</componentName>
+                <identifier>c_phocsAddRegulatoryCode</identifier>
+                <visibilityRule>
+                    <booleanFilter>(1 OR 2) AND 3 AND 4</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.Account.Type}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Residential Care</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Account.Type}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Child Care</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.ExemptionType__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Regulation/Act requirement</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Open</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>actionNames</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>adminFilters</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>maxRecordsToDisplay</name>
+                    <value>10</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>parentFieldApiName</name>
+                    <value>BusinessLicenseApplication.Id</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListApiName</name>
+                    <value>BusinessApplicationRegulatory_Codes__r</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListDisplayType</name>
+                    <value>ADVGRID</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListFieldAliases</name>
+                    <valueList>
+                        <valueListItems>
+                            <value>RegulatoryAuthority__c</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>NAME</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Subject__c</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Status__c</value>
+                        </valueListItems>
+                    </valueList>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListLabel</name>
+                    <value>Exemption Regulatory Codes</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>showActionBar</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>sortFieldAlias</name>
+                    <value>__DEFAULT__</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>sortFieldOrder</name>
+                    <value>Default</value>
+                </componentInstanceProperties>
+                <componentName>lst:dynamicRelatedList</componentName>
+                <identifier>lst_dynamicRelatedList</identifier>
+                <visibilityRule>
+                    <booleanFilter>(1 OR 2) AND 3</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.Account.Type}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Residential Care</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Account.Type}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Child Care</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.ExemptionType__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Regulation/Act requirement</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </componentInstance>
+        </itemInstances>
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
@@ -1099,15 +1216,13 @@
                 <identifier>runtime_sales_activities_activityPanel</identifier>
             </componentInstance>
         </itemInstances>
-        <mode>Replace</mode>
-        <name>sidebar</name>
+        <name>rightcol</name>
         <type>Region</type>
     </flexiPageRegions>
     <masterLabel>Exemptions Record Page</masterLabel>
-    <parentFlexiPage>flexipage__default_rec_L</parentFlexiPage>
     <sobjectType>BusinessLicenseApplication</sobjectType>
     <template>
-        <name>flexipage:recordHomeTemplateDesktop</name>
+        <name>flexipage:recordHomeTwoColEqualHeaderTemplateDesktop</name>
     </template>
     <type>RecordPage</type>
 </FlexiPage>

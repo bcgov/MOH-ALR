@@ -3,21 +3,24 @@
     <fullName>MakeParentMandatoryForActiveFacility</fullName>
     <active>true</active>
     <errorConditionFormula>OR(
-    AND(
-        ISPICKVAL(Status__c, &quot;Open&quot;),
-        $RecordType.DeveloperName = &quot;Facility&quot;,
-        ISBLANK(ParentAccount__c)
-    ),
-    AND(
-        ISPICKVAL(Status__c, &quot;Open&quot;),
-        $RecordType.DeveloperName = &quot;PHOCSDairyFacility&quot;,
-        ISBLANK(ParentAccount__c)
-    ),
-    AND(
-        ISPICKVAL(Status__c, &quot;Open&quot;),
-        $RecordType.DeveloperName = &quot;DrinkingWaterSystem&quot;,
-        ISBLANK(ParentAccount__c)
-    )
+AND(
+ISPICKVAL(Status__c, &quot;Open&quot;),
+$RecordType.DeveloperName = &quot;Facility&quot;,
+ISBLANK(ParentAccount__c), 
+ISBLANK(SourceSystemIdentifier)
+),
+AND(
+ISPICKVAL(Status__c, &quot;Open&quot;),
+$RecordType.DeveloperName = &quot;PHOCSDairyFacility&quot;,
+ISBLANK(ParentAccount__c), 
+ISBLANK(SourceSystemIdentifier)
+),
+AND(
+ISPICKVAL(Status__c, &quot;Open&quot;),
+$RecordType.DeveloperName = &quot;DrinkingWaterSystem&quot;,
+ISBLANK(ParentAccount__c), 
+ISBLANK(SourceSystemIdentifier)
+)
 )</errorConditionFormula>
     <errorDisplayField>ParentAccount__c</errorDisplayField>
     <errorMessage>Populate parent for active facilities</errorMessage>

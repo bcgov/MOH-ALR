@@ -467,7 +467,7 @@ public without sharing class InspectionAssessmentTaskCreationService {
             if (dm.AttributeType__c == 'Non Permitted Food Service' && iCfacility.NonPermittedFoodService__c == true) {
                 templateNames.add(dm.ActionPlanTemplateName__c);
             }
-            if(dm.CategoryL1__c == iCfacility.CategoryL1__c && dm.CategoryL2__c == iCfacility.CategoryL2__c){                
+            if(dm.AttributeType__c == null && dm.CategoryL1__c == iCfacility.CategoryL1__c && dm.CategoryL2__c == iCfacility.CategoryL2__c){                
                 templateNames.add(dm.ActionPlanTemplateName__c);
             }
         }
