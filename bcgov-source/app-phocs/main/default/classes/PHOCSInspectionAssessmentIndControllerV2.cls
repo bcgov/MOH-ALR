@@ -390,9 +390,9 @@ public without sharing class PHOCSInspectionAssessmentIndControllerV2 {
 * @description Update the inspection status to complete & closing comments.
 */    
     @AuraEnabled
-    public static void completeInspection(Id visitId, String closingComments, String timeSpent, Datetime actualStartDate, Boolean followUpInspectionRequired, Boolean environmentalSwabsTaken, String deliveryMethod, Boolean signatureRefusal){
+    public static void completeInspection(Id visitId, String closingComments, String timeSpent, Datetime actualStartDate, Boolean followUpInspectionRequired, Boolean environmentalSwabsTaken, String deliveryMethod, Boolean signatureRefusal, String actionreqbyLicenseeoperator, String actionreqbyLomho){
         Visit visitRec = [SELECT Id, Status, StatusRemarks, ActualVisitStartTime, ActualVisitEndTime, FollowUpInspectionRequired__c, EnvironmentalSwabsTaken__c, 
-                          PHOCSIsDraft__c, TimeSpentMinutes__c, DeliveryMethod__c, SignatureRefusal__c FROM Visit WHERE Id =: visitId LIMIT 1];
+                          PHOCSIsDraft__c, TimeSpentMinutes__c, DeliveryMethod__c, SignatureRefusal__c, ActionsRequiredByLicenseeOperator__c, ActionsRequiredByLOMHO__c FROM Visit WHERE Id =: visitId LIMIT 1];
         
         visitRec.Status = 'Completed';
         visitRec.StatusRemarks = closingComments;
@@ -404,6 +404,8 @@ public without sharing class PHOCSInspectionAssessmentIndControllerV2 {
         visitRec.EnvironmentalSwabsTaken__c = environmentalSwabsTaken;
         visitRec.DeliveryMethod__c = deliveryMethod;
         visitRec.SignatureRefusal__c = signatureRefusal;
+        visitRec.ActionsRequiredByLicenseeOperator__c = actionreqbyLicenseeoperator;
+        visitRec.ActionsRequiredByLOMHO__c = actionreqbyLomho;
         
         update visitRec;
     }    
@@ -413,7 +415,7 @@ public without sharing class PHOCSInspectionAssessmentIndControllerV2 {
 */     
     @AuraEnabled(cacheable=true)
     public static Visit getVisitMeta(Id visitId) {
-        return [SELECT Id, PHOCSIsDraft__c, Status, ownerId,VisitType.Name FROM Visit WHERE Id = :visitId LIMIT 1];
+        return [SELECT Id, PHOCSIsDraft__c, Status, ownerId,VisitType.Name,Account.Type,ActionsRequiredByLicenseeOperator__c,ActionsRequiredByLOMHO__c FROM Visit WHERE Id = :visitId LIMIT 1];
     }
     
     
