@@ -547,15 +547,17 @@ private class PHOCSAssessmentIndCtrlV2Test {
         Datetime startDt = System.now().addHours(-2);
         
         Test.startTest();
-        PHOCSInspectionAssessmentIndControllerV2.completeInspection(inspection.Id, closingComments, null, startDt, false, true, null, false);
+        PHOCSInspectionAssessmentIndControllerV2.completeInspection(inspection.Id, closingComments, null, startDt, false, true, null, false,'No action required','No action required. No contraventions identified');
         Test.stopTest();
         
-        Visit updRecv = [SELECT Id, Status, StatusRemarks, ActualVisitEndTime, PHOCSIsDraft__c FROM Visit WHERE Id =: inspection.Id LIMIT 1];
+        Visit updRecv = [SELECT Id, Status, StatusRemarks, ActualVisitEndTime, PHOCSIsDraft__c,ActionsRequiredByLicenseeOperator__c,ActionsRequiredByLOMHO__c FROM Visit WHERE Id =: inspection.Id LIMIT 1];
         
         System.assertEquals('Completed', updRecv.Status,'Visit status should be Completed');
         System.assertEquals(closingComments, updRecv.StatusRemarks,'Closing comments should be saved');
         System.assertNotEquals(null, updRecv.ActualVisitEndTime,'ActualVisitEndTime should be set');
         System.assertEquals(false, updRecv.PHOCSIsDraft__c,'Draft should be false');
+        System.assertEquals('No action required', updRecv.ActionsRequiredByLicenseeOperator__c);
+        System.assertEquals('No action required. No contraventions identified', updRecv.ActionsRequiredByLOMHO__c);
     }
     
     @IsTest
