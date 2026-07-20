@@ -8,8 +8,12 @@
 trigger RegulatoryCodeViolationTrigger on RegulatoryCodeViolation (after update, after insert) {
     if (Trigger.isAfter && Trigger.isUpdate) {
         RegulatoryCodeViolationHandler.syncChildViolationStatus(Trigger.new, Trigger.oldMap);
+      
     }
     if (Trigger.isAfter && Trigger.isInsert) {
         RegulatoryCodeViolationHandler.updateRecurrenceCount(Trigger.new);
+    }
+    if(Trigger.isBefore && (Trigger.isInsert || Trigger.isUpdate)){
+        PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new, 'PHOCSParentAccountID__c');         
     }
 }
