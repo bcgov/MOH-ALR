@@ -319,6 +319,14 @@
 						<template lwc:if={closingCommentsMessage}>
 							<div class="slds-m-top_x-small"> <span class={closingCommentsMessageClass}>{closingCommentsMessage}</span> </div>
 						</template>
+						<template lwc:if={showActionRequiredFields}>
+						<lightning-dual-listbox label="Actions Required by Licensee/Operator" source-label="Available" selected-label="Chosen" options={actionreqbyLicenseeoperatoroptions} value={actionreqbyLicenseeoperator}
+							onchange={handleactionreqbyLicenseeoperatorChange}>
+						</lightning-dual-listbox>
+
+						<lightning-dual-listbox label="Actions Required by LO/MHO" source-label="Available" selected-label="Chosen" options={actionreqbyLomhooptions} value={actionreqbyLomho} onchange={handleactionreqbyLomhoChange}>
+						</lightning-dual-listbox>
+						</template>
 					</div>
 					<footer class="slds-modal__footer slds-grid slds-grid_align-spread">
 						<lightning-button label="Go Back" variant="neutral" onclick={handleGoBack}></lightning-button>
