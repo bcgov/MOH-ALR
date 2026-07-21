@@ -923,13 +923,6 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection6</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.Status}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Closed</rightValue>
-                    </criteria>
-                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -1093,7 +1086,7 @@
                 <componentName>phocsAddRegulatoryCode</componentName>
                 <identifier>c_phocsAddRegulatoryCode</identifier>
                 <visibilityRule>
-                    <booleanFilter>(1 OR 2) AND 3 AND 4</booleanFilter>
+                    <booleanFilter>(1 OR 2) AND 3 AND 4 AND 5</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.Account.Type}</leftValue>
                         <operator>EQUAL</operator>
@@ -1113,6 +1106,11 @@
                         <leftValue>{!Record.Status}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>Open</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!$Permission.CustomPermission.PHOCSReportingUser}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>false</rightValue>
                     </criteria>
                 </visibilityRule>
             </componentInstance>
