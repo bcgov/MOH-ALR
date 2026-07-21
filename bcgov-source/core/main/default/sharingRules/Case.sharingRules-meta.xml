@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
     <sharingCriteriaRules>
+        <fullName>CaseCCRCSharingRuleProvReporting</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>Read access to restricted PHOCS Child Care and Residential Care investigations for Provincial Reporting users.</description>
+        <label>Case CC RC Sharing Rule - Provincial Reporting</label>
+        <sharedTo>
+            <group>PHOCSReportingUserPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS CCFL Incidents,PHOCS Complaint</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Topic__c</field>
+            <operation>equals</operation>
+            <value>Child Care,Residential Care</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
         <fullName>CaseComplaintSharingRuleALRDataAnalyst</fullName>
         <accessLevel>Edit</accessLevel>
         <description>Read/Write access to Public Complaint Case record type to ALR Data Analyst - ALR-77</description>
@@ -250,26 +270,6 @@
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
-        <fullName>ShareCaseRepIncidentWithPHOCSUsers</fullName>
-        <accessLevel>Edit</accessLevel>
-        <description>Share Case PHOCS record types, excluding restricted Child Care and Residential Care investigations.</description>
-        <label>Share Case Rep Incident with PHOCS Users</label>
-        <sharedTo>
-            <group>EHISUsersPG</group>
-        </sharedTo>
-        <criteriaItems>
-            <field>RecordTypeId</field>
-            <operation>equals</operation>
-            <value>PHOCS Water Advisories,PHOCS Food Recall,PHOCS Requests &amp; Inquiries,PHOCS Complaint,PHOCS Incident</value>
-        </criteriaItems>
-        <criteriaItems>
-            <field>Topic__c</field>
-            <operation>notEqual</operation>
-            <value>Child Care,Residential Care</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
         <fullName>FHAChildResidentialCareCaseInvestigation</fullName>
         <accessLevel>Edit</accessLevel>
         <description>Edit access to restricted PHOCS Child Care and Residential Care investigations for Fraser Health.</description>
@@ -280,7 +280,55 @@
         <criteriaItems>
             <field>RecordTypeId</field>
             <operation>equals</operation>
-            <value>PHOCS Complaint,PHOCS Incident</value>
+            <value>PHOCS CCFL Incidents,PHOCS Complaint</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Topic__c</field>
+            <operation>equals</operation>
+            <value>Child Care,Residential Care</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Fraser Health - FH</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Fraser_Health_CCFL</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Fraser Health CCFL</label>
+        <sharedTo>
+            <group>EHIS_FHA_Water_Admin_PG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS CCFL Incidents</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Topic__c</field>
+            <operation>equals</operation>
+            <value>Child Care,Residential Care</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Fraser Health - FH</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Fraser_Health_CCFL_Officer</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Fraser Health CCFL Officer</label>
+        <sharedTo>
+            <group>EHIS_FHA_Water_Officer_PG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS CCFL Incidents</value>
         </criteriaItems>
         <criteriaItems>
             <field>Topic__c</field>
@@ -305,7 +353,7 @@
         <criteriaItems>
             <field>RecordTypeId</field>
             <operation>equals</operation>
-            <value>PHOCS Complaint,PHOCS Incident</value>
+            <value>PHOCS CCFL Incidents,PHOCS Complaint</value>
         </criteriaItems>
         <criteriaItems>
             <field>Topic__c</field>
@@ -320,6 +368,78 @@
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
+        <fullName>Interior_Health_CCFL</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Interior Health CCFL</label>
+        <sharedTo>
+            <group>EHIS_IHA_Water_Admin_PG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS CCFL Incidents</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Topic__c</field>
+            <operation>equals</operation>
+            <value>Child Care,Residential Care</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Interior Health - IH</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Interior_Health_CCFL_Officer</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Interior Health CCFL Officer</label>
+        <sharedTo>
+            <group>EHIS_IHA_Water_Officer_PG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS CCFL Incidents</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Topic__c</field>
+            <operation>equals</operation>
+            <value>Child Care,Residential Care</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Interior Health - IH</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Island_Health_CCFL</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Island Health CCFL</label>
+        <sharedTo>
+            <group>EHIS_VIHA_Water_Admin_PG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS CCFL Incidents</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Topic__c</field>
+            <operation>equals</operation>
+            <value>Child Care,Residential Care</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Island Health - Island</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
         <fullName>NHAChildResidentialCareCaseInvestigation</fullName>
         <accessLevel>Edit</accessLevel>
         <description>Edit access to restricted PHOCS Child Care and Residential Care investigations for Northern Health.</description>
@@ -330,7 +450,7 @@
         <criteriaItems>
             <field>RecordTypeId</field>
             <operation>equals</operation>
-            <value>PHOCS Complaint,PHOCS Incident</value>
+            <value>PHOCS CCFL Incidents,PHOCS Complaint</value>
         </criteriaItems>
         <criteriaItems>
             <field>Topic__c</field>
@@ -345,6 +465,74 @@
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
+        <fullName>Northern_Health_CCFL</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Northern Health CCFL</label>
+        <sharedTo>
+            <group>EHIS_NHA_Water_Admin_PG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS CCFL Incidents</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Topic__c</field>
+            <operation>equals</operation>
+            <value>Child Care,Residential Care</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Northern Health - NH</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Northern_Health_CCFL_Officer</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Northern Health CCFL Officer</label>
+        <sharedTo>
+            <group>EHIS_NHA_Water_Officer_PG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS CCFL Incidents</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Topic__c</field>
+            <operation>equals</operation>
+            <value>Child Care,Residential Care</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Northern Health - NH</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>ShareCaseRepIncidentWithPHOCSUsers</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>Share Case PHOCS record types, excluding restricted Child Care and Residential Care investigations.</description>
+        <label>Share Case Rep Incident with PHOCS Users</label>
+        <sharedTo>
+            <group>EHISUsersPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Water Advisories,PHOCS Food Recall,PHOCS CCFL Incidents,PHOCS Requests &amp; Inquiries,PHOCS Complaint</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Topic__c</field>
+            <operation>notEqual</operation>
+            <value>Child Care,Residential Care</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
         <fullName>VCHChildResidentialCareCaseInvestigation</fullName>
         <accessLevel>Edit</accessLevel>
         <description>Edit access to restricted PHOCS Child Care and Residential Care investigations for Vancouver Coastal Health.</description>
@@ -355,7 +543,7 @@
         <criteriaItems>
             <field>RecordTypeId</field>
             <operation>equals</operation>
-            <value>PHOCS Complaint,PHOCS Incident</value>
+            <value>PHOCS CCFL Incidents,PHOCS Complaint</value>
         </criteriaItems>
         <criteriaItems>
             <field>Topic__c</field>
@@ -380,7 +568,7 @@
         <criteriaItems>
             <field>RecordTypeId</field>
             <operation>equals</operation>
-            <value>PHOCS Complaint,PHOCS Incident</value>
+            <value>PHOCS CCFL Incidents,PHOCS Complaint</value>
         </criteriaItems>
         <criteriaItems>
             <field>Topic__c</field>
@@ -395,22 +583,26 @@
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
-        <fullName>CaseCCRCSharingRuleProvReporting</fullName>
-        <accessLevel>Read</accessLevel>
-        <description>Read access to restricted PHOCS Child Care and Residential Care investigations for Provincial Reporting users.</description>
-        <label>Case CC RC Sharing Rule - Provincial Reporting</label>
+        <fullName>Vancouver_Coastal_Health_CCFL</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Vancouver Coastal Health CCFL</label>
         <sharedTo>
-            <group>PHOCSReportingUserPG</group>
+            <group>EHIS_VCH_Water_Admin_PG</group>
         </sharedTo>
         <criteriaItems>
             <field>RecordTypeId</field>
             <operation>equals</operation>
-            <value>PHOCS Complaint,PHOCS Incident</value>
+            <value>PHOCS CCFL Incidents</value>
         </criteriaItems>
         <criteriaItems>
             <field>Topic__c</field>
             <operation>equals</operation>
             <value>Child Care,Residential Care</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Vancouver Coastal Health - VCH</value>
         </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
