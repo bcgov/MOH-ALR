@@ -5,16 +5,32 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.AccountId</fieldItem>
+                <identifier>RecordAccountIdField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.RelatedRecordId</fieldItem>
+                <identifier>RecordRelatedRecordIdField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
                     <value>required</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Name</fieldItem>
                 <identifier>RecordNameField2</identifier>
             </fieldInstance>
         </itemInstances>
-        <name>Facet-b0c568cb-2725-4b26-bfac-515262766610</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
         <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
@@ -25,6 +41,10 @@
                 <identifier>RecordMeetingNotesField</identifier>
             </fieldInstance>
         </itemInstances>
+        <name>Facet-b0c568cb-2725-4b26-bfac-515262766610</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
         <name>Facet-d17c4ded-f6ee-44b7-a194-5c8a98d70831</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -59,8 +79,8 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.AccountId</fieldItem>
-                <identifier>RecordAccountIdField</identifier>
+                <fieldItem>Record.ActionTaken__c</fieldItem>
+                <identifier>RecordActionTaken_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -69,24 +89,78 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.ActionTaken__c</fieldItem>
-                <identifier>RecordActionTaken_cField</identifier>
+                <fieldItem>Record.ActionsRequiredbyLicenseeOperator__c</fieldItem>
+                <identifier>RecordActionsRequiredbyLicenseeOperator_cField</identifier>
+                <visibilityRule>
+                    <booleanFilter>((1 OR 2) OR (3 OR 4) AND 5)</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.Account.Type}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Child Care</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Account.Type}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Residential Care</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.CaseId__r.Topic__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Child Care</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.CaseId__r.Topic__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Residential Care</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.CaseId__r.Account.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ActionsRequiredbyLOMHO__c</fieldItem>
+                <identifier>RecordActionsRequiredbyLOMHO_cField</identifier>
+                <visibilityRule>
+                    <booleanFilter>((1 OR 2) AND 3) OR (4 OR 5)</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.CaseId__r.Topic__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Child Care</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.CaseId__r.Topic__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Residential Care</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.CaseId__r.Account.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Account.Type}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Child Care</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Account.Type}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Residential Care</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <name>Facet-ade43377-eb21-4f9a-b19d-dc564263fd54</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.RelatedRecordId</fieldItem>
-                <identifier>RecordRelatedRecordIdField</identifier>
-            </fieldInstance>
-        </itemInstances>
         <name>Facet-68870f5c-571b-4624-8a41-25fcd9600056</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -197,7 +271,7 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>label</name>
-                    <value>More Details</value>
+                    <value>Actions</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection3</identifier>
@@ -342,6 +416,10 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>hideChatterActions</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>hideSlackAction</name>
                     <value>false</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
