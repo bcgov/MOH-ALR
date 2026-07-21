@@ -5,7 +5,7 @@
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
                 28 May -  EHIS-2668         -  Accenture   -  Close subsequent child records.
 ***********************************************************************************************/
-trigger RegulatoryCodeViolationTrigger on RegulatoryCodeViolation (after update, after insert) {
+trigger RegulatoryCodeViolationTrigger on RegulatoryCodeViolation (after update, after insert, before insert, before update) {
     if (Trigger.isAfter && Trigger.isUpdate) {
         RegulatoryCodeViolationHandler.syncChildViolationStatus(Trigger.new, Trigger.oldMap);
       
