@@ -10,10 +10,6 @@ public with sharing class PHOCSBLARegulatoryCodeController{
     public static final String PHOCS_REGULATORY_CODE_RECORD_TYPE = 'PHOCSRegulatoryCode';
     public static final String CHILD_CARE_ACCOUNT_TYPE = 'Child Care';
     public static final String RESIDENTIAL_CARE_ACCOUNT_TYPE = 'Residential Care';
-    public static final String CHILD_CARE_AUTHORITY = 'Child Care Licensing Regulation';
-    public static final String RESIDENTIAL_CARE_AUTHORITY = 'Residential Care Regulation';
-    public static final String COMMUNITY_CARE_AUTHORITY = 'Community Care & Assisted Living Act';
-    
     /**
 * @author: Deepak
 * @date: 14 Jul 2026
@@ -184,19 +180,19 @@ public with sharing class PHOCSBLARegulatoryCodeController{
 */
     public static Set<String> getApplicableRegulatoryAuthorities(String accountType) {
         Set<String> authorityNames = new Set<String>();
+        List<PHOCSExemptionRegulatoryAuthorityMapping__mdt> bLARegulatoryAuthorities = [SELECT RegulatoryAuthority__c FROM PHOCSExemptionRegulatoryAuthorityMapping__mdt
+                                                                                        WHERE FacilityType__c =: accountType AND Active__c = true];
+            
+            for (PHOCSExemptionRegulatoryAuthorityMapping__mdt mapping : bLARegulatoryAuthorities){                 
+                authorityNames.add(mapping.RegulatoryAuthority__c);
+            }
         
-        if (CHILD_CARE_ACCOUNT_TYPE.equalsIgnoreCase(accountType)) {
-            authorityNames.add(CHILD_CARE_AUTHORITY);
-            authorityNames.add(COMMUNITY_CARE_AUTHORITY);
-        } else if (RESIDENTIAL_CARE_ACCOUNT_TYPE.equalsIgnoreCase(accountType)){
-            authorityNames.add(RESIDENTIAL_CARE_AUTHORITY);
-            authorityNames.add(COMMUNITY_CARE_AUTHORITY);
-        } else {
-            throw new AuraHandledException('Regulatory Codes are not configured for ' + 'Account Type: ' + accountType +'.');
+        if (authorityNames.isEmpty()) {
+            throw new AuraHandledException('Regulatory Codes are not configured for Account Type: ' + accountType);
         }
+        
         return authorityNames;
     }
-    
     
     public class RegulatoryCodeResponse {
         @AuraEnabled
