@@ -2,9 +2,10 @@
 <ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>RestrictChildResidentialCareCaseByHA</fullName>
     <active>true</active>
-    <description>Blocks PHOCS Admin and Officer users from creating or updating Child Care and Residential Care investigation Cases outside their authorized Health Authority.</description>
+    <description>Blocks non-System Administrator PHOCS users from creating or updating Child Care and Residential Care investigation Cases outside their authorized Health Authority.</description>
     <errorConditionFormula>AND(
     NOT($Permission.EHISBypassValidationRuleCustomPermission),
+    $Profile.Name &lt;&gt; &apos;System Administrator&apos;,
     OR(
         RecordType.DeveloperName = &apos;PHOCSComplaint&apos;,
         RecordType.DeveloperName = &apos;PHOCSReportableIncident&apos;

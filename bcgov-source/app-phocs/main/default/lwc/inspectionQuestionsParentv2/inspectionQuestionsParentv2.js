@@ -20,6 +20,12 @@ const RESULT_NON_COMPLIANT = "PHOCSNonCompliant";
 const RESULT_NA = "Not Applicable";
 const RESULT_NS = "Not Inspected";
 const ROUTINE_INSPECTION ="Routine";
+const FACILITY_TYPE_CHILDCARE = "Child Care";
+const FACILITY_TYPE_RESIDENTIALCARE = "Residential Care";
+const INSPECTION_TYPE_COMPLAINT = "Complaint";
+const INSPECTION_TYPE_COMPLAINTFOLLOWUP = "Complaint Follow-up";
+const INSPECTION_TYPE_REPORTABLEINCIDENT = "Reportable Incident";
+const INSPECTION_TYPE_REPORTABLEINCIDENTFOLLOWUP = "Reportable Incident Follow-up";
 
 const STATUS_CONFIG = {
     [RESULT_COMPLIANT]: { label: 'Compliant', icon: 'utility:success', iconClass: 'slds-icon-text-success', itemClass: 'review-item review-item--compliant', statusClass: 'review-status-compliant' },
@@ -65,6 +71,9 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
 	regulatoryCodesCache = {};
 	uploadedFilesMap = {};
+
+	actionreqbyLicenseeoperator = [];
+	actionreqbyLomho = [];
 
 	get acceptedFormats() {
 		return [".pdf", ".png", ".jpg", ".jpeg", ".doc", ".docx", ".xls", ".xlsx"];
@@ -139,6 +148,23 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
       { label: 'Email', value: 'Email' },
       { label: 'On-site review', value: 'On-site review' }
     ];
+
+	actionreqbyLicenseeoperatoroptions = [
+    	{ label: 'No action required', value: 'No action required' },
+    	{ label: 'Licensee has addressed some contraventions. Corrective action plan required to be submitted', value: 'Licensee has addressed some contraventions. Corrective action plan required to be submitted' },
+    	{ label: 'Corrective action to be developed and submitted', value: 'Corrective action to be developed and submitted' }
+	];
+
+	actionreqbyLomhooptions = [
+		{ label: 'No action required. No contraventions identified', value: 'No action required. No contraventions identified' },
+		{ label: 'Review and monitor corrective action plan. Follow up inspection required', value: 'Review and monitor corrective action plan. Follow up inspection required' },
+		{ label: 'Provide relevant resources as this is a required action of the licensing officer', value: 'Provide relevant resources as this is a required action of the licensing officer' },
+		{ label: 'Facilitate access to expert or external training/support for the licensee', value: 'Facilitate access to expert or external training/support for the licensee' },
+		{ label: 'Progressive enforcement/compliance actions', value: 'Progressive enforcement/compliance actions' },
+		{ label: 'Hospital Act - No legislative requirement', value: 'Hospital Act - No legislative requirement' },
+		{ label: 'Hospital Act - Monitor enhancement areas at next routine inspection', value: 'Hospital Act - Monitor enhancement areas at next routine inspection' },
+		{ label: 'Hospital Act - Schedule Elder Service Consultant Inspection', value: 'Hospital Act - Schedule Elder Service Consultant Inspection' }
+	];
 
 	connectedCallback() {
 		this.getInspection();
@@ -285,6 +311,35 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 			this.showQuestions = false;
 
 			this.routineInspection = visit.VisitType.Name === ROUTINE_INSPECTION;
+
+			this.actionreqbyLicenseeoperator =
+				visit.ActionsRequiredByLicenseeOperator__c
+					? visit.ActionsRequiredByLicenseeOperator__c.split(';')
+					: [];
+
+			this.actionreqbyLomho =
+				visit.ActionsRequiredByLOMHO__c
+					? visit.ActionsRequiredByLOMHO__c.split(';')
+					: [];
+			
+
+			const facilityType = visit?.Account?.Type;
+			const inspectionType = visit?.VisitType?.Name;
+
+			const isValidFacilityType =
+				facilityType === FACILITY_TYPE_CHILDCARE ||
+				facilityType === FACILITY_TYPE_RESIDENTIALCARE;
+
+			const isExcludedInspectionType =
+				inspectionType === INSPECTION_TYPE_COMPLAINT ||
+				inspectionType === INSPECTION_TYPE_COMPLAINTFOLLOWUP ||
+				inspectionType === INSPECTION_TYPE_REPORTABLEINCIDENT ||
+				inspectionType === INSPECTION_TYPE_REPORTABLEINCIDENTFOLLOWUP;
+
+			this.showActionRequiredFields =
+				isValidFacilityType && !isExcludedInspectionType;
+			
+
 
 			const result = await getInspectionQuestions({
 				visitId: this.recordId
@@ -639,6 +694,18 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 	handleinspectionOpenCommentsChange(event) {
         this.inspectionOpeningComments = event.target.value;
     }
+
+	// ========================================
+	// Action required by licensee & Action required by LO/MHO  EVENT
+	// ========================================
+
+	handleactionreqbyLicenseeoperatorChange(event) {
+    this.actionreqbyLicenseeoperator = event.detail.value;
+	}
+
+	handleactionreqbyLomhoChange(event) {
+    this.actionreqbyLomho = event.detail.value;
+	}
 
 	// ========================================
 	// Open Violation Incident Icon EVENT
@@ -1008,10 +1075,20 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 			return;
 		}
 
-		if (this.actualStartDate) {
-    const selectedDate = new Date(this.actualStartDate);
+		const actualStartInput = this.template.querySelector(
+			'lightning-input[data-field="actualstarttime"]'
+			);
 
-    if (selectedDate > new Date()) {
+		actualStartInput.reportValidity();
+
+		if (!actualStartInput.checkValidity()) {
+			return;
+		}
+
+		if (this.actualStartDate) {
+    	const selectedDate = new Date(this.actualStartDate);
+
+    	if (selectedDate > new Date()) {
         this.showToast(
             'Error',
             'Actual Start Time cannot be in the future.',
@@ -1273,7 +1350,9 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 				followUpInspectionRequired: this.followUpInspectionRequired,
 				environmentalSwabsTaken: this.environmentalSwabsTaken,
 				deliveryMethod: this.deliveryMethod,
-				signatureRefusal: this.signatureRefusal
+				signatureRefusal: this.signatureRefusal,
+				actionreqbyLicenseeoperator: this.actionreqbyLicenseeoperator.join(';'),
+				actionreqbyLomho: this.actionreqbyLomho.join(';')
 			});
 			this.isDraft = false;
 
