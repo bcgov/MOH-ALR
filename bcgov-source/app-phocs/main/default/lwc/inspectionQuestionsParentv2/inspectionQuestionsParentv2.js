@@ -1075,10 +1075,20 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 			return;
 		}
 
-		if (this.actualStartDate) {
-    const selectedDate = new Date(this.actualStartDate);
+		const actualStartInput = this.template.querySelector(
+			'lightning-input[data-field="actualstarttime"]'
+			);
 
-    if (selectedDate > new Date()) {
+		actualStartInput.reportValidity();
+
+		if (!actualStartInput.checkValidity()) {
+			return;
+		}
+
+		if (this.actualStartDate) {
+    	const selectedDate = new Date(this.actualStartDate);
+
+    	if (selectedDate > new Date()) {
         this.showToast(
             'Error',
             'Actual Start Time cannot be in the future.',
