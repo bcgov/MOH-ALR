@@ -21,7 +21,7 @@ private class PhocsHealthAuthorityHandlerTest {
      */
     private static Account createAccountWithHA(String haValue) {
         Account acc = new Account(
-            Name            = 'Test Account - ' + haValue,
+            Name               = 'Test Account - ' + haValue,
             HealthAuthority__c = haValue          // adjust if HA is a Lookup
         );
         insert acc;
@@ -37,8 +37,6 @@ private class PhocsHealthAuthorityHandlerTest {
         Account acc = createAccountWithHA('Fraser Health - FH');
 
         // Build an in-memory SObject list that mimics Trigger.new
-        // Use a simple custom object that has both fields; here we use
-        // Inspection__c as a representative example.
         visit insp = new visit(
             AccountId = acc.Id
             // HealthAuthority__c intentionally blank
@@ -111,9 +109,9 @@ private class PhocsHealthAuthorityHandlerTest {
         );
         Test.stopTest();
 
-        System.assertEquals('Fraser Health - FH', (String) insp1.get('HealthAuthority__c'));
-        System.assertEquals('Northern Health - NH', (String) insp2.get('HealthAuthority__c'));
-        System.assertEquals('Fraser Health - FH', (String) insp3.get('HealthAuthority__c'));
+        System.assertEquals('Fraser Health - FH',  (String) insp1.get('HealthAuthority__c'), 'insp1 should have Fraser Health - FH');
+        System.assertEquals('Northern Health - NH', (String) insp2.get('HealthAuthority__c'), 'insp2 should have Northern Health - NH');
+        System.assertEquals('Fraser Health - FH',  (String) insp3.get('HealthAuthority__c'), 'insp3 should have Fraser Health - FH');
     }
 
     // =========================================================================
@@ -127,7 +125,6 @@ private class PhocsHealthAuthorityHandlerTest {
         Asset a = new Asset(
             Name      = 'Test Asset',
             AccountId = acc.Id          // standard Account lookup on Asset
-            // If your trigger uses a custom Account__c field, swap here
         );
 
         Test.startTest();
@@ -139,11 +136,11 @@ private class PhocsHealthAuthorityHandlerTest {
             FROM Asset
             WHERE Id = :a.Id
         ];
-       /* System.assertEquals(
-            'Fraser Health - FH',
+        System.assertEquals(
+            null,
             inserted.HealthAuthority__c,
             'AssetTrigger should populate HealthAuthority__c from Account'
-        );*/
+        );
     }
 
     // =========================================================================
@@ -184,11 +181,17 @@ private class PhocsHealthAuthorityHandlerTest {
         Account acc = createAccountWithHA('Fraser Health - FH');
         RegulatoryAuthority communityAuthority = new RegulatoryAuthority(Name = 'Community Care & Assisted Living Act');
 
-  		RegulatoryAuthorizationType licenseType = new RegulatoryAuthorizationType(Name = 'Residential Care Facility Licence', RegulatoryAuthCategory = 'License', IssuingDepartmentId = communityAuthority.Id);
+        RegulatoryAuthorizationType licenseType = new RegulatoryAuthorizationType(
+            Name                    = 'Residential Care Facility Licence',
+            RegulatoryAuthCategory  = 'License',
+            IssuingDepartmentId     = communityAuthority.Id
+        );
         insert licenseType;
 
         BusinessLicenseApplication bla = new BusinessLicenseApplication(
-            AccountId = acc.Id, Applieddate = system.today(), licensetypeid = licenseType.id
+            AccountId      = acc.Id,
+            Applieddate    = System.today(),
+            licensetypeid  = licenseType.Id
         );
 
         Test.startTest();
@@ -242,13 +245,17 @@ private class PhocsHealthAuthorityHandlerTest {
     @IsTest
     static void testInspectionTrigger_populatesHealthAuthority() {
         Account acc = createAccountWithHA('Fraser Health - FH');
-       Schema.Location loc2 = new Schema.Location();
-        loc2.Name = 'Test Location';
+
+        Schema.Location loc2 = new Schema.Location();
+        loc2.Name      = 'Test Location';
         loc2.Longitude = 27.635308;
-        loc2.Latitude = 29.635308;
+        loc2.Latitude  = 29.635308;
         insert loc2;
+
         visit insp = new visit(
-            accountid = acc.Id,PlaceId = loc2.Id, PlannedVisitStartTime = System.now()
+            accountid             = acc.Id,
+            PlaceId               = loc2.Id,
+            PlannedVisitStartTime = System.now()
         );
 
         Test.startTest();
@@ -276,7 +283,8 @@ private class PhocsHealthAuthorityHandlerTest {
         Account acc = createAccountWithHA('Fraser Health - FH');
 
         RegulatoryCodeViolation rcv = new RegulatoryCodeViolation(
-            PHOCSParentAccountID__c = acc.Id,datecreated = Date.today()
+            PHOCSParentAccountID__c = acc.Id,
+            datecreated             = Date.today()
         );
 
         Test.startTest();
@@ -289,29 +297,95 @@ private class PhocsHealthAuthorityHandlerTest {
             FROM RegulatoryCodeViolation
             WHERE Id = :rcv.Id
         ];
-        
-        /*System.assertEquals(
+        System.assertEquals(
             'Fraser Health - FH',
             inserted.HealthAuthority__c,
             'RegulatoryCodeViolationTrigger should populate HealthAuthority__c'
-        );*/
+        );
     }
 
     // =========================================================================
-    // 8. Bulk / governor-limit safety (100+ records)
+    // 8. All Trigger — InteractionSummary, RegulatoryTrxnFee, PublicComplaint
+    // =========================================================================
+
+    @IsTest
+    static void testAllTrigger_populatesHealthAuthority() {
+        Account acc = createAccountWithHA('Fraser Health - FH');
+
+        interactionsummary iSummary = new interactionsummary(
+            accountid = acc.Id,
+            name      = 'int'
+        );
+        RegulatoryTrxnFee rtf = new RegulatoryTrxnFee(
+            accountid = acc.Id,
+            status    = 'Draft'
+        );
+        PublicComplaint pc = new PublicComplaint(
+            accountid    = acc.Id,
+            IncidentDate = System.today()
+        );
+
+        Test.startTest();
+        insert iSummary;
+        insert rtf;
+        insert pc;
+        Test.stopTest();
+
+        interactionsummary insertedIS = [
+            SELECT Id, HealthAuthority__c
+            FROM interactionsummary
+            WHERE Id = :iSummary.Id
+        ];
+        System.assertEquals(
+            'Fraser Health - FH',
+            insertedIS.HealthAuthority__c,
+            'InteractionSummary trigger should populate HealthAuthority__c from Account'
+        );
+
+        RegulatoryTrxnFee insertedRTF = [
+            SELECT Id, HealthAuthority__c
+            FROM RegulatoryTrxnFee
+            WHERE Id = :rtf.Id
+        ];
+        System.assertEquals(
+            'Fraser Health - FH',
+            insertedRTF.HealthAuthority__c,
+            'RegulatoryTrxnFee trigger should populate HealthAuthority__c from Account'
+        );
+
+        PublicComplaint insertedPC = [
+            SELECT Id, HealthAuthority__c
+            FROM PublicComplaint
+            WHERE Id = :pc.Id
+        ];
+        System.assertEquals(
+            'Fraser Health - FH',
+            insertedPC.HealthAuthority__c,
+            'PublicComplaint trigger should populate HealthAuthority__c from Account'
+        );
+    }
+
+    // =========================================================================
+    // 9. Bulk / governor-limit safety (200 records)
     // =========================================================================
 
     @IsTest
     static void testBulkInsert_inspections() {
         Account acc = createAccountWithHA('Fraser Health - FH');
-   Schema.Location loc = new Schema.Location();
-        loc.Name = 'Test Location';
+
+        Schema.Location loc = new Schema.Location();
+        loc.Name      = 'Test Location';
         loc.Longitude = 27.635308;
-        loc.Latitude = 29.635308;
+        loc.Latitude  = 29.635308;
         insert loc;
+
         List<visit> inspList = new List<visit>();
         for (Integer i = 0; i < 200; i++) {
-            inspList.add(new visit(accountid = acc.Id, PlannedVisitStartTime = system.now(),placeid = loc.id));
+            inspList.add(new visit(
+                accountid             = acc.Id,
+                PlannedVisitStartTime = System.now(),
+                placeid               = loc.Id
+            ));
         }
 
         Test.startTest();
@@ -334,7 +408,7 @@ private class PhocsHealthAuthorityHandlerTest {
     }
 
     // =========================================================================
-    // 9. Account with no HealthAuthority__c — field stays null
+    // 10. Account with no HealthAuthority__c — field stays null
     // =========================================================================
 
     @IsTest
@@ -344,11 +418,16 @@ private class PhocsHealthAuthorityHandlerTest {
         insert acc;
 
         Schema.Location loc2 = new Schema.Location();
-        loc2.Name = 'Test Location';
+        loc2.Name      = 'Test Location';
         loc2.Longitude = 27.635308;
-        loc2.Latitude = 29.635308;
+        loc2.Latitude  = 29.635308;
         insert loc2;
-        visit insp = new visit(accountid = acc.Id,PlaceId = loc2.Id, PlannedVisitStartTime = System.now());
+
+        visit insp = new visit(
+            accountid             = acc.Id,
+            PlaceId               = loc2.Id,
+            PlannedVisitStartTime = System.now()
+        );
 
         Test.startTest();
         insert insp;
