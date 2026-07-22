@@ -4,6 +4,7 @@
 * @Description: The purpose of this Trigger is to trigger on particular events for RegulatoryTrxnFee
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
                             ALR- 40             ACN-ALR       Fee calculation for newly added unit(s)
+							EHIS-3081			ACN-PHOCS	  populate Health Authority from parent
 ***********************************************************************************************/
 trigger RegulatoryTrxnFeeTrigger on RegulatoryTrxnFee (before insert, before update, after insert, after update, before delete, after delete, after undelete) {
      TriggerHandler handler = new RegulatoryTrxnFeeTriggerHandler();
@@ -45,4 +46,8 @@ trigger RegulatoryTrxnFeeTrigger on RegulatoryTrxnFee (before insert, before upd
              }
          }
      }
+    if(Trigger.isBefore && (Trigger.isInsert || Trigger.isUpdate)){
+        PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new, 'AccountId');         
+    }
+    
  }
