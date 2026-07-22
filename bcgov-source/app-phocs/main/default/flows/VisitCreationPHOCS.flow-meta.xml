@@ -663,7 +663,7 @@ V12- Adding Asset path for Rec water as part of EHIS-3692.
 V14- Adding Planned Started Time as part of EHIS-4313.
 V15- Adding Inspection Update to ChildCare as part of EHIS-4523.
 V16- Separating Child Care &amp; Residential Care Inspections as part of EHIS-4523.
-V17 - Adding instructional text conditionally EHIS-3867</description>
+V19 - Adding instructional text conditionally EHIS-3867</description>
     <dynamicChoiceSets>
         <name>CCRCInspTypeChoiceSet</name>
         <dataType>String</dataType>
@@ -8534,7 +8534,7 @@ V17 - Adding instructional text conditionally EHIS-3867</description>
         </fields>
         <fields>
             <name>displayTextChildCare</name>
-            <fieldText>&lt;p&gt;&lt;strong style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;Please check if all applicable programs are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Before saving the inspection, verify that all applicable services and attributes have been added to the facility to ensure all relevant inspection questions are generated on the inspection form.&lt;/strong&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <styleProperties>
                 <verticalAlignment>
@@ -8545,12 +8545,40 @@ V17 - Adding instructional text conditionally EHIS-3867</description>
                 </width>
             </styleProperties>
             <visibilityRule>
-                <conditionLogic>and</conditionLogic>
+                <conditionLogic>or</conditionLogic>
                 <conditions>
                     <leftValueReference>Get_Insp_Record.Account.Type</leftValueReference>
                     <operator>EqualTo</operator>
                     <rightValue>
                         <stringValue>Child Care</stringValue>
+                    </rightValue>
+                </conditions>
+                <conditions>
+                    <leftValueReference>Get_Insp_Record.Account.Type</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>Recreational Water</stringValue>
+                    </rightValue>
+                </conditions>
+                <conditions>
+                    <leftValueReference>Get_Insp_Record.Account.Type</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>Personal Services</stringValue>
+                    </rightValue>
+                </conditions>
+                <conditions>
+                    <leftValueReference>Get_Insp_Record.Account.Type</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>Food</stringValue>
+                    </rightValue>
+                </conditions>
+                <conditions>
+                    <leftValueReference>Get_Insp_Record.Account.Type</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>Industrial Camps</stringValue>
                     </rightValue>
                 </conditions>
             </visibilityRule>
