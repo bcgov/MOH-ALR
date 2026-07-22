@@ -4,9 +4,14 @@
 * @Description: The purpose of this Trigger is to trigger on particular events
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
                 30 Oct -  PHOCS-402         -  Accenture   -  Update Owner to Queue for PHOCS Web PC records.
+				21 july -  EHIS- 3081 		- Accenture - health authority update
 ***********************************************************************************************/
-trigger PublicComplaintTrigger on PublicComplaint (after insert) {
+trigger PublicComplaintTrigger on PublicComplaint (after insert,before insert, before update) {
     if (Trigger.isAfter && Trigger.isInsert) {
         PublicComplaintTriggerHandler.afterInsert(Trigger.new);
     }
+if(Trigger.isBefore && (Trigger.isInsert || Trigger.isUpdate)){
+        PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new, 'AccountId');         
+    }
+    
 }
