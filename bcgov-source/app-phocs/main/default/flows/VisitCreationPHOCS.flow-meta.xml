@@ -662,8 +662,7 @@ V10- Removing the banner Msg for Non-Dairy in Insp path.
 V12- Adding Asset path for Rec water as part of EHIS-3692.
 V14- Adding Planned Started Time as part of EHIS-4313.
 V15- Adding Inspection Update to ChildCare as part of EHIS-4523.
-V16- Separating Child Care &amp; Residential Care Inspections as part of EHIS-4523.
-V19 - Adding instructional text conditionally EHIS-3867</description>
+V16- Separating Child Care &amp; Residential Care Inspections as part of EHIS-4523.</description>
     <dynamicChoiceSets>
         <name>CCRCInspTypeChoiceSet</name>
         <dataType>String</dataType>
@@ -3588,7 +3587,7 @@ V19 - Adding instructional text conditionally EHIS-3867</description>
         </connector>
         <fields>
             <name>BLA_FIPR_InfoDisplay</name>
-            <fieldText>&lt;p&gt;&lt;strong&gt;Before saving the inspection, verify that all applicable services and attributes have been added to the facility to ensure all relevant inspection questions are generated on the inspection form.&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Please check if all applicable equipment are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.&lt;/strong&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <styleProperties>
                 <verticalAlignment>
@@ -3598,6 +3597,16 @@ V19 - Adding instructional text conditionally EHIS-3867</description>
                     <stringValue>12</stringValue>
                 </width>
             </styleProperties>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>Get_BLA_Record.Account.RecordType.Name</leftValueReference>
+                    <operator>Contains</operator>
+                    <rightValue>
+                        <stringValue>Dairy</stringValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
         </fields>
         <fields>
             <name>BLA_FIPR_New_Inspection_Inspection_Section1</name>
@@ -4262,7 +4271,7 @@ V19 - Adding instructional text conditionally EHIS-3867</description>
         </connector>
         <fields>
             <name>BLACCRC_InfoDisplay</name>
-            <fieldText>&lt;p&gt;&lt;strong&gt;Before saving the inspection, verify that all applicable services and attributes have been added to the facility to ensure all relevant inspection questions are generated on the inspection form.&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Please check if all applicable programs are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.&lt;/strong&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <styleProperties>
                 <verticalAlignment>
@@ -4272,6 +4281,23 @@ V19 - Adding instructional text conditionally EHIS-3867</description>
                     <stringValue>12</stringValue>
                 </width>
             </styleProperties>
+            <visibilityRule>
+                <conditionLogic>or</conditionLogic>
+                <conditions>
+                    <leftValueReference>Get_BLA_Record.Account.Type</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>Child Care</stringValue>
+                    </rightValue>
+                </conditions>
+                <conditions>
+                    <leftValueReference>Get_BLA_Record.Account.Type</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>Residential Care</stringValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
         </fields>
         <fields>
             <name>BLACCRC_New_Inspection_Inspection_Section1</name>
@@ -5254,6 +5280,36 @@ V19 - Adding instructional text conditionally EHIS-3867</description>
             <targetReference>BLA_RC_Visit_Record_Creation</targetReference>
         </connector>
         <fields>
+            <name>BLARC_InfoDisplay</name>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Please check if all applicable programs are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <visibilityRule>
+                <conditionLogic>or</conditionLogic>
+                <conditions>
+                    <leftValueReference>Get_BLA_Record.Account.Type</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>Child Care</stringValue>
+                    </rightValue>
+                </conditions>
+                <conditions>
+                    <leftValueReference>Get_BLA_Record.Account.Type</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>Residential Care</stringValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
             <name>BLARC_New_Inspection_Inspection_Section1</name>
             <fieldType>RegionContainer</fieldType>
             <fields>
@@ -6234,6 +6290,29 @@ V19 - Adding instructional text conditionally EHIS-3867</description>
             <targetReference>Case_RC_Visit_Record_Creation</targetReference>
         </connector>
         <fields>
+            <name>CaseRC_displayInfo</name>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Please check if all applicable programs are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <visibilityRule>
+                <conditionLogic>or</conditionLogic>
+                <conditions>
+                    <leftValueReference>Get_Case_Record.Account.Type</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>Residential Care</stringValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
             <name>Case_RC_New_Inspection_Inspection_Section1</name>
             <fieldType>RegionContainer</fieldType>
             <fields>
@@ -6554,7 +6633,7 @@ V19 - Adding instructional text conditionally EHIS-3867</description>
         </connector>
         <fields>
             <name>CaseCCRC_displayInfo</name>
-            <fieldText>&lt;p&gt;&lt;strong&gt;Before saving the inspection, verify that all applicable services and attributes have been added to the facility to ensure all relevant inspection questions are generated on the inspection form.&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Please check if all applicable equipment are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.&lt;/strong&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <styleProperties>
                 <verticalAlignment>
@@ -6564,6 +6643,23 @@ V19 - Adding instructional text conditionally EHIS-3867</description>
                     <stringValue>12</stringValue>
                 </width>
             </styleProperties>
+            <visibilityRule>
+                <conditionLogic>or</conditionLogic>
+                <conditions>
+                    <leftValueReference>Get_Case_Record.Account.Type</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>Child Care</stringValue>
+                    </rightValue>
+                </conditions>
+                <conditions>
+                    <leftValueReference>Get_Case_Record.Account.Type</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>Residential Care</stringValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
         </fields>
         <fields>
             <name>CaseCCRC_New_Inspection_Inspection_Section1</name>
@@ -7547,7 +7643,7 @@ V19 - Adding instructional text conditionally EHIS-3867</description>
         </connector>
         <fields>
             <name>CaseFIPR_CaseDairy_displayInfo</name>
-            <fieldText>&lt;p&gt;&lt;strong&gt;Before saving the inspection, verify that all applicable services and attributes have been added to the facility to ensure all relevant inspection questions are generated on the inspection form.&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Please check if all applicable equipment are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.&lt;/strong&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <styleProperties>
                 <verticalAlignment>
@@ -7557,6 +7653,16 @@ V19 - Adding instructional text conditionally EHIS-3867</description>
                     <stringValue>12</stringValue>
                 </width>
             </styleProperties>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>Get_Case_Record.Account.RecordType.Name</leftValueReference>
+                    <operator>Contains</operator>
+                    <rightValue>
+                        <stringValue>Dairy</stringValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
         </fields>
         <fields>
             <name>CaseFIPR_New_Inspection_Inspection_Section1</name>
@@ -8534,7 +8640,7 @@ V19 - Adding instructional text conditionally EHIS-3867</description>
         </fields>
         <fields>
             <name>displayTextChildCare</name>
-            <fieldText>&lt;p&gt;&lt;strong&gt;Before saving the inspection, verify that all applicable services and attributes have been added to the facility to ensure all relevant inspection questions are generated on the inspection form.&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;Please check if all applicable programs are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.&lt;/strong&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <styleProperties>
                 <verticalAlignment>
@@ -8545,40 +8651,12 @@ V19 - Adding instructional text conditionally EHIS-3867</description>
                 </width>
             </styleProperties>
             <visibilityRule>
-                <conditionLogic>or</conditionLogic>
+                <conditionLogic>and</conditionLogic>
                 <conditions>
                     <leftValueReference>Get_Insp_Record.Account.Type</leftValueReference>
                     <operator>EqualTo</operator>
                     <rightValue>
                         <stringValue>Child Care</stringValue>
-                    </rightValue>
-                </conditions>
-                <conditions>
-                    <leftValueReference>Get_Insp_Record.Account.Type</leftValueReference>
-                    <operator>EqualTo</operator>
-                    <rightValue>
-                        <stringValue>Recreational Water</stringValue>
-                    </rightValue>
-                </conditions>
-                <conditions>
-                    <leftValueReference>Get_Insp_Record.Account.Type</leftValueReference>
-                    <operator>EqualTo</operator>
-                    <rightValue>
-                        <stringValue>Personal Services</stringValue>
-                    </rightValue>
-                </conditions>
-                <conditions>
-                    <leftValueReference>Get_Insp_Record.Account.Type</leftValueReference>
-                    <operator>EqualTo</operator>
-                    <rightValue>
-                        <stringValue>Food</stringValue>
-                    </rightValue>
-                </conditions>
-                <conditions>
-                    <leftValueReference>Get_Insp_Record.Account.Type</leftValueReference>
-                    <operator>EqualTo</operator>
-                    <rightValue>
-                        <stringValue>Industrial Camps</stringValue>
                     </rightValue>
                 </conditions>
             </visibilityRule>
@@ -9017,7 +9095,7 @@ V19 - Adding instructional text conditionally EHIS-3867</description>
         </connector>
         <fields>
             <name>CCRC_InfoHighlights</name>
-            <fieldText>&lt;p&gt;&lt;strong&gt;Before saving the inspection, verify that all applicable services and attributes have been added to the facility to ensure all relevant inspection questions are generated on the inspection form.&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Please check if all applicable programs are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.﻿&lt;/strong&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <styleProperties>
                 <verticalAlignment>
@@ -9027,6 +9105,23 @@ V19 - Adding instructional text conditionally EHIS-3867</description>
                     <stringValue>12</stringValue>
                 </width>
             </styleProperties>
+            <visibilityRule>
+                <conditionLogic>or</conditionLogic>
+                <conditions>
+                    <leftValueReference>Get_Account_Records.Type</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>Child Care</stringValue>
+                    </rightValue>
+                </conditions>
+                <conditions>
+                    <leftValueReference>Get_Account_Records.Type</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>Residential Care</stringValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
         </fields>
         <fields>
             <name>New_Inspection_CCRCInspection_Section1</name>
@@ -9679,7 +9774,7 @@ V19 - Adding instructional text conditionally EHIS-3867</description>
         </connector>
         <fields>
             <name>FIPR_InfoHighlights</name>
-            <fieldText>&lt;p&gt;&lt;strong&gt;Before saving the inspection, verify that all applicable services and attributes have been added to the facility to ensure all relevant inspection questions are generated on the inspection form.&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Please check if all applicable equipment are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.&lt;span class=&quot;ql-cursor&quot;&gt;﻿&lt;/span&gt;&lt;/strong&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <styleProperties>
                 <verticalAlignment>
@@ -9689,6 +9784,16 @@ V19 - Adding instructional text conditionally EHIS-3867</description>
                     <stringValue>12</stringValue>
                 </width>
             </styleProperties>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>Get_Account_Records.RecordType.Name</leftValueReference>
+                    <operator>Contains</operator>
+                    <rightValue>
+                        <stringValue>Dairy</stringValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
         </fields>
         <fields>
             <name>New_Inspection_FIPRInspection_Section1</name>
@@ -10003,6 +10108,36 @@ V19 - Adding instructional text conditionally EHIS-3867</description>
         <connector>
             <targetReference>RC_Acc_Visit_Record_Creation</targetReference>
         </connector>
+        <fields>
+            <name>RC_InfoHighlights</name>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Please check if all applicable programs are added to the facility before saving the inspection record, so that pertinent questions are automatically added to the inspection.﻿&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <visibilityRule>
+                <conditionLogic>or</conditionLogic>
+                <conditions>
+                    <leftValueReference>Get_Account_Records.Type</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>Child Care</stringValue>
+                    </rightValue>
+                </conditions>
+                <conditions>
+                    <leftValueReference>Get_Account_Records.Type</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>Residential Care</stringValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
         <fields>
             <name>New_Inspection_RC_Inspection_Section1</name>
             <fieldType>RegionContainer</fieldType>
