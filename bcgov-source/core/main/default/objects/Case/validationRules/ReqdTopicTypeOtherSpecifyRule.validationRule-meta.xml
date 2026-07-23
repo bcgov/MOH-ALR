@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ReqdTopicTypeOtherSpecifyRule</fullName>
+    <active>true</active>
+    <description>Throws error when Topic Type includes &quot;Other&quot; and Topic Type (Other Specify) is blank, for all PHOCS Case record types</description>
+    <errorConditionFormula>OR(
+    RecordType.DeveloperName = &quot;PHOCFoodRecall&quot;,
+    RecordType.DeveloperName = &quot;PHOCSComplaint&quot;,
+    RecordType.DeveloperName = &quot;PHOCSReportableIncident&quot;,
+    RecordType.DeveloperName = &quot;PHOCSRequestsInquiries&quot;,
+    RecordType.DeveloperName = &quot;PHOCSWaterAdvisories&quot;
+) &amp;&amp;
+INCLUDES(TopicTypes__c, &quot;Other&quot;) &amp;&amp;
+ISBLANK(TopicTypeOtherSpecify__c)</errorConditionFormula>
+    <errorDisplayField>TopicTypeOtherSpecify__c</errorDisplayField>
+    <errorMessage>Complete this field</errorMessage>
+</ValidationRule>
