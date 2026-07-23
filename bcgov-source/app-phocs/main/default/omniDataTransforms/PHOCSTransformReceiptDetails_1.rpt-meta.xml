@@ -1,0 +1,664 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<OmniDataTransform xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>false</active>
+    <assignmentRulesUsed>false</assignmentRulesUsed>
+    <deletedOnSuccess>false</deletedOnSuccess>
+    <errorIgnored>false</errorIgnored>
+    <expectedInputJson>{
+  &quot;RegulatoryTrxnFeeAccountNumber&quot;: &quot;FA-01050&quot;,
+  &quot;RegulatoryTrxnFeeItemFeeAmount&quot;: 500,
+  &quot;RegulatoryTrxnFeeItem&quot;: {
+    &quot;PaymentDate&quot;: &quot;2026-07-23&quot;,
+    &quot;ReferenceNumber&quot;: &quot;234234234&quot;,
+    &quot;PaidBy&quot;: &quot;vangli&quot;,
+    &quot;Id&quot;: &quot;0kyAq000000gkCvIAI&quot;,
+    &quot;FeeAmount&quot;: 500
+  },
+  &quot;BillingContactName&quot;: &quot;&quot;,
+  &quot;RegulatoryTrxnFee&quot;: {
+    &quot;TotalFeeAmount&quot;: 500,
+    &quot;TotalFeePaid&quot;: 500,
+    &quot;FeeType&quot;: &quot;Late Fees&quot;,
+    &quot;PaymentDate&quot;: &quot;&quot;,
+    &quot;Comments&quot;: &quot;&quot;,
+    &quot;ReferenceNumber&quot;: &quot;&quot;,
+    &quot;CreatedDate&quot;: &quot;2026-07-23T17:34:17.000Z&quot;,
+    &quot;OutstandingFeeAmount&quot;: 0,
+    &quot;Id&quot;: &quot;0kxAq000000gp7lIAA&quot;,
+    &quot;DueDate&quot;: &quot;2026-07-24T19:00:00.000Z&quot;,
+    &quot;Name&quot;: &quot;FEE-000001580&quot;
+  },
+  &quot;BillingContactEmail&quot;: &quot;&quot;,
+  &quot;RegulatoryTrxnFeeAccount&quot;: {
+    &quot;PhysicalAddressCity&quot;: &quot;Fraser Lake&quot;,
+    &quot;PhysicalAddressStateCode&quot;: &quot;BC&quot;,
+    &quot;PhysicalAddressStreet&quot;: &quot;12 Langley Ave&quot;,
+    &quot;PostalCode&quot;: &quot;V3D A5B&quot;,
+    &quot;PhysicalAddressCountryCode&quot;: &quot;CA&quot;,
+    &quot;HierarchyHAId&quot;: &quot;001Aq00000zAkxp&quot;,
+    &quot;HealthAuthority&quot;: &quot;Northern Health - NH&quot;,
+    &quot;AccountNumber&quot;: &quot;FA-01050&quot;,
+    &quot;Name&quot;: &quot;ABC ChildCare Inc&quot;
+  },
+  &quot;InvoiceDate&quot;: &quot;2026-07-23&quot;,
+  &quot;HealthAuthorityAccount&quot;: {
+    &quot;HAAddress&quot;: &quot;Northern Health\nPublic Health Protection\n4th Floor 1600 3rd Avenue\nPrince George, BC V2L 3G6&quot;,
+    &quot;HAFax&quot;: &quot;250-645-8091&quot;,
+    &quot;HAGSTNumber&quot;: &quot;886 135 953 RT 0001&quot;,
+    &quot;HAPhone&quot;: &quot;250-565-7322&quot;,
+    &quot;HAEmail&quot;: &quot;publichealth.protection@northernhealth.ca&quot;,
+    &quot;Id&quot;: &quot;001Aq00000zAkxpIAC&quot;,
+    &quot;Name&quot;: &quot;Northern&quot;
+  },
+  &quot;RegulatoryTrxnFeeItemCount&quot;: 1
+}</expectedInputJson>
+    <fieldLevelSecurityEnabled>false</fieldLevelSecurityEnabled>
+    <inputType>JSON</inputType>
+    <isManagedUsingStdDesigner>false</isManagedUsingStdDesigner>
+    <name>PHOCSTransformReceiptDetails</name>
+    <nullInputsIncludedInOutput>false</nullInputsIncludedInOutput>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>7109ed31-91df-4ccd-bed6-422cc3fd98c2</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeAccount:PostalCode</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>AccountPhysicalAddressPostalCode</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>196b7ee3-8d78-4983-baf3-dd1d167ed8ef</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeItemFeeAmount</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RTFItemFeeAmount</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>143ddb1d-d59d-4361-ada5-98169211f101</globalKey>
+        <inputFieldName>InvoiceDate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Date(MM/dd/yyyy)</outputFieldFormat>
+        <outputFieldName>InvoiceCreatedDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>5eda6eb6-1c36-4e96-92b1-606229a66565</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeAccount:PhysicalAddressCountryCode</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>AccountPhysicalAddressCountryCode</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>a4ed44ad-db43-40e4-82e4-45bbb72da98c</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeAccount:PhysicalAddressStreet</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>AccountPhysicalAddressStreet</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>dce5f52d-435f-49ec-8410-23aff178f435</globalKey>
+        <inputFieldName>RegulatoryTrxnFee:Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegulatoryTrxnFeeName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>3a2949f8-72cf-40de-bbc6-72706b2a54bc</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeAccount:Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>AccountName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>31c08a16-129a-41e3-99c2-fc3ec5570db0</globalKey>
+        <inputFieldName>RegulatoryTrxnFee:CreatedDate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Date(MM/dd/yyyy)</outputFieldFormat>
+        <outputFieldName>RTFCreatedDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>0ecea52c-53e6-4f7d-8dfe-97b5a6213aad</globalKey>
+        <inputFieldName>RegulatoryTrxnFee:Comments</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RTFComments</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>9f888867-8bbd-4788-afca-9d761fe07044</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeItemCount</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RTFItemCount</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>e3174f4b-2b39-4dfe-8173-5c6051772660</globalKey>
+        <inputFieldName>RTFitemFeeAmount</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RTFitemFeeAmount</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>d7139a23-5b8c-4b01-8528-c2d1b2371878</globalKey>
+        <inputFieldName>RegulatoryTrxnFee:TotalFeeAmount</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RTFTotalFeeAmount</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>fbeb6aff-3883-44b8-8616-bd89ce8d208f</globalKey>
+        <inputFieldName>RegulatoryTrxnFee:Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegulatoryTrxnFeeName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>5ef7faad-415a-41b0-8582-a5992208d951</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeAccount:PhysicalAddressStateCode</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>AccountPhysicalAddressStateCode</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>67910628-ffcf-4a02-9ab3-567612cb7365</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeAccount:PhysicalAddressCity</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>AccountPhysicalAddressCity</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>e78e6a62-7f80-4ec6-9496-646dbce753c0</globalKey>
+        <inputFieldName>BillingContactName</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BillingContactName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaSequence>1.0</formulaSequence>
+        <globalKey>fb4051cc-bf7b-410b-9461-428f033db930</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>0bb65adc-f97c-4a6c-a201-1af4ecb3c73b</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeAccount:AccountNumber</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>AccountNumber</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>5503d925-694a-4f3f-b120-a2a8daa5e5d3</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeAccount:PhysicalAddressCountryCode</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>AccountPhysicalAddressCountryCode</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>ee593058-0c39-480d-bd3a-1902c3893e8d</globalKey>
+        <inputFieldName>BillingContactEmail</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BillingContactEmail</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><globalKey>093f3904-fa58-437d-8006-1df5255ba76b</globalKey>
+        <inputFieldName>RegulatoryTrxnFee:DueDate</inputFieldName><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name><outputCreationSequence>1.0</outputCreationSequence><outputFieldFormat>Date(dd-MMM-yyyy)</outputFieldFormat><outputFieldName>DueDate</outputFieldName><outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><transformValuesMappings>{ }</transformValuesMappings><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><globalKey>91f1d98c-534c-47f9-9ce3-aefdbccac9e5</globalKey>
+        <inputFieldName>RegulatoryTrxnFee:TotalFeePaid</inputFieldName><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name><outputCreationSequence>1.0</outputCreationSequence><outputFieldName>RTFAmountPaid</outputFieldName><outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><transformValuesMappings>{ }</transformValuesMappings><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><globalKey>ecbe76a9-b87a-4b8e-9c22-a3c5819a4ea5</globalKey>
+        <inputFieldName>RegulatoryTrxnFee:OutstandingFeeAmount</inputFieldName><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name><outputCreationSequence>1.0</outputCreationSequence><outputFieldName>RTFBalanceOutstanding</outputFieldName><outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><transformValuesMappings>{ }</transformValuesMappings><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><globalKey>baf508ec-3ee1-4c6b-a82f-f83730129a77</globalKey>
+        <inputFieldName>RegulatoryTrxnFee:FeeType</inputFieldName><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name><outputCreationSequence>1.0</outputCreationSequence><outputFieldName>RTFItemFeeType</outputFieldName><outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><transformValuesMappings>{ }</transformValuesMappings><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><globalKey>22ce0718-52bb-4221-8efe-77b51e3f9c0f</globalKey>
+        <inputFieldName>HealthAuthorityAccount:HAAddress</inputFieldName><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name><outputCreationSequence>1.0</outputCreationSequence><outputFieldName>HAAddress</outputFieldName><outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><transformValuesMappings>{ }</transformValuesMappings><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaExpression>JOIN(SPLIT(%HealthAuthorityAccount:HAAddress%, &quot;\n&quot;), &quot;, &quot;)</formulaExpression>
+        <formulaResultPath>HAAddressInline</formulaResultPath>
+        <formulaSequence>2.0</formulaSequence>
+        <globalKey>d5d0e7a3-38e4-429a-9683-f04d3e055198</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>f17ed9b7-30b7-4e21-836e-02fc6e74376e</globalKey>
+        <inputFieldName>HAAddressInline</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>HAAddressInline</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup>
+        <formulaExpression>IF(%RegulatoryTrxnFeeAccount:HealthAuthority% == &quot;Northern Health - NH&quot;, true, false)</formulaExpression><formulaResultPath>IF_HA_Northern</formulaResultPath><formulaSequence>3.0</formulaSequence>
+        <globalKey>623eb19c-03d2-4d40-a5e9-9ee62350b903</globalKey><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name><outputCreationSequence>0.0</outputCreationSequence><outputFieldName>Formula</outputFieldName><outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><globalKey>cddee284-bb22-4a2c-8e23-d31b074c0095</globalKey>
+        <inputFieldName>IF_HA_Northern</inputFieldName><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name><outputCreationSequence>1.0</outputCreationSequence><outputFieldName>IF_HA_Northern</outputFieldName><outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><transformValuesMappings>{ }</transformValuesMappings><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup>
+        <formulaExpression>IF(%RegulatoryTrxnFeeAccount:HealthAuthority% == &quot;Interior Health - IH&quot;, true, false)</formulaExpression><formulaResultPath>IF_HA_Interior</formulaResultPath><formulaSequence>4.0</formulaSequence>
+        <globalKey>02cca23e-04fe-441b-bfa8-3014c2435683</globalKey><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name><outputCreationSequence>0.0</outputCreationSequence><outputFieldName>Formula</outputFieldName><outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><globalKey>4075ee93-d9d2-484f-b4c4-a6b992c93095</globalKey>
+        <inputFieldName>IF_HA_Interior</inputFieldName><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name><outputCreationSequence>1.0</outputCreationSequence><outputFieldName>IF_HA_Interior</outputFieldName><outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><transformValuesMappings>{ }</transformValuesMappings><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup>
+        <formulaExpression>IF(%RegulatoryTrxnFeeAccount:HealthAuthority% == &quot;Island Health - Island&quot;, true, false)</formulaExpression><formulaResultPath>IF_HA_Island</formulaResultPath><formulaSequence>5.0</formulaSequence>
+        <globalKey>ea4ecd0f-5ab1-4388-adec-9f2822fbfaaf</globalKey><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name><outputCreationSequence>0.0</outputCreationSequence><outputFieldName>Formula</outputFieldName><outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><globalKey>cf5c7d99-7216-47d5-882f-e4e8e18a0df6</globalKey>
+        <inputFieldName>IF_HA_Island</inputFieldName><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name><outputCreationSequence>1.0</outputCreationSequence><outputFieldName>IF_HA_Island</outputFieldName><outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><transformValuesMappings>{ }</transformValuesMappings><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup>
+        <formulaExpression>IF(%RegulatoryTrxnFeeAccount:HealthAuthority% == &quot;Vancouver Coastal Health - VCH&quot;, true, false)</formulaExpression><formulaResultPath>IF_HA_VancouverCoastal</formulaResultPath><formulaSequence>6.0</formulaSequence>
+        <globalKey>361d6915-7274-48f7-86f1-c085203b906f</globalKey><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name><outputCreationSequence>0.0</outputCreationSequence><outputFieldName>Formula</outputFieldName><outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><globalKey>3f29a05a-443f-472c-92bc-963f82a4253c</globalKey>
+        <inputFieldName>IF_HA_VancouverCoastal</inputFieldName><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name><outputCreationSequence>1.0</outputCreationSequence><outputFieldName>IF_HA_VancouverCoastal</outputFieldName><outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><transformValuesMappings>{ }</transformValuesMappings><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup>
+        <formulaExpression>IF(%RegulatoryTrxnFeeAccount:HealthAuthority% == &quot;Fraser Health - FH&quot;, true, false)</formulaExpression><formulaResultPath>IF_HA_Fraser</formulaResultPath><formulaSequence>7.0</formulaSequence>
+        <globalKey>64f049c1-0b85-49e5-ad1f-7b7ca986cce2</globalKey><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name><outputCreationSequence>0.0</outputCreationSequence><outputFieldName>Formula</outputFieldName><outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><globalKey>d1b51e4a-3edc-4a0c-bf0f-30a9fea9e006</globalKey>
+        <inputFieldName>IF_HA_Fraser</inputFieldName><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name><outputCreationSequence>1.0</outputCreationSequence><outputFieldName>IF_HA_Fraser</outputFieldName><outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><transformValuesMappings>{ }</transformValuesMappings><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><globalKey>1a621503-9089-40cb-b326-64322adad913</globalKey>
+        <inputFieldName>HealthAuthorityAccount:HAGSTNumber</inputFieldName><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name><outputCreationSequence>1.0</outputCreationSequence><outputFieldName>HAGSTNumber</outputFieldName><outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><transformValuesMappings>{ }</transformValuesMappings><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><globalKey>ab32078e-159e-4fee-bad9-f7ad9a18dafe</globalKey>
+        <inputFieldName>HealthAuthorityAccount:HAPhone</inputFieldName><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name><outputCreationSequence>1.0</outputCreationSequence><outputFieldName>HAPhone</outputFieldName><outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><transformValuesMappings>{ }</transformValuesMappings><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><globalKey>b57db6a8-d126-4d70-998d-50fe707991ea</globalKey>
+        <inputFieldName>HealthAuthorityAccount:HAFax</inputFieldName><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name><outputCreationSequence>1.0</outputCreationSequence><outputFieldName>HAFax</outputFieldName><outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><transformValuesMappings>{ }</transformValuesMappings><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><globalKey>cb5f6515-02de-4421-970e-054efa351f8f</globalKey>
+        <inputFieldName>HealthAuthorityAccount:HAEmail</inputFieldName><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name><outputCreationSequence>1.0</outputCreationSequence><outputFieldName>HAEmail</outputFieldName><outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><transformValuesMappings>{ }</transformValuesMappings><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>6ee4bb79-3f9c-4ee0-a0cd-ab18df0e8711</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeItem:ReferenceNumber</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>ReferenceNumber</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>0d21d809-797c-41e7-81f3-ea221ea6beef</globalKey>
+        <inputFieldName>RegulatoryTrxnFee:PaymentDate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Date(MM/dd/yyyy)</outputFieldFormat>
+        <outputFieldName>PaymentDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>c0dcf769-e1f4-4356-887e-b20868448e92</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeItem:PaymentDate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Date(MM/dd/yyyy)</outputFieldFormat>
+        <outputFieldName>RTFItem:PaymentDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>3364c048-ecee-4dc4-bbd9-a0367597baae</globalKey>
+        <inputFieldName>RegulatoryTrxnFee:FeeType</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RTFItem:FeeType</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>ed2b44ea-5e22-49c7-975a-81103f8a5be2</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeItem:PaidBy</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RTFItem:PaymentMethod</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>76a79d8c-13d5-4721-b079-b973ac96e89b</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeItem:FeeAmount</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSTransformReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RTFItem:FeeAmount</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <outputType>JSON</outputType>
+    <previewJsonData>{
+  &quot;RegulatoryTrxnFeeAccountNumber&quot;: &quot;FA-01050&quot;,
+  &quot;RegulatoryTrxnFeeItemFeeAmount&quot;: 500,
+  &quot;RegulatoryTrxnFeeItem&quot;: {
+    &quot;PaymentDate&quot;: &quot;2026-07-23&quot;,
+    &quot;ReferenceNumber&quot;: &quot;234234234&quot;,
+    &quot;PaidBy&quot;: &quot;vangli&quot;,
+    &quot;Id&quot;: &quot;0kyAq000000gkCvIAI&quot;,
+    &quot;FeeAmount&quot;: 500
+  },
+  &quot;BillingContactName&quot;: &quot;&quot;,
+  &quot;RegulatoryTrxnFee&quot;: {
+    &quot;TotalFeeAmount&quot;: 500,
+    &quot;TotalFeePaid&quot;: 500,
+    &quot;FeeType&quot;: &quot;Late Fees&quot;,
+    &quot;PaymentDate&quot;: &quot;&quot;,
+    &quot;Comments&quot;: &quot;&quot;,
+    &quot;ReferenceNumber&quot;: &quot;&quot;,
+    &quot;CreatedDate&quot;: &quot;2026-07-23T17:34:17.000Z&quot;,
+    &quot;OutstandingFeeAmount&quot;: 0,
+    &quot;Id&quot;: &quot;0kxAq000000gp7lIAA&quot;,
+    &quot;DueDate&quot;: &quot;2026-07-24T19:00:00.000Z&quot;,
+    &quot;Name&quot;: &quot;FEE-000001580&quot;
+  },
+  &quot;BillingContactEmail&quot;: &quot;&quot;,
+  &quot;RegulatoryTrxnFeeAccount&quot;: {
+    &quot;PhysicalAddressCity&quot;: &quot;Fraser Lake&quot;,
+    &quot;PhysicalAddressStateCode&quot;: &quot;BC&quot;,
+    &quot;PhysicalAddressStreet&quot;: &quot;12 Langley Ave&quot;,
+    &quot;PostalCode&quot;: &quot;V3D A5B&quot;,
+    &quot;PhysicalAddressCountryCode&quot;: &quot;CA&quot;,
+    &quot;HierarchyHAId&quot;: &quot;001Aq00000zAkxp&quot;,
+    &quot;HealthAuthority&quot;: &quot;Northern Health - NH&quot;,
+    &quot;AccountNumber&quot;: &quot;FA-01050&quot;,
+    &quot;Name&quot;: &quot;ABC ChildCare Inc&quot;
+  },
+  &quot;InvoiceDate&quot;: &quot;2026-07-23&quot;,
+  &quot;HealthAuthorityAccount&quot;: {
+    &quot;HAAddress&quot;: &quot;Northern Health\nPublic Health Protection\n4th Floor 1600 3rd Avenue\nPrince George, BC V2L 3G6&quot;,
+    &quot;HAFax&quot;: &quot;250-645-8091&quot;,
+    &quot;HAGSTNumber&quot;: &quot;886 135 953 RT 0001&quot;,
+    &quot;HAPhone&quot;: &quot;250-565-7322&quot;,
+    &quot;HAEmail&quot;: &quot;publichealth.protection@northernhealth.ca&quot;,
+    &quot;Id&quot;: &quot;001Aq00000zAkxpIAC&quot;,
+    &quot;Name&quot;: &quot;Northern&quot;
+  },
+  &quot;RegulatoryTrxnFeeItemCount&quot;: 1
+}</previewJsonData>
+    <processSuperBulk>false</processSuperBulk>
+    <responseCacheTtlMinutes>0.0</responseCacheTtlMinutes>
+    <rollbackOnError>false</rollbackOnError>
+    <sourceObject>json</sourceObject>
+    <sourceObjectDefault>false</sourceObjectDefault>
+    <synchronousProcessThreshold>0.0</synchronousProcessThreshold>
+    <targetOutputFileName>PHOCSReceiptTemplate(Version 1)</targetOutputFileName>
+    <type>Transform</type>
+    <uniqueName>PHOCSTransformReceiptDetails_1</uniqueName>
+    <versionNumber>1.0</versionNumber>
+    <xmlDeclarationRemoved>false</xmlDeclarationRemoved>
+</OmniDataTransform>
+
