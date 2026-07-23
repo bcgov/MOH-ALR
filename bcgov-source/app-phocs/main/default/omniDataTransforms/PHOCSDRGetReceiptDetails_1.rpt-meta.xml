@@ -4,53 +4,21 @@
     <assignmentRulesUsed>false</assignmentRulesUsed>
     <deletedOnSuccess>false</deletedOnSuccess>
     <errorIgnored>false</errorIgnored>
-    <expectedOutputJson>{
-  &quot;Units&quot; : [ { } ],
-  &quot;InvoiceItems&quot; : [ { } ],
-  &quot;RegistrantState&quot; : &quot;Text&quot;,
-  &quot;RegistrantName&quot; : &quot;Text&quot;,
-  &quot;RegistrantAddress&quot; : &quot;Text&quot;,
-  &quot;ResidenceName&quot; : &quot;Text&quot;,
-  &quot;ResidenceAddress&quot; : &quot;Text&quot;,
-  &quot;RegistrantStreet&quot; : &quot;Text&quot;,
-  &quot;InvoiceId&quot; : &quot;Text&quot;,
-  &quot;TotalFeeAmount&quot; : &quot;Text&quot;,
-  &quot;RegistrantCity&quot; : &quot;Text&quot;,
-  &quot;InvoiceCreatedDate&quot; : &quot;Text&quot;,
-  &quot;RegistrantZipCode&quot; : &quot;Text&quot;,
-  &quot;InvoicePaymentDate&quot; : &quot;Text&quot;,
-  &quot;CertificateId&quot; : &quot;Text&quot;
-}</expectedOutputJson>
     <fieldLevelSecurityEnabled>false</fieldLevelSecurityEnabled>
     <inputType>JSON</inputType>
     <isManagedUsingStdDesigner>false</isManagedUsingStdDesigner>
     <name>PHOCSDRGetReceiptDetails</name>
-    <nullInputsIncludedInOutput>false</nullInputsIncludedInOutput>
+    <nullInputsIncludedInOutput>true</nullInputsIncludedInOutput>
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>171e9671-6862-4e9b-9240-1161748ee8f7</globalKey>
-        <inputFieldName>OrganizationBillingAddress</inputFieldName>
+        <globalKey>6531761b-3fd1-4032-a831-5726ae8a7c1b</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeAccount:AccountNumberRTPrefixed__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>PHOCSDRGetReceiptDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>OrganizationBillingAddress</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>8ba582b0-cf7a-4c17-abdd-219ec1f1e9b6</globalKey>
-        <inputFieldName>InvoiceItem:Id</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>InvoiceItem:Id</outputFieldName>
+        <outputFieldName>RegulatoryTrxnFeeAccount:AccountNumber</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -60,279 +28,31 @@
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <filterOperator>=</filterOperator>
-        <filterValue>ACR:ContactId</filterValue>
-        <globalKey>6587abbc-e5ef-47f1-b490-9fd80befea3b</globalKey>
-        <inputFieldName>Id</inputFieldName>
-        <inputObjectName>Contact</inputObjectName>
-        <inputObjectQuerySequence>12.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Contact</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>&apos;True&apos;</filterValue>
-        <globalKey>29c02b0b-c25c-4175-882c-154d4c61d8de</globalKey>
-        <inputFieldName>IsActive</inputFieldName>
-        <inputObjectName>AccountContactRelation</inputObjectName>
-        <inputObjectQuerySequence>11.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>ACR</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| | &quot;SELECT/\/\/Quantity__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Private&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
-        <formulaExpression>SUM(QUERY(&quot;SELECT Quantity__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Private&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
-        <formulaResultPath>PrivateQuantitySumValue</formulaResultPath>
-        <formulaSequence>10.0</formulaSequence>
-        <globalKey>b82570a6-0f4a-4b6d-b1ac-045b5fab65c4</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>8baffffe-51ee-4bfb-8122-9d9dc5135dd2</globalKey>
-        <inputFieldName>InvoiceItem:Type</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>InvoiceItem:Type</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| | &quot;SELECT/\/\/FeeAmount/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Private&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
-        <formulaExpression>SUM(QUERY(&quot;SELECT FeeAmount FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Private&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
-        <formulaResultPath>PrivateFeeSumValue</formulaResultPath>
-        <formulaSequence>9.0</formulaSequence>
-        <globalKey>36147538-fe98-46ae-b774-01d0ed6fab0f</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>&quot;$Vlocity.NULL&quot;</filterValue>
-        <globalKey>c34ccb28-f6f1-4e10-976d-600995c91525</globalKey>
-        <inputFieldName>ActiveTo</inputFieldName>
-        <inputObjectName>AssociatedLocation</inputObjectName>
-        <inputObjectQuerySequence>8.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>AssociatedLoc</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>LIMIT</filterOperator>
-        <filterValue>1</filterValue>
-        <globalKey>a6653d1a-4aa3-4825-ba3f-f828ea123c48</globalKey>
-        <inputObjectName>AccountContactRelation</inputObjectName>
-        <inputObjectQuerySequence>11.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>ACR</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <defaultValue>YYYY-MM-DD</defaultValue>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>a68deb57-e9a2-4f67-b8ab-0a43b3db650a</globalKey>
-        <inputFieldName>Invoice:CreatedDate</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>InvoiceCreatedDate</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>1b05c7e2-d788-4345-a1be-4fc63ace79ba</globalKey>
-        <inputFieldName>InvoiceItem:FeeAmount</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>InvoiceItem:FeeAmount</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>&apos;Residence&apos;</filterValue>
-        <globalKey>5eae194a-8d28-4d7a-9010-faf004e7f71d</globalKey>
-        <inputFieldName>Name</inputFieldName>
-        <inputObjectName>RecordType</inputObjectName>
-        <inputObjectQuerySequence>1.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Rec</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:OtherQuantitySumValue 0 &lt;&gt; var:OtherQuantitySumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(OtherQuantitySumValue&lt;&gt;0,OtherQuantitySumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>OtherQuantitySum</formulaResultPath>
-        <formulaSequence>40.0</formulaSequence>
-        <globalKey>5feae49f-b60e-43bb-956c-fa899705c5fa</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| &quot;yyyy-MM-dd&quot; FORMATDATETIME</formulaConverted>
-        <formulaExpression>FORMATDATETIME(&quot;yyyy-MM-dd&quot;)</formulaExpression>
-        <formulaResultPath>InvoicePaymentDate</formulaResultPath>
-        <formulaSequence>41.0</formulaSequence>
-        <globalKey>d60a0441-fab6-4c0d-9965-e749e231d39d</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>3defb974-7838-4ead-b83c-2f86eae89b6e</globalKey>
-        <inputFieldName>Facility:AccountNumberRTPrefixed__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>AccountNumber</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>Facility:ParentId</filterValue>
-        <globalKey>baa91705-a2ac-430d-9d11-c010ef298852</globalKey>
+        <filterValue>RegulatoryTrxnFee:AccountId</filterValue>
+        <globalKey>4d27f158-50a7-4e67-8b03-cb2c37eb5ab0</globalKey>
         <inputFieldName>Id</inputFieldName>
         <inputObjectName>Account</inputObjectName>
-        <inputObjectQuerySequence>5.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>2.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>PHOCSDRGetReceiptDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Organization</outputFieldName>
+        <outputFieldName>RegulatoryTrxnFeeAccount</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
-        <disabled>true</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:InvoiceItem:Amount__c &quot;Unit/\/\/Fee&quot; == 12.50 | var:InvoiceItem:Amount__c &quot;Partial/\/\/Unit/\/\/Fee&quot; == 6.25 0 IF IF</formulaConverted>
-        <formulaExpression>IF(%InvoiceItem:Amount__c%==&quot;Unit Fee&quot;,12.50,IF(%InvoiceItem:Amount__c%==&quot;Partial Unit Fee&quot;,6.25,0))</formulaExpression>
-        <formulaResultPath>InvoiceItem:Price</formulaResultPath>
-        <formulaSequence>1.0</formulaSequence>
-        <globalKey>53acc5ae-3ccc-4206-ade2-6ac9e439e85f</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| &quot;SELECT/\/\/Amount__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Public&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/Limit/\/\/1&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY</formulaConverted>
-        <formulaExpression>QUERY(&quot;SELECT Amount__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Public&apos; AND Quantity__c!=0 Limit 1&quot;, InvoiceItem:RegulatoryTrxnFeeId)</formulaExpression>
-        <formulaResultPath>PublicSum</formulaResultPath>
-        <formulaSequence>6.0</formulaSequence>
-        <globalKey>912ae7d3-2bbc-46b3-8643-66cac230f1af</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>Invoice:AccountId</filterValue>
-        <globalKey>f17a75eb-da8b-464d-84f0-18aafb156042</globalKey>
-        <inputFieldName>Id</inputFieldName>
+        <filterOperator>LIMIT</filterOperator>
+        <filterValue>1</filterValue>
+        <globalKey>6845455a-feee-4fea-ae58-bab765a7f418</globalKey>
         <inputObjectName>Account</inputObjectName>
-        <inputObjectQuerySequence>3.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>2.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>PHOCSDRGetReceiptDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Facility</outputFieldName>
+        <outputFieldName>RegulatoryTrxnFeeAccount</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -340,960 +60,16 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>654a9ab5-9e79-4f6a-81ec-e8293b8fd612</globalKey>
-        <inputFieldName>InvoiceItem:Name</inputFieldName>
+        <globalKey>a1c708be-1842-4e44-b125-4dfe150d05f5</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeAccount:AccountNumberRTPrefixed__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>PHOCSDRGetReceiptDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldFormat>String</outputFieldFormat>
-        <outputFieldName>InvoiceItem:Name</outputFieldName>
+        <outputFieldName>RegulatoryTrxnFeeAccountNumber</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| | &quot;SELECT/\/\/Quantity__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Licensed&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
-        <formulaExpression>SUM(QUERY(&quot;SELECT Quantity__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Licensed&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
-        <formulaResultPath>LicensedQuantitySumValue</formulaResultPath>
-        <formulaSequence>13.0</formulaSequence>
-        <globalKey>6847cd3c-e7a6-4474-a466-191fbbe91bc9</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>LIMIT</filterOperator>
-        <filterValue>1</filterValue>
-        <globalKey>47ae70fc-47e0-4344-91f7-c306adc8c8fa</globalKey>
-        <inputObjectName>Address</inputObjectName>
-        <inputObjectQuerySequence>10.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Address</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| | &quot;SELECT/\/\/Quantity__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Independent/\/\/Living&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
-        <formulaExpression>SUM(QUERY(&quot;SELECT Quantity__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Independent Living&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
-        <formulaResultPath>IndLivingQuantitySumValue</formulaResultPath>
-        <formulaSequence>18.0</formulaSequence>
-        <globalKey>ce990112-d7db-4410-b49c-0816538c9625</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>true</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:Address:Street &quot;/\/\/&quot; var:Address:City &quot;/\/\/&quot; var:Address:State &quot;/\/\/&quot; var:Address:PostalCode &quot;/\/\/&quot; var:Address:Country CONCAT</formulaConverted>
-        <formulaExpression>CONCAT(%Address:Street%, &quot; &quot;,%Address:City%, &quot; &quot;,%Address:State%, &quot; &quot;,%Address:PostalCode%, &quot; &quot;,%Address:Country%)</formulaExpression>
-        <formulaResultPath>ResidenceAddress</formulaResultPath>
-        <formulaSequence>3.0</formulaSequence>
-        <globalKey>4feae60f-40a5-44df-ba13-d2fa901cc5ba</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>&apos;Active&apos;</filterValue>
-        <globalKey>ada31a98-cee8-46bf-9513-101f6f04261b</globalKey>
-        <inputFieldName>Status</inputFieldName>
-        <inputObjectName>BusinessLicense</inputObjectName>
-        <inputObjectQuerySequence>6.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Certificate</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:IndLivingFeeSumValue 0 &lt;&gt; var:IndLivingFeeSumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(IndLivingFeeSumValue&lt;&gt;0,IndLivingFeeSumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>IndLivingFeeSum</formulaResultPath>
-        <formulaSequence>24.0</formulaSequence>
-        <globalKey>55206e5e-9fbd-48a2-9b39-acf070b30b5d</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>ResidenceAccount:Id</filterValue>
-        <globalKey>dfb6243c-5860-4ccc-9cc6-4bd8c299da9d</globalKey>
-        <inputFieldName>AccountId</inputFieldName>
-        <inputObjectName>Asset</inputObjectName>
-        <inputObjectQuerySequence>4.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Unit</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>true</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:LicensedSumValue 0 &lt;&gt; var:LicensedSumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(LicensedSumValue&lt;&gt;0,LicensedSumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>LicensedSum</formulaResultPath>
-        <formulaSequence>21.0</formulaSequence>
-        <globalKey>a9934f6a-5e5b-4b2f-9efb-c451da21a3b2</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>Facility:Id</filterValue>
-        <globalKey>7f2316c1-945c-48b9-873d-0a2e5f9a92a5</globalKey>
-        <inputFieldName>ParentRecordId</inputFieldName>
-        <inputObjectName>AssociatedLocation</inputObjectName>
-        <inputObjectQuerySequence>8.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>AssociatedLoc</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>true</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:PrivateSumValue 0 &lt;&gt; var:PrivateSumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(PrivateSumValue&lt;&gt;0,PrivateSumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>PrivateSum</formulaResultPath>
-        <formulaSequence>30.0</formulaSequence>
-        <globalKey>bd2b9716-46cc-4f35-8fe7-1a1002632490</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:PerDiemFeeSumValue 0 &lt;&gt; var:PerDiemFeeSumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(PerDiemFeeSumValue&lt;&gt;0,PerDiemFeeSumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>PerDiemFeeSum</formulaResultPath>
-        <formulaSequence>29.0</formulaSequence>
-        <globalKey>e0cd0d2d-4c7e-4376-ada4-c172a08ec8bf</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>98f5ad9c-87e5-4d6a-9f41-8f6b506fd377</globalKey>
-        <inputFieldName>Facility:Name</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>FacilityName</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| | &quot;SELECT/\/\/FeeAmount/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Public&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
-        <formulaExpression>SUM(QUERY(&quot;SELECT FeeAmount FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Public&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
-        <formulaResultPath>PublicFeeSumValue</formulaResultPath>
-        <formulaSequence>8.0</formulaSequence>
-        <globalKey>41cd9a54-a5ac-46c9-9f19-ea28f18fe853</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>98c5969d-4992-4492-b6d5-21f6f16ccd6e</globalKey>
-        <inputFieldName>Invoice:Name</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>InvoiceId</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>9f733e95-1350-45c9-b45b-a981c431f072</globalKey>
-        <inputFieldName>Organization:BillingStreet</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>OrganizationStreet</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>true</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| TODAY</formulaConverted>
-        <formulaExpression>TODAY()</formulaExpression>
-        <formulaResultPath>InvoiceCreatedDate</formulaResultPath>
-        <formulaSequence>5.0</formulaSequence>
-        <globalKey>3076a6c6-29c2-4113-83d2-72a02bb3eadd</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>93e96200-9a5f-4a7c-a1b3-218850d8b793</globalKey>
-        <inputFieldName>Contact:Name</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>RelatedContactName</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>AssociatedLoc:LocationId</filterValue>
-        <globalKey>4d9a8ac3-75f7-42ee-a8b4-bb0acf44a164</globalKey>
-        <inputFieldName>Id</inputFieldName>
-        <inputObjectName>Location</inputObjectName>
-        <inputObjectQuerySequence>9.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Location</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>a4daee11-b0d7-4652-a755-f4f2e936f26f</globalKey>
-        <inputFieldName>Organization:BillingPostalCode</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>OrganizationZipCode</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:PublicQuantitySumValue 0 &lt;&gt; var:PublicQuantitySumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(PublicQuantitySumValue&lt;&gt;0,PublicQuantitySumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>PublicQuantitySum</formulaResultPath>
-        <formulaSequence>34.0</formulaSequence>
-        <globalKey>98fd87f2-b8df-4bb1-ba7f-2926bc48bb1a</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>true</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:PublicSumValue 0 &lt;&gt; var:PublicSumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(PublicSumValue&lt;&gt;0,PublicSumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>PublicSum</formulaResultPath>
-        <formulaSequence>35.0</formulaSequence>
-        <globalKey>2adc4db0-d138-433f-84a7-956e87e9b2f6</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>true</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:IndLivingSumValue 0 &lt;&gt; var:IndLivingSumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(IndLivingSumValue&lt;&gt;0,IndLivingSumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>IndLivingSum</formulaResultPath>
-        <formulaSequence>26.0</formulaSequence>
-        <globalKey>76cb1a1f-af63-4077-8966-31fd23d29710</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>d2020e35-7b84-410c-bfbe-ddd35b10f95b</globalKey>
-        <inputFieldName>InvoiceItem:Quantity</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>InvoiceItem:Quantity</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:LicensedQuantitySumValue 0 &lt;&gt; var:LicensedQuantitySumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(LicensedQuantitySumValue&lt;&gt;0,LicensedQuantitySumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>LicensedQuantitySum</formulaResultPath>
-        <formulaSequence>22.0</formulaSequence>
-        <globalKey>c0d2f7d6-6bf3-48db-a8f2-b1b17da625fe</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>true</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:InvoiceItem:Amount__c &quot;Unit/\/\/Fee&quot; == var:InvoiceItem:Quantity 12.50 * | var:InvoiceItem:Amount__c &quot;Partial/\/\/Unit/\/\/Fee&quot; == var:InvoiceItem:Quantity 6.25 * 0 IF IF</formulaConverted>
-        <formulaExpression>IF(%InvoiceItem:Amount__c%==&quot;Unit Fee&quot;,%InvoiceItem:Quantity% * 12.50,IF(%InvoiceItem:Amount__c%==&quot;Partial Unit Fee&quot;,%InvoiceItem:Quantity% * 6.25,0))</formulaExpression>
-        <formulaResultPath>InvoiceItem:Fees</formulaResultPath>
-        <formulaSequence>4.0</formulaSequence>
-        <globalKey>8ca2800a-e5b3-4918-b961-8ec17f526499</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| | &quot;SELECT/\/\/FeeAmount/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Per/\/\/Diem&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
-        <formulaExpression>SUM(QUERY(&quot;SELECT FeeAmount FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Per Diem&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
-        <formulaResultPath>PerDiemFeeSumValue</formulaResultPath>
-        <formulaSequence>15.0</formulaSequence>
-        <globalKey>3b9e1ae3-85a9-4890-ba23-72403b25a068</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>true</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:PerDiemSumValue 0 &lt;&gt; var:PerDiemSumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(PerDiemSumValue&lt;&gt;0,PerDiemSumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>PerDiemSum</formulaResultPath>
-        <formulaSequence>28.0</formulaSequence>
-        <globalKey>cc72979b-5f27-4359-b09e-ef738ff65d25</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>LIMIT</filterOperator>
-        <filterValue>1</filterValue>
-        <globalKey>770af2a6-4a33-466b-ae01-28f9b6765d40</globalKey>
-        <inputObjectName>Location</inputObjectName>
-        <inputObjectQuerySequence>9.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Location</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>&quot;$Vlocity.NULL&quot;</filterValue>
-        <globalKey>e5a4f144-a74f-4994-9860-40aa39859ecc</globalKey>
-        <inputFieldName>ParentId</inputFieldName>
-        <inputObjectName>Asset</inputObjectName>
-        <inputObjectQuerySequence>4.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Unit</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| | &quot;SELECT/\/\/FeeAmount/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Licensed&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
-        <formulaExpression>SUM(QUERY(&quot;SELECT FeeAmount FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Licensed&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
-        <formulaResultPath>LicensedFeeSumValue</formulaResultPath>
-        <formulaSequence>14.0</formulaSequence>
-        <globalKey>3fb5a05a-5d6d-4462-a1de-f1f2be570211</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>00902676-5d1f-4d7e-8829-cecaf1c489fa</globalKey>
-        <inputFieldName>Certificate:RegistrationCertificate__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>CertificateId</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| | &quot;SELECT/\/\/FeeAmount/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Independent/\/\/Living&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
-        <formulaExpression>SUM(QUERY(&quot;SELECT FeeAmount FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Independent Living&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
-        <formulaResultPath>IndLivingFeeSumValue</formulaResultPath>
-        <formulaSequence>20.0</formulaSequence>
-        <globalKey>0177f407-e562-44db-9ec3-f7959278dcae</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| &quot;SELECT/\/\/Amount__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Independent/\/\/Living&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/Limit/\/\/1&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY</formulaConverted>
-        <formulaExpression>QUERY(&quot;SELECT Amount__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Independent Living&apos; AND Quantity__c!=0 Limit 1&quot;, InvoiceItem:RegulatoryTrxnFeeId)</formulaExpression>
-        <formulaResultPath>IndLivingSum</formulaResultPath>
-        <formulaSequence>19.0</formulaSequence>
-        <globalKey>32734169-892a-42fb-96ee-4cb7f1999b51</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <defaultValue>0.00</defaultValue>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>fad668ea-2df1-41de-a8a6-ebbb8fde23bb</globalKey>
-        <inputFieldName>Invoice:TotalFeeAmount</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldFormat>Currency</outputFieldFormat>
-        <outputFieldName>TotalFeeAmount</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| | &quot;SELECT/\/\/FeeAmount/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Other&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
-        <formulaExpression>SUM(QUERY(&quot;SELECT FeeAmount FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Other&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
-        <formulaResultPath>OtherFeeSumValue</formulaResultPath>
-        <formulaSequence>38.0</formulaSequence>
-        <globalKey>d149379a-07f8-41a4-a396-9a9b773327ca</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| &quot;SELECT/\/\/Amount__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Licensed&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/Limit/\/\/1&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY</formulaConverted>
-        <formulaExpression>QUERY(&quot;SELECT Amount__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Licensed&apos; AND Quantity__c!=0 Limit 1&quot;, InvoiceItem:RegulatoryTrxnFeeId)</formulaExpression>
-        <formulaResultPath>LicensedSum</formulaResultPath>
-        <formulaSequence>12.0</formulaSequence>
-        <globalKey>139d6fe6-56ef-4aaf-9b45-96cbc4f194e3</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:OtherFeeSumValue 0 &lt;&gt; var:OtherFeeSumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(OtherFeeSumValue&lt;&gt;0,OtherFeeSumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>OtherFeeSum</formulaResultPath>
-        <formulaSequence>39.0</formulaSequence>
-        <globalKey>142ce669-2183-4c8a-8a84-00003fed43ad</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>&apos;Owner Contact&apos;</filterValue>
-        <globalKey>f9a9190a-c860-471a-959a-35b38028221c</globalKey>
-        <inputFieldName>Roles</inputFieldName>
-        <inputObjectName>AccountContactRelation</inputObjectName>
-        <inputObjectQuerySequence>11.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>ACR</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:PerDiemQuantitySumValue 0 &lt;&gt; var:PerDiemQuantitySumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(PerDiemQuantitySumValue&lt;&gt;0,PerDiemQuantitySumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>PerDiemQuantitySum</formulaResultPath>
-        <formulaSequence>27.0</formulaSequence>
-        <globalKey>9e9e9520-812e-4b98-a88a-a4097c2db06d</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| &quot;SELECT/\/\/Amount__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Private&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/Limit/\/\/1/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY</formulaConverted>
-        <formulaExpression>QUERY(&quot;SELECT Amount__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Private&apos; AND Quantity__c!=0 Limit 1 &quot;, InvoiceItem:RegulatoryTrxnFeeId)</formulaExpression>
-        <formulaResultPath>PrivateSum</formulaResultPath>
-        <formulaSequence>11.0</formulaSequence>
-        <globalKey>a042bc06-8b72-44f5-b00a-be6f2e1c3749</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>Facility:Id</filterValue>
-        <globalKey>c5ccf28f-a0a5-4406-97ce-b1e5355f9c7b</globalKey>
-        <inputFieldName>Account__c</inputFieldName>
-        <inputObjectName>BusinessLicense</inputObjectName>
-        <inputObjectQuerySequence>6.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Certificate</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>LIMIT</filterOperator>
-        <filterValue>1</filterValue>
-        <globalKey>f76574bf-46f4-4454-ac20-a6ddaf0a3e87</globalKey>
-        <inputObjectName>BusinessLicense</inputObjectName>
-        <inputObjectQuerySequence>6.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Certificate</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>d11057bb-a010-4353-b514-dae68e24d4d3</globalKey>
-        <inputFieldName>Organization:Name</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>OrganizationName</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:LicensedFeeSumValue 0 &lt;&gt; var:LicensedFeeSumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(LicensedFeeSumValue&lt;&gt;0,LicensedFeeSumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>LicensedFeeSum</formulaResultPath>
-        <formulaSequence>23.0</formulaSequence>
-        <globalKey>44c2677f-72e1-40f6-996c-049821af5859</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| &quot;SELECT/\/\/Amount__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Per/\/\/Diem&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/Limit/\/\/1/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY</formulaConverted>
-        <formulaExpression>QUERY(&quot;SELECT Amount__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Per Diem&apos; AND Quantity__c!=0 Limit 1 &quot; , InvoiceItem:RegulatoryTrxnFeeId)</formulaExpression>
-        <formulaResultPath>PerDiemSum</formulaResultPath>
-        <formulaSequence>17.0</formulaSequence>
-        <globalKey>ba08656b-836d-44d0-8e35-2967d86739b3</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| | &quot;SELECT/\/\/Quantity__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Per/\/\/Diem&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
-        <formulaExpression>SUM(QUERY(&quot;SELECT Quantity__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Per Diem&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
-        <formulaResultPath>PerDiemQuantitySumValue</formulaResultPath>
-        <formulaSequence>16.0</formulaSequence>
-        <globalKey>9f280a42-d82e-4a7a-beea-058103d115e4</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:Organization:BillingStreet &quot;/\/\/&quot; var:Organization:BillingCity &quot;/\/\/&quot; var:Organization:BillingState &quot;/\/\/&quot; var:Organization:BillingPostalCode &quot;/\/\/&quot; var:Organization:BillingCountry CONCAT</formulaConverted>
-        <formulaExpression>CONCAT(%Organization:BillingStreet%, &quot; &quot;,%Organization:BillingCity%, &quot; &quot;,%Organization:BillingState%, &quot; &quot;,%Organization:BillingPostalCode%, &quot; &quot;,%Organization:BillingCountry%)</formulaExpression>
-        <formulaResultPath>OrganizationBillingAddress</formulaResultPath>
-        <formulaSequence>2.0</formulaSequence>
-        <globalKey>24418a3f-9a57-4227-8976-a196f1ded638</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| | &quot;SELECT/\/\/Quantity__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Other&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
-        <formulaExpression>SUM(QUERY(&quot;SELECT Quantity__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Other&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
-        <formulaResultPath>OtherQuantitySumValue</formulaResultPath>
-        <formulaSequence>37.0</formulaSequence>
-        <globalKey>a1028eed-0baf-4dee-98e9-5a1e9aeecc56</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>61e82d70-50c6-4f50-92a2-10fa8b47a0ed</globalKey>
-        <inputFieldName>Invoice:PaymentDate__c</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldFormat>Date(MM/dd/yyyy)</outputFieldFormat>
-        <outputFieldName>InvoicePaymentDate</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>LIMIT</filterOperator>
-        <filterValue>1</filterValue>
-        <globalKey>748b6bb8-3526-47ac-a708-74037d8f6d26</globalKey>
-        <inputObjectName>AssociatedLocation</inputObjectName>
-        <inputObjectQuerySequence>8.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>AssociatedLoc</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| | &quot;SELECT/\/\/Quantity__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Public&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY SUM</formulaConverted>
-        <formulaExpression>SUM(QUERY(&quot;SELECT Quantity__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Public&apos; AND Quantity__c!=0 &quot;, InvoiceItem:RegulatoryTrxnFeeId))</formulaExpression>
-        <formulaResultPath>PublicQuantitySumValue</formulaResultPath>
-        <formulaSequence>7.0</formulaSequence>
-        <globalKey>42424efe-7415-40da-81c5-e779d06ca751</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>Invoice:Id</filterValue>
-        <globalKey>9d53ae98-49a3-4068-afe5-92fbd5dc1ded</globalKey>
-        <inputFieldName>RegulatoryTrxnFeeId</inputFieldName>
-        <inputObjectName>RegulatoryTrxnFeeItem</inputObjectName>
-        <inputObjectQuerySequence>7.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>InvoiceItem</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:IndLivingQuantitySumValue 0 &lt;&gt; var:IndLivingQuantitySumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(IndLivingQuantitySumValue&lt;&gt;0,IndLivingQuantitySumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>IndLivingQuantitySum</formulaResultPath>
-        <formulaSequence>25.0</formulaSequence>
-        <globalKey>46f0c305-89fd-430b-b29f-17e435577b7d</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:PrivateFeeSumValue 0 &lt;&gt; var:PrivateFeeSumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(PrivateFeeSumValue&lt;&gt;0,PrivateFeeSumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>PrivateFeeSum</formulaResultPath>
-        <formulaSequence>32.0</formulaSequence>
-        <globalKey>62db1e66-9166-47d7-9b97-69097fa3a5d8</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>Location:Id</filterValue>
-        <globalKey>026cbb30-2541-4723-aec3-59c465972d37</globalKey>
-        <inputFieldName>ParentId</inputFieldName>
-        <inputObjectName>Address</inputObjectName>
-        <inputObjectQuerySequence>10.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Address</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>9afeae10-de6b-4d75-a0a7-c5b19d6d63c3</globalKey>
-        <inputFieldName>Organization:BillingState</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>OrganizationState</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <filterOperator>=</filterOperator>
-        <filterValue>Facility:ParentId</filterValue>
-        <globalKey>f395528e-f5c7-46d9-9804-57216545e444</globalKey>
-        <inputFieldName>AccountId</inputFieldName>
-        <inputObjectName>AccountContactRelation</inputObjectName>
-        <inputObjectQuerySequence>11.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>ACR</outputFieldName>
-        <outputObjectName>json</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -1301,14 +77,14 @@
         <filterGroup>0.0</filterGroup>
         <filterOperator>=</filterOperator>
         <filterValue>Id</filterValue>
-        <globalKey>086d6fe7-5ae6-4700-9ead-002311a853bf</globalKey>
+        <globalKey>8e3ffd86-6663-4b04-a451-4697771a0805</globalKey>
         <inputFieldName>Id</inputFieldName>
         <inputObjectName>RegulatoryTrxnFee</inputObjectName>
-        <inputObjectQuerySequence>2.0</inputObjectQuerySequence>
+        <inputObjectQuerySequence>1.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>PHOCSDRGetReceiptDetails</name>
         <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Invoice</outputFieldName>
+        <outputFieldName>RegulatoryTrxnFee</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -1316,30 +92,75 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| &quot;SELECT/\/\/Amount__c/\/\/FROM/\/\/RegulatoryTrxnFeeItem/\/\/WHERE/\/\/RegulatoryTrxnFeeId/\/\/=/\/\/&apos;{0}&apos;/\/\/AND/\/\/Name/\/\/=/\/\/&apos;Other&apos;/\/\/AND/\/\/Quantity__c!=0/\/\/Limit/\/\/1&quot; var:InvoiceItem:RegulatoryTrxnFeeId QUERY</formulaConverted>
-        <formulaExpression>QUERY(&quot;SELECT Amount__c FROM RegulatoryTrxnFeeItem WHERE RegulatoryTrxnFeeId = &apos;{0}&apos; AND Name = &apos;Other&apos; AND Quantity__c!=0 Limit 1&quot;, InvoiceItem:RegulatoryTrxnFeeId)</formulaExpression>
-        <formulaResultPath>OtherSum</formulaResultPath>
-        <formulaSequence>36.0</formulaSequence>
-        <globalKey>4615a6eb-60fe-4951-b34e-cbff51fb45fe</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>PHOCSDRGetReceiptDetails</name>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>e66fd9a6-a663-4d49-9088-e3c40f49578f</globalKey>
-        <inputFieldName>RegistrantAccount:BillingCity</inputFieldName>
+        <globalKey>7ac1b72c-da08-467e-8732-26897b118a31</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeAccount:Physical_Address__City__s</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>PHOCSDRGetReceiptDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>RegistrantCity</outputFieldName>
+        <outputFieldName>RegulatoryTrxnFeeAccount:PhysicalAddressCity</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>554722c6-aeb1-4f69-80cd-ab10c11f7efd</globalKey>
+        <inputFieldName>RegulatoryTrxnFee:CreatedDate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegulatoryTrxnFee:CreatedDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>ee6cf95c-57b9-4718-93da-37df5e5b9b40</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeItemFeeAmount</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegulatoryTrxnFeeItemFeeAmount</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>b14be404-cb02-45bf-83a8-44b6f49f8bad</globalKey>
+        <inputFieldName>InvoiceDate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRRegulatoryTrxnFeeDetail</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>InvoiceDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>LIMIT</filterOperator>
+        <filterValue>1</filterValue>
+        <globalKey>d81b8481-1d05-44a8-900c-7d727c44b8b4</globalKey>
+        <inputObjectName>RegulatoryTrxnFee</inputObjectName>
+        <inputObjectQuerySequence>1.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>RegulatoryTrxnFee</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
@@ -1347,11 +168,28 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:PublicFeeSumValue 0 &lt;&gt; var:PublicFeeSumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(PublicFeeSumValue&lt;&gt;0,PublicFeeSumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>PublicFeeSum</formulaResultPath>
-        <formulaSequence>33.0</formulaSequence>
-        <globalKey>dad2b8c7-3576-4b01-b441-ef69d8d41d7e</globalKey>
+        <filterOperator>INCLUDES</filterOperator>
+        <filterValue>&apos;Billing Contact&apos;</filterValue>
+        <globalKey>fd888428-f529-452f-8ccc-f8ae9d6755f0</globalKey>
+        <inputFieldName>Roles</inputFieldName>
+        <inputObjectName>AccountContactRelation</inputObjectName>
+        <inputObjectQuerySequence>3.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>AccountContactRelation</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>var:RegulatoryTrxnFeeItem|1:FeeAmount</formulaConverted>
+        <formulaExpression>%RegulatoryTrxnFeeItem|1:FeeAmount%</formulaExpression>
+        <formulaResultPath>RegulatoryTrxnFeeItemFeeAmount</formulaResultPath>
+        <formulaSequence>3.0</formulaSequence>
+        <globalKey>60b43bcd-d658-467b-8ffa-b3eb3e8490d6</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>PHOCSDRGetReceiptDetails</name>
@@ -1364,11 +202,174 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:PrivateQuantitySumValue 0 &lt;&gt; var:PrivateQuantitySumValue &apos;&apos; IF</formulaConverted>
-        <formulaExpression>IF(PrivateQuantitySumValue&lt;&gt;0,PrivateQuantitySumValue,&apos;&apos;)</formulaExpression>
-        <formulaResultPath>PrivateQuantitySum</formulaResultPath>
-        <formulaSequence>31.0</formulaSequence>
-        <globalKey>9810dcd3-fa06-4e44-9290-6277bdd2fb42</globalKey>
+        <globalKey>21d1aecb-603f-49bf-ae87-ccd9f7e711d3</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeAccount:Physical_Address__PostalCode__s</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegulatoryTrxnFeeAccount:PostalCode</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>AccountContactRelation:ContactId</filterValue>
+        <globalKey>3c744853-99b7-4224-8444-61b17a28a4da</globalKey>
+        <inputFieldName>Id</inputFieldName>
+        <inputObjectName>Contact</inputObjectName>
+        <inputObjectQuerySequence>4.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>BillingContact</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>b06d2c18-1833-4770-8ac8-1470ea4b346b</globalKey>
+        <inputFieldName>RegulatoryTrxnFee:Comments</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegulatoryTrxnFee:Comments</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>RegulatoryTrxnFee:AccountId</filterValue>
+        <globalKey>ae5a6bad-a075-43e9-86d7-c2814599d125</globalKey>
+        <inputFieldName>AccountId</inputFieldName>
+        <inputObjectName>AccountContactRelation</inputObjectName>
+        <inputObjectQuerySequence>3.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>AccountContactRelation</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>RegulatoryTrxnFee:Id</filterValue>
+        <globalKey>b8a62326-fda5-4f3f-8c65-59c98f885772</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeId</inputFieldName>
+        <inputObjectName>RegulatoryTrxnFeeItem</inputObjectName>
+        <inputObjectQuerySequence>5.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>RegulatoryTrxnFeeItem</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>LIMIT</filterOperator>
+        <filterValue>1</filterValue>
+        <globalKey>a297995c-5780-44c7-bb40-972592417ad9</globalKey>
+        <inputObjectName>AccountContactRelation</inputObjectName>
+        <inputObjectQuerySequence>3.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>AccountContactRelation</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>d6bd6727-c925-4df4-b957-9044f3136e68</globalKey>
+        <inputFieldName>BillingContact:Email</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BillingContactEmail</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>582bf53c-9dee-42b4-a061-6d4950cb3224</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeAccount:Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegulatoryTrxnFeeAccount:Name</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><globalKey>2af53674-3560-468f-8247-6f0f2ce1fa37</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeAccount:HealthAuthority__c</inputFieldName><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name><outputCreationSequence>1.0</outputCreationSequence><outputFieldName>RegulatoryTrxnFeeAccount:HealthAuthority</outputFieldName><outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><transformValuesMappings>{ }</transformValuesMappings><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>5ce6f035-d103-4feb-9edb-bea731c9b223</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeItem:FeeAmount</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegulatoryTrxnFeeItem:FeeAmount</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>74ff6e2b-3759-4510-9628-18d37f110ab7</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeItem:Id</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegulatoryTrxnFeeItem:Id</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| TODAY</formulaConverted>
+        <formulaExpression>TODAY()</formulaExpression>
+        <formulaResultPath>InvoiceDate</formulaResultPath>
+        <formulaSequence>1.0</formulaSequence>
+        <globalKey>fd53ab57-f3a7-4d03-9e0f-6a8cb1b534af</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>PHOCSDRGetReceiptDetails</name>
@@ -1378,9 +379,322 @@
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>LIMIT</filterOperator>
+        <filterValue>1</filterValue>
+        <globalKey>61617756-5a6a-4f59-8edc-7f6f104694a1</globalKey>
+        <inputObjectName>Contact</inputObjectName>
+        <inputObjectQuerySequence>4.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>BillingContact</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>a550b2fe-d7a1-40bc-b4ac-cbff7d8267aa</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeAccount:Physical_Address__CountryCode__s</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegulatoryTrxnFeeAccount:PhysicalAddressCountryCode</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>59149ef6-65a9-4584-947e-bfd397997709</globalKey>
+        <inputFieldName>RegulatoryTrxnFee:Id</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegulatoryTrxnFee:Id</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>db06a9ca-d645-4d64-9beb-a8974426f3d4</globalKey>
+        <inputFieldName>RegulatoryTrxnFee:Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegulatoryTrxnFee:Name</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>77240d15-bf3d-41ad-ba08-88a87e705709</globalKey>
+        <inputFieldName>RegulatoryTrxnFee:TotalFeeAmount</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegulatoryTrxnFee:TotalFeeAmount</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>302c96bb-b34f-4cf8-b427-878f21339e2b</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeItemCount</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegulatoryTrxnFeeItemCount</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| | var:RegulatoryTrxnFeeItem ISBLANK 0 | var:RegulatoryTrxnFeeItem LISTSIZE IF</formulaConverted>
+        <formulaExpression>IF(ISBLANK(RegulatoryTrxnFeeItem), 0, LISTSIZE(RegulatoryTrxnFeeItem))</formulaExpression>
+        <formulaResultPath>RegulatoryTrxnFeeItemCount</formulaResultPath>
+        <formulaSequence>2.0</formulaSequence>
+        <globalKey>07dad15b-e84e-4db2-9c17-b0de399393fb</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>634be0e9-66f5-4995-9cdd-919b5b8225a3</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeAccount:Physical_Address__StateCode__s</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegulatoryTrxnFeeAccount:PhysicalAddressStateCode</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>d721b88d-ad1b-4419-b46a-e21e3facb17b</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeAccount:Physical_Address__Street__s</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegulatoryTrxnFeeAccount:PhysicalAddressStreet</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>21cf88e7-cc58-43c5-8bce-280f5801cd22</globalKey>
+        <inputFieldName>BillingContact:Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BillingContactName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><globalKey>04f228c9-664a-4166-bc59-8cffdb7a8f39</globalKey>
+        <inputFieldName>RegulatoryTrxnFee:DueDate</inputFieldName><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name><outputCreationSequence>1.0</outputCreationSequence><outputFieldName>RegulatoryTrxnFee:DueDate</outputFieldName><outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><transformValuesMappings>{ }</transformValuesMappings><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><globalKey>589e1361-d729-45b1-83df-7e433e0d840a</globalKey>
+        <inputFieldName>RegulatoryTrxnFee:TotalFeePaid__c</inputFieldName><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name><outputCreationSequence>1.0</outputCreationSequence><outputFieldName>RegulatoryTrxnFee:TotalFeePaid</outputFieldName><outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><transformValuesMappings>{ }</transformValuesMappings><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><globalKey>acfbcf8a-a423-4402-bd12-f5d5ab589fae</globalKey>
+        <inputFieldName>RegulatoryTrxnFee:OutstandingFeeAmount__c</inputFieldName><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name><outputCreationSequence>1.0</outputCreationSequence><outputFieldName>RegulatoryTrxnFee:OutstandingFeeAmount</outputFieldName><outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><transformValuesMappings>{ }</transformValuesMappings><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><globalKey>c70639d6-5cc5-453b-8153-c7b0cdfc9324</globalKey>
+        <inputFieldName>RegulatoryTrxnFee:FeeType__c</inputFieldName><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name><outputCreationSequence>1.0</outputCreationSequence><outputFieldName>RegulatoryTrxnFee:FeeType</outputFieldName><outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><transformValuesMappings>{ }</transformValuesMappings><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><globalKey>870f595e-4b9a-48b4-94a6-24dcfbc6c2a0</globalKey>
+        <inputFieldName>HealthAuthorityAccount:HAAddress__c</inputFieldName><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name><outputCreationSequence>1.0</outputCreationSequence><outputFieldName>HealthAuthorityAccount:HAAddress</outputFieldName><outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><transformValuesMappings>{ }</transformValuesMappings><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><globalKey>d71681ef-556b-419d-a5c9-2642239dffa8</globalKey>
+        <inputFieldName>HealthAuthorityAccount:HAGSTNumber__c</inputFieldName><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name><outputCreationSequence>1.0</outputCreationSequence><outputFieldName>HealthAuthorityAccount:HAGSTNumber</outputFieldName><outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><transformValuesMappings>{ }</transformValuesMappings><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><globalKey>685c22cd-e339-4bb5-ba35-a3fc3d0afa42</globalKey>
+        <inputFieldName>HealthAuthorityAccount:HAPhone__c</inputFieldName><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name><outputCreationSequence>1.0</outputCreationSequence><outputFieldName>HealthAuthorityAccount:HAPhone</outputFieldName><outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><transformValuesMappings>{ }</transformValuesMappings><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><globalKey>c09b9267-de33-46ef-806d-d71e1e361398</globalKey>
+        <inputFieldName>HealthAuthorityAccount:HAFax__c</inputFieldName><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name><outputCreationSequence>1.0</outputCreationSequence><outputFieldName>HealthAuthorityAccount:HAFax</outputFieldName><outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><transformValuesMappings>{ }</transformValuesMappings><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><globalKey>2fb17633-6673-4985-b0d2-3916cc71cde2</globalKey>
+        <inputFieldName>HealthAuthorityAccount:HAEmail__c</inputFieldName><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name><outputCreationSequence>1.0</outputCreationSequence><outputFieldName>HealthAuthorityAccount:HAEmail</outputFieldName><outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><transformValuesMappings>{ }</transformValuesMappings><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><globalKey>4244ff82-00ff-446a-bbcc-fa6c0ee72b24</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeAccount:HierarchyHAId__c</inputFieldName><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name><outputCreationSequence>1.0</outputCreationSequence><outputFieldName>RegulatoryTrxnFeeAccount:HierarchyHAId</outputFieldName><outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><transformValuesMappings>{ }</transformValuesMappings><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><filterOperator>=</filterOperator><filterValue>RegulatoryTrxnFeeAccount:HierarchyHAId__c</filterValue>
+        <globalKey>c825cafa-0c8c-47f6-be1d-f42ead29fe50</globalKey><inputFieldName>Id</inputFieldName><inputObjectName>Account</inputObjectName>
+        <inputObjectQuerySequence>6.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence><name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence><outputFieldName>HealthAuthorityAccount</outputFieldName><outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><filterOperator>LIMIT</filterOperator><filterValue>1</filterValue>
+        <globalKey>6cb90be2-188b-461b-bc74-3b40299d8cee</globalKey><inputObjectName>Account</inputObjectName><inputObjectQuerySequence>6.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence><name>PHOCSDRGetReceiptDetails</name><outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>HealthAuthorityAccount</outputFieldName><outputObjectName>json</outputObjectName><requiredForUpsert>false</requiredForUpsert><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><globalKey>829a180c-a2fa-4a22-9a79-61d136a0e590</globalKey>
+        <inputFieldName>HealthAuthorityAccount:Id</inputFieldName><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name><outputCreationSequence>1.0</outputCreationSequence><outputFieldName>HealthAuthorityAccount:Id</outputFieldName><outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><transformValuesMappings>{ }</transformValuesMappings><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled><filterGroup>0.0</filterGroup><globalKey>0388ed15-acdb-4f53-8e46-84a1b02fdab0</globalKey>
+        <inputFieldName>HealthAuthorityAccount:Name</inputFieldName><inputObjectQuerySequence>0.0</inputObjectQuerySequence><linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name><outputCreationSequence>1.0</outputCreationSequence><outputFieldName>HealthAuthorityAccount:Name</outputFieldName><outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert><transformValuesMappings>{ }</transformValuesMappings><upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>8a493090-74ef-44e7-b122-15f0af11033b</globalKey>
+        <inputFieldName>RegulatoryTrxnFee:ReferenceNumber__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegulatoryTrxnFee:ReferenceNumber</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>df79f3e8-784c-46ab-8e62-dfb667bdd3c1</globalKey>
+        <inputFieldName>RegulatoryTrxnFee:PaymentDate__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegulatoryTrxnFee:PaymentDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>903fe62a-a46c-44b5-8f72-5a26114bfc63</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeItem:PaymentDate__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegulatoryTrxnFeeItem:PaymentDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>69354068-1d93-4fc9-830e-9bb050e50754</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeItem:PaidBy__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegulatoryTrxnFeeItem:PaidBy</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>13a41c79-8586-4936-8cc2-b1bd533080fc</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeItem:ReferenceNumber__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegulatoryTrxnFeeItem:ReferenceNumber</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
     <outputType>JSON</outputType>
     <previewJsonData>{
-  &quot;Id&quot; : &quot;cc&quot;
+  &quot;Id&quot; : &quot;0kxAq000000gp7lIAA&quot;
 }</previewJsonData>
     <processSuperBulk>false</processSuperBulk>
     <responseCacheTtlMinutes>0.0</responseCacheTtlMinutes>
@@ -1388,6 +702,7 @@
     <sourceObject>json</sourceObject>
     <sourceObjectDefault>false</sourceObjectDefault>
     <synchronousProcessThreshold>0.0</synchronousProcessThreshold>
+    <targetOutputFileName>PHOCSReceiptTemplate(Version 1)</targetOutputFileName>
     <type>Extract</type>
     <uniqueName>PHOCSDRGetReceiptDetails_1</uniqueName>
     <versionNumber>1.0</versionNumber>
