@@ -6,6 +6,7 @@
     <errorConditionFormula>AND(
     RecordType.DeveloperName = &quot;PHOCSInspection&quot;,
     NOT($Permission.EHISBypassValidationRuleCustomPermission),
+				NOT(ISCHANGED(IsRetracted__c)),
     OR(
         AND(
             ISPICKVAL(Status, &quot;Completed&quot;),
