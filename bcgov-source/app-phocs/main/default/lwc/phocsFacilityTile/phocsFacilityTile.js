@@ -1,11 +1,14 @@
 import { LightningElement, wire } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import getfacilities from '@salesforce/apex/PhocsFacilityTileController.getfacilities';
+import getPortalContactDetails from '@salesforce/apex/PHOCSPortalContactController.getPortalContactDetails';
 import tileBanner from '@salesforce/resourceUrl/tile';
 export default class PhocsFacilityTile extends NavigationMixin(LightningElement) {
     bannerUrl = tileBanner;
 
     accounts = [];
+
+    contactId;
 
     @wire(getfacilities)
     wiredAccounts({ data, error }) {
@@ -59,5 +62,29 @@ export default class PhocsFacilityTile extends NavigationMixin(LightningElement)
 
     get hasAccounts() {
         return this.accounts && this.accounts.length > 0;
+    }
+
+    connectedCallback() {
+    console.log('connectedCallback fired');
+
+    getPortalContactDetails()
+        .then(result => {
+            this.contactId = result;
+            console.log('Contact Id:', this.contactId);
+
+        })
+        .catch(error => {
+            console.error(error);
+        });
+}
+
+    handleCreateFacilityRequest() {
+        this[NavigationMixin.Navigate]({
+            type: 'standard__webPage',
+            attributes: {
+                //url: '/facility-request-form'
+                url: '/facility-request-form?ContextId=' + this.contactId
+            }
+        });
     }
 }
