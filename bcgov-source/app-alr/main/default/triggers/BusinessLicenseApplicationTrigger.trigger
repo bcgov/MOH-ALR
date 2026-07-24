@@ -10,11 +10,11 @@
 
 
 
-trigger BusinessLicenseApplicationTrigger on BusinessLicenseApplication (after update,before insert, before update) {
+trigger BusinessLicenseApplicationTrigger on BusinessLicenseApplication (after update,before insert) {
     if(Trigger.isAfter && Trigger.isUpdate){
             BusinessLicenseApplicationHelper.updateFeeStatus(Trigger.New);            
         }
-	 if(Trigger.isBefore && (Trigger.isInsert || Trigger.isUpdate)){
+	 if(Trigger.isBefore && (Trigger.isInsert)){
            PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new, 'AccountId');         
         }
 }

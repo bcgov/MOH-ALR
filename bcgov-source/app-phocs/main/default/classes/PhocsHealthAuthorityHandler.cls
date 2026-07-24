@@ -9,35 +9,48 @@ public class PhocsHealthAuthorityHandler {
         List<SObject> childRecords,
         String parentIdField
     ) {
-        // Step 1 — Collect parent IDs from child records
-        Set<Id> parentIds = new Set<Id>();
-        for (SObject rec : childRecords) {
-            Id parentId = (Id) rec.get(parentIdField);
-            if (parentId != null) {
-                parentIds.add(parentId);
-            }
+        // Step 1 — Check bypass switch from Custom Setting
+        // If BypassHealthAuthorityHandler__c is TRUE, skip all logic
+        PHOCSBypassHealthAuthorityHandler__c bypassSetting = 
+            PHOCSBypassHealthAuthorityHandler__c.getInstance();
+        
+        if (bypassSetting != null && bypassSetting.BypassHealthAuthorityHandler__c) {
+            return;
         }
 
-        if (parentIds.isEmpty()) return;
+        try {
+            // Step 2 — Collect parent IDs from child records
+            Set<Id> parentIds = new Set<Id>();
+            for (SObject rec : childRecords) {
+                Id parentId = (Id) rec.get(parentIdField);
+                if (parentId != null) {
+                    parentIds.add(parentId);
+                }
+            }
+            if (parentIds.isEmpty()) return;
 
-        // Step 2 — Query parent Account HealthAuthority__c
-        Map<Id, Account> parentAccounts = new Map<Id, Account>([
-            SELECT Id, HealthAuthority__c
-            FROM Account
-            WHERE Id IN :parentIds
-        ]);
+            // Step 3 — Query parent Account HealthAuthority__c
+            Map<Id, Account> parentAccounts = new Map<Id, Account>([
+                SELECT Id, HealthAuthority__c
+                FROM Account
+                WHERE Id IN :parentIds
+            ]);
 
-        // Step 3 — Populate HA on child records
-        for (SObject rec : childRecords) {
-            Id parentId = (Id) rec.get(parentIdField);
-            if (parentId != null && parentAccounts.containsKey(parentId)) {
-                rec.put(
-                    'HealthAuthority__c',
-                    parentAccounts.get(parentId).HealthAuthority__c
-                );
+            // Step 4 — Populate HA on child records
+            for (SObject rec : childRecords) {
+                Id parentId = (Id) rec.get(parentIdField);
+                if (parentId != null && parentAccounts.containsKey(parentId)) {
+                    rec.put(
+                        'HealthAuthority__c',
+                        parentAccounts.get(parentId).HealthAuthority__c
+                    );
+                }
+            }
+
+        } catch (Exception e) {
+            for (SObject rec : childRecords) {
+                rec.addError('Unable to populate Health Authority: ' + e.getMessage());
             }
         }
     }
-
-
 }
