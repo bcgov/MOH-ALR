@@ -4,12 +4,12 @@
 * @Description: The purpose of this Trigger is to trigger on particular events
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
                 30 Oct -  PHOCS-402         -  Accenture   -  Update Owner to Queue for PHOCS Web PC records.
-				21 july -  EHIS- 3081 		- Accenture - health authority update
+                21 july -  EHIS- 3081       - Accenture - health authority update
 ***********************************************************************************************/
 trigger LabTestRequiredTrigger on LabTestRequired__c (before insert) {
 
 if(Trigger.isBefore && (Trigger.isInsert )){
-        PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new, 'AccountId');         
+        PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new, 'FacilityName__c');         
     }
     
 
