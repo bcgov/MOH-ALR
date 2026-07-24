@@ -40,6 +40,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 	autoOpenedReview = false;
 	timeSpent = '';
     followUpInspectionRequired = false;
+	actualStartDate;
 
 	totalQuestions = 0;
 	answeredQuestions = 0;
@@ -104,6 +105,18 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 	  const dd = String(today.getDate()).padStart(2, '0');
 	  return `${yyyy}-${mm}-${dd}T00:00`;
 	} */
+
+	get currentDateTime() {
+    const now = new Date();
+
+    const yyyy = now.getFullYear();
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const dd = String(now.getDate()).padStart(2, '0');
+    const hh = String(now.getHours()).padStart(2, '0');
+    const mi = String(now.getMinutes()).padStart(2, '0');
+
+    return `${yyyy}-${mm}-${dd}T${hh}:${mi}`;
+    }
 
 	priorityOptions = [
       { label: "Critical", value: "Critical" },
@@ -226,6 +239,10 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 			this.inspection = await getInspection({
 				visitId: this.recordId
 			});
+
+			if (this.inspection?.ActualVisitStartTime) {
+             this.actualStartDate = this.formatDatetimeForInput(this.inspection.ActualVisitStartTime);
+        }
 		} catch (error) {
 			console.error('Error fetching inspection:', error);
 		}
@@ -342,8 +359,24 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
 	handleViewOnly() {
 		this.showQuestions = true;
-
 	}
+
+	handleActualStartTimeChange(event) {
+    const selectedValue = event.target.value;
+    const selectedDate = new Date(selectedValue);
+
+    this.actualStartDate = selectedValue;
+
+    if (selectedDate > new Date()) {
+        event.target.setCustomValidity(
+            'Actual Start Time cannot be in the future.'
+        );
+    } else {
+        event.target.setCustomValidity('');
+    }
+
+    event.target.reportValidity();
+    }
 
 	handleTimeSpentChange(event) {
     const input = event.target;
@@ -847,6 +880,19 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 			return;
 		}
 
+		if (this.actualStartDate) {
+		    const selectedDate = new Date(this.actualStartDate);
+			
+			if (selectedDate > new Date()) {
+				this.showToast(
+					'Error',
+                    'Actual Start Time cannot be in the future.',
+                    'error'
+            );
+        return;
+    }
+}
+
         input.setCustomValidity("");
         input.reportValidity();
 
@@ -1088,10 +1134,13 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 			};
 			await this.createViolationsAndNotify();
 
+			const actualStartDateToSend = this.actualStartDate ? (typeof this.actualStartDate === 'string' ? new Date(this.actualStartDate) : this.actualStartDate) : null;
+
 			await completeInspection({
 				visitId: this.recordId,
 				closingComments: this.closingComments,
 				timeSpent: this.timeSpent,
+				actualStartDate: actualStartDateToSend,
                 followUpInspectionRequired: this.followUpInspectionRequired
 			});
 			this.isDraft = false;

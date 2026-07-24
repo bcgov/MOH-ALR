@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
-    <apiVersion>63.0</apiVersion>
+    <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <decisions>
         <name>Should_Populate_Parent_Account_Id</name>
@@ -10,7 +10,7 @@
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Populate_Parent_Account_Id</name>
-            <conditionLogic>1 OR (2 AND 3)</conditionLogic>
+            <conditionLogic>(1 AND 4) OR (2 AND 3) AND 5</conditionLogic>
             <conditions>
                 <leftValueReference>IsNew</leftValueReference>
                 <operator>EqualTo</operator>
@@ -32,6 +32,20 @@
                     <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>$Record.ParentId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Recordtype</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>Populate_Parent_Account_Field</targetReference>
             </connector>
@@ -44,6 +58,16 @@
         <name>IsNew</name>
         <dataType>Boolean</dataType>
         <expression>ISNEW()</expression>
+    </formulas>
+    <formulas>
+        <name>Recordtype</name>
+        <dataType>Boolean</dataType>
+        <expression>OR(
+    $Record.RecordType.DeveloperName = &quot;DrinkingWaterSystem&quot;,
+    $Record.RecordType.DeveloperName = &quot;Facility&quot;,
+    $Record.RecordType.DeveloperName = &quot;PHOCSDairyFacility&quot;,
+    $Record.RecordType.DeveloperName = &quot;DrinkingWaterSourceIntake&quot;
+)</expression>
     </formulas>
     <interviewLabel>Populate Parent Account {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Populate Parent Account</label>
@@ -72,6 +96,14 @@
         <label>Populate Parent Account Field</label>
         <locationX>50</locationX>
         <locationY>395</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>ParentAccount__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
         <inputAssignments>
             <field>ParentId</field>
             <value>

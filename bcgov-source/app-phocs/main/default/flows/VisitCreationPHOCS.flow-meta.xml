@@ -72,7 +72,7 @@
         <offset>0</offset>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </actionCalls>
-    <apiVersion>61.0</apiVersion>
+    <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <choices>
         <name>ScheduledonSiteInspection</name>
@@ -153,7 +153,8 @@
             <label>Case</label>
         </rules>
     </decisions>
-    <description>Clone from VisitCreation flow and update Screen elements to align with PHOCS requirements</description>
+    <description>Clone from VisitCreation flow and update Screen elements to align with PHOCS requirements
+V2: Development changes related to EHIS-4313</description>
     <dynamicChoiceSets>
         <name>InspMethodChoices</name>
         <dataType>Picklist</dataType>
@@ -246,7 +247,7 @@
         <inputAssignments>
             <field>PlannedVisitStartTime</field>
             <value>
-                <elementReference>Acc_Actual_Start_Time</elementReference>
+                <elementReference>Acc_Planned_Start_Time</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -323,7 +324,7 @@
         <inputAssignments>
             <field>PlannedVisitStartTime</field>
             <value>
-                <elementReference>BLA_Actual_Start_Time</elementReference>
+                <elementReference>BLA_Planned_Start_Time</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -400,7 +401,7 @@
         <inputAssignments>
             <field>PlannedVisitStartTime</field>
             <value>
-                <elementReference>Case_of_Actual_Start_Time</elementReference>
+                <elementReference>Case_of_Planned_Start_Time</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -483,7 +484,7 @@
         <inputAssignments>
             <field>PlannedVisitStartTime</field>
             <value>
-                <elementReference>Actual_Start_Time</elementReference>
+                <elementReference>Planned_Start_Time</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -831,7 +832,6 @@
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -860,7 +860,6 @@
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -872,11 +871,10 @@
                     </styleProperties>
                 </fields>
                 <fields>
-                    <name>Acc_Actual_Start_Time</name>
+                    <name>Acc_Planned_Start_Time</name>
                     <dataType>DateTime</dataType>
-                    <fieldText>Actual Start Time</fieldText>
+                    <fieldText>Planned Start Time</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -947,7 +945,6 @@
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -962,7 +959,21 @@
                     <name>Acc_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Acc_Actual_Start_Time</name>
+                    <dataType>DateTime</dataType>
+                    <fieldText>Actual Start Time</fieldText>
+                    <fieldType>InputField</fieldType>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -1173,7 +1184,6 @@
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -1202,7 +1212,6 @@
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -1214,11 +1223,10 @@
                     </styleProperties>
                 </fields>
                 <fields>
-                    <name>BLA_Actual_Start_Time</name>
+                    <name>BLA_Planned_Start_Time</name>
                     <dataType>DateTime</dataType>
-                    <fieldText>Actual Start Time</fieldText>
+                    <fieldText>Planned Start Time</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -1295,7 +1303,6 @@
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -1310,7 +1317,21 @@
                     <name>BLA_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>BLA_Actual_Start_Time</name>
+                    <dataType>DateTime</dataType>
+                    <fieldText>Actual Start Time</fieldText>
+                    <fieldType>InputField</fieldType>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -1521,7 +1542,6 @@
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -1550,7 +1570,6 @@
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -1562,11 +1581,10 @@
                     </styleProperties>
                 </fields>
                 <fields>
-                    <name>Case_of_Actual_Start_Time</name>
+                    <name>Case_of_Planned_Start_Time</name>
                     <dataType>DateTime</dataType>
-                    <fieldText>Actual Start Time</fieldText>
+                    <fieldText>Planned Start Time</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -1643,7 +1661,6 @@
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -1658,7 +1675,21 @@
                     <name>Case_Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Case_of_Actual_Start_Time</name>
+                    <dataType>DateTime</dataType>
+                    <fieldText>Actual Start Time</fieldText>
+                    <fieldType>InputField</fieldType>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -1859,7 +1890,6 @@
                     <dataType>String</dataType>
                     <fieldText>Inspection Type Other- Specify</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -1888,7 +1918,6 @@
                     <dataType>String</dataType>
                     <fieldText>Inspection Method</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -1900,11 +1929,10 @@
                     </styleProperties>
                 </fields>
                 <fields>
-                    <name>Actual_Start_Time</name>
+                    <name>Planned_Start_Time</name>
                     <dataType>DateTime</dataType>
-                    <fieldText>Actual Start Time</fieldText>
+                    <fieldText>Planned Start Time</fieldText>
                     <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -2021,7 +2049,6 @@
                     </defaultValue>
                     <fieldText>Inspection Priority</fieldText>
                     <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -2036,7 +2063,21 @@
                     <name>Special_Instruction</name>
                     <fieldText>Special Instruction</fieldText>
                     <fieldType>LargeTextArea</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Actual_Start_Time</name>
+                    <dataType>DateTime</dataType>
+                    <fieldText>Actual Start Time</fieldText>
+                    <fieldType>InputField</fieldType>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>

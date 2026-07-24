@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
-    <apiVersion>61.0</apiVersion>
+    <apiVersion>65.0</apiVersion>
     <assignments>
         <name>addAssessmentIndicatorName</name>
         <label>addAssessmentIndicatorName</label>
-        <locationX>264</locationX>
-        <locationY>866</locationY>
+        <locationX>138</locationX>
+        <locationY>974</locationY>
         <assignmentItems>
             <assignToReference>existingAssessmentIndicatorList</assignToReference>
             <operator>Add</operator>
@@ -20,7 +20,7 @@
     <assignments>
         <name>addCategory</name>
         <label>addCategory</label>
-        <locationX>264</locationX>
+        <locationX>402</locationX>
         <locationY>458</locationY>
         <assignmentItems>
             <assignToReference>existingCategoryList</assignToReference>
@@ -36,7 +36,7 @@
     <assignments>
         <name>addTaskID</name>
         <label>addTaskID</label>
-        <locationX>264</locationX>
+        <locationX>402</locationX>
         <locationY>350</locationY>
         <assignmentItems>
             <assignToReference>existingTaskIDList</assignToReference>
@@ -49,14 +49,43 @@
             <targetReference>addCategory</targetReference>
         </connector>
     </assignments>
-    <description>added Fault Path</description>
+    <decisions>
+        <name>Check_Existing_Task_IDs</name>
+        <label>Check Existing Task IDs</label>
+        <locationX>314</locationX>
+        <locationY>650</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Task_IDs_Found</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>existingTaskIDList</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>existingTaskIDList</leftValueReference>
+                <operator>IsEmpty</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>getAllInspectionAssessmentQuestions</targetReference>
+            </connector>
+            <label>Task IDs Found</label>
+        </rules>
+    </decisions>
+    <description>Added Check Existing Task IDs logic(fixes 50k SOQL row limit on new Inspections)</description>
     <environments>Default</environments>
     <interviewLabel>Get All Assessment Task Details From Inspection {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Get All Assessment Task Details From Inspection</label>
     <loops>
         <name>loopAssessmentTaskList</name>
         <label>loopAssessmentTaskList</label>
-        <locationX>176</locationX>
+        <locationX>314</locationX>
         <locationY>242</locationY>
         <collectionReference>existingTaskList</collectionReference>
         <iterationOrder>Asc</iterationOrder>
@@ -64,14 +93,14 @@
             <targetReference>addTaskID</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
-            <targetReference>getAllInspectionAssessmentQuestions</targetReference>
+            <targetReference>Check_Existing_Task_IDs</targetReference>
         </noMoreValuesConnector>
     </loops>
     <loops>
         <name>loopInspectionQuestions</name>
         <label>loopInspectionQuestions</label>
-        <locationX>176</locationX>
-        <locationY>758</locationY>
+        <locationX>50</locationX>
+        <locationY>866</locationY>
         <collectionReference>existingInspectionQuestionsList</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -100,7 +129,7 @@
     <recordLookups>
         <name>getAllAssessmentTasksForInspection</name>
         <label>getAllAssessmentTasksForInspection</label>
-        <locationX>176</locationX>
+        <locationX>314</locationX>
         <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -127,8 +156,8 @@
     <recordLookups>
         <name>getAllInspectionAssessmentQuestions</name>
         <label>getAllInspectionAssessmentQuestions</label>
-        <locationX>176</locationX>
-        <locationY>650</locationY>
+        <locationX>50</locationX>
+        <locationY>758</locationY>
         <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>loopInspectionQuestions</targetReference>
@@ -153,7 +182,7 @@
     <screens>
         <name>relatedAssessmentTaskErrorMessageScreen</name>
         <label>relatedAssessmentTaskErrorMessageScreen</label>
-        <locationX>704</locationX>
+        <locationX>842</locationX>
         <locationY>242</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
@@ -162,6 +191,14 @@
             <name>relatedAssessmentTaskErrorMessage</name>
             <fieldText>&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(68, 68, 68);&quot;&gt;Not able to load related Assessment Tasks. Please try again later.&lt;/span&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
         </fields>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
@@ -169,8 +206,8 @@
     <screens>
         <name>relatedInspectionQuestionsErrorMessage</name>
         <label>relatedInspectionQuestionsErrorMessage</label>
-        <locationX>440</locationX>
-        <locationY>758</locationY>
+        <locationX>314</locationX>
+        <locationY>866</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -178,12 +215,20 @@
             <name>relatedInspectionQuestionErrorMessage</name>
             <fieldText>&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(68, 68, 68);&quot;&gt;Not able to load related Inspection Questions. Please try again later.&lt;/span&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
         </fields>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
     </screens>
     <start>
-        <locationX>50</locationX>
+        <locationX>188</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>getAllAssessmentTasksForInspection</targetReference>
