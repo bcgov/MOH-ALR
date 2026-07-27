@@ -9,7 +9,7 @@
                         <valueListItems>
                             <value>CustomButton.BusinessLicense.View_Permit</value>
                             <visibilityRule>
-                                <booleanFilter>(1 OR 2 OR 3 OR 4 OR 5 OR 6 OR 9) AND (7 OR 8)</booleanFilter>
+                                <booleanFilter>(1 OR 2 OR 3 OR 4 OR 5 OR 6 OR 9) AND (7 OR 8) AND 10</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
                                     <operator>EQUAL</operator>
@@ -55,6 +55,11 @@
                                     <operator>EQUAL</operator>
                                     <rightValue>Sewerage Holding Tank Permit to Construct</rightValue>
                                 </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Status}</leftValue>
+                                    <operator>NE</operator>
+                                    <rightValue>Inactive</rightValue>
+                                </criteria>
                             </visibilityRule>
                         </valueListItems>
                         <valueListItems>
@@ -86,7 +91,7 @@
                         <valueListItems>
                             <value>CustomButton.BusinessLicense.View_License</value>
                             <visibilityRule>
-                                <booleanFilter>(1 OR 2 OR 5 OR 6) AND (3 OR 4)</booleanFilter>
+                                <booleanFilter>(1 OR 2 OR 5 OR 6) AND (3 OR 4) AND 7</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
                                     <operator>EQUAL</operator>
@@ -116,6 +121,11 @@
                                     <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>BCCDC Dairy Worker Licence</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Status}</leftValue>
+                                    <operator>NE</operator>
+                                    <rightValue>Inactive</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
