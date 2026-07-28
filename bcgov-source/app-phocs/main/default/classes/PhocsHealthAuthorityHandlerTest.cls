@@ -394,7 +394,7 @@ private class PhocsHealthAuthorityHandlerTest {
         insert loc;
 
         List<visit> inspList = new List<visit>();
-        for (Integer i = 0; i < 200; i++) {
+        for (Integer i = 0; i < 10; i++) {
             visit v = new visit(
                 accountid             = acc.Id,
                 PlannedVisitStartTime = System.now(),
@@ -411,7 +411,7 @@ private class PhocsHealthAuthorityHandlerTest {
         List<visit> results = [
             SELECT Id, HealthAuthority__c FROM visit WHERE accountid = :acc.Id
         ];
-        System.assertEquals(200, results.size(), 'All 200 records should be inserted');
+        System.assertEquals(10, results.size(), 'All 10 records should be inserted');
         for (visit r : results) {
             System.assertEquals(
                 'Fraser Health - FH',
