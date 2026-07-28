@@ -116,7 +116,6 @@ global with sharing class PHOCSLabResults {
             List<LabTestRequired__c> labTestRequiredRecords = buildLabTestRequiredRecords(requisition, request.record.labTestRequisition, groupedResults, labTestMasterMap, mappingConfig);
             
             saveLabTestRequiredRecords(labTestRequiredRecords);
-            //throw new DmlException('Test exception for email notification.');
         } catch(Exception ex) {
             LogService.logAndPublish(CLASS_NAME, 'processWaterLabResults', JSON.serialize(request), ex);
             throw ex;
@@ -511,9 +510,6 @@ global with sharing class PHOCSLabResults {
                 if (!result.isSuccess()) {
                     for (Database.Error err : result.getErrors()) {
                         LogService.logAndPublish(CLASS_NAME, 'saveLabTestRequiredRecords', err.getMessage(), new DmlException(err.getMessage()));
-                        
-                        //Database.Error err = sr.getErrors()[0];                        
-                        //throw new DmlException(err.getStatusCode() + ' - ' + err.getMessage());
                     }
                 }
             }

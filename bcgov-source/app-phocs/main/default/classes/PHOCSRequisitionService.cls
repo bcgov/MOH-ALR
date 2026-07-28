@@ -33,7 +33,6 @@ global with sharing class PHOCSRequisitionService {
             res.responseBody = Blob.valueOf(buildResponseJson(responsePayload));
             
             //sendNotificationEmail(successfulRequisitions.size());
-            //throw new DmlException('Test exception for email notification.');
             
         } catch (Exception ex) {
             handleException(res, ex);
@@ -89,42 +88,12 @@ global with sharing class PHOCSRequisitionService {
                 rw.eHO = req.DWOEHOName__c;
                 rw.samplerName = req.SamplerName__c;
                 rw.facilityBoilAdvisory = req.BoilAdvisory__c;
-                /*rw.status = req.Status__c;
-                rw.phsaLabNumber = req.PHSALabNumber__c;
-                rw.toLaboratory = req.ToLaboratory__c;
-                rw.siteType = req.Type__c;                
-                rw.sampleType = req.SampleType__c; 
-                rw.collectionDateTime = req.CollectionDateTime__c != null ? String.valueOf(req.CollectionDateTime__c) : null;
-                rw.sampleReason = req.SampleReason__c;                
-                rw.eHOPhone = req.DWOEHOPhoneNumber__c;
-                rw.eHOFax = req.DWOEHOFaxNumber__c;
-                rw.eHOMobile = req.EHOMobile__c;
-                rw.eHOEmail = req.DWOEHOEmail__c;
-                rw.dWO = req.MHOName__c;
-                rw.dWOPhone = req.MHOPhoneNumber__c;
-                rw.dWOFax = req.MHOFaxNumber__c;
-                rw.dWOCell = req.DWOMobile__c;
-                rw.dWOEmail = req.MHOEmail__c;
-                rw.facilityType = req.FacilityName__r != null ? req.FacilityName__r.Type : null;
-                rw.facilityPopulation = req.FacilityName__r != null ? req.FacilityName__r.PopulationServedper24hrs__c : null;
-                rw.waterSourceCategory = req.FacilityName__r != null ? req.FacilityName__r.WaterSourceCategory__c : null; */
                 if (req.SamplingSite__r != null) {
                     rw.siteName = req.SamplingSite__r.Name;                    
                     rw.siteAddress = formatAddress(req.SamplingSite__r.VisitorAddress.Address);
                     rw.siteTreated = req.SamplingSite__r.SiteTreatment__c != null ? ((req.SamplingSite__r.SiteTreatment__c == 'Post-treatment') ? 'True' : 'False') : null;
-                    rw.siteID = req.SamplingSite__r.SiteNumber__c;                 
-                    /*rw.latitude = req.SamplingSite__r.Latitude;
-                    rw.longitude = req.SamplingSite__r.Longitude;
-                    rw.submittedForDWPA = req.SamplingSite__r.SubmittedForDWPA__c;                    
-                    rw.meetsProvincialTreatmentObjectives = String.valueOf(req.SamplingSite__r.MeetsProvincialTreatmentObjectives__c);*/
-                }                
-                /*if (req.WaterSupplier__r != null) {
-                    rw.purveyorName = req.WaterSupplier__r.Name;
-                    rw.purveyorPhone = req.WaterSupplier__r.Phone;
-                    rw.purveyorCell = req.WaterSupplier__r.MobilePhone;
-                    rw.purveyorFax = req.WaterSupplier__r.Fax;
-                    rw.purveyorEmail = req.WaterSupplier__r.Email;
-                } */
+                    rw.siteID = req.SamplingSite__r.SiteNumber__c;
+                }
                 requisitionWrappers.add(rw);
             }
             
@@ -404,33 +373,6 @@ Any exception is logged but does not fail the REST transaction.
         public String samplerName;
         public String facilityBoilAdvisory;
         public String siteID;
-        /*public String toLaboratory;
-        public String siteType;        
-        public String sampleType;
-        public String phsaLabNumber;
-        public String collectionDateTime;
-        public String sampleReason;     
-        public String status;        
-        public String eHOPhone;
-        public String eHOFax;
-        public String eHOMobile;
-        public String eHOEmail;
-        public String dWO;
-        public String dWOPhone;
-        public String dWOFax;
-        public String dWOCell;
-        public String dWOEmail;        
-        public Decimal facilityPopulation;
-        public String waterSourceCategory;        
-        public Decimal latitude;
-        public Decimal longitude;        
-        public Boolean submittedForDWPA;
-        public String meetsProvincialTreatmentObjectives;
-        public String purveyorName;
-        public String purveyorPhone;
-        public String purveyorCell;
-        public String purveyorFax;
-        public String purveyorEmail; */
     }
     
 /**
