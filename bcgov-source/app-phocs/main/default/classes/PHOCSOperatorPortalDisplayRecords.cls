@@ -50,7 +50,8 @@ public with sharing class PHOCSOperatorPortalDisplayRecords{
         List<Object> results = new List<Object>(); 
         Map<String, SObjectWrapper> wrapperRegistry = new Map<String, SObjectWrapper>{
             'PortalBLADetail' => new BusinessLicenseListApplicationDetailWrapper(),
-            'PortalFacilityDetail' => new PortalFacilityDetailWrapper()
+            'PortalFacilityDetail' => new PortalFacilityDetailWrapper(),
+            'RegulatoryTransactionFeeDetail' => new RegulatoryTransactionFeeDetailWrapper()
         };
             
         SObjectWrapper wrapper = wrapperRegistry.get(configName);
@@ -191,6 +192,21 @@ public with sharing class PHOCSOperatorPortalDisplayRecords{
                 'Phone' => formatPhoneNumber(account.Phone),
             	'FacilityHierarchy' =>  account.FacilityHierarchy__r.Name
             };
+            return result;
+        }
+    }
+
+    public class RegulatoryTransactionFeeDetailWrapper implements SObjectWrapper {
+        public Object wrap(SObject record) {
+            Map<String, Object> result = (Map<String, Object>) JSON.deserializeUntyped(
+                JSON.serialize(record)
+            );
+            Object dueDate = record.get('DueDate');
+            if(dueDate instanceof Datetime){
+                result.put('DueDate', ((Datetime) dueDate).formatGMT('yyyy-MM-dd'));
+            }else if(dueDate instanceof Date){
+                result.put('DueDate', String.valueOf((Date) dueDate));
+            }
             return result;
         }
     }

@@ -8,13 +8,14 @@
     </values>
     <values>
         <field>ObjectQuery__c</field>
-        <value xsi:type="xsd:string">Select Id, Name,FeeAmount, CreatedDate
+        <value xsi:type="xsd:string">SELECT Id, Name, FeeAmount, Status__c, PaidBy__c, PaymentDate__c, CreatedDate
 From RegulatoryTrxnFeeItem
-where RegulatoryTrxnFeeId =:recordId</value>
+WHERE RegulatoryTrxnFeeId = :recordId
+ORDER BY CreatedDate ASC</value>
     </values>
     <values>
         <field>ParentFieldAPIName__c</field>
-        <value xsi:nil="true"/>
+        <value xsi:type="xsd:string">RegulatoryTrxnFeeId</value>
     </values>
     <values>
         <field>ParentSobjectAPIName__c</field>
