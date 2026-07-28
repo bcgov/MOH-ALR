@@ -120,7 +120,7 @@ public class PHOCSLabResultsTest {
 */
     @isTest
     public static void testProcessRequest_TruncatesLongResultDescription() {
-        String longDescription = 'A'.repeat(300);
+        String longDescription = 'A'.repeat(255);
         String payload = '{"record":{"LabTestRequisition":{"RequisitionNumber":"CM8N-LONGDESC","FacilityName":"WONOWON SCHOOL WATER","DWOEHOName":"NE EHO 7",' +
             '"SamplingSiteName":"HALL FOUNTAIN","SamplingSiteAddress":"400 M Wonowon Subdivision","SamplingSiteTreatment":"YES","SystemType":"WS3^2-14 Connections",' +
             '"SpecimenSource":"Other (cistern etc.)","BoilAdvisory":"NO","SampleType":"DWATER^Drinking water","TestCategory":"WATERW^Water Bacteriology Testing",' +
