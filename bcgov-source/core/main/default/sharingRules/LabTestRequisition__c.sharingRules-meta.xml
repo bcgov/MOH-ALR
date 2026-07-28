@@ -12,6 +12,11 @@
             <operation>equals</operation>
             <value>Fraser Health - FH</value>
         </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Food Lab Test Requisition,PHOCS Dairy Environmental Swab Testing,PHOCS Lead Water Test Requisition,PHOCS Dye Test Requisition,PHOCS Dairy Product Test Requisition,PHOCS Radon Air Quality Test Requisition</value>
+        </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
@@ -26,6 +31,11 @@
             <operation>equals</operation>
             <value>Interior Health - IH</value>
         </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Food Lab Test Requisition,PHOCS Dairy Environmental Swab Testing,PHOCS Lead Water Test Requisition,PHOCS Dye Test Requisition,PHOCS Dairy Product Test Requisition,PHOCS Radon Air Quality Test Requisition</value>
+        </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
@@ -39,6 +49,11 @@
             <field>HealthAuthority__c</field>
             <operation>equals</operation>
             <value>Island Health - Island</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Food Lab Test Requisition,PHOCS Dairy Environmental Swab Testing,PHOCS Lead Water Test Requisition,PHOCS Dye Test Requisition,PHOCS Dairy Product Test Requisition,PHOCS Radon Air Quality Test Requisition</value>
         </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
@@ -72,6 +87,201 @@
             <field>HealthAuthority__c</field>
             <operation>equals</operation>
             <value>Vancouver Coastal Health - VCH</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Food Lab Test Requisition,PHOCS Dairy Environmental Swab Testing,PHOCS Lead Water Test Requisition,PHOCS Dye Test Requisition,PHOCS Dairy Product Test Requisition,PHOCS Radon Air Quality Test Requisition</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>LabTestRequisitionReportingUser</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>LabTestRequisitionReportingUser</label>
+        <sharedTo>
+            <group>PHOCSReportingUserPG</group>
+        </sharedTo>
+        <booleanFilter>1 OR 2 OR 3 OR 4 OR 5</booleanFilter>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Water Lab Test Requisition</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Lead Water Test Requisition</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Radon Air Quality Test Requisition</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Dye Test Requisition</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Food Lab Test Requisition</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSDairySharingRuleReporting</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS Dairy Sharing Rule Reporting</label>
+        <sharedTo>
+            <group>PHOCSBCCDCDairyPublicGroup</group>
+        </sharedTo>
+        <booleanFilter>1 OR 2</booleanFilter>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Dairy Environmental Swab Testing</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Dairy Product Test Requisition</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSLTReqSharingRuleBAandOfficerDairy</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>PHOCS LTReq Sharing Rule BA and Officer Dairy</label>
+        <sharedTo>
+            <group>EHISUsersPG</group>
+        </sharedTo>
+        <booleanFilter>1 AND 2 AND 3 AND 4 AND 5 AND 6</booleanFilter>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Food Lab Test Requisition,PHOCS Dairy Environmental Swab Testing,PHOCS Lead Water Test Requisition,PHOCS Dye Test Requisition,PHOCS Dairy Product Test Requisition,PHOCS Radon Air Quality Test Requisition</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>notEqual</operation>
+            <value>Fraser Health - FH</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>notEqual</operation>
+            <value>Interior Health - IH</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>notEqual</operation>
+            <value>Island Health - Island</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>notEqual</operation>
+            <value>Northern Health - NH</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>notEqual</operation>
+            <value>Vancouver Coastal Health</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSLabtestrequisitionVancouverreportingusersharingrule</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS Lab test requisition Vancouver reporting user sharing rule</label>
+        <sharedTo>
+            <group>EHISVCHReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Vancouver Coastal Health - VCH</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Food Lab Test Requisition,PHOCS Lead Water Test Requisition,PHOCS Dye Test Requisition,PHOCS Radon Air Quality Test Requisition,PHOCS Water Lab Test Requisition</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSLabtestrequisitionfraserreportingusersharingrule</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS Lab test requisition fraser reporting user sharing rule</label>
+        <sharedTo>
+            <group>EHISFHAReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Fraser Health - FH</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Food Lab Test Requisition,PHOCS Lead Water Test Requisition,PHOCS Dye Test Requisition,PHOCS Radon Air Quality Test Requisition,PHOCS Water Lab Test Requisition</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSLabtestrequisitioninteriorreportingusersharingrule</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS Lab test requisition interior reporting user sharing rule</label>
+        <sharedTo>
+            <group>EHISIHAReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Interior Health - IH</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Food Lab Test Requisition,PHOCS Lead Water Test Requisition,PHOCS Dye Test Requisition,PHOCS Radon Air Quality Test Requisition,PHOCS Water Lab Test Requisition</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSLabtestrequisitionislandreportingusersharingrule</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS Lab test requisition island reporting user sharing rule</label>
+        <sharedTo>
+            <group>EHISVCISReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Island Health - Island</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Food Lab Test Requisition,PHOCS Lead Water Test Requisition,PHOCS Dye Test Requisition,PHOCS Radon Air Quality Test Requisition,PHOCS Water Lab Test Requisition</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSLabtestrequisitionnorthernreportingusersharingrule</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS Lab test requisition northern reporting user sharing rule</label>
+        <sharedTo>
+            <group>EHISNHAReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Northern Health - NH</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Food Lab Test Requisition,PHOCS Lead Water Test Requisition,PHOCS Dye Test Requisition,PHOCS Radon Air Quality Test Requisition,PHOCS Water Lab Test Requisition</value>
         </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>

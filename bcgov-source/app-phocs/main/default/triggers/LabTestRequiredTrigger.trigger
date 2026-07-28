@@ -6,10 +6,10 @@
                 30 Oct -  PHOCS-402         -  Accenture   -  Update Owner to Queue for PHOCS Web PC records.
                 21 july -  EHIS- 3081       - Accenture - health authority update
 ***********************************************************************************************/
-trigger LabTestRequiredTrigger on LabTestRequired__c (before insert) {
+trigger LabTestRequiredTrigger on LabTestRequired__c (before insert, before update) {
 
-if(Trigger.isBefore && (Trigger.isInsert )){
-        PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new, 'FacilityName__c');         
+if(Trigger.isBefore && (Trigger.isInsert || Trigger.IsUpdate)){
+        PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new);         
     }
     
 

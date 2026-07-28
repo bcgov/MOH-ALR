@@ -113,12 +113,17 @@
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
-        <fullName>ShareInspectionWithEHISofficer</fullName>
-        <accessLevel>Edit</accessLevel>
-        <label>Share Inspection with EHIS Officer</label>
+        <fullName>PHOCSVisitFraserReportingusersharingrule</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS Visit Fraser Reporting user sharing rule</label>
         <sharedTo>
-            <group>EHIS_Officer_Users_PG</group>
+            <group>EHISFHAReportingUser</group>
         </sharedTo>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Fraser Health - FH</value>
+        </criteriaItems>
         <criteriaItems>
             <field>RecordTypeId</field>
             <operation>equals</operation>
@@ -127,12 +132,93 @@
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
-        <fullName>ShareInspectionwithEHISAdmin</fullName>
-        <accessLevel>Edit</accessLevel>
-        <label>Share Inspection with EHIS Admin</label>
+        <fullName>PHOCSVisitInteriorReportingusersharingrule</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS Visit Interior Reporting user sharing rule</label>
         <sharedTo>
-            <group>EHIS_Water_Admin_Users_PG</group>
+            <group>EHISIHAReportingUser</group>
         </sharedTo>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Interior Health - IH</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Inspection</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSVisitIslandReportingusersharingrule</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS Visit Island Reporting user sharing rule</label>
+        <sharedTo>
+            <group>EHISVCISReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Island Health - Island</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Inspection</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSVisitNorthernReportingusersharingrule</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS Visit Northern Reporting user sharing rule</label>
+        <sharedTo>
+            <group>EHISNHAReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Northern Health - NH</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Inspection</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSVisitSharingRuleBAandOfficerDairy</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>PHOCS Visit Sharing Rule BA and Officer Dairy</label>
+        <sharedTo>
+            <group>EHISUsersPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Inspection</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>notEqual</operation>
+            <value>Island Health - Island,Interior Health - IH,Fraser Health - FH,Northern Health - NH,Vancouver Coastal Health - VCH</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSVisitVancouverReportingusersharingrule</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS Visit Vancouver Reporting user sharing rule</label>
+        <sharedTo>
+            <group>EHISVCHReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Vancouver Coastal Health - VCH</value>
+        </criteriaItems>
         <criteriaItems>
             <field>RecordTypeId</field>
             <operation>equals</operation>
@@ -151,6 +237,20 @@
             <field>RecordTypeId</field>
             <operation>equals</operation>
             <value>PHOCS Inspection</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>VisitSharingRuleALRALLUSER</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Visit Sharing Rule ALR ALL USER</label>
+        <sharedTo>
+            <group>ALRAllUsersPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>ALR Inspection</value>
         </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
@@ -222,6 +322,11 @@
             <field>HealthAuthority__c</field>
             <operation>equals</operation>
             <value>Northern Health - NH</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Inspection</value>
         </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>

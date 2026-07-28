@@ -47,7 +47,7 @@ trigger RegulatoryTrxnFeeTrigger on RegulatoryTrxnFee (before insert, before upd
          }
      }
     if(Trigger.isBefore && (Trigger.isInsert || Trigger.isUpdate)){
-        PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new, 'AccountId');         
+        PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new);         
     }
     
  }

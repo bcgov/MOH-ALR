@@ -11,6 +11,6 @@
 
 trigger ConditionsTrigger on Conditions__c (before insert) {
 	 if(Trigger.isBefore && (Trigger.isInsert)){
-           PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new, 'Account_Name__c');         
+           PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new);         
         }
 }

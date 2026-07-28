@@ -5,7 +5,7 @@
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
                 28 May -  EHIS-2668         -  Accenture   -  Close subsequent child records.
 ***********************************************************************************************/
-trigger RegulatoryCodeViolationTrigger on RegulatoryCodeViolation (after update, after insert, before insert) {
+trigger RegulatoryCodeViolationTrigger on RegulatoryCodeViolation (after update, after insert, before insert, before update) {
     if (Trigger.isAfter && Trigger.isUpdate) {
         RegulatoryCodeViolationHandler.syncChildViolationStatus(Trigger.new, Trigger.oldMap);
       
@@ -13,7 +13,7 @@ trigger RegulatoryCodeViolationTrigger on RegulatoryCodeViolation (after update,
     if (Trigger.isAfter && Trigger.isInsert) {
         RegulatoryCodeViolationHandler.updateRecurrenceCount(Trigger.new);
     }
-    if(Trigger.isBefore && (Trigger.isInsert)){
-        PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new, 'PHOCSParentAccountID__c');         
+    if(Trigger.isBefore && (Trigger.isInsert || Trigger.isupdate)){
+        PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new);         
     }
 }

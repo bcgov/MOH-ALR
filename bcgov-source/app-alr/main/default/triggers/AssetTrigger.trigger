@@ -39,8 +39,8 @@ trigger AssetTrigger on Asset (before insert, before update, after insert, after
                  handler.afterUndelete(Trigger.new, Trigger.newMap);
             }
         }*/
-    if(Trigger.isBefore && (Trigger.isInsert)){
-        PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new, 'AccountId');         
+    if(Trigger.isBefore && (Trigger.isInsert || Trigger.isUpdate)){
+        PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new);         
     }
           
 }

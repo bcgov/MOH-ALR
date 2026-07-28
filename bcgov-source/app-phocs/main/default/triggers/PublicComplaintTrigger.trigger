@@ -6,12 +6,12 @@
                 30 Oct -  PHOCS-402         -  Accenture   -  Update Owner to Queue for PHOCS Web PC records.
 				21 july -  EHIS- 3081 		- Accenture - health authority update
 ***********************************************************************************************/
-trigger PublicComplaintTrigger on PublicComplaint (after insert,before insert) {
+trigger PublicComplaintTrigger on PublicComplaint (after insert,before insert, before update) {
     if (Trigger.isAfter && Trigger.isInsert) {
         PublicComplaintTriggerHandler.afterInsert(Trigger.new);
     }
-if(Trigger.isBefore && (Trigger.isInsert )){
-        PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new, 'AccountId');         
+if(Trigger.isBefore && (Trigger.isInsert || Trigger.isUpdate )){
+        PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new);         
     }
     
 }
