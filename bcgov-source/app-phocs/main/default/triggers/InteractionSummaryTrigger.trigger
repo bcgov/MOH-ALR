@@ -8,6 +8,6 @@
 ***********************************************************************************************/
 trigger InteractionSummaryTrigger on InteractionSummary (before insert, before update) {
 	 if(Trigger.isBefore && (Trigger.isInsert || Trigger.isUpdate)){
-           PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new, 'AccountId');         
+           PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new);         
         }
 }

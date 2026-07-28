@@ -40,7 +40,7 @@ trigger AssetTrigger on Asset (before insert, before update, after insert, after
             }
         }*/
     if(Trigger.isBefore && (Trigger.isInsert || Trigger.isUpdate)){
-        PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new, 'AccountId');         
+        PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new);         
     }
           
 }

@@ -15,12 +15,17 @@
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
-        <fullName>PHOCSRCVAdmin</fullName>
-        <accessLevel>Edit</accessLevel>
-        <label>PHOCS RCV Admin</label>
+        <fullName>PHOCSRCVFraserreportingusersharingrule</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS RCV Fraser reporting user sharing rule</label>
         <sharedTo>
-            <group>EHIS_Water_Admin_Users_PG</group>
+            <group>EHISFHAReportingUser</group>
         </sharedTo>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Fraser Health - FH</value>
+        </criteriaItems>
         <criteriaItems>
             <field>RecordTypeId</field>
             <operation>equals</operation>
@@ -29,12 +34,93 @@
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
-        <fullName>PHOCSRCVOfficer</fullName>
-        <accessLevel>Edit</accessLevel>
-        <label>PHOCS RCV Officer</label>
+        <fullName>PHOCSRCVInteriorreportingusersharingrule</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS RCV Interior reporting user sharing rule</label>
         <sharedTo>
-            <group>EHIS_Officer_Users_PG</group>
+            <group>EHISIHAReportingUser</group>
         </sharedTo>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Interior Health - IH</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Regulatory Code Violation</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSRCVIslandreportingusersharingrule</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS RCV Island reporting user sharing rule</label>
+        <sharedTo>
+            <group>EHISVCISReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Island Health - Island</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Regulatory Code Violation</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSRCVSharingRuleBAandOfficerDairy</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>PHOCS RCV Sharing Rule BA and Officer Dairy</label>
+        <sharedTo>
+            <group>EHISUsersPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Regulatory Code Violation</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>notEqual</operation>
+            <value>Island Health - Island,Interior Health - IH,Fraser Health - FH,Northern Health - NH,Vancouver Coastal Health - VCH</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSRCVVancouverreportingusersharingrule</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS RCV Vancouver reporting user sharing rule</label>
+        <sharedTo>
+            <group>EHISVCHReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Vancouver Coastal Health - VCH</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Regulatory Code Violation</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSRCVnorthernreportingusersharingrule</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS RCV northern reporting user sharing rule</label>
+        <sharedTo>
+            <group>EHISNHAReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Northern Health - NH</value>
+        </criteriaItems>
         <criteriaItems>
             <field>RecordTypeId</field>
             <operation>equals</operation>
@@ -166,6 +252,34 @@
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
+        <fullName>RegulatoryCodeViolationSharingRuleALRALLUSER</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>Regulatory Code Violation Sharing Rule ALR ALL USER</label>
+        <sharedTo>
+            <group>ALRAllUsersPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>ALR Regulatory Code Violation</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>RegulatoryCodeViolationSharingRuleALRDataAnalyst</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Regulatory Code Violation Sharing Rule ALR Data Analyst</label>
+        <sharedTo>
+            <group>ALRDataAnalystUsersPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>ALR Regulatory Code Violation</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
         <fullName>ShareRCVwithPHOCSReportingUsers</fullName>
         <accessLevel>Read</accessLevel>
         <label>Share RCV with PHOCS Reporting Users</label>
@@ -179,28 +293,4 @@
         </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
-    <sharingOwnerRules>
-        <fullName>Regulatory_Code_Violation_Sharing_Rule_ALR_All_Users_PG</fullName>
-        <accessLevel>Read</accessLevel>
-        <description>Read access to all personas - ALR-163</description>
-        <label>Regulatory Code Violation Sharing Rule-ALR All Users PG</label>
-        <sharedTo>
-            <group>ALRAllUsersPG</group>
-        </sharedTo>
-        <sharedFrom>
-            <group>ALRAllUsersPG</group>
-        </sharedFrom>
-    </sharingOwnerRules>
-    <sharingOwnerRules>
-        <fullName>Regulatory_Code_Violation_Sharing_Rule_ALR_DataAnalysts_PG</fullName>
-        <accessLevel>Edit</accessLevel>
-        <description>Giving ALR Data analyst access to CRE on ALR violations  - ALR 1582</description>
-        <label>Regulatory_Code_Violation_Sharing_Rule_ALR_DataAnalysts_PG</label>
-        <sharedTo>
-            <group>ALRDataAnalystUsersPG</group>
-        </sharedTo>
-        <sharedFrom>
-            <group>ALRAllUsersPG</group>
-        </sharedFrom>
-    </sharingOwnerRules>
 </SharingRules>

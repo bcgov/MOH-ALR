@@ -11,6 +11,6 @@
 
 trigger BusinessLicenseTrigger on BusinessLicense (before insert, before update) {
 	 if(Trigger.isBefore && (Trigger.isInsert || Trigger.isUpdate)){
-           PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new, 'Account__c');         
+           PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new);         
         }
 }

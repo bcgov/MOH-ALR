@@ -13,7 +13,7 @@ trigger RegulatoryCodeViolationTrigger on RegulatoryCodeViolation (after update,
     if (Trigger.isAfter && Trigger.isInsert) {
         RegulatoryCodeViolationHandler.updateRecurrenceCount(Trigger.new);
     }
-    if(Trigger.isBefore && (Trigger.isInsert || Trigger.isUpdate)){
-        PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new, 'PHOCSParentAccountID__c');         
+    if(Trigger.isBefore && (Trigger.isInsert || Trigger.isupdate)){
+        PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new);         
     }
 }

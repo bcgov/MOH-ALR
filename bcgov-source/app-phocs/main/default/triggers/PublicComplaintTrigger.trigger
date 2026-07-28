@@ -10,8 +10,8 @@ trigger PublicComplaintTrigger on PublicComplaint (after insert,before insert, b
     if (Trigger.isAfter && Trigger.isInsert) {
         PublicComplaintTriggerHandler.afterInsert(Trigger.new);
     }
-if(Trigger.isBefore && (Trigger.isInsert || Trigger.isUpdate)){
-        PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new, 'AccountId');         
+if(Trigger.isBefore && (Trigger.isInsert || Trigger.isUpdate )){
+        PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new);         
     }
     
 }

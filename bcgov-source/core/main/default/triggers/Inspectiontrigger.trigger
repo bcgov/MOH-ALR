@@ -10,6 +10,6 @@ trigger Inspectiontrigger on Visit (after update, before insert, before update) 
         VisitTriggerHandler.afterUpdate(Trigger.New, Trigger.OldMap);
     }
 	 if(Trigger.isBefore && (Trigger.isInsert || Trigger.isUpdate)){
-           PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new, 'AccountId');         
+           PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new);         
         }
 }

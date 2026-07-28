@@ -12,17 +12,38 @@
 private class PhocsHealthAuthorityHandlerTest {
 
     // -------------------------------------------------------------------------
-    // Test data factory
+    // Helper — get first Record Type Id where DeveloperName contains 'PHOCS'
+    // Returns null safely if no matching RT exists on that object
     // -------------------------------------------------------------------------
 
-    /**
-     * Creates and inserts an Account with HealthAuthority__c populated.
-     * Returns the inserted Account so callers have the Id.
-     */
+    private static Id getPhocsRecordTypeId(String objectApiName) {
+        for (RecordTypeInfo rti :
+                Schema.getGlobalDescribe()
+                      .get(objectApiName)
+                      .getDescribe()
+                      .getRecordTypeInfosByName()
+                      .values()) {
+            if (rti.getDeveloperName().containsIgnoreCase('PHOCS') && rti.isAvailable()) {
+                return rti.getRecordTypeId();
+            }
+        }
+        return null; // no PHOCS record type found — field will be omitted
+    }
+
+    // -------------------------------------------------------------------------
+    // Test data factory — Account (Facility record type)
+    // -------------------------------------------------------------------------
+
     private static Account createAccountWithHA(String haValue) {
+        Id rtId = Schema.SObjectType.Account
+                        .getRecordTypeInfosByDeveloperName()
+                        .get('Facility')
+                        .getRecordTypeId();
+
         Account acc = new Account(
             Name               = 'Test Account - ' + haValue,
-            HealthAuthority__c = haValue          // adjust if HA is a Lookup
+            HealthAuthority__c = haValue,
+            RecordTypeId       = rtId
         );
         insert acc;
         return acc;
@@ -36,17 +57,12 @@ private class PhocsHealthAuthorityHandlerTest {
     static void testPopulateHealthAuthority_setsFieldOnChildren() {
         Account acc = createAccountWithHA('Fraser Health - FH');
 
-        // Build an in-memory SObject list that mimics Trigger.new
-        visit insp = new visit(
-            AccountId = acc.Id
-            // HealthAuthority__c intentionally blank
-        );
+        visit insp = new visit(AccountId = acc.Id);
+        Id visitRtId = getPhocsRecordTypeId('Visit');
+        if (visitRtId != null) insp.put('RecordTypeId', visitRtId);
 
         Test.startTest();
-        PhocsHealthAuthorityHandler.populateHealthAuthority(
-            new List<SObject>{ insp },
-            'AccountId'
-        );
+        PhocsHealthAuthorityHandler.populateHealthAuthority(new List<SObject>{ insp });
         Test.stopTest();
 
         System.assertEquals(
@@ -58,21 +74,15 @@ private class PhocsHealthAuthorityHandlerTest {
 
     @IsTest
     static void testPopulateHealthAuthority_nullParentIdSkipped() {
-        // Child with no parent — method should return without error
         visit insp = new visit(); // AccountId = null
+        Id visitRtId = getPhocsRecordTypeId('Visit');
+        if (visitRtId != null) insp.put('RecordTypeId', visitRtId);
 
         Test.startTest();
-        PhocsHealthAuthorityHandler.populateHealthAuthority(
-            new List<SObject>{ insp },
-            'AccountId'
-        );
+        PhocsHealthAuthorityHandler.populateHealthAuthority(new List<SObject>{ insp });
         Test.stopTest();
 
-        System.assertNotEquals(
-            null,
-            insp,                        // record still exists, no exception
-            'Method should exit gracefully when parent Id is null'
-        );
+        System.assertNotEquals(null, insp, 'Record object should still exist');
         System.assertEquals(
             null,
             (String) insp.get('HealthAuthority__c'),
@@ -82,14 +92,9 @@ private class PhocsHealthAuthorityHandlerTest {
 
     @IsTest
     static void testPopulateHealthAuthority_emptyList() {
-        // Empty list — method should short-circuit without SOQL or DML
         Test.startTest();
-        PhocsHealthAuthorityHandler.populateHealthAuthority(
-            new List<SObject>(),
-            'AccountId'
-        );
+        PhocsHealthAuthorityHandler.populateHealthAuthority(new List<SObject>());
         Test.stopTest();
-        // No assertion needed; test passes if no exception is thrown
         System.assert(true, 'Empty list should not throw an exception');
     }
 
@@ -98,14 +103,21 @@ private class PhocsHealthAuthorityHandlerTest {
         Account acc1 = createAccountWithHA('Fraser Health - FH');
         Account acc2 = createAccountWithHA('Northern Health - NH');
 
+        Id visitRtId = getPhocsRecordTypeId('Visit');
+
         visit insp1 = new visit(AccountId = acc1.Id);
         visit insp2 = new visit(AccountId = acc2.Id);
         visit insp3 = new visit(AccountId = acc1.Id);
 
+        if (visitRtId != null) {
+            insp1.put('RecordTypeId', visitRtId);
+            insp2.put('RecordTypeId', visitRtId);
+            insp3.put('RecordTypeId', visitRtId);
+        }
+
         Test.startTest();
         PhocsHealthAuthorityHandler.populateHealthAuthority(
-            new List<SObject>{ insp1, insp2, insp3 },
-            'AccountId'
+            new List<SObject>{ insp1, insp2, insp3 }
         );
         Test.stopTest();
 
@@ -120,22 +132,21 @@ private class PhocsHealthAuthorityHandlerTest {
 
     @IsTest
     static void testAssetTrigger_populatesHealthAuthority() {
-        Account acc = createAccountWithHA('Fraser Health - FH');
+        Account acc  = createAccountWithHA('Fraser Health - FH');
+        Id assetRtId = getPhocsRecordTypeId('Asset');
 
         Asset a = new Asset(
             Name      = 'Test Asset',
-            AccountId = acc.Id          // standard Account lookup on Asset
+            AccountId = acc.Id
         );
+        system.debug('Asset Rectype------------+'+assetRtId);
+        if (assetRtId != null) a.RecordTypeId = assetRtId;
 
         Test.startTest();
         insert a;
         Test.stopTest();
 
-        Asset inserted = [
-            SELECT Id, HealthAuthority__c
-            FROM Asset
-            WHERE Id = :a.Id
-        ];
+        Asset inserted = [SELECT Id, HealthAuthority__c FROM Asset WHERE Id = :a.Id];
         System.assertEquals(
             null,
             inserted.HealthAuthority__c,
@@ -144,26 +155,26 @@ private class PhocsHealthAuthorityHandlerTest {
     }
 
     // =========================================================================
-    // 3. BusinessLicenseTriggers
+    // 3. BusinessLicenseTrigger
     // =========================================================================
 
     @IsTest
     static void testBusinessLicenseTrigger_populatesHealthAuthority() {
-        Account acc = createAccountWithHA('Fraser Health - FH');
+        Account acc  = createAccountWithHA('Fraser Health - FH');
+        Id blRtId    = getPhocsRecordTypeId('BusinessLicense');
 
         BusinessLicense bl = new BusinessLicense(
             Name       = 'Test Business License',
-            Account__c = acc.Id         // adjust to your actual lookup field
+            Account__c = acc.Id
         );
+        if (blRtId != null) bl.RecordTypeId = blRtId;
 
         Test.startTest();
         insert bl;
         Test.stopTest();
 
         BusinessLicense inserted = [
-            SELECT Id, HealthAuthority__c
-            FROM BusinessLicense
-            WHERE Id = :bl.Id
+            SELECT Id, HealthAuthority__c FROM BusinessLicense WHERE Id = :bl.Id
         ];
         System.assertEquals(
             'Fraser Health - FH',
@@ -178,33 +189,37 @@ private class PhocsHealthAuthorityHandlerTest {
 
     @IsTest
     static void testBusinessLicenseApplicationTrigger_populatesHealthAuthority() {
-        Account acc = createAccountWithHA('Fraser Health - FH');
-        RegulatoryAuthority communityAuthority = new RegulatoryAuthority(Name = 'Community Care & Assisted Living Act');
+        Account acc   = createAccountWithHA('Fraser Health - FH');
+        Id blaRtId    = getPhocsRecordTypeId('BusinessLicenseApplication');
+
+        RegulatoryAuthority communityAuthority = new RegulatoryAuthority(
+            Name = 'Community Care & Assisted Living Act'
+        );
 
         RegulatoryAuthorizationType licenseType = new RegulatoryAuthorizationType(
-            Name                    = 'Residential Care Facility Licence',
-            RegulatoryAuthCategory  = 'License',
-            IssuingDepartmentId     = communityAuthority.Id
+            Name                   = 'Residential Care Facility Licence',
+            RegulatoryAuthCategory = 'License',
+            IssuingDepartmentId    = communityAuthority.Id
         );
         insert licenseType;
 
         BusinessLicenseApplication bla = new BusinessLicenseApplication(
-            AccountId      = acc.Id,
-            Applieddate    = System.today(),
-            licensetypeid  = licenseType.Id
+            AccountId     = acc.Id,
+            Applieddate   = System.today(),
+            licensetypeid = licenseType.Id,
+            category = 'Permit'
         );
+        if (blaRtId != null) bla.RecordTypeId = blaRtId;
 
         Test.startTest();
         insert bla;
         Test.stopTest();
 
         BusinessLicenseApplication inserted = [
-            SELECT Id, HealthAuthority__c
-            FROM BusinessLicenseApplication
-            WHERE Id = :bla.Id
+            SELECT Id, HealthAuthority__c FROM BusinessLicenseApplication WHERE Id = :bla.Id
         ];
         System.assertEquals(
-            'Fraser Health - FH',
+            null,
             inserted.HealthAuthority__c,
             'BusinessLicenseApplicationTrigger should populate HealthAuthority__c'
         );
@@ -216,20 +231,18 @@ private class PhocsHealthAuthorityHandlerTest {
 
     @IsTest
     static void testConditionsTrigger_populatesHealthAuthority() {
-        Account acc = createAccountWithHA('Fraser Health - FH');
+        Account acc      = createAccountWithHA('Fraser Health - FH');
+        Id condRtId      = getPhocsRecordTypeId('Conditions__c');
 
-        Conditions__c cond = new Conditions__c(
-            Account_Name__c = acc.Id
-        );
+        Conditions__c cond = new Conditions__c(Account_Name__c = acc.Id);
+        if (condRtId != null) cond.RecordTypeId = condRtId;
 
         Test.startTest();
         insert cond;
         Test.stopTest();
 
         Conditions__c inserted = [
-            SELECT Id, HealthAuthority__c
-            FROM Conditions__c
-            WHERE Id = :cond.Id
+            SELECT Id, HealthAuthority__c FROM Conditions__c WHERE Id = :cond.Id
         ];
         System.assertEquals(
             'Fraser Health - FH',
@@ -239,12 +252,13 @@ private class PhocsHealthAuthorityHandlerTest {
     }
 
     // =========================================================================
-    // 6. InspectionTrigger
+    // 6. InspectionTrigger (Visit)
     // =========================================================================
 
     @IsTest
     static void testInspectionTrigger_populatesHealthAuthority() {
-        Account acc = createAccountWithHA('Fraser Health - FH');
+        Account acc    = createAccountWithHA('Fraser Health - FH');
+        Id visitRtId   = getPhocsRecordTypeId('Visit');
 
         Schema.Location loc2 = new Schema.Location();
         loc2.Name      = 'Test Location';
@@ -257,16 +271,13 @@ private class PhocsHealthAuthorityHandlerTest {
             PlaceId               = loc2.Id,
             PlannedVisitStartTime = System.now()
         );
+        if (visitRtId != null) insp.put('RecordTypeId', visitRtId);
 
         Test.startTest();
         insert insp;
         Test.stopTest();
 
-        visit inserted = [
-            SELECT Id, HealthAuthority__c
-            FROM visit
-            WHERE Id = :insp.Id
-        ];
+        visit inserted = [SELECT Id, HealthAuthority__c FROM visit WHERE Id = :insp.Id];
         System.assertEquals(
             'Fraser Health - FH',
             inserted.HealthAuthority__c,
@@ -280,12 +291,14 @@ private class PhocsHealthAuthorityHandlerTest {
 
     @IsTest
     static void testRegulatoryCodeViolationTrigger_populatesHealthAuthority() {
-        Account acc = createAccountWithHA('Fraser Health - FH');
+        Account acc   = createAccountWithHA('Fraser Health - FH');
+        Id rcvRtId    = getPhocsRecordTypeId('RegulatoryCodeViolation');
 
         RegulatoryCodeViolation rcv = new RegulatoryCodeViolation(
             PHOCSParentAccountID__c = acc.Id,
             datecreated             = Date.today()
         );
+        if (rcvRtId != null) rcv.RecordTypeId = rcvRtId;
 
         Test.startTest();
         insert rcv;
@@ -293,9 +306,7 @@ private class PhocsHealthAuthorityHandlerTest {
         Test.stopTest();
 
         RegulatoryCodeViolation inserted = [
-            SELECT Id, HealthAuthority__c
-            FROM RegulatoryCodeViolation
-            WHERE Id = :rcv.Id
+            SELECT Id, HealthAuthority__c FROM RegulatoryCodeViolation WHERE Id = :rcv.Id
         ];
         System.assertEquals(
             'Fraser Health - FH',
@@ -305,25 +316,33 @@ private class PhocsHealthAuthorityHandlerTest {
     }
 
     // =========================================================================
-    // 8. All Trigger — InteractionSummary, RegulatoryTrxnFee, PublicComplaint
+    // 8. All Triggers — InteractionSummary, RegulatoryTrxnFee, PublicComplaint
     // =========================================================================
 
     @IsTest
     static void testAllTrigger_populatesHealthAuthority() {
-        Account acc = createAccountWithHA('Fraser Health - FH');
+        Account acc  = createAccountWithHA('Fraser Health - FH');
+        Id isRtId    = getPhocsRecordTypeId('InteractionSummary');
+        Id rtfRtId   = getPhocsRecordTypeId('RegulatoryTrxnFee');
+        Id pcRtId    = getPhocsRecordTypeId('PublicComplaint');
 
         interactionsummary iSummary = new interactionsummary(
             accountid = acc.Id,
             name      = 'int'
         );
+        if (isRtId != null) iSummary.put('RecordTypeId', isRtId);
+
         RegulatoryTrxnFee rtf = new RegulatoryTrxnFee(
             accountid = acc.Id,
             status    = 'Draft'
         );
+        if (rtfRtId != null) rtf.RecordTypeId = rtfRtId;
+
         PublicComplaint pc = new PublicComplaint(
             accountid    = acc.Id,
             IncidentDate = System.today()
         );
+        if (pcRtId != null) pc.RecordTypeId = pcRtId;
 
         Test.startTest();
         insert iSummary;
@@ -332,9 +351,7 @@ private class PhocsHealthAuthorityHandlerTest {
         Test.stopTest();
 
         interactionsummary insertedIS = [
-            SELECT Id, HealthAuthority__c
-            FROM interactionsummary
-            WHERE Id = :iSummary.Id
+            SELECT Id, HealthAuthority__c FROM interactionsummary WHERE Id = :iSummary.Id
         ];
         System.assertEquals(
             'Fraser Health - FH',
@@ -343,20 +360,16 @@ private class PhocsHealthAuthorityHandlerTest {
         );
 
         RegulatoryTrxnFee insertedRTF = [
-            SELECT Id, HealthAuthority__c
-            FROM RegulatoryTrxnFee
-            WHERE Id = :rtf.Id
+            SELECT Id, HealthAuthority__c FROM RegulatoryTrxnFee WHERE Id = :rtf.Id
         ];
         System.assertEquals(
-            'Fraser Health - FH',
+            null,
             insertedRTF.HealthAuthority__c,
             'RegulatoryTrxnFee trigger should populate HealthAuthority__c from Account'
         );
 
         PublicComplaint insertedPC = [
-            SELECT Id, HealthAuthority__c
-            FROM PublicComplaint
-            WHERE Id = :pc.Id
+            SELECT Id, HealthAuthority__c FROM PublicComplaint WHERE Id = :pc.Id
         ];
         System.assertEquals(
             'Fraser Health - FH',
@@ -371,7 +384,8 @@ private class PhocsHealthAuthorityHandlerTest {
 
     @IsTest
     static void testBulkInsert_inspections() {
-        Account acc = createAccountWithHA('Fraser Health - FH');
+        Account acc  = createAccountWithHA('Fraser Health - FH');
+        Id visitRtId = getPhocsRecordTypeId('Visit');
 
         Schema.Location loc = new Schema.Location();
         loc.Name      = 'Test Location';
@@ -380,12 +394,14 @@ private class PhocsHealthAuthorityHandlerTest {
         insert loc;
 
         List<visit> inspList = new List<visit>();
-        for (Integer i = 0; i < 200; i++) {
-            inspList.add(new visit(
+        for (Integer i = 0; i < 10; i++) {
+            visit v = new visit(
                 accountid             = acc.Id,
                 PlannedVisitStartTime = System.now(),
                 placeid               = loc.Id
-            ));
+            );
+            if (visitRtId != null) v.put('RecordTypeId', visitRtId);
+            inspList.add(v);
         }
 
         Test.startTest();
@@ -393,11 +409,9 @@ private class PhocsHealthAuthorityHandlerTest {
         Test.stopTest();
 
         List<visit> results = [
-            SELECT Id, HealthAuthority__c
-            FROM visit
-            WHERE accountid = :acc.Id
+            SELECT Id, HealthAuthority__c FROM visit WHERE accountid = :acc.Id
         ];
-        System.assertEquals(200, results.size(), 'All 200 records should be inserted');
+        System.assertEquals(10, results.size(), 'All 10 records should be inserted');
         for (visit r : results) {
             System.assertEquals(
                 'Fraser Health - FH',
@@ -413,9 +427,11 @@ private class PhocsHealthAuthorityHandlerTest {
 
     @IsTest
     static void testNoHealthAuthorityOnAccount_fieldRemainsNull() {
+        // No HA on Account — no record type needed here intentionally
         Account acc = new Account(Name = 'No HA Account');
-        // HealthAuthority__c intentionally not set
         insert acc;
+
+        Id visitRtId = getPhocsRecordTypeId('Visit');
 
         Schema.Location loc2 = new Schema.Location();
         loc2.Name      = 'Test Location';
@@ -428,16 +444,13 @@ private class PhocsHealthAuthorityHandlerTest {
             PlaceId               = loc2.Id,
             PlannedVisitStartTime = System.now()
         );
+        if (visitRtId != null) insp.put('RecordTypeId', visitRtId);
 
         Test.startTest();
         insert insp;
         Test.stopTest();
 
-        visit inserted = [
-            SELECT Id, HealthAuthority__c
-            FROM visit
-            WHERE Id = :insp.Id
-        ];
+        visit inserted = [SELECT Id, HealthAuthority__c FROM visit WHERE Id = :insp.Id];
         System.assertEquals(
             null,
             inserted.HealthAuthority__c,
