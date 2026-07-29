@@ -4,19 +4,24 @@
     <protected>false</protected>
     <values>
         <field>ChildSobjectAPIName__c</field>
-        <value xsi:nil="true"/>
+        <value xsi:type="xsd:string">RegulatoryTrxnFee</value>
     </values>
     <values>
         <field>ObjectQuery__c</field>
-        <value xsi:type="xsd:string">SELECT Name, AccountName__c, Status, TotalFeeAmount, Account.Type , RecordType.DeveloperName FROM RegulatoryTrxnFee WHERE Status IN (&apos;Due&apos;, &apos;Paid&apos;)  AND RecordType.DeveloperName IN (&apos;PHOCSTransactionFee&apos;,&apos;PHOCSNonDairyTransactionFee&apos;) ORDER BY Status ASC</value>
+        <value xsi:type="xsd:string">SELECT Id, Name, FeeType__c, Status, DueDate, TotalFeeAmount
+FROM RegulatoryTrxnFee
+WHERE AccountId = :recordId
+AND Status IN (&apos;Due&apos;, &apos;Paid&apos;)
+AND RecordType.DeveloperName IN (&apos;PHOCSTransactionFee&apos;, &apos;PHOCSNonDairyTransactionFee&apos;)
+ORDER BY Status ASC, DueDate ASC</value>
     </values>
     <values>
         <field>ParentFieldAPIName__c</field>
-        <value xsi:nil="true"/>
+        <value xsi:type="xsd:string">AccountId</value>
     </values>
     <values>
         <field>ParentSobjectAPIName__c</field>
-        <value xsi:nil="true"/>
+        <value xsi:type="xsd:string">Account</value>
     </values>
     <values>
         <field>SobjectAPIName__c</field>
@@ -24,6 +29,6 @@
     </values>
     <values>
         <field>Type__c</field>
-        <value xsi:type="xsd:string">List</value>
+        <value xsi:type="xsd:string">Related</value>
     </values>
 </CustomMetadata>
