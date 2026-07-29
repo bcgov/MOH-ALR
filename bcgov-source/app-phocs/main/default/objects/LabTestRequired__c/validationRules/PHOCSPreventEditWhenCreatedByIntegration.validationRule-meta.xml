@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PHOCSPreventEditWhenCreatedByIntegration</fullName>
+    <active>true</active>
+    <description>This Water Lab Test Required record is read-only and can only be modified by the Salesforce API Only System Integrations or System Administrator profiles.</description>
+    <errorConditionFormula>AND(
+    RecordType.DeveloperName = &quot;PHOCSWaterLabTestRequired&quot;,
+    CreatedBy.Profile.Name = &quot;Salesforce API Only System Integrations&quot;,
+    $Profile.Name &lt;&gt; &quot;Salesforce API Only System Integrations&quot;,
+    $Profile.Name &lt;&gt; &quot;System Administrator&quot;
+)</errorConditionFormula>
+    <errorMessage>This Lab Result is created by integration and cannot be edited.</errorMessage>
+</ValidationRule>
