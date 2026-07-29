@@ -10,8 +10,11 @@ export default class PhocsRequestFormNextButton extends OmniscriptBaseMixin(Ligh
         let facilities = this.omniJsonData?.FacilityRequestForm?.Facilities;
 
         if (!facilities) {
-            facilities = [];
-        } else if (!Array.isArray(facilities)) {
+            this.errorMessage = 'Add at least one facility before submitting your request.';
+            return;
+        }
+
+        if(!Array.isArray(facilities)) {
             facilities = [facilities];
         }
 
