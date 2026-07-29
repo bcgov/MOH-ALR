@@ -2,6 +2,24 @@
 <ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Vancouver_Health_queue</fullName>
     <active>true</active>
-    <errorConditionFormula>AND( ISCHANGED(OwnerId), HealthAuthority__c = &quot;Vancouver Coastal Health - VCH&quot;, OR( AND( NOT(ISBLANK(Owner:Queue.DeveloperName)), NOT(CONTAINS(Owner:Queue.DeveloperName, &quot;Vancouver&quot;)) ), AND( ISBLANK(Owner:Queue.DeveloperName), $Profile.Name &lt;&gt; &quot;System Administrator&quot;, NOT(CONTAINS(Owner:User.UserRole.Name, &quot;PHOCS_VCH&quot;)) ) ) )</errorConditionFormula>
+    <errorConditionFormula>AND(
+ISCHANGED(OwnerId),
+
+HealthAuthority__c = &quot;Vancouver Coastal Health - VCH&quot;,
+
+$Profile.Name &lt;&gt; &quot;System Administrator&quot;,
+
+OR(
+AND(
+NOT(ISBLANK(Owner:Queue.DeveloperName)),
+NOT(CONTAINS(Owner:Queue.DeveloperName, &quot;Coastal&quot;))
+),
+
+AND(
+ISBLANK(Owner:Queue.DeveloperName),
+NOT(CONTAINS(Owner:User.Username, &quot;coastal &quot;))
+)
+)
+)</errorConditionFormula>
     <errorMessage>Incorrect Selection</errorMessage>
 </ValidationRule>
