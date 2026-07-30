@@ -22,6 +22,10 @@ private class PHOCSMonerisServiceTest {
         insert fee;
         RegulatoryTrxnFeeItem feeItem = new RegulatoryTrxnFeeItem(
             RegulatoryTrxnFeeId = fee.Id,
+            RecordTypeId = Schema.SObjectType.RegulatoryTrxnFeeItem
+                .getRecordTypeInfosByDeveloperName()
+                .get('PHOCSRegulatoryTransactionFeeItem')
+                .getRecordTypeId(),
             FeeAmount = 120.00,
             Amount__c = 120.00,
             Name = 'Test'
@@ -87,6 +91,25 @@ private class PHOCSMonerisServiceTest {
         System.debug('Status: ' + updatedFee.Status);
         
         System.assertEquals('1760633356HvaZZUqLeXDhtpp33jMfRuwvGHTlnT', updatedFee.PHOCSMonerisTicketNumber__c);
+        RegulatoryTrxnFeeItem updatedFeeItem = [
+            SELECT Status__c, Payment_Method__c, Payment_Type__c,
+                   PaymentChannel__c, PaidBy__c, PaymentDate__c,
+                   ReferenceNumber__c, PortalPaymentStatus__c
+            FROM RegulatoryTrxnFeeItem
+            WHERE RegulatoryTrxnFeeId = :fee.Id
+            LIMIT 1
+        ];
+        System.assertEquals('Paid', updatedFeeItem.Status__c);
+        System.assertEquals('Credit', updatedFeeItem.Payment_Method__c);
+        System.assertEquals('MasterCard', updatedFeeItem.Payment_Type__c);
+        System.assertEquals('Portal', updatedFeeItem.PaymentChannel__c);
+        System.assertEquals(
+            [SELECT Name FROM User WHERE Id = :UserInfo.getUserId()].Name,
+            updatedFeeItem.PaidBy__c
+        );
+        System.assertEquals(Date.today(), updatedFeeItem.PaymentDate__c);
+        System.assertEquals('660191690010010300', updatedFeeItem.ReferenceNumber__c);
+        System.assertEquals(null, updatedFeeItem.PortalPaymentStatus__c);
     }
 
     @IsTest

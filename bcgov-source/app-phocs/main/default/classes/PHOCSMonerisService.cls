@@ -148,14 +148,45 @@ public class PHOCSMonerisService {
 
         if (receiptWrapper != null && receiptWrapper.response.receipt != null) {
             String receiptStatus;
-            if(receiptWrapper.response.receipt.result == 'a'){
+            Boolean isSuccessful = receiptWrapper.response.receipt.result == 'a';
+            if(isSuccessful){
                 receiptStatus = 'Paid';
             }
             if(receiptWrapper.response.receipt.result == 'd'){
                 receiptStatus = 'Due';//Canceled';
             }
-            updateRegulatoryTransFee(recordId, transFee.PHOCSMonerisTicketNumber__c, receiptWrapper.response.receipt.cc.reference_no, receiptStatus);
+            MonerisReceiptWrapper.CCReceipt cardDetails = receiptWrapper.response.receipt.cc;
+            PHOCSPortalPaymentFeeItemService.updatePaymentAttempt(
+                Id.valueOf(recordId),
+                isSuccessful,
+                PHOCSPortalPaymentFeeItemService.normalizePaymentMethod(
+                    cardDetails != null && cardDetails.is_debit == 'true'
+                ),
+                PHOCSPortalPaymentFeeItemService.normalizeCardType(
+                    cardDetails == null ? null : cardDetails.card_type
+                ),
+                cardDetails == null ? null : cardDetails.reference_no,
+                Date.today()
+            );
+            updateRegulatoryTransFee(
+                recordId,
+                transFee.PHOCSMonerisTicketNumber__c,
+                cardDetails == null ? null : cardDetails.reference_no,
+                receiptStatus
+            );
         }
+    }
+
+    @AuraEnabled(cacheable=false)
+    public static void recordPaymentError(String recordId) {
+        PHOCSPortalPaymentFeeItemService.updatePaymentAttempt(
+            Id.valueOf(recordId),
+            false,
+            null,
+            null,
+            null,
+            null
+        );
     }
     
     /**
