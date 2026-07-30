@@ -63,7 +63,11 @@ export default class PhocsPayment extends NavigationMixin(LightningElement) {
          updatePaymentStatus({regulatoryTransactionFeeId:this.regulatoryTransactionFeeId})
             .then(result => {
                this.redirectToRegTransactionFeePage();
-        })
+            })
+            .catch(error => {
+                this.error = error;
+                this.redirectToRegTransactionFeePage();
+            });
     }
     redirectToRegTransactionFeePage(){
         this[NavigationMixin.Navigate]({
