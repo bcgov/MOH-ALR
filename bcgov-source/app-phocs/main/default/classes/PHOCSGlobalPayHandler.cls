@@ -1,5 +1,7 @@
 public with sharing class PHOCSGlobalPayHandler {
-    private static set<string> SUCCESSFUL_STATUS_MESSAGES = new set<String>{'CAPTURED'};
+    private static set<string> SUCCESSFUL_STATUS_MESSAGES = new set<String>{'CAPTURED', 'FUNDED'};
+    private static set<string> FAILED_STATUS_MESSAGES =
+        new set<String>{'DECLINED', 'FAILED', 'REJECTED'};
     private static string STATUS_PAID = 'PAID';
 
     private static PHOCSGlobalPayEndpoints__mdt globalPaySetting = PHOCSGlobalPayEndpoints__mdt.getInstance('Default');
@@ -8,6 +10,9 @@ public with sharing class PHOCSGlobalPayHandler {
     }
     private static String PaymentLinkEndpointUrl {
         get { return globalPaySetting.BaseEndpoint__c + globalPaySetting.PaymentLinkEndpoint__c; }
+    }
+    private static String TransactionEndpointUrl {
+        get { return globalPaySetting.BaseEndpoint__c + globalPaySetting.TransactionEndpoint__c; }
     }
     private static String GlobalPayRedirectUrl {
         get { return  getPHOCSSiteDomain() + globalPaySetting.PaymentReturnEndpoint__c; }
@@ -44,15 +49,56 @@ public with sharing class PHOCSGlobalPayHandler {
                                                          From RegulatoryTrxnFee 
                                                          where Id=:regulatoryTransactionFeeId limit 1];
                 
-                GlobalPayLinkDetailsResponse linkResp = getPaymentLinkStatus(regulatoryTrxnFeeRec, appConfig);
+                GlobalPayLinkDetailsResponse linkResp;
+                try {
+                    linkResp = getPaymentLinkStatus(regulatoryTrxnFeeRec, appConfig);
+                } catch (Exception paymentStatusException) {
+                    System.debug(
+                        LoggingLevel.ERROR,
+                        'Unable to retrieve GlobalPay link status: ' +
+                        paymentStatusException.getMessage()
+                    );
+                    return;
+                }
                 if(linkResp.transactions != null && linkResp.transactions.transaction_list != null && !linkResp.transactions.transaction_list.isEmpty()){
-                    linkResp.transactions.transaction_list.sort();
-                    regulatoryTrxnFeeRec.ReferenceNumber__c = linkResp.transactions.transaction_list[0].id;
-                    regulatoryTrxnFeeRec.GlobalPayPaymentStatus__c = linkResp.transactions.transaction_list[0].status;
+                    linkResp.transactions.transaction_list.sort(new TransactionItemSortByTime());
+                    TransactionItem paymentTransaction = linkResp.transactions.transaction_list[0];
+                    GlobalPayTransactionResponse transactionDetails;
+                    try {
+                        transactionDetails = getTransactionDetails(
+                            paymentTransaction.id,
+                            appConfig
+                        );
+                    } catch (Exception transactionDetailsException) {
+                        transactionDetails = new GlobalPayTransactionResponse();
+                    }
+                    String paymentStatus = String.isNotBlank(transactionDetails.status) ? transactionDetails.status  : paymentTransaction.status;
+                    String normalizedPaymentStatus = String.isBlank(paymentStatus) ? null : paymentStatus.trim().toUpperCase();
+                    Boolean isSuccessful = SUCCESSFUL_STATUS_MESSAGES.contains(normalizedPaymentStatus);
+                    
+                    regulatoryTrxnFeeRec.ReferenceNumber__c = paymentTransaction.id;
+                    regulatoryTrxnFeeRec.GlobalPayPaymentStatus__c = paymentStatus;
                     regulatoryTrxnFeeRec.PaymentDate__c = Date.today();
-                    if(SUCCESSFUL_STATUS_MESSAGES.contains(linkResp.transactions.transaction_list[0].status)){
+                    if(isSuccessful){
                          regulatoryTrxnFeeRec.Status = STATUS_PAID;
                     }
+                    String fundingType = transactionDetails.payment_method?.card?.funding;
+                    boolean isDebit =  fundingType.equalsIgnoreCase('DEBIT');
+                    String paymentMethod;
+                    if (String.isNotBlank(fundingType)) {
+                        paymentMethod = PHOCSPortalPaymentFeeItemService.normalizePaymentMethod(isDebit);
+                    }
+
+                    PHOCSPortalPaymentFeeItemService.updatePaymentAttempt(
+                        regulatoryTransactionFeeId,
+                        isSuccessful,
+                        paymentMethod,
+                        PHOCSPortalPaymentFeeItemService.normalizeCardType(
+                            transactionDetails.payment_method?.card?.brand
+                        ),
+                        paymentTransaction.id,
+                        Date.today()
+                    );
                     update regulatoryTrxnFeeRec;
                 }
             }
@@ -200,6 +246,34 @@ public with sharing class PHOCSGlobalPayHandler {
    
     	return (GlobalPayLinkDetailsResponse)JSON.deserialize(res.getBody(), GlobalPayLinkDetailsResponse.class);
     }
+
+    private static GlobalPayTransactionResponse getTransactionDetails(
+        String transactionId,
+        AppConfig appConfig
+    ) {
+        HttpRequest req = new HttpRequest();
+        req.setEndpoint(TransactionEndpointUrl + '/' + transactionId);
+        req.setMethod('GET');
+        req.setHeader('Authorization', 'Bearer ' + appConfig.onetimeAccessToken);
+        req.setHeader('X-GP-Version', '2021-03-22');
+
+        HttpResponse res = new Http().send(req);
+        if (res.getStatusCode() != 200) {
+            System.debug(
+                 LoggingLevel.ERROR,
+                 'Unable to retrieve GlobalPay Transaction Details : ' +
+                 res.getStatus() + ' - ' + res.getBody()
+            );
+            throw new CalloutException(
+                'GlobalPay transaction callout failed: ' +
+                res.getStatus() + ' - ' + res.getBody()
+            );
+        }
+        return (GlobalPayTransactionResponse) JSON.deserialize(
+            res.getBody(),
+            GlobalPayTransactionResponse.class
+        );
+    }
     
     public class TransactionItemSortByTime implements Comparator<TransactionItem> {
         public Integer compare(TransactionItem a, TransactionItem b) { 
@@ -207,11 +281,11 @@ public with sharing class PHOCSGlobalPayHandler {
             DateTime bDateTime = (b != null && b.time_created != null) ? b.time_created : null;
 
             if (aDateTime == null && bDateTime == null) return 0;
-            if (aDateTime == null) return -1;
-            if (bDateTime == null) return 1;
+            if (aDateTime == null) return 1;
+            if (bDateTime == null) return -1;
 
             if (aDateTime == bDateTime) return 0;
-            return aDateTime > bDateTime ? 1 : -1;
+            return aDateTime > bDateTime ? -1 : 1;
         }
 	}
 
@@ -389,6 +463,7 @@ public with sharing class PHOCSGlobalPayHandler {
        private String description;
        private String expiration_date;
        private Order order;
+       private Transactions transactions;
        private Action action;
     }
 
@@ -448,7 +523,7 @@ public with sharing class PHOCSGlobalPayHandler {
         public List<TransactionItem> transaction_list;
     }
     
-	public class TransactionItem {
+    public class TransactionItem {
         public String id;
         public Datetime time_created;
         public String status;
@@ -457,5 +532,23 @@ public with sharing class PHOCSGlobalPayHandler {
         public String amount;
         public String transactionCurrency;
         public String reference;
+   }
+
+   public class GlobalPayTransactionResponse {
+        public String id;
+        public Datetime time_created;
+        public String status;
+        public String reference;
+        public TransactionPaymentMethod payment_method;
+   }
+
+   public class TransactionPaymentMethod {
+        public String type;
+        public TransactionCard card;
+   }
+
+   public class TransactionCard {
+        public String brand;
+        public String funding;
    }
 }

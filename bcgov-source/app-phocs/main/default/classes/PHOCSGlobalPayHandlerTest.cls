@@ -17,6 +17,17 @@ private class PHOCSGlobalPayHandlerTest {
 		
         RegulatoryTrxnFee fee1 = new RegulatoryTrxnFee(AccountId = facility.Id, FeeType__c = 'Renewal Unit Fee', Status = 'Paid');
         insert fee1;
+        insert new RegulatoryTrxnFeeItem(
+            RegulatoryTrxnFeeId = fee1.Id,
+            RecordTypeId = Schema.SObjectType.RegulatoryTrxnFeeItem
+                .getRecordTypeInfosByDeveloperName()
+                .get('PHOCSRegulatoryTransactionFeeItem')
+                .getRecordTypeId(),
+            FeeAmount = 1000,
+            Amount__c = 1000,
+            Name = 'GlobalPay Test Item',
+            Status__c = 'Due'
+        );
     }
 
     @isTest
@@ -74,8 +85,19 @@ private class PHOCSGlobalPayHandlerTest {
             LIMIT 1
         ];
     
-        System.assertEquals('COMPLETED', updatedRTF.GlobalPayPaymentStatus__c, 'Status should have been updated to COMPLETED.');   
+        System.assertEquals('CAPTURED', updatedRTF.GlobalPayPaymentStatus__c, 'Status should have been updated to CAPTURED.');
         System.assertEquals('txn001', updatedRTF.ReferenceNumber__c, 'ReferenceNumber should be taken from transaction list.');
+        RegulatoryTrxnFeeItem updatedFeeItem = [
+            SELECT Payment_Method__c, Payment_Type__c, PaymentChannel__c,
+                   PaidBy__c, PortalPaymentStatus__c
+            FROM RegulatoryTrxnFeeItem
+            WHERE RegulatoryTrxnFeeId = :rtf.Id
+            LIMIT 1
+        ];
+        System.assertEquals('Credit', updatedFeeItem.Payment_Method__c);
+        System.assertEquals('Visa', updatedFeeItem.Payment_Type__c);
+        System.assertEquals('Portal', updatedFeeItem.PaymentChannel__c);
+        System.assertEquals(null, updatedFeeItem.PortalPaymentStatus__c);
     }
 
     
@@ -110,12 +132,28 @@ private class PHOCSGlobalPayHandlerTest {
                 linkResp.transactions.transaction_list = new List<PHOCSGlobalPayHandler.TransactionItem>();
     			PHOCSGlobalPayHandler.TransactionItem item = new PHOCSGlobalPayHandler.TransactionItem();
                 item.id = 'txn001';
-                item.status = 'COMPLETED';
+                item.status = 'CAPTURED';
                 item.time_created = Datetime.now();
                 linkResp.transactions.transaction_list.add(item);
                 
                 res.setStatusCode(200);
                 res.setBody(JSON.serialize(linkResp));
+                return res;
+            }
+
+            if (req.getEndpoint().contains('ucp/transactions/') && req.getMethod() == 'GET') {
+                PHOCSGlobalPayHandler.GlobalPayTransactionResponse transactionResp =
+                    new PHOCSGlobalPayHandler.GlobalPayTransactionResponse();
+                transactionResp.id = 'txn001';
+                transactionResp.status = 'CAPTURED';
+                transactionResp.payment_method =
+                    new PHOCSGlobalPayHandler.TransactionPaymentMethod();
+                transactionResp.payment_method.card =
+                    new PHOCSGlobalPayHandler.TransactionCard();
+                transactionResp.payment_method.card.brand = 'VISA';
+                transactionResp.payment_method.card.funding = 'CREDIT';
+                res.setStatusCode(200);
+                res.setBody(JSON.serialize(transactionResp));
                 return res;
             }
 
