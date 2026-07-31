@@ -8,7 +8,7 @@
     <inputType>JSON</inputType>
     <isManagedUsingStdDesigner>false</isManagedUsingStdDesigner>
     <name>PHOCSDRGetReceiptDetails</name>
-    <nullInputsIncludedInOutput>true</nullInputsIncludedInOutput>
+    <nullInputsIncludedInOutput>false</nullInputsIncludedInOutput>
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
@@ -93,12 +93,12 @@
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <globalKey>7ac1b72c-da08-467e-8732-26897b118a31</globalKey>
-        <inputFieldName>RegulatoryTrxnFeeAccount:Physical_Address__City__s</inputFieldName>
+        <inputFieldName>RegulatoryTrxnFeeAccount:BillingCity</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>PHOCSDRGetReceiptDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>RegulatoryTrxnFeeAccount:PhysicalAddressCity</outputFieldName>
+        <outputFieldName>RegulatoryTrxnFeeAccount:BillingCity</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -203,12 +203,12 @@
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <globalKey>21d1aecb-603f-49bf-ae87-ccd9f7e711d3</globalKey>
-        <inputFieldName>RegulatoryTrxnFeeAccount:Physical_Address__PostalCode__s</inputFieldName>
+        <inputFieldName>RegulatoryTrxnFeeAccount:BillingPostalCode</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>PHOCSDRGetReceiptDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>RegulatoryTrxnFeeAccount:PostalCode</outputFieldName>
+        <outputFieldName>RegulatoryTrxnFeeAccount:BillingPostalCode</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -270,6 +270,23 @@
         <filterValue>RegulatoryTrxnFee:Id</filterValue>
         <globalKey>b8a62326-fda5-4f3f-8c65-59c98f885772</globalKey>
         <inputFieldName>RegulatoryTrxnFeeId</inputFieldName>
+        <inputObjectName>RegulatoryTrxnFeeItem</inputObjectName>
+        <inputObjectQuerySequence>5.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>RegulatoryTrxnFeeItem</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>&apos;Paid&apos;</filterValue>
+        <globalKey>4be5d6ed-71dc-45b6-98db-e9c7dcf09731</globalKey>
+        <inputFieldName>Status__c</inputFieldName>
         <inputObjectName>RegulatoryTrxnFeeItem</inputObjectName>
         <inputObjectQuerySequence>5.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
@@ -350,6 +367,21 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <globalKey>3039763c-ed0b-4a08-8f43-c29a344ef16f</globalKey>
+        <inputFieldName>RegulatoryTrxnFeeItem:FeeType__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDRGetReceiptDetails</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>RegulatoryTrxnFeeItem:FeeType</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <globalKey>74ff6e2b-3759-4510-9628-18d37f110ab7</globalKey>
         <inputFieldName>RegulatoryTrxnFeeItem:Id</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
@@ -399,12 +431,12 @@
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <globalKey>a550b2fe-d7a1-40bc-b4ac-cbff7d8267aa</globalKey>
-        <inputFieldName>RegulatoryTrxnFeeAccount:Physical_Address__CountryCode__s</inputFieldName>
+        <inputFieldName>RegulatoryTrxnFeeAccount:BillingCountryCode</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>PHOCSDRGetReceiptDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>RegulatoryTrxnFeeAccount:PhysicalAddressCountryCode</outputFieldName>
+        <outputFieldName>RegulatoryTrxnFeeAccount:BillingCountryCode</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -491,12 +523,12 @@
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <globalKey>634be0e9-66f5-4995-9cdd-919b5b8225a3</globalKey>
-        <inputFieldName>RegulatoryTrxnFeeAccount:Physical_Address__StateCode__s</inputFieldName>
+        <inputFieldName>RegulatoryTrxnFeeAccount:BillingState</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>PHOCSDRGetReceiptDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>RegulatoryTrxnFeeAccount:PhysicalAddressStateCode</outputFieldName>
+        <outputFieldName>RegulatoryTrxnFeeAccount:BillingState</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -506,12 +538,12 @@
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <globalKey>d721b88d-ad1b-4419-b46a-e21e3facb17b</globalKey>
-        <inputFieldName>RegulatoryTrxnFeeAccount:Physical_Address__Street__s</inputFieldName>
+        <inputFieldName>RegulatoryTrxnFeeAccount:BillingStreet</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>PHOCSDRGetReceiptDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>RegulatoryTrxnFeeAccount:PhysicalAddressStreet</outputFieldName>
+        <outputFieldName>RegulatoryTrxnFeeAccount:BillingStreet</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -656,6 +688,7 @@
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>PHOCSDRGetReceiptDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>Date(dd-MMM-yyyy)</outputFieldFormat>
         <outputFieldName>RegulatoryTrxnFeeItem:PaymentDate</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
@@ -666,12 +699,12 @@
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <globalKey>69354068-1d93-4fc9-830e-9bb050e50754</globalKey>
-        <inputFieldName>RegulatoryTrxnFeeItem:PaidBy__c</inputFieldName>
+        <inputFieldName>RegulatoryTrxnFeeItem:Payment_Method__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>PHOCSDRGetReceiptDetails</name>
         <outputCreationSequence>1.0</outputCreationSequence>
-        <outputFieldName>RegulatoryTrxnFeeItem:PaidBy</outputFieldName>
+        <outputFieldName>RegulatoryTrxnFeeItem:PaymentMethod</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
