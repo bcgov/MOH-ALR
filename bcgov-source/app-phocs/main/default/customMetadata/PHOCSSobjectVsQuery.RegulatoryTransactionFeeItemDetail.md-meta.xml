@@ -8,11 +8,20 @@
     </values>
     <values>
         <field>ObjectQuery__c</field>
-        <value xsi:type="xsd:string">SELECT Id, Name, FeeAmount, Status__c, PaidBy__c, PaymentDate__c,
-RegulatoryTrxnFeeId, RegulatoryTrxnFee.Name, Comments
-FROM RegulatoryTrxnFeeItem
-WHERE Id = :recordId
-LIMIT 1</value>
+        <value xsi:type="xsd:string">Select Id, 
+          Name,
+          FeeAmount,
+          Status__c,
+           RegulatoryTrxnFeeId,
+          RegulatoryTrxnFee.Name,
+          Comments ,
+          PaymentDate__c,
+          PaidBy__c,
+          ReferenceNumber__c,
+          Payment_Method__c,
+          Payment_Type__c
+From RegulatoryTrxnFeeItem 
+WHERE Id = :recordId LIMIT 1</value>
     </values>
     <values>
         <field>ParentFieldAPIName__c</field>
