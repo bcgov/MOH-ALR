@@ -9,8 +9,14 @@
     RecordType.DeveloperName = &quot;PHOCSReportableIncident&quot;,
     RecordType.DeveloperName = &quot;PHOCSRequestsInquiries&quot;,
     RecordType.DeveloperName = &quot;PHOCSWaterAdvisories&quot;
-) &amp;&amp;
-INCLUDES(TopicTypes__c, &quot;Other&quot;) &amp;&amp;
+)
+&amp;&amp;
+OR(
+    INCLUDES(TopicTypes__c, &quot;Other&quot;),
+    INCLUDES(ComplaintTopicType__c, &quot;Other&quot;),
+    INCLUDES(IncidentTopicType__c, &quot;Other&quot;)
+)
+&amp;&amp;
 ISBLANK(TopicTypeOtherSpecify__c)</errorConditionFormula>
     <errorDisplayField>TopicTypeOtherSpecify__c</errorDisplayField>
     <errorMessage>Complete this field</errorMessage>
