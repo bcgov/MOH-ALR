@@ -1,27 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
     <sharingCriteriaRules>
-        <fullName>ShareDocumentTemplatesWithALRUsers</fullName>
+        <fullName>DTSharingrulestoallHAs</fullName>
         <accessLevel>Read</accessLevel>
-        <description>EHIS-2841</description>
-        <label>Share Document Templates With ALR Users</label>
+        <label>DT Sharing rules to all HA&apos;s</label>
         <sharedTo>
-            <group>ALRAllUsersPG</group>
-        </sharedTo>
-        <criteriaItems>
-            <field>RecordTypeId</field>
-            <operation>equals</operation>
-            <value>ALR Document Template</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
-        <fullName>ShareDocumentTemplatesWithPHOCSUsers</fullName>
-        <accessLevel>Read</accessLevel>
-        <description>EHIS-2841</description>
-        <label>Share Document Templates With PHOCS Users</label>
-        <sharedTo>
-            <group>EHISUsersPG</group>
+            <group>PHOCSAllHAReportingUsersPG</group>
         </sharedTo>
         <criteriaItems>
             <field>RecordTypeId</field>
@@ -92,6 +76,50 @@
         <label>Document Template Sharing Rule BA and Officer VCH PG</label>
         <sharedTo>
             <group>PHOCSBAandOfficerVCHPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Document Template</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSDocTempSharingRuleDairy</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS Doc Temp Sharing Rule Dairy</label>
+        <sharedTo>
+            <group>PHOCSReportingUserPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Document Template</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>ShareDocumentTemplatesWithALRUsers</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>EHIS-2841</description>
+        <label>Share Document Templates With ALR Users</label>
+        <sharedTo>
+            <group>ALRAllUsersPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>ALR Document Template</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>ShareDocumentTemplatesWithPHOCSUsers</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>EHIS-2841</description>
+        <label>Share Document Templates With PHOCS Users</label>
+        <sharedTo>
+            <group>EHISUsersPG</group>
         </sharedTo>
         <criteriaItems>
             <field>RecordTypeId</field>
