@@ -15,17 +15,10 @@ public class PHOCSRequisitionServiceTest{
     //Test Data Setup
     @testSetup
     private static void createTestData() {        
-        Account facility = new Account(Name = 'Test Facility', RecordTypeId = FACILITY_RT);
+        Account facility = new Account(Name = 'Test Facility', RecordTypeId = FACILITY_RT, Physical_Address__Street__s = '123 Main Street',
+                                       Physical_Address__City__s = 'Burnaby', Physical_Address__StateCode__s = 'BC',
+                                       Physical_Address__PostalCode__s = 'V5H 1A1', Physical_Address__CountryCode__s = 'CA');
         insert facility;
-        
-        Schema.Location samplingSite = new Schema.Location();
-        samplingSite.Name = 'Test Location';
-        samplingSite.Longitude = 27.635308;
-        samplingSite.Latitude = 29.635308;
-        samplingSite.SubmittedForDWPA__c = true;
-        samplingSite.SiteTreatment__c = 'Post-treatment';
-        samplingSite.ParentAccount__c = facility.Id;
-        insert samplingSite;
         
         Contact supplier = new Contact(FirstName = 'Water', LastName = 'Supplier Test', Email = 'test@gmail.com', RecordTypeId = CONTACT_PHOCS_RT);
         insert supplier;
@@ -37,7 +30,6 @@ public class PHOCSRequisitionServiceTest{
         LabTestRequisition__c requisition = new LabTestRequisition__c(
             RecordTypeId = LAB_REQ_RT,
             FacilityName__c = facility.Id,
-            SamplingSite__c = samplingSite.Id,
             WaterSupplier__c = supplier.Id,            
             Status__c = 'Requested',
             ToLaboratory__c = 'BCCDC',
@@ -49,7 +41,11 @@ public class PHOCSRequisitionServiceTest{
             SampleReason__c = 'Audit',
             SamplerName__c = 'John',
             HealthAuthority__c = 'Interior',            
-            DWOEHOName__c = 'John Smith'
+            DWOEHOName__c = 'John Smith',
+            Site_Descriptor__c = 'Hall Fountain',
+            Site_Number__c = '1234567',
+            Site_Treatment__c = 'Post-treatment',
+            SpecimenSource__c = 'Well'
         );        
         insert requisition;        
 
@@ -118,10 +114,9 @@ public class PHOCSRequisitionServiceTest{
     public static void testBuildResponse() {        
         List<LabTestRequisition__c> requisitions = [SELECT LabTestRequisitionNumber__c, Status__c, ToLaboratory__c, Type__c, SystemType__c, SampleType__c,
                                                     BoilAdvisory__c, CollectionDateTime__c, SampleReason__c, SamplerName__c, HealthAuthority__c, DWOEHOName__c,
-                                                    FacilityName__r.Name, FacilityName__r.Type, SpecimenSource__c, SamplingSite__r.VisitorAddress.Address,
-                                                    FacilityName__r.WaterSourceCategory__c, SamplingSite__r.Name, SamplingSite__r.SiteNumber__c,
-                                                    SamplingSite__r.SubmittedForDWPA__c, SamplingSite__r.SiteTreatment__c, WaterSupplier__r.Name,
-                                                    SamplingSite__r.VisitorAddressId FROM LabTestRequisition__c LIMIT 1];
+                                                    FacilityName__r.Name, FacilityName__r.Type, SpecimenSource__c, FacilityName__r.WaterSourceCategory__c, Site_Descriptor__c,
+                                                    Site_Number__c, Site_Treatment__c, Drinking_Water_Component_Name__r.Name, Drinking_Water_Component_Name__r.Address,
+                                                    FacilityName__r.Physical_Address__c FROM LabTestRequisition__c LIMIT 1];
         
         Test.startTest();
         PHOCSRequisitionService.ResponseWrapper response = PHOCSRequisitionService.buildResponse(requisitions);

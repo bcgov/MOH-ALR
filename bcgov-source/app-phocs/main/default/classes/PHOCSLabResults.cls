@@ -14,6 +14,7 @@ global with sharing class PHOCSLabResults {
     public static final String STATUS_REQUESTED = 'Requested';
     public static final String STATUS_IN_PROGRESS = 'In Progress';
     public static final String STATUS_COMPLETED = 'Completed';
+    public static final String STATUS_SUBMITTED = 'Submitted';
     public static final String STATUS_CANCELLED = 'Cancelled';
     public static final String RECORDTYPE_WATER = 'PHOCSWaterLabTestRequired';
     public static final Integer RESULT_DESCRIPTION_LENGTH = 255;
@@ -46,7 +47,7 @@ global with sharing class PHOCSLabResults {
             }
             String requestBody = RestContext.request.requestBody.toString();
             System.debug(LoggingLevel.INFO, 'Incoming Payload: ' + requestBody);
-            RequestWrapper request = (RequestWrapper)JSON.deserialize(RestContext.request.requestBody.toString(), RequestWrapper.class);            
+            RequestWrapper request = (RequestWrapper)JSON.deserialize(requestBody, RequestWrapper.class);            
             validateRequest(request);            
             processWaterLabResults(request);            
             response.statusCode = HTTP_SUCCESS;
@@ -109,7 +110,7 @@ global with sharing class PHOCSLabResults {
             }
             Map<String, Map<String, String>> mappingConfig = getMappingConfig();
             LabTestRequisition__c requisition = getOrCreateLabTestRequisition(request.record.labTestRequisition, mappingConfig);
-            attachInboundJson(requisition.Id, JSON.serializePretty(request));
+            attachInboundJson(requisition.Id, request.record.labTestRequisition.requisitionNumber, JSON.serializePretty(request));
             Map<String, List<ResultWrapper>> groupedResults = groupResultsByTestCode(request.record.results);            
             Map<String, LabTestMasterList__c> labTestMasterMap = getLabTestMasterMap(groupedResults.keySet());
             
@@ -128,7 +129,7 @@ global with sharing class PHOCSLabResults {
 * @description: Attaches inbound JSON payload to the Lab Test Requisition for audit purposes.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
-    public static void attachInboundJson(Id requisitionId, String jsonPayload) {
+    public static void attachInboundJson(Id requisitionId, String requisitionNumber, String jsonPayload){
         try {
             if (Test.isRunningTest() && throwTestException){
                 throw new DmlException('Test Exception');
@@ -142,7 +143,7 @@ global with sharing class PHOCSLabResults {
             }
             
             ContentVersion contentVersion = new ContentVersion();
-            contentVersion.Title = 'BCCDC Lab Results Payload - ' + System.now().format('yyyyMMdd');
+            contentVersion.Title = 'BCCDC Lab Results - ' + requisitionNumber + ' - ' + System.now().format('yyyyMMdd');
             contentVersion.PathOnClient = 'BCCDC_LabResults.txt';
             contentVersion.VersionData = Blob.valueOf(jsonPayload);
             contentVersion.FirstPublishLocationId = requisitionId;
@@ -214,12 +215,12 @@ global with sharing class PHOCSLabResults {
             if (Test.isRunningTest() && throwTestException){
                 throw new DmlException('Test Exception');
             }
-            List<LabTestRequisition__c> requisitions = [SELECT Id, Status__c, LabTestRequisitionNumber__c FROM LabTestRequisition__c 
+            List<LabTestRequisition__c> requisitions = [SELECT Id, Status__c, LabTestRequisitionNumber__c, CollectionDateTime__c FROM LabTestRequisition__c 
                                                         WHERE LabTestRequisitionNumber__c =: wrapper.requisitionNumber AND RecordTypeId =: LAB_REQUISITION_RTID LIMIT 1];
             
             if (!requisitions.isEmpty()) {
                 LabTestRequisition__c requisition = requisitions[0];
-                updateRequisitionStatus(requisition, wrapper.requisitionStatus, mappingConfig);
+                updateRequisitionStatus(requisition, wrapper, mappingConfig);
                 return requisition;
             }            
             return createLabTestRequisition(wrapper, mappingConfig);
@@ -254,7 +255,11 @@ global with sharing class PHOCSLabResults {
             requisition.CollectionDateTime__c = wrapper.reportedOn;
             requisition.RecordTypeId = LAB_REQUISITION_RTID;
             requisition.TestCategory__c = getMappedValue(mappingConfig, ATTR_TYPE_TEST_CATEGORY, wrapper.testCategory, null);
-            requisition.Status__c = wrapper.requisitionStatus == 'F' ? 'Completed' : 'Submitted';
+            requisition.Site_Descriptor__c = wrapper.samplingSiteName;
+            requisition.Site_Number__c = wrapper.samplingSiteID;
+            String jsonValue = wrapper.samplingSiteTreatment == null ? null : wrapper.samplingSiteTreatment.toUpperCase();
+            requisition.Site_Treatment__c = mappingConfig.get('SamplingSiteTreatment').get(jsonValue);
+            requisition.Status__c = wrapper.requisitionStatus == 'F' ? STATUS_COMPLETED : STATUS_SUBMITTED;
             
             SObjectAccessDecision decision = Security.stripInaccessible(AccessType.CREATABLE, new List<SObject>{ requisition });
             
@@ -276,29 +281,25 @@ global with sharing class PHOCSLabResults {
 * @description: Updates requisition status.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
-    public static void updateRequisitionStatus(LabTestRequisition__c requisition, String requisitionStatus, Map<String, Map<String, String>> mappingConfig) {
+    public static void updateRequisitionStatus(LabTestRequisition__c requisition, LabTestRequisitionWrapper wrapper, Map<String, Map<String, String>> mappingConfig) {
         try {
-            if (Test.isRunningTest() && throwTestException){
+            if (Test.isRunningTest() && throwTestException) {
                 throw new DmlException('Test Exception');
-            }
-            String status = mapStatus(requisitionStatus, mappingConfig);
-            
-            if (status == requisition.Status__c) {
-                return;
             }
             
             if (!Schema.sObjectType.LabTestRequisition__c.isUpdateable()) {
                 throw new NoAccessException();
             }
             
-            requisition.Status__c = status;
+            requisition.Status__c = wrapper.requisitionStatus == 'F' ? STATUS_COMPLETED : STATUS_SUBMITTED;
+            requisition.CollectionDateTime__c = wrapper.reportedOn;
             
             SObjectAccessDecision decision = Security.stripInaccessible(AccessType.UPDATABLE, new List<SObject>{ requisition });
             
             update decision.getRecords();
             
-        } catch(Exception ex) {
-            LogService.logAndPublish(CLASS_NAME, 'updateRequisitionStatus', JSON.serialize(requisition), ex);
+        } catch (Exception ex) {
+            LogService.logAndPublish(CLASS_NAME, 'updateRequisitionStatus', JSON.serialize(wrapper), ex);
             throw ex;
         }
     }
@@ -423,7 +424,7 @@ global with sharing class PHOCSLabResults {
                 record.RecordTypeId = recordTypeId;
                 record.ExternalId__c = wrapper.requisitionNumber + '-' + testCode;
                 record.LabTestRequisition__c = requisition.Id;
-                record.TestCategory__c = getMappedValue(mappingConfig, ATTR_TYPE_SAMPLE_TYPE, wrapper.SampleType, null);
+                record.TestCategory__c = getWaterTestCategory(wrapper.sampleType);
                 record.Method__c = getMappedValue(mappingConfig, ATTR_TYPE_METHOD, wrapper.method, wrapper.method);
                 record.TestDate__c = wrapper.testDate;
                 record.ReportedOn__c = wrapper.reportedOn;
@@ -480,6 +481,31 @@ global with sharing class PHOCSLabResults {
             throw ex;
         }
     }    
+
+/**
+* @author: Deepak
+* @date: 21 Jul 2026
+* @description: Builds the WaterTestCategory on lab test required.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/     
+    public static String getWaterTestCategory(String sampleType) {
+        try {
+            if (Test.isRunningTest() && throwTestException) {
+                throw new DmlException('Test Exception');
+            }
+            
+            if (String.isBlank(sampleType)) {
+                return 'Other water';
+            }
+            
+            String value = String.isBlank(sampleType) ? '' : sampleType.toLowerCase();
+            return value.contains('drinking') ? 'Drinking water' : value.contains('pool') ? 'Recreational water' : 'Other water';
+            
+        } catch (Exception ex) {
+            LogService.logAndPublish(CLASS_NAME, 'getWaterTestCategory', sampleType, ex);
+            throw ex;
+        }
+    }
     
 /**
 * @author: Deepak
@@ -660,6 +686,7 @@ global with sharing class PHOCSLabResults {
         public String dWOEHOName;
         public String samplingSiteName;
         public String samplingSiteAddress;
+        public String samplingSiteID;
         public String samplingSiteTreatment;
         public String systemType;
         public String specimenSource;
