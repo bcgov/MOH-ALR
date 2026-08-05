@@ -100,8 +100,15 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.SamplingSite__c</fieldItem>
-                <identifier>RecordSamplingSite_cField</identifier>
+                <fieldItem>Record.Drinking_Water_Component_Name__c</fieldItem>
+                <identifier>RecordDrinking_Water_Component_Name__cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.FacilityName__r.RecordTypeName__c}</leftValue>
+                        <operator>CONTAINS</operator>
+                        <rightValue>DrinkingWaterSystem</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <name>Facet-4a5ae745-857d-4118-8053-ba86caf8a5b8</name>
@@ -291,19 +298,6 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.SpecimenSource__c</fieldItem>
                 <identifier>RecordSpecimenSource_cField2</identifier>
-                <visibilityRule>
-                    <booleanFilter>1 OR 2</booleanFilter>
-                    <criteria>
-                        <leftValue>{!Record.SampleType__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Drinking Water</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.SampleType__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Drinking Water Sample</rightValue>
-                    </criteria>
-                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -456,6 +450,98 @@
             </componentInstance>
         </itemInstances>
         <name>Facet-6f078238-c980-4eb1-a4d6-133891f94d48</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Site_Treatment__c</fieldItem>
+                <identifier>RecordSite_Treatment_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Site_Number__c</fieldItem>
+                <identifier>RecordSite_Number_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Dedicated_Sampling_Station__c</fieldItem>
+                <identifier>RecordDedicated_Sampling_Station_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Automated_Monitoring__c</fieldItem>
+                <identifier>RecordAutomated_Monitoring_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Provincially_Funded_Sampling__c</fieldItem>
+                <identifier>RecordProvincially_Funded_Sampling_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-c140de7e-24bc-4962-a5fc-1acbb01c1278</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>required</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Site_Descriptor__c</fieldItem>
+                <identifier>RecordSite_Descriptor_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-d60c9a75-2ca5-4392-b6d0-b7dc2a9e9c18</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-c140de7e-24bc-4962-a5fc-1acbb01c1278</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column3</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-d60c9a75-2ca5-4392-b6d0-b7dc2a9e9c18</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column4</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-b14a168e-8f15-4e64-83c6-8b74b6f7a6c7</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -721,6 +807,68 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.CollectionDateTime__c</fieldItem>
+                <identifier>RecordCollectionDateTime_cField2</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ReceivedDateTime__c</fieldItem>
+                <identifier>RecordReceivedDateTime_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-ecd252df-b43b-43e8-a814-9f27b5e0e9ab</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.PrintedOn__c</fieldItem>
+                <identifier>RecordPrintedOn_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-26e3ef38-14a4-43fe-9eb7-ac5ab43d6e8b</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-ecd252df-b43b-43e8-a814-9f27b5e0e9ab</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column19</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-26e3ef38-14a4-43fe-9eb7-ac5ab43d6e8b</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column20</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-44c85919-8eac-4785-ab74-cce1c8852952</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.CreatedById</fieldItem>
@@ -837,6 +985,24 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>columns</name>
+                    <value>Facet-b14a168e-8f15-4e64-83c6-8b74b6f7a6c7</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>horizontalAlignment</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Additional Information Section</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:fieldSection</componentName>
+                <identifier>flexipage_fieldSection2</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>columns</name>
                     <value>Facet-8a728468-7462-4ffc-8b02-dea14b36871c</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
@@ -903,6 +1069,24 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection4</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>columns</name>
+                    <value>Facet-44c85919-8eac-4785-ab74-cce1c8852952</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>horizontalAlignment</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Laboratory Information</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:fieldSection</componentName>
+                <identifier>flexipage_fieldSection10</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
