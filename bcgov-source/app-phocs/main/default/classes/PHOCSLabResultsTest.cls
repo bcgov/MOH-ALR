@@ -12,7 +12,7 @@ public class PHOCSLabResultsTest {
     private static final String CREATE_REQ_NUMBER = 'CM8N-DRKRGC';
     private static final String UPDATE_REQ_NUMBER = 'CM8N-UPDATE';
     private static final String PAYLOAD_TEMPLATE = '{"record":{"LabTestRequisition":{"RequisitionNumber":"##REQ_NUMBER##","FacilityName":"WONOWON SCHOOL WATER","DWOEHOName":"NE EHO 7",' +
-        '"SamplingSiteName":"HALL FOUNTAIN","SamplingSiteAddress":"400 M Wonowon Subdivision","SamplingSiteTreatment":"YES","SystemType":"WS3^2-14 Connections",' +
+        '"SamplingSiteName":"HALL FOUNTAIN","SamplingSiteAddress":"400 M Wonowon Subdivision","SamplingSiteTreatment":"YES","SystemType":"WS3^2-14 Connections","SamplingSiteID":"1234567",' +
         '"SpecimenSource":"Other (cistern etc.)","BoilAdvisory":"NO","SampleType":"DWATER^Drinking water","TestCategory":"WATERW^Water Bacteriology Testing",' +
         '"Method":"Membrane Filtration","ReportedOn":"2026-02-27T09:02:00.000-08:00","TestDate":"2026-02-25T09:50:00.000-08:00","RequisitionStatus":"F"},' +
         '"results":[{"TestCodeID":"TOTCOL","ResultValueCode":"ESTCT","ResultValueDescription":"Estimated Count","UnitOfMeasure":"Count/100mL","StatusCategory":"F"},' +
@@ -361,7 +361,7 @@ public class PHOCSLabResultsTest {
     public static void testAttachInboundJson_Exception() {
         PHOCSLabResults.throwTestException = true;
         try {
-            PHOCSLabResults.attachInboundJson(null, '{}');
+            PHOCSLabResults.attachInboundJson(null, null, '{}');
             Assert.fail('Expected exception');
         } catch (Exception ex) {
             Assert.areEqual('Test Exception', ex.getMessage());
@@ -421,7 +421,11 @@ public class PHOCSLabResultsTest {
     public static void testUpdateRequisitionStatus_Exception() {
         PHOCSLabResults.throwTestException = true;
         try {
-            PHOCSLabResults.updateRequisitionStatus(new LabTestRequisition__c(), 'Requested', new Map<String, Map<String, String>>());
+            PHOCSLabResults.LabTestRequisitionWrapper wrapper = new PHOCSLabResults.LabTestRequisitionWrapper();
+            wrapper.requisitionStatus = 'F';
+            wrapper.reportedOn = System.now();
+            
+            PHOCSLabResults.updateRequisitionStatus(new LabTestRequisition__c(), wrapper, new Map<String, Map<String, String>>());
             Assert.fail('Expected exception');
         } catch (Exception ex) {
             Assert.areEqual('Test Exception', ex.getMessage());
