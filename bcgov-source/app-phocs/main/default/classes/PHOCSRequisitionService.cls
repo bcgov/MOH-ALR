@@ -82,18 +82,18 @@ global with sharing class PHOCSRequisitionService {
                 RequisitionWrapper rw = new RequisitionWrapper();            
                 rw.requisitionID = req.LabTestRequisitionNumber__c;
                 rw.healthAuthority = req.HealthAuthority__c;            
-                rw.facilityName = req.FacilityName__r != null ? req.FacilityName__r.Name : null;
+                rw.facilityName = req.Drinking_Water_Component_Name__r != null ? req.Drinking_Water_Component_Name__r.Name : (req.FacilityName__r != null ? req.FacilityName__r.Name : null);
                 rw.facilityType = req.SystemType__c;
                 rw.siteSource = req.SpecimenSource__c;
                 rw.eHO = req.DWOEHOName__c;
                 rw.samplerName = req.SamplerName__c;
                 rw.facilityBoilAdvisory = req.BoilAdvisory__c;
-                if (req.SamplingSite__r != null) {
-                    rw.siteName = req.SamplingSite__r.Name;                    
-                    rw.siteAddress = formatAddress(req.SamplingSite__r.VisitorAddress.Address);
-                    rw.siteTreated = req.SamplingSite__r.SiteTreatment__c != null ? ((req.SamplingSite__r.SiteTreatment__c == 'Post-treatment') ? 'True' : 'False') : null;
-                    rw.siteID = req.SamplingSite__r.SiteNumber__c;
-                }
+                rw.siteName = req.Site_Descriptor__c;
+                rw.siteAddress = req.Drinking_Water_Component_Name__r != null && req.Drinking_Water_Component_Name__r.Address != null
+                                 ? formatAddress(req.Drinking_Water_Component_Name__r.Address) : (req.FacilityName__r != null && req.FacilityName__r.Physical_Address__c != null
+                                 ? formatAddress(req.FacilityName__r.Physical_Address__c) : req.Site_Descriptor__c);
+                rw.siteTreated = req.Site_Treatment__c != null ? (req.Site_Treatment__c == 'Post-treatment' ? 'True' : 'False') : null;
+                rw.siteID = req.Site_Number__c;
                 requisitionWrappers.add(rw);
             }
             
