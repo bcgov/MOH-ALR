@@ -5,7 +5,7 @@
  * @date 2025-12-14
  * 
  */
-public with sharing class InspectionQuestionsControllerV2 {
+public without sharing class InspectionQuestionsControllerV2 {
     public static String STATUS_PLANNED = 'Planned';
     public static final String STATUS_INPROGRESS = 'InProgress';
 
