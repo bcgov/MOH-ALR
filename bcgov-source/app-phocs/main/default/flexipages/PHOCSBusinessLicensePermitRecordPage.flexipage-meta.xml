@@ -145,6 +145,52 @@
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
+                        <valueListItems>
+                            <value>CustomButton.BusinessLicense.ViewPermit</value>
+                            <visibilityRule>
+                                <booleanFilter>(1 OR 2 OR 3 OR 4 OR 5) AND (6 OR 7) AND 8</booleanFilter>
+                                <criteria>
+                                    <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Record of Sewerage System</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Industrial Camp Operating Permit</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Industrial Camp Sewerage System of Approval</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Tobacco and Vapour Retailer Information</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.RegulatoryAuthorizationType.Name}</leftValue>
+                                    <operator>CONTAINS</operator>
+                                    <rightValue>Personal Service Establishment Health Approval</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!$Permission.CustomPermission.PHOCSAdmin}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>true</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!$Permission.CustomPermission.PHOCSOfficer}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>true</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Status}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Active</rightValue>
+                                </criteria>
+                            </visibilityRule>
+                        </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
@@ -161,6 +207,10 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>hideChatterActions</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>hideSlackAction</name>
                     <value>false</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
