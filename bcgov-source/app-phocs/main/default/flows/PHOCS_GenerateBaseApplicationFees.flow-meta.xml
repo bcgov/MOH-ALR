@@ -184,7 +184,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>GetAAAassociatedToGetAssetDetails</targetReference>
+                <targetReference>GetAssetDetails</targetReference>
             </connector>
             <label>RecreationalWater</label>
         </rules>
@@ -222,7 +222,7 @@ AND(
     <formulas>
         <name>PoolArea</name>
         <dataType>Number</dataType>
-        <expression>{!GetAAAassociatedToGetAssetDetails.Asset.PoolAream2__c}</expression>
+        <expression>{!GetAssetDetails.PoolAream2__c}</expression>
         <scale>2</scale>
     </formulas>
     <interviewLabel>PHOCS_GenerateBaseApplicationFees {!$Flow.CurrentDateTime}</interviewLabel>
@@ -278,8 +278,8 @@ AND(
         <inputReference>RTFRecord</inputReference>
     </recordCreates>
     <recordLookups>
-        <name>GetAAAassociatedToGetAssetDetails</name>
-        <label>GetAAAassociatedToGetAssetDetails</label>
+        <name>GetAssetDetails</name>
+        <label>GetAssetDetails</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
@@ -288,14 +288,14 @@ AND(
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
-            <field>RgltyAuthApplicationId</field>
+            <field>AccountId</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>$Record.Id</elementReference>
+                <elementReference>$Record.AccountId</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>AuthApplicationAsset</object>
+        <object>Asset</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
