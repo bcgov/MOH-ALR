@@ -1,0 +1,980 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OmniDataTransform xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>false</active>
+    <assignmentRulesUsed>false</assignmentRulesUsed>
+    <deletedOnSuccess>false</deletedOnSuccess>
+    <errorIgnored>false</errorIgnored>
+    <expectedInputJson>{
+  &quot;BLAccountFacilityHA&quot; : &quot;Text&quot;,
+  &quot;BLAccountApprovedMenu&quot; : &quot;Text&quot;,
+  &quot;BLAccountLicensePlate&quot; : &quot;Text&quot;,
+  &quot;BLAccountOperationStartDate&quot; : &quot;Text&quot;,
+  &quot;CreatedDate&quot; : &quot;Text&quot;,
+  &quot;AccountWell&quot; : &quot;Text&quot;,
+  &quot;BLAOwnerName&quot; : &quot;Text&quot;,
+  &quot;BLADetails&quot; : {
+    &quot;BLAName&quot; : &quot;Text&quot;
+  },
+  &quot;BLOrganizationId&quot; : &quot;Text&quot;,
+  &quot;BLAReasonforApplying&quot; : &quot;Text&quot;,
+  &quot;BLAccountBillingAddress&quot; : &quot;Text&quot;,
+  &quot;BLAEngineeringDesignFirmName&quot; : &quot;Text&quot;,
+  &quot;BLAEngineerofRecordDesigner&quot; : &quot;Text&quot;,
+  &quot;BLAEngineeringDesignFirmAddress&quot; : &quot;Text&quot;,
+  &quot;BLAApplicantName&quot; : &quot;Text&quot;,
+  &quot;BLADescriptionofProposedWorks&quot; : &quot;Text&quot;,
+  &quot;BLIdentifier&quot; : &quot;Text&quot;,
+  &quot;BLPeriodStart&quot; : &quot;Text&quot;,
+  &quot;BLOrganizationHA&quot; : &quot;Text&quot;,
+  &quot;WaterSuppliers&quot; : {
+    &quot;WaterSuppliersName&quot; : &quot;Text&quot;
+  },
+  &quot;DocumentChecklistItems&quot; : {
+    &quot;DocumentChecklistItemsName&quot; : &quot;Text&quot;,
+    &quot;DocumentDate&quot; : &quot;Text&quot;,
+    &quot;FileUploadDate&quot; : &quot;Text&quot;
+  },
+  &quot;AccountCategoryL3&quot; : &quot;Text&quot;,
+  &quot;CarePrograms&quot; : {
+    &quot;CareProgramQuantity&quot; : &quot;Text&quot;,
+    &quot;CareProgramServiceType&quot; : &quot;Text&quot;,
+    &quot;CareProgramToalCapacity&quot; : &quot;Text&quot;
+  },
+  &quot;BLAccountTotMaxCapacity&quot; : &quot;Text&quot;,
+  &quot;BLAccountId&quot; : &quot;Text&quot;,
+  &quot;RegulatoryAuthorizationTypeName&quot; : &quot;Text&quot;,
+  &quot;ConstructionPermitDocumentTemplateId&quot; : &quot;Text&quot;,
+  &quot;ConstructionPermitDocumentTemplateName&quot; : &quot;Text&quot;,
+  &quot;BLOrganizationBillingAddress&quot; : &quot;Text&quot;,
+  &quot;AccountServiceAreaDescription&quot; : &quot;Text&quot;,
+  &quot;AccountPHOWaterSystemSizeCategory&quot; : &quot;Text&quot;,
+  &quot;AccountCategoryL1&quot; : &quot;Text&quot;,
+  &quot;BLAccountPhysicalAddress&quot; : &quot;Text&quot;,
+  &quot;AccountPopulationServedper24hrs&quot; : &quot;Text&quot;,
+  &quot;AccountType&quot; : &quot;Text&quot;,
+  &quot;BLOrganizationName&quot; : &quot;Text&quot;,
+  &quot;AccountCategoryL2&quot; : &quot;Text&quot;,
+  &quot;AccountNoofConnections&quot; : &quot;Text&quot;,
+  &quot;AccountOperatingMonths&quot; : &quot;Text&quot;,
+  &quot;BLAccountName&quot; : &quot;Text&quot;,
+  &quot;AccountPhysicalCity&quot; : &quot;Text&quot;,
+  &quot;AccountPhysicalCountryCode&quot; : &quot;Text&quot;,
+  &quot;AccountPhysicalPostalCode&quot; : &quot;Text&quot;,
+  &quot;AccountPhysicalStateCode&quot; : &quot;Text&quot;,
+  &quot;AccountPhysicalStreet&quot; : &quot;Text&quot;,
+  &quot;BLOrganizationBillingCity&quot; : &quot;Text&quot;,
+  &quot;BLOrganizationBillingCountry&quot; : &quot;Text&quot;,
+  &quot;BLOrganizationBillingPostalCode&quot; : &quot;Text&quot;,
+  &quot;BLOrganizationBillingState&quot; : &quot;Text&quot;,
+  &quot;BLOrganizationBillingStreet&quot; : &quot;Text&quot;,
+  &quot;AccountHealthAuthority&quot; : &quot;Text&quot;
+}</expectedInputJson>
+    <expectedOutputJson>{
+  &quot;Units&quot; : [ {
+    &quot;Name&quot; : &quot;Units&quot;,
+    &quot;Type&quot; : &quot;Private&quot;
+  }, {
+    &quot;Name&quot; : &quot;Units&quot;,
+    &quot;Type&quot; : &quot;Public&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Private&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Public&quot;
+  }, {
+    &quot;Name&quot; : &quot;Units&quot;,
+    &quot;Type&quot; : &quot;Independent Living&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Independent Living&quot;
+  }, {
+    &quot;Name&quot; : &quot;Units&quot;,
+    &quot;Type&quot; : &quot;Per Diem&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Per Diem&quot;
+  }, {
+    &quot;Name&quot; : &quot;Units&quot;,
+    &quot;Type&quot; : &quot;Public&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Public&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Public&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Per Diem&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Private&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Private&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Private&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Private&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Private&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Private&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Private&quot;
+  }, {
+    &quot;Name&quot; : &quot;Unit Request&quot;,
+    &quot;Type&quot; : &quot;Private&quot;
+  } ],
+  &quot;ResidenceName&quot; : &quot;ABC567&quot;,
+  &quot;RegistrantName&quot; : &quot;ABC12&quot;
+}</expectedOutputJson>
+    <fieldLevelSecurityEnabled>false</fieldLevelSecurityEnabled>
+    <inputType>JSON</inputType>
+    <isManagedUsingStdDesigner>true</isManagedUsingStdDesigner>
+    <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+    <nullInputsIncludedInOutput>false</nullInputsIncludedInOutput>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>64f2a05d-848a-465a-a12e-9f692bbcf657</globalKey>
+        <inputFieldName>BLAccountFacilityHA</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003Qccb</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003Qccb</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountFacilityHA</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>04f0d36b-30ab-4dd4-b9fb-4c968389d802</globalKey>
+        <inputFieldName>BLAOwnerName</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QcHd</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QcHd</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAOwnerName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>aa8b9182-69c4-4cd3-936d-ca3b14213a8b</globalKey>
+        <inputFieldName>BLAccountLicensePlate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QcPh</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QcPh</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountLicensePlate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>a871e242-18d5-4355-863c-de857442cc42</globalKey>
+        <inputFieldName>BLAccountCountryCode</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QueL</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QueL</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountCountryCode</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>67d348a1-01dd-4617-ba61-d4c758aed1fe</globalKey>
+        <inputFieldName>AccountCategoryL1</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QcXl</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QcXl</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>AccountCategoryL1</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>7f7f1864-6b9d-44ee-a170-bc7dfdf6a13c</globalKey>
+        <inputFieldName>IF_HA_Interior</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QwMn</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QwMn</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>IF_HA_Interior</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>9ef2996c-9478-4697-901e-1dfb794abb34</globalKey>
+        <inputFieldName>BLEffectiveDate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003Qw3R</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003Qw3R</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLEffectiveDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>62fb60eb-e3c0-45b4-8d8d-0559987b3546</globalKey>
+        <inputFieldName>IF_HA_VancouverCoastal</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QwWT</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QwWT</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>IF_HA_VancouverCoastal</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>046347af-72f0-442e-a5a6-dee73cc20a76</globalKey>
+        <inputFieldName>isSmallPool</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QsxV</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QsxV</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>isSmallPool</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>356adf8e-6da7-47ea-84d6-025bfa54c1e4</globalKey>
+        <inputFieldName>BLAccountStreet</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QuXt</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QuXt</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountStreet</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>3c71dca0-4a10-4246-aab5-5d2a91595edd</globalKey>
+        <inputFieldName>PoolArea</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QgGP</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QgGP</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>PoolArea</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>6ebb5b2e-9a8d-4084-b243-5275a3ad379c</globalKey>
+        <inputFieldName>BLOrganizationFacilityHA</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QchR</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QchR</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLOrganizationFacilityHA</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>e74e1602-0c7c-4b2d-92a3-bbfa7a7a910a</globalKey>
+        <inputFieldName>BLAccountId</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QcEP</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QcEP</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountId</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>true</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>8af920ed-c359-4b92-a92d-6ea15cf87051</globalKey>
+        <inputFieldName>BLAOwnerName</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QchS</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QchS</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAOwnerName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>5737d610-2374-45d5-a481-7b312987e01a</globalKey>
+        <inputFieldName>BLPeriodEnd</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003Qw0D</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003Qw0D</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLPeriodEnd</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>84ffbf37-2eb8-4e6e-81ff-bd48de02726d</globalKey>
+        <inputFieldName>BLAccountState</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003Qub7</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003Qub7</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountState</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>850794a4-761f-48af-99bb-8e95e410509d</globalKey>
+        <inputFieldName>BLAccountOperationStartDate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QcMT</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QcMT</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountOperationStartDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>011b9d26-555a-4ee0-a37a-fb34886e3022</globalKey>
+        <inputFieldName>IF_HA_Island</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QwRd</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QwRd</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>IF_HA_Island</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>5a86b6ef-9ab1-4981-bd81-5b91344a7bbf</globalKey>
+        <inputFieldName>BLOrganizationId</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QcUY</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QcUY</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLOrganizationId</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>cbdd80af-44f7-4c27-ade4-83f26887d286</globalKey>
+        <inputFieldName>BLExpiryDate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003Qw8H</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003Qw8H</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLExpiryDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>4ceb6011-ae90-4952-b6ea-c02d54655131</globalKey>
+        <inputFieldName>BLFacilityAddress</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QuWH</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QuWH</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLFacilityAddress</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>9811b80e-783a-4b1b-8bf1-bc45501c829a</globalKey>
+        <inputFieldName>BLAccountName</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QcUX</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QcUX</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>461c3cac-ca42-4313-8f34-6144295dcabe</globalKey>
+        <inputFieldName>BLIdentifier</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QcBB</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QcBB</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLIdentifier</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>true</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>4f9a7120-5947-4001-a03e-75e1a0351c53</globalKey>
+        <inputFieldName>CreatedDate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QceD</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QceD</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>CreatedDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>4db8450d-580a-4214-b00e-7a600fce00cb</globalKey>
+        <inputFieldName>BLPeriodStart</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QcJF</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QcJF</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLPeriodStart</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>179a24a4-25b4-482f-9fe2-76eb668ed488</globalKey>
+        <inputFieldName>DrinkingWaterOperatingPermitAuthority</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QzR7</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QzR7</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>DrinkingWaterOperatingPermitAuthority</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>eb01a76c-b81a-4cc5-bc58-7d9ca040811f</globalKey>
+        <inputFieldName>PoolOperatingPermitAuthority</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003R5d0</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003R5d0</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>PoolOperatingPermitAuthority</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>235ef7f1-fde6-48db-afa8-3650859eba3d</globalKey>
+        <inputFieldName>IssuingAuthority</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003Qzu9</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003Qzu9</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>IssuingAuthority</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>e53dbb20-b609-4779-a0a1-0717a30a427f</globalKey>
+        <inputFieldName>BLAccountApprovedMenu</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QcRJ</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QcRJ</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountApprovedMenu</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>687d6e35-1465-4b34-bc69-41dd9f7e8115</globalKey>
+        <inputFieldName>BusinessLicense:Conditions:Description</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003Qizl</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003Qizl</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BusinessLicense:Conditions:Description</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>72b4dc4c-19f0-4009-9dec-871ba65d53bf</globalKey>
+        <inputFieldName>BLAccountPostalCode</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003Qucj</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003Qucj</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountPostalCode</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>43c11ff6-5fb9-4552-98fa-deb894824a7b</globalKey>
+        <inputFieldName>BLADetails:BLAName</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003Qcaz</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003Qcaz</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLADetails:BLAName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>977b3003-a5e4-4bc1-9e55-1b707bb3baa4</globalKey>
+        <inputFieldName>DocumentChecklistItems:DocumentDate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QcZN</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QcZN</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>DocumentChecklistItems:DocumentDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>6d137f2d-3176-4a75-969b-0f792cfa75fa</globalKey>
+        <inputFieldName>BLAccountCity</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QuZV</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QuZV</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountCity</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>9cf0ee75-3a00-42a1-819c-167a3b649cfb</globalKey>
+        <inputFieldName>PoolOperationSchedule</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QgEn</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QgEn</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>PoolOperationSchedule</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>true</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>843b0efd-b6b4-47e5-984a-49f8a2aa9135</globalKey>
+        <inputFieldName>OrganizationBillingAddress</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QcG1</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QcG1</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>OrganizationBillingAddress</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>0d8c6af0-ce47-4670-a283-f90181402bdf</globalKey>
+        <inputFieldName>AccountCategoryL3</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003Qcfp</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003Qcfp</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>AccountCategoryL3</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>c57e4b3f-68fd-42b4-9dbc-d69466e88e4f</globalKey>
+        <inputFieldName>isConditionNotPresent</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003Qnpo</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003Qnpo</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>IF_isConditionNotPresent</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaSequence>1.0</formulaSequence>
+        <globalKey>3a0e6261-316c-4392-b144-07e3c8f0b3a6</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QcCn</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QcCn</omniDataTransformationId>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>b5c5aea3-e81b-4c6a-8e2d-d4cbeed546d4</globalKey>
+        <inputFieldName>BLAReasonforApplying</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003Qcj3</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003Qcj3</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAReasonforApplying</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>82e2e1b0-b2ed-47d1-a737-9608501a7a14</globalKey>
+        <inputFieldName>AccountCategoryL2</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QcO5</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QcO5</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>AccountCategoryL2</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>5ac21071-d76e-4f01-a511-8e08960af8c1</globalKey>
+        <inputFieldName>IF_HA_Northern</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QwD7</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QwD7</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>IF_HA_Northern</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>12a32346-5b2b-480e-8028-c90c9ffe3003</globalKey>
+        <inputFieldName>DocumentChecklistItems:DocumentChecklistItemsName</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QcKr</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QcKr</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>DocumentChecklistItems:DocumentChecklistItemsName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>true</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>298dc40a-adfe-427f-9a25-021f488ac1d9</globalKey>
+        <inputFieldName>CreatedByIdName</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QcO6</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QcO6</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>CreatedByIdName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>01a833b4-6438-4485-9c84-e29f0ffa0387</globalKey>
+        <inputFieldName>IF_HA_Fraser</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QwHx</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QwHx</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>IF_HA_Fraser</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>5ba86737-0709-474a-88ee-d2b59d430cd2</globalKey>
+        <inputFieldName>BLOrganizationName</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QcW9</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QcW9</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLOrganizationName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>7ac6d320-4265-44a9-8d78-f26522736395</globalKey>
+        <inputFieldName>BLAccountPhysicalAddress</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMTransformPoolBusinessLicenseDetails</name>
+        <omniDataTransformation>0kdAq000003QcSv</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003QcSv</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountPhysicalAddress</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <outputType>JSON</outputType>
+    <previewJsonData>{
+  &quot;BLOrganizationName&quot; : &quot;DM Prep - Business Entity&quot;,
+  &quot;BLAccountPHOWaterSystemSizeCategory&quot; : &quot;Small Water System &lt;50&quot;,
+  &quot;BLAccountPHOWaterSourceCategory&quot; : &quot;Small Water System &lt;50&quot;,
+  &quot;PoolArea&quot; : 20,
+  &quot;isConditionNotPresent&quot; : true,
+  &quot;BLAccountOperatingMonths&quot; : &quot;January;February;March;April;May;June;July;August;September;October;November;December&quot;,
+  &quot;CarePrograms&quot; : {
+    &quot;CareProgramServiceType&quot; : &quot;Commercial&quot;
+  },
+  &quot;BLOrganizationBillingState&quot; : &quot;BC&quot;,
+  &quot;BLOrganizationAccountName&quot; : &quot;DM Prep - Business Entity&quot;,
+  &quot;BLAccountFacilityHA&quot; : &quot;&lt;a href=\&quot;/001Aq00000zAkxpIAC\&quot; target=\&quot;_self\&quot;&gt;Northern&lt;/a&gt;&quot;,
+  &quot;DocumentChecklistItems&quot; : [ {
+    &quot;DocumentChecklistItemsName&quot; : &quot;Pool Data Sheet&quot;
+  }, {
+    &quot;DocumentChecklistItemsName&quot; : &quot;Pool Safety Plan&quot;
+  } ],
+  &quot;BLAccountBillingAddress&quot; : &quot;    &quot;,
+  &quot;AccountCategoryL1&quot; : &quot;Commercial&quot;,
+  &quot;AccountCategoryL2&quot; : &quot;Indoor spray pool&quot;,
+  &quot;BLAccountPhysicalAddress&quot; : &quot;    &quot;,
+  &quot;BLOrganizationHA&quot; : &quot;&lt;a href=\&quot;/001Aq00000zAkxpIAC\&quot; target=\&quot;_self\&quot;&gt;Northern&lt;/a&gt;&quot;,
+  &quot;AccountCategoryL3&quot; : &quot;Non-recirculating&quot;,
+  &quot;BLAccountHealthAuthority&quot; : &quot;Northern Health - NH&quot;,
+  &quot;BLOrganizationId&quot; : &quot;001Aq000012kgfLIAQ&quot;,
+  &quot;BLIdentifier&quot; : &quot;2026-0000000757&quot;,
+  &quot;CurrentDate&quot; : &quot;2026-08-07&quot;,
+  &quot;BLOrganizationBillingPostalCode&quot; : &quot;V3D A5B&quot;,
+  &quot;BLAApplicantMailingAddress&quot; : &quot;    &quot;,
+  &quot;BLAccountName&quot; : &quot;ABC Rec Water Facility&quot;,
+  &quot;RegulatoryAuthorizationTypeName&quot; : &quot;Pool Operating Permit&quot;,
+  &quot;PoolOperationSchedule&quot; : &quot;operation Schedule test value&quot;,
+  &quot;BLAccountId&quot; : &quot;FA-01778&quot;,
+  &quot;BLOrganizationBillingCountry&quot; : &quot;Canada&quot;,
+  &quot;isWSICatL1GroundWater&quot; : false,
+  &quot;BLAccountPhysicalAddressCity&quot; : &quot;Kelowna&quot;,
+  &quot;BLAOwnerName&quot; : &quot;EHIS Officer Test&quot;,
+  &quot;BLADetails&quot; : {
+    &quot;BLAName&quot; : &quot;BLA-0000002411&quot;
+  },
+  &quot;BLAReasonforApplying&quot; : &quot;New application&quot;,
+  &quot;BLOrganizationBillingCity&quot; : &quot;Vancouver&quot;,
+  &quot;BLPeriodStart&quot; : &quot;2026-08-05T13:38:37.000Z&quot;,
+  &quot;BLAccountDWSDetails&quot; : {
+    &quot;FacilitiesDWTDetails&quot; : {
+      &quot;BLAccountPhysicalAddress&quot; : &quot;    &quot;
+    }
+  },
+  &quot;BLOrganizationBillingStreet&quot; : &quot;22234, 100 Ave, 123St&quot;,
+  &quot;isWSICatL1SurfaceWater&quot; : false
+}</previewJsonData>
+    <processSuperBulk>false</processSuperBulk>
+    <responseCacheTtlMinutes>0.0</responseCacheTtlMinutes>
+    <rollbackOnError>false</rollbackOnError>
+    <sourceObject>json</sourceObject>
+    <sourceObjectDefault>false</sourceObjectDefault>
+    <synchronousProcessThreshold>0.0</synchronousProcessThreshold>
+    <targetOutputFileName>PHOCSPoolOperatingPermitTemplate(Version 1)</targetOutputFileName>
+    <type>Transform</type>
+    <uniqueName>PHOCSDMTransformPoolBusinessLicenseDetails_1</uniqueName>
+    <versionNumber>1.0</versionNumber>
+    <xmlDeclarationRemoved>false</xmlDeclarationRemoved>
+</OmniDataTransform>
