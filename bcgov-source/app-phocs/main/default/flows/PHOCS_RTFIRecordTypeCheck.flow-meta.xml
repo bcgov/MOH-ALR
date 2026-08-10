@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <customErrors>
+        <name>Custom_Error_Message_1</name>
+        <label>Custom Error Message 1</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <customErrorMessages>
+            <errorMessage>{!ErrorMessage}</errorMessage>
+            <isFieldError>false</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <decisions>
+        <name>Decision_1</name>
+        <label>ValidateRecordTypeAssociation</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>ValidRTMatch</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>isMatchingRecordType</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Custom_Error_Message_1</targetReference>
+            </connector>
+            <label>ValidMatch</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>isMatchingRecordType</name>
+        <dataType>Boolean</dataType>
+        <expression>OR (
+   AND( 
+({!$Record.RecordType.DeveloperName} == &apos;PHOCSRegulatoryTransactionFeeItem&apos;) , 
+({!GetRTFRecordDetails.RecordType.DeveloperName}==&apos;PHOCSTransactionFee&apos;)
+),
+  AND(   
+({!$Record.RecordType.DeveloperName}==&apos;PHOCSNonDairyTransactionFeeItem&apos;),
+({!GetRTFRecordDetails.RecordType.DeveloperName}==&apos;PHOCSNonDairyTransactionFee&apos;)
+)
+     )</expression>
+    </formulas>
+    <interviewLabel>PHOCS_RTFIRecordTypeCheck {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>PHOCS_RTFIRecordTypeCheck</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>GetRTFRecordDetails</name>
+        <label>GetRTFRecordDetails</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Decision_1</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.RegulatoryTrxnFeeId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>RegulatoryTrxnFee</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>GetRTFRecordDetails</targetReference>
+        </connector>
+        <filterFormula>OR (
+    ({!$Record.RecordType.DeveloperName} == &apos;PHOCSRegulatoryTransactionFeeItem&apos;) ,
+     ({!$Record.RecordType.DeveloperName}==&apos;PHOCSNonDairyTransactionFeeItem&apos;)
+     )</filterFormula>
+        <object>RegulatoryTrxnFeeItem</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>ErrorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>Invalid fee record type. Select Dairy Fee record type for Dairy facilities or PHOCS Fee record type for all other program areas.</stringValue>
+        </value>
+    </variables>
+</Flow>
