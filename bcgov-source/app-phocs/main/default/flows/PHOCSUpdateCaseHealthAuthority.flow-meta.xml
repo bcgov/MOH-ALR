@@ -27,12 +27,8 @@
             <label>Account Is Set</label>
         </rules>
     </decisions>
+    <description>Updating start condition formula, adding more record types</description>
     <environments>Default</environments>
-    <formulas>
-        <name>CaseAccountHealthAuthorityText</name>
-        <dataType>String</dataType>
-        <expression>TEXT({!Get_Case_Account.HealthAuthority__c})</expression>
-    </formulas>
     <interviewLabel>PHOCS Update Case Health Authority {!$Flow.CurrentDateTime}</interviewLabel>
     <label>PHOCS Update Case Health Authority</label>
     <processMetadataValues>
@@ -93,7 +89,7 @@
         <inputAssignments>
             <field>HealthAuthority__c</field>
             <value>
-                <elementReference>CaseAccountHealthAuthorityText</elementReference>
+                <elementReference>Get_Case_Account.HealthAuthority__c</elementReference>
             </value>
         </inputAssignments>
         <inputReference>$Record</inputReference>
@@ -104,10 +100,7 @@
         <connector>
             <targetReference>Check_Case_Account</targetReference>
         </connector>
-        <filterFormula>OR(
-    {!$Record.RecordType.DeveloperName} = &quot;PHOCSComplaint&quot;,
-    {!$Record.RecordType.DeveloperName} = &quot;PHOCSReportableIncident&quot;
-)</filterFormula>
+        <filterFormula>CONTAINS({!$Record.RecordType.DeveloperName}, &quot;PHOCS&quot;)</filterFormula>
         <object>Case</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordBeforeSave</triggerType>
