@@ -1,0 +1,52 @@
+<template>
+    <template if:true={errorMessage}>
+        <div class="slds-text-color_error slds-m-bottom_small">
+            {errorMessage}
+        </div>
+    </template>
+    <div class="footerContainer">
+        <div class="nextButton">
+            <lightning-button label="Cancel" variant="brand" stretch onclick={handleCancel}>
+            </lightning-button>
+            <lightning-button label="Submit" variant="brand" stretch onclick={handleNext}>
+            </lightning-button>
+        </div>
+    </div>
+
+    <template if:true={showCancelModal}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="cancel-modal-heading"
+            class="slds-modal slds-fade-in-open cancelModal">
+
+            <div class="slds-modal__container">
+
+                <header class="slds-modal__header">
+                    <h2 id="cancel-modal-heading" class="slds-text-heading_medium">
+                        Cancel the Request
+                    </h2>
+                </header>
+
+                <div class="slds-modal__content slds-p-around_medium">
+                    <p>
+                        Do you want to continue?
+                    </p>
+                </div>
+
+                <footer class="slds-modal__footer">
+                    <div class="modalButtonContainer">
+
+                        <lightning-button label="Yes" variant="brand" onclick={handleCancelYes}>
+                        </lightning-button>
+
+                        <lightning-button label="No" variant="neutral" onclick={handleCancelNo}>
+                        </lightning-button>
+
+                    </div>
+                </footer>
+
+            </div>
+        </section>
+
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+</template>
