@@ -378,7 +378,7 @@ public with sharing class InspectionViolationService {
                     vio.InspectionAssmntIndId = ind.Id;
                     vio.InspectionId = inspectionId;
                     vio.PHOCSParentAccountID__c = inspectionAccountId;
-                    vio.Asset__c = inspectionAssetId;
+                    vio.Asset__c = (inspectionAssetId != null && inspectionAssetId.getSObjectType() == Asset.SObjectType) ? inspectionAssetId : NULL;
                     vio.DateCreated = System.now();
                     vio.RegulatoryCodeId = mapItem.RegulatoryCodeId;
                     vio.ComplianceDueDate = ind.ComplianceDueDate__c;
