@@ -10,7 +10,8 @@ private class PHOCSMonerisReceiptsTest {
             Store_ID__c = 'store123',
             API_Token__c = 'apitoken123',
             Checkout_Id__c = 'checkout789',
-            Environment__c = 'qa'
+            Environment__c = 'qa',
+            Endpoints__c = 'https://gatewayt.moneris.com'
         );
         return config;
     }

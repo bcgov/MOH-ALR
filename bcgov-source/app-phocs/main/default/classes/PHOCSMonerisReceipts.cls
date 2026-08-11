@@ -5,14 +5,14 @@
  *      This Apex service class is responsible for retrieving (capturing) the receipt details 
  *      from the Moneris Payment Gateway using a previously generated checkout ticket.
  *
- *      It sends a POST callout to the Moneris Checkout API (via Named Credential: 'Moneris')
- *      with the `action` parameter set to `'receipt'`, along with store credentials and 
+ *      It sends a POST callout to the Moneris Checkout API endpoint configured in custom metadata
+ *      with the `action` parameter set to `'receipt'`, along with store credentials and
  *      the Moneris ticket number. The response is then deserialized into the 
  *      `MonerisReceiptWrapper` class for further processing within Salesforce.
  *
  *  FUNCTIONALITY   :
  *      - Builds a JSON payload to request receipt details from Moneris
- *      - Executes a secure callout using Salesforce Named Credential
+ *      - Uses the endpoint configured in PHOCSMonerisConfiguration__mdt
  *      - Parses the JSON response using `MonerisReceiptWrapper`
  *      - Returns a strongly typed object containing receipt data such as 
  *        transaction number, approval code, and reference number
@@ -50,6 +50,10 @@ public class PHOCSMonerisReceipts {
         String ticket,
         String status
     ) {
+        if (moneris == null || String.isBlank(moneris.Endpoints__c)) {
+            throw new AuraHandledException('Moneris endpoint is not configured');
+        }
+
         Map<String, Object> payload = new Map<String, Object>{
             'store_id'    => moneris.Store_ID__c,
             'api_token'   => moneris.API_Token__c,
@@ -60,7 +64,8 @@ public class PHOCSMonerisReceipts {
         };
         
         HttpRequest req = new HttpRequest();
-        req.setEndpoint('callout:Moneris/chktv2/request/request.php');
+        String endpoint = moneris.Endpoints__c + '/chktv2/request/request.php';
+        req.setEndpoint(endpoint);
         req.setMethod('POST');
         req.setHeader('Content-Type', 'application/json');
         req.setBody(JSON.serialize(payload));

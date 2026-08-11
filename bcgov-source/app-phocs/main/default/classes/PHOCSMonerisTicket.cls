@@ -6,8 +6,8 @@
  *      integration within the PHOCS (Public Health Operating Compliance System) Salesforce
  *      application.
  *
- *      It performs an HTTP POST callout to the Moneris Checkout API (using Named Credential:
- *      'Moneris') to generate a unique "ticket" for initiating a checkout transaction.
+ *      It performs an HTTP POST callout to the Moneris Checkout API using the endpoint configured
+ *      in PHOCSMonerisConfiguration__mdt to generate a unique "ticket" for checkout.
  *      The ticket serves as a secure, time-bound reference identifier required by the Moneris
  *      Hosted Checkout or Hosted Tokenization workflows.
  *
@@ -15,7 +15,7 @@
  *      - Builds and sends a payload to Moneris 'preload' API endpoint
  *      - Parses the Moneris JSON response to extract the 'ticket' value
  *      - Validates Moneris response codes and handles exceptions gracefully
- *      - Uses Salesforce Named Credential for endpoint and authentication management
+ *      - Uses the endpoint configured in PHOCSMonerisConfiguration__mdt
  *
  *  EXAMPLE USAGE   :
  *      PHOCSMonerisConfiguration__mdt moneris = [SELECT Store_ID__c, API_Token__c, Checkout_Id__c, Environment__c 
@@ -43,9 +43,14 @@ public class PHOCSMonerisTicket {
      */
     public static String generateTicket(PHOCSMonerisConfiguration__mdt moneris, String orderNo, Decimal totalAmt) {                   
         String ticket;
+
+        if (moneris == null || String.isBlank(moneris.Endpoints__c)) {
+            throw new AuraHandledException('Moneris endpoint is not configured');
+        }
         
         HttpRequest req = new HttpRequest();
-        req.setEndpoint('callout:Moneris/chktv2/request/request.php');
+        String endpoint = moneris.Endpoints__c + '/chktv2/request/request.php';
+        req.setEndpoint(endpoint);
         req.setMethod('POST');
         req.setHeader('Content-Type', 'application/json');
         req.setBody(JSON.serialize(getPayload(moneris, orderNo, totalAmt)));
