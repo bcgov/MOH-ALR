@@ -7,6 +7,7 @@
 ***********************************************************************************************/
 @isTest
 public class VisitTriggerHandlerTest {
+    public static Id recordTypePHOCSFacilityAccount = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('Facility').getRecordTypeId();
 
 /**
 * @author: Accenture
@@ -20,11 +21,11 @@ public class VisitTriggerHandlerTest {
 */
     @testSetup
     static void setupTestData() {
-        Account routineAccount = new Account(Name = 'PHOCS Test Account - Routine', RiskAssessmentEligibility__c = false);
-        Account followUpAccount = new Account(Name = 'PHOCS Test Account - FollowUp', RiskAssessmentEligibility__c = false);
-        Account alreadyEligibleAccount = new Account(Name = 'PHOCS Test Account - AlreadyEligible', RiskAssessmentEligibility__c = true);
-        Account noVisitTypeAccount = new Account(Name = 'PHOCS Test Account - NoVisitType', RiskAssessmentEligibility__c = false);
-        Account wrongVisitTypeAccount = new Account(Name = 'PHOCS Test Account - WrongVisitType', RiskAssessmentEligibility__c = false);
+        Account routineAccount = new Account(Name = 'PHOCS Test Account - Routine', RiskAssessmentEligibility__c = false, RecordTypeId = recordTypePHOCSFacilityAccount);
+        Account followUpAccount = new Account(Name = 'PHOCS Test Account - FollowUp', RiskAssessmentEligibility__c = false, RecordTypeId = recordTypePHOCSFacilityAccount);
+        Account alreadyEligibleAccount = new Account(Name = 'PHOCS Test Account - AlreadyEligible', RiskAssessmentEligibility__c = true, RecordTypeId = recordTypePHOCSFacilityAccount);
+        Account noVisitTypeAccount = new Account(Name = 'PHOCS Test Account - NoVisitType', RiskAssessmentEligibility__c = false, RecordTypeId = recordTypePHOCSFacilityAccount);
+        Account wrongVisitTypeAccount = new Account(Name = 'PHOCS Test Account - WrongVisitType', RiskAssessmentEligibility__c = false, RecordTypeId = recordTypePHOCSFacilityAccount);
         insert new List<Account>{ routineAccount, followUpAccount, alreadyEligibleAccount, noVisitTypeAccount, wrongVisitTypeAccount };
 
         InspectionType routineType = new InspectionType(Name = VisitTriggerHandler.VISIT_TYPE_ROUTINE);
