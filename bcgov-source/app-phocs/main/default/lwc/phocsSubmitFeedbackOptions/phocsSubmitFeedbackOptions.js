@@ -11,7 +11,7 @@ export default class PhocsSubmitFeedbackOptions extends NavigationMixin(Lightnin
             value: 'Request'
         },
         {
-            label: 'Reporting a concern or compliant',
+            label: 'Reporting a concern or complaint',
             value: 'Complaint'
         }
     ];
