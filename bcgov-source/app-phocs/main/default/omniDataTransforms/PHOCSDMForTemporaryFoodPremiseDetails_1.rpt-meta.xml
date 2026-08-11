@@ -46,6 +46,23 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <globalKey>cea68d49-4a92-4d9a-be60-89c337b252ad</globalKey>
+        <inputFieldName>IssuingDepartment</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMForTemporaryFoodPremiseDetails</name>
+        <omniDataTransformation>0kdAq000003PTY9</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003PTY9</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>IssuingDepartment</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <formulaConverted>| | var:BLA:Event:StartDateTime 8 10 SUBSTRING &quot;-&quot; var:BLA:Event:MMM &quot;-&quot; | var:BLA:Event:StartDateTime 0 4 SUBSTRING CONCAT</formulaConverted>
         <formulaExpression>CONCAT(SUBSTRING(%BLA:Event:StartDateTime%, 8, 10), &quot;-&quot;, %BLA:Event:MMM%, &quot;-&quot;, SUBSTRING(%BLA:Event:StartDateTime%, 0, 4))</formulaExpression>
         <formulaResultPath>BLA:Event:StartDateClean</formulaResultPath>
@@ -56,6 +73,25 @@
         <name>PHOCSDMForTemporaryFoodPremiseDetails</name>
         <omniDataTransformation>0kdAq000003LhJZ</omniDataTransformation>
         <omniDataTransformationId>0kdAq000003LhJZ</omniDataTransformationId>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>&apos;Public/\/\/Health/\/\/Act,/\/\/Food/\/\/Premises/\/\/Regulation&apos;</formulaConverted>
+        <formulaExpression>&apos;Public Health Act, Food Premises Regulation&apos;</formulaExpression>
+        <formulaResultPath>ByAuthorityOf</formulaResultPath>
+        <formulaSequence>21.0</formulaSequence>
+        <globalKey>885b116b-6da1-416d-ad43-7242f712216e</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMForTemporaryFoodPremiseDetails</name>
+        <omniDataTransformation>0kdAq000003PTWX</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003PTWX</omniDataTransformationId>
         <outputCreationSequence>0.0</outputCreationSequence>
         <outputFieldName>Formula</outputFieldName>
         <outputObjectName>Formula</outputObjectName>
@@ -92,6 +128,25 @@
         <name>PHOCSDMForTemporaryFoodPremiseDetails</name>
         <omniDataTransformation>0kdAq000003LhHx</omniDataTransformation>
         <omniDataTransformationId>0kdAq000003LhHx</omniDataTransformationId>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:BLAccount:HealthAuthority__c &apos;Fraser/\/\/Health/\/\/-/\/\/FH&apos; == &apos;Fraser/\/\/Health/\/\/Authority,/\/\/Health/\/\/Protection&apos; | var:BLAccount:HealthAuthority__c &apos;Interior/\/\/Health/\/\/-/\/\/IH&apos; == &apos;Interior/\/\/Health/\/\/Authority,/\/\/Health/\/\/Protection&apos; | var:BLAccount:HealthAuthority__c &apos;Island/\/\/Health/\/\/-/\/\/Island&apos; == &apos;Island/\/\/Health/\/\/Authority,/\/\/Health/\/\/Protection/\/\/&amp;/\/\/Health/\/\/Environments&apos; | var:BLAccount:HealthAuthority__c &apos;Northern/\/\/Health/\/\/-/\/\/NH&apos; == &apos;Northern/\/\/Health/\/\/Authority,/\/\/Public/\/\/Health/\/\/Protection&apos; | var:BLAccount:HealthAuthority__c &apos;Vancouver/\/\/Coastal/\/\/Health/\/\/-/\/\/VCH&apos; == &apos;Vancouver/\/\/Coastal/\/\/Health/\/\/Authority,/\/\/Health/\/\/Protection&apos; &apos;&apos; IF IF IF IF IF</formulaConverted>
+        <formulaExpression>IF(%BLAccount:HealthAuthority__c% == &apos;Fraser Health - FH&apos;,&apos;Fraser Health Authority, Health Protection&apos;,IF(%BLAccount:HealthAuthority__c% == &apos;Interior Health - IH&apos;,&apos;Interior Health Authority, Health Protection&apos;,IF(%BLAccount:HealthAuthority__c% == &apos;Island Health - Island&apos;,&apos;Island Health Authority, Health Protection &amp; Health Environments&apos;,IF(%BLAccount:HealthAuthority__c% == &apos;Northern Health - NH&apos;,&apos;Northern Health Authority, Public Health Protection&apos;,IF(%BLAccount:HealthAuthority__c% == &apos;Vancouver Coastal Health - VCH&apos;,&apos;Vancouver Coastal Health Authority, Health Protection&apos;,&apos;&apos;)))))</formulaExpression>
+        <formulaResultPath>IssuingDepartment</formulaResultPath>
+        <formulaSequence>20.0</formulaSequence>
+        <globalKey>2968c689-a455-4c0d-b5df-c9e47bf2e625</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMForTemporaryFoodPremiseDetails</name>
+        <omniDataTransformation>0kdAq000003PTUv</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003PTUv</omniDataTransformationId>
         <outputCreationSequence>0.0</outputCreationSequence>
         <outputFieldName>Formula</outputFieldName>
         <outputObjectName>Formula</outputObjectName>
@@ -2157,6 +2212,23 @@
         <omniDataTransformationId>0kdAq000003Lcv3</omniDataTransformationId>
         <outputCreationSequence>1.0</outputCreationSequence>
         <outputFieldName>BLAccountFacilityHAName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>e99c3b70-5edf-4bcb-bad8-d422b858dd2f</globalKey>
+        <inputFieldName>ByAuthorityOf</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMForTemporaryFoodPremiseDetails</name>
+        <omniDataTransformation>0kdAq000003PTZl</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003PTZl</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>ByAuthorityOf</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
