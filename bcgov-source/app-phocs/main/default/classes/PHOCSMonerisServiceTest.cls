@@ -33,7 +33,8 @@ private class PHOCSMonerisServiceTest {
                 API_Token__c = 'apitoken123',
                 Checkout_Id__c = 'checkout789',
                 HealthAuthority__c = 'Vancouver Coastal Health - VCH',
-                Environment__c = 'qa'
+                Environment__c = 'qa',
+                Endpoints__c = 'https://gatewayt.moneris.com'
             )};
     }
     
