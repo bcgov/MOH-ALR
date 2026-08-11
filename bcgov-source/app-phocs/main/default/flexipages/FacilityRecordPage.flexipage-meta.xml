@@ -63,7 +63,7 @@
                         <valueListItems>
                             <value>Account.PHOCSInitiateRiskAssessment</value>
                             <visibilityRule>
-                                <booleanFilter>1 AND 2</booleanFilter>
+                                <booleanFilter>1 AND (2 OR 3 OR 4)</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.RiskAssessmentEligibility__c}</leftValue>
                                     <operator>EQUAL</operator>
@@ -73,6 +73,16 @@
                                     <leftValue>{!Record.Type}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>Personal Services</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Type}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Recreational Water</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Type}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Food</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
@@ -4071,7 +4081,7 @@
                 <componentName>lst:dynamicRelatedList</componentName>
                 <identifier>lst_dynamicRelatedList6</identifier>
                 <visibilityRule>
-                    <booleanFilter>1 AND 2</booleanFilter>
+                    <booleanFilter>1 AND (2 OR 3 OR 4)</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.RiskAssessmentEligibility__c}</leftValue>
                         <operator>EQUAL</operator>
@@ -4081,6 +4091,16 @@
                         <leftValue>{!Record.Type}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>Personal Services</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Type}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Recreational Water</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Type}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Food</rightValue>
                     </criteria>
                 </visibilityRule>
             </componentInstance>
