@@ -120,7 +120,7 @@
             <assignToReference>RTFItemRecord.FeeType__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <stringValue>Annual Operating Permit Fees</stringValue>
+                <elementReference>LoopThroughMetadataToGetLIcenseTypes.RTFIFeeType__c</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -196,6 +196,7 @@
             <label>RecreationalWater</label>
         </rules>
     </decisions>
+    <description>EHIS-4550 - Generate application fee for sewerage</description>
     <environments>Default</environments>
     <formulas>
         <name>isBLMetConditions</name>
@@ -223,7 +224,9 @@ AND(
        PoolArea &gt; 0,  
  {!LoopThroughMetadataToGetLIcenseTypes.PoolMinArea__c} &lt; PoolArea, 
     {!LoopThroughMetadataToGetLIcenseTypes.PoolAreaString__c}  &gt;= PoolArea 
-       )
+       ),
+   AND(ISBLANK({!LoopThroughMetadataToGetLIcenseTypes.MetricType__c}),
+{!LoopThroughMetadataToGetLIcenseTypes.LicenseType__c} =={!$Record.LicenseType.Name})
 )</expression>
     </formulas>
     <formulas>
@@ -374,7 +377,7 @@ AND(
         <connector>
             <targetReference>GetGenerateApplicationFeeMetadata</targetReference>
         </connector>
-        <filterFormula>({!$Record.RecordType.DeveloperName}==&apos;OperatingPermitApplication&apos; ) &amp;&amp; TEXT({!$Record.Status})==&apos;Closed&apos;  &amp;&amp; ISCHANGED({!$Record.ClosureReason__c}) &amp;&amp; Text({!$Record.ClosureReason__c})==&apos;Approved&apos;</filterFormula>
+        <filterFormula>(({!$Record.RecordType.DeveloperName}==&apos;OperatingPermitApplication&apos; ) || ({!$Record.RecordType.DeveloperName}==&apos;ConstructionPermitApplication&apos; ) ||({!$Record.RecordType.DeveloperName}==&apos;PHOCSRecordofSewerageSystem&apos; ) )&amp;&amp; TEXT({!$Record.Status})==&apos;Closed&apos;  &amp;&amp; ISCHANGED({!$Record.ClosureReason__c}) &amp;&amp; (Text({!$Record.ClosureReason__c})==&apos;Approved&apos; || Text({!$Record.ClosureReason__c})==&apos;Accepted&apos;)</filterFormula>
         <object>BusinessLicenseApplication</object>
         <recordTriggerType>Update</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
