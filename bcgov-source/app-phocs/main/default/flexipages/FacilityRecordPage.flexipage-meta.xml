@@ -31,7 +31,7 @@
                         <valueListItems>
                             <value>Account.PHOCSNewInspection</value>
                             <visibilityRule>
-                                <booleanFilter>1 OR 2</booleanFilter>
+                                <booleanFilter>(1 OR 2) AND 3</booleanFilter>
                                 <criteria>
                                     <leftValue>{!$Permission.CustomPermission.PHOCSOfficer}</leftValue>
                                     <operator>EQUAL</operator>
@@ -41,6 +41,11 @@
                                     <leftValue>{!$Permission.CustomPermission.PHOCSAdmin}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>true</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.CategoryL1__c}</leftValue>
+                                    <operator>NE</operator>
+                                    <rightValue>Beach</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
@@ -209,6 +214,13 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.CategoryL1__c</fieldItem>
                 <identifier>RecordCategoryL1_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.Type}</leftValue>
+                        <operator>NE</operator>
+                        <rightValue>Recreational Water</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -219,6 +231,13 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.CategoryL2__c</fieldItem>
                 <identifier>RecordCategoryL2_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.Type}</leftValue>
+                        <operator>NE</operator>
+                        <rightValue>Recreational Water</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -229,6 +248,64 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.CategoryL3__c</fieldItem>
                 <identifier>RecordCategory_L3__cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.Type}</leftValue>
+                        <operator>NE</operator>
+                        <rightValue>Recreational Water</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.CategoryL1__c</fieldItem>
+                <identifier>RecordCategoryL1_cField2</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.Type}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Recreational Water</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.CategoryL2__c</fieldItem>
+                <identifier>RecordCategoryL2_cField2</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.Type}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Recreational Water</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.CategoryL3__c</fieldItem>
+                <identifier>RecordCategoryL3_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.Type}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Recreational Water</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <name>Facet-caec94cf-6b0f-4eb3-a8c5-94242f2d1ce8</name>
