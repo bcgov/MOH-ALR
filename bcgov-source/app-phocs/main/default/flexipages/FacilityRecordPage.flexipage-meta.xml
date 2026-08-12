@@ -63,7 +63,7 @@
                         <valueListItems>
                             <value>Account.PHOCSInitiateRiskAssessment</value>
                             <visibilityRule>
-                                <booleanFilter>1 AND (2 OR 3 OR 4)</booleanFilter>
+                                <booleanFilter>1 AND (2 OR 3 OR (4 AND (5 OR 6)))</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.RiskAssessmentEligibility__c}</leftValue>
                                     <operator>EQUAL</operator>
@@ -83,6 +83,16 @@
                                     <leftValue>{!Record.Type}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>Food</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.CategoryL2__c}</leftValue>
+                                    <operator>NE</operator>
+                                    <rightValue>Temporary food service or events</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.CategoryL1__c}</leftValue>
+                                    <operator>NE</operator>
+                                    <rightValue>Temporary food premises</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
@@ -4081,7 +4091,7 @@
                 <componentName>lst:dynamicRelatedList</componentName>
                 <identifier>lst_dynamicRelatedList6</identifier>
                 <visibilityRule>
-                    <booleanFilter>1 AND (2 OR 3 OR 4)</booleanFilter>
+                    <booleanFilter>1 AND (2 OR 3 OR (4 AND (5 OR 6)))</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.RiskAssessmentEligibility__c}</leftValue>
                         <operator>EQUAL</operator>
@@ -4101,6 +4111,16 @@
                         <leftValue>{!Record.Type}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>Food</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.CategoryL2__c}</leftValue>
+                        <operator>NE</operator>
+                        <rightValue>Temporary food service or events</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.CategoryL1__c}</leftValue>
+                        <operator>NE</operator>
+                        <rightValue>Temporary food premises</rightValue>
                     </criteria>
                 </visibilityRule>
             </componentInstance>
