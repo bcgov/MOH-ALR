@@ -1,5 +1,8 @@
 public with sharing class PHOCSPortalPaymentFeeItemService {
-    private static final String PHOCS_ITEM_RECORD_TYPE = 'PHOCSRegulatoryTransactionFeeItem';
+    private static final Set<String> PHOCS_ITEM_RECORD_TYPES = new Set<String>{
+        'PHOCSRegulatoryTransactionFeeItem',
+        'PHOCSNonDairyTransactionFeeItem'
+    };
     private static final String PAYMENT_CHANNEL_PORTAL = 'Portal';
     private static final String PAYMENT_STATUS_ERROR = 'Error';
     private static final String STATUS_DUE = 'Due';
@@ -29,7 +32,7 @@ public with sharing class PHOCSPortalPaymentFeeItemService {
                    ReferenceNumber__c, PortalPaymentStatus__c
             FROM RegulatoryTrxnFeeItem
             WHERE RegulatoryTrxnFeeId = :regulatoryTransactionFeeId
-              AND RecordType.DeveloperName = :PHOCS_ITEM_RECORD_TYPE
+              AND RecordType.DeveloperName IN :PHOCS_ITEM_RECORD_TYPES
               AND Status__c = :STATUS_DUE
         ];
 
