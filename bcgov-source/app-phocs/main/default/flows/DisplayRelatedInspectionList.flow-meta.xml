@@ -2,15 +2,10 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
-    <customProperties>
-        <name>ScreenProgressIndicator</name>
-        <value>
-            <stringValue>{&quot;location&quot;:&quot;top&quot;,&quot;type&quot;:&quot;simple&quot;}</stringValue>
-        </value>
-    </customProperties>
+    <description>Used in PHOCS Inspection record page</description>
     <environments>Default</environments>
-    <interviewLabel>Display Child Events {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>Display Child Events</label>
+    <interviewLabel>Display Related Inspection List {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Display Related Inspection List</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -31,48 +26,42 @@
     </processMetadataValues>
     <processType>Flow</processType>
     <recordLookups>
-        <name>GetEventRecords</name>
-        <label>Get Event Records</label>
+        <name>GetVisitRecord</name>
+        <label>GetVisitRecord</label>
         <locationX>176</locationX>
         <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Events</targetReference>
+            <targetReference>RelatedInspectionList</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
-            <field>WhatId</field>
+            <field>ParentVisitId</field>
             <operator>EqualTo</operator>
             <value>
                 <elementReference>recordId</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>false</getFirstRecordOnly>
-        <object>Event</object>
+        <object>Visit</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <screens>
-        <name>Events</name>
-        <label>Events</label>
+        <name>RelatedInspectionList</name>
+        <label>RelatedInspectionList</label>
         <locationX>176</locationX>
         <locationY>242</locationY>
-        <allowBack>true</allowBack>
+        <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
+        <allowPause>false</allowPause>
         <fields>
-            <name>EventsTable</name>
+            <name>Inspection</name>
             <dataTypeMappings>
                 <typeName>T</typeName>
-                <typeValue>Event</typeValue>
+                <typeValue>Visit</typeValue>
             </dataTypeMappings>
             <extensionName>flowruntime:datatable</extensionName>
             <fieldType>ComponentInstance</fieldType>
-            <inputParameters>
-                <name>label</name>
-                <value>
-                    <stringValue>Data Table</stringValue>
-                </value>
-            </inputParameters>
             <inputParameters>
                 <name>selectionMode</name>
                 <value>
@@ -88,7 +77,7 @@
             <inputParameters>
                 <name>tableData</name>
                 <value>
-                    <elementReference>GetEventRecords</elementReference>
+                    <elementReference>GetVisitRecord</elementReference>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -100,10 +89,22 @@
             <inputParameters>
                 <name>columns</name>
                 <value>
-                    <stringValue>[{&quot;apiName&quot;:&quot;StartDateTime&quot;,&quot;guid&quot;:&quot;column-5bd6&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:true,&quot;customHeaderLabel&quot;:&quot;Start Date&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:0,&quot;label&quot;:&quot;Start Date Time&quot;,&quot;type&quot;:&quot;customDateTime&quot;},{&quot;apiName&quot;:&quot;EndDateTime&quot;,&quot;guid&quot;:&quot;column-a26d&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:true,&quot;customHeaderLabel&quot;:&quot;End Date&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:1,&quot;label&quot;:&quot;End Date Time&quot;,&quot;type&quot;:&quot;customDateTime&quot;}]</stringValue>
+                    <stringValue>[{&quot;apiName&quot;:&quot;Hyperlink_Name__c&quot;,&quot;guid&quot;:&quot;column-35e3&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:true,&quot;customHeaderLabel&quot;:&quot;Name&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:0,&quot;label&quot;:&quot;Hyperlink Name&quot;,&quot;type&quot;:&quot;customRichText&quot;},{&quot;apiName&quot;:&quot;InspectionTypeHyperlink__c&quot;,&quot;guid&quot;:&quot;column-e77a&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:true,&quot;customHeaderLabel&quot;:&quot;Inspection Type&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:1,&quot;label&quot;:&quot;Inspection Type Hyperlink&quot;,&quot;type&quot;:&quot;customRichText&quot;},{&quot;apiName&quot;:&quot;Status&quot;,&quot;guid&quot;:&quot;column-551a&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:2,&quot;label&quot;:&quot;Status&quot;,&quot;type&quot;:&quot;text&quot;}]</stringValue>
                 </value>
             </inputParameters>
-            <inputsOnNextNavToAssocScrn>ResetValues</inputsOnNextNavToAssocScrn>
+            <inputParameters>
+                <name>label</name>
+                <value>
+                    <stringValue>Related Inspections</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>shouldDisplayLabel</name>
+                <value>
+                    <booleanValue>true</booleanValue>
+                </value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <storeOutputAutomatically>true</storeOutputAutomatically>
         </fields>
@@ -114,7 +115,7 @@
         <locationX>50</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>GetEventRecords</targetReference>
+            <targetReference>GetVisitRecord</targetReference>
         </connector>
     </start>
     <status>Active</status>
@@ -123,9 +124,6 @@
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
-        <isOutput>true</isOutput>
-        <value>
-            <stringValue>0f0bZ00000008dVQAQ</stringValue>
-        </value>
+        <isOutput>false</isOutput>
     </variables>
 </Flow>

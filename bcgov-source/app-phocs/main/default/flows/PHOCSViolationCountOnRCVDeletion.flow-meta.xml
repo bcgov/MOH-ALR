@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
-    <apiVersion>64.0</apiVersion>
+    <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
         <description>Assigning all remaining child RCV records to a variable</description>
@@ -110,11 +110,21 @@ Logic: Summary count of all Regulatory Code Violation records (any status) tied 
         <connector>
             <targetReference>Get_All_Child_RCV_Records</targetReference>
         </connector>
-        <filterFormula>AND(
-    NOT(ISBLANK({!$Record.Inspection.Id})),
-    CONTAINS({!$Record.RecordType.DeveloperName}, &quot;PHOCS&quot;),
-    TEXT({!$Record.Inspection.Status}) &lt;&gt; &quot;Abandoned&quot;
-)</filterFormula>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>InspectionId</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>PHOCSIsBelongsToPHOCS__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
         <object>RegulatoryCodeViolation</object>
         <recordTriggerType>Delete</recordTriggerType>
         <triggerType>RecordBeforeDelete</triggerType>

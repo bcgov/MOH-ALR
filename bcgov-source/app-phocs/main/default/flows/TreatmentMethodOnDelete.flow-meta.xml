@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
-    <apiVersion>64.0</apiVersion>
+    <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <customErrors>
         <name>Error</name>
@@ -88,11 +88,11 @@
             <field>Id</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>$Record.ParentId</elementReference>
+                <elementReference>$Record.AccountId</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>Asset</object>
+        <object>Account</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordUpdates>
@@ -108,7 +108,7 @@
             <field>Id</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>$Record.ParentId</elementReference>
+                <elementReference>$Record.AccountId</elementReference>
             </value>
         </filters>
         <inputAssignments>
@@ -129,7 +129,7 @@
                 <elementReference>TotalVirusCredits</elementReference>
             </value>
         </inputAssignments>
-        <object>Asset</object>
+        <object>Account</object>
     </recordUpdates>
     <start>
         <locationX>0</locationX>

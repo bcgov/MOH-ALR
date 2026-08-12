@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
-    <apiVersion>63.0</apiVersion>
+    <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <customProperties>
         <name>ScreenProgressIndicator</name>
@@ -8,47 +8,7 @@
             <stringValue>{&quot;location&quot;:&quot;top&quot;,&quot;type&quot;:&quot;simple&quot;}</stringValue>
         </value>
     </customProperties>
-    <decisions>
-        <name>Has_Active_Current_BL</name>
-        <label>Has Active Current BL</label>
-        <locationX>314</locationX>
-        <locationY>350</locationY>
-        <defaultConnector>
-            <targetReference>GetPermitRecordTypeId</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>No Active Current BL</defaultConnectorLabel>
-        <rules>
-            <name>Current_BL_Active</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Get_Current_BL.Id</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>Get_Current_BL.Status</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Active</stringValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>Get_Current_BL.RecordType.DeveloperName</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>PHOCSPermitLicense</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Inactivate_Old_BL</targetReference>
-            </connector>
-            <label>Current BL Active</label>
-        </rules>
-    </decisions>
-    <description>EHIS-2615
-EHIS-4849 remove AAA, and Business License will not be issued from Recreational Water Asset</description>
+    <description>EHIS-2615</description>
     <environments>Default</environments>
     <formulas>
         <name>BLContactId</name>
@@ -106,8 +66,8 @@ EHIS-4849 remove AAA, and Business License will not be issued from Recreational 
     <recordCreates>
         <name>CreateBusinessLicenseRecord</name>
         <label>Create  Business License Record</label>
-        <locationX>578</locationX>
-        <locationY>674</locationY>
+        <locationX>176</locationX>
+        <locationY>350</locationY>
         <connector>
             <targetReference>UpdateBLA</targetReference>
         </connector>
@@ -139,12 +99,6 @@ EHIS-4849 remove AAA, and Business License will not be issued from Recreational 
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>PeriodStart</field>
-            <value>
-                <elementReference>$Flow.CurrentDateTime</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
             <field>RecordTypeId</field>
             <value>
                 <elementReference>GetPermitRecordTypeId.Id</elementReference>
@@ -166,38 +120,13 @@ EHIS-4849 remove AAA, and Business License will not be issued from Recreational 
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
     <recordLookups>
-        <name>Get_Current_BL</name>
-        <label>Get Current BL</label>
-        <locationX>314</locationX>
+        <name>GetPermitRecordTypeId</name>
+        <label>Get Permit RecordType Id</label>
+        <locationX>176</locationX>
         <locationY>242</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Has_Active_Current_BL</targetReference>
-        </connector>
-        <faultConnector>
-            <isGoTo>true</isGoTo>
-            <targetReference>Error</targetReference>
-        </faultConnector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>recordId.LicensePermitNameId</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>BusinessLicense</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
-    <recordLookups>
-        <name>GetPermitRecordTypeId</name>
-        <label>Get Permit RecordType Id</label>
-        <locationX>578</locationX>
-        <locationY>458</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Inactivate_Facility_BLs</targetReference>
+            <targetReference>CreateBusinessLicenseRecord</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -219,96 +148,10 @@ EHIS-4849 remove AAA, and Business License will not be issued from Recreational 
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordUpdates>
-        <name>Inactivate_Facility_BLs</name>
-        <label>Inactivate Facility BLs</label>
-        <locationX>578</locationX>
-        <locationY>566</locationY>
-        <connector>
-            <targetReference>CreateBusinessLicenseRecord</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Account__c</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>recordId.AccountId</elementReference>
-            </value>
-        </filters>
-        <filters>
-            <field>RegulatoryAuthorizationTypeId</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>recordId.LicenseTypeId</elementReference>
-            </value>
-        </filters>
-        <filters>
-            <field>Status</field>
-            <operator>EqualTo</operator>
-            <value>
-                <stringValue>Active</stringValue>
-            </value>
-        </filters>
-        <filters>
-            <field>RecordTypeId</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>GetPermitRecordTypeId.Id</elementReference>
-            </value>
-        </filters>
-        <inputAssignments>
-            <field>PeriodEnd</field>
-            <value>
-                <elementReference>$Flow.CurrentDateTime</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Status</field>
-            <value>
-                <stringValue>Inactive</stringValue>
-            </value>
-        </inputAssignments>
-        <object>BusinessLicense</object>
-    </recordUpdates>
-    <recordUpdates>
-        <name>Inactivate_Old_BL</name>
-        <label>Inactivate Old BL</label>
-        <locationX>50</locationX>
-        <locationY>458</locationY>
-        <connector>
-            <isGoTo>true</isGoTo>
-            <targetReference>GetPermitRecordTypeId</targetReference>
-        </connector>
-        <faultConnector>
-            <isGoTo>true</isGoTo>
-            <targetReference>Error</targetReference>
-        </faultConnector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>Get_Current_BL.Id</elementReference>
-            </value>
-        </filters>
-        <inputAssignments>
-            <field>PeriodEnd</field>
-            <value>
-                <elementReference>$Flow.CurrentDateTime</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Status</field>
-            <value>
-                <stringValue>Inactive</stringValue>
-            </value>
-        </inputAssignments>
-        <object>BusinessLicense</object>
-    </recordUpdates>
-    <recordUpdates>
         <name>UpdateBLA</name>
         <label>Update BLA</label>
-        <locationX>578</locationX>
-        <locationY>782</locationY>
+        <locationX>176</locationX>
+        <locationY>458</locationY>
         <faultConnector>
             <isGoTo>true</isGoTo>
             <targetReference>Error</targetReference>
@@ -332,8 +175,8 @@ EHIS-4849 remove AAA, and Business License will not be issued from Recreational 
     <screens>
         <name>Error</name>
         <label>Error</label>
-        <locationX>1106</locationX>
-        <locationY>782</locationY>
+        <locationX>704</locationX>
+        <locationY>458</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -356,14 +199,14 @@ EHIS-4849 remove AAA, and Business License will not be issued from Recreational 
     <screens>
         <name>IssuePermit</name>
         <label>Issue Permit</label>
-        <locationX>314</locationX>
+        <locationX>176</locationX>
         <locationY>134</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <backButtonLabel>Cancel</backButtonLabel>
         <connector>
-            <targetReference>Get_Current_BL</targetReference>
+            <targetReference>GetPermitRecordTypeId</targetReference>
         </connector>
         <fields>
             <name>confirmationMessage</name>
@@ -383,31 +226,13 @@ EHIS-4849 remove AAA, and Business License will not be issued from Recreational 
         <showHeader>true</showHeader>
     </screens>
     <start>
-        <locationX>188</locationX>
+        <locationX>50</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>IssuePermit</targetReference>
         </connector>
     </start>
     <status>Active</status>
-    <variables>
-        <name>AssetLicenceIds</name>
-        <dataType>String</dataType>
-        <isCollection>true</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>LicenceCount</name>
-        <dataType>Number</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <scale>0</scale>
-        <value>
-            <numberValue>0.0</numberValue>
-        </value>
-    </variables>
     <variables>
         <name>recordId</name>
         <dataType>SObject</dataType>
