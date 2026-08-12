@@ -85,7 +85,10 @@ public with sharing class PHOCSGlobalPayHandler {
                     }
                     String fundingType = transactionDetails.payment_method?.card?.funding;
                     Boolean isDebit = String.isNotBlank(fundingType) && fundingType.equalsIgnoreCase('DEBIT');
-                    String paymentMethod = PHOCSPortalPaymentFeeItemService.normalizePaymentMethod(isDebit);
+                    String paymentMethod;
+                    if (String.isNotBlank(fundingType)) {
+                        paymentMethod = PHOCSPortalPaymentFeeItemService.normalizePaymentMethod(isDebit);
+                    }
 
                     RegulatoryTrxnFeeTriggerHandler.skipAfterUpdate = true;
                     try {
