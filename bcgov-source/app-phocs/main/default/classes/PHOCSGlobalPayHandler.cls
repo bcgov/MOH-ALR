@@ -81,25 +81,28 @@ public with sharing class PHOCSGlobalPayHandler {
                     regulatoryTrxnFeeRec.PaymentDate__c = Date.today();
                     if(isSuccessful){
                          regulatoryTrxnFeeRec.Status = STATUS_PAID;
+                         regulatoryTrxnFeeRec.Status__c = 'Paid';
                     }
                     String fundingType = transactionDetails.payment_method?.card?.funding;
-                    boolean isDebit =  fundingType.equalsIgnoreCase('DEBIT');
-                    String paymentMethod;
-                    if (String.isNotBlank(fundingType)) {
-                        paymentMethod = PHOCSPortalPaymentFeeItemService.normalizePaymentMethod(isDebit);
-                    }
+                    Boolean isDebit = String.isNotBlank(fundingType) && fundingType.equalsIgnoreCase('DEBIT');
+                    String paymentMethod = PHOCSPortalPaymentFeeItemService.normalizePaymentMethod(isDebit);
 
-                    PHOCSPortalPaymentFeeItemService.updatePaymentAttempt(
-                        regulatoryTransactionFeeId,
-                        isSuccessful,
-                        paymentMethod,
-                        PHOCSPortalPaymentFeeItemService.normalizeCardType(
-                            transactionDetails.payment_method?.card?.brand
-                        ),
-                        paymentTransaction.id,
-                        Date.today()
-                    );
-                    update regulatoryTrxnFeeRec;
+                    RegulatoryTrxnFeeTriggerHandler.skipAfterUpdate = true;
+                    try {
+                        PHOCSPortalPaymentFeeItemService.updatePaymentAttempt(
+                            regulatoryTransactionFeeId,
+                            isSuccessful,
+                            paymentMethod,
+                            PHOCSPortalPaymentFeeItemService.normalizeCardType(
+                                transactionDetails.payment_method?.card?.brand
+                            ),
+                            paymentTransaction.id,
+                            Date.today()
+                        );
+                        update regulatoryTrxnFeeRec;
+                    } finally {
+                        RegulatoryTrxnFeeTriggerHandler.skipAfterUpdate = false;
+                    }
                 }
             }
         }

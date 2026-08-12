@@ -37,6 +37,8 @@ export default class PhocsPayment extends NavigationMixin(LightningElement) {
     connectedCallback() {
         const url = new URL(window.location.href);
         this.source = url.searchParams.get('source');
+        this.state = url.searchParams.get('state');
+        this.recordId = url.searchParams.get('recordId') || this.recordId;
 
         if(this.source  === "GP" && this.state === "1"){
            this.updateGlobalPaymentStaus()
@@ -60,7 +62,7 @@ export default class PhocsPayment extends NavigationMixin(LightningElement) {
     }
 
     updateGlobalPaymentStaus(){
-         updatePaymentStatus({regulatoryTransactionFeeId:this.regulatoryTransactionFeeId})
+         updatePaymentStatus({regulatoryTransactionFeeId:this.regulatoryTransactionFeeId || this.recordId})
             .then(result => {
                this.redirectToRegTransactionFeePage();
             })
