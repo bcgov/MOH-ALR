@@ -88,10 +88,66 @@
             </connector>
             <label>Is Treatment Method</label>
         </rules>
+        <rules>
+            <name>Is_RecreationalWater</name>
+            <conditionLogic>(1 AND 2) OR (1 AND (3 OR 4 OR 5) AND 6)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>PHOCSRecreationalWater</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>isNew</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Type__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.PoolType__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.PoolSubtype__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>isNew</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Facility_Parent</targetReference>
+            </connector>
+            <label>Is RecreationalWater</label>
+        </rules>
     </decisions>
+    <description>V3: Update RecreationalWater Facility Account L1/2/3 values based on RecreationalWater Asset creation/updating - EHIS-4849</description>
     <environments>Default</environments>
+    <formulas>
+        <name>isNew</name>
+        <dataType>Boolean</dataType>
+        <expression>ISNEW()</expression>
+    </formulas>
     <interviewLabel>Tr {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>RollUpTreatmentMethod</label>
+    <label>RollUpTreatmentMethod_UpdateRecWaterFacility</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -111,6 +167,53 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_Facility_Parent</name>
+        <label>Update Facility Parent</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Account.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>RecordTypeName__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Facility</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Type</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Recreational Water</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>CategoryL1__c</field>
+            <value>
+                <elementReference>$Record.Type__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CategoryL2__c</field>
+            <value>
+                <elementReference>$Record.PoolType__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CategoryL3__c</field>
+            <value>
+                <elementReference>$Record.PoolSubtype__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Account</object>
+    </recordUpdates>
     <start>
         <locationX>0</locationX>
         <locationY>0</locationY>
