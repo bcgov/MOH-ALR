@@ -21,7 +21,7 @@ private class PHOCSPortalPaymentFeeItemServiceTest {
             RegulatoryTrxnFeeId = fee.Id,
             RecordTypeId = Schema.SObjectType.RegulatoryTrxnFeeItem
                 .getRecordTypeInfosByDeveloperName()
-                .get('PHOCSRegulatoryTransactionFeeItem')
+                .get('PHOCSNonDairyTransactionFeeItem')
                 .getRecordTypeId(),
             Name = 'Portal Payment Test Item',
             FeeAmount = 100,

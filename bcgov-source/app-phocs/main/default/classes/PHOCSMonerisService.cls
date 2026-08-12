@@ -20,7 +20,7 @@
  *      - Fetches receipt/payment status using ticket numbers
  *      - Updates RegulatoryTrxnFee records with ticket, reference number, payment status, 
  *        and payment date
- *      - Ensures all Moneris API interactions are securely handled via Named Credential: 'Moneris'
+ *      - Uses the endpoint configured in PHOCSMonerisConfiguration__mdt for Moneris API interactions
  *
  *  WORKFLOW        :
  *      1. generateTicket(recordId)
@@ -79,7 +79,7 @@ public class PHOCSMonerisService {
         
         //For-Testing only
         String orderNo = 'ORDER-' + DateTime.now().format('yyyyMMdd-HHmmss') + '-' + transFee.Name;
-		System.debug('Endpoint: ' + 'callout:Moneris/chktv2/request/request.php');
+		System.debug('Endpoint: ' + moneris.Endpoints__c + '/chktv2/request/request.php');
         
         ticket = PHOCSMonerisTicket.generateTicket(
             moneris,
@@ -206,7 +206,7 @@ public class PHOCSMonerisService {
         if (reference != null && reference != '')
             transFee.ReferenceNumber__c = reference;
         if (status != null && status != '') {
-            transFee.Status = status;
+            transFee.Status__c = status;
             if (status.equalsIgnoreCase('paid')) {
                 transFee.PaymentDate__c = Date.today();
             }

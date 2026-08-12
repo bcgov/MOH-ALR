@@ -160,13 +160,14 @@ private class PHOCSMonerisServiceTest {
         Test.stopTest();
 
         RegulatoryTrxnFee updatedFee = [
-            SELECT PHOCSMonerisTicketNumber__c, ReferenceNumber__c, Status, PaymentDate__c
+            SELECT PHOCSMonerisTicketNumber__c, ReferenceNumber__c, Status, Status__c, PaymentDate__c
             FROM RegulatoryTrxnFee WHERE Id = :fee.Id
         ];
 
         System.assertEquals('TICKET-111', updatedFee.PHOCSMonerisTicketNumber__c);
         System.assertEquals('REF-222', updatedFee.ReferenceNumber__c);
         System.assertEquals('PAID', updatedFee.Status);
+        System.assertEquals('Paid', updatedFee.Status__c);
         System.assertNotEquals(null, updatedFee.PaymentDate__c, 'Payment date should be set for Paid');
     }
 }
