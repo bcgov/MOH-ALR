@@ -375,4 +375,53 @@ public class InspectionViolationServiceTest {
         System.assertEquals('No assessment responses found', result.message);
         System.assertEquals(0, result.violationCount);
     }
+    
+/**
+* @description: Verifies that resolving a violation through an inspection stamps ResolvedIn with the resolving
+*              inspection, while the Inspection field continues to reference where the violation was raised.
+*/    
+    @isTest
+    static void testCreateRegulatoryCodeViolations_StampsResolvedIn() {
+        Visit resolvingVisit = [SELECT Id, AccountId, PlaceId FROM Visit LIMIT 1];
+        AssessmentTask testTask = [SELECT Id FROM AssessmentTask WHERE ParentId = :resolvingVisit.Id LIMIT 1];
+        AssessmentIndicatorDefinition parentIndicator = [SELECT Id FROM AssessmentIndicatorDefinition WHERE PHOCSParentId__c = null LIMIT 1];
+
+        // A separate, earlier inspection where the violation was originally raised
+        Visit originalVisit = new Visit(
+            AccountId = resolvingVisit.AccountId,
+            PlaceId = resolvingVisit.PlaceId,
+            PlannedVisitStartTime = DateTime.now().addDays(-30),
+            PlannedVisitEndTime = DateTime.now().addDays(-30).addHours(2)
+        );
+        insert originalVisit;
+
+        InspectionAssessmentInd response = new InspectionAssessmentInd(
+            AssessmentTaskId = testTask.Id,
+            AssessmentIndDefinitionId = parentIndicator.Id,
+            RecordTypeId = InspectionViolationService.recordTypePHOCSInspectionAssessmentInd,
+            Result = InspectionViolationService.RESULT_NON_COMPLIANT
+        );
+        insert response;
+
+        RegulatoryCodeViolation openParent = new RegulatoryCodeViolation(
+            RecordTypeId = InspectionViolationService.recordTypePHOCSRegulatoryCodeViolation,
+            InspectionId = originalVisit.Id,
+            InspectionAssmntIndId = response.Id,
+            DateCreated = System.now(),
+            ComplianceDueDate = System.now().addDays(5),
+            Status = 'Open'
+        );
+        insert openParent;
+
+        Map<Id, String> violationStatusMap = new Map<Id, String>{ openParent.Id => InspectionViolationService.RESULT_COMPLIANT };
+
+        Test.startTest();
+        InspectionViolationService.createRegulatoryCodeViolationsForInspection(resolvingVisit.Id, null, violationStatusMap);
+        Test.stopTest();
+
+        RegulatoryCodeViolation resolved = [SELECT Status, InspectionId, ResolvedIn__c FROM RegulatoryCodeViolation WHERE Id = :openParent.Id];
+        System.assertEquals('Resolved', resolved.Status, 'Violation should be resolved when its question is answered Compliant');
+        System.assertEquals(resolvingVisit.Id, resolved.ResolvedIn__c, 'ResolvedIn should reference the inspection that resolved the violation');
+        System.assertEquals(originalVisit.Id, resolved.InspectionId, 'Inspection should still reference where the violation was raised');
+    }
 }
