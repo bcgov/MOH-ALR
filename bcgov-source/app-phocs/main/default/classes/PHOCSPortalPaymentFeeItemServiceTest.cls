@@ -13,7 +13,11 @@ private class PHOCSPortalPaymentFeeItemServiceTest {
 
         RegulatoryTrxnFee fee = new RegulatoryTrxnFee(
             AccountId = facility.Id,
-            Status = 'Due'
+            Status = 'Due',
+            RecordTypeId = Schema.SObjectType.RegulatoryTrxnFee
+                .getRecordTypeInfosByDeveloperName()
+                .get('PHOCSNonDairyTransactionFee')
+                .getRecordTypeId()
         );
         insert fee;
 

@@ -147,27 +147,29 @@ public class PHOCSMonerisService {
         );
 
         if (receiptWrapper != null && receiptWrapper.response.receipt != null) {
-            String receiptStatus;
+            String receiptStatus = 'Due';
             Boolean isSuccessful = receiptWrapper.response.receipt.result == 'a';
             if(isSuccessful){
                 receiptStatus = 'Paid';
             }
-            if(receiptWrapper.response.receipt.result == 'd'){
-                receiptStatus = 'Due';//Canceled';
-            }
             MonerisReceiptWrapper.CCReceipt cardDetails = receiptWrapper.response.receipt.cc;
-            PHOCSPortalPaymentFeeItemService.updatePaymentAttempt(
-                Id.valueOf(recordId),
-                isSuccessful,
-                PHOCSPortalPaymentFeeItemService.normalizePaymentMethod(
-                    cardDetails != null && cardDetails.is_debit == 'true'
-                ),
-                PHOCSPortalPaymentFeeItemService.normalizeCardType(
-                    cardDetails == null ? null : cardDetails.card_type
-                ),
-                cardDetails == null ? null : cardDetails.reference_no,
-                Date.today()
-            );
+            RegulatoryTrxnFeeTriggerHandler.skipAfterUpdate = true;
+            try {
+                PHOCSPortalPaymentFeeItemService.updatePaymentAttempt(
+                    Id.valueOf(recordId),
+                    isSuccessful,
+                    PHOCSPortalPaymentFeeItemService.normalizePaymentMethod(
+                        cardDetails != null && cardDetails.is_debit == 'true'
+                    ),
+                    PHOCSPortalPaymentFeeItemService.normalizeCardType(
+                        cardDetails == null ? null : cardDetails.card_type
+                    ),
+                    cardDetails == null ? null : cardDetails.reference_no,
+                    Date.today()
+                );
+            } finally {
+                RegulatoryTrxnFeeTriggerHandler.skipAfterUpdate = false;
+            }
             updateRegulatoryTransFee(
                 recordId,
                 transFee.PHOCSMonerisTicketNumber__c,
@@ -199,18 +201,24 @@ public class PHOCSMonerisService {
      */
     @future
     public static void updateRegulatoryTransFee(String recordId, String ticket, String reference, String status) {
-        RegulatoryTrxnFee transFee = getRegulatoryTransFee(recordId);
+        RegulatoryTrxnFeeTriggerHandler.skipAfterUpdate = true;
+        try {
+            RegulatoryTrxnFee transFee = getRegulatoryTransFee(recordId);
 
-        if (ticket != null && ticket != '')
-            transFee.PHOCSMonerisTicketNumber__c = ticket;
-        if (reference != null && reference != '')
-            transFee.ReferenceNumber__c = reference;
-        if (status != null && status != '') {
-            transFee.Status__c = status;
-            if (status.equalsIgnoreCase('paid')) {
-                transFee.PaymentDate__c = Date.today();
+            if (ticket != null && ticket != '')
+                transFee.PHOCSMonerisTicketNumber__c = ticket;
+            if (reference != null && reference != '')
+                transFee.ReferenceNumber__c = reference;
+            if (status != null && status != '') {
+                transFee.Status = status;
+                transFee.Status__c = status;
+                if (status.equalsIgnoreCase('paid')) {
+                    transFee.PaymentDate__c = Date.today();
+                }
             }
+            update transFee;
+        } finally {
+            RegulatoryTrxnFeeTriggerHandler.skipAfterUpdate = false;
         }
-        update transFee;
     }
 }

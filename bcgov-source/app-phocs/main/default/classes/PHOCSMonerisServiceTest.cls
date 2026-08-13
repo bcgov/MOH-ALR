@@ -17,7 +17,12 @@ private class PHOCSMonerisServiceTest {
         insert acc;
         RegulatoryTrxnFee fee = new RegulatoryTrxnFee(
             AccountId = acc.Id,
-            Status = 'Due'
+            Status = 'Due',
+            PHOCSMonerisTicketNumber__c = '1760633356HvaZZUqLeXDhtpp33jMfRuwvGHTlnT',
+            RecordTypeId = Schema.SObjectType.RegulatoryTrxnFee
+                .getRecordTypeInfosByDeveloperName()
+                .get('PHOCSTransactionFee')
+                .getRecordTypeId()
         );
         insert fee;
         RegulatoryTrxnFeeItem feeItem = new RegulatoryTrxnFeeItem(
@@ -28,7 +33,8 @@ private class PHOCSMonerisServiceTest {
                 .getRecordTypeId(),
             FeeAmount = 120.00,
             Amount__c = 120.00,
-            Name = 'Test'
+            Name = 'Test',
+            Status__c = 'Due'
         );
         insert feeItem;
         PHOCSMonerisService.monerisConfig = new Map<String, PHOCSMonerisConfiguration__mdt>{
@@ -68,17 +74,11 @@ private class PHOCSMonerisServiceTest {
         // Arrange
         Account acc = [Select Id, Name, HealthAuthority__c from Account limit 1];
         RegulatoryTrxnFee fee = [SELECT Id, Status, Name, RecordTypeId, ReferenceNumber__c, PaymentDate__c, FeeType__c, PHOCSMonerisTicketNumber__c, AccountName__c, PHOCSCustomerID__c FROM RegulatoryTrxnFee limit 1];
-		fee.PHOCSMonerisTicketNumber__c = '1760633356HvaZZUqLeXDhtpp33jMfRuwvGHTlnT';
         // Replace real method calls with mocks using Stub API
         Test.startTest();
-        update fee;
 
         //PHOCSMonerisService.generateTicket(fee.Id);
-        try{
-            PHOCSMonerisService.checkReceiptStatus(fee.Id, 'PAID');
-        }catch(Exception ex){
-            System.debug('Exception: ' + ex);
-        }
+        PHOCSMonerisService.checkReceiptStatus(fee.Id, 'PAID');
 
         Test.stopTest();
 
@@ -135,6 +135,8 @@ private class PHOCSMonerisServiceTest {
         // Arrange
         Account acc = [Select Id, Name, HealthAuthority__c from Account limit 1];
         RegulatoryTrxnFee fee = [SELECT Id, Status, Name, RecordTypeId, ReferenceNumber__c, PaymentDate__c, FeeType__c, PHOCSMonerisTicketNumber__c, AccountName__c, PHOCSCustomerID__c FROM RegulatoryTrxnFee limit 1];
+        fee.PHOCSMonerisTicketNumber__c = null;
+        update fee;
 
         Test.startTest();
         try {

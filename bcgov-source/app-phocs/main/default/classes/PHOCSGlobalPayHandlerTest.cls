@@ -15,7 +15,15 @@ private class PHOCSGlobalPayHandlerTest {
         );
         insert facility;
 		
-        RegulatoryTrxnFee fee1 = new RegulatoryTrxnFee(AccountId = facility.Id, FeeType__c = 'Renewal Unit Fee', Status = 'Paid');
+        RegulatoryTrxnFee fee1 = new RegulatoryTrxnFee(
+            AccountId = facility.Id,
+            FeeType__c = 'Annual Operating Permit Fees',
+            Status = 'Paid',
+            RecordTypeId = Schema.SObjectType.RegulatoryTrxnFee
+                .getRecordTypeInfosByDeveloperName()
+                .get('PHOCSTransactionFee')
+                .getRecordTypeId()
+        );
         insert fee1;
         insert new RegulatoryTrxnFeeItem(
             RegulatoryTrxnFeeId = fee1.Id,
@@ -85,7 +93,7 @@ private class PHOCSGlobalPayHandlerTest {
             LIMIT 1
         ];
     
-        System.assertEquals('CAPTURED', updatedRTF.GlobalPayPaymentStatus__c, 'Status should have been updated to CAPTURED.');
+        System.assertEquals('Captured', updatedRTF.GlobalPayPaymentStatus__c, 'Status should have been updated to Captured.');
         System.assertEquals('txn001', updatedRTF.ReferenceNumber__c, 'ReferenceNumber should be taken from transaction list.');
         RegulatoryTrxnFeeItem updatedFeeItem = [
             SELECT Payment_Method__c, Payment_Type__c, PaymentChannel__c,
