@@ -1,5 +1,5 @@
 global without sharing class PHOCSPublicDisplayObjectRecords implements Callable{
-
+    
     global Object call(String action, Map<String,Object> args){
         Map<String, Object> input = (Map<String, Object>)args.get('input');
         Map<String, Object> output = (Map<String, Object>)args.get('output');
@@ -34,12 +34,12 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         }
         // METHODS FOR PORTAL USERS
         // Methods to call for Portal user in class PHOCSOperatorPortalDisplayRecords  to imply portal user sharing rules.
-         if(action == 'getRecordsListPortal'){
+        if(action == 'getRecordsListPortal'){
             List<Object> lstSobjects =  PHOCSOperatorPortalDisplayRecords.getRecordsList(String.valueof(input.get('configName')));
             output.put('result', lstSobjects);
             return output;
         }
-         if(action == 'getRecordDetailsPortal'){
+        if(action == 'getRecordDetailsPortal'){
             List<Object> lstSobjects = PHOCSOperatorPortalDisplayRecords.getRecordDetails(String.valueof(input.get('recordId')), String.valueof(input.get('configName')));
             output.put('result',lstSobjects);
             return output;
@@ -49,109 +49,109 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             output.put('result',lstSobjects);
             return output;
         }
-
+        
         return invokeMethod(action, input, output, options);
         
     }
     private Object invokeMethod(String methodName, Map<String, Object> inputMap, Map<String, Object> outMap, Map<String, Object> options) {
-         List<SObject> lstSobject = new List<SObject>();
+        List<SObject> lstSobject = new List<SObject>();
         if(methodName == 'getInspectionDetails'){
             lstSobject =  getDynamicQueryResults(String.valueof(inputMap.get('objectAPIName')));
         }
         if(methodName == 'getRecordById'){
             lstSobject =  getRecordById(String.valueof(inputMap.get('recordId')));
         }
-         if(methodName == 'getRelatedListById'){
+        if(methodName == 'getRelatedListById'){
             lstSobject =  getRelatedListById(String.valueof(inputMap.get('recordId')),String.valueof(inputMap.get('childSobjectAPIName')));
         }
         return outMap.put('result',lstSobject);
     }
     
     //Method to get Sobject Details as list of records for list view
-     public static List<SObject> getDynamicQueryResults(String objectName) {
+    public static List<SObject> getDynamicQueryResults(String objectName) {
         PHOCSSobjectVsQuery__mdt queryConfig = [
             SELECT ObjectQuery__c 
             FROM PHOCSSobjectVsQuery__mdt 
             WHERE Type__c = 'List' AND SobjectAPIName__c = :objectName 
             LIMIT 1
         ];
-
+        
         if (queryConfig == null || String.isBlank(queryConfig.ObjectQuery__c)) {
             throw new QueryException('No SOQL query found for object: ' + objectName);
         }
-
+        
         List<SObject> results = Database.query(queryConfig.ObjectQuery__c);  // NOPMD
-
+        
         return results;
     }
-
-     //Method to get Sobject record for record detail page
-     public static List<SObject> getRecordById(Id recordId) {
+    
+    //Method to get Sobject record for record detail page
+    public static List<SObject> getRecordById(Id recordId) {
         if (recordId == null) {
             throw new AuraHandledException('Record ID is required.');
         }
-         String objectName = recordId.getSObjectType().getDescribe().getName();
-         
-         PHOCSSobjectVsQuery__mdt queryConfig = [
-                 SELECT ObjectQuery__c ,ParentFieldAPIName__c
-                 FROM PHOCSSobjectVsQuery__mdt 
-                 WHERE Type__c = 'Record' AND SobjectAPIName__c = :objectName 
-                 LIMIT 1
-             ];
-
+        String objectName = recordId.getSObjectType().getDescribe().getName();
+        
+        PHOCSSobjectVsQuery__mdt queryConfig = [
+            SELECT ObjectQuery__c ,ParentFieldAPIName__c
+            FROM PHOCSSobjectVsQuery__mdt 
+            WHERE Type__c = 'Record' AND SobjectAPIName__c = :objectName 
+            LIMIT 1
+        ];
+        
         if (queryConfig == null || String.isBlank(queryConfig.ObjectQuery__c)) {
             throw new QueryException('No SOQL query found for object: ' + objectName);
         }
-
+        
         String soqlQuery = queryConfig.ObjectQuery__c;
         String query = soqlQuery;
         if(soqlQuery.indexOf('LIMIT') == -1){
             if(string.isNotBlank(queryConfig.ParentFieldAPIName__c)){
-                 query = soqlQuery + ' AND ' + queryConfig.ParentFieldAPIName__c + ' = :recordId';
+                query = soqlQuery + ' AND ' + queryConfig.ParentFieldAPIName__c + ' = :recordId';
             }else if(soqlQuery.indexOf('WHERE') == -1){
-                  query = soqlQuery + ' WHERE Id = :recordId LIMIT 1';
+                query = soqlQuery + ' WHERE Id = :recordId LIMIT 1';
             }
         }
-
+        
         List<SObject> results = Database.query(query); // NOPMD
         return results;
     }
     //Method to get Sobject related list 
-     public static List<SObject> getRelatedListById(Id recordId, String childSobjectAPIName) {
+    public static List<SObject> getRelatedListById(Id recordId, String childSobjectAPIName) {
         if (recordId == null || childSobjectAPIName == Null) {
             throw new AuraHandledException('Record ID is required.');
         }
-         String parentSObjectName = recordId.getSObjectType().getDescribe().getName();
-
-         PHOCSSobjectVsQuery__mdt queryConfig = [
-                 SELECT ObjectQuery__c, ParentFieldAPIName__c 
-                 FROM PHOCSSobjectVsQuery__mdt 
-                 WHERE Type__c = 'Related' AND 
-                       ParentSobjectAPIName__c =:parentSObjectName AND 
-                       ChildSobjectAPIName__c = :childSobjectAPIName AND 
-                       SobjectAPIName__c = :childSobjectAPIName 
-                LIMIT 1
-             ];
-
+        String parentSObjectName = recordId.getSObjectType().getDescribe().getName();
+        
+        PHOCSSobjectVsQuery__mdt queryConfig = [
+            SELECT ObjectQuery__c, ParentFieldAPIName__c 
+            FROM PHOCSSobjectVsQuery__mdt 
+            WHERE Type__c = 'Related' AND 
+            ParentSobjectAPIName__c =:parentSObjectName AND 
+            ChildSobjectAPIName__c = :childSobjectAPIName AND 
+            SobjectAPIName__c = :childSobjectAPIName 
+            LIMIT 1
+        ];
+        
         if (queryConfig == null || String.isBlank(queryConfig.ObjectQuery__c)) {
             throw new QueryException('No SOQL query found for object: ' + childSobjectAPIName);
         }
-
-         String soqlQuery = queryConfig.ObjectQuery__c;
-
-         if(string.isNotBlank(queryConfig.ParentFieldAPIName__c)){
+        
+        String soqlQuery = queryConfig.ObjectQuery__c;
+        
+        if(string.isNotBlank(queryConfig.ParentFieldAPIName__c)){
             soqlQuery = soqlQuery + ' WHERE ' + queryConfig.ParentFieldAPIName__c + ' = :recordId';
-         }
-         if(parentSObjectName == 'Account' &&  childSobjectAPIName == 'Visit'){  //Inspection Related List for Account
+        }
+        if(parentSObjectName == 'Account' &&  childSobjectAPIName == 'Visit'){  //Inspection Related List for Account
             soqlQuery = soqlQuery + ' AND AccountId = :recordId';  
-         }         
-
+        }         
+        
         List<SObject> results = Database.query(soqlQuery);// NOPMD
         return results;
     }
     
-     // === Record Details with Wrapper ==
-     public static List<Object> getRecordDetails(Id recordId, string configName) {
+    // === Record Details with Wrapper ==
+    public static List<Object> getRecordDetails(Id recordId, string configName) {
         if (recordId == null) {
             throw new AuraHandledException('Record ID is required.');
         }
@@ -159,28 +159,28 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         List<Object> results = new List<Object>(); 
         Map<String, SObjectWrapper> wrapperRegistry = new Map<String, SObjectWrapper>{
             'Account' => new AccountDetailsWrapper(),
-            'Visit' => new InspectionDetailsWrapper(),
-            'LabTestRequisition__c' => new LabTestRequisitionDetailsWrapper(),
-            'Case' => new CaseDetailsWrapper(),
-            'RegulatoryTrxnFeeItem' => new RegulatoryTrxnFeeItemDetailsWrapper()
-        };
-            
-         String objectName = recordId.getSObjectType().getDescribe().getName();
-         SObjectWrapper wrapper = wrapperRegistry.get(objectName);
-         
-         String soqlQuery;        
-         if(string.isNotBlank(configName)){
+                'Visit' => new InspectionDetailsWrapper(),
+                'LabTestRequisition__c' => new LabTestRequisitionDetailsWrapper(),
+                'Case' => new CaseDetailsWrapper(),
+                'RegulatoryTrxnFeeItem' => new RegulatoryTrxnFeeItemDetailsWrapper()
+                };
+                    
+                    String objectName = recordId.getSObjectType().getDescribe().getName();
+        SObjectWrapper wrapper = wrapperRegistry.get(objectName);
+        
+        String soqlQuery;        
+        if(string.isNotBlank(configName)){
             PHOCSSobjectVsQuery__mdt queryConfig = [
-                 SELECT ObjectQuery__c 
-                 FROM PHOCSSobjectVsQuery__mdt 
-                 WHERE Type__c = 'Record' AND DeveloperName= :configName 
-                 LIMIT 1
-             ];
-             soqlQuery = queryConfig.ObjectQuery__c;
-         }else{
-             soqlQuery = getRecordDetailsQuery(recordId);
+                SELECT ObjectQuery__c 
+                FROM PHOCSSobjectVsQuery__mdt 
+                WHERE Type__c = 'Record' AND DeveloperName= :configName 
+                LIMIT 1
+            ];
+            soqlQuery = queryConfig.ObjectQuery__c;
+        }else{
+            soqlQuery = getRecordDetailsQuery(recordId);
         }
-
+        
         List<SObject> queryResults = Database.query(soqlQuery);// NOPMD
         if(!queryResults.isEmpty()){
             if(wrapper != null){
@@ -194,29 +194,29 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
     
     // === RELATED LIST QUERY WITH WRAPPER ===
     public static List<Object> getRelatedList(Id recordId, string configName) {
-
+        
         Map<String, SObjectWrapper> wrapperRegistry = new Map<String, SObjectWrapper>{
             'LabTestRequired__c' => new LabTestRequiredListWrapper(),
-            'InspectionAssessmentInd' => new InspectionAssessmentIndDetailsWrapper(),
-            'Visit' => new InspectionListWrapper()
-        };
+                'InspectionAssessmentInd' => new InspectionAssessmentIndDetailsWrapper(),
+                'Visit' => new InspectionListWrapper()
+                };
+                    
+                    if (recordId == null) {
+                        throw new AuraHandledException('Record ID required.');
+                    }
         
-        if (recordId == null) {
-            throw new AuraHandledException('Record ID required.');
-        }
-
         String parentSObjectName = recordId.getSObjectType().getDescribe().getName();
         PHOCSSobjectVsQuery__mdt queryConfig = [
             SELECT ObjectQuery__c, ParentFieldAPIName__c, ChildSobjectAPIName__c
             FROM PHOCSSobjectVsQuery__mdt 
             WHERE Type__c = 'Related'AND 
-                  DeveloperName= :configName
+            DeveloperName= :configName
             LIMIT 1
         ];
         if (queryConfig == null || String.isBlank(queryConfig.ObjectQuery__c)) {
             throw new QueryException('No SOQL query found for related list object');
         }
-
+        
         SObjectWrapper wrapper = wrapperRegistry.get(queryConfig.ChildSobjectAPIName__c);
         List<Object> results = new List<Object>();
         
@@ -233,21 +233,21 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
     
     // === RELATED LIST QUERY WITH WRAPPER ===
     public static List<Object> getRecordsList(string configName) {
-
+        
         Map<String, SObjectWrapper> wrapperRegistry = new Map<String, SObjectWrapper>{
             'FacilitiesList' => new FacilityWrapper()        
-        };
-        PHOCSSobjectVsQuery__mdt queryConfig = [
-            SELECT ObjectQuery__c, ParentFieldAPIName__c, ChildSobjectAPIName__c,SobjectAPIName__c,DeveloperName
-            FROM PHOCSSobjectVsQuery__mdt 
-            WHERE Type__c = 'List'AND 
-                  DeveloperName= :configName
-            LIMIT 1
-        ];
+                };
+                    PHOCSSobjectVsQuery__mdt queryConfig = [
+                        SELECT ObjectQuery__c, ParentFieldAPIName__c, ChildSobjectAPIName__c,SobjectAPIName__c,DeveloperName
+                        FROM PHOCSSobjectVsQuery__mdt 
+                        WHERE Type__c = 'List'AND 
+                        DeveloperName= :configName
+                        LIMIT 1
+                    ];
         if (queryConfig == null || String.isBlank(queryConfig.ObjectQuery__c)) {
             throw new QueryException('No SOQL query found for related list object');
         }
-
+        
         SObjectWrapper wrapper = wrapperRegistry.get(queryConfig.DeveloperName);
         List<Object> results = new List<Object>();
         for (SObject sObj : Database.query(queryConfig.ObjectQuery__c)) {        // NOPMD
@@ -260,18 +260,18 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         return results; 
     }
     
-     public static String getRecordDetailsQuery(Id recordId) {
+    public static String getRecordDetailsQuery(Id recordId) {
         SObjectType objType = recordId.getSObjectType();
         DescribeSObjectResult describeResult = objType.getDescribe();
         String objectName = describeResult.getName();
-
+        
         Map<String, Schema.SObjectField> fieldsMap = describeResult.fields.getMap();
-
+        
         List<String> fieldNames = new List<String>();
         for (String fieldName : fieldsMap.keySet()) {
             fieldNames.add(fieldName);
         }
-
+        
         String query = 'SELECT ' + String.join(fieldNames, ', ') + ' FROM ' + objectName + ' WHERE Id = \'' + recordId + '\'';
         return query;
     }
@@ -280,90 +280,90 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
     public static List<Object> getFacilityList(String programArea, String filterItems, String operatingWithoutLicence) {      
         List<Object> results = new List<Object>();
         FacilityWrapper wrapper = new FacilityWrapper();
-
+        
         String query =
             'SELECT Id, Name, Type, Physical_Address__City__s, CategoryL1__c, CategoryL2__c, ' +
             'HealthAuthority__c, Phone, ParentAccount__r.Name, FacilityCHSAText__c, Physical_Address__c, ' +
             'PHOCSNumberOfInspections__c, PHOCSOutstandingViolations__c, PHOCSLastInspectionDate__c, ' +
             'HideAddressonPublicSite__c,HidePhoneonPublicSite__c, OWLPublicRetentionActive__c ' +
             'FROM Account';
-
+        
         query += getFacilitiesFilter(programArea, filterItems, operatingWithoutLicence);
         for (Account sObj : Database.query(query)) {    // NOPMD
             results.add(wrapper.wrap(sObj));
         }
-
+        
         return results;
     }
-
+    
     @AuraEnabled(cacheable=true)
     public static List<Object> getInspectionResults(Id inspectionId) {
         if (inspectionId == null) {
             throw new AuraHandledException('Inspection ID is required.');
         }
-
+        
         Map<String, String> statusMap = new Map<String, String>{
             'Compliant' => 'Compliant',
-            'Non-compliant' => 'Non-compliant',
-            'NA' => 'NA',
-            'N/A (Not Applicable)' => 'Not Applicable',
-            'N/S (Not Assessed)' => 'Not Inspected',
-            'PHOCSNonCompliant' => 'Non Compliant',
-            'Abandoned' => 'Abandoned'
-        };
-
-        List<Object> results = new List<Object>();
-
+                'Non-compliant' => 'Non-compliant',
+                'NA' => 'NA',
+                'N/A (Not Applicable)' => 'Not Applicable',
+                'N/S (Not Assessed)' => 'Not Inspected',
+                'PHOCSNonCompliant' => 'Non Compliant',
+                'Abandoned' => 'Abandoned'
+                };
+                    
+                    List<Object> results = new List<Object>();
+        
         List<InspectionAssessmentInd> parentQuestions = [
             SELECT Id,
-                AssessmentIndDefinition.Name,
-                AssessmentIndDefinition.Category__c,
-                AssessmentIndDefinition.RelatedRegulatoryCodes__c,
-                AssessmentIndDefinitionId,
-                AssessmentTaskId,
-                Result
+            AssessmentIndDefinition.Name,
+            AssessmentIndDefinition.Category__c,
+            AssessmentIndDefinition.RelatedRegulatoryCodes__c,
+            AssessmentIndDefinitionId,
+            AssessmentTaskId,
+            Result
             FROM InspectionAssessmentInd
             WHERE AssessmentTask.ParentId = :inspectionId
             AND AssessmentIndDefinition.PHOCSParentId__c = null
             ORDER BY AssessmentIndDefinition.Category__c, AssessmentIndDefinition.Name
         ];
-
+        
         if (parentQuestions.isEmpty()) {
             return results;
         }
-
+        
         Set<Id> parentDefIds = new Set<Id>();
         Set<Id> nonCompliantParentDefIds = new Set<Id>();
-
+        
         for (InspectionAssessmentInd parent : parentQuestions) {
             parentDefIds.add(parent.AssessmentIndDefinitionId);
-
+            
             if (parent.Result == 'PHOCSNonCompliant') {
                 nonCompliantParentDefIds.add(parent.AssessmentIndDefinitionId);
             }
         }
-
+        
         List<InspectionAssessmentInd> cannedComments = [
             SELECT AssessmentIndDefinition.Name,
-                AssessmentIndDefinition.PHOCSParentId__c,
-                AssessmentTaskId
+            AssessmentIndDefinition.PHOCSParentId__c,
+            AssessmentTaskId
             FROM InspectionAssessmentInd
             WHERE AssessmentTask.ParentId = :inspectionId
             AND AssessmentIndDefinition.PHOCSParentId__c IN :parentDefIds
             AND PHOCSCheckboxResponse__c = true
             ORDER BY AssessmentIndDefinition.Name
         ];
-
+        
         Map<String, List<String>> cannedCommentsByKey = new Map<String, List<String>>();
-
+        
         for (InspectionAssessmentInd cc : cannedComments) {
             if (cc.AssessmentIndDefinition == null || cc.AssessmentIndDefinition.PHOCSParentId__c == null) {
                 continue;
             }
-
+            
             String key = cc.AssessmentTaskId + '_' + cc.AssessmentIndDefinition.PHOCSParentId__c;
             String commentName = cc.AssessmentIndDefinition.Name;
-
+            
             if (
                 nonCompliantParentDefIds.contains(cc.AssessmentIndDefinition.PHOCSParentId__c) &&
                 String.isNotBlank(commentName)
@@ -371,21 +371,21 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 if (!cannedCommentsByKey.containsKey(key)) {
                     cannedCommentsByKey.put(key, new List<String>());
                 }
-
+                
                 cannedCommentsByKey.get(key).add(commentName.trim());
             }
         }
-
+        
         for (InspectionAssessmentInd parent : parentQuestions) {
             String key = parent.AssessmentTaskId + '_' + parent.AssessmentIndDefinitionId;
             Boolean isNonCompliant = parent.Result == 'PHOCSNonCompliant';
-
+            
             String status = statusMap.containsKey(parent.Result) ? statusMap.get(parent.Result) : parent.Result;
-
+            
             String questionAndComments = parent.AssessmentIndDefinition != null
                 ? parent.AssessmentIndDefinition.Name
                 : '';
-
+            
             if (
                 parent.AssessmentIndDefinition != null &&
                 String.isNotBlank(parent.AssessmentIndDefinition.RelatedRegulatoryCodes__c)
@@ -394,7 +394,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                     parent.AssessmentIndDefinition.RelatedRegulatoryCodes__c +
                     ']';
             }
-
+            
             if (
                 isNonCompliant &&
                 cannedCommentsByKey.containsKey(key) &&
@@ -402,26 +402,26 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             ) {
                 questionAndComments += '\n\n' + String.join(cannedCommentsByKey.get(key), '\n');
             }
-
+            
             results.add(new Map<String, Object>{
                 'Id' => parent.Id,
-                'QuestionandComments' => questionAndComments,
-                'Status' => status
-            });
+                    'QuestionandComments' => questionAndComments,
+                    'Status' => status
+                    });
         }
-
+        
         return results;
     }
-
+    
     private static WaterAdvisoryDetails getWaterAdvisoryDetails(Account accRecord) {
         WaterAdvisoryDetails details = new WaterAdvisoryDetails();
-
+        
         if (accRecord == null || accRecord.RecordTypeName__c != 'DrinkingWaterSystem') {
             return details;
         }
-
+        
         List<String> advisoryBlocks = new List<String>();
-
+        
         for (Case advisory : [
             SELECT Id, TypeOfAdvisory__c, ReasonForAdvisory__c
             FROM Case
@@ -431,9 +431,9 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             ORDER BY LastModifiedDate DESC
         ]){
             details.hasWaterAdvisories = true;
-
+            
             List<String> reasonLines = new List<String>();
-
+            
             if (String.isNotBlank(advisory.ReasonForAdvisory__c)) {
                 for (String reason : advisory.ReasonForAdvisory__c.split(';')) {
                     if (String.isNotBlank(reason)) {
@@ -441,71 +441,160 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                     }
                 }
             }
-
+            
             String advisoryBlock =
                 '<div style="' +
-                    'display:flex;' +
-                    'align-items:flex-start;' +
-                    'gap:12px;' +
-                    'margin-bottom:12px;' +
-                    'padding:14px 16px;' +
-                    'background:#fdb913;' +
-                    'border-radius:4px;' +
-                    'border:none;' +
-                    'box-shadow:0 1px 2px rgba(0,0,0,0.15);' +
+                'display:flex;' +
+                'align-items:flex-start;' +
+                'gap:12px;' +
+                'margin-bottom:12px;' +
+                'padding:14px 16px;' +
+                'background:#fdb913;' +
+                'border-radius:4px;' +
+                'border:none;' +
+                'box-shadow:0 1px 2px rgba(0,0,0,0.15);' +
                 '">' +
-
-                   '<div style="' +
-                        'font-size:20px;' +
-                        'line-height:1;' +
-                        'margin-top:2px;' +
-                        'flex-shrink:0;' +
-                    '">' +
-                        '⚠' +
-                    '</div>' +
-                    
-                    '<div style="color:#111;">' +
-
-                        '<div style="' +
-                            'font-weight:700;' +
-                            'margin-bottom:8px;' +
-                            'font-size:16px;' +
-                        '">' +
-                            'This facility is currently going under a ' +
-                            advisory.TypeOfAdvisory__c +
-                        '</div>' +
-
-                        '<div style="' +
-                            'font-weight:600;' +
-                            'margin-bottom:4px;' +
-                        '">' +
-                            'Underlying Problems:' +
-                        '</div>' +
-
-                        '<div style="' +
-                            'line-height:1.7;' +
-                        '">' +
-                            String.join(reasonLines, '<br/>') +
-                        '</div>' +
-
-                    '</div>' +
-
+                
+                '<div style="' +
+                'font-size:20px;' +
+                'line-height:1;' +
+                'margin-top:2px;' +
+                'flex-shrink:0;' +
+                '">' +
+                '⚠' +
+                '</div>' +
+                
+                '<div style="color:#111;">' +
+                
+                '<div style="' +
+                'font-weight:700;' +
+                'margin-bottom:8px;' +
+                'font-size:16px;' +
+                '">' +
+                'This facility is currently going under a ' +
+                advisory.TypeOfAdvisory__c +
+                '</div>' +
+                
+                '<div style="' +
+                'font-weight:600;' +
+                'margin-bottom:4px;' +
+                '">' +
+                'Underlying Problems:' +
+                '</div>' +
+                
+                '<div style="' +
+                'line-height:1.7;' +
+                '">' +
+                String.join(reasonLines, '<br/>') +
+                '</div>' +
+                
+                '</div>' +
+                
                 '</div>';
-
+            
             advisoryBlocks.add(advisoryBlock);
         }
-
+        
         if (details.hasWaterAdvisories) {
             details.waterAdvisoryReasonSummary = String.join(advisoryBlocks, '');
         }
-
         return details;
     }
-                                                                
+    /**********************************************************************************************
+* @Author:      Yuvashree Perumal 
+* @Date:        12/08/2026
+* @Description: EHIS-3277 - getBeachAdvisoryDetails method is used to show banner for Not for swimming and Beach Advisory type.
+***********************************************************************************************/ 
+    private static BeachAdvisoryDetails getBeachAdvisoryDetails(Account accRecord) {
+        BeachAdvisoryDetails details = new BeachAdvisoryDetails();
+        if (accRecord == null || accRecord.Type != 'Recreational Water' || accRecord.CategoryL1__c != 'Beach') {
+            return details;
+        }
+        List<String> bannerBlocks = new List<String>();
+        for (Case advisory : [SELECT Id,Type,TypeOfAdvisory__c,ReasonForAdvisory__c,AdvisoryIssuedDate__c FROM Case
+                              WHERE AccountId = :accRecord.Id
+                              AND RecordType.DeveloperName = 'PHOCSWaterAdvisories'
+                              AND Status = 'Open'
+                              AND Type = 'Recreational Water'
+                              AND TypeOfAdvisory__c IN ('Not Suitable for Swimming', 'Beach Closure')
+                              ORDER BY LastModifiedDate DESC
+                             ]) {
+                                 details.hasBeachAdvisories = true;
+                                 String issuedDateText = advisory.AdvisoryIssuedDate__c != null ? advisory.AdvisoryIssuedDate__c.format() : '';
+                                 String headerText = '';
+                                 if (advisory.TypeOfAdvisory__c == 'Not Suitable for Swimming') {
+                                     headerText = 'This beach is currently under a beach advisory as of ' + issuedDateText + ':';
+                                 } else if (advisory.TypeOfAdvisory__c == 'Beach Closure') {
+                                     headerText = 'This beach is currently closed as of ' + issuedDateText + ':';
+                                 }
+                                 List<String> reasons = new List<String>();
+                                 if (String.isNotBlank(advisory.ReasonForAdvisory__c)) {
+                                     for (String reason : advisory.ReasonForAdvisory__c.split(';')) {
+                                         if (String.isNotBlank(reason)) {
+                                             reasons.add(reason.trim());
+                                         }
+                                     }
+                                 }
+                                 String reasonLine = '';
+                                 if (!reasons.isEmpty()) {
+                                     reasonLine =
+                                         '<div style="' +
+                                         'margin-top:6px;' +
+                                         'font-size:15px;' +
+                                         '">' +
+                                         '<strong>Reason:</strong> ' +
+                                         String.join(reasons, ', ').escapeHtml4() +
+                                         '</div>';
+                                 }
+                                 String bannerBlock =
+                                     '<div style="' +
+                                     'display:flex;' +
+                                     'align-items:flex-start;' +
+                                     'gap:12px;' +
+                                     'margin-bottom:12px;' +
+                                     'padding:14px 16px;' +
+                                     'background:#fdb913;' +
+                                     'border-radius:4px;' +
+                                     'border:none;' +
+                                     'box-shadow:0 1px 2px rgba(0,0,0,0.15);' +
+                                     '">' +
+                                     
+                                     '<div style="' +
+                                     'font-size:20px;' +
+                                     'line-height:1;' +
+                                     'margin-top:2px;' +
+                                     'flex-shrink:0;' +
+                                     '">' +
+                                     '⚠' +
+                                     '</div>' +
+                                     
+                                     '<div style="color:#111;">' +
+                                     
+                                     '<div style="' +
+                                     'font-weight:700;' +
+                                     'font-size:16px;' +
+                                     'margin-bottom:4px;' +
+                                     '">' +
+                                     headerText.escapeHtml4() +
+                                     '</div>' +
+                                     
+                                     reasonLine +
+                                     
+                                     '</div>' +
+                                     
+                                     '</div>';
+                                 bannerBlocks.add(bannerBlock);
+                             }
+        if (details.hasBeachAdvisories) {
+            details.beachAdvisoryBannerHtml = String.join(bannerBlocks, '');
+        }
+        return details;
+    }
+    
     private static String getFacilitiesFilter(String programArea, String filterItems, String operatingWithoutLicence) {
         String returnQuery;
         Boolean isOWLListing = operatingWithoutLicence == 'true';
-
+        
         switch on programArea {
             when 'food' {
                 returnQuery = ' WHERE RecordType.DeveloperName = \'Facility\' AND Type = \'Food\' AND Status__c = \'Open\'';
@@ -544,13 +633,13 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         returnQuery = addFlexCardFilters(filterItems, returnQuery);
         return returnQuery; 
     }
-
+    
     private static String getCareFacilityWhereClause(String facilityType, Boolean isOWLListing) {
         String whereClause =
-           ' WHERE RecordType.DeveloperName = \'Facility\' ' +
+            ' WHERE RecordType.DeveloperName = \'Facility\' ' +
             'AND Type = \'' + String.escapeSingleQuotes(facilityType) + '\' ' +
             'AND (';
-
+        
         if (isOWLListing) {
             whereClause +=
                 '(Status__c = \'Open\' AND LicenseDetail__c = \'Operating Without Licence\') ' +
@@ -568,62 +657,69 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
     
     private static string getAddress(Address physicalAddress){
         string[] returnAddress = new string[]{};
-        if(physicalAddress != null){
-            if(string.isNotBlank(physicalAddress.getStreet())){
-                returnAddress.add(physicalAddress.getStreet()); 
+            if(physicalAddress != null){
+                if(string.isNotBlank(physicalAddress.getStreet())){
+                    returnAddress.add(physicalAddress.getStreet()); 
+                }
+                if(string.isNotBlank(physicalAddress.getCity())){
+                    returnAddress.add(physicalAddress.getCity()); 
+                }
+                if(string.isNotBlank(physicalAddress.getState())){
+                    returnAddress.add(physicalAddress.getState()); 
+                }
+                if(string.isNotBlank(physicalAddress.getCountry())){
+                    returnAddress.add(physicalAddress.getCountry()); 
+                }
+                if(string.isNotBlank(physicalAddress.getPostalCode())){
+                    returnAddress.add(physicalAddress.getPostalCode()); 
+                }
+                return String.join(returnAddress, ', ');
             }
-            if(string.isNotBlank(physicalAddress.getCity())){
-                returnAddress.add(physicalAddress.getCity()); 
-            }
-            if(string.isNotBlank(physicalAddress.getState())){
-                returnAddress.add(physicalAddress.getState()); 
-            }
-            if(string.isNotBlank(physicalAddress.getCountry())){
-                returnAddress.add(physicalAddress.getCountry()); 
-            }
-            if(string.isNotBlank(physicalAddress.getPostalCode())){
-                returnAddress.add(physicalAddress.getPostalCode()); 
-            }
-            return String.join(returnAddress, ', ');
-        }
         return '';
     }
-
+    
     private static String formatPhoneNumber(String phone) {
         if (String.isBlank(phone)) {
             return '';
         }
-
+        
         String digits = phone.replaceAll('[^0-9]', '');
-
+        
         if (digits.length() == 11 && digits.startsWith('1')) {
             digits = digits.substring(1);
         }
-
+        
         if (digits.length() == 10) {
             return '(' + digits.substring(0, 3) + ') ' +
                 digits.substring(3, 6) + '-' +
                 digits.substring(6, 10);
         }
-
+        
         return phone;
     }
-
+    
     public interface SObjectWrapper {
         Object wrap(SObject record);
     }
-
+    
     public class WaterAdvisoryDetails {
         public Boolean hasWaterAdvisories = false;
         public String waterAdvisoryReasonSummary = '';
     }
-
+    /**********************************************************************************************
+* @Author:      Yuvashree Perumal 
+* @Date:        12/08/2026
+* @Description: Wrapper to get the parameters -EHIS-3277
+***********************************************************************************************/ 
+    public class BeachAdvisoryDetails {
+        public Boolean hasBeachAdvisories = false;
+        public String beachAdvisoryBannerHtml = '';
+    }
     public class AccountDetailsWrapper implements SObjectWrapper {
         public Object wrap(SObject record) {
-            Account accRecord = (Account) record;
-
+            Account accRecord = (Account) record;           
             WaterAdvisoryDetails advisoryDetails = getWaterAdvisoryDetails(accRecord);
-
+            BeachAdvisoryDetails beachAdvisoryDetails = getBeachAdvisoryDetails(accRecord);//added for EHIS-3277
             Map<String, Object> result = new Map<String, Object>{
                 'Id' => accRecord.Id,
                 'Name' => accRecord.Name,
@@ -645,44 +741,45 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 'PhysicalAddressCountry' => accRecord.Physical_Address__c?.getCountry(),
                 'PhysicalAddressCountryCode' => accRecord.Physical_Address__c?.getCountryCode(),
                 'HideAddressonPublicSite__c' => accRecord.HideAddressonPublicSite__c,
-                 'HidePhoneonPublicSite__c' => accRecord.HidePhoneonPublicSite__c,
+                'HidePhoneonPublicSite__c' => accRecord.HidePhoneonPublicSite__c,
                 'HasWaterAdvisories' => advisoryDetails.hasWaterAdvisories,
-                'WaterAdvisoryReasonSummary' => advisoryDetails.waterAdvisoryReasonSummary
-            };
-
-            return result;
+                'WaterAdvisoryReasonSummary' => advisoryDetails.waterAdvisoryReasonSummary,
+                'HasBeachAdvisories' => beachAdvisoryDetails.hasBeachAdvisories,//added for EHIS-3277
+                'BeachAdvisoryBannerHtml' => beachAdvisoryDetails.beachAdvisoryBannerHtml //added for EHIS-3277
+                    };
+                        return result;
         }
     }
     public class FacilityWrapper implements SObjectWrapper {
         public Object wrap(SObject record) {
             Date phocsLastInspectionDate ;
             Account accRecord = (Account) record;
-        
+            
             if(accRecord.PHOCSLastInspectionDate__c != null){
                 Datetime dt =  accRecord.PHOCSLastInspectionDate__c;
                 phocsLastInspectionDate = dt.date();
             }
-
-
-                Map<String, Object> result = new Map<String, Object>{
+            
+            
+            Map<String, Object> result = new Map<String, Object>{
                 'Id' => accRecord.Id,
-                'Type'=> accRecord.Type,
-                'CategoryL1__c'=> accRecord.CategoryL1__c,
-                'CategoryL2__c'=> accRecord.CategoryL2__c,
-                'FacilityCHSAText__c'=> accRecord.FacilityCHSAText__c,
-                'HealthAuthority__c'=> accRecord.HealthAuthority__c, 
-                'LastInspectionDate__c ' => phocsLastInspectionDate,
-                'Name' => accRecord.Name,
-                'PHOCSNumberOfInspections__c' => accRecord.PHOCSNumberOfInspections__c,
-                'PHOCSOutstandingViolations__c'=> accRecord.PHOCSOutstandingViolations__c,
-                'PhysicalAddress' => accRecord.HideAddressonPublicSite__c ? '' : getAddress(accRecord.Physical_Address__c),
-                'PhysicalAddressStreet'=> accRecord.Physical_Address__c?.getStreet(),
-                'PhysicalAddressCity' => accRecord.HideAddressonPublicSite__c ? '' : accRecord.Physical_Address__c?.getCity(),
-                'PhysicalAddressState'=> accRecord.Physical_Address__c?.getState(),
-                'PhysicalAddressCountry'=> accRecord.Physical_Address__c?.getCountry(),
-                'PhysicalAddressPostalCode'=> accRecord.Physical_Address__c?.getPostalCode()
-            };
-            return result;
+                    'Type'=> accRecord.Type,
+                    'CategoryL1__c'=> accRecord.CategoryL1__c,
+                    'CategoryL2__c'=> accRecord.CategoryL2__c,
+                    'FacilityCHSAText__c'=> accRecord.FacilityCHSAText__c,
+                    'HealthAuthority__c'=> accRecord.HealthAuthority__c, 
+                    'LastInspectionDate__c ' => phocsLastInspectionDate,
+                    'Name' => accRecord.Name,
+                    'PHOCSNumberOfInspections__c' => accRecord.PHOCSNumberOfInspections__c,
+                    'PHOCSOutstandingViolations__c'=> accRecord.PHOCSOutstandingViolations__c,
+                    'PhysicalAddress' => accRecord.HideAddressonPublicSite__c ? '' : getAddress(accRecord.Physical_Address__c),
+                        'PhysicalAddressStreet'=> accRecord.Physical_Address__c?.getStreet(),
+                        'PhysicalAddressCity' => accRecord.HideAddressonPublicSite__c ? '' : accRecord.Physical_Address__c?.getCity(),
+                            'PhysicalAddressState'=> accRecord.Physical_Address__c?.getState(),
+                            'PhysicalAddressCountry'=> accRecord.Physical_Address__c?.getCountry(),
+                            'PhysicalAddressPostalCode'=> accRecord.Physical_Address__c?.getPostalCode()
+                            };
+                                return result;
         }
     } 
     
@@ -691,17 +788,17 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             Case caseRecord = (Case) record;
             Map<String, Object> result = new Map<String, Object>{
                 'Id' => caseRecord.Id,
-                'CaseNumber' => caseRecord.CaseNumber,
-                'TypeOfAdvisory' => caseRecord.TypeOfAdvisory__c,
-                'LastModifiedDate'=> caseRecord.LastModifiedDate,
-                'ReasonForAdvisory'=> caseRecord.ReasonForAdvisory__c,
-                'AccountId' => caseRecord.AccountId,
-                'AccountName'=> caseRecord.Account.Name,
-                'AccountPhone'=> caseRecord.Account.Phone,
-                'AccountWebsite'=> caseRecord.Account.Website,
-                'PopulationServedper24hrs' => caseRecord.Account.PopulationServedper24hrs__c 
-            };
-            return result;
+                    'CaseNumber' => caseRecord.CaseNumber,
+                    'TypeOfAdvisory' => caseRecord.TypeOfAdvisory__c,
+                    'LastModifiedDate'=> caseRecord.LastModifiedDate,
+                    'ReasonForAdvisory'=> caseRecord.ReasonForAdvisory__c,
+                    'AccountId' => caseRecord.AccountId,
+                    'AccountName'=> caseRecord.Account.Name,
+                    'AccountPhone'=> caseRecord.Account.Phone,
+                    'AccountWebsite'=> caseRecord.Account.Website,
+                    'PopulationServedper24hrs' => caseRecord.Account.PopulationServedper24hrs__c 
+                    };
+                        return result;
         }
     } 
     public class LabTestRequisitionDetailsWrapper implements SObjectWrapper {
@@ -709,90 +806,90 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             LabTestRequisition__c lab = (LabTestRequisition__c) record;
             Map<String, Object> result = new Map<String, Object>{
                 'Name' => lab.Name,
-                'FacilityName' => lab.FacilityName__r?.Name,
-                'FacilityAccountId' => lab.FacilityName__c,
-                'PhysicalAddressStreet'=> lab.FacilityName__r?.Physical_Address__c?.getStreet(),
-                'PhysicalAddressCity'=> lab.FacilityName__r?.Physical_Address__c?.getCity(),
-                'PhysicalAddressState'=> lab.FacilityName__r?.Physical_Address__c?.getState(),
-                'PhysicalAddressCountry'=> lab.FacilityName__r?.Physical_Address__c?.getCountry(),
-                'PhysicalAddressPostalCode'=> lab.FacilityName__r?.Physical_Address__c?.getPostalCode(),
-                'SamplingSiteName' => lab.SamplingSite__r?.Name,
-                'CollectionDateTime' => lab.CollectionDateTime__c
-            };
-            return result;
+                    'FacilityName' => lab.FacilityName__r?.Name,
+                    'FacilityAccountId' => lab.FacilityName__c,
+                    'PhysicalAddressStreet'=> lab.FacilityName__r?.Physical_Address__c?.getStreet(),
+                    'PhysicalAddressCity'=> lab.FacilityName__r?.Physical_Address__c?.getCity(),
+                    'PhysicalAddressState'=> lab.FacilityName__r?.Physical_Address__c?.getState(),
+                    'PhysicalAddressCountry'=> lab.FacilityName__r?.Physical_Address__c?.getCountry(),
+                    'PhysicalAddressPostalCode'=> lab.FacilityName__r?.Physical_Address__c?.getPostalCode(),
+                    'SamplingSiteName' => lab.SamplingSite__r?.Name,
+                    'CollectionDateTime' => lab.CollectionDateTime__c
+                    };
+                        return result;
         }
     }
     
-     public class RegulatoryTrxnFeeItemDetailsWrapper implements SObjectWrapper {
+    public class RegulatoryTrxnFeeItemDetailsWrapper implements SObjectWrapper {
         public Object wrap(SObject record) {
             RegulatoryTrxnFeeItem regulatoryTrxnFeeItemRecord = (RegulatoryTrxnFeeItem) record;
             Map<String, Object> result = new Map<String, Object>{
                 'Id' => regulatoryTrxnFeeItemRecord.Id,
-                'Name' => regulatoryTrxnFeeItemRecord.Name,
-                'FeeAmount'=> regulatoryTrxnFeeItemRecord.FeeAmount,
-                'RegulatoryTrxnFeeId'=> regulatoryTrxnFeeItemRecord.RegulatoryTrxnFee.Id,
-                'RegulatoryTrxnFeeName'=> regulatoryTrxnFeeItemRecord.RegulatoryTrxnFee.Name,
-                'Comments'=> regulatoryTrxnFeeItemRecord.Comments
-            };
-            return result;
+                    'Name' => regulatoryTrxnFeeItemRecord.Name,
+                    'FeeAmount'=> regulatoryTrxnFeeItemRecord.FeeAmount,
+                    'RegulatoryTrxnFeeId'=> regulatoryTrxnFeeItemRecord.RegulatoryTrxnFee.Id,
+                    'RegulatoryTrxnFeeName'=> regulatoryTrxnFeeItemRecord.RegulatoryTrxnFee.Name,
+                    'Comments'=> regulatoryTrxnFeeItemRecord.Comments
+                    };
+                        return result;
         }
     }
-
+    
     public class InspectionDetailsWrapper implements SObjectWrapper {
         public Object wrap(SObject record) {
             Visit inspection = (Visit) record;
             WaterAdvisoryDetails advisoryDetails = getWaterAdvisoryDetails(inspection.Account);
-
+            
             Map<String, Object> result = new Map<String, Object>{
                 'Id' => inspection.Id,
-                'Name' => inspection.Name,
-                'ActualVisitStartTime' => inspection.ActualVisitStartTime != null ? inspection.ActualVisitStartTime.format('yyyy-MM-dd')  : '',
-                'InspectionType' => inspection.TestInspType__c,
-                'PHOCSViolationCount' => inspection.PHOCSViolationCount__c,
-
-                'AccountId' => inspection.Account?.Id,
-                'AccountName' => inspection.Account?.Name,
-                'AccountType' => inspection.Account?.Type,
-                'CategoryL1' => inspection.Account?.CategoryL1__c,
-                'CategoryL2' => inspection.Account?.CategoryL2__c,
-                'HealthAuthority' => inspection.Account?.HealthAuthority__c,
-                'FacilityCHSAText' => inspection.Account?.FacilityCHSAText__c,
-                'PHOCSParentAccount' => inspection.Account?.PHOCSParentAccount__c,
-                'HidePhoneonPublicSite' => inspection.Account?.HidePhoneonPublicSite__c,
-                'Phone' => inspection.Account?.HidePhoneonPublicSite__c == true ? '' : formatPhoneNumber(inspection.Account?.Phone),
-                'PHOCSOutstandingViolations' => inspection.Account?.PHOCSOutstandingViolations__c,
-                'OperatingMonths' => inspection.Account?.OperatingMonths__c,
-                'PhysicalLocation' => inspection.Account?.PhysicalLocation__c,
-                'HideAddressonPublicSite' => inspection.Account?.HideAddressonPublicSite__c,
-            
-                'PhysicalAddress' => inspection.Account?.HideAddressonPublicSite__c == true ? '' 
-                    : getAddress(inspection.Account?.Physical_Address__c),
-                'PhysicalAddressStreet' => inspection.Account?.Physical_Address__c?.getStreet(),
-                'PhysicalAddressCity' => inspection.Account?.Physical_Address__c?.getCity(),
-                'PhysicalAddressState' => inspection.Account?.Physical_Address__c?.getState(),
-                'PhysicalAddressPostalCode' => inspection.Account?.Physical_Address__c?.getPostalCode(),
-                'PhysicalAddressCountry' => inspection.Account?.Physical_Address__c?.getCountry(),
-
-                'HasWaterAdvisories' => advisoryDetails.hasWaterAdvisories,
-                'WaterAdvisoryReasonSummary' => advisoryDetails.waterAdvisoryReasonSummary
-            };
-
-            return result;
+                    'Name' => inspection.Name,
+                    'ActualVisitStartTime' => inspection.ActualVisitStartTime != null ? inspection.ActualVisitStartTime.format('yyyy-MM-dd')  : '',
+                        'InspectionType' => inspection.TestInspType__c,
+                        'PHOCSViolationCount' => inspection.PHOCSViolationCount__c,
+                        
+                        'AccountId' => inspection.Account?.Id,
+                        'AccountName' => inspection.Account?.Name,
+                        'AccountType' => inspection.Account?.Type,
+                        'CategoryL1' => inspection.Account?.CategoryL1__c,
+                        'CategoryL2' => inspection.Account?.CategoryL2__c,
+                        'HealthAuthority' => inspection.Account?.HealthAuthority__c,
+                        'FacilityCHSAText' => inspection.Account?.FacilityCHSAText__c,
+                        'PHOCSParentAccount' => inspection.Account?.PHOCSParentAccount__c,
+                        'HidePhoneonPublicSite' => inspection.Account?.HidePhoneonPublicSite__c,
+                        'Phone' => inspection.Account?.HidePhoneonPublicSite__c == true ? '' : formatPhoneNumber(inspection.Account?.Phone),
+                            'PHOCSOutstandingViolations' => inspection.Account?.PHOCSOutstandingViolations__c,
+                            'OperatingMonths' => inspection.Account?.OperatingMonths__c,
+                            'PhysicalLocation' => inspection.Account?.PhysicalLocation__c,
+                            'HideAddressonPublicSite' => inspection.Account?.HideAddressonPublicSite__c,
+                            
+                            'PhysicalAddress' => inspection.Account?.HideAddressonPublicSite__c == true ? '' 
+                            : getAddress(inspection.Account?.Physical_Address__c),
+                                'PhysicalAddressStreet' => inspection.Account?.Physical_Address__c?.getStreet(),
+                                'PhysicalAddressCity' => inspection.Account?.Physical_Address__c?.getCity(),
+                                'PhysicalAddressState' => inspection.Account?.Physical_Address__c?.getState(),
+                                'PhysicalAddressPostalCode' => inspection.Account?.Physical_Address__c?.getPostalCode(),
+                                'PhysicalAddressCountry' => inspection.Account?.Physical_Address__c?.getCountry(),
+                                
+                                'HasWaterAdvisories' => advisoryDetails.hasWaterAdvisories,
+                                'WaterAdvisoryReasonSummary' => advisoryDetails.waterAdvisoryReasonSummary
+                                };
+                                    
+                                    return result;
         }
     }
-
+    
     public class InspectionListWrapper implements SObjectWrapper {
         public Object wrap(SObject record) {
             Visit inspection = (Visit) record;
             Map<String, Object> result = new Map<String, Object>{
                 'Id' => inspection.Id,
-                'Name' => inspection.Name,
-                'AccountName' => inspection.Account.Name,
-                'ActualVisitStartTime' => inspection.ActualVisitStartTime,
-                'InspectionType' => inspection.VisitType.Name,
-                'PHOCSViolationCount' => inspection.PHOCSViolationCount__c
-            };
-            return result;
+                    'Name' => inspection.Name,
+                    'AccountName' => inspection.Account.Name,
+                    'ActualVisitStartTime' => inspection.ActualVisitStartTime,
+                    'InspectionType' => inspection.VisitType.Name,
+                    'PHOCSViolationCount' => inspection.PHOCSViolationCount__c
+                    };
+                        return result;
         }
     }
     public class LabTestRequiredListWrapper implements SObjectWrapper {
@@ -800,30 +897,30 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             LabTestRequired__c lab = (LabTestRequired__c) record;
             Map<String, Object> result = new Map<String, Object>{
                 'Name' => lab.Name,
-                'TestCategory' => lab.TestCategory__c,
-                'UnitOfMeasure' => lab.UnitOfMeasure__c,
-                'ResultValue' => lab.ResultValue__c,
-                'TestId' => lab.Test__c,
-                'TestName' => lab.Test__r ?.Name,           
-                'SamplingSiteName'   => lab.LabTestRequisition__r?.SamplingSite__r?.Name,               
-                'SampleTestType'     => lab.Test__r?.SampleTestType__c,
-                'ParameterType'      => lab.Test__r?.ParameterType__c,  
-                'CollectionDateTime' => lab.LabTestRequisition__r?.CollectionDateTime__c
-            };            
-            return result;
+                    'TestCategory' => lab.TestCategory__c,
+                    'UnitOfMeasure' => lab.UnitOfMeasure__c,
+                    'ResultValue' => lab.ResultValue__c,
+                    'TestId' => lab.Test__c,
+                    'TestName' => lab.Test__r ?.Name,           
+                    'SamplingSiteName'   => lab.LabTestRequisition__r?.SamplingSite__r?.Name,               
+                    'SampleTestType'     => lab.Test__r?.SampleTestType__c,
+                    'ParameterType'      => lab.Test__r?.ParameterType__c,  
+                    'CollectionDateTime' => lab.LabTestRequisition__r?.CollectionDateTime__c
+                    };            
+                        return result;
         }
     }
-     public class InspectionAssessmentIndDetailsWrapper implements SObjectWrapper {
+    public class InspectionAssessmentIndDetailsWrapper implements SObjectWrapper {
         public Object wrap(SObject record) {
             InspectionAssessmentInd iaiRecord = (InspectionAssessmentInd) record;
             Map<String, Object> result = new Map<String, Object>{
                 'Id' => iaiRecord.Id,
-                'AssessmentIndDefinitionCategory' => iaiRecord.AssessmentIndDefinition.Category__c,
-                'AssessmentIndDefinitionName'=> iaiRecord.AssessmentIndDefinition.Name,
-                'TextFieldResponse'=> iaiRecord.TextFieldResponse,
-                'Result'=> iaiRecord.Result
-            };
-            return result;
+                    'AssessmentIndDefinitionCategory' => iaiRecord.AssessmentIndDefinition.Category__c,
+                    'AssessmentIndDefinitionName'=> iaiRecord.AssessmentIndDefinition.Name,
+                    'TextFieldResponse'=> iaiRecord.TextFieldResponse,
+                    'Result'=> iaiRecord.Result
+                    };
+                        return result;
         }
     }
     private static String addFlexCardFilters(String filterItems, String returnQuery){
