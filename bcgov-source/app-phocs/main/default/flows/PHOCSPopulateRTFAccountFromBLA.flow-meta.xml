@@ -16,7 +16,9 @@
         <inputAssignments><field>AccountId</field><value><elementReference>Get_Parent_BLA.AccountId</elementReference></value></inputAssignments><inputReference>$Record</inputReference>
     </recordUpdates>
     <start><locationX>0</locationX><locationY>0</locationY><connector><targetReference>Get_Parent_BLA</targetReference></connector>
-        <filterFormula>AND(ISBLANK({!$Record.AccountId}), NOT(ISBLANK({!$Record.ParentRecordId})))</filterFormula>
+        <filterLogic>and</filterLogic>
+        <filters><field>AccountId</field><operator>IsNull</operator><value><booleanValue>true</booleanValue></value></filters>
+        <filters><field>ParentRecordId</field><operator>IsNull</operator><value><booleanValue>false</booleanValue></value></filters>
         <object>RegulatoryTrxnFee</object><recordTriggerType>CreateAndUpdate</recordTriggerType><triggerType>RecordBeforeSave</triggerType>
     </start><status>Active</status>
 </Flow>
