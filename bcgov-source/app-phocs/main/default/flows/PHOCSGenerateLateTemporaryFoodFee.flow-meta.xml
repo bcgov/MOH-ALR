@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion><areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Late_Fee_Required</name><label>Late Fee Required</label><locationX>0</locationX><locationY>0</locationY><defaultConnectorLabel>Not Required</defaultConnectorLabel>
+        <rules><name>Yes</name><conditionLogic>and</conditionLogic>
+            <conditions><leftValueReference>Get_BLA.LicenseType.Name</leftValueReference><operator>EqualTo</operator><rightValue><stringValue>Temporary Food Service Permit</stringValue></rightValue></conditions>
+            <conditions><leftValueReference>Days_Before_Event</leftValueReference><operator>LessThan</operator><rightValue><numberValue>14.0</numberValue></rightValue></conditions>
+            <conditions><leftValueReference>Get_Existing_Late_Fee.Id</leftValueReference><operator>IsNull</operator><rightValue><booleanValue>true</booleanValue></rightValue></conditions>
+            <connector><targetReference>Create_RTF</targetReference></connector><label>Yes</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas><name>Days_Before_Event</name><dataType>Number</dataType><expression>DATEVALUE({!Get_Earliest_Event.StartDateTime}) - DATEVALUE({!Get_BLA.AppliedDate})</expression><scale>0</scale></formulas>
+    <interviewLabel>PHOCS Generate Late Temporary Food Fee {!$Flow.CurrentDateTime}</interviewLabel><label>PHOCS Generate Late Temporary Food Fee</label>
+    <processMetadataValues><name>BuilderType</name><value><stringValue>LightningFlowBuilder</stringValue></value></processMetadataValues>
+    <processMetadataValues><name>CanvasMode</name><value><stringValue>AUTO_LAYOUT_CANVAS</stringValue></value></processMetadataValues>
+    <processMetadataValues><name>OriginBuilderType</name><value><stringValue>LightningFlowBuilder</stringValue></value></processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_RTF</name><label>Create RTF</label><locationX>0</locationX><locationY>0</locationY><connector><targetReference>Create_RTFI</targetReference></connector>
+        <inputAssignments><field>AccountId</field><value><elementReference>Get_BLA.AccountId</elementReference></value></inputAssignments>
+        <inputAssignments><field>Comments</field><value><stringValue>Late Temporary Food Event Application Processing Fee</stringValue></value></inputAssignments>
+        <inputAssignments><field>DueDate</field><value><elementReference>$Flow.CurrentDate</elementReference></value></inputAssignments>
+        <inputAssignments><field>FeeType__c</field><value><stringValue>New Application</stringValue></value></inputAssignments>
+        <inputAssignments><field>ParentRecordId</field><value><elementReference>Get_BLA.Id</elementReference></value></inputAssignments>
+        <inputAssignments><field>RecordTypeId</field><value><elementReference>Get_RTF_Record_Type.Id</elementReference></value></inputAssignments>
+        <inputAssignments><field>Status</field><value><stringValue>DRAFT</stringValue></value></inputAssignments>
+        <inputAssignments><field>Status__c</field><value><stringValue>Draft</stringValue></value></inputAssignments>
+        <object>RegulatoryTrxnFee</object><storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_RTFI</name><label>Create RTFI</label><locationX>0</locationX><locationY>0</locationY>
+        <inputAssignments><field>FeeAmount</field><value><numberValue>50.0</numberValue></value></inputAssignments>
+        <inputAssignments><field>FeeType__c</field><value><stringValue>Late Fees</stringValue></value></inputAssignments>
+        <inputAssignments><field>Name</field><value><stringValue>Late Temporary Food Event Application Processing Fee</stringValue></value></inputAssignments>
+        <inputAssignments><field>RecordTypeId</field><value><elementReference>Get_RTFI_Record_Type.Id</elementReference></value></inputAssignments>
+        <inputAssignments><field>RegulatoryTrxnFeeId</field><value><elementReference>Create_RTF.Id</elementReference></value></inputAssignments>
+        <inputAssignments><field>Status__c</field><value><stringValue>Due</stringValue></value></inputAssignments>
+        <object>RegulatoryTrxnFeeItem</object><storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordLookups>
+        <name>Get_BLA</name><label>Get BLA</label><locationX>0</locationX><locationY>0</locationY><assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound><connector><targetReference>Get_Earliest_Event</targetReference></connector>
+        <filterLogic>and</filterLogic><filters><field>Id</field><operator>EqualTo</operator><value><elementReference>$Record.WhatId</elementReference></value></filters><getFirstRecordOnly>true</getFirstRecordOnly><object>BusinessLicenseApplication</object><storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Earliest_Event</name><label>Get Earliest Event</label><locationX>0</locationX><locationY>0</locationY><assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound><connector><targetReference>Get_Existing_Late_Fee</targetReference></connector>
+        <filterLogic>and</filterLogic><filters><field>WhatId</field><operator>EqualTo</operator><value><elementReference>Get_BLA.Id</elementReference></value></filters><getFirstRecordOnly>true</getFirstRecordOnly><object>Event</object><sortField>StartDateTime</sortField><sortOrder>Asc</sortOrder><storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Existing_Late_Fee</name><label>Get Existing Late Fee</label><locationX>0</locationX><locationY>0</locationY><assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound><connector><targetReference>Get_RTF_Record_Type</targetReference></connector>
+        <filterLogic>and</filterLogic><filters><field>ParentRecordId</field><operator>EqualTo</operator><value><elementReference>Get_BLA.Id</elementReference></value></filters><filters><field>Comments</field><operator>EqualTo</operator><value><stringValue>Late Temporary Food Event Application Processing Fee</stringValue></value></filters><getFirstRecordOnly>true</getFirstRecordOnly><object>RegulatoryTrxnFee</object><storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_RTF_Record_Type</name><label>Get RTF Record Type</label><locationX>0</locationX><locationY>0</locationY><assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound><connector><targetReference>Get_RTFI_Record_Type</targetReference></connector>
+        <filterLogic>and</filterLogic><filters><field>DeveloperName</field><operator>EqualTo</operator><value><stringValue>PHOCSNonDairyTransactionFee</stringValue></value></filters><filters><field>SobjectType</field><operator>EqualTo</operator><value><stringValue>RegulatoryTrxnFee</stringValue></value></filters><getFirstRecordOnly>true</getFirstRecordOnly><object>RecordType</object><storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_RTFI_Record_Type</name><label>Get RTFI Record Type</label><locationX>0</locationX><locationY>0</locationY><assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound><connector><targetReference>Late_Fee_Required</targetReference></connector>
+        <filterLogic>and</filterLogic><filters><field>DeveloperName</field><operator>EqualTo</operator><value><stringValue>PHOCSNonDairyTransactionFeeItem</stringValue></value></filters><filters><field>SobjectType</field><operator>EqualTo</operator><value><stringValue>RegulatoryTrxnFeeItem</stringValue></value></filters><getFirstRecordOnly>true</getFirstRecordOnly><object>RecordType</object><storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start><locationX>0</locationX><locationY>0</locationY><connector><targetReference>Get_BLA</targetReference></connector><object>Event</object><recordTriggerType>CreateAndUpdate</recordTriggerType><triggerType>RecordAfterSave</triggerType></start>
+    <status>Active</status>
+</Flow>

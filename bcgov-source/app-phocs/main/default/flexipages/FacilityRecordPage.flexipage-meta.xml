@@ -308,6 +308,30 @@
                 </visibilityRule>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties><name>uiBehavior</name><value>none</value></fieldInstanceProperties>
+                <fieldItem>Record.MultiplePremiseFacility__c</fieldItem>
+                <identifier>RecordMultiplePremiseFacility_cField</identifier>
+                <visibilityRule>
+                    <booleanFilter>(1 AND 2) OR (3 AND 4)</booleanFilter>
+                    <criteria><leftValue>{!Record.Type}</leftValue><operator>EQUAL</operator><rightValue>Food</rightValue></criteria>
+                    <criteria><leftValue>{!Record.CategoryL1__c}</leftValue><operator>NE</operator><rightValue>Temporary Food Premises</rightValue></criteria>
+                    <criteria><leftValue>{!Record.Type}</leftValue><operator>EQUAL</operator><rightValue>Recreational Water</rightValue></criteria>
+                    <criteria><leftValue>{!Record.CategoryL1__c}</leftValue><operator>NE</operator><rightValue>Beach</rightValue></criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties><name>uiBehavior</name><value>required</value></fieldInstanceProperties>
+                <fieldItem>Record.PremiseRole__c</fieldItem>
+                <identifier>RecordPremiseRole_cField</identifier>
+                <visibilityRule>
+                    <criteria><leftValue>{!Record.MultiplePremiseFacility__c}</leftValue><operator>EQUAL</operator><rightValue>true</rightValue></criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-caec94cf-6b0f-4eb3-a8c5-94242f2d1ce8</name>
         <type>Facet</type>
     </flexiPageRegions>
