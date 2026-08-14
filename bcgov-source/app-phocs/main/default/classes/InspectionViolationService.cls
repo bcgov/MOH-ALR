@@ -293,6 +293,7 @@ public with sharing class InspectionViolationService {
                     
                     if (status == RESULT_COMPLIANT){
                         vio.Status = 'Resolved';
+                        vio.ResolvedIn__c = visitId;
                         parentViolationsToClose.add(vio);
                     }
                 }
