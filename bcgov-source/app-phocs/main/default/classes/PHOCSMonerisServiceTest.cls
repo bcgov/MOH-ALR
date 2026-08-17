@@ -11,6 +11,10 @@ private class PHOCSMonerisServiceTest {
         insert licensetype;
         Account acc = new Account(
             Name = 'Test Account',
+            RecordTypeId = Schema.SObjectType.Account
+                .getRecordTypeInfosByDeveloperName()
+                .get('Facility')
+                .getRecordTypeId(),
             HealthAuthority__c = 'Vancouver Coastal Health - VCH',
             LicenseType__c = licensetype.Id
         );
@@ -21,7 +25,7 @@ private class PHOCSMonerisServiceTest {
             PHOCSMonerisTicketNumber__c = '1760633356HvaZZUqLeXDhtpp33jMfRuwvGHTlnT',
             RecordTypeId = Schema.SObjectType.RegulatoryTrxnFee
                 .getRecordTypeInfosByDeveloperName()
-                .get('PHOCSTransactionFee')
+                .get('PHOCSNonDairyTransactionFee')
                 .getRecordTypeId()
         );
         insert fee;
@@ -29,7 +33,7 @@ private class PHOCSMonerisServiceTest {
             RegulatoryTrxnFeeId = fee.Id,
             RecordTypeId = Schema.SObjectType.RegulatoryTrxnFeeItem
                 .getRecordTypeInfosByDeveloperName()
-                .get('PHOCSRegulatoryTransactionFeeItem')
+                .get('PHOCSNonDairyTransactionFeeItem')
                 .getRecordTypeId(),
             FeeAmount = 120.00,
             Amount__c = 120.00,
