@@ -293,6 +293,29 @@
                 </visibilityRule>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.PortalPaymentStatus__c</fieldItem>
+                <identifier>RecordPortalPaymentStatus_cField</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.PaymentChannel__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Portal</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.PortalPaymentStatus__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Error</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-865fdeb0-5949-4aa1-8a24-8f337018aa78</name>
         <type>Facet</type>
     </flexiPageRegions>
