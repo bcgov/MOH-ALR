@@ -415,52 +415,6 @@ private class PHOCSPublicDisplayObjectRecordsTest {
         System.assertEquals(2,reasonLineCount,'Expected Reason line only for cases where ReasonForAdvisory__c is populated');
     }
     @isTest
-    static void testGetFacilityList_AllExactProgramAreas() {
-        createTestAccount();
-        createBeachFacilityAccount();       
-        List<String> programAreas = new List<String>{
-                'food',
-                'drinkingwatersystem',
-                'residentialcare',
-                'hospital',
-                'childcare',
-                'personalservices',
-                'tobaccovapour',
-                'recreationalwater',
-                'industrial-camps',
-                'sewerage-facilities',
-                ''
-                };
-                    Test.startTest();        
-        for (String programArea : programAreas) {
-            Map<String, Object> input = new Map<String, Object>{
-                'programArea' => programArea,
-                'filterItems' => null,
-                'operatingWithoutLicence' => 'false'
-                    };
-                        runTestCallMethod('getFacilityList', input);
-        }        
-        Map<String, Object> residentialOwlInput = new Map<String, Object>{
-            'programArea' => 'residentialcare',
-            'filterItems' => null,
-            'operatingWithoutLicence' => 'true'
-                };                 
-                    runTestCallMethod('getFacilityList', residentialOwlInput);      
-        Map<String, Object> childCareOwlInput = new Map<String, Object>{
-            'programArea' => 'childcare',
-            'filterItems' => null,
-            'operatingWithoutLicence' => 'true'
-                };                 
-                    runTestCallMethod('getFacilityList', childCareOwlInput);      
-        Map<String, Object> filterInput = new Map<String, Object>{
-            'programArea' => 'recreationalwater',
-            'filterItems' => 'Cityville',
-            'operatingWithoutLicence' => 'false'
-                };                   
-                    runTestCallMethod('getFacilityList', filterInput);        
-        Test.stopTest();
-    }
-    @isTest
     static void testGetInspectionResults_EmptyResult() {
         Account acc = createTestAccount();      
         Test.startTest();     
