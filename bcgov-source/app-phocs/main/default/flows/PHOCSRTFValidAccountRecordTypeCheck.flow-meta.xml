@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <customErrors>
+        <name>ErrorMessage</name>
+        <label>ErrorMessage</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <customErrorMessages>
+            <errorMessage>{!ErrorMessageContent}</errorMessage>
+            <isFieldError>false</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <decisions>
+        <name>ValidAccountRecordTypeCheck</name>
+        <label>ValidAccountRecordTypeCheck</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>ErrorMessage</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>ValidRecordTypeCombination</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>validAccountRecordType</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>ValidRecordTypeCombination</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>validAccountRecordType</name>
+        <dataType>Boolean</dataType>
+        <expression>OR(
+AND(
+OR({!GetParentAccountRecord.RecordType.DeveloperName}==&apos;Facility&apos;,
+{!GetParentAccountRecord.RecordType.DeveloperName}==&apos;DrinkingWaterSystem&apos;,
+{!GetParentAccountRecord.RecordType.DeveloperName}==&apos;DrinkingWaterSourceIntake&apos;),
+{!$Record.RecordType.DeveloperName}==&apos;PHOCSNonDairyTransactionFee&apos;
+    ),
+AND(
+    {!GetParentAccountRecord.RecordType.DeveloperName}==&apos;PHOCSDairyFacility&apos;,
+    {!$Record.RecordType.DeveloperName}==&apos;PHOCSTransactionFee&apos;
+    )
+)</expression>
+    </formulas>
+    <interviewLabel>PHOCSRTFValidAccountRecordTypeCheck {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>PHOCSRTFValidAccountRecordTypeCheck</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>GetParentAccountRecord</name>
+        <label>GetParentAccountRecord</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>ValidAccountRecordTypeCheck</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.AccountId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Account</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>GetParentAccountRecord</targetReference>
+        </connector>
+        <filterFormula>OR (
+{!$Record.RecordType.DeveloperName}==&apos;PHOCSNonDairyTransactionFee&apos;,
+{!$Record.RecordType.DeveloperName}==&apos;PHOCSTransactionFee&apos;
+)</filterFormula>
+        <object>RegulatoryTrxnFee</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>ErrorMessageContent</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>Invalid fee record type. Select Dairy Fee record type for Dairy facilities or PHOCS Fee record type for all other program areas.</stringValue>
+        </value>
+    </variables>
+</Flow>
