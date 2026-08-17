@@ -2,6 +2,22 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>67.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Populate_Case_Type_from_Account_Type</name>
+        <label>Populate Case Type from Account Type</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Type</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Account.Type</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Case_Account</targetReference>
+        </connector>
+    </assignments>
     <decisions>
         <name>Check_Case_Account</name>
         <label>Check Case Account</label>
@@ -27,7 +43,61 @@
             <label>Account Is Set</label>
         </rules>
     </decisions>
-    <description>Updating start condition formula, adding more record types</description>
+    <decisions>
+        <name>Check_PHOCS_Advisories_RecordType</name>
+        <label>Check PHOCS Advisories RecordType</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Check_Case_Account</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Is_PHOCS_Advisories</name>
+            <conditionLogic>1 AND 2 AND 3 AND (4 OR 5)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>PHOCSWaterAdvisories</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Account.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Type</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Account.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Drinking Water</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Account.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Recreational Water</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Populate_Case_Type_from_Account_Type</targetReference>
+            </connector>
+            <label>Is PHOCS Advisories</label>
+        </rules>
+    </decisions>
+    <description>Updating start condition formula, adding more record types
+EHIS-5095 - Auto populate Case type values from Account type</description>
     <environments>Default</environments>
     <interviewLabel>PHOCS Update Case Health Authority {!$Flow.CurrentDateTime}</interviewLabel>
     <label>PHOCS Update Case Health Authority</label>
@@ -98,7 +168,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Check_Case_Account</targetReference>
+            <targetReference>Check_PHOCS_Advisories_RecordType</targetReference>
         </connector>
         <filterFormula>CONTAINS({!$Record.RecordType.DeveloperName}, &quot;PHOCS&quot;)</filterFormula>
         <object>Case</object>
