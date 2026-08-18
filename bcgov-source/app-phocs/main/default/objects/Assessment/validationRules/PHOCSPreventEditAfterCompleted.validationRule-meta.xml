@@ -6,18 +6,9 @@
     <errorConditionFormula>AND(
     RecordType.DeveloperName = &quot;PHOCSAssessment&quot;,
     NOT($Permission.EHISBypassValidationRuleCustomPermission),
-    ISPICKVAL(Type, &quot;Risk Assessment&quot;),
     NOT(ISNEW()),
-    OR(
-        AND(
-            ISPICKVAL(AssessmentStatus, &quot;Completed&quot;),
-            NOT(ISCHANGED(AssessmentStatus))
-        ),
-        AND(
-            ISCHANGED(AssessmentStatus),
-            ISPICKVAL(PRIORVALUE(AssessmentStatus), &quot;Completed&quot;)
-        )
-    )
+    ISPICKVAL(PRIORVALUE(Type), &quot;Risk Assessment&quot;),
+    ISPICKVAL(PRIORVALUE(AssessmentStatus), &quot;Completed&quot;)
 )</errorConditionFormula>
     <errorMessage>Assessment record cannot be edited once the status is marked as Completed</errorMessage>
 </ValidationRule>
