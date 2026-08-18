@@ -187,8 +187,8 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:BLAccount:CategoryL1__c &apos;Surface/\/\/Water&apos; == var:BLAccount:CategoryL2__c &apos;Rainwater&apos; == AND true false IF</formulaConverted>
-        <formulaExpression>IF(AND(%BLAccount:CategoryL1__c% == &apos;Surface Water&apos;, %BLAccount:CategoryL2__c% == &apos;Rainwater&apos;), true, false)</formulaExpression>
+        <formulaConverted>| var:WaterSuppliersDWS:CategoryL1__c &apos;Surface/\/\/Water&apos; == var:WaterSuppliersDWS:CategoryL3__c &apos;Rainwater&apos; == AND true false IF</formulaConverted>
+        <formulaExpression>IF(AND(%WaterSuppliersDWS:CategoryL1__c% == &apos;Surface Water&apos;, %WaterSuppliersDWS:CategoryL3__c% == &apos;Rainwater&apos;), true, false)</formulaExpression>
         <formulaResultPath>IF_Treatement3</formulaResultPath>
         <formulaSequence>30.0</formulaSequence>
         <globalKey>3f4ac160-fa9e-4519-ab84-4c49207be497</globalKey>
@@ -940,6 +940,23 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <globalKey>bb71954d-4cc6-4f34-b72b-26d19ea2af3b</globalKey>
+        <inputFieldName>BLA:AppliedDate</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSExtractGetWSEPermitTemplate</name>
+        <omniDataTransformation>0kdAq000003Uf2P</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003Uf2P</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLADetails:AppliedDate</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <filterOperator>=</filterOperator>
         <filterValue>DocumentChecklistItems:Id</filterValue>
         <globalKey>82444601-7e4a-413c-86fa-d60e6672250d</globalKey>
@@ -977,9 +994,9 @@
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <filterOperator>=</filterOperator>
-        <filterValue>BLAccountDWS:Id</filterValue>
+        <filterValue>BusinessLicense:Account__c</filterValue>
         <globalKey>d8f441f8-5bf3-4657-b9d7-fe98886e6aeb</globalKey>
-        <inputFieldName>ParentId</inputFieldName>
+        <inputFieldName>Id</inputFieldName>
         <inputObjectName>Account</inputObjectName>
         <inputObjectQuerySequence>18.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
@@ -1004,6 +1021,23 @@
         <omniDataTransformationId>0kdAq000003SVGw</omniDataTransformationId>
         <outputCreationSequence>1.0</outputCreationSequence>
         <outputFieldName>BLAccountDWSDetails:FacilitiesDWTDetails:AssetDetails:OtherTreatmentMethod</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>ffc6fa0b-c0e1-407f-b6a8-66ad918ca43e</globalKey>
+        <inputFieldName>WaterSuppliersDWS:AccountNumberRTPrefixed__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSExtractGetWSEPermitTemplate</name>
+        <omniDataTransformation>0kdAq000003UpUn</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003UpUn</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountDWSDetails:WaterSuppliersDWSDetails:BLAccountWSENumber</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -1448,6 +1482,23 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <globalKey>7428a6fb-c1d0-453c-a02d-d87d7a5fa5cd</globalKey>
+        <inputFieldName>BLAccount:WaterSourceName__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSExtractGetWSEPermitTemplate</name>
+        <omniDataTransformation>0kdAq000003UfQb</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003UfQb</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>WaterSourceName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <globalKey>3d22afe7-ef68-4fc8-ab11-e1888b001980</globalKey>
         <inputFieldName>ExemptionBLA:ClosureReason__c</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
@@ -1773,8 +1824,8 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:BLAccount:CategoryL1__c &apos;Surface/\/\/Water&apos; == true false IF</formulaConverted>
-        <formulaExpression>IF(%BLAccount:CategoryL1__c% == &apos;Surface Water&apos;, true, false)</formulaExpression>
+        <formulaConverted>| var:WaterSuppliersDWS:CategoryL1__c &apos;Surface/\/\/Water&apos; == true false IF</formulaConverted>
+        <formulaExpression>IF(%WaterSuppliersDWS:CategoryL1__c% == &apos;Surface Water&apos;, true, false)</formulaExpression>
         <formulaResultPath>IF_Treatement2</formulaResultPath>
         <formulaSequence>29.0</formulaSequence>
         <globalKey>d8d4e5ec-9dd6-46dc-9ee5-ba74ce980d99</globalKey>
@@ -1989,6 +2040,23 @@
         <omniDataTransformationId>0kdAq000003T0yz</omniDataTransformationId>
         <outputCreationSequence>1.0</outputCreationSequence>
         <outputFieldName>WellTagNumber</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>3377c866-7e3e-4f15-a267-67369c64ff6e</globalKey>
+        <inputFieldName>BusinessLicense:Account__r.Description</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSExtractGetWSEPermitTemplate</name>
+        <omniDataTransformation>0kdAq000003Upcr</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003Upcr</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>AccountDescription</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -3571,8 +3639,8 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:BLAccount:CategoryL1__c &apos;Groundwater&apos; == var:BLADataWSE:GARPScreeningOutcome__c &apos;GARP/\/\/-/\/\/Low/\/\/Risk/\/\/of/\/\/Pathogens&apos; != AND true false IF</formulaConverted>
-        <formulaExpression>IF(AND(%BLAccount:CategoryL1__c% == &apos;Groundwater&apos;, %BLADataWSE:GARPScreeningOutcome__c% != &apos;GARP - Low Risk of Pathogens&apos;), true, false)</formulaExpression>
+        <formulaConverted>| var:WaterSuppliersDWS:CategoryL1__c &apos;Groundwater&apos; == var:BLADataWSE:GARPScreeningOutcome__c &apos;GARP/\/\/-/\/\/Low/\/\/Risk/\/\/of/\/\/Pathogens&apos; != AND true false IF</formulaConverted>
+        <formulaExpression>IF(AND(%WaterSuppliersDWS:CategoryL1__c% == &apos;Groundwater&apos;, %BLADataWSE:GARPScreeningOutcome__c% != &apos;GARP - Low Risk of Pathogens&apos;), true, false)</formulaExpression>
         <formulaResultPath>IF_Treatement1</formulaResultPath>
         <formulaSequence>28.0</formulaSequence>
         <globalKey>05f380d6-8620-47dc-aa66-5176aa45db54</globalKey>
@@ -4476,6 +4544,23 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <globalKey>6c43783f-2360-4631-9a59-899094007acc</globalKey>
+        <inputFieldName>BLA:PrimaryOwner.Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSExtractGetWSEPermitTemplate</name>
+        <omniDataTransformation>0kdAq000003UfK9</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003UfK9</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLADetails:BLAPrimaryOwner</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <filterOperator>=</filterOperator>
         <filterValue>BLAccountDWS:Id</filterValue>
         <globalKey>97a1e107-f03e-400d-9765-36296736e86e</globalKey>
@@ -5054,6 +5139,25 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <filterOperator>LIKE</filterOperator>
+        <filterValue>&apos;Drinking water&apos;</filterValue>
+        <globalKey>9925eff5-b273-436c-b973-0fc16a9ddf0f</globalKey>
+        <inputFieldName>Type</inputFieldName>
+        <inputObjectName>Account</inputObjectName>
+        <inputObjectQuerySequence>18.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSExtractGetWSEPermitTemplate</name>
+        <omniDataTransformation>0kdAq000003UpJV</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003UpJV</omniDataTransformationId>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>WaterSuppliersDWS</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <globalKey>2ecb4640-d2ce-49fc-8e8a-41efe49f528f</globalKey>
         <inputFieldName>isConditionNotPresent</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
@@ -5288,6 +5392,23 @@
         <outputFieldName>BLAccountDWSDetails:FacilitiesDWDDetails:FacilitiesCatL1DWDPesticidesParameters</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>0ef4de55-9a73-464a-9a79-e35e7b18b683</globalKey>
+        <inputFieldName>WaterSuppliersDWS:CategoryL2__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSExtractGetWSEPermitTemplate</name>
+        <omniDataTransformation>0kdAq000003UpHt</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003UpHt</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountDWSDetails:WaterSuppliersDWSDetails:BLAccountWaterSourceIntakeCategoryL2</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
