@@ -2,7 +2,7 @@
 <OmniScript xmlns="http://soap.sforce.com/2006/04/metadata">
     <description>PHOCS Submit a Feedback through Public Site.</description>
     <elementTypeComponentMapping>{&quot;ElementTypeToHTMLTemplateList&quot;:[]}</elementTypeComponentMapping>
-    <isActive>true</isActive>
+    <isActive>false</isActive>
     <isIntegrationProcedure>false</isIntegrationProcedure>
     <isManagedUsingStdDesigner>true</isManagedUsingStdDesigner>
     <isMetadataCacheDisabled>false</isMetadataCacheDisabled>
@@ -39,7 +39,7 @@
             <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
             <propertySetConfig>{
   &quot;label&quot; : &quot;LineBreak2&quot;,
-  &quot;padding&quot; : 0,
+  &quot;padding&quot; : 30,
   &quot;show&quot; : null,
   &quot;HTMLTemplateId&quot; : &quot;&quot;
 }</propertySetConfig>
@@ -53,30 +53,30 @@
             <name>LineBreak3</name>
             <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
             <propertySetConfig>{
-  &quot;padding&quot; : 0.0,
-  &quot;label&quot; : &quot;LineBreak2&quot;,
+  &quot;label&quot; : &quot;LineBreak3&quot;,
+  &quot;padding&quot; : 30,
+  &quot;show&quot; : null,
   &quot;HTMLTemplateId&quot; : &quot;&quot;
 }</propertySetConfig>
-            <sequenceNumber>1.0</sequenceNumber>
+            <sequenceNumber>2.0</sequenceNumber>
             <type>Line Break</type>
         </childElements>
         <childElements>
             <isActive>true</isActive>
             <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
             <level>1.0</level>
-            <name>TextBlock1</name>
+            <name>TextBlock4</name>
             <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
             <propertySetConfig>{
   &quot;controlWidth&quot; : 12,
   &quot;label&quot; : &quot;TextBlock1&quot;,
-  &quot;text&quot; : &quot;&lt;p&gt;&lt;span style=\&quot;color: #236fa1;\&quot;&gt;&lt;strong&gt;&lt;span style=\&quot;font-family: &apos;Salesforce Sans&apos;, Arial, sans-serif; font-size: 24px;\&quot;&gt;Thank You&lt;/span&gt;&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;\n&lt;p&gt;&lt;span style=\&quot;color: #000000;\&quot;&gt;&lt;span style=\&quot;font-family: &apos;Salesforce Sans&apos;, Arial, sans-serif;\&quot;&gt;Your form has been successfully submitted.You will receive a confirmation email.&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;&quot;,
-  &quot;show&quot; : null,
-  &quot;dataJSON&quot; : false,
+  &quot;text&quot; : &quot;&lt;p&gt;&lt;span style=\&quot;color: #000000;\&quot;&gt;&lt;span style=\&quot;font-family: &apos;Salesforce Sans&apos;, Arial, sans-serif;\&quot;&gt;Your form has been successfully submitted.You will receive a confirmation email.&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;&quot;,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;dataJSON&quot; : false,
   &quot;textKey&quot; : &quot;&quot;,
   &quot;sanitize&quot; : false
 }</propertySetConfig>
-            <sequenceNumber>2.0</sequenceNumber>
+            <sequenceNumber>1.0</sequenceNumber>
             <type>Text Block</type>
         </childElements>
         <isActive>true</isActive>
@@ -85,7 +85,7 @@
         <name>Acknowledgement</name>
         <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
         <propertySetConfig>{
-  &quot;label&quot; : &quot;Acknowledgement&quot;,
+  &quot;label&quot; : &quot;Thank You&quot;,
   &quot;validationRequired&quot; : true,
   &quot;previousLabel&quot; : &quot;&quot;,
   &quot;previousWidth&quot; : &quot;0&quot;,
@@ -170,7 +170,7 @@
   &quot;pubsub&quot; : false,
   &quot;errorMessage&quot; : {
     &quot;custom&quot; : [ ],
-    &quot;default&quot; : null
+    &quot;default&quot; : &quot;The form could not be successfully submitted. Please navigate back to the form and try again.​&quot;
   },
   &quot;enableDefaultAbort&quot; : false,
   &quot;enableActionMessage&quot; : false,
@@ -203,7 +203,7 @@
   &quot;helpText&quot; : &quot;&quot;,
   &quot;pattern&quot; : &quot;&quot;,
   &quot;ptrnErrText&quot; : &quot;&quot;,
-  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;placeholder&quot; : &quot;Enter your email address&quot;,
   &quot;show&quot; : null,
   &quot;conditionType&quot; : &quot;Hide if False&quot;,
   &quot;accessibleInFutureSteps&quot; : false,
@@ -239,7 +239,7 @@
   &quot;ptrnErrText&quot; : &quot;&quot;,
   &quot;minLength&quot; : 0,
   &quot;maxLength&quot; : 255,
-  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;placeholder&quot; : &quot;Enter your first name&quot;,
   &quot;show&quot; : null,
   &quot;conditionType&quot; : &quot;Hide if False&quot;,
   &quot;accessibleInFutureSteps&quot; : false,
@@ -275,7 +275,7 @@
   &quot;ptrnErrText&quot; : &quot;&quot;,
   &quot;minLength&quot; : 0,
   &quot;maxLength&quot; : 255,
-  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;placeholder&quot; : &quot;Enter your last name&quot;,
   &quot;show&quot; : null,
   &quot;conditionType&quot; : &quot;Hide if False&quot;,
   &quot;accessibleInFutureSteps&quot; : false,
@@ -389,7 +389,7 @@
   &quot;ptrnErrText&quot; : &quot;&quot;,
   &quot;minLength&quot; : 0,
   &quot;maxLength&quot; : &quot;1000&quot;,
-  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;placeholder&quot; : &quot;Enter your comments here (1000 characters max)&quot;,
   &quot;show&quot; : null,
   &quot;conditionType&quot; : &quot;Hide if False&quot;,
   &quot;accessibleInFutureSteps&quot; : false,
@@ -629,7 +629,7 @@
   &quot;ptrnErrText&quot; : &quot;&quot;,
   &quot;minLength&quot; : 0,
   &quot;maxLength&quot; : &quot;500&quot;,
-  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;placeholder&quot; : &quot;Enter your comments here (500 characters max)&quot;,
   &quot;show&quot; : null,
   &quot;conditionType&quot; : &quot;Hide if False&quot;,
   &quot;accessibleInFutureSteps&quot; : false,
@@ -665,7 +665,7 @@
   &quot;ptrnErrText&quot; : &quot;&quot;,
   &quot;minLength&quot; : 0,
   &quot;maxLength&quot; : &quot;30&quot;,
-  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;placeholder&quot; : &quot;Enter subject (30 characters max)&quot;,
   &quot;show&quot; : null,
   &quot;conditionType&quot; : &quot;Hide if False&quot;,
   &quot;accessibleInFutureSteps&quot; : false,
