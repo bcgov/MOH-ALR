@@ -74,7 +74,7 @@
                         <valueListItems>
                             <value>Visit.PHOCSPublishInspToPDS</value>
                             <visibilityRule>
-                                <booleanFilter>1 AND 2 AND 3 AND 4</booleanFilter>
+                                <booleanFilter>1 AND 2 AND 3 AND 4 AND (5 OR 6)</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.Status}</leftValue>
                                     <operator>EQUAL</operator>
@@ -95,12 +95,22 @@
                                     <operator>EQUAL</operator>
                                     <rightValue>false</rightValue>
                                 </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Account.Type}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Child Care</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Account.Type}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Residential Care</rightValue>
+                                </criteria>
                             </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>Visit.PHOCSUnpublishToPDS</value>
                             <visibilityRule>
-                                <booleanFilter>1 AND 2 AND 3 AND 4</booleanFilter>
+                                <booleanFilter>1 AND 2 AND 3 AND 4 AND (5 OR 6)</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.Status}</leftValue>
                                     <operator>EQUAL</operator>
@@ -120,6 +130,16 @@
                                     <leftValue>{!Record.IsRetracted__c}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>false</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Account.Type}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Child Care</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Account.Type}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Residential Care</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
