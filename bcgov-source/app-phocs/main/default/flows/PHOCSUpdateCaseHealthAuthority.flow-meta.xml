@@ -13,12 +13,26 @@
         <defaultConnectorLabel>No Account</defaultConnectorLabel>
         <rules>
             <name>Account_Is_Set</name>
-            <conditionLogic>and</conditionLogic>
+            <conditionLogic>1 AND (2 OR 3)</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.AccountId</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.AccountId</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>$Record__Prior.AccountId</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Is_Insert</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -27,8 +41,13 @@
             <label>Account Is Set</label>
         </rules>
     </decisions>
-    <description>Updating start condition formula, adding more record types</description>
+    <description>As part of EHIS-5127 - Updated the All PHOCS Case RecordTypes</description>
     <environments>Default</environments>
+    <formulas>
+        <name>Is_Insert</name>
+        <dataType>Boolean</dataType>
+        <expression>ISNEW()</expression>
+    </formulas>
     <interviewLabel>PHOCS Update Case Health Authority {!$Flow.CurrentDateTime}</interviewLabel>
     <label>PHOCS Update Case Health Authority</label>
     <processMetadataValues>
@@ -100,7 +119,15 @@
         <connector>
             <targetReference>Check_Case_Account</targetReference>
         </connector>
-        <filterFormula>CONTAINS({!$Record.RecordType.DeveloperName}, &quot;PHOCS&quot;)</filterFormula>
+        <filterFormula>OR(
+    {!$Record.RecordType.DeveloperName} = &quot;PHOCSComplaint&quot;,
+    {!$Record.RecordType.DeveloperName} = &quot;PHOCSReportableIncident&quot;,
+    {!$Record.RecordType.DeveloperName} = &quot;PHOCSWaterAdvisories&quot;,
+    {!$Record.RecordType.DeveloperName} = &quot;PHOCSRequestsInquiries&quot;,
+    {!$Record.RecordType.DeveloperName} = &quot;PHOCSEvent&quot;,
+    {!$Record.RecordType.DeveloperName} = &quot;PHOCSFacilityEnquiry&quot;,
+    {!$Record.RecordType.DeveloperName} = &quot;PHOCFoodRecall&quot;
+)</filterFormula>
         <object>Case</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordBeforeSave</triggerType>

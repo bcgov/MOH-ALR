@@ -17,11 +17,11 @@ private class PHOCSGlobalPayHandlerTest {
 		
         RegulatoryTrxnFee fee1 = new RegulatoryTrxnFee(
             AccountId = facility.Id,
-            FeeType__c = 'Annual Operating Permit Fees',
+            FeeType__c = 'New Application',
             Status = 'Paid',
             RecordTypeId = Schema.SObjectType.RegulatoryTrxnFee
                 .getRecordTypeInfosByDeveloperName()
-                .get('PHOCSTransactionFee')
+                .get('PHOCSNonDairyTransactionFee')
                 .getRecordTypeId()
         );
         insert fee1;
@@ -29,7 +29,7 @@ private class PHOCSGlobalPayHandlerTest {
             RegulatoryTrxnFeeId = fee1.Id,
             RecordTypeId = Schema.SObjectType.RegulatoryTrxnFeeItem
                 .getRecordTypeInfosByDeveloperName()
-                .get('PHOCSRegulatoryTransactionFeeItem')
+                .get('PHOCSNonDairyTransactionFeeItem')
                 .getRecordTypeId(),
             FeeAmount = 1000,
             Amount__c = 1000,
