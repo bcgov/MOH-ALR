@@ -8,10 +8,7 @@
     $Profile.Name &lt;&gt; &quot;System Administrator&quot;,
     $Profile.Name &lt;&gt; &quot;Salesforce API Only System Integrations&quot;,
     ISPICKVAL(PRIORVALUE(Status__c), &quot;Submitted&quot;),
-    ISCHANGED(Status__c),
-    NOT(
-        ISPICKVAL(Status__c, &quot;Completed&quot;)
-    )
+    NOT(ISPICKVAL(Status__c, &quot;Completed&quot;))
 )</errorConditionFormula>
     <errorMessage>This Lab Requisition is Submitted and cannot be edited.</errorMessage>
 </ValidationRule>
