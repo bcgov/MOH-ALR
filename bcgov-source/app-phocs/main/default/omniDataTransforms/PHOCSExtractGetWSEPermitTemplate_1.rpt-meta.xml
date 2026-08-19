@@ -187,8 +187,8 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:WaterSuppliersDWS:CategoryL1__c &apos;Surface/\/\/Water&apos; == var:WaterSuppliersDWS:CategoryL3__c &apos;Rainwater&apos; == AND true false IF</formulaConverted>
-        <formulaExpression>IF(AND(%WaterSuppliersDWS:CategoryL1__c% == &apos;Surface Water&apos;, %WaterSuppliersDWS:CategoryL3__c% == &apos;Rainwater&apos;), true, false)</formulaExpression>
+        <formulaConverted>| var:WaterSuppliersDWS:CategoryL1__c &apos;Surface/\/\/Water&apos; == var:BLAccountDWS:CategoryL2__c &apos;Rainwater&apos; == AND true false IF</formulaConverted>
+        <formulaExpression>IF(AND(%WaterSuppliersDWS:CategoryL1__c% == &apos;Surface Water&apos;, %BLAccountDWS:CategoryL2__c% == &apos;Rainwater&apos;), true, false)</formulaExpression>
         <formulaResultPath>IF_Treatement3</formulaResultPath>
         <formulaSequence>30.0</formulaSequence>
         <globalKey>3f4ac160-fa9e-4519-ab84-4c49207be497</globalKey>
@@ -5098,6 +5098,23 @@
         <outputFieldName>Formula</outputFieldName>
         <outputObjectName>Formula</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>db517e1a-c3d9-4f41-af9e-4add7aa11711</globalKey>
+        <inputFieldName>BLAccountDWS:CategoryL2__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSExtractGetWSEPermitTemplate</name>
+        <omniDataTransformation>0kdAq000003Vv3V</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003Vv3V</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>BLAccountDWSDetails:WaterSuppliersDWSDetails:BLAccountDWSCategoryL2</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
