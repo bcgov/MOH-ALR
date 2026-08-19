@@ -2,18 +2,15 @@
 <ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>PHOCSPreventEditForOfficersNAdmins</fullName>
     <active>true</active>
-    <description>Prevents edits to PHOCS Contacts associated with Business Entity or Facility Accounts unless the user has the PHOCS Officer or PHOCS Admin permission.</description>
+    <description>Prevents edits to PHOCS Contacts associated with Business Entity or Facility Accounts unless the user has the PHOCS Officer permission. - Updated to only Officers</description>
     <errorConditionFormula>AND(
-    NOT(ISNEW()),
-    $RecordType.DeveloperName = &quot;PHOCSContact&quot;,
-    OR(
-        Account.RecordType.DeveloperName = &quot;Business_Entity&quot;,
-        Account.RecordType.DeveloperName = &quot;Facility&quot;
-    ),
-    OR(
-        $Permission.PHOCSOfficer,
-        $Permission.PHOCSAdmin
-    )
+NOT(ISNEW()),
+$RecordType.DeveloperName = &quot;PHOCSContact&quot;,
+OR(Account.RecordType.DeveloperName = &quot;Business_Entity&quot;,
+Account.RecordType.DeveloperName = &quot;DrinkingWaterSourceIntake&quot;,
+Account.RecordType.DeveloperName = &quot;DrinkingWaterSystem&quot;,
+Account.RecordType.DeveloperName = &quot;Facility&quot;),
+$Permission.PHOCSOfficer
 )</errorConditionFormula>
     <errorMessage>Officers cannot edit this Contact record.</errorMessage>
 </ValidationRule>

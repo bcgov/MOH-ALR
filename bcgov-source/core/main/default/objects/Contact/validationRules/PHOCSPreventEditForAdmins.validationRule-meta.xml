@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PHOCSPreventEditForAdmins</fullName>
+    <active>true</active>
+    <description>Prevents edits to PHOCS Contacts associated with Business Entity or Facility Accounts unless the user has the PHOCS Admin permission.</description>
+    <errorConditionFormula>AND(
+NOT(ISNEW()),
+$RecordType.DeveloperName = &quot;PHOCSContact&quot;,
+Account.RecordType.DeveloperName = &quot;Business_Entity&quot;,
+$Permission.PHOCSAdmin
+)</errorConditionFormula>
+    <errorMessage>Business Admin cannot edit this Contact record.</errorMessage>
+</ValidationRule>
