@@ -3,6 +3,22 @@
     <apiVersion>67.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
+        <name>AssignFeeAmount</name>
+        <label>AssignFeeAmount</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>RTFItemRecord.FeeAmount</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LoopThroughMetadataToGetLIcenseTypes.Amount__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>LoopThroughMetadataToGetLIcenseTypes</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>AssignParentId</name>
         <label>AssignParentId</label>
         <locationX>0</locationX>
@@ -16,6 +32,22 @@
         </assignmentItems>
         <connector>
             <targetReference>createRTFItemRecord</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>AssignProratedAmount</name>
+        <label>AssignProratedAmount</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>RTFItemRecord.FeeAmount</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>ProRateAmount</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>LoopThroughMetadataToGetLIcenseTypes</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -98,9 +130,6 @@
         <assignmentItems>
             <assignToReference>RTFItemRecord.FeeAmount</assignToReference>
             <operator>Assign</operator>
-            <value>
-                <elementReference>LoopThroughMetadataToGetLIcenseTypes.Amount__c</elementReference>
-            </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>RTFItemRecord.Status__c</assignToReference>
@@ -124,7 +153,7 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>LoopThroughMetadataToGetLIcenseTypes</targetReference>
+            <targetReference>ProRatedFeesCheck</targetReference>
         </connector>
     </assignments>
     <decisions>
@@ -196,6 +225,31 @@
             <label>RecreationalWater</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>ProRatedFeesCheck</name>
+        <label>ProRatedFeesCheck</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>AssignFeeAmount</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>IsProRatedFee</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>LoopThroughMetadataToGetLIcenseTypes.ProRateFees__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>AssignProratedAmount</targetReference>
+            </connector>
+            <label>IsProRatedFee</label>
+        </rules>
+    </decisions>
     <description>EHIS-4550 - Generate application fee for sewerage</description>
     <environments>Default</environments>
     <formulas>
@@ -233,6 +287,12 @@ AND(
         <name>PoolArea</name>
         <dataType>Number</dataType>
         <expression>{!GetAssetDetails.PoolAream2__c}</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>ProRateAmount</name>
+        <dataType>Number</dataType>
+        <expression>IF(MONTH({!$Flow.CurrentDate}) &gt;=4, (12-(MONTH({!$Flow.CurrentDate})-4))/12, (4-MONTH({!$Flow.CurrentDate}))/12) *{!LoopThroughMetadataToGetLIcenseTypes.Amount__c}</expression>
         <scale>2</scale>
     </formulas>
     <interviewLabel>PHOCS_GenerateBaseApplicationFees {!$Flow.CurrentDateTime}</interviewLabel>
