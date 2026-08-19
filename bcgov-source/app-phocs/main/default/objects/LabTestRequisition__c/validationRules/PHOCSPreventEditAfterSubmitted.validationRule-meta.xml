@@ -5,16 +5,12 @@
     <description>This Water Lab Test Requisition has been submitted and is read-only. Only the Status field can be updated from Submitted to Completed.</description>
     <errorConditionFormula>AND(
     RecordType.DeveloperName = &quot;PHOCSWaterLabTestRequisition&quot;,
-    ISPICKVAL(Status__c, &quot;Submitted&quot;),
-    NOT(ISBLANK(SubmittedDateTime__c)),
     $Profile.Name &lt;&gt; &quot;System Administrator&quot;,
     $Profile.Name &lt;&gt; &quot;Salesforce API Only System Integrations&quot;,
+    ISPICKVAL(PRIORVALUE(Status__c), &quot;Submitted&quot;),
+    ISCHANGED(Status__c),
     NOT(
-        AND(
-            ISCHANGED(Status__c),
-            ISPICKVAL(PRIORVALUE(Status__c), &quot;Submitted&quot;),
-            ISPICKVAL(Status__c, &quot;Completed&quot;)
-        )
+        ISPICKVAL(Status__c, &quot;Completed&quot;)
     )
 )</errorConditionFormula>
     <errorMessage>This Lab Requisition is Submitted and cannot be edited.</errorMessage>
