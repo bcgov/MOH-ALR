@@ -697,6 +697,36 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         
         return phone;
     }
+
+    private static String joinCategories(Account accRecord) {
+        List<String> categories = new List<String>();
+
+        if (String.isNotBlank(accRecord.CategoryL1__c)) {
+            categories.add(accRecord.CategoryL1__c);
+        }
+
+        if (String.isNotBlank(accRecord.CategoryL2__c)) {
+            categories.add(accRecord.CategoryL2__c);
+        }
+
+        if (String.isNotBlank(accRecord.CategoryL3__c)) {
+            categories.add(accRecord.CategoryL3__c);
+        }
+
+        return String.join(categories, ', ');
+    }
+
+    private static String transformConnectionNumber(Account accRecord) {
+    String connectionNumber = accRecord.NoofConnections__c;
+
+    if (String.isBlank(connectionNumber)) {
+        return '';
+    }
+
+    return connectionNumber
+        .replaceAll('\\s*\\([^)]*\\)', '')
+        .trim();
+}
     
     public interface SObjectWrapper {
         Object wrap(SObject record);
@@ -720,12 +750,16 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             Account accRecord = (Account) record;           
             WaterAdvisoryDetails advisoryDetails = getWaterAdvisoryDetails(accRecord);
             BeachAdvisoryDetails beachAdvisoryDetails = getBeachAdvisoryDetails(accRecord);//added for EHIS-3277
+            
             Map<String, Object> result = new Map<String, Object>{
                 'Id' => accRecord.Id,
                 'Name' => accRecord.Name,
                 'Type' => accRecord.Type,
                 'CategoryL1__c' => accRecord.CategoryL1__c,
                 'CategoryL2__c' => accRecord.CategoryL2__c,
+                'Categories' => joinCategories(accRecord),
+                'ConnectionNumber' => transformConnectionNumber(accRecord),
+                'TotalMaximumCapacity__c'  => accRecord.TotalMaximumCapacity__c,
                 'HealthAuthority__c' => accRecord.HealthAuthority__c,
                 'Phone' => accRecord.HidePhoneonPublicSite__c ? '' : formatPhoneNumber(accRecord.Phone),
                 'ParentAccount' => accRecord.ParentAccount__r.Name,
