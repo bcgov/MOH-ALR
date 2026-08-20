@@ -7,6 +7,9 @@ private class PHOCSPublicDisplayObjectRecordsTest {
             Type = 'Drinking Water',
             CategoryL1__c = 'Community Water System',
             CategoryL2__c = 'Local Gov System',
+            CategoryL3__c = 'Municipality',
+            NoofConnections__c = '15-300 (WS2)',
+            TotalMaximumCapacity__c = 12,
             HealthAuthority__c = 'Vancouver Coastal Health - VCH',
             Phone = '1234567890'     
         );
@@ -92,6 +95,19 @@ private class PHOCSPublicDisplayObjectRecordsTest {
         
         Case caseRec = new Case(AccountId=acc.Id, Status = 'Open');
         insert caseRec;
+
+        Asset assetRec1 = new Asset(AccountId=acc.Id, Name = 'Asset 1', Status = 'Active');
+        insert assetRec1;
+
+        Asset assetRec2 = new Asset(AccountId=acc.Id, Name = 'Asset 2', Status = 'Active');
+        insert assetRec2;
+
+        Schema.Location locationRec = new Schema.Location(ParentAccount__c=acc.Id, Name='Location Test', SiteTreatment__c='Raw');
+        insert locationRec;
+
+
+        Visit inspectionRec = new Visit(AccountId=acc.Id, PlaceId=locationRec.Id, InspectionMethod__c='Scheduled on Site Inspection', PlannedVisitStartTime=System.now());
+        insert inspectionRec;
         
         LabTestRequisition__c req = new LabTestRequisition__c();
         req.CollectionDateTime__c = DateTime.now();
@@ -130,11 +146,17 @@ private class PHOCSPublicDisplayObjectRecordsTest {
                     runTestCallMethod('getRecordDetails', input);
         
         input = new Map<String, Object>{
+            'recordId' => inspectionRec.Id,
+                'configName' => 'InspectionRecordDetail'
+                };     
+                    runTestCallMethod('getRecordDetails', input);
+
+        input = new Map<String, Object>{
             'recordId' => caseRec.Id,
                 'configName' => 'FacilityWaterAdvisoryDetail'
                 };     
                     runTestCallMethod('getRecordDetails', input);
-        
+                           
         input = new Map<String, Object>{
             'recordId' => req.Id,
                 'configName' => 'FacilityWaterSampleDetail'
