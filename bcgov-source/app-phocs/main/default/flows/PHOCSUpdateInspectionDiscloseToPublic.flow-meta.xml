@@ -3,28 +3,6 @@
     <apiVersion>67.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <decisions>
-        <name>Check_Inspection_Eligible</name>
-        <label>Check Inspection Eligible</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>PHOCSInspectionRT</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>PHOCSInspection</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Get_Account_Facility</targetReference>
-            </connector>
-            <label>PHOCSInspection RT</label>
-        </rules>
-    </decisions>
-    <decisions>
         <name>Check_ProgramArea_VisitType</name>
         <label>Check ProgramArea &amp; VisitType</label>
         <locationX>0</locationX>
@@ -41,35 +19,35 @@
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>Get_Account_Facility.Type</leftValueReference>
+                <leftValueReference>Get_Account.Type</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Drinking Water</stringValue>
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>Get_Account_Facility.Type</leftValueReference>
+                <leftValueReference>Get_Account.Type</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Recreational Water</stringValue>
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>Get_Account_Facility.Type</leftValueReference>
+                <leftValueReference>Get_Account.Type</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Food</stringValue>
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>Get_Account_Facility.Type</leftValueReference>
+                <leftValueReference>Get_Account.Type</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Personal Services</stringValue>
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>Get_Account_Facility.Type</leftValueReference>
+                <leftValueReference>Get_Account.Type</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Tobacco and Vapour</stringValue>
@@ -91,7 +69,7 @@
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>Get_Account_Facility.Type</leftValueReference>
+                <leftValueReference>Get_Account.Type</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Drinking Water</stringValue>
@@ -114,7 +92,7 @@
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>Get_Account_Facility.Type</leftValueReference>
+                <leftValueReference>Get_Account.Type</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Tobacco and Vapour</stringValue>
@@ -151,8 +129,8 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordLookups>
-        <name>Get_Account_Facility</name>
-        <label>Get Account Facility</label>
+        <name>Get_Account</name>
+        <label>Get Account</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
@@ -165,13 +143,6 @@
             <operator>EqualTo</operator>
             <value>
                 <elementReference>$Record.AccountId</elementReference>
-            </value>
-        </filters>
-        <filters>
-            <field>RecordTypeName__c</field>
-            <operator>EqualTo</operator>
-            <value>
-                <stringValue>Facility</stringValue>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
@@ -216,23 +187,9 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Check_Inspection_Eligible</targetReference>
+            <targetReference>Get_Account</targetReference>
         </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Status</field>
-            <operator>EqualTo</operator>
-            <value>
-                <stringValue>Completed</stringValue>
-            </value>
-        </filters>
-        <filters>
-            <field>Status</field>
-            <operator>IsChanged</operator>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </filters>
+        <filterFormula>{!$Record.RecordType.DeveloperName}==&apos;PHOCSInspection&apos; &amp;&amp; TEXT({!$Record.Status})==&apos;Completed&apos; &amp;&amp; ISCHANGED({!$Record.Status})</filterFormula>
         <object>Visit</object>
         <recordTriggerType>Update</recordTriggerType>
         <triggerType>RecordBeforeSave</triggerType>
