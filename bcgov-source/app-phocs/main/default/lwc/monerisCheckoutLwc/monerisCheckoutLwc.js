@@ -2,6 +2,7 @@ import { LightningElement, wire, track, api } from 'lwc';
 import { CurrentPageReference, NavigationMixin } from 'lightning/navigation';
 import createCheckoutTicket from '@salesforce/apex/PHOCSMonerisService.generateTicket';
 import capturePaymentStatus from '@salesforce/apex/PHOCSMonerisService.checkReceiptStatus';
+import recordPaymentError from '@salesforce/apex/PHOCSMonerisService.recordPaymentError';
 
 export default class MonerisCheckoutLwc extends NavigationMixin(LightningElement) {
     @track countdown = 10;
@@ -53,12 +54,12 @@ export default class MonerisCheckoutLwc extends NavigationMixin(LightningElement
         this.monerisInstance.setCheckoutDiv('monerisCheckout');
 
         this.monerisInstance.setCallback('page_loaded', () => {});
-        this.monerisInstance.setCallback('cancel_transaction', () => this.redirectToRegulatoryPage());
+        this.monerisInstance.setCallback('cancel_transaction', () => this.handlePaymentError());
         this.monerisInstance.setCallback('payment_receipt', data => this.handlePaymentReceipt(data));
         this.monerisInstance.setCallback('payment_complete', () => {});
         this.monerisInstance.setCallback('error_event', err => {
             this.isLoading = false;
-            alert('Payment error: ' + JSON.stringify(err));
+            this.handlePaymentError();
         });
 
         this.monerisInstance.startCheckout(this.ticket);
@@ -74,7 +75,14 @@ export default class MonerisCheckoutLwc extends NavigationMixin(LightningElement
     handleCapturePayment() {
         capturePaymentStatus({ recordId: this.recordId, status: 'Paid' }).catch(error => {
             console.error('Payment capture failed:', error);
+            this.handlePaymentError();
         });
+    }
+
+    handlePaymentError() {
+        recordPaymentError({ recordId: this.recordId })
+            .catch(error => console.error('Unable to record payment error:', error))
+            .finally(() => this.redirectToRegulatoryPage());
     }
 
     /** === Step 4: Countdown Redirect === */

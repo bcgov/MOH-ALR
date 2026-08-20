@@ -432,6 +432,9 @@ global with sharing class PHOCSLabResults {
                 record.Status__c = mapStatus(firstResult.statusCategory, mappingConfig);
                 record.ResultValue__c = populateResultValue(resultGroup);
                 record.ResultCodeDescription__c = buildResultDescription(resultGroup);
+                record.Unit_of_Measure__c = firstResult.unitOfMeasure;
+                record.SampleTestType__c = getMappedValue(mappingConfig, ATTR_TYPE_TEST_CATEGORY, wrapper.testCategory, null);
+                
                 
                 if (masterMap.containsKey(testCode)) {
                     record.Test__c = masterMap.get(testCode).Id;

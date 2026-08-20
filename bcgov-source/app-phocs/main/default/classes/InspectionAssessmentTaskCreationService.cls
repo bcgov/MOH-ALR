@@ -277,7 +277,7 @@ public without sharing class InspectionAssessmentTaskCreationService {
             } else if (accountType == DRINKINGWATER_ACCOUNTTYPE){
                 getAPTemplatesName.addAll(getDrinkingWaterTemplates(facilityAccountId, decisionMaps));
             } else if (accountType == RECREATIONALWATER_ACCOUNTTYPE){
-                getAPTemplatesName.addAll(getRecreationalWaterTemplates(facilityAccountId, decisionMaps, relatedAssetId));
+                getAPTemplatesName.addAll(getRecreationalWaterTemplates(facilityAccountId, decisionMaps));
             } else if (accountType == INDUSTRIALCAMPS_ACCOUNTTYPE){
                 getAPTemplatesName.addAll(getIndustrialCampTemplates(facilityAccountId, decisionMaps));
             } else if (accountType == TOBACCONVAPOUR_ACCOUNTTYPE){
@@ -417,15 +417,13 @@ public without sharing class InspectionAssessmentTaskCreationService {
 * @date: 11 May 2026
 * @description: The purpose of this Method is to return Recreational Water ActionPlanTemplateNames.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*                    12 Aug -  PHOCS-4849 - Wen - Update the input parameter to align with 1:1 relationship of Facility:Asset for Recreational Water
 */
-    private static Set<String> getRecreationalWaterTemplates(Id facilityAccountId, List<PHOCSActionPlanTemplateDecisionMap__mdt> decisionMaps, Id relatedAssetId){
+    private static Set<String> getRecreationalWaterTemplates(Id facilityAccountId, List<PHOCSActionPlanTemplateDecisionMap__mdt> decisionMaps){
         Set<String> templateNames = new Set<String>();
         Id recWaterAssetRTId = Schema.SObjectType.Asset.getRecordTypeInfosByDeveloperName().get('PHOCSRecreationalWater').getRecordTypeId();
-        
-        if (relatedAssetId == null){
-            return templateNames;
-        }        
-        Asset recreationalAsset = [SELECT Type__c, PoolType__c, PoolSubtype__c, HeatTrace__c FROM Asset WHERE Id =: relatedAssetId AND RecordTypeId =: recWaterAssetRTId  LIMIT 1];         
+              
+        Asset recreationalAsset = [SELECT Type__c, PoolType__c, PoolSubtype__c, HeatTrace__c FROM Asset WHERE AccountId =: facilityAccountId AND RecordTypeId =: recWaterAssetRTId AND Status = 'Active' ORDER BY CreatedDate DESC LIMIT 1];         
         
         String assetType = recreationalAsset.Type__c;
         String assetPoolType = recreationalAsset.PoolType__c;

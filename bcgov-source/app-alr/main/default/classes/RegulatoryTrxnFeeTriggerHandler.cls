@@ -6,6 +6,7 @@
                            ALR-40              ACN-ALR        Fee calculation for newly added unit(s)
 ***********************************************************************************************/
 public without sharing class RegulatoryTrxnFeeTriggerHandler implements TriggerHandler {
+    public static Boolean skipAfterUpdate = false;
     public RegulatoryTrxnFeeTriggerHandler helper;
     //beforeInsert
     public void beforeInsert(List<RegulatoryTrxnFee> newRegTransList) {
@@ -21,6 +22,10 @@ public without sharing class RegulatoryTrxnFeeTriggerHandler implements TriggerH
     }
     //afterUpdate
     public void afterUpdate(List<RegulatoryTrxnFee> oldRegTransList, List<RegulatoryTrxnFee> newRegTransList, Map<ID, SObject> oldRegTransMap, Map<ID, SObject> newRegTransMap) {
+       if (skipAfterUpdate) {
+           return;
+       }
+
        RegulatoryTrxnFeeUtility.updateUnitStatus(newRegTransList, oldRegTransMap, newRegTransMap);
     }
     //afterDelete

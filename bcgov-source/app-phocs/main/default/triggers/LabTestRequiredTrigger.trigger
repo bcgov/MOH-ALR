@@ -7,10 +7,8 @@
                 21 july -  EHIS- 3081       - Accenture - health authority update
 ***********************************************************************************************/
 trigger LabTestRequiredTrigger on LabTestRequired__c (before insert, before update) {
-
-if(Trigger.isBefore && (Trigger.isInsert || Trigger.IsUpdate)){
-        PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new);         
+    if(Trigger.isBefore && (Trigger.isInsert || Trigger.IsUpdate)){
+        LabTestRequiredTriggerHandler.populateFacilityFromRequisition(Trigger.new, Trigger.oldMap);
+        PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new);
     }
-    
-
 }

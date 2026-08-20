@@ -19,6 +19,7 @@ public with sharing class RegulatoryCodeViolationHandler {
     public static void syncChildViolationStatus(List<RegulatoryCodeViolation> newList, Map<Id, RegulatoryCodeViolation> oldMap){
         Set<Id> parentViolationIds = new Set<Id>();
         Map<Id, String> parentStatusMap = new Map<Id, String>();
+        Map<Id, Id> parentResolvedInMap = new Map<Id, Id>();
         try{
             for(RegulatoryCodeViolation newRec : newList){
                 RegulatoryCodeViolation oldRec =oldMap.get(newRec.Id);
@@ -30,13 +31,14 @@ public with sharing class RegulatoryCodeViolationHandler {
                 if(newRec.PHOCSParentId__c == null && newRec.Status == STATUS_RESOLVED){
                     parentViolationIds.add(newRec.Id);
                     parentStatusMap.put(newRec.Id,newRec.Status);
+                    parentResolvedInMap.put(newRec.Id,newRec.ResolvedIn__c);
                 }
             }
             
             if (parentViolationIds.isEmpty()) {
                 return;
             }        
-            List<RegulatoryCodeViolation> childViolations = [SELECT Id, Status, PHOCSParentId__c, DateResolved FROM RegulatoryCodeViolation WHERE PHOCSParentId__c IN: parentViolationIds];
+            List<RegulatoryCodeViolation> childViolations = [SELECT Id, Status, PHOCSParentId__c, DateResolved, ResolvedIn__c FROM RegulatoryCodeViolation WHERE PHOCSParentId__c IN: parentViolationIds];
             
             if(childViolations.isEmpty()){
                 return;
@@ -48,6 +50,7 @@ public with sharing class RegulatoryCodeViolationHandler {
                 if(parentStatus != null && child.Status != parentStatus){
                     child.Status = parentStatus;
                     child.DateResolved = System.Now();
+                    child.ResolvedIn__c = parentResolvedInMap.get(child.PHOCSParentId__c);
                 }
             }
             
