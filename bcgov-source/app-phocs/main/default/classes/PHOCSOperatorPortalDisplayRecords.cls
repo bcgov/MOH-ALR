@@ -51,7 +51,8 @@ public with sharing class PHOCSOperatorPortalDisplayRecords{
         Map<String, SObjectWrapper> wrapperRegistry = new Map<String, SObjectWrapper>{
             'PortalBLADetail' => new BusinessLicenseListApplicationDetailWrapper(),
             'PortalFacilityDetail' => new PortalFacilityDetailWrapper(),
-            'RegulatoryTransactionFeeDetail' => new RegulatoryTransactionFeeDetailWrapper()
+            'RegulatoryTransactionFeeDetail' => new RegulatoryTransactionFeeDetailWrapper(),
+            'RegulatoryTransactionFeeItemDetail' => new RegulatoryTransactionFeeItemDetailWrapper()
         };
             
         SObjectWrapper wrapper = wrapperRegistry.get(configName);
@@ -159,6 +160,32 @@ public with sharing class PHOCSOperatorPortalDisplayRecords{
 
         return phone;
     }
+
+    private static String formatCurrency(Decimal amount) {
+        if (amount == null) {
+            return '';
+        }
+
+        String formattedAmount = amount.setScale(2).format();
+        String decimalSample = Decimal.valueOf('0.1').format();
+        String decimalSeparator = decimalSample.substring(
+            decimalSample.length() - 2,
+            decimalSample.length() - 1
+        );
+        Integer decimalPosition = formattedAmount.lastIndexOf(decimalSeparator);
+
+        if (decimalPosition == -1) {
+            formattedAmount += decimalSeparator + '00';
+        } else {
+            Integer decimalPlaces = formattedAmount.length() - decimalPosition - 1;
+            while (decimalPlaces < 2) {
+                formattedAmount += '0';
+                decimalPlaces++;
+            }
+        }
+
+        return '$' + formattedAmount;
+    }
 	
     private static string getBLAStatusSummary(string status){
         Map<string, string> statusSummary = new Map<string,string>{
@@ -207,6 +234,18 @@ public with sharing class PHOCSOperatorPortalDisplayRecords{
             }else if(dueDate instanceof Date){
                 result.put('DueDate', String.valueOf((Date) dueDate));
             }
+            result.put('TotalFeeAmountFormatted', formatCurrency((Decimal) record.get('TotalFeeAmount')));
+            result.put('OutstandingFeeAmountFormatted', formatCurrency((Decimal) record.get('OutstandingFeeAmount__c')));
+            return result;
+        }
+    }
+
+    public class RegulatoryTransactionFeeItemDetailWrapper implements SObjectWrapper {
+        public Object wrap(SObject record) {
+            Map<String, Object> result = (Map<String, Object>) JSON.deserializeUntyped(
+                JSON.serialize(record)
+            );
+            result.put('FeeAmountFormatted', formatCurrency((Decimal) record.get('FeeAmount')));
             return result;
         }
     }
