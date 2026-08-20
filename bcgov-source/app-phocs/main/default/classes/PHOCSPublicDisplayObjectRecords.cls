@@ -284,7 +284,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         String query =
             'SELECT Id, Name, Type, Physical_Address__City__s, CategoryL1__c, CategoryL2__c, ' +
             'HealthAuthority__c, Phone, ParentAccount__r.Name, FacilityCHSAText__c, Physical_Address__c, ' +
-            'PHOCSNumberOfInspections__c, PHOCSOutstandingViolations__c, PHOCSLastInspectionDate__c, ' +
+            'PHOCSNumberOfInspections__c, PHOCSOutstandingViolations__c, PHOCSLastInspectionDate__c,LicenseDetail__c, ' +
             'HideAddressonPublicSite__c,HidePhoneonPublicSite__c, OWLPublicRetentionActive__c ' +
             'FROM Account';
         
@@ -726,7 +726,30 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
     return connectionNumber
         .replaceAll('\\s*\\([^)]*\\)', '')
         .trim();
-}
+    }
+
+    private static String joinAssetTypes(Account accRecord) {
+        if (accRecord.Id == null) {
+            return '';
+        }
+
+        Set<String> uniqueTypes = new Set<String>();
+
+        List<Asset> acctAssets = [SELECT Id, Type__c
+                                    FROM Asset
+                                    WHERE AccountId = :accRecord.Id
+                                    AND Type__c != null
+                                    AND Status = 'Active'
+                                    ORDER By Type__c];
+
+        for (Asset asset : acctAssets) {
+            uniqueTypes.add(asset.Type__c);
+        }
+
+        return String.join(uniqueTypes, ', ');
+    }
+
+
     
     public interface SObjectWrapper {
         Object wrap(SObject record);
@@ -760,6 +783,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 'Categories' => joinCategories(accRecord),
                 'ConnectionNumber' => transformConnectionNumber(accRecord),
                 'TotalMaximumCapacity__c'  => accRecord.TotalMaximumCapacity__c,
+                'AssetTypes' => joinAssetTypes(accRecord),
                 'HealthAuthority__c' => accRecord.HealthAuthority__c,
                 'Phone' => accRecord.HidePhoneonPublicSite__c ? '' : formatPhoneNumber(accRecord.Phone),
                 'ParentAccount' => accRecord.ParentAccount__r.Name,
@@ -811,7 +835,8 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                         'PhysicalAddressCity' => accRecord.HideAddressonPublicSite__c ? '' : accRecord.Physical_Address__c?.getCity(),
                             'PhysicalAddressState'=> accRecord.Physical_Address__c?.getState(),
                             'PhysicalAddressCountry'=> accRecord.Physical_Address__c?.getCountry(),
-                            'PhysicalAddressPostalCode'=> accRecord.Physical_Address__c?.getPostalCode()
+                            'PhysicalAddressPostalCode'=> accRecord.Physical_Address__c?.getPostalCode(),
+                            'LicenseDetail__c' => accRecord.LicenseDetail__c
                             };
                                 return result;
         }
@@ -879,8 +904,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                     'Name' => inspection.Name,
                     'ActualVisitStartTime' => inspection.ActualVisitStartTime != null ? inspection.ActualVisitStartTime.format('yyyy-MM-dd')  : '',
                         'InspectionType' => inspection.TestInspType__c,
-                        'PHOCSViolationCount' => inspection.PHOCSViolationCount__c,
-                        
+                        'PHOCSViolationCount' => inspection.PHOCSViolationCount__c, 
                         'AccountId' => inspection.Account?.Id,
                         'AccountName' => inspection.Account?.Name,
                         'AccountType' => inspection.Account?.Type,
@@ -958,7 +982,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         }
     }
     private static String addFlexCardFilters(String filterItems, String returnQuery){
-        String filters  = filterItems == null ? returnQuery : returnQuery + ' AND ( HealthAuthority__c = \''+filterItems+'\' OR Physical_Address__city__s  = \''+filterItems+'\')';
+        String filters  = filterItems == null ? returnQuery : returnQuery + ' AND ( HealthAuthority__c = \''+filterItems+'\' OR Physical_Address__city__s  = \''+filterItems+'\' OR LicenseDetail__c   = \''+filterItems+'\')';
         return filters;
     }
 }
