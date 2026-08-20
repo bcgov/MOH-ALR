@@ -284,7 +284,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         String query =
             'SELECT Id, Name, Type, Physical_Address__City__s, CategoryL1__c, CategoryL2__c, ' +
             'HealthAuthority__c, Phone, ParentAccount__r.Name, FacilityCHSAText__c, Physical_Address__c, ' +
-            'PHOCSNumberOfInspections__c, PHOCSOutstandingViolations__c, PHOCSLastInspectionDate__c, ' +
+            'PHOCSNumberOfInspections__c, PHOCSOutstandingViolations__c, PHOCSLastInspectionDate__c,LicenseDetail__c, ' +
             'HideAddressonPublicSite__c,HidePhoneonPublicSite__c, OWLPublicRetentionActive__c ' +
             'FROM Account';
         
@@ -696,7 +696,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         }
         
         return phone;
-    }
+}
     
     public interface SObjectWrapper {
         Object wrap(SObject record);
@@ -777,7 +777,8 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                         'PhysicalAddressCity' => accRecord.HideAddressonPublicSite__c ? '' : accRecord.Physical_Address__c?.getCity(),
                             'PhysicalAddressState'=> accRecord.Physical_Address__c?.getState(),
                             'PhysicalAddressCountry'=> accRecord.Physical_Address__c?.getCountry(),
-                            'PhysicalAddressPostalCode'=> accRecord.Physical_Address__c?.getPostalCode()
+                            'PhysicalAddressPostalCode'=> accRecord.Physical_Address__c?.getPostalCode(),
+                            'LicenseDetail__c' => accRecord.LicenseDetail__c
                             };
                                 return result;
         }
@@ -924,7 +925,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         }
     }
     private static String addFlexCardFilters(String filterItems, String returnQuery){
-        String filters  = filterItems == null ? returnQuery : returnQuery + ' AND ( HealthAuthority__c = \''+filterItems+'\' OR Physical_Address__city__s  = \''+filterItems+'\')';
+        String filters  = filterItems == null ? returnQuery : returnQuery + ' AND ( HealthAuthority__c = \''+filterItems+'\' OR Physical_Address__city__s  = \''+filterItems+'\' OR LicenseDetail__c   = \''+filterItems+'\')';
         return filters;
     }
 }
