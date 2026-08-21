@@ -960,7 +960,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             Map<String, Object> result = new Map<String, Object>{
                 'Name' => lab.Name,
                     'TestCategory' => lab.TestCategory__c,
-                    'UnitOfMeasure' => lab.UnitOfMeasure__c,
+                    'UnitOfMeasure' => lab.Unit_of_Measure__c,
                     'ResultValue' => lab.ResultValue__c,
                     'TestId' => lab.Test__c,
                     'TestName' => lab.Test__r ?.Name,           
