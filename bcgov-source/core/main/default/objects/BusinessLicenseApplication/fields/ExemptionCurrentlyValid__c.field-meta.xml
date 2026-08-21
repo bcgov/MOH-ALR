@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ExemptionCurrentlyValid__c</fullName>
+    <formula>AND(
+  TEXT(Status) = &quot;Closed&quot;,
+  OR(TEXT(ClosureReason__c) = &quot;Granted&quot;, TEXT(ClosureReason__c) = &quot;Granted - Renewed&quot;),
+  OR(ISBLANK(EffectiveTo__c), EffectiveTo__c &gt;= TODAY())
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Exemption Currently Valid</label>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>
