@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Facility_Access_Requests</fullName>
+    <booleanFilter>1 AND (2 OR (3 AND 4))</booleanFilter>
+    <columns>CASES.CASE_NUMBER</columns>
+    <columns>CASES.CREATED_DATE</columns>
+    <columns>NAME</columns>
+    <columns>Email_ID__c</columns>
+    <columns>MobileNumber__c</columns>
+    <columns>CASES.STATUS</columns>
+    <columns>First_Name__c</columns>
+    <columns>FacilityNumber__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>CASES.RECORDTYPE</field>
+        <operation>equals</operation>
+        <value>Case.PHOCSFacilityEnquiry</value>
+    </filters>
+    <filters>
+        <field>CASES.STATUS</field>
+        <operation>equals</operation>
+        <value>New,Review in progress</value>
+    </filters>
+    <filters>
+        <field>CASES.STATUS</field>
+        <operation>equals</operation>
+        <value>Closed</value>
+    </filters>
+    <filters>
+        <field>ClosureReason__c</field>
+        <operation>equals</operation>
+        <value>Rejected</value>
+    </filters>
+    <label>Facility Access Requests</label>
+    <sharedTo>
+        <group>EHISFHAReportingUser</group>
+        <group>EHISIHAReportingUser</group>
+        <group>EHISNHAReportingUser</group>
+        <group>EHISVCHReportingUser</group>
+        <group>EHISVCISReportingUser</group>
+        <group>PHOCSAllHAReportingUsersPG</group>
+        <group>PHOCSBAandOfficerFHPG</group>
+        <group>PHOCSBAandOfficerIHPG</group>
+        <group>PHOCSBAandOfficerIslandPG</group>
+        <group>PHOCSBAandOfficerNHPG</group>
+        <group>PHOCSBAandOfficerVCHPG</group>
+    </sharedTo>
+</ListView>

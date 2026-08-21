@@ -1,5 +1,11 @@
 <template>
-    <h1 class="page-title">My Facilities</h1>
+    <div class="title-row">
+        <h1 class="page-title">My Facilities</h1>
+        <template if:true={hasAccounts}>
+            <lightning-button label=" + Register Another Facility" variant="Outline" onclick={regiteranotherfacility}>
+            </lightning-button>
+        </template>
+    </div>
     <template if:true={hasAccounts}>
         <div class="tiles-container">
             <template for:each={accounts} for:item="acc">
@@ -50,6 +56,7 @@
             </template>
         </div>
     </template>
+
 
     <template if:false={hasAccounts}>
         <div class="no-records-message">

@@ -65,18 +65,18 @@ export default class PhocsFacilityTile extends NavigationMixin(LightningElement)
     }
 
     connectedCallback() {
-    console.log('connectedCallback fired');
+        console.log('connectedCallback fired');
 
-    getPortalContactDetails()
-        .then(result => {
-            this.contactId = result;
-            console.log('Contact Id:', this.contactId);
+        getPortalContactDetails()
+            .then(result => {
+                this.contactId = result;
+                console.log('Contact Id:', this.contactId);
 
-        })
-        .catch(error => {
-            console.error(error);
-        });
-}
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
 
     handleCreateFacilityRequest() {
         this[NavigationMixin.Navigate]({
@@ -87,4 +87,15 @@ export default class PhocsFacilityTile extends NavigationMixin(LightningElement)
             }
         });
     }
+
+    regiteranotherfacility() {
+        this[NavigationMixin.Navigate]({
+            type: 'standard__webPage',
+            attributes: {
+                //url: '/facility-request-form'
+                url: '/facility-request-form?ContextId=' + this.contactId
+            }
+        });
+    }
+
 }
