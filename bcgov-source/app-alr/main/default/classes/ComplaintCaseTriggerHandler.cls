@@ -5,9 +5,10 @@
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
                           ALR-509             Sri Teja       Public complaints/Cases additional changes
                           ALR-762             ACN-ALR        Error Thrown on creation of Reportable Incident Case 
+                          EHIS-688            ACN-PHOCS      Updates IsDairyCase__c for PHOCS Case record types
 ***********************************************************************************************/
 public with sharing class ComplaintCaseTriggerHandler {
-    static String className = 'ComplaintCaseTriggerHandler';
+    public static String className = 'ComplaintCaseTriggerHandler';
 
 /**
 * @Author: Accenture_ALR Dev Team
@@ -51,6 +52,102 @@ public with sharing class ComplaintCaseTriggerHandler {
         
         for (Id accountId : casesByAccountId.keySet()) {
             generateComplaintCaseIDs(casesByAccountId.get(accountId), licenseTypeSet);
+        }
+    }
+    
+/**
+* @Author: Deepak
+* @date:
+* @description: Updates IsDairyCase__c for PHOCS Case record types after insert.
+* @return: void
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
+    public static void handleAfterInsert(List<Case> newCases) {
+        try {
+            updateDairyCaseFlag(newCases, null, false);
+        } catch (Exception ex) {
+            LogService.logAndPublish(className, 'handleAfterInsert', JSON.serialize(newCases), ex);
+            throw ex;
+        }
+    }
+    
+/**
+* @Author: Deepak
+* @date:
+* @description: Updates IsDairyCase__c when AccountId changes after update.
+* @return: void
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
+    public static void handleAfterUpdate(List<Case> newCases, Map<Id, Case> oldCasesMap) {
+        try {
+            updateDairyCaseFlag(newCases, oldCasesMap, true);
+        } catch (Exception ex) {
+            LogService.logAndPublish(className, 'handleAfterUpdate', JSON.serialize(newCases), ex);
+            throw ex;
+        }
+    }
+    
+/**
+* @Author: Deepak
+* @date:
+* @description: Updates IsDairyCase__c based on the related Account Record Type for PHOCS Cases.
+* @return: void
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
+    private static void updateDairyCaseFlag(List<Case> newCases, Map<Id, Case> oldCasesMap, Boolean isUpdate) {
+        try {
+            Set<Id> accountIds = new Set<Id>();
+            Set<Id> phocsRecordTypeIds = new Set<Id>();
+            Map<Id, Case> casesToProcessMap = new Map<Id, Case>();
+            Set<String> phocsRecordTypeDeveloperNames = new Set<String>{'PHOCSFacilityEnquiry', 'PHOCSEvent', 'PHOCSFoodRecall', 'PHOCSComplaint', 'PHOCSReportableIncident', 'PHOCSRequestsInquiries', 'PHOCSWaterAdvisories'};
+                Map<String, Schema.RecordTypeInfo> recordTypeInfoMap = Schema.SObjectType.Case.getRecordTypeInfosByDeveloperName();
+            
+            for (String developerName : phocsRecordTypeDeveloperNames) {
+                if (recordTypeInfoMap.containsKey(developerName)) {
+                    phocsRecordTypeIds.add(recordTypeInfoMap.get(developerName).getRecordTypeId());
+                }
+            }
+            
+            for (Case newCase : newCases) {
+                if (!phocsRecordTypeIds.contains(newCase.RecordTypeId)) {
+                    continue;
+                }
+                if (!isUpdate) {
+                    casesToProcessMap.put(newCase.Id, newCase);
+                    if (newCase.AccountId != null) {
+                        accountIds.add(newCase.AccountId);
+                    }
+                } else {
+                    Case oldCase = oldCasesMap.get(newCase.Id);
+                    if (newCase.AccountId != oldCase.AccountId) {
+                        casesToProcessMap.put(newCase.Id, newCase);
+                        if (newCase.AccountId != null) {
+                            accountIds.add(newCase.AccountId);
+                        }
+                    }
+                }
+            }
+            
+            if (casesToProcessMap.isEmpty()) {
+                return;
+            }
+            
+            Map<Id, Account> accountMap = new Map<Id, Account>([SELECT Id, RecordType.DeveloperName FROM Account WHERE Id IN :accountIds WITH SECURITY_ENFORCED]);
+            
+            List<Case> casesToUpdate = new List<Case>();
+            for (Case newCase : casesToProcessMap.values()) {
+                Account account = newCase.AccountId != null ? accountMap.get(newCase.AccountId) : null;
+                Case caseToUpdate = new Case(Id = newCase.Id);
+                caseToUpdate.IsDairyCase__c = account != null && account.RecordType.DeveloperName == 'PHOCSDairyFacility';
+                casesToUpdate.add(caseToUpdate);
+            }
+            
+            if (!casesToUpdate.isEmpty()) {
+                update casesToUpdate;
+            }
+        } catch (Exception ex) {
+            LogService.logAndPublish(className, 'updateDairyCaseFlag', JSON.serialize(newCases), ex);
+            throw ex;
         }
     }
 
