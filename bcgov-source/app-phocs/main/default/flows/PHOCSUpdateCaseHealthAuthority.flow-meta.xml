@@ -24,12 +24,12 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>Clear_Case_Health_Authority</targetReference>
+            <targetReference>check_record_type</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>No Account</defaultConnectorLabel>
         <rules>
             <name>Account_Is_Set</name>
-            <conditionLogic>1 AND (2 OR 3)</conditionLogic>
+            <conditionLogic>1 AND (2 OR 3) AND 4</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.AccountId</leftValueReference>
                 <operator>IsNull</operator>
@@ -49,6 +49,13 @@
                 <operator>EqualTo</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>PHOCSFacilityEnquiry</stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -110,8 +117,29 @@
             <label>Is PHOCS Advisories</label>
         </rules>
     </decisions>
-    <description>As part of EHIS-5127 - Updated the All PHOCS Case RecordTypes
-As part of EHIS-5095 - Auto populate Case type fields from account type only for Drinking and recreation water Types</description>
+    <decisions>
+        <name>check_record_type</name>
+        <label>check record type</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Clear_Case_Health_Authority</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>If_PHOCS_Facility_Enquiry_record_type</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>PHOCSFacilityEnquiry</stringValue>
+                </rightValue>
+            </conditions>
+            <label>If PHOCS Facility Enquiry record type</label>
+        </rules>
+    </decisions>
+    <description>As part of EHIS-4612 added recordcheck  in the flow that flow will not trigger for record type PHOCSFacilityEnquiry</description>
     <environments>Default</environments>
     <formulas>
         <name>Is_Insert</name>
