@@ -43,6 +43,9 @@ public with sharing class PhocsBlaRenewalManagementController {
     private static final String RTF_PARENT_BLA_NAME_FIELD = 'ParentRecord.Name';    
     private static final String RTF_STATUS_FIELD = 'Status__c';
     private static final String RTF_FEETYPE_FIELD ='FeeType__c';
+    private static final String BL_STATUS_FIELD ='Active';
+    private static final String RTF_FEETYPE_RENEWAL ='Renewal';
+    private static final String RTF_STATUS_DRAFT ='Draft';
     
     
     // Regulatory Transaction Fee Item
@@ -280,13 +283,13 @@ public static OperationResponse generateRenewalRecords(List<Id> accountIds) {
         String accountSoql =
         'SELECT Id, Name,' +
         '(SELECT Id, PoolAream2__c, Status FROM Assets ' +
-        ' WHERE Status = \'Active\' LIMIT 1),' +
+        ' WHERE Status =: BL_STATUS_FIELD LIMIT 1),' +
         '(SELECT Id, Status, ClosedDate__c, LicenseType.Name,' +
         ' Account.Type, Account.CategoryL2__c,' +
         ' Account.NumberOfSeats__c, Account.NoofConnections__c,' +
         ' AccountId, LicensePermitName.Status' +
         ' FROM BusinessLicenseApplicationAccount' +
-        ' WHERE LicensePermitName.Status = \'Active\'' +
+        ' WHERE LicensePermitName.Status = :BL_STATUS_FIELD' +
         ' AND RecordTypeId = :BLARecordTypeId' +
         ' AND LicenseType.Name IN :LICENSETYPES' +
         ' AND ClosedDate__c != NULL' +
@@ -539,8 +542,8 @@ String premiseRole
     String rtfSoql = 'SELECT Id, ' + RTF_ACCOUNT_FIELD + ', ' +
     RTF_PARENT_RECORD_FIELD + ', ' + RTF_PARENT_BLA_NAME_FIELD + ', ' +
     RTF_STATUS_FIELD + ' FROM ' + RTF_OBJECT +
-    ' WHERE '+RTF_STATUS_FIELD + ' = \'Draft\''+
-    ' AND '+ RTF_FEETYPE_FIELD + ' = \'Renewal\'';
+    ' WHERE '+RTF_STATUS_FIELD + ' = :RTF_STATUS_DRAFT'+
+    ' AND '+ RTF_FEETYPE_FIELD + ' = :RTF_FEETYPE_RENEWAL';  
     
     Schema.SObjectType rtfType = Schema.getGlobalDescribe().get(RTF_OBJECT);
     

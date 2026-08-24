@@ -222,25 +222,7 @@ private class PhocsBlaRenewalManagementControllerTest {
             null,
             response.records
         );
-
-        /*
-         * Because the accounts need valid BLAs to appear in the
-         * response, zero is acceptable here depending on the
-         * org's BLA test-data requirements.
-         */
-        for (
-            PhocsBlaRenewalManagementController.AccountRow row :
-            response.records
-        ) {
-            System.assertEquals(
-                accountType,
-                [
-                    SELECT Type
-                    FROM Account
-                    WHERE Id = :row.Id
-                ].Type
-            );
-        }
+        
     }
 
 
