@@ -20,7 +20,7 @@
  *      - Fetches receipt/payment status using ticket numbers
  *      - Updates RegulatoryTrxnFee records with ticket, reference number, payment status, 
  *        and payment date
- *      - Ensures all Moneris API interactions are securely handled via Named Credential: 'Moneris'
+ *      - Uses the endpoint configured in PHOCSMonerisConfiguration__mdt for Moneris API interactions
  *
  *  WORKFLOW        :
  *      1. generateTicket(recordId)
@@ -79,7 +79,7 @@ public class PHOCSMonerisService {
         
         //For-Testing only
         String orderNo = 'ORDER-' + DateTime.now().format('yyyyMMdd-HHmmss') + '-' + transFee.Name;
-		System.debug('Endpoint: ' + 'callout:Moneris/chktv2/request/request.php');
+		System.debug('Endpoint: ' + moneris.Endpoints__c + '/chktv2/request/request.php');
         
         ticket = PHOCSMonerisTicket.generateTicket(
             moneris,
@@ -147,15 +147,48 @@ public class PHOCSMonerisService {
         );
 
         if (receiptWrapper != null && receiptWrapper.response.receipt != null) {
-            String receiptStatus;
-            if(receiptWrapper.response.receipt.result == 'a'){
+            String receiptStatus = 'Due';
+            Boolean isSuccessful = receiptWrapper.response.receipt.result == 'a';
+            if(isSuccessful){
                 receiptStatus = 'Paid';
             }
-            if(receiptWrapper.response.receipt.result == 'd'){
-                receiptStatus = 'Due';//Canceled';
+            MonerisReceiptWrapper.CCReceipt cardDetails = receiptWrapper.response.receipt.cc;
+            RegulatoryTrxnFeeTriggerHandler.skipAfterUpdate = true;
+            try {
+                PHOCSPortalPaymentFeeItemService.updatePaymentAttempt(
+                    Id.valueOf(recordId),
+                    isSuccessful,
+                    PHOCSPortalPaymentFeeItemService.normalizePaymentMethod(
+                        cardDetails != null && cardDetails.is_debit == 'true'
+                    ),
+                    PHOCSPortalPaymentFeeItemService.normalizeCardType(
+                        cardDetails == null ? null : cardDetails.card_type
+                    ),
+                    cardDetails == null ? null : cardDetails.reference_no,
+                    Date.today()
+                );
+            } finally {
+                RegulatoryTrxnFeeTriggerHandler.skipAfterUpdate = false;
             }
-            updateRegulatoryTransFee(recordId, transFee.PHOCSMonerisTicketNumber__c, receiptWrapper.response.receipt.cc.reference_no, receiptStatus);
+            updateRegulatoryTransFee(
+                recordId,
+                transFee.PHOCSMonerisTicketNumber__c,
+                cardDetails == null ? null : cardDetails.reference_no,
+                receiptStatus
+            );
         }
+    }
+
+    @AuraEnabled(cacheable=false)
+    public static void recordPaymentError(String recordId) {
+        PHOCSPortalPaymentFeeItemService.updatePaymentAttempt(
+            Id.valueOf(recordId),
+            false,
+            null,
+            null,
+            null,
+            null
+        );
     }
     
     /**
@@ -168,18 +201,24 @@ public class PHOCSMonerisService {
      */
     @future
     public static void updateRegulatoryTransFee(String recordId, String ticket, String reference, String status) {
-        RegulatoryTrxnFee transFee = getRegulatoryTransFee(recordId);
+        RegulatoryTrxnFeeTriggerHandler.skipAfterUpdate = true;
+        try {
+            RegulatoryTrxnFee transFee = getRegulatoryTransFee(recordId);
 
-        if (ticket != null && ticket != '')
-            transFee.PHOCSMonerisTicketNumber__c = ticket;
-        if (reference != null && reference != '')
-            transFee.ReferenceNumber__c = reference;
-        if (status != null && status != '') {
-            transFee.Status = status;
-            if (status.equalsIgnoreCase('paid')) {
-                transFee.PaymentDate__c = Date.today();
+            if (ticket != null && ticket != '')
+                transFee.PHOCSMonerisTicketNumber__c = ticket;
+            if (reference != null && reference != '')
+                transFee.ReferenceNumber__c = reference;
+            if (status != null && status != '') {
+                transFee.Status = status;
+                transFee.Status__c = status;
+                if (status.equalsIgnoreCase('paid')) {
+                    transFee.PaymentDate__c = Date.today();
+                }
             }
+            update transFee;
+        } finally {
+            RegulatoryTrxnFeeTriggerHandler.skipAfterUpdate = false;
         }
-        update transFee;
     }
 }

@@ -6,11 +6,19 @@
     <errorConditionFormula>OR(
     RecordType.DeveloperName = &quot;PHOCFoodRecall&quot;,
     RecordType.DeveloperName = &quot;PHOCSComplaint&quot;,
+    RecordType.DeveloperName = &quot;PHOCSEvent&quot;,
     RecordType.DeveloperName = &quot;PHOCSReportableIncident&quot;,
     RecordType.DeveloperName = &quot;PHOCSRequestsInquiries&quot;,
     RecordType.DeveloperName = &quot;PHOCSWaterAdvisories&quot;
-) &amp;&amp;
-INCLUDES(TopicSubtypeMulti__c, &quot;Other&quot;) &amp;&amp;
+)
+&amp;&amp;
+OR(
+    INCLUDES(TopicSubtypeMulti__c, &quot;Other&quot;),
+    INCLUDES(ComplaintTopicSubType__c, &quot;Other&quot;),
+    INCLUDES(EventTopicSubType__c, &quot;Other&quot;),
+    INCLUDES(IncidentTopicSubType__c, &quot;Other&quot;)
+)
+&amp;&amp;
 ISBLANK(TopicSubTypeOtherSpecify__c)</errorConditionFormula>
     <errorDisplayField>TopicSubTypeOtherSpecify__c</errorDisplayField>
     <errorMessage>Complete this field</errorMessage>

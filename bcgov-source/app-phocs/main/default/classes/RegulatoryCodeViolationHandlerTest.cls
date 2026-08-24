@@ -230,4 +230,39 @@ public class RegulatoryCodeViolationHandlerTest {
         Integer resolvedCount = [SELECT COUNT() FROM RegulatoryCodeViolation WHERE PHOCSParentId__c = :parent.Id AND Status = 'Resolved'];
         Assert.areEqual(10, resolvedCount, 'All 10 child violations should be resolved when parent is resolved.');
     }
+    
+/**
+* @description: To verify child violations inherit the ResolvedIn value of their parent.
+*/    
+    @isTest
+    public static void testSyncChildViolationStatus_ChildrenInheritResolvedIn() {
+        Map<String, Id> dataMap = createTestData();
+
+        RegulatoryCodeViolation parent = new RegulatoryCodeViolation(RecordTypeId = recordTypePHOCSRegulatoryCodeViolation, InspectionId = dataMap.get('inspId'),
+                                                                     InspectionAssmntIndId = dataMap.get('inspAsmIndId'), ComplianceDueDate = System.now().addDays(5),
+                                                                     DateCreated = System.now(), Status = 'Open');
+        insert parent;
+
+        List<RegulatoryCodeViolation> childViolationsToInsert = new List<RegulatoryCodeViolation>();
+        childViolationsToInsert.add(new RegulatoryCodeViolation(RecordTypeId = recordTypePHOCSRegulatoryCodeViolation, InspectionId = dataMap.get('inspId'),
+                                                                InspectionAssmntIndId = dataMap.get('inspAsmIndId'), ComplianceDueDate = System.now().addDays(5),
+                                                                DateCreated = System.now(), Status = 'Open', PHOCSParentId__c = parent.Id));
+        childViolationsToInsert.add(new RegulatoryCodeViolation(RecordTypeId = recordTypePHOCSRegulatoryCodeViolation, InspectionId = dataMap.get('inspId'),
+                                                                InspectionAssmntIndId = dataMap.get('inspAsmIndId'), ComplianceDueDate = System.now().addDays(10),
+                                                                DateCreated = System.now(), Status = 'Open', PHOCSParentId__c = parent.Id));
+        insert childViolationsToInsert;
+
+        Test.startTest();
+        parent.Status = 'Resolved';
+        parent.ResolvedIn__c = dataMap.get('inspId');
+        update parent;
+        Test.stopTest();
+
+        List<RegulatoryCodeViolation> updatedChildren = [SELECT Id, Status, ResolvedIn__c FROM RegulatoryCodeViolation WHERE PHOCSParentId__c = :parent.Id];
+        Assert.areEqual(2, updatedChildren.size(), 'Both child violations should be returned.');
+        for (RegulatoryCodeViolation child : updatedChildren) {
+            Assert.areEqual('Resolved', child.Status, 'Child status should be updated to Resolved when parent is resolved.');
+            Assert.areEqual(dataMap.get('inspId'), child.ResolvedIn__c, 'Child should inherit the ResolvedIn value of its parent violation.');
+        }
+    }
 }

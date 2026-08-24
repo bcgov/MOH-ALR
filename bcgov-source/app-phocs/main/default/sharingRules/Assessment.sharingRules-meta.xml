@@ -1,36 +1,193 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
-    <sharingOwnerRules>
-        <fullName>Assessment_sharing_rule</fullName>
+    <sharingCriteriaRules>
+        <fullName>PhocAssessmentFraserBASharingRule</fullName>
         <accessLevel>Edit</accessLevel>
-        <label>Assessment sharing rule</label>
+        <label>PhocAssessmentFraserBASharingRule</label>
         <sharedTo>
-            <group>EHISUsersPG</group>
+            <group>PHOCSBAandOfficerFHPG</group>
         </sharedTo>
-        <sharedFrom>
-            <group>EHISUsersPG</group>
-        </sharedFrom>
-    </sharingOwnerRules>
-    <sharingOwnerRules>
-        <fullName>Assessment_sharing_rule_reporting_user</fullName>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Assessment</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Fraser Health - FH</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PhocAssessmentInteriorBASharingRule</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>PhocAssessmentInteriorBASharingRule</label>
+        <sharedTo>
+            <group>PHOCSBAandOfficerIHPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Assessment</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Interior Health - IH</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PhocAssessmentNorthernBASharingRule</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>PhocAssessmentNorthernBASharingRule</label>
+        <sharedTo>
+            <group>PHOCSBAandOfficerNHPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Assessment</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Northern Health - NH</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PhocAssessmentsFraserReportingSharingRule</fullName>
         <accessLevel>Read</accessLevel>
-        <label>Assessment sharing rule reporting user</label>
+        <label>PhocAssessmentsFraserReportingSharingRule</label>
         <sharedTo>
-            <group>PHOCSReportingUserPG</group>
+            <group>EHISFHAReportingUser</group>
         </sharedTo>
-        <sharedFrom>
-            <group>EHISUsersPG</group>
-        </sharedFrom>
-    </sharingOwnerRules>
-    <sharingOwnerRules>
-        <fullName>PHOCSDairySharingRuleReporting</fullName>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Assessment</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Fraser Health - FH</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PhocAssessmentsInteriorReportingSharingRule</fullName>
         <accessLevel>Read</accessLevel>
-        <label>PHOCS Dairy Sharing Rule Reporting</label>
+        <label>PhocAssessmentsInteriorReportingSharingRule</label>
         <sharedTo>
-            <group>PHOCSBCCDCDairyPublicGroup</group>
+            <group>EHISIHAReportingUser</group>
         </sharedTo>
-        <sharedFrom>
-            <group>EHISUsersPG</group>
-        </sharedFrom>
-    </sharingOwnerRules>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Assessment</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Interior Health - IH</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PhocAssessmentsIslandReportingSharingRule</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PhocAssessmentsIslandReportingSharingRule</label>
+        <sharedTo>
+            <group>EHISVCISReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Assessment</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Island Health - Island</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PhocAssessmentsNorthernReportingSharingRule</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PhocAssessmentsNorthernReportingSharingRule</label>
+        <sharedTo>
+            <group>EHISNHAReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Assessment</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Northern Health - NH</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PhocAssessmentsVancouverBASharingRule</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>PhocAssessmentsVancouverBASharingRule</label>
+        <sharedTo>
+            <group>PHOCSBAandOfficerVCHPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Assessment</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Vancouver Coastal Health - VCH</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PhocAssessmentsVancouverReportingSharingRule</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PhocAssessmentsVancouverReportingSharingRule</label>
+        <sharedTo>
+            <group>EHISVCHReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Assessment</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Vancouver Coastal Health - VCH</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PhocAssessmentslslandBASharingRule</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>PhocAssessmentslslandBASharingRule</label>
+        <sharedTo>
+            <group>PHOCSBAandOfficerIslandPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Assessment</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Island Health - Island</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
 </SharingRules>

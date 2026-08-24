@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PremiseRoleRequired</fullName>
+    <active>true</active>
+    <description>Requires a premise role when a facility is designated as a multiple premise facility.</description>
+    <errorConditionFormula>AND(MultiplePremiseFacility__c, ISBLANK(TEXT(PremiseRole__c)))</errorConditionFormula>
+    <errorDisplayField>PremiseRole__c</errorDisplayField>
+    <errorMessage>Select a Premise Role when Multiple Premise Facility is selected.</errorMessage>
+</ValidationRule>

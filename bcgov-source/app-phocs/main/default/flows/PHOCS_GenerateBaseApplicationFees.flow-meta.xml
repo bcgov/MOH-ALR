@@ -3,6 +3,22 @@
     <apiVersion>67.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
+        <name>AssignFeeAmount</name>
+        <label>AssignFeeAmount</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>RTFItemRecord.FeeAmount</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LoopThroughMetadataToGetLIcenseTypes.Amount__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>LoopThroughMetadataToGetLIcenseTypes</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>AssignParentId</name>
         <label>AssignParentId</label>
         <locationX>0</locationX>
@@ -16,6 +32,22 @@
         </assignmentItems>
         <connector>
             <targetReference>createRTFItemRecord</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>AssignProratedAmount</name>
+        <label>AssignProratedAmount</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>RTFItemRecord.FeeAmount</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>ProRateAmount</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>LoopThroughMetadataToGetLIcenseTypes</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -69,7 +101,7 @@
             <assignToReference>RTFRecord.FeeType__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <stringValue>Annual Operating Permit Fees</stringValue>
+                <stringValue>New Application</stringValue>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -98,9 +130,6 @@
         <assignmentItems>
             <assignToReference>RTFItemRecord.FeeAmount</assignToReference>
             <operator>Assign</operator>
-            <value>
-                <elementReference>LoopThroughMetadataToGetLIcenseTypes.Amount__c</elementReference>
-            </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>RTFItemRecord.Status__c</assignToReference>
@@ -116,8 +145,15 @@
                 <elementReference>GetNonDairyRTFItemRecodType.Id</elementReference>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>RTFItemRecord.FeeType__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LoopThroughMetadataToGetLIcenseTypes.RTFIFeeType__c</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
-            <targetReference>LoopThroughMetadataToGetLIcenseTypes</targetReference>
+            <targetReference>ProRatedFeesCheck</targetReference>
         </connector>
     </assignments>
     <decisions>
@@ -184,11 +220,37 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>GetAAAassociatedToGetAssetDetails</targetReference>
+                <targetReference>GetAssetDetails</targetReference>
             </connector>
             <label>RecreationalWater</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>ProRatedFeesCheck</name>
+        <label>ProRatedFeesCheck</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>AssignFeeAmount</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>IsProRatedFee</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>LoopThroughMetadataToGetLIcenseTypes.ProRateFees__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>AssignProratedAmount</targetReference>
+            </connector>
+            <label>IsProRatedFee</label>
+        </rules>
+    </decisions>
+    <description>EHIS-4550 - Generate application fee for sewerage</description>
     <environments>Default</environments>
     <formulas>
         <name>isBLMetConditions</name>
@@ -216,13 +278,21 @@ AND(
        PoolArea &gt; 0,  
  {!LoopThroughMetadataToGetLIcenseTypes.PoolMinArea__c} &lt; PoolArea, 
     {!LoopThroughMetadataToGetLIcenseTypes.PoolAreaString__c}  &gt;= PoolArea 
-       )
+       ),
+   AND(ISBLANK({!LoopThroughMetadataToGetLIcenseTypes.MetricType__c}),
+{!LoopThroughMetadataToGetLIcenseTypes.LicenseType__c} =={!$Record.LicenseType.Name})
 )</expression>
     </formulas>
     <formulas>
         <name>PoolArea</name>
         <dataType>Number</dataType>
-        <expression>{!GetAAAassociatedToGetAssetDetails.Asset.PoolAream2__c}</expression>
+        <expression>{!GetAssetDetails.PoolAream2__c}</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>ProRateAmount</name>
+        <dataType>Number</dataType>
+        <expression>IF(MONTH({!$Flow.CurrentDate}) &gt;=4, (12-(MONTH({!$Flow.CurrentDate})-4))/12, (4-MONTH({!$Flow.CurrentDate}))/12) *{!LoopThroughMetadataToGetLIcenseTypes.Amount__c}</expression>
         <scale>2</scale>
     </formulas>
     <interviewLabel>PHOCS_GenerateBaseApplicationFees {!$Flow.CurrentDateTime}</interviewLabel>
@@ -278,8 +348,8 @@ AND(
         <inputReference>RTFRecord</inputReference>
     </recordCreates>
     <recordLookups>
-        <name>GetAAAassociatedToGetAssetDetails</name>
-        <label>GetAAAassociatedToGetAssetDetails</label>
+        <name>GetAssetDetails</name>
+        <label>GetAssetDetails</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
@@ -288,14 +358,14 @@ AND(
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
-            <field>RgltyAuthApplicationId</field>
+            <field>AccountId</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>$Record.Id</elementReference>
+                <elementReference>$Record.AccountId</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>AuthApplicationAsset</object>
+        <object>Asset</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
@@ -367,7 +437,7 @@ AND(
         <connector>
             <targetReference>GetGenerateApplicationFeeMetadata</targetReference>
         </connector>
-        <filterFormula>({!$Record.RecordType.DeveloperName}==&apos;OperatingPermitApplication&apos; ) &amp;&amp; TEXT({!$Record.Status})==&apos;Closed&apos;  &amp;&amp; ISCHANGED({!$Record.ClosureReason__c}) &amp;&amp; Text({!$Record.ClosureReason__c})==&apos;Approved&apos;</filterFormula>
+        <filterFormula>(({!$Record.RecordType.DeveloperName}==&apos;OperatingPermitApplication&apos; ) || ({!$Record.RecordType.DeveloperName}==&apos;ConstructionPermitApplication&apos; ) ||({!$Record.RecordType.DeveloperName}==&apos;PHOCSRecordofSewerageSystem&apos; ) )&amp;&amp; TEXT({!$Record.Status})==&apos;Closed&apos;  &amp;&amp; ISCHANGED({!$Record.ClosureReason__c}) &amp;&amp; (Text({!$Record.ClosureReason__c})==&apos;Approved&apos; || Text({!$Record.ClosureReason__c})==&apos;Accepted&apos;)</filterFormula>
         <object>BusinessLicenseApplication</object>
         <recordTriggerType>Update</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>

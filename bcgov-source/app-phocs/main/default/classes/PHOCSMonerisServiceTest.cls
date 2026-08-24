@@ -11,20 +11,34 @@ private class PHOCSMonerisServiceTest {
         insert licensetype;
         Account acc = new Account(
             Name = 'Test Account',
+            RecordTypeId = Schema.SObjectType.Account
+                .getRecordTypeInfosByDeveloperName()
+                .get('Facility')
+                .getRecordTypeId(),
             HealthAuthority__c = 'Vancouver Coastal Health - VCH',
             LicenseType__c = licensetype.Id
         );
         insert acc;
         RegulatoryTrxnFee fee = new RegulatoryTrxnFee(
             AccountId = acc.Id,
-            Status = 'Due'
+            Status = 'Due',
+            PHOCSMonerisTicketNumber__c = '1760633356HvaZZUqLeXDhtpp33jMfRuwvGHTlnT',
+            RecordTypeId = Schema.SObjectType.RegulatoryTrxnFee
+                .getRecordTypeInfosByDeveloperName()
+                .get('PHOCSNonDairyTransactionFee')
+                .getRecordTypeId()
         );
         insert fee;
         RegulatoryTrxnFeeItem feeItem = new RegulatoryTrxnFeeItem(
             RegulatoryTrxnFeeId = fee.Id,
+            RecordTypeId = Schema.SObjectType.RegulatoryTrxnFeeItem
+                .getRecordTypeInfosByDeveloperName()
+                .get('PHOCSNonDairyTransactionFeeItem')
+                .getRecordTypeId(),
             FeeAmount = 120.00,
             Amount__c = 120.00,
-            Name = 'Test'
+            Name = 'Test',
+            Status__c = 'Due'
         );
         insert feeItem;
         PHOCSMonerisService.monerisConfig = new Map<String, PHOCSMonerisConfiguration__mdt>{
@@ -33,7 +47,8 @@ private class PHOCSMonerisServiceTest {
                 API_Token__c = 'apitoken123',
                 Checkout_Id__c = 'checkout789',
                 HealthAuthority__c = 'Vancouver Coastal Health - VCH',
-                Environment__c = 'qa'
+                Environment__c = 'qa',
+                Endpoints__c = 'https://gatewayt.moneris.com'
             )};
     }
     
@@ -63,17 +78,11 @@ private class PHOCSMonerisServiceTest {
         // Arrange
         Account acc = [Select Id, Name, HealthAuthority__c from Account limit 1];
         RegulatoryTrxnFee fee = [SELECT Id, Status, Name, RecordTypeId, ReferenceNumber__c, PaymentDate__c, FeeType__c, PHOCSMonerisTicketNumber__c, AccountName__c, PHOCSCustomerID__c FROM RegulatoryTrxnFee limit 1];
-		fee.PHOCSMonerisTicketNumber__c = '1760633356HvaZZUqLeXDhtpp33jMfRuwvGHTlnT';
         // Replace real method calls with mocks using Stub API
         Test.startTest();
-        update fee;
 
         //PHOCSMonerisService.generateTicket(fee.Id);
-        try{
-            PHOCSMonerisService.checkReceiptStatus(fee.Id, 'PAID');
-        }catch(Exception ex){
-            System.debug('Exception: ' + ex);
-        }
+        PHOCSMonerisService.checkReceiptStatus(fee.Id, 'PAID');
 
         Test.stopTest();
 
@@ -86,6 +95,25 @@ private class PHOCSMonerisServiceTest {
         System.debug('Status: ' + updatedFee.Status);
         
         System.assertEquals('1760633356HvaZZUqLeXDhtpp33jMfRuwvGHTlnT', updatedFee.PHOCSMonerisTicketNumber__c);
+        RegulatoryTrxnFeeItem updatedFeeItem = [
+            SELECT Status__c, Payment_Method__c, Payment_Type__c,
+                   PaymentChannel__c, PaidBy__c, PaymentDate__c,
+                   ReferenceNumber__c, PortalPaymentStatus__c
+            FROM RegulatoryTrxnFeeItem
+            WHERE RegulatoryTrxnFeeId = :fee.Id
+            LIMIT 1
+        ];
+        System.assertEquals('Paid', updatedFeeItem.Status__c);
+        System.assertEquals('Credit', updatedFeeItem.Payment_Method__c);
+        System.assertEquals('MasterCard', updatedFeeItem.Payment_Type__c);
+        System.assertEquals('Portal', updatedFeeItem.PaymentChannel__c);
+        System.assertEquals(
+            [SELECT Name FROM User WHERE Id = :UserInfo.getUserId()].Name,
+            updatedFeeItem.PaidBy__c
+        );
+        System.assertEquals(Date.today(), updatedFeeItem.PaymentDate__c);
+        System.assertEquals('660191690010010300', updatedFeeItem.ReferenceNumber__c);
+        System.assertEquals(null, updatedFeeItem.PortalPaymentStatus__c);
     }
 
     @IsTest
@@ -111,6 +139,8 @@ private class PHOCSMonerisServiceTest {
         // Arrange
         Account acc = [Select Id, Name, HealthAuthority__c from Account limit 1];
         RegulatoryTrxnFee fee = [SELECT Id, Status, Name, RecordTypeId, ReferenceNumber__c, PaymentDate__c, FeeType__c, PHOCSMonerisTicketNumber__c, AccountName__c, PHOCSCustomerID__c FROM RegulatoryTrxnFee limit 1];
+        fee.PHOCSMonerisTicketNumber__c = null;
+        update fee;
 
         Test.startTest();
         try {
@@ -136,13 +166,14 @@ private class PHOCSMonerisServiceTest {
         Test.stopTest();
 
         RegulatoryTrxnFee updatedFee = [
-            SELECT PHOCSMonerisTicketNumber__c, ReferenceNumber__c, Status, PaymentDate__c
+            SELECT PHOCSMonerisTicketNumber__c, ReferenceNumber__c, Status, Status__c, PaymentDate__c
             FROM RegulatoryTrxnFee WHERE Id = :fee.Id
         ];
 
         System.assertEquals('TICKET-111', updatedFee.PHOCSMonerisTicketNumber__c);
         System.assertEquals('REF-222', updatedFee.ReferenceNumber__c);
         System.assertEquals('PAID', updatedFee.Status);
+        System.assertEquals('Paid', updatedFee.Status__c);
         System.assertNotEquals(null, updatedFee.PaymentDate__c, 'Payment date should be set for Paid');
     }
 }

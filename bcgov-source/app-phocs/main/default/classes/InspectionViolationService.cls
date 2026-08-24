@@ -293,6 +293,7 @@ public with sharing class InspectionViolationService {
                     
                     if (status == RESULT_COMPLIANT){
                         vio.Status = 'Resolved';
+                        vio.ResolvedIn__c = visitId;
                         parentViolationsToClose.add(vio);
                     }
                 }
@@ -338,7 +339,8 @@ public with sharing class InspectionViolationService {
                 return result;
             }
             
-            Map<Id, AssessmentTask> taskMap = new Map<Id, AssessmentTask>([SELECT Id, ParentId, Parent.AccountId, Parent.ContextId FROM AssessmentTask WHERE Id IN :assessmentTaskIds]); 
+            Map<Id, AssessmentTask> taskMap = new Map<Id, AssessmentTask>([SELECT Id, ParentId, Parent.AccountId, Parent.ContextId, Parent.Account.HealthAuthority__c
+                                                                           FROM AssessmentTask WHERE Id IN :assessmentTaskIds]); 
             
             if (definitionToParentViolationMap != null) {
                 parentViolationIds.addAll(definitionToParentViolationMap.values());
@@ -378,7 +380,7 @@ public with sharing class InspectionViolationService {
                     vio.InspectionAssmntIndId = ind.Id;
                     vio.InspectionId = inspectionId;
                     vio.PHOCSParentAccountID__c = inspectionAccountId;
-                    vio.Asset__c = inspectionAssetId;
+                    vio.Asset__c = (inspectionAssetId != null && inspectionAssetId.getSObjectType() == Asset.SObjectType) ? inspectionAssetId : NULL;
                     vio.DateCreated = System.now();
                     vio.RegulatoryCodeId = mapItem.RegulatoryCodeId;
                     vio.ComplianceDueDate = ind.ComplianceDueDate__c;
@@ -387,6 +389,7 @@ public with sharing class InspectionViolationService {
                     vio.Corrected_During_Inspection__c = ind.CorrectedDuringInspection__c;
                     vio.Status = ind.CorrectedDuringInspection__c == true ? 'Resolved' : 'Open';
                     vio.DateResolved = ind.CorrectedDuringInspection__c == true ? System.Now() : null;
+                    vio.HealthAuthority__c = taskMap.get(ind.AssessmentTaskId)?.Parent?.Account?.HealthAuthority__c;
                     if (parentViolationId != null && validParentViolationMap.containsKey(parentViolationId)){
                         vio.PHOCSParentId__c = parentViolationId;
                     }

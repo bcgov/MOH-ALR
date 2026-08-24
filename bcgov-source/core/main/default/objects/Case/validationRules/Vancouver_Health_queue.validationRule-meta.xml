@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Vancouver_Health_queue</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+ISCHANGED(OwnerId),
+
+HealthAuthority__c = &quot;Vancouver Coastal Health - VCH&quot;,
+
+$Profile.Name &lt;&gt; &quot;System Administrator&quot;,
+
+OR(
+AND(
+NOT(ISBLANK(Owner:Queue.DeveloperName)),
+NOT(CONTAINS(Owner:Queue.DeveloperName, &quot;Coastal&quot;))
+),
+
+AND(
+ISBLANK(Owner:Queue.DeveloperName),
+NOT(CONTAINS(Owner:User.UserRole.Name, &quot;VCH&quot;))
+)
+)
+)</errorConditionFormula>
+    <errorMessage>Records can only be assigned to queues that belong to your Health Authority.</errorMessage>
+</ValidationRule>

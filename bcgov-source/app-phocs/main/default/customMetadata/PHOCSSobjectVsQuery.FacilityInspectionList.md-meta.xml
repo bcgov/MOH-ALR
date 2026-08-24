@@ -12,12 +12,6 @@
 FROM Visit
 WHERE Status = &apos;Completed&apos;
   AND DiscloseToPublic__c = true
-  AND (
-         (Account.Type IN (&apos;Residential Care&apos;, &apos;Child Care&apos;))
-        OR
-        (Account.Type NOT IN (&apos;Residential Care&apos;, &apos;Child Care&apos;)
-         AND VisitType.Name NOT IN (&apos;Complaint&apos;, &apos;Complaint Follow-up&apos;))
-      )
   AND AccountId = :recordId
   ORDER BY ActualVisitStartTime DESC</value>
     </values>
