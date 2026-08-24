@@ -1,0 +1,278 @@
+<template>
+    <lightning-card>
+        <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+
+            <lightning-tabset active-tab-value={activeTab}>
+                
+                <!-- ========================================================= -->
+                <!-- RENEWAL GENERATION                                         -->
+                <!-- ========================================================= -->
+                <lightning-tab
+                    label="Renewal Generation"
+                    value="generation"
+                    onactive={handleGenerationTab}>
+
+                    <div class="slds-p-top_medium">
+                           
+                        <!-- Filters -->
+                        <div class="slds-box slds-theme_default slds-m-bottom_medium">
+                             <div><p>
+                            This table displays eligible Drinking Water, Food Premise, and Pool facilities that have not yet had an Operating Permit renewal fee generated for the current renewal cycle. Use the filters to refine the list, select the applicable facilities, and click “Generate Renewals” to generate draft renewal fees.
+                        </p>
+                            </div>
+                            <div class="slds-grid slds-wrap slds-gutters">
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 filter-dropdown">
+                                    <lightning-combobox
+                                        label="Type"
+                                        value={generationFilters.accountType}
+                                        options={accountTypeOptions}
+                                        onchange={handleGenerationTypeChange}>
+                                    </lightning-combobox>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 filter-checkbox">
+                                    <lightning-input
+                                        type="checkbox"
+                                        label="Multiple Premise Facility?"
+                                        checked={generationFilters.multiplePremise}
+                                        onchange={handleGenerationMultiplePremiseChange}>
+                                    </lightning-input>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 filter-buttons">
+                                    <lightning-button
+                                        label="Search"
+                                        variant="brand"
+                                        onclick={searchGeneration}>
+                                    </lightning-button>
+
+                                    <lightning-button
+                                        label="Reset"
+                                        class="slds-m-left_small"
+                                        onclick={resetGeneration}>
+                                    </lightning-button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Header -->
+                        <div class="table-header slds-m-bottom_small">
+                            <div>
+                                <span class="slds-text-heading_small">
+                                    Renewal Accounts
+                                </span>
+
+                                <span class="slds-m-left_medium selection-summary">
+                                    Selected: {generationSelectedCount} / {generationTotalCount}
+                                </span>
+                            </div>
+
+                            <template if:true={showGenerateButton}>
+                                <lightning-button
+                                    label="Generate Renewals"
+                                    variant="brand"
+                                    onclick={generateRenewals}
+                                    disabled={isLoading}>
+                                </lightning-button>
+                            </template>
+                        </div>
+
+                        <!-- Spinner -->
+                        <template if:true={isLoading}>
+                            <lightning-spinner
+                                alternative-text="Loading">
+                            </lightning-spinner>
+                        </template>
+
+                        <!-- Empty state -->
+                        <template if:false={generationHasRecords}>
+                            <div class="empty-state">
+                                No records to display.
+                            </div>
+                        </template>
+
+                        <!-- Datatable -->
+                        <template if:true={generationHasRecords}>
+                            <div class="datatable-container">
+                            <lightning-datatable
+                                key-field="Id"
+                                data={generationPageData}
+                                columns={generationColumns}
+                                selected-rows={generationSelectedRows}
+                                sorted-by={generationSortedBy}
+                                sorted-direction={generationSortDirection}
+                                onsort={handleGenerationSort}
+                                onrowselection={handleGenerationSelection}>
+                            </lightning-datatable>
+                            </div>
+                            <!-- Pagination -->
+                            <div class="pagination slds-m-top_medium">
+                                <lightning-button
+                                    label="Previous"
+                                    onclick={generationPrevious}
+                                    disabled={generationPreviousDisabled}>
+                                </lightning-button>
+
+                                <span class="page-label">
+                                    Page {generationCurrentPage} of {generationTotalPages}
+                                </span>
+
+                                <lightning-button
+                                    label="Next"
+                                    onclick={generationNext}
+                                    disabled={generationNextDisabled}>
+                                </lightning-button>
+                            </div>
+                        </template>
+
+                    </div>
+                </lightning-tab>
+
+
+                <!-- ========================================================= -->
+                <!-- SEND Fee For RENEWALS                                             -->
+                <!-- ========================================================= -->
+                <lightning-tab
+                    label="Send Renewals"
+                    value="send"
+                    onactive={handleSendTab}>
+
+                    <div class="slds-p-top_medium">
+
+                        <!-- Filters -->
+                        <div class="slds-box slds-theme_default slds-m-bottom_medium">
+                            <div>
+                                <p>This table displays draft Operating Permit renewal fees ready for review. Review and adjust fee amounts as needed by clicking into the fee record. Use the filters to refine the list, select the applicable facilities, and click “Send Renewals” to send invoices to facility contacts
+                                    </p>
+                            </div>
+                            <div class="slds-grid slds-wrap slds-gutters">
+
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 filter-dropdown" >
+                                    <lightning-combobox
+                                        label="Type"
+                                        value={sendFilters.type}
+                                        options={accountTypeOptions}
+                                        onchange={handleSendTypeChange}>
+                                    </lightning-combobox>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 filter-dropdown">
+                                    <lightning-input
+                                        type="text"
+                                        label="Fee Name"
+                                        value={sendFilters.feeName}
+                                        onchange={handleSendFeeNameChange}>
+                                    </lightning-input>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 filter-checkbox">
+                                    <lightning-input
+                                        type="checkbox"
+                                        label="Multiple Premise Facility?"
+                                        checked={sendFilters.multiplePremise}
+                                        onchange={handleSendMultiplePremiseChange}>
+                                    </lightning-input>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 filter-dropdown">
+                                    <lightning-combobox
+                                        label="Premise Role"
+                                        value={sendFilters.premiseRole}
+                                        options={premiseRoleOptions}
+                                        onchange={handleSendPremiseRoleChange}>
+                                    </lightning-combobox>
+                                </div>
+                                 <div class="slds-col slds-size_1-of-3 slds-m-top_small"></div>
+                                <div class="slds-col slds-size_1-of-3 slds-m-top_small filter-renewalbtn">
+                                    <lightning-button
+                                        label="Search"
+                                        variant="brand"
+                                        onclick={searchSend}>
+                                    </lightning-button>
+
+                                    <lightning-button
+                                        label="Reset"
+                                        class="slds-m-left_small"
+                                        onclick={resetSend}>
+                                    </lightning-button>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 slds-m-top_small"></div>
+                            </div>
+                        </div>
+
+                        <!-- Header -->
+                        <div class="table-header slds-m-bottom_small">
+                            <div>
+                                <span class="slds-text-heading_small">
+                                    Renewals Ready to Send
+                                </span>
+
+                                <span class="slds-m-left_medium selection-summary">
+                                    Selected: {sendSelectedCount} / {sendTotalCount}
+                                </span>
+                            </div>
+
+                            <template if:true={showSendButton}>
+                                <lightning-button
+                                    label="Send Renewals"
+                                    variant="brand"
+                                    onclick={sendRenewals}
+                                    disabled={isLoading}>
+                                </lightning-button>
+                            </template>
+                        </div>
+
+                        <template if:true={isLoading}>
+                            <lightning-spinner
+                                alternative-text="Loading">
+                            </lightning-spinner>
+                        </template>
+
+                        <!-- Empty state -->
+                        <template if:false={sendHasRecords}>
+                            <div class="empty-state">
+                                No records to display.
+                            </div>
+                        </template>
+
+                        <!-- Datatable -->
+                        <template if:true={sendHasRecords}>
+                            <div class="datatable-container">
+                            <lightning-datatable
+                                key-field="Id"
+                                data={sendPageData}
+                                columns={sendColumns}
+                                selected-rows={sendSelectedRows}
+                                sorted-by={sendSortedBy}
+                                sorted-direction={sendSortDirection}
+                                onsort={handleSendSort}
+                                onrowselection={handleSendSelection}>
+                            </lightning-datatable>
+                            </div>
+
+                            <div class="pagination slds-m-top_medium">
+                                <lightning-button
+                                    label="Previous"
+                                    onclick={sendPrevious}
+                                    disabled={sendPreviousDisabled}>
+                                </lightning-button>
+
+                                <span class="page-label">
+                                    Page {sendCurrentPage} of {sendTotalPages}
+                                </span>
+
+                                <lightning-button
+                                    label="Next"
+                                    onclick={sendNext}
+                                    disabled={sendNextDisabled}>
+                                </lightning-button>
+                            </div>
+                        </template>
+
+                    </div>
+                </lightning-tab>
+
+            </lightning-tabset>
+        </div>
+    </lightning-card>
+</template>
