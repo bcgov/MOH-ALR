@@ -291,12 +291,12 @@
                                     <rightValue>false</rightValue>
                                 </criteria>
                                 <criteria>
-                                    <leftValue>{!Record.ParentVisit.VisitType.Name}</leftValue>
+                                    <leftValue>{!Record.VisitType.Name}</leftValue>
                                     <operator>CONTAINS</operator>
                                     <rightValue>Initial</rightValue>
                                 </criteria>
                                 <criteria>
-                                    <leftValue>{!Record.ParentVisit.VisitType.Name}</leftValue>
+                                    <leftValue>{!Record.VisitType.Name}</leftValue>
                                     <operator>CONTAINS</operator>
                                     <rightValue>Routine</rightValue>
                                 </criteria>
@@ -332,12 +332,12 @@
                                     <rightValue>false</rightValue>
                                 </criteria>
                                 <criteria>
-                                    <leftValue>{!Record.ParentVisit.VisitType.Name}</leftValue>
+                                    <leftValue>{!Record.VisitType.Name}</leftValue>
                                     <operator>CONTAINS</operator>
                                     <rightValue>Initial</rightValue>
                                 </criteria>
                                 <criteria>
-                                    <leftValue>{!Record.ParentVisit.VisitType.Name}</leftValue>
+                                    <leftValue>{!Record.VisitType.Name}</leftValue>
                                     <operator>CONTAINS</operator>
                                     <rightValue>Routine</rightValue>
                                 </criteria>
@@ -569,7 +569,7 @@
                         <valueListItems>
                             <value>Visit.PHOCSPublishInspToPDS</value>
                             <visibilityRule>
-                                <booleanFilter>1 AND 2 AND 3 AND 4 AND 5 AND 6 AND (7 OR 8) AND 9</booleanFilter>
+                                <booleanFilter>1 AND 2 AND 3 AND 4 AND 5 AND 6 AND 7 AND 8</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.Status}</leftValue>
                                     <operator>EQUAL</operator>
@@ -601,12 +601,7 @@
                                     <rightValue>Industrial Camps</rightValue>
                                 </criteria>
                                 <criteria>
-                                    <leftValue>{!Record.ParentVisit.Name}</leftValue>
-                                    <operator>CONTAINS</operator>
-                                    <rightValue>Initial</rightValue>
-                                </criteria>
-                                <criteria>
-                                    <leftValue>{!Record.ParentVisit.Name}</leftValue>
+                                    <leftValue>{!Record.VisitType.Name}</leftValue>
                                     <operator>CONTAINS</operator>
                                     <rightValue>Routine</rightValue>
                                 </criteria>
@@ -620,7 +615,7 @@
                         <valueListItems>
                             <value>Visit.PHOCSUnpublishToPDS</value>
                             <visibilityRule>
-                                <booleanFilter>1 AND 2 AND 3 AND 4 AND 5 AND (6 OR 7) AND 8 AND 9</booleanFilter>
+                                <booleanFilter>1 AND 2 AND 3 AND 4 AND 5 AND 6 AND 7 AND 8</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.Status}</leftValue>
                                     <operator>EQUAL</operator>
@@ -647,12 +642,7 @@
                                     <rightValue>Dairy</rightValue>
                                 </criteria>
                                 <criteria>
-                                    <leftValue>{!Record.ParentVisit.VisitType.Name}</leftValue>
-                                    <operator>CONTAINS</operator>
-                                    <rightValue>Initial</rightValue>
-                                </criteria>
-                                <criteria>
-                                    <leftValue>{!Record.ParentVisit.VisitType.Name}</leftValue>
+                                    <leftValue>{!Record.VisitType.Name}</leftValue>
                                     <operator>CONTAINS</operator>
                                     <rightValue>Routine</rightValue>
                                 </criteria>
@@ -910,7 +900,7 @@
                         <valueListItems>
                             <value>Visit.PHOCSPublishInspToPDS</value>
                             <visibilityRule>
-                                <booleanFilter>1 AND 2 AND 3 AND 4 AND 5 AND 6</booleanFilter>
+                                <booleanFilter>1 AND 2 AND 3 AND 4 AND (5 OR 7) AND 6</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.Status}</leftValue>
                                     <operator>EQUAL</operator>
@@ -932,7 +922,7 @@
                                     <rightValue>false</rightValue>
                                 </criteria>
                                 <criteria>
-                                    <leftValue>{!Record.ParentVisit.VisitType.Name}</leftValue>
+                                    <leftValue>{!Record.VisitType.Name}</leftValue>
                                     <operator>CONTAINS</operator>
                                     <rightValue>Routine</rightValue>
                                 </criteria>
@@ -940,13 +930,18 @@
                                     <leftValue>{!$Permission.CustomPermission.PHOCSPublishUnpublishInspection}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>true</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.VisitType.Name}</leftValue>
+                                    <operator>CONTAINS</operator>
+                                    <rightValue>OWL</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>Visit.PHOCSUnpublishToPDS</value>
                             <visibilityRule>
-                                <booleanFilter>1 AND 2 AND 3 AND 4 AND 5 AND 6</booleanFilter>
+                                <booleanFilter>1 AND 2 AND 3 AND 4 AND (5 OR 7) AND 6</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.Status}</leftValue>
                                     <operator>EQUAL</operator>
@@ -968,7 +963,7 @@
                                     <rightValue>false</rightValue>
                                 </criteria>
                                 <criteria>
-                                    <leftValue>{!Record.ParentVisit.VisitType.Name}</leftValue>
+                                    <leftValue>{!Record.VisitType.Name}</leftValue>
                                     <operator>CONTAINS</operator>
                                     <rightValue>Routine</rightValue>
                                 </criteria>
@@ -976,6 +971,11 @@
                                     <leftValue>{!$Permission.CustomPermission.PHOCSPublishUnpublishInspection}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>true</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.VisitType.Name}</leftValue>
+                                    <operator>CONTAINS</operator>
+                                    <rightValue>OWL</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
@@ -1228,12 +1228,12 @@
                                     <rightValue>false</rightValue>
                                 </criteria>
                                 <criteria>
-                                    <leftValue>{!Record.ParentVisit.VisitType.Name}</leftValue>
+                                    <leftValue>{!Record.VisitType.Name}</leftValue>
                                     <operator>CONTAINS</operator>
                                     <rightValue>MTS</rightValue>
                                 </criteria>
                                 <criteria>
-                                    <leftValue>{!Record.ParentVisit.VisitType.Name}</leftValue>
+                                    <leftValue>{!Record.VisitType.Name}</leftValue>
                                     <operator>CONTAINS</operator>
                                     <rightValue>Routine</rightValue>
                                 </criteria>
@@ -1269,12 +1269,12 @@
                                     <rightValue>false</rightValue>
                                 </criteria>
                                 <criteria>
-                                    <leftValue>{!Record.ParentVisit.VisitType.Name}</leftValue>
+                                    <leftValue>{!Record.VisitType.Name}</leftValue>
                                     <operator>CONTAINS</operator>
                                     <rightValue>MTS</rightValue>
                                 </criteria>
                                 <criteria>
-                                    <leftValue>{!Record.ParentVisit.VisitType.Name}</leftValue>
+                                    <leftValue>{!Record.VisitType.Name}</leftValue>
                                     <operator>CONTAINS</operator>
                                     <rightValue>Routine</rightValue>
                                 </criteria>
