@@ -10,21 +10,24 @@
         <field>ObjectQuery__c</field>
         <value xsi:type="xsd:string">SELECT Id, Name, TestCategory__c,UnitOfMeasure__c, ResultValue__c,Test__r.Name, Test__r.SampleTestType__c, Test__r.ParameterType__c, LabTestRequisition__r.CollectionDateTime__c, LabTestRequisition__r.SamplingSite__r.Name,Unit_of_Measure__c
 FROM LabTestRequired__c
-WHERE RecordType.Name = &apos;PHOCS Water Lab Test Required&apos;
+WHERE LabTestRequisition__r.FacilityName__c =:recordId
 	AND Test__r.RecordType.Name =&apos;PHOCS Lab Test Master List&apos;
-	AND (
-    LabTestRequisition__r.RecordType.Name = &apos;PHOCS Water Lab Test Requisition&apos;
+        AND Status__c =&apos;Completed&apos;
+        AND LabTestRequisition__r.Status__c =&apos;Completed&apos;
+        AND TestCategory__c = &apos;Drinking Water&apos;
+AND (
+    (
+        LabTestRequisition__r.RecordType.Name = &apos;PHOCS Water Lab Test Requisition&apos;
+        AND RecordType.Name = &apos;PHOCS Water Lab Test Required&apos;
+        AND LabTestRequisition__r.SampleType__c = &apos;Drinking Water&apos;
+    )
     OR
     (
-        LabTestRequisition__r.RecordType.Name = &apos;PHOCS Lead Water Test Requisition&apos;
-        AND
         LabTestRequisition__r.FacilityName__r.Type = &apos;Child Care&apos;
+        AND RecordType.Name = &apos;PHOCS Lead Water Test Required&apos;
+        AND LabTestRequisition__r.RecordType.Name = &apos;PHOCS Lead Water Test Requisition&apos;
     )
 )
-    AND LabTestRequisition__r.FacilityName__c =:recordId
-    AND LabTestRequisition__r.SampleType__c =&apos;Drinking Water&apos;
-    AND Status__c =&apos;Completed&apos;
-    AND LabTestRequisition__r.Status__c =&apos;Completed&apos;
  ORDER BY LabTestRequisition__r.CollectionDateTime__c DESC NULLS LAST LIMIT 200</value>
     </values>
     <values>
