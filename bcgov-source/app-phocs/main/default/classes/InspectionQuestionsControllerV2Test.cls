@@ -220,8 +220,7 @@ private class InspectionQuestionsControllerV2Test {
 
     /**
      * @description Test getRegulatoryCodesByIndicator falls back to Subject when the
-     *              Description is blank. Note RegulatoryAuthorityId is a required field
-     *              on RegulatoryCode, so an authority-less code cannot be created.
+     *              Description is blank.
      */
     @isTest
     static void testGetRegulatoryCodesByIndicator_BlankDescriptionFallsBackToSubject() {
