@@ -642,8 +642,8 @@ private class PhocsBlaRenewalManagementControllerTest {
          * Re-query the actual inserted records.
          */
         List<RegulatoryTrxnFee> insertedFees = [
-            SELECT Id, Status__c,TotalFeeAmount,TotalFeePaid__c,OutstandingFeeAmount__c FROM RegulatoryTrxnFee WHERE Id IN :fees];      
-         System.debug('fees===============>'+insertedFees[0]);
+            SELECT Id, Status__c,TotalFeeAmount FROM RegulatoryTrxnFee WHERE Id IN :fees];      
+         
         List<Id> feeIds = new List<Id>();
         for (RegulatoryTrxnFee fee : insertedFees) {    
             feeIds.add(fee.Id);
