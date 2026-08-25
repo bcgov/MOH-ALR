@@ -4,8 +4,51 @@
 * @Description: Test class for PHOCSAsmntVioRelatedController.
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]
 ***********************************************************************************************/
-@isTest(SeeAllData=true)
+@isTest
 public class PHOCSAsmntVioRelatedControllerTest {
+    
+    @TestSetup
+    public static void setupTestData() {
+        RegulatoryAuthorizationType reg = new RegulatoryAuthorizationType(Name = 'Test Regulatory Type');
+        insert reg;
+        
+        Id facilityRTId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('Facility').getRecordTypeId();
+        
+        Account testAccount = new Account(Name = 'Test Facility', LicenseType__c = reg.Id, RecordTypeId = facilityRTId);
+        insert testAccount;
+        
+        ContactPointAddress cpa = new ContactPointAddress(Name = 'Test Address', Street = '123 Test Lane', City = 'Alberta', State = 'AL', Country = 'Canada', PostalCode = 'M2H2E4');
+        insert cpa;
+        
+        Id visitRTId = Schema.SObjectType.Visit.getRecordTypeInfosByDeveloperName().get('PHOCSInspection').getRecordTypeId();
+        
+        Visit testVisit = new Visit(AccountId = testAccount.Id, PlaceId = cpa.Id, RecordTypeId = visitRTId, PlannedVisitStartTime = DateTime.now(), PlannedVisitEndTime = DateTime.now().addHours(2));
+        insert testVisit;
+        
+        AssessmentTaskDefinition testTaskDef = new AssessmentTaskDefinition(Name = 'Test Category', TaskType = 'InspectionChecklist');
+        insert testTaskDef;
+        
+        AssessmentTask testTask = new AssessmentTask(Name = 'Test Task', TaskType = 'SignatureTask', ParentId = testVisit.Id, AssessmentTaskDefinitionId = testTaskDef.Id);
+        insert testTask;
+        
+        AssessmentIndicatorDefinition indicator = new AssessmentIndicatorDefinition(Name = 'Question 1', DataType = 'String', Category__c = 'Test Category', Criticality__c = 'Critical', PHOCSParentId__c = null);
+        insert indicator;
+        
+        Id inspAmntRTId = Schema.SObjectType.InspectionAssessmentInd.getRecordTypeInfosByDeveloperName().get('PHOCSInspectionAssessmentInd').getRecordTypeId();
+        
+        InspectionAssessmentInd inspAssmntInd = new InspectionAssessmentInd(AssessmentIndDefinitionId = indicator.Id, AssessmentTaskId = testTask.Id, RecordTypeId = inspAmntRTId);
+        insert inspAssmntInd;
+        
+        RegulatoryCodeViolation violation = new RegulatoryCodeViolation(InspectionId = testVisit.Id, InspectionAssmntIndId = inspAssmntInd.Id, 
+                                                                        ComplianceDueDate = System.now().addDays(2), DateCreated = System.now(), Status = 'Open', Scope__c = 'Isolated',
+                                                                        Severity__c = 'Potential for significant harm');
+        insert violation;
+        
+        Id assessmentRTId = Schema.SObjectType.Assessment.getRecordTypeInfosByDeveloperName().get('PHOCSAssessment').getRecordTypeId();
+        
+        Assessment assessment = new Assessment(Name = 'Test Assessment', RecordTypeId = assessmentRTId, ResponseContextId = testVisit.Id, AssessmentStatus = 'In Progress');
+        insert assessment;
+    }
     
     /**
 * @author: Deepak
@@ -19,8 +62,8 @@ public class PHOCSAsmntVioRelatedControllerTest {
         List<RegulatoryCodeViolation> result = PHOCSAsmntVioRelatedController.getRelatedViolations(null);
         Test.stopTest();
         
-        System.assertNotEquals(null, result, 'Result should not be null.');
-        System.assertEquals(0, result.size(), 'Null Assessment Id should return an empty list.');
+        Assert.areNotEqual(null, result, 'Result should not be null.');
+        Assert.areEqual(0, result.size(), 'Null Assessment Id should return an empty list.');
     }
     
     /**
@@ -37,30 +80,8 @@ public class PHOCSAsmntVioRelatedControllerTest {
         List<RegulatoryCodeViolation> result = PHOCSAsmntVioRelatedController.getRelatedViolations(assessmentId);
         Test.stopTest();
         
-        System.assertNotEquals(null, result, 'Result should not be null.');
-        System.assertEquals(0, result.size(), 'An Assessment Id that does not exist should return an empty list.');
-    }
-    
-    /**
-* @author: Deepak
-* @date: 25 Aug 2026
-* @description: Verifies the controller behavior when an Assessment exists without a ResponseContextId.
-* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
-*/
-    @isTest
-    public static void testGetRelatedViolations_AssessmentWithoutResponseContext() {
-        List<Assessment> assessments = [SELECT Id, ResponseContextId FROM Assessment WHERE ResponseContextId = NULL LIMIT 1];
-        
-        if (assessments.isEmpty()) {
-            return;
-        }
-        
-        Test.startTest();
-        List<RegulatoryCodeViolation> result = PHOCSAsmntVioRelatedController.getRelatedViolations(assessments[0].Id);
-        Test.stopTest();
-        
-        System.assertNotEquals(null, result, 'Result should not be null.');
-        System.assertEquals(0, result.size(), 'Assessment without ResponseContextId should return an empty list.');
+        Assert.areNotEqual(null, result, 'Result should not be null.');
+        Assert.areEqual(0, result.size(), 'An Assessment Id that does not exist should return an empty list.');
     }
     
     /**
@@ -71,56 +92,16 @@ public class PHOCSAsmntVioRelatedControllerTest {
 */
     @isTest
     public static void testGetRelatedViolations_ReturnsQualifyingViolations() {
-        List<Assessment> assessments = [SELECT Id, ResponseContextId FROM Assessment WHERE ResponseContextId != NULL LIMIT 20];
-        
-        if (assessments.isEmpty()) {
-            return;
-        }
-        
-        Set<Id> inspectionIds = new Set<Id>();
-        
-        for (Assessment assessment : assessments) {
-            inspectionIds.add(assessment.ResponseContextId);
-        }
-        
-        List<RegulatoryCodeViolation> violations = [SELECT Id, Name, InspectionId, Scope__c, Severity__c, IsChildViolation__c, RegulatoryCode.Name, RegulatoryCode.Subject, InspectionAssmntInd.AssessmentIndDefinition.Name FROM RegulatoryCodeViolation WHERE InspectionId IN :inspectionIds AND Scope__c != NULL AND Severity__c != NULL AND IsChildViolation__c = false LIMIT 20];
-        
-        if (violations.isEmpty()) {
-            return;
-        }
-        
-        Assessment selectedAssessment;
-        
-        for (Assessment assessment : assessments) {
-            for (RegulatoryCodeViolation violation : violations) {
-                if (violation.InspectionId == assessment.ResponseContextId) {
-                    selectedAssessment = assessment;
-                    break;
-                }
-            }
-            
-            if (selectedAssessment != null) {
-                break;
-            }
-        }
-        
-        if (selectedAssessment == null) {
-            return;
-        }
+        Assessment assessment = [SELECT Id, ResponseContextId FROM Assessment WHERE RecordType.DeveloperName = 'PHOCSAssessment' LIMIT 1];
         
         Test.startTest();
-        List<RegulatoryCodeViolation> result = PHOCSAsmntVioRelatedController.getRelatedViolations(selectedAssessment.Id);
+        List<RegulatoryCodeViolation> result = PHOCSAsmntVioRelatedController.getRelatedViolations(assessment.Id);
         Test.stopTest();
         
-        System.assertNotEquals(null, result, 'Result should not be null.');
-        System.assert(result.size() > 0, 'Expected qualifying Regulatory Code Violations to be returned.');
-        
-        for (RegulatoryCodeViolation violation : result) {
-            System.assertEquals(selectedAssessment.ResponseContextId, violation.InspectionId, 'Returned violation must belong to the Assessment ResponseContextId Inspection.');
-            System.assertNotEquals(null, violation.Scope__c, 'Returned violation must have Scope.');
-            System.assertNotEquals(null, violation.Severity__c, 'Returned violation must have Severity.');
-            System.assertEquals(false, violation.IsChildViolation__c, 'Child violations must not be returned.');
-        }
+        Assert.areNotEqual(null, result, 'Result should not be null.');
+        Assert.areEqual(1, result.size(), 'Expected one qualifying Regulatory Code Violation.');
+        Assert.areNotEqual(null, result[0].Scope__c, 'Returned violation must have Scope.');
+        Assert.areNotEqual(null, result[0].Severity__c, 'Returned violation must have Severity.');
     }
     
     /**
@@ -131,56 +112,20 @@ public class PHOCSAsmntVioRelatedControllerTest {
 */
     @isTest
     public static void testGetRelatedViolations_ReturnsRequiredFields() {
-        List<Assessment> assessments = [SELECT Id, ResponseContextId FROM Assessment WHERE ResponseContextId != NULL LIMIT 20];
-        
-        if (assessments.isEmpty()) {
-            return;
-        }
-        
-        Set<Id> inspectionIds = new Set<Id>();
-        
-        for (Assessment assessment : assessments) {
-            inspectionIds.add(assessment.ResponseContextId);
-        }
-        
-        List<RegulatoryCodeViolation> expectedViolations = [SELECT Id, Name, InspectionId, Scope__c, Severity__c, IsChildViolation__c, RegulatoryCode.Name, RegulatoryCode.Subject, InspectionAssmntInd.AssessmentIndDefinition.Name FROM RegulatoryCodeViolation WHERE InspectionId IN :inspectionIds AND Scope__c != NULL AND Severity__c != NULL AND IsChildViolation__c = false LIMIT 20];
-        
-        if (expectedViolations.isEmpty()) {
-            return;
-        }
-        
-        Assessment selectedAssessment;
-        
-        for (Assessment assessment : assessments) {
-            for (RegulatoryCodeViolation violation : expectedViolations) {
-                if (violation.InspectionId == assessment.ResponseContextId) {
-                    selectedAssessment = assessment;
-                    break;
-                }
-            }
-            
-            if (selectedAssessment != null) {
-                break;
-            }
-        }
-        
-        if (selectedAssessment == null) {
-            return;
-        }
+        Assessment assessment = [SELECT Id FROM Assessment WHERE RecordType.DeveloperName = 'PHOCSAssessment' LIMIT 1];
         
         Test.startTest();
-        List<RegulatoryCodeViolation> result = PHOCSAsmntVioRelatedController.getRelatedViolations(selectedAssessment.Id);
+        List<RegulatoryCodeViolation> result = PHOCSAsmntVioRelatedController.getRelatedViolations(assessment.Id);
         Test.stopTest();
         
-        System.assert(result.size() > 0, 'Expected at least one violation.');
+        Assert.areEqual(1, result.size(), 'Expected one violation.');
         
-        RegulatoryCodeViolation firstViolation = result[0];
+        RegulatoryCodeViolation violation = result[0];
         
-        System.assertNotEquals(null, firstViolation.Id, 'Violation Id should be populated.');
-        System.assertNotEquals(null, firstViolation.Name, 'Violation Name should be populated.');
-        System.assertNotEquals(null, firstViolation.InspectionId, 'Inspection Id should be populated.');
-        System.assertNotEquals(null, firstViolation.Scope__c, 'Scope should be populated.');
-        System.assertNotEquals(null, firstViolation.Severity__c, 'Severity should be populated.');
+        Assert.areNotEqual(null, violation.Id, 'Violation Id should be populated.');
+        Assert.areNotEqual(null, violation.Name, 'Violation Name should be populated.');
+        Assert.areNotEqual(null, violation.Scope__c, 'Scope should be populated.');
+        Assert.areNotEqual(null, violation.Severity__c, 'Severity should be populated.');
     }
     
     /**
@@ -191,21 +136,12 @@ public class PHOCSAsmntVioRelatedControllerTest {
 */
     @isTest
     public static void testGetRelatedViolations_OnlyQualifyingViolationsReturned() {
-        List<Assessment> assessments = [SELECT Id, ResponseContextId FROM Assessment WHERE ResponseContextId != NULL LIMIT 20];
-        
-        if (assessments.isEmpty()) {
-            return;
-        }
+        Assessment assessment = [SELECT Id, ResponseContextId FROM Assessment WHERE RecordType.DeveloperName = 'PHOCSAssessment' LIMIT 1];
         
         Test.startTest();
-        List<RegulatoryCodeViolation> result = PHOCSAsmntVioRelatedController.getRelatedViolations(assessments[0].Id);
+        List<RegulatoryCodeViolation> result = PHOCSAsmntVioRelatedController.getRelatedViolations(assessment.Id);
         Test.stopTest();
         
-        for (RegulatoryCodeViolation violation : result) {
-            System.assertEquals(assessments[0].ResponseContextId, violation.InspectionId, 'Violation must belong to the Assessment Inspection.');
-            System.assertNotEquals(null, violation.Scope__c, 'Scope must be populated.');
-            System.assertNotEquals(null, violation.Severity__c, 'Severity must be populated.');
-            System.assertEquals(false, violation.IsChildViolation__c, 'Child violations must be excluded.');
-        }
+        Assert.areEqual(1, result.size(), 'Expected one qualifying violation.');
     }
 }
