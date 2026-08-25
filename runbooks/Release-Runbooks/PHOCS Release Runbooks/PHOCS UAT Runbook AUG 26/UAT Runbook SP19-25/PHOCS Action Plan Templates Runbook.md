@@ -38,10 +38,14 @@ EHIS-4527
 EHIS-4603
 >Child Care General Inspection Template
 >Child Minding Inspection Template
+EHIS-4824
+>Child Care Radon/Lead Inspection Update Template
+EHIS-4687
+>Residential Care Inspection template
 
 Document checklist Templates
 
-EHIS-4237 , 4460
+EHIS-4237 , 4460 , 4619 
 >Food Premise Operating Permit Application Checklist
 >Temporary Food Service Operating Permit Application Checklist
 >Pool Construction Permit Application Checklist
@@ -54,7 +58,11 @@ EHIS-4237 , 4460
 >Water_Operating_Permit_Application_Checklist
 >Water_Source_Evaluation_Application_Checklist
 >Temporary_Personal_Services_Establishment
+>Residential Care Licence Application Checklist
+>Child Care Licence Application Checklist
 
+Dairy Action Plan Templates EHIS-4261
+>BCCDC_Inspection_Update_cfc9156d_85e6_11f1_b355_6f3af60b0ab7.apt-meta.xml
 
 - Provide R/W for PHOCS business admin and officer PG , PHOCS Data Load User PG 
 -     PHOCS BA and Officer FH PG , PHOCS Reporting user PG
@@ -65,6 +73,7 @@ EHIS-4237 , 4460
     - PHOCS Dairy Business Admin & Officer PG
 - PHOCS operator PG Read, Reporting user group , PHOCS BCCDC Dairy Public Group - Read only  
 
+> EHIS-5329
 
 > Verification steps: 
 EHIS-4064
