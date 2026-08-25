@@ -1,0 +1,324 @@
+:host {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* ============================================================
+   MAIN CONTAINER
+   ============================================================ */
+
+.slds-p-horizontal_medium {
+    box-sizing: border-box;
+    width: 100%;
+}
+
+/* ============================================================
+   TABLE HEADER / ACTIONS
+   ============================================================ */
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.selection-summary {
+    color: #5c5c5c;
+    font-size: 0.875rem;
+    white-space: nowrap;
+}
+
+/* ============================================================
+   FILTER AREA
+   ============================================================ */
+
+.slds-box {
+    width: 100%;
+    box-sizing: border-box;
+}
+.filter-dropdown {
+    display: flex;
+    align-items: flex-end;
+    min-height: 4.5rem;    
+}
+.filter-checkbox {
+    display: flex;
+    align-items: flex-end;
+    min-height: 4.5rem;    
+}
+
+.filter-buttons {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    min-height: 4.5rem;
+} 
+
+/* Prevent long labels/inputs from overflowing */
+lightning-input,
+lightning-combobox {
+    width: 100%;
+    max-width: 100%;
+}
+
+/* ============================================================
+   DATATABLE RESPONSIVENESS
+   ============================================================ */
+
+/*
+ * Datatables have many columns and cannot realistically collapse
+ * every column into a mobile card. Horizontal scrolling is the
+ * safest UX for phones/tablets.
+ */
+lightning-datatable {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+}
+
+/*
+ * Wrapper behavior for narrow screens.
+ */
+:host {
+    overflow-x: hidden;
+}
+
+/* ============================================================
+   PAGINATION
+   ============================================================ */
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    padding: 0.5rem 0 1rem;
+    box-sizing: border-box;
+}
+
+.page-label {
+    min-width: 100px;
+    text-align: center;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+
+.empty-state {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 3rem 1rem;
+    text-align: center;
+    color: #666;
+    border: 1px solid #dddbda;
+    border-radius: 0.25rem;
+    background: #fafaf9;
+}
+
+/* ============================================================
+   TABLET
+   Android tablets / iPads / smaller laptop screens
+   ============================================================ */
+
+@media screen and (max-width: 1024px) {
+
+    .table-header {
+        align-items: flex-start;
+    }
+
+    .filter-dropdown,.filter-checkbox,
+    .filter-buttons {
+        min-height: auto;
+        padding-top: 0.25rem;
+        padding-bottom: 0.25rem;
+    }
+    .filter-renewalbtn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: auto;
+        padding: 0.25rem 0;
+    }
+
+    .selection-summary {
+        display: inline-block;
+        margin-top: 0.25rem;
+    }
+}
+
+/* ============================================================
+   MOBILE
+   Android phones / iPhones
+   ============================================================ */
+
+@media screen and (max-width: 767px) {
+
+    /*
+     * Reduce outer spacing on phones.
+     */
+    .slds-p-horizontal_medium {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+
+    /*
+     * Stack title and action button.
+     */
+    .table-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+
+    .table-header lightning-button {
+        width: 100%;
+    }
+
+    /*
+     * Selection count can wrap on smaller screens.
+     */
+    .selection-summary {
+        display: block;
+        margin-left: 0 !important;
+        margin-top: 0.25rem;
+        white-space: normal;
+    }
+
+    /*
+     * Filters become one column because the HTML already uses
+     * SLDS responsive grid classes.
+     */
+    .filter-checkbox {
+        min-height: auto;
+        padding-top: 0.5rem;
+        align-items: center;
+    }
+
+    .filter-buttons {
+        min-height: auto;
+        padding-top: 0.75rem;
+        display: flex;
+        width: 100%;
+    }
+
+    .filter-buttons lightning-button {
+        flex: 1;
+    }
+
+    /*
+     * Give Search and Reset comfortable touch targets.
+     */
+    .filter-buttons lightning-button {
+        min-height: 2.75rem;
+    }
+
+    /*
+     * Pagination remains easy to use with touch.
+     */
+    .pagination {
+        gap: 0.5rem;
+        justify-content: space-between;
+    }
+
+    .pagination lightning-button {
+        min-width: 5.5rem;
+        min-height: 2.75rem;
+    }
+
+    .page-label {
+        min-width: auto;
+        flex: 1;
+        font-size: 0.875rem;
+    }
+
+    /*
+     * Empty state needs less vertical space on phones.
+     */
+    .empty-state {
+        padding: 2rem 0.75rem;
+    }
+}
+
+/* ============================================================
+   VERY SMALL PHONES
+   iPhone SE / compact Android devices
+   ============================================================ */
+
+@media screen and (max-width: 390px) {
+
+    .slds-p-horizontal_medium {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+
+    .pagination {
+        gap: 0.25rem;
+    }
+
+    .pagination lightning-button {
+        min-width: 4.75rem;
+    }
+
+    .page-label {
+        font-size: 0.75rem;
+    }
+
+    .empty-state {
+        font-size: 0.875rem;
+    }
+}
+
+/* ============================================================
+   LANDSCAPE PHONES
+   ============================================================ */
+
+@media screen and (max-width: 767px) and (orientation: landscape) {
+
+    .table-header {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .table-header lightning-button {
+        width: auto;
+    }
+
+    .filter-buttons {
+        flex-direction: row;
+    }
+}
+
+/* ============================================================
+   ACCESSIBILITY / TOUCH
+   ============================================================ */
+
+/*
+ * Avoid hover-only interactions on touch devices.
+ * Buttons remain comfortably tappable.
+ */
+lightning-button {
+    touch-action: manipulation;
+}
+
+/*
+ * Don't allow the component itself to create horizontal overflow.
+ */
+* {
+    box-sizing: border-box;
+}
+.datatable-container {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}

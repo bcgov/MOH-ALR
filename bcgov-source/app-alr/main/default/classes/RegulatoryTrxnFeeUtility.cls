@@ -7,6 +7,7 @@
 ***********************************************************************************************/
 public with sharing class RegulatoryTrxnFeeUtility {
     public static String className = 'RegulatoryTrxnFeeUtility';
+    public static Id RTFRecordType= Schema.SObjectType.RegulatoryTrxnFee.getRecordTypeInfosByDeveloperName().get('TransactionFee').getRecordTypeId();
 
 /**
 * @Author: Accenture_ALR Dev Team
@@ -19,8 +20,11 @@ public with sharing class RegulatoryTrxnFeeUtility {
     public static void updateUnitStatus(List<RegulatoryTrxnFee> newRegTransList, Map<ID, SObject> oldRegTransMap, Map<ID, SObject> newRegTransMap) {
         Map<Id, RegulatoryTrxnFee> paidRegTransMap = new Map<Id, RegulatoryTrxnFee>();
         try {
+            
             //fetch trans fee records which have been paid
             for(RegulatoryTrxnFee regTransRec : (List<RegulatoryTrxnFee>)newRegTransMap.values()) {
+                if(regTransRec.RecordTypeId!= RTFRecordType){ return;}
+                   
                 RegulatoryTrxnFee oldRec = (RegulatoryTrxnFee)oldRegTransMap.get(regTransRec.Id);
                 if(regTransRec.recordTypeId == BCMOH_Constants.transFeeRecTypeId &&
                    (regTransRec.Status == BCMOH_Constants.feeStatus || regTransRec.Status == BCMOH_Constants.cancelledStatus)
