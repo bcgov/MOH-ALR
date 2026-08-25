@@ -364,6 +364,13 @@ AND(
                 <elementReference>$Record.AccountId</elementReference>
             </value>
         </filters>
+        <filters>
+            <field>Status</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Active</stringValue>
+            </value>
+        </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>Asset</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
@@ -442,7 +449,7 @@ AND(
         <recordTriggerType>Update</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Active</status>
+    <status>Draft</status>
     <variables>
         <name>RTFItemRecord</name>
         <dataType>SObject</dataType>
