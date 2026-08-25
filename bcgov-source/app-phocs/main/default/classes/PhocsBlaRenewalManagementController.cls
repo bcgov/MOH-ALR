@@ -280,23 +280,36 @@ public static OperationResponse generateRenewalRecords(List<Id> accountIds) {
             );
         }
         
-        String accountSoql =
-        'SELECT Id, Name,' +
-        '(SELECT Id, PoolAream2__c, Status FROM Assets ' +
-        ' WHERE Status =: BL_STATUS_FIELD LIMIT 1),' +
-        '(SELECT Id, Status, ClosedDate__c, LicenseType.Name,' +
-        ' Account.Type, Account.CategoryL2__c,' +
-        ' Account.NumberOfSeats__c, Account.NoofConnections__c,' +
-        ' AccountId, LicensePermitName.Status' +
-        ' FROM BusinessLicenseApplicationAccount' +
-        ' WHERE LicensePermitName.Status = :BL_STATUS_FIELD' +
-        ' AND RecordTypeId = :BLARecordTypeId' +
-        ' AND LicenseType.Name IN :LICENSETYPES' +
-        ' AND ClosedDate__c != NULL' +
-        ' ORDER BY ClosedDate__c DESC LIMIT 1)' +
-        ' FROM Account WHERE Id IN :accountIds';
-        
-        List<Account> accounts = Database.query(accountSoql);
+        Map<String, Object> bindVars = new Map<String, Object>{
+    'blStatus' => BL_STATUS_FIELD,
+    'recordTypeId' => BLARecordTypeId,
+    'licenseTypes' => LICENSETYPES,
+    'accountIds' => accountIds
+};
+
+String accountSoql =
+    'SELECT Id, Name,' +
+    '(SELECT Id, PoolAream2__c, Status FROM Assets ' +
+    ' WHERE Status = :blStatus LIMIT 1),' +
+    '(SELECT Id, Status, ClosedDate__c, LicenseType.Name,' +
+    ' Account.Type, Account.CategoryL2__c,' +
+    ' Account.NumberOfSeats__c, Account.NoofConnections__c,' +
+    ' AccountId, LicensePermitName.Status' +
+    ' FROM BusinessLicenseApplicationAccount' +
+    ' WHERE LicensePermitName.Status = :blStatus' +
+    ' AND RecordTypeId = :recordTypeId' +
+    ' AND LicenseType.Name IN :licenseTypes' +
+    ' AND ClosedDate__c != NULL' +
+    ' ORDER BY ClosedDate__c DESC LIMIT 1)' +
+    ' FROM Account WHERE Id IN :accountIds';
+
+List<Account> accounts =
+    (List<Account>)Database.queryWithBinds(
+        accountSoql,
+        bindVars,
+        AccessLevel.USER_MODE
+    );
+
         
         if (accounts.isEmpty()) {
             return new OperationResponse(
