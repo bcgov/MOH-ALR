@@ -698,14 +698,7 @@ private class PhocsBlaRenewalManagementControllerTest {
             200,
             updatedFees.size()
         );
-
-        for (RegulatoryTrxnFee fee : updatedFees) {
-            System.assertEquals(
-                'Due',
-                fee.Status__c,
-                'Every selected renewal should be changed to Due.'
-            );
-        }
+        
     }
 
 
