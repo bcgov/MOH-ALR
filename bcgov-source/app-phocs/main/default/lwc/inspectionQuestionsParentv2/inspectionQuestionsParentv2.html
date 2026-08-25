@@ -267,8 +267,13 @@
 						<template lwc:if={hasRegulatoryCodes}>
 							<template for:each={regulatoryCodes} for:item="code">
 								<div key={code.regulatoryCodeId} class="modal-code-item">
-									<div class="slds-text-heading_small">{code.regulatoryCodeName}</div>
-									<div class="slds-text-body_regular slds-m-bottom_x-small">{code.regulatoryCodeSubject}</div>
+									<template lwc:if={code.hasAuthority}>
+										<div class="code-authority">{code.regulatoryAuthorityName}</div>
+									</template>
+									<div class="code-name">{code.regulatoryCodeName}</div>
+									<template lwc:if={code.hasDescription}>
+										<div class="code-description">{code.regulatoryCodeDescription}</div>
+									</template>
 									<p><strong>Status:</strong> {code.statusText}</p>
 									<p><strong>Validity:</strong> {code.validityText}</p>
 								</div>
