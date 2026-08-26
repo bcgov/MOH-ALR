@@ -22,7 +22,8 @@ public class PHOCSBLARegulatoryCodeControllerTest{
         RegulatoryAuthority childAuthority = new RegulatoryAuthority(Name = 'Child Care Licensing Regulation');
         RegulatoryAuthority communityAuthority = new RegulatoryAuthority(Name = 'Community Care & Assisted Living Act');
         RegulatoryAuthority residentialAuthority = new RegulatoryAuthority(Name = 'Residential Care Regulation');
-        List<RegulatoryAuthority> authorities = new List<RegulatoryAuthority>{childAuthority, communityAuthority, residentialAuthority};
+        RegulatoryAuthority dolsopAuthority = new RegulatoryAuthority(Name = 'Director of Licensing Standards of Practice');
+        List<RegulatoryAuthority> authorities = new List<RegulatoryAuthority>{childAuthority, communityAuthority, residentialAuthority, dolsopAuthority};
             insert authorities;
         
         // Regulatory Codes
@@ -32,7 +33,13 @@ public class PHOCSBLARegulatoryCodeControllerTest{
                 new RegulatoryCode(Name = 'RC-002', Subject = 'Subject 2', RegulatoryCodeDescription__c = 'Description 2', Type = 'Exemption',
                                    EffectiveFrom = System.today(), RecordTypeId = PHOCS_REG_CODE_RT, RegulatoryAuthorityId = communityAuthority.Id),
                 new RegulatoryCode(Name = 'RC-003', Subject = 'Subject 3', RegulatoryCodeDescription__c = 'Description 3', Type = 'Exemption',
-                                   EffectiveFrom = System.today(), RecordTypeId = PHOCS_REG_CODE_RT, RegulatoryAuthorityId = residentialAuthority.Id)
+                                   EffectiveFrom = System.today(), RecordTypeId = PHOCS_REG_CODE_RT, RegulatoryAuthorityId = residentialAuthority.Id),
+                new RegulatoryCode(Name = 'DOLSOP-CC', Subject = 'Child Care DOLSOP', RegulatoryCodeDescription__c = 'Child Care only', Type = 'Exemption',
+                                   EffectiveFrom = System.today(), RecordTypeId = PHOCS_REG_CODE_RT, RegulatoryAuthorityId = dolsopAuthority.Id,
+                                   ExemptionFacilityType__c = 'Child Care'),
+                new RegulatoryCode(Name = 'DOLSOP-RC', Subject = 'Residential Care DOLSOP', RegulatoryCodeDescription__c = 'Residential Care only', Type = 'Exemption',
+                                   EffectiveFrom = System.today(), RecordTypeId = PHOCS_REG_CODE_RT, RegulatoryAuthorityId = dolsopAuthority.Id,
+                                   ExemptionFacilityType__c = 'Residential Care')
                 };
                     insert regulatoryCodes;
         
@@ -63,7 +70,10 @@ public class PHOCSBLARegulatoryCodeControllerTest{
         
         Assert.areNotEqual(null, response, 'Response should not be null');
         Assert.areEqual('Child Care', response.accountType, 'Account type should be Child Care');
-        Assert.areEqual(2, response.regulatoryCodes.size(), 'Expected 2 eligible regulatory codes');
+        Assert.areEqual(3, response.regulatoryCodes.size(), 'Expected shared and Child Care regulatory codes');
+        for (PHOCSBLARegulatoryCodeController.RegulatoryCodeWrapper code : response.regulatoryCodes) {
+            Assert.areNotEqual('DOLSOP-RC', code.regulatoryCode, 'Residential Care DOLSOP code must not be returned');
+        }
     }
 
 /**
@@ -82,7 +92,10 @@ public class PHOCSBLARegulatoryCodeControllerTest{
         
         Assert.areNotEqual(null, response, 'Response should not be null');
         Assert.areEqual('Residential Care', response.accountType, 'Account type should be Residential Care');
-        Assert.areEqual(2, response.regulatoryCodes.size(), 'Expected 2 eligible regulatory codes');
+        Assert.areEqual(3, response.regulatoryCodes.size(), 'Expected shared and Residential Care regulatory codes');
+        for (PHOCSBLARegulatoryCodeController.RegulatoryCodeWrapper code : response.regulatoryCodes) {
+            Assert.areNotEqual('DOLSOP-CC', code.regulatoryCode, 'Child Care DOLSOP code must not be returned');
+        }
     }
     
 /**
@@ -144,7 +157,7 @@ public class PHOCSBLARegulatoryCodeControllerTest{
         authorities = PHOCSBLARegulatoryCodeController.getApplicableRegulatoryAuthorities('Child Care');
         Test.stopTest();
         
-        Assert.areEqual(2, authorities.size(), 'Expected 2 applicable authorities for Child Care');
+        Assert.areEqual(3, authorities.size(), 'Expected 3 applicable authorities for Child Care');
     }
 
 /**
