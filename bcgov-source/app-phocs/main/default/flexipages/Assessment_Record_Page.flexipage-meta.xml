@@ -175,6 +175,29 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
+                <fieldItem>Record.PartAScore__c</fieldItem>
+                <identifier>RecordPartAScore_cField</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 OR 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.Account.Type}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Child Care</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Account.Type}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Residential Care</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.CalculatedScore__c</fieldItem>
                 <identifier>RecordCalculatedScore_cField</identifier>
             </fieldInstance>
@@ -193,6 +216,29 @@
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.PartBScore__c</fieldItem>
+                <identifier>RecordPartBScore_cField</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 OR 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.Account.Type}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Child Care</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Account.Type}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Residential Care</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
@@ -399,11 +445,6 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>actionNames</name>
-                    <valueList>
-                        <valueListItems>
-                            <value>New</value>
-                        </valueListItems>
-                    </valueList>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>maxRecordsToDisplay</name>
@@ -453,6 +494,25 @@
                 </componentInstanceProperties>
                 <componentName>lst:dynamicRelatedList</componentName>
                 <identifier>lst_dynamicRelatedList</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentName>phocsAssessmentViolationRelatedList</componentName>
+                <identifier>c_phocsAssessmentViolationRelatedList</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 OR 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.Account.Type}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Child Care</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Account.Type}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Residential Care</rightValue>
+                    </criteria>
+                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <mode>Replace</mode>

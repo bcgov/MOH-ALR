@@ -1,0 +1,100 @@
+<template>
+    <div class="slds-p-horizontal_medium">
+        <template if:true={isLoading}>
+            <div class="slds-is-relative slds-p-vertical_large">
+                <lightning-spinner alternative-text="Loading violations" size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <template if:true={hasViolations}>
+            <div style="display:flex; justify-content:flex-end; align-items:center; gap:0.75rem;" class="slds-p-bottom_x-small">
+                <span class="slds-text-body_small slds-text-color_weak">{totalCountLabel}</span>
+                <template if:true={hasSelectedViolation}>
+                    <span class="slds-badge slds-theme_success">{selectedCountLabel}</span>
+                </template>
+            </div>
+
+            <template for:each={categories} for:item="category">
+                <div key={category.name} class="slds-m-bottom_small slds-box slds-box_x-small slds-p-around_none">
+                    <button type="button" class="slds-button slds-button_reset slds-p-around_small slds-truncate" style="width:100%; display:flex; align-items:center; justify-content:flex-start;" data-name={category.name} onclick={handleToggleCategory}>
+                        <lightning-icon icon-name={category.iconName} size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                        <span class="slds-text-heading_small">{category.name}</span>
+                    </button>
+
+                    <template if:true={category.isOpen}>
+                        <div class="slds-p-horizontal_small slds-p-bottom_small">
+                            <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped">
+                                <thead>
+                                    <tr class="slds-line-height_reset slds-text-title_caps">
+                                        <th scope="col" style="width:60px;"><div class="slds-truncate" title="Select">Select</div></th>
+                                        <th scope="col" style="width:120px;"><div class="slds-truncate" title="Violation Name">Violation Name</div></th>
+                                        <th scope="col" style="width:110px;"><div class="slds-truncate" title="Regulatory Code">Regulatory Code</div></th>
+                                        <th scope="col"><div class="slds-truncate" title="Inspection Question">Inspection Question</div></th>
+                                        <th scope="col" style="width:220px;"><div class="slds-truncate" title="Scope">Scope</div></th>
+                                        <th scope="col" style="width:280px;"><div class="slds-truncate" title="Severity">Severity</div></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={category.violations} for:item="violation">
+                                        <tr key={violation.id} class="slds-hint-parent">
+                                            <td>
+                                                <lightning-input type="checkbox" variant="label-hidden" data-id={violation.id} checked={violation.selected} onchange={handleSelectionChange}></lightning-input>
+                                            </td>
+                                            <td>
+                                                <a href={violation.recordUrl} target="_blank" rel="noopener noreferrer" class="slds-cell-wrap">{violation.violationName}</a>
+                                            </td>
+                                            <td>
+                                                <div class="slds-cell-wrap">{violation.regulatoryCode}</div>
+                                            </td>
+                                            <td>
+                                                <div class="slds-cell-wrap">{violation.inspectionQuestion}</div>
+                                            </td>
+                                            <td>
+                                                <div class="slds-select_container">
+                                                    <select class="slds-select" data-id={violation.id} data-field="scope" disabled={violation.scopeDisabled} required={violation.selected} onchange={handleValueChange}>
+                                                        <option value="">Select scope</option>
+                                                        <template for:each={violation.scopeSelectOptions} for:item="opt">
+                                                            <option key={opt.value} value={opt.value} selected={opt.selected}>{opt.label}</option>
+                                                        </template>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="slds-select_container">
+                                                    <select class="slds-select" data-id={violation.id} data-field="severity" disabled={violation.severityDisabled} required={violation.selected} onchange={handleValueChange}>
+                                                        <option value="">Select severity</option>
+                                                        <template for:each={violation.severitySelectOptions} for:item="opt">
+                                                            <option key={opt.value} value={opt.value} selected={opt.selected}>{opt.label}</option>
+                                                        </template>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </template>
+                </div>
+            </template>
+        </template>
+
+        <template if:false={hasViolations}>
+            <template if:false={isLoading}>
+                <div class="slds-illustration slds-illustration_small slds-p-around_medium slds-text-align_center">
+                    <lightning-icon icon-name="utility:success" size="medium" variant="success" class="slds-m-bottom_small"></lightning-icon>
+                    <p class="slds-text-heading_small slds-text-color_success">No violations identified</p>
+                    <p class="slds-text-body_small slds-text-color_weak">No regulatory code violations were found for the selected inspection.</p>
+                </div>
+            </template>
+        </template>
+
+        <template if:true={showValidationError}>
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error slds-m-top_small" role="alert">
+                <span class="slds-assistive-text">Error</span>
+                <lightning-icon icon-name="utility:error" size="x-small" variant="inverse" class="slds-m-right_x-small"></lightning-icon>
+                Scope and Severity must be selected for every checked violation before proceeding.
+            </div>
+        </template>
+    </div>
+</template>
