@@ -106,7 +106,7 @@
 												<lightning-combobox label="Priority" value={parent.selectPriority} options={priorityOptions} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} onchange={handlePriorityChange} disabled={isCompleted}> </lightning-combobox>
 											</lightning-layout-item>
 											<lightning-layout-item size="12" medium-device-size="4" class="slds-p-around_small slds-p-top_none">
-												<lightning-input label="Compliance Due Date" type="datetime-local" value={parent.preferredDateTime} required={parent.showNonCompliantFields} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-question-id={parent.assessmentIndicatorDefinitionId} data-field="compduedate" onchange={handleDatetimeChange} disabled={isCompleted}> </lightning-input>
+												<lightning-input label="Compliance Due Date" type="datetime-local" value={parent.preferredDateTime} data-definitionid={parent.assessmentIndicatorDefinitionId} data-taskid={parent.assessmentTaskId} data-question-id={parent.assessmentIndicatorDefinitionId} data-field="compduedate" onchange={handleDatetimeChange} disabled={isCompleted}> </lightning-input>
 											</lightning-layout-item>
 										</lightning-layout>
 									</template>
@@ -305,7 +305,7 @@
 								<lightning-input type="datetime-local" label="Actual Start Time" value={actualStartDate} max={currentDateTime} required data-field="actualstarttime" onchange={handleActualStartTimeChange}></lightning-input>
 							</div>
 							<div class="slds-col slds-size_1-of-2 slds-p-right_small">
-								<lightning-input type="text" label="Time Spent (HH:MM)" value={timeSpent} maxlength="5" required placeholder="HH:MM" data-field="timespent" onchange={handleTimeSpentChange}></lightning-input>
+								<lightning-input type="text" label="Time Spent (HH:MM)" value={timeSpent} maxlength="5" placeholder="HH:MM" data-field="timespent" onchange={handleTimeSpentChange}></lightning-input>
 								<div class="slds-col slds-size_1-of-1 slds-m-vertical_small"></div>
 								<lightning-input type="checkbox" label="Follow-up Inspection Required" checked={followUpInspectionRequired} onchange={handleFollowUpChange}></lightning-input>
 								<div class="slds-col slds-size_1-of-1 slds-m-vertical_small"></div>
