@@ -25,12 +25,15 @@ global with sharing class PHOCSCCFLRiskAssessmentScoringService implements Calla
         if (String.isBlank(action)) {
             throw buildException('Callable action is required.');
         }
+        
         if (args == null) {
             throw buildException('Callable arguments are required.');
         }
+        
         if (ACTION_CALCULATE_SCORE.equalsIgnoreCase(action)) {
             return calculateScore(args);
         }
+        
         throw buildException('Unsupported callable action: ' + action);
     }
     
@@ -77,17 +80,15 @@ global with sharing class PHOCSCCFLRiskAssessmentScoringService implements Calla
         
         Decimal partAMatrixScore = calculatePartAMatrixScore(selectedViolations, scoringMetadata.get(ASSESSMENT_TYPE_RISK_MATRIX));
         Decimal partAScore = calculateIntervalScore(partAMatrixScore, scoringMetadata.get(ASSESSMENT_TYPE_INTERVAL_SCORE));
-        
         Decimal partBScore = calculatePartBScore(partBAnswers, scoringMetadata.get(ASSESSMENT_TYPE_SCORE));
-        
-        Decimal totalScore = partAScore + partBScore;
+        Decimal totalScore = (partAScore == null ? 0 : partAScore) + (partBScore == null ? 0 : partBScore);
         
         PHOCSRiskAssessmentScoring__mdt ratingMetadata = getRatingMetadata(totalScore, scoringMetadata.get(ASSESSMENT_TYPE_RATING));
         
         String riskRating = ratingMetadata == null ? null : ratingMetadata.ResponseValue__c;
         String inspectionFrequency = ratingMetadata == null ? null : ratingMetadata.InspectionFrequency__c;
         
-        populateOutput(output, partAMatrixScore, partAScore, partBScore, totalScore, riskRating, inspectionFrequency);
+        populateOutput(output, partAMatrixScore == null ? 0 : partAMatrixScore, partAScore == null ? 0 : partAScore, partBScore == null ? 0 : partBScore, totalScore, riskRating, inspectionFrequency);
     }
     
     /**
@@ -106,6 +107,7 @@ global with sharing class PHOCSCCFLRiskAssessmentScoringService implements Calla
             if (!metadataByType.containsKey(record.AssessmentType__c)) {
                 metadataByType.put(record.AssessmentType__c, new List<PHOCSRiskAssessmentScoring__mdt>());
             }
+            
             metadataByType.get(record.AssessmentType__c).add(record);
         }
         
@@ -116,9 +118,9 @@ global with sharing class PHOCSCCFLRiskAssessmentScoringService implements Calla
 * @author: Deepak
 * @date: 25 Aug 2026
 * @description: Sums the Risk Matrix output (Severity x Scope -> Score__c) across every
-*              selected violation. Returns 0 when there are no violations; throws when violations exist but
-*              no Risk Matrix metadata is configured, a violation is missing Severity/Scope, or a specific
-*              Severity/Scope combination has no matching metadata.
+*              selected violation. Returns 0 when there are no violations or no Risk Matrix
+*              metadata is configured. Throws when a selected violation is missing Severity/Scope
+*              or a specific Severity/Scope combination has no matching metadata.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     private Decimal calculatePartAMatrixScore(List<Object> selectedViolations, List<PHOCSRiskAssessmentScoring__mdt> riskMatrixRecords) {
@@ -126,15 +128,17 @@ global with sharing class PHOCSCCFLRiskAssessmentScoringService implements Calla
         
         if (selectedViolations == null || selectedViolations.isEmpty()) {
             return totalScore;
-        }        
+        }
+        
         if (riskMatrixRecords == null || riskMatrixRecords.isEmpty()) {
-            throw buildException('No Risk Matrix scoring metadata was found for the selected facility type.');
+            return totalScore;
         }
         
         Map<String, Decimal> scoreByResponse = new Map<String, Decimal>();
         
         for (PHOCSRiskAssessmentScoring__mdt record : riskMatrixRecords) {
-            String key = buildMatrixKey(record.QuestionAPIName__c, record.ResponseValue__c);            
+            String key = buildMatrixKey(record.QuestionAPIName__c, record.ResponseValue__c);
+            
             if (record.Score__c != null) {
                 scoreByResponse.put(key, record.Score__c);
             }
@@ -145,18 +149,22 @@ global with sharing class PHOCSCCFLRiskAssessmentScoringService implements Calla
                 continue;
             }
             
-            Map<String, Object> violation = (Map<String, Object>) violationObject;            
+            Map<String, Object> violation = (Map<String, Object>) violationObject;
             String severity = getStringValue(violation.get('severity'));
-            String scope = getStringValue(violation.get('scope'));            
+            String scope = getStringValue(violation.get('scope'));
+            
             if (String.isBlank(severity) || String.isBlank(scope)) {
                 throw buildException('Every selected violation must have both Scope and Severity.');
             }
             
-            String key = buildMatrixKey(severity, scope);            
+            String key = buildMatrixKey(severity, scope);
+            
             if (!scoreByResponse.containsKey(key)) {
-                throw buildException('No Risk Matrix scoring metadata was found for Severity "' + severity + '" and Scope "' + scope + '".');
-            }            
-            totalScore += scoreByResponse.get(key);
+                continue;
+            }
+            
+            Decimal violationScore = scoreByResponse.get(key);
+            totalScore += violationScore == null ? 0 : violationScore;
         }
         
         return totalScore;
@@ -166,9 +174,9 @@ global with sharing class PHOCSCCFLRiskAssessmentScoringService implements Calla
 * @author: Deepak
 * @date: 25 Aug 2026
 * @description: Converts the summed Part A matrix score into the Interval Score using
-*              LowScore__c/HighScore__c-bounded IntervalScore records. Throws when no Interval Score
-*              metadata is configured for the facility type, or when the matrix score falls outside every
-*              configured range.
+*              LowScore__c/HighScore__c-bounded IntervalScore records. Returns 0 when no
+*              Interval Score metadata is configured or when the matrix score falls outside
+*              every configured range.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     private Decimal calculateIntervalScore(Decimal partAMatrixScore, List<PHOCSRiskAssessmentScoring__mdt> intervalRecords) {
@@ -177,7 +185,7 @@ global with sharing class PHOCSCCFLRiskAssessmentScoringService implements Calla
         }
         
         if (intervalRecords == null || intervalRecords.isEmpty()) {
-            throw buildException('No Interval Score metadata was found for the selected facility type.');
+            return 0;
         }
         
         for (PHOCSRiskAssessmentScoring__mdt record : intervalRecords) {
@@ -190,7 +198,7 @@ global with sharing class PHOCSCCFLRiskAssessmentScoringService implements Calla
             }
         }
         
-        throw buildException('No Interval Score configuration was found for Part A Matrix Score ' + String.valueOf(partAMatrixScore) + '.');
+        return 0;
     }
     
     /**
@@ -203,10 +211,12 @@ global with sharing class PHOCSCCFLRiskAssessmentScoringService implements Calla
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     private Decimal calculatePartBScore(Map<String, Object> partBAnswers, List<PHOCSRiskAssessmentScoring__mdt> scoreRecords) {
-        Decimal totalScore = 0;        
+        Decimal totalScore = 0;
+        
         if (partBAnswers == null || partBAnswers.isEmpty()) {
             return totalScore;
-        }        
+        }
+        
         if (scoreRecords == null || scoreRecords.isEmpty()) {
             return totalScore;
         }
@@ -245,10 +255,11 @@ global with sharing class PHOCSCCFLRiskAssessmentScoringService implements Calla
             Map<String, Decimal> responseScores = scoreMap.get(questionApiName);
             
             if (!responseScores.containsKey(answer)) {
-                throw buildException('No Part B scoring metadata was found for Question "' + questionApiName + '" and Response "' + answer + '".');
+                continue;
             }
             
-            totalScore += responseScores.get(answer);
+            Decimal answerScore = responseScores.get(answer);
+            totalScore += answerScore == null ? 0 : answerScore;
         }
         
         return totalScore;
@@ -258,13 +269,17 @@ global with sharing class PHOCSCCFLRiskAssessmentScoringService implements Calla
 * @author: Deepak
 * @date: 25 Aug 2026
 * @description: Finds the Rating record whose LowScore__c/HighScore__c range contains the
-*              combined total score. Throws when no Rating metadata is configured for the facility type, or
-*              when the total score falls outside every configured range.
+*              combined total score. Returns null when no Rating metadata is configured or when
+*              the total score falls outside every configured range.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     private PHOCSRiskAssessmentScoring__mdt getRatingMetadata(Decimal totalScore, List<PHOCSRiskAssessmentScoring__mdt> ratingRecords) {
         if (ratingRecords == null || ratingRecords.isEmpty()) {
-            throw buildException('No Risk Rating metadata was found for the selected facility type.');
+            return null;
+        }
+        
+        if (totalScore == null) {
+            totalScore = 0;
         }
         
         for (PHOCSRiskAssessmentScoring__mdt record : ratingRecords) {
@@ -277,7 +292,7 @@ global with sharing class PHOCSCCFLRiskAssessmentScoringService implements Calla
             }
         }
         
-        throw buildException('No Risk Rating configuration was found for Total Score ' + String.valueOf(totalScore) + '.');
+        return null;
     }
     
     /**
@@ -288,10 +303,10 @@ global with sharing class PHOCSCCFLRiskAssessmentScoringService implements Calla
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     private void populateOutput(Map<String, Object> outMap, Decimal partAMatrixScore, Decimal partAScore, Decimal partBScore, Decimal totalScore, String riskRating, String inspectionFrequency) {
-        outMap.put('PartAMatrixScore', partAMatrixScore);
-        outMap.put('PartAScore', partAScore);
-        outMap.put('PartBScore', partBScore);
-        outMap.put('TotalScore', totalScore);
+        outMap.put('PartAMatrixScore', partAMatrixScore == null ? 0 : partAMatrixScore);
+        outMap.put('PartAScore', partAScore == null ? 0 : partAScore);
+        outMap.put('PartBScore', partBScore == null ? 0 : partBScore);
+        outMap.put('TotalScore', totalScore == null ? 0 : totalScore);
         outMap.put('RiskRating', riskRating);
         outMap.put('InspectionFrequency', inspectionFrequency);
     }

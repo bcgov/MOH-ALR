@@ -49,11 +49,11 @@ public class PHOCSAsmntVioRelatedControllerTest {
     }
     
     /**
-    * @author: Deepak
-    * @date: 25 Aug 2026
-    * @description: Verifies that null Assessment Id returns an empty list.
-    * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
-    */
+* @author: Deepak
+* @date: 25 Aug 2026
+* @description: Verifies that null Assessment Id returns an empty list.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
     @isTest
     public static void testGetRelatedViolations_NullAssessmentId() {
         Test.startTest();
@@ -65,11 +65,11 @@ public class PHOCSAsmntVioRelatedControllerTest {
     }
     
     /**
-    * @author: Deepak
-    * @date: 25 Aug 2026
-    * @description: Verifies that an invalid Assessment Id returns an empty list.
-    * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
-    */
+* @author: Deepak
+* @date: 25 Aug 2026
+* @description: Verifies that an invalid Assessment Id returns an empty list.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
     @isTest
     public static void testGetRelatedViolations_InvalidAssessmentId() {
         Id assessmentId = '001000000000001AAA';
@@ -83,11 +83,11 @@ public class PHOCSAsmntVioRelatedControllerTest {
     }
     
     /**
-    * @author: Deepak
-    * @date: 25 Aug 2026
-    * @description: Verifies that an Assessment without ResponseContextId returns an empty list.
-    * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
-    */
+* @author: Deepak
+* @date: 25 Aug 2026
+* @description: Verifies that an Assessment without ResponseContextId returns an empty list.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
     @isTest
     public static void testGetRelatedViolations_AssessmentWithoutResponseContext() {
         Id assessmentRTId = Schema.SObjectType.Assessment.getRecordTypeInfosByDeveloperName().get('PHOCSAssessment').getRecordTypeId();
@@ -104,11 +104,11 @@ public class PHOCSAsmntVioRelatedControllerTest {
     }
     
     /**
-    * @author: Deepak
-    * @date: 25 Aug 2026
-    * @description: Verifies that qualifying Regulatory Code Violations are returned for the Inspection associated with the Assessment.
-    * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
-    */
+* @author: Deepak
+* @date: 25 Aug 2026
+* @description: Verifies that qualifying Regulatory Code Violations are returned for the Inspection associated with the Assessment.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
     @isTest
     public static void testGetRelatedViolations_ReturnsQualifyingViolations() {
         Assessment assessment = [SELECT Id, ResponseContextId FROM Assessment WHERE RecordType.DeveloperName = 'PHOCSAssessment' AND ResponseContextId != NULL LIMIT 1];
@@ -126,11 +126,11 @@ public class PHOCSAsmntVioRelatedControllerTest {
     }
     
     /**
-    * @author: Deepak
-    * @date: 25 Aug 2026
-    * @description: Verifies that all fields required by the related-list LWC are returned.
-    * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
-    */
+* @author: Deepak
+* @date: 25 Aug 2026
+* @description: Verifies that all fields required by the related-list LWC are returned.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
     @isTest
     public static void testGetRelatedViolations_ReturnsRequiredFields() {
         Assessment assessment = [SELECT Id FROM Assessment WHERE RecordType.DeveloperName = 'PHOCSAssessment' AND ResponseContextId != NULL LIMIT 1];
@@ -153,11 +153,11 @@ public class PHOCSAsmntVioRelatedControllerTest {
     }
     
     /**
-    * @author: Deepak
-    * @date: 25 Aug 2026
-    * @description: Verifies that violations without Scope are excluded from the results.
-    * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
-    */
+* @author: Deepak
+* @date: 25 Aug 2026
+* @description: Verifies that violations without Scope are excluded from the results.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
     @isTest
     public static void testGetRelatedViolations_ExcludesMissingScope() {
         Assessment assessment = [SELECT Id, ResponseContextId FROM Assessment WHERE RecordType.DeveloperName = 'PHOCSAssessment' AND ResponseContextId != NULL LIMIT 1];
@@ -179,11 +179,11 @@ public class PHOCSAsmntVioRelatedControllerTest {
     }
     
     /**
-    * @author: Deepak
-    * @date: 25 Aug 2026
-    * @description: Verifies that violations without Severity are excluded from the results.
-    * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
-    */
+* @author: Deepak
+* @date: 25 Aug 2026
+* @description: Verifies that violations without Severity are excluded from the results.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
     @isTest
     public static void testGetRelatedViolations_ExcludesMissingSeverity() {
         Assessment assessment = [SELECT Id, ResponseContextId FROM Assessment WHERE RecordType.DeveloperName = 'PHOCSAssessment' AND ResponseContextId != NULL LIMIT 1];
@@ -205,11 +205,11 @@ public class PHOCSAsmntVioRelatedControllerTest {
     }
     
     /**
-    * @author: Deepak
-    * @date: 25 Aug 2026
-    * @description: Verifies that returned violations belong to the Inspection referenced by Assessment.ResponseContextId.
-    * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
-    */
+* @author: Deepak
+* @date: 25 Aug 2026
+* @description: Verifies that returned violations belong to the Inspection referenced by Assessment.ResponseContextId.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
     @isTest
     public static void testGetRelatedViolations_InspectionRelationship() {
         Assessment assessment = [SELECT Id, ResponseContextId FROM Assessment WHERE RecordType.DeveloperName = 'PHOCSAssessment' AND ResponseContextId != NULL LIMIT 1];
@@ -223,11 +223,11 @@ public class PHOCSAsmntVioRelatedControllerTest {
     }
     
     /**
-    * @author: Deepak
-    * @date: 25 Aug 2026
-    * @description: Verifies that child violations are excluded based on the IsChildViolation__c formula field.
-    * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
-    */
+* @author: Deepak
+* @date: 25 Aug 2026
+* @description: Verifies that child violations are excluded based on the IsChildViolation__c formula field.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
     @isTest
     public static void testGetRelatedViolations_ExcludesChildViolations() {
         Assessment assessment = [SELECT Id, ResponseContextId FROM Assessment WHERE RecordType.DeveloperName = 'PHOCSAssessment' AND ResponseContextId != NULL LIMIT 1];
