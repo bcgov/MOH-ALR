@@ -115,7 +115,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>17.0</sequenceNumber>
+        <sequenceNumber>16.0</sequenceNumber>
         <type>Step</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -176,7 +176,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>11.0</sequenceNumber>
+        <sequenceNumber>10.0</sequenceNumber>
         <type>Remote Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -279,7 +279,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>14.0</sequenceNumber>
+        <sequenceNumber>13.0</sequenceNumber>
         <type>Remote Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -326,7 +326,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>13.0</sequenceNumber>
+        <sequenceNumber>12.0</sequenceNumber>
         <type>DataRaptor Extract Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -510,7 +510,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>18.0</sequenceNumber>
+        <sequenceNumber>17.0</sequenceNumber>
         <type>Navigate Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -518,38 +518,40 @@
             <isActive>true</isActive>
             <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
             <level>1.0</level>
-            <name>Messaging1</name>
+            <name>LineBreak4</name>
             <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
             <propertySetConfig>{
-  &quot;controlWidth&quot; : 12,
-  &quot;label&quot; : &quot;Messaging1&quot;,
-  &quot;validateExpression&quot; : null,
-  &quot;messages&quot; : [ {
-    &quot;value&quot; : true,
-    &quot;type&quot; : &quot;Warning&quot;,
-    &quot;text&quot; : &quot;Please select atleast one violation to proceed next.&quot;,
-    &quot;active&quot; : true
-  }, {
-    &quot;value&quot; : false,
-    &quot;type&quot; : &quot;Requirement&quot;,
-    &quot;text&quot; : &quot;&quot;,
-    &quot;active&quot; : false
-  } ],
-  &quot;hideLabel&quot; : true,
+  &quot;label&quot; : &quot;LineBreak4&quot;,
+  &quot;padding&quot; : 14,
+  &quot;show&quot; : null,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;
+}</propertySetConfig>
+            <sequenceNumber>1.0</sequenceNumber>
+            <type>Line Break</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>LineBreak5</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;label&quot; : &quot;LineBreak5&quot;,
+  &quot;padding&quot; : 12,
   &quot;show&quot; : {
     &quot;group&quot; : {
       &quot;operator&quot; : &quot;AND&quot;,
       &quot;rules&quot; : [ {
-        &quot;data&quot; : &quot;false&quot;,
-        &quot;condition&quot; : &quot;=&quot;,
-        &quot;field&quot; : &quot;hasSelectedViolation&quot;
+        &quot;data&quot; : &quot;0&quot;,
+        &quot;condition&quot; : &quot;&lt;&gt;&quot;,
+        &quot;field&quot; : &quot;openRegViolationCount&quot;
       } ]
     }
   },
   &quot;HTMLTemplateId&quot; : &quot;&quot;
 }</propertySetConfig>
-            <sequenceNumber>1.0</sequenceNumber>
-            <type>Validation</type>
+            <sequenceNumber>3.0</sequenceNumber>
+            <type>Line Break</type>
         </childElements>
         <childElements>
             <isActive>true</isActive>
@@ -571,8 +573,95 @@
   } ],
   &quot;disableKeyUpValid&quot; : false
 }</propertySetConfig>
-            <sequenceNumber>0.0</sequenceNumber>
+            <sequenceNumber>4.0</sequenceNumber>
             <type>Custom Lightning Web Component</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>TextBlock2</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 12.0,
+  &quot;label&quot; : &quot;TextBlock1&quot;,
+  &quot;text&quot; : &quot;&lt;p&gt;&lt;strong&gt;Facility Name:&amp;nbsp; &lt;/strong&gt;%facilityName%&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &lt;strong&gt;Facility Type&lt;/strong&gt;: %facilityType%&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&lt;strong&gt;Inspection&lt;/strong&gt;: %selectedInspId%&lt;/p&gt;&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;dataJSON&quot; : false,
+  &quot;textKey&quot; : &quot;&quot;,
+  &quot;sanitize&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>0.0</sequenceNumber>
+            <type>Text Block</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>TextBlock4</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;TextBlock4&quot;,
+  &quot;text&quot; : &quot;&lt;p&gt;Select the top three non-compliance items for each category from the most recent routine inspection report. For each item, select the applicable Scope and Severity. Scope indicates the potential for harm posed by the identified risk, and Severity indicates the degree of harm that could result.&lt;/p&gt;&quot;,
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;0&quot;,
+        &quot;condition&quot; : &quot;&lt;&gt;&quot;,
+        &quot;field&quot; : &quot;openRegViolationCount&quot;
+      } ]
+    }
+  },
+  &quot;dataJSON&quot; : false,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;textKey&quot; : &quot;&quot;,
+  &quot;sanitize&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>2.0</sequenceNumber>
+            <type>Text Block</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>WarningMessage</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;WarningMessage&quot;,
+  &quot;validateExpression&quot; : null,
+  &quot;messages&quot; : [ {
+    &quot;value&quot; : true,
+    &quot;type&quot; : &quot;Warning&quot;,
+    &quot;text&quot; : &quot;Please select at least one violation to proceed next.&quot;,
+    &quot;active&quot; : true
+  }, {
+    &quot;value&quot; : false,
+    &quot;type&quot; : &quot;Requirement&quot;,
+    &quot;text&quot; : &quot;&quot;,
+    &quot;active&quot; : false
+  } ],
+  &quot;hideLabel&quot; : true,
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;false&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;field&quot; : &quot;hasSelectedViolation&quot;
+      }, {
+        &quot;field&quot; : &quot;openRegViolationCount&quot;,
+        &quot;condition&quot; : &quot;&lt;&gt;&quot;,
+        &quot;data&quot; : &quot;0&quot;
+      } ]
+    }
+  },
+  &quot;HTMLTemplateId&quot; : &quot;&quot;
+}</propertySetConfig>
+            <sequenceNumber>5.0</sequenceNumber>
+            <type>Validation</type>
         </childElements>
         <isActive>true</isActive>
         <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
@@ -626,7 +715,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>7.0</sequenceNumber>
+        <sequenceNumber>6.0</sequenceNumber>
         <type>Step</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -642,7 +731,7 @@
   &quot;Language&quot; : &quot;English&quot;,
   &quot;show&quot; : null
 }</propertySetConfig>
-        <sequenceNumber>10.0</sequenceNumber>
+        <sequenceNumber>9.0</sequenceNumber>
         <type>OmniScript</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -684,6 +773,21 @@
             <isActive>true</isActive>
             <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
             <level>1.0</level>
+            <name>LineBreak6</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;label&quot; : &quot;LineBreak6&quot;,
+  &quot;padding&quot; : 12,
+  &quot;show&quot; : null,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;
+}</propertySetConfig>
+            <sequenceNumber>3.0</sequenceNumber>
+            <type>Line Break</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
             <name>SearchInspection</name>
             <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
             <propertySetConfig>{
@@ -705,7 +809,7 @@
       &quot;phase1MapItems&quot; : [ {
         &quot;InterfaceObjectName__c&quot; : &quot;InspectionType&quot;,
         &quot;InterfaceFieldAPIName__c&quot; : &quot;Name&quot;,
-        &quot;FilterOperator__c&quot; : &quot;LIKE&quot;,
+        &quot;FilterOperator__c&quot; : &quot;=&quot;,
         &quot;FilterValue__c&quot; : &quot;&apos;Routine&apos;&quot;,
         &quot;InterfaceObjectLookupOrder__c&quot; : 1,
         &quot;DomainObjectFieldAPIName__c&quot; : &quot;inspTypeRec&quot;
@@ -768,8 +872,27 @@
     &quot;default&quot; : null
   }
 }</propertySetConfig>
-            <sequenceNumber>2.0</sequenceNumber>
+            <sequenceNumber>4.0</sequenceNumber>
             <type>Lookup</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>TextBlock5</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;TextBlock5&quot;,
+  &quot;text&quot; : &quot;&lt;p&gt;Select the most recent routine inspection from the list below.&lt;/p&gt;&quot;,
+  &quot;show&quot; : null,
+  &quot;dataJSON&quot; : false,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;textKey&quot; : &quot;&quot;,
+  &quot;sanitize&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>2.0</sequenceNumber>
+            <type>Text Block</type>
         </childElements>
         <isActive>true</isActive>
         <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
@@ -1033,7 +1156,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>12.0</sequenceNumber>
+        <sequenceNumber>11.0</sequenceNumber>
         <type>Step</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -1047,7 +1170,7 @@
   &quot;label&quot; : &quot;SetErrorForNoViolationSelected&quot;,
   &quot;validationRequired&quot; : &quot;Step&quot;,
   &quot;elementErrorMap&quot; : {
-    &quot;phocsCCFLViolationAssessmentLWC&quot; : &quot;Please select atleast one violation to proceed next.&quot;
+    &quot;phocsCCFLViolationAssessmentLWC&quot; : &quot;Please select at least one violation to proceed next.&quot;
   },
   &quot;showPersistentComponent&quot; : [ true, false ],
   &quot;show&quot; : {
@@ -1057,6 +1180,10 @@
         &quot;data&quot; : &quot;false&quot;,
         &quot;condition&quot; : &quot;=&quot;,
         &quot;field&quot; : &quot;hasSelectedViolation&quot;
+      }, {
+        &quot;field&quot; : &quot;openRegViolationCount&quot;,
+        &quot;condition&quot; : &quot;&lt;&gt;&quot;,
+        &quot;data&quot; : &quot;0&quot;
       } ]
     }
   },
@@ -1066,7 +1193,7 @@
   &quot;message&quot; : { },
   &quot;pubsub&quot; : false
 }</propertySetConfig>
-        <sequenceNumber>8.0</sequenceNumber>
+        <sequenceNumber>7.0</sequenceNumber>
         <type>Set Errors</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -1090,6 +1217,10 @@
         &quot;data&quot; : &quot;false&quot;,
         &quot;condition&quot; : &quot;=&quot;,
         &quot;field&quot; : &quot;isViolationSelectionValid&quot;
+      }, {
+        &quot;field&quot; : &quot;openRegViolationCount&quot;,
+        &quot;condition&quot; : &quot;&lt;&gt;&quot;,
+        &quot;data&quot; : &quot;0&quot;
       } ]
     }
   },
@@ -1099,40 +1230,7 @@
   &quot;message&quot; : { },
   &quot;pubsub&quot; : false
 }</propertySetConfig>
-        <sequenceNumber>9.0</sequenceNumber>
-        <type>Set Errors</type>
-    </omniProcessElements>
-    <omniProcessElements>
-        <isActive>true</isActive>
-        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-        <level>0.0</level>
-        <name>SetErrorsForNoViolations</name>
-        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-        <propertySetConfig>{
-  &quot;controlWidth&quot; : 12,
-  &quot;label&quot; : &quot;SetErrorsForNoViolations&quot;,
-  &quot;validationRequired&quot; : &quot;Step&quot;,
-  &quot;elementErrorMap&quot; : {
-    &quot;SearchInspection&quot; : &quot;No open violations were identified for the selected inspection.&quot;
-  },
-  &quot;showPersistentComponent&quot; : [ true, false ],
-  &quot;show&quot; : {
-    &quot;group&quot; : {
-      &quot;operator&quot; : &quot;AND&quot;,
-      &quot;rules&quot; : [ {
-        &quot;data&quot; : &quot;0&quot;,
-        &quot;condition&quot; : &quot;=&quot;,
-        &quot;field&quot; : &quot;openRegViolationCount&quot;
-      } ]
-    }
-  },
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;wpm&quot; : false,
-  &quot;ssm&quot; : false,
-  &quot;message&quot; : { },
-  &quot;pubsub&quot; : false
-}</propertySetConfig>
-        <sequenceNumber>5.0</sequenceNumber>
+        <sequenceNumber>8.0</sequenceNumber>
         <type>Set Errors</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -1155,7 +1253,7 @@
   &quot;message&quot; : { },
   &quot;pubsub&quot; : false
 }</propertySetConfig>
-        <sequenceNumber>6.0</sequenceNumber>
+        <sequenceNumber>5.0</sequenceNumber>
         <type>Set Values</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -1201,7 +1299,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>15.0</sequenceNumber>
+        <sequenceNumber>14.0</sequenceNumber>
         <type>DataRaptor Post Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -1247,7 +1345,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>16.0</sequenceNumber>
+        <sequenceNumber>15.0</sequenceNumber>
         <type>DataRaptor Post Action</type>
     </omniProcessElements>
     <omniProcessType>OmniScript</omniProcessType>
