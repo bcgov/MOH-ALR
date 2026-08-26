@@ -481,18 +481,25 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
         for (PHOCSRiskAssessmentScoring__mdt record : riskMatrixRecords) {
             candidateProgramAreas.add(record.ProgramArea__c);
         }
-        for (String candidate : candidateProgramAreas) {
-            List<PHOCSRiskAssessmentScoring__mdt> intervalRecords = [SELECT Id FROM PHOCSRiskAssessmentScoring__mdt WHERE ProgramArea__c = :candidate AND AssessmentType__c = 'IntervalScore' LIMIT 1];
-            if (intervalRecords.isEmpty()) {
-                continue;
-            }
-            List<PHOCSRiskAssessmentScoring__mdt> ratingRecords = [SELECT Id FROM PHOCSRiskAssessmentScoring__mdt WHERE ProgramArea__c = :candidate AND AssessmentType__c = 'Rating' LIMIT 1];
-            if (ratingRecords.isEmpty()) {
-                continue;
-            }
-            return candidate;
+        if (candidateProgramAreas.isEmpty()) {
+            return null;
         }
-        Assert.isTrue(true, 'Test Assert');
+
+        Set<String> programAreasWithInterval = new Set<String>();
+        for (PHOCSRiskAssessmentScoring__mdt record : [SELECT ProgramArea__c FROM PHOCSRiskAssessmentScoring__mdt WHERE ProgramArea__c IN :candidateProgramAreas AND AssessmentType__c = 'IntervalScore']) {
+            programAreasWithInterval.add(record.ProgramArea__c);
+        }
+
+        Set<String> programAreasWithRating = new Set<String>();
+        for (PHOCSRiskAssessmentScoring__mdt record : [SELECT ProgramArea__c FROM PHOCSRiskAssessmentScoring__mdt WHERE ProgramArea__c IN :candidateProgramAreas AND AssessmentType__c = 'Rating']) {
+            programAreasWithRating.add(record.ProgramArea__c);
+        }
+
+        for (String candidate : candidateProgramAreas) {
+            if (programAreasWithInterval.contains(candidate) && programAreasWithRating.contains(candidate)) {
+                return candidate;
+            }
+        }
         return null;
     }
     
@@ -505,20 +512,35 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
     private static PartBScenario resolvePartBScenario() {
         List<PHOCSRiskAssessmentScoring__mdt> scoreRecords = [SELECT ProgramArea__c, QuestionAPIName__c, ResponseValue__c, Score__c FROM PHOCSRiskAssessmentScoring__mdt WHERE AssessmentType__c = 'Score' 
                                                               AND QuestionAPIName__c != null AND Score__c != null LIMIT 50];
+        if (scoreRecords.isEmpty()) {
+            return null;
+        }
+
+        Set<String> programAreas = new Set<String>();
         for (PHOCSRiskAssessmentScoring__mdt scoreRecord : scoreRecords) {
-            List<PHOCSRiskAssessmentScoring__mdt> matrixRecords = [SELECT QuestionAPIName__c, ResponseValue__c, Score__c FROM PHOCSRiskAssessmentScoring__mdt WHERE ProgramArea__c = :scoreRecord.ProgramArea__c AND AssessmentType__c = 'RiskMatrix' AND Score__c != null LIMIT 1];
-            if (!matrixRecords.isEmpty()) {
+            programAreas.add(scoreRecord.ProgramArea__c);
+        }
+
+        Map<String, PHOCSRiskAssessmentScoring__mdt> matrixRecordByProgramArea = new Map<String, PHOCSRiskAssessmentScoring__mdt>();
+        for (PHOCSRiskAssessmentScoring__mdt matrixRecord : [SELECT ProgramArea__c, QuestionAPIName__c, ResponseValue__c, Score__c FROM PHOCSRiskAssessmentScoring__mdt WHERE ProgramArea__c IN :programAreas AND AssessmentType__c = 'RiskMatrix' AND Score__c != null]) {
+            if (!matrixRecordByProgramArea.containsKey(matrixRecord.ProgramArea__c)) {
+                matrixRecordByProgramArea.put(matrixRecord.ProgramArea__c, matrixRecord);
+            }
+        }
+
+        for (PHOCSRiskAssessmentScoring__mdt scoreRecord : scoreRecords) {
+            if (matrixRecordByProgramArea.containsKey(scoreRecord.ProgramArea__c)) {
+                PHOCSRiskAssessmentScoring__mdt matrixRecord = matrixRecordByProgramArea.get(scoreRecord.ProgramArea__c);
                 PartBScenario scenario = new PartBScenario();
                 scenario.programArea = scoreRecord.ProgramArea__c;
                 scenario.questionApiName = scoreRecord.QuestionAPIName__c;
                 scenario.responseValue = scoreRecord.ResponseValue__c;
                 scenario.partBScore = scoreRecord.Score__c;
-                scenario.matrixQuestion = matrixRecords[0].QuestionAPIName__c;
-                scenario.matrixResponse = matrixRecords[0].ResponseValue__c;
+                scenario.matrixQuestion = matrixRecord.QuestionAPIName__c;
+                scenario.matrixResponse = matrixRecord.ResponseValue__c;
                 return scenario;
             }
         }
-        Assert.isTrue(true, 'Test Assert');
         return null;
     }
     

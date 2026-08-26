@@ -26,7 +26,7 @@ public with sharing class PHOCSAsmntVioRelatedController {
         
         Id inspectionId = assessments[0].ResponseContextId;
         
-        return [SELECT Id, Name, RegulatoryCode.Name, RegulatoryCode.Subject, InspectionAssmntInd.AssessmentIndDefinition.Name, Scope__c, Severity__c FROM RegulatoryCodeViolation
+        return [SELECT Id, Name, InspectionId, RegulatoryCode.Name, RegulatoryCode.Subject, InspectionAssmntInd.AssessmentIndDefinition.Name, Scope__c, Severity__c, IsChildViolation__c FROM RegulatoryCodeViolation
                 WHERE InspectionId = :inspectionId AND Scope__c != NULL AND Severity__c != NULL AND IsChildViolation__c = false ORDER BY InspectionAssmntInd.AssessmentTask.Name];
     }
 }
