@@ -193,6 +193,20 @@ export default class PhocsAddRegulatoryCode extends LightningElement {
                         ).toLowerCase();
 
 
+                    const regulatoryAuthority =
+                        (
+                            record.regulatoryAuthority ||
+                            ''
+                        ).toLowerCase();
+
+
+                    const subject =
+                        (
+                            record.subject ||
+                            ''
+                        ).toLowerCase();
+
+
                     const description =
                         (
                             record.description ||
@@ -203,7 +217,15 @@ export default class PhocsAddRegulatoryCode extends LightningElement {
                     const matchesSearch =
                         !normalizedSearchTerm ||
 
+                        regulatoryAuthority.includes(
+                            normalizedSearchTerm
+                        ) ||
+
                         regulatoryCode.includes(
+                            normalizedSearchTerm
+                        ) ||
+
+                        subject.includes(
                             normalizedSearchTerm
                         ) ||
 
