@@ -863,8 +863,12 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
 				formattedCodes.push({
 					regulatoryCodeId: code.regulatoryCodeId,
+					regulatoryAuthorityName: code.regulatoryAuthorityName,
 					regulatoryCodeName: code.regulatoryCodeName,
 					regulatoryCodeSubject: code.regulatoryCodeSubject,
+					regulatoryCodeDescription: code.regulatoryCodeDescription,
+					hasAuthority: !!code.regulatoryAuthorityName,
+					hasDescription: !!code.regulatoryCodeDescription,
 					statusText: code.isActive ? "Active" : "Inactive",
 					validityText: code.validityText || "N/A",
 				});
