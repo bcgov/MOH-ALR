@@ -143,9 +143,10 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
         Test.stopTest();
         
         Assert.areEqual(0, (Decimal) result.get('PartAMatrixScore'), 'Part A Matrix Score should be zero when no metadata exists');
-        Assert.areEqual(0, (Decimal) result.get('PartAScore'), 'Part A Score should be zero when no Interval Score metadata exists');
-        Assert.areEqual(0, (Decimal) result.get('PartBScore'), 'Part B Score should be zero when no Part B metadata exists');
+        Assert.areEqual(0, (Decimal) result.get('OutputPartAScore'), 'Part A Score should be zero when no Interval Score metadata exists');
+        Assert.areEqual(0, (Decimal) result.get('OutputPartBScore'), 'Part B Score should be zero when no Part B metadata exists');
         Assert.areEqual(0, (Decimal) result.get('TotalScore'), 'Total Score should be zero when no scoring metadata exists');
+        Assert.areEqual(0, (Decimal) result.get('CalculatedScore'), 'Calculated Score should be zero when no scoring metadata exists');
         Assert.isNull(result.get('RiskRating'), 'Risk Rating should be null when no rating metadata exists');
         Assert.isNull(result.get('InspectionFrequency'), 'Inspection Frequency should be null when no rating metadata exists');
     }
@@ -171,9 +172,10 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
         Test.stopTest();
         
         Assert.areEqual(0, (Decimal) result.get('PartAMatrixScore'), 'Flat arguments should be parsed correctly');
-        Assert.areEqual(0, (Decimal) result.get('PartAScore'), 'Part A Score should be zero');
-        Assert.areEqual(0, (Decimal) result.get('PartBScore'), 'Part B Score should be zero');
+        Assert.areEqual(0, (Decimal) result.get('OutputPartAScore'), 'Part A Score should be zero');
+        Assert.areEqual(0, (Decimal) result.get('OutputPartBScore'), 'Part B Score should be zero');
         Assert.areEqual(0, (Decimal) result.get('TotalScore'), 'Total Score should be zero');
+        Assert.areEqual(0, (Decimal) result.get('CalculatedScore'), 'Calculated Score should be zero');
     }
     
     /**
@@ -251,9 +253,10 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
         Test.stopTest();
         
         Assert.areEqual(0, (Decimal) output.get('PartAMatrixScore'), 'Non-map violations should be skipped');
-        Assert.areEqual(0, (Decimal) output.get('PartAScore'), 'Part A Score should be zero');
-        Assert.areEqual(0, (Decimal) output.get('PartBScore'), 'Part B Score should be zero');
+        Assert.areEqual(0, (Decimal) output.get('OutputPartAScore'), 'Part A Score should be zero');
+        Assert.areEqual(0, (Decimal) output.get('OutputPartBScore'), 'Part B Score should be zero');
         Assert.areEqual(0, (Decimal) output.get('TotalScore'), 'Total Score should be zero');
+        Assert.areEqual(0, (Decimal) output.get('CalculatedScore'), 'Calculated Score should be zero');
     }
     
     /**
@@ -294,8 +297,9 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
         Test.stopTest();
         
         Assert.areEqual(0, (Decimal) result.get('PartAMatrixScore'), 'Unknown Severity/Scope combination should contribute zero');
-        Assert.areEqual(0, (Decimal) result.get('PartAScore'), 'Part A Score should be zero when matrix score is zero');
+        Assert.areEqual(0, (Decimal) result.get('OutputPartAScore'), 'Part A Score should be zero when matrix score is zero');
         Assert.areEqual(0, (Decimal) result.get('TotalScore'), 'Total Score should be zero');
+        Assert.areEqual(0, (Decimal) result.get('CalculatedScore'), 'Calculated Score should be zero');
     }
     
     /**
@@ -333,7 +337,7 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
         );
         Test.stopTest();
         
-        Assert.areEqual(0, (Decimal) result.get('PartBScore'), 'Unmatched Part B response should contribute zero');
+        Assert.areEqual(0, (Decimal) result.get('OutputPartBScore'), 'Unmatched Part B response should contribute zero');
     }
     
     /**
@@ -371,7 +375,7 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
         );
         Test.stopTest();
         
-        Assert.areEqual(0, (Decimal) result.get('PartBScore'), 'Unconfigured Part B questions should contribute zero');
+        Assert.areEqual(0, (Decimal) result.get('OutputPartBScore'), 'Unconfigured Part B questions should contribute zero');
     }
     
     /**
@@ -410,14 +414,14 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
         );
         Test.stopTest();
         
-        Assert.areEqual(0, (Decimal) result.get('PartBScore'), 'Null and blank Part B answers should contribute zero');
+        Assert.areEqual(0, (Decimal) result.get('OutputPartBScore'), 'Null and blank Part B answers should contribute zero');
     }
     
     /**
 * @author: Deepak
 * @date: 25 Aug 2026
 * @description: Covers a valid Part B response and validates the calculated Part B score.
-* @Modification Log: [Date] - [Change Reference] - [Description]
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     @isTest
     public static void testCalculateScore_ValidPartBAnswer_ReturnsPartBScore() {
@@ -448,15 +452,16 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
         );
         Test.stopTest();
         
-        Assert.areEqual(scenario.partBScore, (Decimal) result.get('PartBScore'), 'PartBScore should match the configured response score');
+        Assert.areEqual(scenario.partBScore, (Decimal) result.get('OutputPartBScore'), 'OutputPartBScore should match the configured response score');
         Assert.areEqual(true, result.containsKey('TotalScore'), 'TotalScore should be populated');
+        Assert.areEqual(true, result.containsKey('CalculatedScore'), 'CalculatedScore should be populated');
     }
     
     /**
 * @author: Deepak
 * @date: 25 Aug 2026
 * @description: Covers multiple selected violations and validates matrix score aggregation.
-* @Modification Log: [Date] - [Change Reference] - [Description]
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     @isTest
     public static void testCalculateScore_MultipleViolations_SumsMatrixScores() {
@@ -510,7 +515,7 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
 * @author: Deepak
 * @date: 25 Aug 2026
 * @description: Covers the complete scoring flow.
-* @Modification Log: [Date] - [Change Reference] - [Description]
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     @isTest
     public static void testCalculateScore_EndToEnd_ReturnsExpectedTotals() {
@@ -601,9 +606,10 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
         Test.stopTest();
         
         Assert.areEqual(expectedMatrixTotal, (Decimal) result.get('PartAMatrixScore'), 'PartAMatrixScore should equal the configured matrix score');
-        Assert.areEqual(expectedPartAScore, (Decimal) result.get('PartAScore'), 'PartAScore should equal the matched Interval Score or zero');
-        Assert.areEqual(0, (Decimal) result.get('PartBScore'), 'PartBScore should be zero when no Part B answers are submitted');
-        Assert.areEqual(expectedPartAScore, (Decimal) result.get('TotalScore'), 'TotalScore should equal PartAScore');
+        Assert.areEqual(expectedPartAScore, (Decimal) result.get('OutputPartAScore'), 'OutputPartAScore should equal the matched Interval Score or zero');
+        Assert.areEqual(0, (Decimal) result.get('OutputPartBScore'), 'OutputPartBScore should be zero when no Part B answers are submitted');
+        Assert.areEqual(expectedPartAScore, (Decimal) result.get('TotalScore'), 'TotalScore should equal OutputPartAScore');
+        Assert.areEqual(expectedPartAScore, (Decimal) result.get('CalculatedScore'), 'CalculatedScore should equal TotalScore');
         Assert.areEqual(expectedRiskRating, (String) result.get('RiskRating'), 'RiskRating should match the configured rating or remain null');
         Assert.areEqual(expectedInspectionFrequency, (String) result.get('InspectionFrequency'), 'InspectionFrequency should match the configured frequency or remain null');
     }
@@ -681,7 +687,7 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
         Test.stopTest();
         
         Assert.areEqual(selectedMatrixRecord.Score__c, (Decimal) result.get('PartAMatrixScore'), 'Matrix score should still be calculated');
-        Assert.areEqual(0, (Decimal) result.get('PartAScore'), 'Part A Score should be zero when no Interval Score metadata exists');
+        Assert.areEqual(0, (Decimal) result.get('OutputPartAScore'), 'Part A Score should be zero when no Interval Score metadata exists');
     }
     
     /**
@@ -789,7 +795,7 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
 * @author: Deepak
 * @date: 25 Aug 2026
 * @description: Builds the Callable argument wrapper.
-* @Modification Log: [Date] - [Change Reference] - [Description]
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     private static Map<String, Object> buildArgs(String facilityType, List<Object> selectedViolations, Map<String, Object> partBAnswers) {
         Map<String, Object> input = new Map<String, Object>{'facilityType' => facilityType, 'selectedViolations' => selectedViolations, 'PartBThreeYearOperationalHistoryAssessment' => partBAnswers};            
