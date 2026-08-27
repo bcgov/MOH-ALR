@@ -299,14 +299,19 @@ global with sharing class PHOCSCCFLRiskAssessmentScoringService implements Calla
 * @author: Deepak
 * @date: 25 Aug 2026
 * @description: Populates the output map with the Part A matrix total, Part A interval score,
-*              Part B score, combined total score, Risk Rating, and Inspection Frequency.
+*              Part B score, combined total score (as both TotalScore and CalculatedScore), Risk
+*              Rating, and Inspection Frequency, using flat, non-nested keys throughout.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*                     27 Aug - PHOCS-4817 - Deepak - Renamed PartAScore/PartBScore to
+*                     OutputPartAScore/OutputPartBScore and added CalculatedScore to match the
+*                     OmniScript's flat display bindings.
 */
     private void populateOutput(Map<String, Object> outMap, Decimal partAMatrixScore, Decimal partAScore, Decimal partBScore, Decimal totalScore, String riskRating, String inspectionFrequency) {
         outMap.put('PartAMatrixScore', partAMatrixScore == null ? 0 : partAMatrixScore);
-        outMap.put('PartAScore', partAScore == null ? 0 : partAScore);
-        outMap.put('PartBScore', partBScore == null ? 0 : partBScore);
+        outMap.put('OutputPartAScore', partAScore == null ? 0 : partAScore);
+        outMap.put('OutputPartBScore', partBScore == null ? 0 : partBScore);
         outMap.put('TotalScore', totalScore == null ? 0 : totalScore);
+        outMap.put('CalculatedScore', totalScore == null ? 0 : totalScore);
         outMap.put('RiskRating', riskRating);
         outMap.put('InspectionFrequency', inspectionFrequency);
     }
