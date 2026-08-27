@@ -2,26 +2,17 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>67.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
-    <description>EHIS-4803- Flow to auto populate Facility Classification Type for LWS based on the Type</description>
+    <description>EHIS-4803- Flow to auto populate Facility Classification Type for Small Water Systems</description>
     <environments>Default</environments>
     <formulas>
         <name>ClassificationTypeFormula</name>
         <dataType>String</dataType>
         <expression>IF(
-    {!$Record.Account.PHOWaterSystemSizeCategory__c} = &apos;Small Water System 50-500&apos;,    &apos;SWS&apos;,
-    IF(
-        {!$Record.Account.PHOWaterSystemSizeCategory__c} = &apos;Large Water System &gt;100,000&apos;,
-        CASE( {!$Record.Type__c},
-            &apos;Treatment&apos;, &apos;WT&apos;,
-            &apos;Distribution&apos;, &apos;WD&apos;,
-            &apos;&apos;
-        ),
-        &apos;&apos;
-    )
+   AND($Record.PopulationServedper24hrs__c &gt;= 50,$Record.PopulationServedper24hrs__c &lt;= 500),    &apos;SWS&apos;,&apos;&apos;
 )</expression>
     </formulas>
-    <interviewLabel>EHIS-4803- Flow to auto populate Facility Classification Type based on the Type {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>PHOCS Populate Facility Classification Type for LWS</label>
+    <interviewLabel>PHOCS Populate Facility Classification Type for SWS {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>PHOCS Populate Facility Classification Type for SWS</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -43,12 +34,12 @@
     <processType>AutoLaunchedFlow</processType>
     <recordUpdates>
         <description>populate Facility Classification Type</description>
-        <name>UpdateTriggeringAssetrecord</name>
-        <label>Update Triggering Asset record</label>
+        <name>UpdateTriggeringAccountRecord</name>
+        <label>Update Triggering Account Record</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <inputAssignments>
-            <field>FacilityClassificationType__c</field>
+            <field>PHOCSFacilityClassificationType__c</field>
             <value>
                 <elementReference>ClassificationTypeFormula</elementReference>
             </value>
@@ -59,13 +50,13 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>UpdateTriggeringAssetrecord</targetReference>
+            <targetReference>UpdateTriggeringAccountRecord</targetReference>
         </connector>
         <filterFormula>OR(
-AND( ISNEW(), NOT(ISBLANK(TEXT({!$Record.Type__c}))) ),
-ISCHANGED({!$Record.Type__c})
+ISNEW(), 
+ISCHANGED({!$Record.PopulationServedper24hrs__c} )
 )</filterFormula>
-        <object>Asset</object>
+        <object>Account</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
