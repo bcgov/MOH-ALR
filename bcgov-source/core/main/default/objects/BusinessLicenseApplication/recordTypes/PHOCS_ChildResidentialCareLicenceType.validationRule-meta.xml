@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PHOCS_ChildResidentialCareLicenceType</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+
+    /* Exclude Record Types */
+    NOT(
+        OR(
+            RecordType.DeveloperName = &quot;DairyWorkerLicence&quot;,
+            RecordType.DeveloperName = &quot;PHOCSBCCDCDairyPlantLicence&quot;
+        )
+    ),
+
+    NOT(ISBLANK(AccountId)),
+    NOT(ISBLANK(LicenseTypeId)),
+
+    OR(
+        TEXT(Account.Type) = &quot;Child Care&quot;,
+        TEXT(Account.Type) = &quot;Residential Care&quot;
+    ),
+
+    NOT(
+        OR(
+
+            /* Child Care */
+            AND(
+                Account.RecordTypeName__c = &quot;Facility&quot;,
+                TEXT(Account.Type) = &quot;Child Care&quot;,
+                OR(
+                    RecordType.DeveloperName = &quot;OperatingPermitApplication&quot;,
+                    RecordType.DeveloperName = &quot;PHOCSExemptions&quot;
+                ),
+                 LicenseType.Name = &quot;Child Care Licence&quot;
+            ),
+
+            /* Residential Care */
+            AND(
+                Account.RecordTypeName__c = &quot;Facility&quot;,
+                TEXT(Account.Type) = &quot;Residential Care&quot;,
+                OR(
+                    RecordType.DeveloperName = &quot;OperatingPermitApplication&quot;,
+                    RecordType.DeveloperName = &quot;PHOCSExemptions&quot;
+                ),
+                LicenseType.Name = &quot;Residential Care Facility Licence&quot;
+            )
+        )
+    )
+)</errorConditionFormula>
+    <errorMessage>Select a valid Licence Type for this Facility and application type.</errorMessage>
+</ValidationRule>
