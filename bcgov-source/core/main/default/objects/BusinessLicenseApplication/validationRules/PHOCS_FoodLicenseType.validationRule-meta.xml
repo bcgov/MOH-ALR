@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PHOCS_FoodLicenseType</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    /* Exclude Record Types */
+    NOT(
+    OR(
+      RecordType.DeveloperName = &quot;DairyWorkerLicence&quot;,
+      RecordType.DeveloperName = &quot;PHOCSBCCDCDairyPlantLicence&quot;
+     )
+     ),
+    NOT(ISBLANK(AccountId)),
+    NOT(ISBLANK(LicenseTypeId)),
+
+    Account.RecordTypeName__c = &quot;Facility&quot;,
+    TEXT(Account.Type) = &quot;Food&quot;,
+
+    NOT(
+        OR(
+            /* Temporary Food Service Permit */
+            AND(
+                OR(
+                    TEXT(Account.CategoryL1__c) =
+                        &quot;Temporary food premises&quot;,
+                    TEXT(Account.CategoryL2__c) =
+                        &quot;Temporary food service or events&quot;,
+                    TEXT(Account.CategoryL3__c) =
+                        &quot;14 days or less&quot;,
+                    TEXT(Account.CategoryL3__c) =
+                        &quot;More than 14 days&quot;
+                ),                    
+                OR(
+                    RecordType.DeveloperName =
+                        &quot;OperatingPermitApplication&quot;,
+                    RecordType.DeveloperName =
+                        &quot;PHOCSExemptions&quot;
+                ),
+
+                LicenseType.Name =
+                    &quot;Temporary Food Service Permit&quot;
+            ),
+
+            /* Food Premises Operating Permit */
+            AND(
+                AND(
+                    TEXT(Account.CategoryL1__c) &lt;&gt;
+                        &quot;Temporary food premises&quot;,
+                    TEXT(Account.CategoryL2__c) &lt;&gt;
+                        &quot;Temporary food service or events&quot;
+                ),
+
+                OR(
+                    RecordType.DeveloperName =
+                        &quot;OperatingPermitApplication&quot;,
+                    RecordType.DeveloperName =
+                        &quot;PHOCSExemptions&quot;
+                ),
+
+                LicenseType.Name =
+                    &quot;Food Premises Operating Permit&quot;
+            )
+        )
+    )
+)</errorConditionFormula>
+    <errorMessage>Select a valid Licence Type for this Facility and application type.</errorMessage>
+</ValidationRule>

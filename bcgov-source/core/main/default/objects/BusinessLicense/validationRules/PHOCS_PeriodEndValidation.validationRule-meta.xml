@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PHOCS_PeriodEndValidation</fullName>
+    <active>true</active>
+    <description>Validated Period End Date should be future date in BL record</description>
+    <errorConditionFormula>AND(
+    NOT(ISBLANK( PeriodStart )),
+    NOT(ISBLANK( PeriodEnd )),
+    PeriodEnd  &lt;= PeriodStart 
+)</errorConditionFormula>
+    <errorMessage>Period End Date cannot be before Period Start Date.</errorMessage>
+</ValidationRule>

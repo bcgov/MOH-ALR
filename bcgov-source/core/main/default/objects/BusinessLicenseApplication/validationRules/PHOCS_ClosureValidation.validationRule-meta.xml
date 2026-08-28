@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PHOCS_ClosureValidation</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    TEXT(Status) &lt;&gt; &quot;Closed&quot;,
+    OR(
+        ISCHANGED( ClosedBy__c ),
+        ISCHANGED( ClosedDate__c ),
+        ISCHANGED( ClosureReason__c )
+    ),
+    OR(
+        NOT(ISBLANK(TEXT(ClosureReason__c ))),
+        NOT(ISBLANK(ClosedDate__c )),
+        NOT(ISBLANK(ClosedBy__c ))
+    )
+)</errorConditionFormula>
+    <errorMessage>Application Status must be &apos;Closed&apos; to update Closure Reason, Closed By and Closed Date.</errorMessage>
+</ValidationRule>

@@ -9,10 +9,35 @@
         </value>
     </customProperties>
     <decisions>
+        <name>All_Fees_Paid</name>
+        <label>All Fees Paid?</label>
+        <locationX>314</locationX>
+        <locationY>242</locationY>
+        <defaultConnector>
+            <targetReference>IssuePermit</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>If_fee_is_not_paid</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Check_for_unpaid_fees.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>ShowFeeValidationError</targetReference>
+            </connector>
+            <label>If fee is not paid</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Has_Active_Current_BL</name>
         <label>Has Active Current BL</label>
-        <locationX>314</locationX>
-        <locationY>350</locationY>
+        <locationX>578</locationX>
+        <locationY>566</locationY>
         <defaultConnector>
             <targetReference>GetPermitRecordTypeId</targetReference>
         </defaultConnector>
@@ -48,7 +73,8 @@
         </rules>
     </decisions>
     <description>EHIS-2615
-EHIS-4849 remove AAA, and Business License will not be issued from Recreational Water Asset</description>
+EHIS-4849 remove AAA, and Business License will not be issued from Recreational Water Asset
+Regulatory Transaction Fee validation added before issuing permit/Licence as part of EHIS-4594</description>
     <environments>Default</environments>
     <formulas>
         <name>BLContactId</name>
@@ -106,8 +132,8 @@ EHIS-4849 remove AAA, and Business License will not be issued from Recreational 
     <recordCreates>
         <name>CreateBusinessLicenseRecord</name>
         <label>Create  Business License Record</label>
-        <locationX>578</locationX>
-        <locationY>674</locationY>
+        <locationX>842</locationX>
+        <locationY>890</locationY>
         <connector>
             <targetReference>UpdateBLA</targetReference>
         </connector>
@@ -166,10 +192,45 @@ EHIS-4849 remove AAA, and Business License will not be issued from Recreational 
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
     <recordLookups>
+        <name>Check_for_unpaid_fees</name>
+        <label>Check for unpaid fees</label>
+        <locationX>314</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>All_Fees_Paid</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>ParentRecordId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Status__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Paid</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Status__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Canceled</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>RegulatoryTrxnFee</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>Get_Current_BL</name>
         <label>Get Current BL</label>
-        <locationX>314</locationX>
-        <locationY>242</locationY>
+        <locationX>578</locationX>
+        <locationY>458</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Has_Active_Current_BL</targetReference>
@@ -193,8 +254,8 @@ EHIS-4849 remove AAA, and Business License will not be issued from Recreational 
     <recordLookups>
         <name>GetPermitRecordTypeId</name>
         <label>Get Permit RecordType Id</label>
-        <locationX>578</locationX>
-        <locationY>458</locationY>
+        <locationX>842</locationX>
+        <locationY>674</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Inactivate_Facility_BLs</targetReference>
@@ -221,8 +282,8 @@ EHIS-4849 remove AAA, and Business License will not be issued from Recreational 
     <recordUpdates>
         <name>Inactivate_Facility_BLs</name>
         <label>Inactivate Facility BLs</label>
-        <locationX>578</locationX>
-        <locationY>566</locationY>
+        <locationX>842</locationX>
+        <locationY>782</locationY>
         <connector>
             <targetReference>CreateBusinessLicenseRecord</targetReference>
         </connector>
@@ -272,8 +333,8 @@ EHIS-4849 remove AAA, and Business License will not be issued from Recreational 
     <recordUpdates>
         <name>Inactivate_Old_BL</name>
         <label>Inactivate Old BL</label>
-        <locationX>50</locationX>
-        <locationY>458</locationY>
+        <locationX>314</locationX>
+        <locationY>674</locationY>
         <connector>
             <isGoTo>true</isGoTo>
             <targetReference>GetPermitRecordTypeId</targetReference>
@@ -307,8 +368,8 @@ EHIS-4849 remove AAA, and Business License will not be issued from Recreational 
     <recordUpdates>
         <name>UpdateBLA</name>
         <label>Update BLA</label>
-        <locationX>578</locationX>
-        <locationY>782</locationY>
+        <locationX>842</locationX>
+        <locationY>998</locationY>
         <faultConnector>
             <isGoTo>true</isGoTo>
             <targetReference>Error</targetReference>
@@ -332,8 +393,8 @@ EHIS-4849 remove AAA, and Business License will not be issued from Recreational 
     <screens>
         <name>Error</name>
         <label>Error</label>
-        <locationX>1106</locationX>
-        <locationY>782</locationY>
+        <locationX>1370</locationX>
+        <locationY>998</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -356,8 +417,8 @@ EHIS-4849 remove AAA, and Business License will not be issued from Recreational 
     <screens>
         <name>IssuePermit</name>
         <label>Issue Permit</label>
-        <locationX>314</locationX>
-        <locationY>134</locationY>
+        <locationX>578</locationX>
+        <locationY>350</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -382,11 +443,36 @@ EHIS-4849 remove AAA, and Business License will not be issued from Recreational 
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
     </screens>
+    <screens>
+        <description>Fee(s) must be paid before issuing permit/licence.</description>
+        <name>ShowFeeValidationError</name>
+        <label>ShowFeeValidationError</label>
+        <locationX>50</locationX>
+        <locationY>350</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>Fee_Validation</name>
+            <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;em style=&quot;color: rgb(234, 10, 59); font-size: 14px; background-color: rgba(5, 21, 36, 0.06);&quot;&gt;Fee(s) must be paid before issuing permit/licence.&lt;/em&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
     <start>
         <locationX>188</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>IssuePermit</targetReference>
+            <targetReference>Check_for_unpaid_fees</targetReference>
         </connector>
     </start>
     <status>Active</status>

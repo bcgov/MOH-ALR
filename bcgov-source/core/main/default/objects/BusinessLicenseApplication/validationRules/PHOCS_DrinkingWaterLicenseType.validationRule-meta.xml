@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PHOCS_DrinkingWaterLicenseType</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    /* Exclude Record Types */
+   NOT(
+   OR(
+    RecordType.DeveloperName = &quot;DairyWorkerLicence&quot;,
+    RecordType.DeveloperName = &quot;PHOCSBCCDCDairyPlantLicence&quot;
+    )
+    ),
+    NOT(ISBLANK(AccountId)),
+    NOT(ISBLANK(LicenseTypeId)),
+
+    OR(
+        Account.RecordTypeName__c = &quot;DrinkingWaterSystem&quot;,
+        Account.RecordTypeName__c = &quot;DrinkingWaterSourceIntake&quot;
+    ),
+
+    NOT(
+        OR(
+
+            AND(
+                Account.RecordTypeName__c = &quot;DrinkingWaterSystem&quot;,
+                TEXT(Account.Type) = &quot;Drinking Water&quot;,
+                OR(
+                    RecordType.DeveloperName = &quot;ConstructionPermitApplication&quot;,
+                    RecordType.DeveloperName = &quot;PHOCSExemptions&quot;
+                ),
+                LicenseType.Name = &quot;Drinking Water Construction Permit&quot;
+            ),
+
+            AND(
+                Account.RecordTypeName__c = &quot;DrinkingWaterSystem&quot;,
+                TEXT(Account.Type) = &quot;Drinking Water&quot;,
+                OR(
+                    RecordType.DeveloperName = &quot;OperatingPermitApplication&quot;,
+                    RecordType.DeveloperName = &quot;PHOCSExemptions&quot;
+                ),
+                LicenseType.Name = &quot;Drinking Water Operating Permit&quot;
+            ),
+
+            AND(
+                Account.RecordTypeName__c = &quot;DrinkingWaterSourceIntake&quot;,
+                TEXT(Account.Type) = &quot;Drinking Water&quot;,
+                RecordType.DeveloperName = &quot;Evaluation&quot;,
+                LicenseType.Name = &quot;Water Source Evaluation&quot;
+            )
+        )
+    )
+)</errorConditionFormula>
+    <errorMessage>Select a valid Licence Type for this Facility and application type.</errorMessage>
+</ValidationRule>
