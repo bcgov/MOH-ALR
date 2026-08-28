@@ -30,6 +30,25 @@
     </omniDataTransformItem>
     <omniDataTransformItem>
         <disabled>false</disabled>
+        <filterGroup>1.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>&apos;DrinkingWaterSystem&apos;</filterValue>
+        <globalKey>cb5dfb48-a3fa-4b13-894d-8b1886eda55d</globalKey>
+        <inputFieldName>RecordType.DeveloperName</inputFieldName>
+        <inputObjectName>Account</inputObjectName>
+        <inputObjectQuerySequence>1.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMExtractRelatedFacilityInformation</name>
+        <omniDataTransformation>0kdAq000003YbZh</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003YbZh</omniDataTransformationId>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>facilityRec</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <globalKey>6a3d480e-f697-4898-b581-5e2f075028d7</globalKey>
         <inputFieldName>facilityRec:HealthAuthority__c</inputFieldName>
@@ -43,6 +62,25 @@
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>1.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>facilityAccId</filterValue>
+        <globalKey>a81e013d-9e72-4ae3-86c2-bc5f67134a5f</globalKey>
+        <inputFieldName>Id</inputFieldName>
+        <inputObjectName>Account</inputObjectName>
+        <inputObjectQuerySequence>1.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMExtractRelatedFacilityInformation</name>
+        <omniDataTransformation>0kdAq000003YbY5</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003YbY5</omniDataTransformationId>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>facilityRec</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -84,6 +122,25 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:facilityRec:PHOWaterSystemSizeCategory__c &quot;Large&quot; LIKE true false IF</formulaConverted>
+        <formulaExpression>IF(%facilityRec:PHOWaterSystemSizeCategory__c% LIKE &quot;Large&quot;, true, false)</formulaExpression>
+        <formulaResultPath>IsLargeDrinkingWaterSystem</formulaResultPath>
+        <formulaSequence>1.0</formulaSequence>
+        <globalKey>5e0f9d88-1907-421f-a84f-42589a0164c1</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMExtractRelatedFacilityInformation</name>
+        <omniDataTransformation>0kdAq000003ZLfl</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003ZLfl</omniDataTransformationId>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
         <globalKey>780348b9-576b-455f-8f8e-a765c6e3a009</globalKey>
         <inputFieldName>facilityRec:Type</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
@@ -115,9 +172,43 @@
         <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>9410a697-38d4-4183-a90e-ccfe1739c336</globalKey>
+        <inputFieldName>facilityRec:PHOWaterSystemSizeCategory__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMExtractRelatedFacilityInformation</name>
+        <omniDataTransformation>0kdAq000003YbeX</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003YbeX</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>DrinkingWaterSystemSize</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>8d876759-e3a2-4dd5-857f-841ef4331983</globalKey>
+        <inputFieldName>IsLargeDrinkingWaterSystem</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>PHOCSDMExtractRelatedFacilityInformation</name>
+        <omniDataTransformation>0kdAq000003ZLvt</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003ZLvt</omniDataTransformationId>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldName>IsLargeDrinkingWaterSystem</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
     <outputType>JSON</outputType>
     <previewJsonData>{
-  &quot;facilityAccId&quot; : &quot;001Aq000014mGhpIAE&quot;
+  &quot;facilityAccId&quot; : &quot;001Aq000019SU5nIAG&quot;
 }</previewJsonData>
     <processSuperBulk>false</processSuperBulk>
     <responseCacheTtlMinutes>0.0</responseCacheTtlMinutes>

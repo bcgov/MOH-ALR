@@ -696,7 +696,60 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         }
         
         return phone;
-}
+    }
+
+    private static String joinCategories(Account accRecord) {
+        List<String> categories = new List<String>();
+
+        if (String.isNotBlank(accRecord.CategoryL1__c)) {
+            categories.add(accRecord.CategoryL1__c);
+        }
+
+        if (String.isNotBlank(accRecord.CategoryL2__c)) {
+            categories.add(accRecord.CategoryL2__c);
+        }
+
+        if (String.isNotBlank(accRecord.CategoryL3__c)) {
+            categories.add(accRecord.CategoryL3__c);
+        }
+
+        return String.join(categories, ', ');
+    }
+
+    private static String transformConnectionNumber(Account accRecord) {
+    String connectionNumber = accRecord.NoofConnections__c;
+
+    if (String.isBlank(connectionNumber)) {
+        return '';
+    }
+
+    return connectionNumber
+        .replaceAll('\\s*\\([^)]*\\)', '')
+        .trim();
+    }
+
+    private static String joinAssetTypes(Account accRecord) {
+        if (accRecord.Id == null) {
+            return '';
+        }
+
+        Set<String> uniqueTypes = new Set<String>();
+
+        List<Asset> acctAssets = [SELECT Id, Type__c
+                                    FROM Asset
+                                    WHERE AccountId = :accRecord.Id
+                                    AND Type__c != null
+                                    AND Status = 'Active'
+                                    ORDER By Type__c];
+
+        for (Asset asset : acctAssets) {
+            uniqueTypes.add(asset.Type__c);
+        }
+
+        return String.join(uniqueTypes, ', ');
+    }
+
+
     
     public interface SObjectWrapper {
         Object wrap(SObject record);
@@ -720,12 +773,17 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             Account accRecord = (Account) record;           
             WaterAdvisoryDetails advisoryDetails = getWaterAdvisoryDetails(accRecord);
             BeachAdvisoryDetails beachAdvisoryDetails = getBeachAdvisoryDetails(accRecord);//added for EHIS-3277
+            
             Map<String, Object> result = new Map<String, Object>{
                 'Id' => accRecord.Id,
                 'Name' => accRecord.Name,
                 'Type' => accRecord.Type,
                 'CategoryL1__c' => accRecord.CategoryL1__c,
                 'CategoryL2__c' => accRecord.CategoryL2__c,
+                'Categories' => joinCategories(accRecord),
+                'ConnectionNumber' => transformConnectionNumber(accRecord),
+                'TotalMaximumCapacity__c'  => accRecord.TotalMaximumCapacity__c,
+                'AssetTypes' => joinAssetTypes(accRecord),
                 'HealthAuthority__c' => accRecord.HealthAuthority__c,
                 'Phone' => accRecord.HidePhoneonPublicSite__c ? '' : formatPhoneNumber(accRecord.Phone),
                 'ParentAccount' => accRecord.ParentAccount__r.Name,
@@ -846,13 +904,16 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                     'Name' => inspection.Name,
                     'ActualVisitStartTime' => inspection.ActualVisitStartTime != null ? inspection.ActualVisitStartTime.format('yyyy-MM-dd')  : '',
                         'InspectionType' => inspection.TestInspType__c,
-                        'PHOCSViolationCount' => inspection.PHOCSViolationCount__c,
-                        
+                        'PHOCSViolationCount' => inspection.PHOCSViolationCount__c, 
                         'AccountId' => inspection.Account?.Id,
                         'AccountName' => inspection.Account?.Name,
                         'AccountType' => inspection.Account?.Type,
                         'CategoryL1' => inspection.Account?.CategoryL1__c,
                         'CategoryL2' => inspection.Account?.CategoryL2__c,
+                        'Categories' => joinCategories(inspection.Account),
+                        'ConnectionNumber' => transformConnectionNumber(inspection.Account),
+                        'TotalMaximumCapacity'  => inspection.Account.TotalMaximumCapacity__c,
+                        'AssetTypes' => joinAssetTypes(inspection.Account),
                         'HealthAuthority' => inspection.Account?.HealthAuthority__c,
                         'FacilityCHSAText' => inspection.Account?.FacilityCHSAText__c,
                         'PHOCSParentAccount' => inspection.Account?.PHOCSParentAccount__c,
@@ -899,7 +960,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             Map<String, Object> result = new Map<String, Object>{
                 'Name' => lab.Name,
                     'TestCategory' => lab.TestCategory__c,
-                    'UnitOfMeasure' => lab.UnitOfMeasure__c,
+                    'UnitOfMeasure' => lab.Unit_of_Measure__c,
                     'ResultValue' => lab.ResultValue__c,
                     'TestId' => lab.Test__c,
                     'TestName' => lab.Test__r ?.Name,           

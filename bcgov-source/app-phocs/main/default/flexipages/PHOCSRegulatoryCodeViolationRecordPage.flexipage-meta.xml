@@ -135,7 +135,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>required</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Description</fieldItem>
                 <identifier>RecordDescriptionField</identifier>
@@ -179,7 +179,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>required</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.CorrectiveActionDescription</fieldItem>
                 <identifier>RecordCorrectiveActionDescriptionField</identifier>
@@ -203,6 +203,13 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.ResolutionNotes</fieldItem>
                 <identifier>RecordResolutionNotesField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.Status}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Resolved</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -215,7 +222,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>required</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Priority</fieldItem>
                 <identifier>RecordPriorityField</identifier>

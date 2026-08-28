@@ -20,8 +20,9 @@
         AND(
             ISPICKVAL(Status, &quot;Completed&quot;),
             NOT(ISCHANGED(Status)),
-												NOT(ISCHANGED(NumberofFollowups__c)),
-												NOT(ISCHANGED(DiscloseToPublic__c)) 
+												NOT(ISCHANGED(NumberofFollowups__c)),												NOT(ISCHANGED(DiscloseToPublic__c)) ,
+NOT(ISCHANGED(DeliveryMethod__c)),
+NOT(ISCHANGED(SignatureRefusal__c))
         ),
         AND(
             ISCHANGED(Status),

@@ -1,0 +1,33 @@
+<template>
+    <div class="slds-card slds-card_boundary">
+        <header class="slds-card__header slds-grid">
+            <div class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <lightning-icon icon-name="standard:record" size="small"></lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        <span>Related Violations</span>
+                    </h2>
+                </div>
+            </div>
+        </header>
+        <div class="slds-card__body slds-card__body_inner">
+            <template if:true={isLoading}>
+                <div class="slds-is-relative slds-p-vertical_medium">
+                    <lightning-spinner alternative-text="Loading violations" size="small"></lightning-spinner>
+                </div>
+            </template>
+            <template if:true={hasRecords}>
+                <lightning-datatable key-field="Id" data={violations} columns={columns} hide-checkbox-column></lightning-datatable>
+            </template>
+            <template if:false={hasRecords}>
+                <template if:false={isLoading}>
+                    <div class="slds-text-color_weak slds-p-vertical_small">
+                        No related violations found.
+                    </div>
+                </template>
+            </template>
+        </div>
+    </div>
+</template>

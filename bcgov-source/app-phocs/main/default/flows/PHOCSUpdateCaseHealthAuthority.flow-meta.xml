@@ -24,12 +24,12 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>Clear_Case_Health_Authority</targetReference>
+            <targetReference>check_record_type</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>No Account</defaultConnectorLabel>
         <rules>
             <name>Account_Is_Set</name>
-            <conditionLogic>1 AND (2 OR 3)</conditionLogic>
+            <conditionLogic>1 AND (2 OR 3) AND 4</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.AccountId</leftValueReference>
                 <operator>IsNull</operator>
@@ -51,10 +51,77 @@
                     <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>PHOCSFacilityEnquiry</stringValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>Get_Case_Account</targetReference>
             </connector>
             <label>Account Is Set</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_HS_Plan_Not_Required</name>
+        <label>Check HS Plan Not Required</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Check_PHOCS_Advisories_RecordType</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Clear_Monitoring_Required</name>
+            <conditionLogic>1 AND 2 AND (3 OR 4) AND (5 OR 6)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.HealthandSafetyPlanRequired__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Not Required</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.DoesthePlanRequireMonitoring__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>PHOCSComplaint</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>PHOCSReportableIncident</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Topic__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Child Care</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Topic__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Residential Care</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Clear_Plan_Monitoring</targetReference>
+            </connector>
+            <label>Clear Monitoring Required</label>
         </rules>
     </decisions>
     <decisions>
@@ -110,8 +177,29 @@
             <label>Is PHOCS Advisories</label>
         </rules>
     </decisions>
-    <description>As part of EHIS-5127 - Updated the All PHOCS Case RecordTypes
-As part of EHIS-5095 - Auto populate Case type fields from account type only for Drinking and recreation water Types</description>
+    <decisions>
+        <name>check_record_type</name>
+        <label>check record type</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Clear_Case_Health_Authority</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>If_PHOCS_Facility_Enquiry_record_type</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>PHOCSFacilityEnquiry</stringValue>
+                </rightValue>
+            </conditions>
+            <label>If PHOCS Facility Enquiry record type</label>
+        </rules>
+    </decisions>
+    <description>As part of EHIS-4612 added recordcheck  in the flow that flow will not trigger for record type PHOCSFacilityEnquiry</description>
     <environments>Default</environments>
     <formulas>
         <name>Is_Insert</name>
@@ -171,6 +259,19 @@ As part of EHIS-5095 - Auto populate Case type fields from account type only for
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <recordUpdates>
+        <name>Clear_Plan_Monitoring</name>
+        <label>Clear Plan Monitoring</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_PHOCS_Advisories_RecordType</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>DoesthePlanRequireMonitoring__c</field>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
         <name>Set_Case_Health_Authority</name>
         <label>Set Case Health Authority</label>
         <locationX>0</locationX>
@@ -187,7 +288,7 @@ As part of EHIS-5095 - Auto populate Case type fields from account type only for
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Check_PHOCS_Advisories_RecordType</targetReference>
+            <targetReference>Check_HS_Plan_Not_Required</targetReference>
         </connector>
         <filterFormula>OR(
     {!$Record.RecordType.DeveloperName} = &quot;PHOCSComplaint&quot;,

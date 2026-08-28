@@ -181,15 +181,21 @@ private class InspectionQuestionsControllerV2Test {
     @isTest
     static void testGetRegulatoryCodesByIndicator_ValidId() {
         AssessmentIndicatorDefinition indicator = [SELECT Id FROM AssessmentIndicatorDefinition LIMIT 1];
-        RegulatoryAuthority rc = [SELECT Id from RegulatoryAuthority LIMIT 1];
-        
+
+        RegulatoryAuthority authority = new RegulatoryAuthority(Name = 'Drinking Water Regulation');
+        insert authority;
+
         // Create a Regulatory Code - IsActive is auto-set
+        Datetime effectiveFrom = Datetime.newInstance(2026, 4, 5, 9, 0, 0);
+        Datetime effectiveTo = Datetime.newInstance(2027, 4, 5, 9, 0, 0);
+
         RegulatoryCode testCode = new RegulatoryCode(
-            Name = 'test',
+            Name = 'Section 8',
             Subject = 'Test Regulation',
-            RegulatoryAuthorityId = rc.Id,
-            EffectiveFrom = Date.today().addMonths(-1),
-            EffectiveTo = Date.today().addMonths(12)
+            Description = 'Water supply system must provide potable water.',
+            RegulatoryAuthorityId = authority.Id,
+            EffectiveFrom = effectiveFrom,
+            EffectiveTo = effectiveTo
         );
         insert testCode;
 
@@ -201,13 +207,49 @@ private class InspectionQuestionsControllerV2Test {
         insert codeLink;
 
         Test.startTest();
-        List<InspectionQuestionsControllerV2.RegulatoryCodeWrapper> result = 
+        List<InspectionQuestionsControllerV2.RegulatoryCodeWrapper> result =
             InspectionQuestionsControllerV2.getRegulatoryCodesByIndicator(indicator.Id);
         Test.stopTest();
 
         System.assertNotEquals(null, result, 'Result should not be null');
         System.assertEquals(1, result.size(), 'Should return one regulatory code');
-        //System.assertEquals('Test', result[0].regulatoryCodeName, 'Regulatory code name should match');
+        System.assertEquals('Drinking Water Regulation', result[0].regulatoryAuthorityName, 'Regulatory authority name should be returned');
+        System.assertEquals('Section 8', result[0].regulatoryCodeName, 'Regulatory code name should match');
+        System.assertEquals('Water supply system must provide potable water.', result[0].regulatoryCodeDescription, 'Description should be returned');
+    }
+
+    /**
+     * @description Test getRegulatoryCodesByIndicator falls back to Subject when the
+     *              Description is blank.
+     */
+    @isTest
+    static void testGetRegulatoryCodesByIndicator_BlankDescriptionFallsBackToSubject() {
+        AssessmentIndicatorDefinition indicator = [SELECT Id FROM AssessmentIndicatorDefinition LIMIT 1];
+
+        RegulatoryAuthority authority = new RegulatoryAuthority(Name = 'Food Premises Regulation');
+        insert authority;
+
+        RegulatoryCode codeWithoutDescription = new RegulatoryCode(
+            Name = '8',
+            Subject = 'Fallback Subject',
+            RegulatoryAuthorityId = authority.Id,
+            EffectiveFrom = Datetime.newInstance(2026, 4, 5, 9, 0, 0)
+        );
+        insert codeWithoutDescription;
+
+        insert new RegulatoryCodeAssessmentInd(
+            AssessmentIndDefinitionId = indicator.Id,
+            RegulatoryCodeId = codeWithoutDescription.Id
+        );
+
+        Test.startTest();
+        List<InspectionQuestionsControllerV2.RegulatoryCodeWrapper> result =
+            InspectionQuestionsControllerV2.getRegulatoryCodesByIndicator(indicator.Id);
+        Test.stopTest();
+
+        System.assertEquals(1, result.size(), 'Should return one regulatory code');
+        System.assertEquals('Fallback Subject', result[0].regulatoryCodeDescription, 'Description should fall back to Subject when blank');
+        System.assertEquals('Food Premises Regulation', result[0].regulatoryAuthorityName, 'Regulatory authority name should be returned');
     }
 
     /**
