@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Check_account_is_Dairy</name>
+        <label>Check account is Dairy</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Its_dairy_Public_complaint</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Account.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Dairy</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>update_checkbox_field</targetReference>
+            </connector>
+            <label>Its dairy Public complaint</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>check_record_type</name>
+        <label>check record type</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>record_type_is_not_eqal_to_Public_Complaint</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Public_Complaint</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_account_is_Dairy</targetReference>
+            </connector>
+            <label>record type is not eqal to Public_Complaint</label>
+        </rules>
+    </decisions>
+    <description>This created as part of EHIS-5241 where we are uisng this flow to differentiate the dairy record for sharing rules</description>
+    <environments>Default</environments>
+    <interviewLabel>PHOCS Public Complaint Dairy {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>PHOCS Public Complaint Dairy Checkbox</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>update_checkbox_field</name>
+        <label>update checkbox field</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>IsDairyPublicComplaint__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>check_record_type</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>AccountId</field>
+            <operator>NotEqualTo</operator>
+        </filters>
+        <object>PublicComplaint</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>
