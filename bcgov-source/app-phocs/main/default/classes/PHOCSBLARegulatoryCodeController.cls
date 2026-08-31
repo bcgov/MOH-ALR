@@ -56,10 +56,12 @@ public with sharing class PHOCSBLARegulatoryCodeController{
             if (existingRegulatoryCodeIds.isEmpty()) {
                 regulatoryCodes = [SELECT Id, RegulatoryAuthorityId, RegulatoryAuthority.Name, Name, Subject, Description, RegulatoryCodeDescription__c FROM RegulatoryCode
                                    WHERE Type = 'Exemption' AND RecordTypeId =: regulatoryCodeRecordTypeId AND RegulatoryAuthority.Name IN :regulatoryAuthorityNames
+                                   AND (ExemptionFacilityType__c = NULL OR ExemptionFacilityType__c =: application.Account.Type)
                                    ORDER BY RegulatoryAuthority.Name ASC, Name ASC];
             } else {
                 regulatoryCodes = [SELECT Id, RegulatoryAuthorityId, RegulatoryAuthority.Name, Name, Subject, Description, RegulatoryCodeDescription__c FROM RegulatoryCode
                                    WHERE Type = 'Exemption' AND RecordTypeId =: regulatoryCodeRecordTypeId AND RegulatoryAuthority.Name IN :regulatoryAuthorityNames
+                                   AND (ExemptionFacilityType__c = NULL OR ExemptionFacilityType__c =: application.Account.Type)
                                    AND Id NOT IN :existingRegulatoryCodeIds ORDER BY RegulatoryAuthority.Name ASC, Name ASC];
             }
             
@@ -244,3 +246,4 @@ public with sharing class PHOCSBLARegulatoryCodeController{
     }
 
 }
+

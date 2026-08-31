@@ -68,7 +68,7 @@
                         <valueListItems>
                             <value>Account.PHOCSInitiateRiskAssessment</value>
                             <visibilityRule>
-                                <booleanFilter>1 AND (2 OR 3 OR (4 AND (5 OR 6)) OR 7)</booleanFilter>
+                                <booleanFilter>1 AND (2 OR 3 OR (4 AND (5 OR 6)) OR 7 OR 8 OR 9)</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.RiskAssessmentEligibility__c}</leftValue>
                                     <operator>EQUAL</operator>
@@ -103,6 +103,16 @@
                                     <leftValue>{!Record.Type}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>Tobacco and Vapour</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Type}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Child Care</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Type}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Residential Care</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
@@ -943,6 +953,16 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.LicenseDetail__c</fieldItem>
                 <identifier>RecordLicenseDetail_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ProgramAffiliationFunding__c</fieldItem>
+                <identifier>RecordProgramAffiliationFunding_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -2857,6 +2877,11 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>adminFilters</name>
+                    <valueList>
+                        <valueListItems>
+                            <value>Type|EQUALS|[&quot;Risk Assessment&quot;]</value>
+                        </valueListItems>
+                    </valueList>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>maxRecordsToDisplay</name>
@@ -2919,7 +2944,7 @@
                 <componentName>lst:dynamicRelatedList</componentName>
                 <identifier>lst_dynamicRelatedList6</identifier>
                 <visibilityRule>
-                    <booleanFilter>1 AND (2 OR 3 OR (4 AND (5 OR 6)) OR 7)</booleanFilter>
+                    <booleanFilter>1 AND (2 OR 3 OR (4 AND (5 OR 6)) OR 7 OR 8 OR 9)</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.RiskAssessmentEligibility__c}</leftValue>
                         <operator>EQUAL</operator>
@@ -2954,6 +2979,16 @@
                         <leftValue>{!Record.Type}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>Tobacco and Vapour</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Type}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Child Care</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Type}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Residential Care</rightValue>
                     </criteria>
                 </visibilityRule>
             </componentInstance>

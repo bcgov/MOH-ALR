@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>EHIS-4803- Flow to auto populate Facility Classification Type for Small Water Systems</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>ClassificationTypeFormula</name>
+        <dataType>String</dataType>
+        <expression>IF(
+   AND($Record.PopulationServedper24hrs__c &gt;= 50,$Record.PopulationServedper24hrs__c &lt;= 500),    &apos;SWS&apos;,&apos;&apos;
+)</expression>
+    </formulas>
+    <interviewLabel>PHOCS Populate Facility Classification Type for SWS {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>PHOCS Populate Facility Classification Type for SWS</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <description>populate Facility Classification Type</description>
+        <name>UpdateTriggeringAccountRecord</name>
+        <label>Update Triggering Account Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>PHOCSFacilityClassificationType__c</field>
+            <value>
+                <elementReference>ClassificationTypeFormula</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>UpdateTriggeringAccountRecord</targetReference>
+        </connector>
+        <filterFormula>OR(
+ISNEW(), 
+ISCHANGED({!$Record.PopulationServedper24hrs__c} )
+)</filterFormula>
+        <object>Account</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

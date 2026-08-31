@@ -189,8 +189,10 @@ public without sharing class InspectionQuestionsControllerV2 {
             return new List<RegulatoryCodeWrapper>();
         }
 
-        List<RegulatoryCodeAssessmentInd> regulatoryCodeRecords = [ SELECT RegulatoryCode.Id, RegulatoryCode.Name, RegulatoryCode.Subject, RegulatoryCode.EffectiveFrom, RegulatoryCode.EffectiveTo, RegulatoryCode.IsActive
-            FROM RegulatoryCodeAssessmentInd WHERE AssessmentIndDefinitionId = :assessmentIndicatorDefinitionId WITH SECURITY_ENFORCED];
+        List<RegulatoryCodeAssessmentInd> regulatoryCodeRecords = [ SELECT RegulatoryCode.Id, RegulatoryCode.Name, RegulatoryCode.Subject, RegulatoryCode.Description,
+            RegulatoryCode.RegulatoryAuthorityId, RegulatoryCode.RegulatoryAuthority.Name, RegulatoryCode.EffectiveFrom, RegulatoryCode.EffectiveTo, RegulatoryCode.IsActive
+            FROM RegulatoryCodeAssessmentInd WHERE AssessmentIndDefinitionId = :assessmentIndicatorDefinitionId WITH SECURITY_ENFORCED
+            ORDER BY RegulatoryCode.RegulatoryAuthority.Name ASC NULLS LAST, RegulatoryCode.Name ASC];
 
         List<RegulatoryCodeWrapper> regulatoryCodeWrappers = new List<RegulatoryCodeWrapper>();
 
@@ -200,8 +202,12 @@ public without sharing class InspectionQuestionsControllerV2 {
                 formattedValidity = (record.RegulatoryCode.EffectiveFrom != null ? String.valueOf(record.RegulatoryCode.EffectiveFrom) : '') + ' to ' +
                     (record.RegulatoryCode.EffectiveTo != null ? String.valueOf(record.RegulatoryCode.EffectiveTo) : '');
             }
+            
+            regulatoryCodeWrappers.add(new RegulatoryCodeWrapper(record.RegulatoryCode.Id,
+            record.RegulatoryCode.RegulatoryAuthority.Name, record.RegulatoryCode.Name,
+            record.RegulatoryCode.Subject, record.RegulatoryCode.Description,
+            record.RegulatoryCode.IsActive, formattedValidity));
 
-            regulatoryCodeWrappers.add(new RegulatoryCodeWrapper(record.RegulatoryCode.Id, record.RegulatoryCode.Name, record.RegulatoryCode.Subject, record.RegulatoryCode.IsActive, formattedValidity));
         }
         return regulatoryCodeWrappers;
     }
@@ -294,15 +300,19 @@ public without sharing class InspectionQuestionsControllerV2 {
      */
     public class RegulatoryCodeWrapper {
         @AuraEnabled public Id regulatoryCodeId { get; set; }
+        @AuraEnabled public String regulatoryAuthorityName { get; set; }
         @AuraEnabled public String regulatoryCodeName { get; set; }
-         @AuraEnabled public String regulatoryCodeSubject { get; set; }
+        @AuraEnabled public String regulatoryCodeSubject { get; set; }
+        @AuraEnabled public String regulatoryCodeDescription { get; set; }
         @AuraEnabled public Boolean isActive { get; set; }
         @AuraEnabled public String validityText { get; set; }
 
-        public RegulatoryCodeWrapper(Id codeId, String name, String Subject, Boolean active, String validity) {
+       public RegulatoryCodeWrapper(Id codeId, String authorityName, String name, String Subject, String codeDescription, Boolean active, String validity) {
             regulatoryCodeId = codeId;
+            regulatoryAuthorityName = authorityName;
             regulatoryCodeName = name;
             regulatoryCodeSubject = Subject;
+            regulatoryCodeDescription = String.isNotBlank(codeDescription) ? codeDescription : Subject;
             isActive = active;
             validityText = validity;
         }
