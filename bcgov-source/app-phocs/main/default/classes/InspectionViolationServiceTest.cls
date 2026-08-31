@@ -342,7 +342,7 @@ public class InspectionViolationServiceTest {
         insert responses;
         
         Test.startTest();
-        InspectionViolationService.ViolationResult result = InspectionViolationService.createRegulatoryCodeViolationsForInspection(testVisit.Id, null, null);
+        InspectionViolationService.ViolationResult result = InspectionViolationService.createRegulatoryCodeViolationsForInspection(testVisit.Id, null, null, null);
         Test.stopTest();
         
         System.assertEquals(true, result.success, 'Bulk violation creation should succeed');
@@ -357,7 +357,7 @@ public class InspectionViolationServiceTest {
     @isTest
     static void testCreateRegulatoryCodeViolations_NullVisitId() {
         Test.startTest();
-        InspectionViolationService.ViolationResult result = InspectionViolationService.createRegulatoryCodeViolationsForInspection(null, null, null);
+        InspectionViolationService.ViolationResult result = InspectionViolationService.createRegulatoryCodeViolationsForInspection(null, null, null, null);
         Test.stopTest();
         
         System.assertEquals(false, result.success, 'Should return failure for null visit ID');
@@ -368,7 +368,7 @@ public class InspectionViolationServiceTest {
     static void testCreateRegulatoryCodeViolations_NoAssessmentResponses() {
         Visit testVisit = [SELECT Id FROM Visit LIMIT 1];
         Test.startTest();
-        InspectionViolationService.ViolationResult result = InspectionViolationService.createRegulatoryCodeViolationsForInspection(testVisit.Id, null, null);
+        InspectionViolationService.ViolationResult result = InspectionViolationService.createRegulatoryCodeViolationsForInspection(testVisit.Id, null, null, null);
         Test.stopTest();
         
         System.assertEquals(true, result.success);
@@ -416,12 +416,50 @@ public class InspectionViolationServiceTest {
         Map<Id, String> violationStatusMap = new Map<Id, String>{ openParent.Id => InspectionViolationService.RESULT_COMPLIANT };
 
         Test.startTest();
-        InspectionViolationService.createRegulatoryCodeViolationsForInspection(resolvingVisit.Id, null, violationStatusMap);
+        InspectionViolationService.createRegulatoryCodeViolationsForInspection(resolvingVisit.Id, null, violationStatusMap, null);
         Test.stopTest();
 
         RegulatoryCodeViolation resolved = [SELECT Status, InspectionId, ResolvedIn__c FROM RegulatoryCodeViolation WHERE Id = :openParent.Id];
         System.assertEquals('Resolved', resolved.Status, 'Violation should be resolved when its question is answered Compliant');
         System.assertEquals(resolvingVisit.Id, resolved.ResolvedIn__c, 'ResolvedIn should reference the inspection that resolved the violation');
         System.assertEquals(originalVisit.Id, resolved.InspectionId, 'Inspection should still reference where the violation was raised');
+    }
+    
+    @isTest
+    static void testCreateRegulatoryCodeViolations_StampsDateCreatedFromActualStartTime() {
+        Visit testVisit = [SELECT Id FROM Visit LIMIT 1];
+
+        // Simulate the Start Inspection stamp: the Visit holds the date the inspection was ENTERED.
+        Datetime dataEntryStamp = System.now();
+        testVisit.ActualVisitStartTime = dataEntryStamp;
+        update testVisit;
+
+        AssessmentTask testTask = [SELECT Id FROM AssessmentTask WHERE ParentId = :testVisit.Id LIMIT 1];
+        AssessmentIndicatorDefinition parentIndicator = [SELECT Id FROM AssessmentIndicatorDefinition WHERE PHOCSParentId__c = null LIMIT 1];
+
+        insert new InspectionAssessmentInd(
+            AssessmentTaskId = testTask.Id,
+            AssessmentIndDefinitionId = parentIndicator.Id,
+            RecordTypeId = InspectionViolationService.recordTypePHOCSInspectionAssessmentInd,
+            Result = InspectionViolationService.RESULT_NON_COMPLIANT
+        );
+
+        // Inspection was actually conducted three days before it was entered into the system.
+        // This is what the officer types on the submit modal, and what the violations must carry.
+        Datetime backDatedStart = dataEntryStamp.addDays(-3);
+
+        Test.startTest();
+        InspectionViolationService.ViolationResult result = InspectionViolationService.createRegulatoryCodeViolationsForInspection(testVisit.Id, null, null, backDatedStart);
+        Test.stopTest();
+
+        System.assertEquals(true, result.success, 'Violation creation should succeed');
+        System.assert(result.violationCount > 0, 'At least one violation should be created');
+
+        List<RegulatoryCodeViolation> violations = [SELECT DateCreated, CreatedDate FROM RegulatoryCodeViolation WHERE Id IN :result.violationIds];
+        for (RegulatoryCodeViolation vio : violations) {
+            System.assertEquals(backDatedStart, vio.DateCreated, 'DateCreated should be stamped with the Inspection Actual Start Time');
+            System.assertNotEquals(dataEntryStamp, vio.DateCreated, 'The date supplied on submit must take precedence over the Actual Start Time stored on the Visit');
+            System.assertNotEquals(vio.CreatedDate.date(), vio.DateCreated.date(), 'System CreatedDate should remain the submission date, separate from the violation date');
+        }
     }
 }
