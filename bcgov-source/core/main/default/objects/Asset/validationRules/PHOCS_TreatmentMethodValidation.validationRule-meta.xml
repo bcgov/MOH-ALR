@@ -4,6 +4,7 @@
     <active>true</active>
     <description>When a PHOCS Drinking Water System Component has an Asset Type of Treatment, then related Asset Record Type must be PHOCS Treatment Method.</description>
     <errorConditionFormula>AND(
+    NOT( $Permission.EHISBypassValidationRuleCustomPermission ),
     /* Exclude Record Types */
     NOT(
     OR(

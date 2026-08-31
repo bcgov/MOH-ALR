@@ -4,6 +4,7 @@
     <active>true</active>
     <description>Validating all asset recordtypes with Facility record types with account type.</description>
     <errorConditionFormula>AND(
+    NOT( $Permission.EHISBypassValidationRuleCustomPermission ),
     NOT(ISBLANK(AccountId)),
 
     NOT(
