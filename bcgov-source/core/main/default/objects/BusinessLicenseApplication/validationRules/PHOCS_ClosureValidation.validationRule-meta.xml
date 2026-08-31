@@ -3,6 +3,7 @@
     <fullName>PHOCS_ClosureValidation</fullName>
     <active>true</active>
     <errorConditionFormula>AND(
+    NOT( $Permission.EHISBypassValidationRuleCustomPermission ),
     TEXT(Status) &lt;&gt; &quot;Closed&quot;,
     OR(
         ISCHANGED( ClosedBy__c ),

@@ -4,6 +4,7 @@
     <active>true</active>
     <description>Validated Period End Date should be future date in BL record</description>
     <errorConditionFormula>AND(
+    NOT( $Permission.EHISBypassValidationRuleCustomPermission ),
     NOT(ISBLANK( PeriodStart )),
     NOT(ISBLANK( PeriodEnd )),
     PeriodEnd  &lt;= PeriodStart 

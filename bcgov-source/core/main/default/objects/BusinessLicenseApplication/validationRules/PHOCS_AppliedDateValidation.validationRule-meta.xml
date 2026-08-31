@@ -3,6 +3,9 @@
     <fullName>PHOCS_AppliedDateValidation</fullName>
     <active>true</active>
     <description>BLA Applied Date Validation</description>
-    <errorConditionFormula>DATEVALUE( AppliedDate ) &gt; TODAY()</errorConditionFormula>
+    <errorConditionFormula>AND(
+NOT( $Permission.EHISBypassValidationRuleCustomPermission ),
+DATEVALUE( AppliedDate ) &gt; TODAY()
+)</errorConditionFormula>
     <errorMessage>Applied Date cannot be in the future.</errorMessage>
 </ValidationRule>
