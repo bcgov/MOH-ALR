@@ -5,6 +5,7 @@
     <description>Validated Period End Date should be future date in BL record</description>
     <errorConditionFormula>AND(
     NOT( $Permission.EHISBypassValidationRuleCustomPermission ),
+    RecordType.DeveloperName = &quot;PHOCSPermitLicense&quot;,
     NOT(ISBLANK( PeriodStart )),
     NOT(ISBLANK( PeriodEnd )),
     PeriodEnd  &lt;= PeriodStart 

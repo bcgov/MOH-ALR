@@ -4,6 +4,17 @@
     <active>true</active>
     <errorConditionFormula>AND(
     NOT( $Permission.EHISBypassValidationRuleCustomPermission ),
+    OR(
+RecordType.DeveloperName = &quot;New_License_Application_Record_Type&quot;,
+RecordType.DeveloperName = &quot;PHOCSBCCDCDairyPlantLicence&quot;,
+RecordType.DeveloperName = &quot;ConstructionPermitApplication&quot;,
+RecordType.DeveloperName = &quot;DairyWorkerLicence&quot;,
+RecordType.DeveloperName = &quot;Evaluation&quot;,
+RecordType.DeveloperName = &quot;PHOCSExemptions&quot;,
+RecordType.DeveloperName = &quot;OperatingPermitApplication&quot;,
+RecordType.DeveloperName = &quot;PHOCSRecordofSewerageSystem&quot;,
+RecordType.DeveloperName = &quot;Renewal&quot;
+),
     TEXT(Status) &lt;&gt; &quot;Closed&quot;,
     OR(
         ISCHANGED( ClosedBy__c ),
