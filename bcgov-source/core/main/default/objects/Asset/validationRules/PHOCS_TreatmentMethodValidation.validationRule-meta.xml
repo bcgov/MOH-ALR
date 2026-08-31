@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PHOCS_TreatmentMethodValidation</fullName>
+    <active>true</active>
+    <description>When a PHOCS Drinking Water System Component has an Asset Type of Treatment, then related Asset Record Type must be PHOCS Treatment Method.</description>
+    <errorConditionFormula>AND(
+    NOT( $Permission.EHISBypassValidationRuleCustomPermission ),
+    /* Exclude Record Types */
+    NOT(
+    OR(
+       RecordType.DeveloperName = &quot;DairyWorkerLicence&quot;,
+       RecordType.DeveloperName = &quot;PHOCSBCCDCDairyPlantLicence&quot;
+      )
+      ),
+    NOT(ISBLANK( ParentId )),
+     Parent.RecordTypeName__c = &quot;PHOCSDrinkingWaterSystemComponent&quot;,
+    TEXT( Parent.Type__c ) = &quot;Treatment&quot;,
+    RecordTypeName__c &lt;&gt; &quot;Treatment_Method&quot;
+)</errorConditionFormula>
+    <errorMessage>Select PHOCS Treatment Method type.</errorMessage>
+</ValidationRule>

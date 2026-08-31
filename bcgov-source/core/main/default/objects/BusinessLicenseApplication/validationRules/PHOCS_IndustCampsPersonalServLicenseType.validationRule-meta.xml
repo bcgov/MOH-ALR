@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PHOCS_IndustCampsPersonalServLicenseType</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+   NOT( $Permission.EHISBypassValidationRuleCustomPermission ),
+      /* Exclude Record Types */
+    NOT(
+    OR(
+         RecordType.DeveloperName = &quot;DairyWorkerLicence&quot;,
+         RecordType.DeveloperName = &quot;PHOCSBCCDCDairyPlantLicence&quot;
+      )
+      ),
+    NOT(ISBLANK(AccountId)),
+    NOT(ISBLANK(LicenseTypeId)),
+
+    OR(
+        TEXT(Account.Type) = &quot;Industrial Camps&quot;,
+        TEXT(Account.Type) = &quot;Personal Services&quot;
+    ),
+
+    NOT(
+        OR(
+
+            AND(
+                Account.RecordTypeName__c = &quot;Facility&quot;,
+                TEXT(Account.Type) = &quot;Industrial Camps&quot;,
+                OR(
+                    RecordType.DeveloperName = &quot;OperatingPermitApplication&quot;,
+                    RecordType.DeveloperName = &quot;PHOCSExemptions&quot;
+                ),
+                OR(
+                    LicenseType.Name = &quot;Industrial Camp Operating Permit&quot;,
+                    LicenseType.Name = &quot;Industrial Camp Sewerage System of Approval&quot;
+                )
+            ),
+
+            AND(
+                Account.RecordTypeName__c = &quot;Facility&quot;,
+                TEXT(Account.Type) = &quot;Personal Services&quot;,
+                OR(
+                    RecordType.DeveloperName = &quot;OperatingPermitApplication&quot;,
+                    RecordType.DeveloperName = &quot;PHOCSExemptions&quot;
+                ),
+                OR(
+                    LicenseType.Name = &quot;Personal Service Establishment Health Approval&quot;,
+                    LicenseType.Name = &quot;Temporary Personal Service Establishment Health Approval&quot;
+                )
+            )
+        )
+    )
+)</errorConditionFormula>
+    <errorMessage>Select a valid Licence Type for this Facility and application type.</errorMessage>
+</ValidationRule>

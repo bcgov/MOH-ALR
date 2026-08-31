@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PHOCS_RecreationalWaterLicenseType</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+   NOT( $Permission.EHISBypassValidationRuleCustomPermission ),
+      /* Exclude Record Types */
+    NOT(
+    OR(
+       RecordType.DeveloperName = &quot;DairyWorkerLicence&quot;,
+       RecordType.DeveloperName = &quot;PHOCSBCCDCDairyPlantLicence&quot;
+       )
+       ),
+    NOT(ISBLANK(AccountId)),
+    NOT(ISBLANK(LicenseTypeId)),
+
+    TEXT(Account.Type) = &quot;Recreational Water&quot;,
+
+    NOT(
+        OR(
+
+            AND(
+                OR(
+                    RecordType.DeveloperName = &quot;ConstructionPermitApplication&quot;,
+                    RecordType.DeveloperName = &quot;PHOCSExemptions&quot;
+                ),
+                LicenseType.Name = &quot;Pool Construction Permit&quot;
+            ),
+
+            AND(
+                OR(
+                    RecordType.DeveloperName = &quot;OperatingPermitApplication&quot;,
+                    RecordType.DeveloperName = &quot;PHOCSExemptions&quot;
+                ),
+                LicenseType.Name = &quot;Pool Operating Permit&quot;
+            )
+        )
+    )
+)</errorConditionFormula>
+    <errorMessage>Select a valid Licence Type for this Facility and application type.</errorMessage>
+</ValidationRule>

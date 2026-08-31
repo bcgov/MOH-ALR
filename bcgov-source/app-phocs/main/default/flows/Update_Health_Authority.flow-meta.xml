@@ -27,89 +27,16 @@
     </actionCalls>
     <apiVersion>63.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
-    <decisions>
-        <description>Assign Health Authority based on Facility HA</description>
-        <name>Assign_Health_Authority</name>
-        <label>Assign Health Authority</label>
-        <locationX>710</locationX>
-        <locationY>1247</locationY>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>Interior</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Get_Facility_Hierarchy.Name</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Interior</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Interior_Health_IH</targetReference>
-            </connector>
-            <label>Interior</label>
-        </rules>
-        <rules>
-            <name>Fraser</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Get_Facility_Hierarchy.Name</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Fraser</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Fraser_Health_FH</targetReference>
-            </connector>
-            <label>Fraser</label>
-        </rules>
-        <rules>
-            <name>Vancouver_Coastal</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Get_Facility_Hierarchy.Name</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Vancouver Coastal</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Vancouver_Coastal_Health_VCH</targetReference>
-            </connector>
-            <label>Vancouver Coastal</label>
-        </rules>
-        <rules>
-            <name>Vancouver_Island</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Get_Facility_Hierarchy.Name</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Vancouver Island</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Island_Health_Island</targetReference>
-            </connector>
-            <label>Vancouver Island</label>
-        </rules>
-        <rules>
-            <name>Northern</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Get_Facility_Hierarchy.Name</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Northern</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Northern_Health_NH</targetReference>
-            </connector>
-            <label>Northern</label>
-        </rules>
-    </decisions>
+    <customErrors>
+        <name>Error</name>
+        <label>Error</label>
+        <locationX>1370</locationX>
+        <locationY>1463</locationY>
+        <customErrorMessages>
+            <errorMessage>You can only create facilities associated with your Health Authority.</errorMessage>
+            <isFieldError>false</isFieldError>
+        </customErrorMessages>
+    </customErrors>
     <decisions>
         <description>Update Health Authority Only if Facility Hierarchy is changed</description>
         <name>Check_Facility_Hierarchy_Changed</name>
@@ -154,6 +81,127 @@
                 <targetReference>Get_Facility_Hierarchy</targetReference>
             </connector>
             <label>Outcome 1 of Check Facility Hierarchy exists</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Check Health Authority based on Facility HA and User HA</description>
+        <name>Check_Health_Authority</name>
+        <label>Check Health Authority</label>
+        <locationX>710</locationX>
+        <locationY>1355</locationY>
+        <defaultConnector>
+            <targetReference>Error</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Interior</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Facility_Hierarchy.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Interior</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_User.Email</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>interior</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Interior_Health_IH</targetReference>
+            </connector>
+            <label>Interior</label>
+        </rules>
+        <rules>
+            <name>Fraser</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Facility_Hierarchy.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Fraser</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_User.Email</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>fraser</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Fraser_Health_FH</targetReference>
+            </connector>
+            <label>Fraser</label>
+        </rules>
+        <rules>
+            <name>Vancouver_Coastal</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Facility_Hierarchy.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Vancouver Coastal</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_User.Email</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>vch</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Vancouver_Coastal_Health_VCH</targetReference>
+            </connector>
+            <label>Vancouver Coastal</label>
+        </rules>
+        <rules>
+            <name>Vancouver_Island</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Facility_Hierarchy.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Vancouver Island</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_User.Email</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>island</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Island_Health_Island</targetReference>
+            </connector>
+            <label>Vancouver Island</label>
+        </rules>
+        <rules>
+            <name>Northern</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Facility_Hierarchy.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Northern</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_User.Email</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>northern</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Northern_Health_NH</targetReference>
+            </connector>
+            <label>Northern</label>
         </rules>
     </decisions>
     <decisions>
@@ -245,7 +293,8 @@
 Bug Fix - For New Record and Update Record
 Bug fix - On creation Facility Hierarchy Updates
 test -v8
-Flow to update Health Authority Field - EHIS-188 - Bug fix</description>
+Flow to update Health Authority Field - EHIS-188 - Bug fix
+EHIS-5000 Prevent Creation of Facilities for Another Health Authority</description>
     <environments>Default</environments>
     <formulas>
         <description>Check if record is created</description>
@@ -282,7 +331,7 @@ Flow to update Health Authority Field - EHIS-188 - Bug fix</description>
         <locationY>1139</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Assign_Health_Authority</targetReference>
+            <targetReference>Get_User</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -296,12 +345,33 @@ Flow to update Health Authority Field - EHIS-188 - Bug fix</description>
         <object>Account</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <recordLookups>
+        <name>Get_User</name>
+        <label>Get User</label>
+        <locationX>710</locationX>
+        <locationY>1247</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_Health_Authority</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.CreatedById</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>User</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <recordUpdates>
         <description>Update Account Field Health Authority to Fraser Health - FH</description>
         <name>Fraser_Health_FH</name>
         <label>Fraser Health - FH</label>
         <locationX>314</locationX>
-        <locationY>1355</locationY>
+        <locationY>1463</locationY>
         <inputAssignments>
             <field>HealthAuthority__c</field>
             <value>
@@ -315,7 +385,7 @@ Flow to update Health Authority Field - EHIS-188 - Bug fix</description>
         <name>Interior_Health_IH</name>
         <label>Interior Health - IH</label>
         <locationX>50</locationX>
-        <locationY>1355</locationY>
+        <locationY>1463</locationY>
         <inputAssignments>
             <field>HealthAuthority__c</field>
             <value>
@@ -329,7 +399,7 @@ Flow to update Health Authority Field - EHIS-188 - Bug fix</description>
         <name>Island_Health_Island</name>
         <label>Island Health - Island</label>
         <locationX>842</locationX>
-        <locationY>1355</locationY>
+        <locationY>1463</locationY>
         <inputAssignments>
             <field>HealthAuthority__c</field>
             <value>
@@ -343,7 +413,7 @@ Flow to update Health Authority Field - EHIS-188 - Bug fix</description>
         <name>Northern_Health_NH</name>
         <label>Northern Health - NH</label>
         <locationX>1106</locationX>
-        <locationY>1355</locationY>
+        <locationY>1463</locationY>
         <inputAssignments>
             <field>HealthAuthority__c</field>
             <value>
@@ -375,7 +445,7 @@ Flow to update Health Authority Field - EHIS-188 - Bug fix</description>
         <name>Vancouver_Coastal_Health_VCH</name>
         <label>Vancouver Coastal Health - VCH</label>
         <locationX>578</locationX>
-        <locationY>1355</locationY>
+        <locationY>1463</locationY>
         <inputAssignments>
             <field>HealthAuthority__c</field>
             <value>

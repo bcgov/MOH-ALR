@@ -474,9 +474,10 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
     const timeRegex = /^(\d{1,2}):([0-5][0-9])$/;
 
-    if (!value) {
+    /*if (!value) {
         input.setCustomValidity("Time Spent is required.");
-    } else if (!timeRegex.test(value)) {
+    }*/
+	if (!timeRegex.test(value)) {
         input.setCustomValidity("Please enter time in valid HH:MM format.");
     } else {
         input.setCustomValidity("");
