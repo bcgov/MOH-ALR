@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PHOCS_SewerageLicenseType</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+   NOT( $Permission.EHISBypassValidationRuleCustomPermission ),
+   /* Exclude Record Types */
+   NOT(
+   OR(
+      RecordType.DeveloperName = &quot;DairyWorkerLicence&quot;,
+      RecordType.DeveloperName = &quot;PHOCSBCCDCDairyPlantLicence&quot;
+      )
+      ),
+    NOT(ISBLANK(AccountId)),
+    NOT(ISBLANK(LicenseTypeId)),
+
+    Account.RecordTypeName__c = &quot;Facility&quot;,
+    TEXT(Account.Type) = &quot;Sewerage&quot;,
+
+    NOT(
+        OR(
+            /* Sewerage Holding Tank Permit to Construct */
+            AND(
+                TEXT(Account.CategoryL1__c) =
+                    &quot;Holding tank&quot;,
+
+                OR(
+                    RecordType.DeveloperName =
+                        &quot;ConstructionPermitApplication&quot;,
+                    RecordType.DeveloperName =
+                        &quot;PHOCSExemptions&quot;
+                ),
+
+                LicenseType.Name =
+                    &quot;Sewerage Holding Tank Permit to Construct&quot;
+            ),
+
+            /* Record of Sewerage System */
+            AND(
+                OR(
+                    TEXT(Account.CategoryL1__c) =
+                        &quot;Sewerage system - Type 1&quot;,
+                    TEXT(Account.CategoryL1__c) =
+                        &quot;Sewerage system - Type 2&quot;,
+                    TEXT(Account.CategoryL1__c) =
+                        &quot;Sewerage system - Type 3&quot;
+                ),
+
+                OR(
+                    RecordType.DeveloperName =
+                        &quot;PHOCSRecordofSewerageSystem&quot;,
+                    RecordType.DeveloperName =
+                        &quot;PHOCSExemptions&quot;
+                ),
+
+                LicenseType.Name =
+                    &quot;Record of Sewerage System&quot;
+            )
+        )
+    )
+)</errorConditionFormula>
+    <errorMessage>Select a valid Licence Type for this Facility and application type.</errorMessage>
+</ValidationRule>

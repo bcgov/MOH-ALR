@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PHOCS_AssetRecordTypeValidation</fullName>
+    <active>true</active>
+    <description>Validating all asset recordtypes with Facility record types with account type.</description>
+    <errorConditionFormula>AND(
+    NOT( $Permission.EHISBypassValidationRuleCustomPermission ),
+    NOT(ISBLANK(AccountId)),
+
+    NOT(
+        OR(
+            RecordTypeName__c = &quot;DairyProducts&quot;,
+            RecordTypeName__c = &quot;PHOCSDairyPlantRoomsandEquipment&quot;
+        )
+    ),
+
+    NOT(
+        OR(
+            /* Child Care */
+            AND(
+                Account.RecordTypeName__c = &quot;Facility&quot;,
+                TEXT(Account.Type) = &quot;Child Care&quot;,
+                RecordTypeName__c = &quot;ChildCareService&quot;
+            ),
+
+            /* Drinking Water */
+            AND(
+                Account.RecordTypeName__c = &quot;DrinkingWaterSystem&quot;,
+                TEXT(Account.Type) = &quot;Drinking Water&quot;,
+                RecordTypeName__c = &quot;PHOCSDrinkingWaterSystemComponent&quot;
+            ),
+
+            /* Personal Services */
+            AND(
+                Account.RecordTypeName__c = &quot;Facility&quot;,
+                TEXT(Account.Type) = &quot;Personal Services&quot;,
+                RecordTypeName__c = &quot;PHOCSPersonalServices&quot;
+            ),
+
+            /* Recreational Water */
+            AND(
+                Account.RecordTypeName__c = &quot;Facility&quot;,
+                TEXT(Account.Type) = &quot;Recreational Water&quot;,
+                RecordTypeName__c = &quot;PHOCSRecreationalWater&quot;
+            ),
+
+            /* Residential Care */
+            AND(
+                Account.RecordTypeName__c = &quot;Facility&quot;,
+                TEXT(Account.Type) = &quot;Residential Care&quot;,
+                RecordTypeName__c = &quot;ResidentialCareService&quot;
+            ),
+
+            /* Industrial Camps */
+            AND(
+                Account.RecordTypeName__c = &quot;Facility&quot;,
+                TEXT(Account.Type) = &quot;Industrial Camps&quot;,
+                RecordTypeName__c = &quot;PHOCS_Sewerage_Component&quot;
+            )
+        )
+    )
+)</errorConditionFormula>
+    <errorMessage>Asset type must match Facility. Select a valid type.</errorMessage>
+</ValidationRule>
