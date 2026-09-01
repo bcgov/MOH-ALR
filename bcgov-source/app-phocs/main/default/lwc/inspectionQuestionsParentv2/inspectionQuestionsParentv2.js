@@ -477,12 +477,12 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
     /*if (!value) {
         input.setCustomValidity("Time Spent is required.");
     }*/
-	if (!timeRegex.test(value)) {
+	if (value && !timeRegex.test(value)) {
         input.setCustomValidity("Please enter time in valid HH:MM format.");
-    } else {
+    } 
+	else {
         input.setCustomValidity("");
     }
-
 	input.reportValidity();
 	}
 
@@ -1068,13 +1068,13 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
         const value = input.value ? input.value.trim() : '';
 		const timeRegex = /^(\d{1,2}):([0-5][0-9])$/;
 
-        if (!value) {
+       /* if (!value) {
 			input.setCustomValidity("Time Spent is required.");
 			input.reportValidity();
 			return;
-		}
+		}*/
 		
-		if (!timeRegex.test(value)) {
+		if (value && !timeRegex.test(value)) {
 			input.setCustomValidity("Please enter time in valid HH:MM format.");
 			input.reportValidity();
 			return;
