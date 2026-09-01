@@ -1343,9 +1343,10 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 				...(this.inspection || {}),
 				Status: 'Completed'
 			};
-			await this.createViolationsAndNotify();
 
 			const actualStartDateToSend = typeof this.actualStartDate === 'string' ? new Date(this.actualStartDate) : this.actualStartDate;
+
+			await this.createViolationsAndNotify(actualStartDateToSend);
 
 			await completeInspection({
 				visitId: this.recordId,
@@ -1394,7 +1395,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 		}
 	}
 
-	async createViolationsAndNotify() {
+	async createViolationsAndNotify(actualStartDate) {
 		try {
 			const definitionToParentViolationMap = {};
 			const violationStatusMap = {};
@@ -1419,7 +1420,8 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 			const violationResult = await createViolationsForInspection({
 				visitId: this.recordId,
 				definitionToParentViolationMap,
-				violationStatusMap
+				violationStatusMap,
+				actualStartDate
 			});
 
 			if (violationResult?.success) {
