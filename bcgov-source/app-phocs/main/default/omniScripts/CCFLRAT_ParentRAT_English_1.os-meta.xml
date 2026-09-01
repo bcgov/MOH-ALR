@@ -1025,7 +1025,7 @@
   &quot;label&quot; : &quot;Part A: Inspection Score&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;expression&quot; : &quot;%RiskScoreOutput:PartAScore%&quot;,
+  &quot;expression&quot; : &quot;%OutputPartAScore%&quot;,
   &quot;hide&quot; : false,
   &quot;show&quot; : null,
   &quot;mask&quot; : null,
@@ -1049,7 +1049,7 @@
   &quot;label&quot; : &quot;Part B: Operational History Score&quot;,
   &quot;showInputWidth&quot; : false,
   &quot;inputWidth&quot; : 12,
-  &quot;expression&quot; : &quot;%RiskScoreOutput:PartBScore%&quot;,
+  &quot;expression&quot; : &quot;%OutputPartBScore%&quot;,
   &quot;hide&quot; : false,
   &quot;show&quot; : null,
   &quot;mask&quot; : null,
@@ -1330,7 +1330,16 @@
   &quot;redirectPreviousLabel&quot; : &quot;Previous&quot;,
   &quot;redirectPreviousWidth&quot; : 3,
   &quot;showPersistentComponent&quot; : [ true, false ],
-  &quot;show&quot; : null,
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;0&quot;,
+        &quot;condition&quot; : &quot;&lt;&gt;&quot;,
+        &quot;field&quot; : &quot;openRegViolationCount&quot;
+      } ]
+    }
+  },
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;wpm&quot; : false,
   &quot;ssm&quot; : false,
