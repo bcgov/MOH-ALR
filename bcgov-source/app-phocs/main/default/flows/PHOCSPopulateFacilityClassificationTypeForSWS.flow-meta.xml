@@ -8,7 +8,8 @@
         <name>ClassificationTypeFormula</name>
         <dataType>String</dataType>
         <expression>IF(
-   AND($Record.PopulationServedper24hrs__c &gt;= 50,$Record.PopulationServedper24hrs__c &lt;= 500),    &apos;SWS&apos;,&apos;&apos;
+ OR( ISBLANK($Record.PopulationServedper24hrs__c),
+   AND($Record.PopulationServedper24hrs__c &gt;= 50,$Record.PopulationServedper24hrs__c &lt;= 500)),    &apos;SWS&apos;,&apos;&apos;
 )</expression>
     </formulas>
     <interviewLabel>PHOCS Populate Facility Classification Type for SWS {!$Flow.CurrentDateTime}</interviewLabel>
