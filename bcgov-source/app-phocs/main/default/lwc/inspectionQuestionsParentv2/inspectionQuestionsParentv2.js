@@ -1113,7 +1113,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 	async handleFinalSubmit() {
 		let isValid = true;
 		let statusnotselected = false;
-		let duedateempty = false;
+		//let duedateempty = false;
 		let missingNonCompliantDetails = false;
 		const unansweredParents = [];
 
@@ -1134,12 +1134,12 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
           return;
         }
 
-		this.template
+		/*this.template
 			.querySelectorAll('lightning-input[data-field="compduedate"]')
 			.forEach((input) => {
 				input.setCustomValidity("");
 				input.reportValidity();
-			});
+			});*/
 
 		for (const group of this.groupedQuestions) {
 			for (const parent of group.parentQuestions) {
@@ -1162,7 +1162,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 					isValid = false;
 				}
 
-				if (parent.result === RESULT_NON_COMPLIANT && !parent.preferredDateTime) {
+				/*if (parent.result === RESULT_NON_COMPLIANT && !parent.preferredDateTime) {
 					duedateempty = true;
 					isValid = false;
 
@@ -1176,7 +1176,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 						);
 						input.reportValidity();
 					}
-				}
+				}*/
 			}
 		}
 
@@ -1189,14 +1189,14 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 				);
 				return;
 			}
-			if (duedateempty) {
+			/*if (duedateempty) {
 				this.showToast(
 					"Error",
 					"Enter a compliance due date for non-compliant items",
 					"error",
 				);
 				return;
-			}
+			}*/
 			if (missingNonCompliantDetails) {
 				this.showToast(
 					"Error",
