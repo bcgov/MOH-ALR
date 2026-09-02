@@ -1,69 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <name>PHOCS_Case_Approved_Portal_User_Alert</name>
-        <label>PHOCS Case Approved - Portal User Alert</label>
+        <name>Send_email_to_portal_user</name>
+        <label>Send email to portal user</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <actionName>emailSimple</actionName>
-        <actionType>emailSimple</actionType>
+        <actionName>Case.PHOCS_Case_Approved_Portal_User_Alert</actionName>
+        <actionType>emailAlert</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
-            <name>recipientAddresses</name>
-            <value>
-                <collectionElements>
-                    <elementReference>$Record.ContactEmail</elementReference>
-                </collectionElements>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>senderType</name>
-            <value>
-                <inputConfiguratorMode>Custom</inputConfiguratorMode>
-                <stringValue>OrgWideEmailAddress</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>senderAddress</name>
-            <value>
-                <elementReference>var_OrgWideEmail</elementReference>
-                <inputConfiguratorMode>Resource</inputConfiguratorMode>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>useEmailTemplate</name>
-            <value>
-                <stringValue>True</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>emailTemplateName</name>
-            <value>
-                <inputConfiguratorMode>Custom</inputConfiguratorMode>
-                <setupReference>unfiled$public/PHOCS_CaseApprovedPortalUserAlert</setupReference>
-                <setupReferenceType>EmailTemplate</setupReferenceType>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>recipientId</name>
-            <value>
-                <elementReference>$Record.ContactId</elementReference>
-                <inputConfiguratorMode>Resource</inputConfiguratorMode>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>relatedRecordId</name>
+            <name>SObjectRowId</name>
             <value>
                 <elementReference>$Record.Id</elementReference>
                 <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
-        <nameSegment>emailSimple</nameSegment>
+        <nameSegment>Case.PHOCS_Case_Approved_Portal_User_Alert</nameSegment>
         <offset>0</offset>
-        <versionString>3.0.1</versionString>
     </actionCalls>
     <apiVersion>67.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Check_record_type</name>
+        <label>Check record type</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>PHOCSFacilityEnquiry_record_type</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>PHOCSFacilityEnquiry</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_email_to_portal_user</targetReference>
+            </connector>
+            <label>PHOCSFacilityEnquiry record type</label>
+        </rules>
+    </decisions>
+    <description>created as part oF bug - EHIS-5428</description>
     <environments>Default</environments>
     <interviewLabel>Case Operator Portal - Facility Request Approved {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Email Notification - Facility Access Approved</label>
@@ -90,14 +69,21 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>PHOCS_Case_Approved_Portal_User_Alert</targetReference>
+            <targetReference>Check_record_type</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
+        <filters>
+            <field>ClosureReason__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Approved</stringValue>
+            </value>
+        </filters>
         <filters>
             <field>Status</field>
             <operator>EqualTo</operator>
             <value>
-                <stringValue>Approved</stringValue>
+                <stringValue>Closed</stringValue>
             </value>
         </filters>
         <object>Case</object>
@@ -112,7 +98,7 @@
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <value>
-            <stringValue>EHIS.Project@gov.bc.ca</stringValue>
+            <stringValue>ehis.project@gov.bc.ca</stringValue>
         </value>
     </variables>
 </Flow>
