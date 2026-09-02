@@ -15,6 +15,21 @@
         </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Share_PHOCS_Omni_Process_SubType_with_Operators</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>Share PHOCS OmniScripts identified by SubType</description>
+        <label>Share PHOCS Omni Process SubType with Operators</label>
+        <sharedTo>
+            <group>PHOCSOperatorUserPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>SubType</field>
+            <operation>contains</operation>
+            <value>PHOCS</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
     <sharingGuestRules>
         <fullName>PHOCS_Share_OmniProcess_ForGU</fullName>
         <accessLevel>Read</accessLevel>
@@ -25,6 +40,21 @@
         </sharedTo>
         <criteriaItems>
             <field>Name</field>
+            <operation>contains</operation>
+            <value>PHOCS</value>
+        </criteriaItems>
+        <includeHVUOwnedRecords>false</includeHVUOwnedRecords>
+    </sharingGuestRules>
+    <sharingGuestRules>
+        <fullName>PHOCS_Share_OmniProcess_SubType_ForGU</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>Share PHOCS OmniScripts identified by SubType with Guest Site Users</description>
+        <label>PHOCS Share OmniProcess SubType For GU</label>
+        <sharedTo>
+            <guestUser>phocsservices</guestUser>
+        </sharedTo>
+        <criteriaItems>
+            <field>SubType</field>
             <operation>contains</operation>
             <value>PHOCS</value>
         </criteriaItems>
