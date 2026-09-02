@@ -413,7 +413,7 @@
         </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
-    <!-- <sharingCriteriaRules>
+    <sharingCriteriaRules>
         <fullName>BCCDCDairyFacility</fullName>
         <accessLevel>Read</accessLevel>
         <accountSettings>
@@ -431,8 +431,13 @@
             <operation>equals</operation>
             <value>PHOCS Dairy Facility</value>
         </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Business Entity</value>
+        </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
-    </sharingCriteriaRules> -->
+    </sharingCriteriaRules>
     <sharingCriteriaRules>
         <fullName>PHOCSAccountSharingRuleBAandOfficerBEHAFH</fullName>
         <accessLevel>Read</accessLevel>
@@ -573,6 +578,25 @@
             <field>Type</field>
             <operation>equals</operation>
             <value>4-CHSA</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Share_HA_BusinessEntity_With_Dairy_AdminOfficer</fullName>
+        <accessLevel>Read</accessLevel>
+        <accountSettings>
+            <caseAccessLevel>None</caseAccessLevel>
+            <contactAccessLevel>Read</contactAccessLevel>
+            <opportunityAccessLevel>None</opportunityAccessLevel>
+        </accountSettings>
+        <label>Share HA BusinessEntity With Dairy AdminOfficer</label>
+        <sharedTo>
+            <group>EHISUsersPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Business Entity,PHOCS HA Hierarchy</value>
         </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>

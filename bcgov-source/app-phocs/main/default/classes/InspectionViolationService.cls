@@ -32,7 +32,7 @@ public with sharing class InspectionViolationService {
                 WHERE Id = :visitId
                 LIMIT 1
             ];
-
+            
             // Get all InspectionAssessmentInd records for this visit with their definitions
             // Including both parent (non-compliant) and child (selected canned comments) records
             List<InspectionAssessmentInd> allResponses = [
@@ -278,7 +278,7 @@ public with sharing class InspectionViolationService {
                      28 May -  EHIS-2668         -  Accenture   -  Create Hierarchy Chain Violations.
 */
     @AuraEnabled
-    public static ViolationResult createRegulatoryCodeViolationsForInspection(Id visitId, Map<Id, Id> definitionToParentViolationMap, Map<Id, String> violationStatusMap) {
+    public static ViolationResult createRegulatoryCodeViolationsForInspection(Id visitId, Map<Id, Id> definitionToParentViolationMap, Map<Id, String> violationStatusMap, Datetime actualStartDate) {
         ViolationResult result = new ViolationResult();
         Set<Id> parentViolationIds = new Set<Id>();
         List<RegulatoryCodeViolation> parentViolationsToClose = new List<RegulatoryCodeViolation>();
@@ -342,6 +342,9 @@ public with sharing class InspectionViolationService {
             Map<Id, AssessmentTask> taskMap = new Map<Id, AssessmentTask>([SELECT Id, ParentId, Parent.AccountId, Parent.ContextId, Parent.Account.HealthAuthority__c
                                                                            FROM AssessmentTask WHERE Id IN :assessmentTaskIds]); 
             
+            // Supplied by the submit screen: completeInspection() writes it to the Visit only AFTER this method runs.
+            Datetime inspectionDate = actualStartDate != null ? actualStartDate : System.now();
+           
             if (definitionToParentViolationMap != null) {
                 parentViolationIds.addAll(definitionToParentViolationMap.values());
             }            
@@ -381,7 +384,7 @@ public with sharing class InspectionViolationService {
                     vio.InspectionId = inspectionId;
                     vio.PHOCSParentAccountID__c = inspectionAccountId;
                     vio.Asset__c = (inspectionAssetId != null && inspectionAssetId.getSObjectType() == Asset.SObjectType) ? inspectionAssetId : NULL;
-                    vio.DateCreated = System.now();
+                    vio.DateCreated = inspectionDate;
                     vio.RegulatoryCodeId = mapItem.RegulatoryCodeId;
                     vio.ComplianceDueDate = ind.ComplianceDueDate__c;
                     vio.CorrectiveActionDescription = ind.CorrectiveActionDescription__c;

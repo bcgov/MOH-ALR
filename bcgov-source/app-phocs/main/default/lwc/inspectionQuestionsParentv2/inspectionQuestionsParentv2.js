@@ -474,14 +474,15 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 
     const timeRegex = /^(\d{1,2}):([0-5][0-9])$/;
 
-    if (!value) {
+    /*if (!value) {
         input.setCustomValidity("Time Spent is required.");
-    } else if (!timeRegex.test(value)) {
+    }*/
+	if (value && !timeRegex.test(value)) {
         input.setCustomValidity("Please enter time in valid HH:MM format.");
-    } else {
+    } 
+	else {
         input.setCustomValidity("");
     }
-
 	input.reportValidity();
 	}
 
@@ -1067,13 +1068,13 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
         const value = input.value ? input.value.trim() : '';
 		const timeRegex = /^(\d{1,2}):([0-5][0-9])$/;
 
-        if (!value) {
+       /* if (!value) {
 			input.setCustomValidity("Time Spent is required.");
 			input.reportValidity();
 			return;
-		}
+		}*/
 		
-		if (!timeRegex.test(value)) {
+		if (value && !timeRegex.test(value)) {
 			input.setCustomValidity("Please enter time in valid HH:MM format.");
 			input.reportValidity();
 			return;
@@ -1112,7 +1113,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 	async handleFinalSubmit() {
 		let isValid = true;
 		let statusnotselected = false;
-		let duedateempty = false;
+		//let duedateempty = false;
 		let missingNonCompliantDetails = false;
 		const unansweredParents = [];
 
@@ -1133,12 +1134,12 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
           return;
         }
 
-		this.template
+		/*this.template
 			.querySelectorAll('lightning-input[data-field="compduedate"]')
 			.forEach((input) => {
 				input.setCustomValidity("");
 				input.reportValidity();
-			});
+			});*/
 
 		for (const group of this.groupedQuestions) {
 			for (const parent of group.parentQuestions) {
@@ -1161,7 +1162,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 					isValid = false;
 				}
 
-				if (parent.result === RESULT_NON_COMPLIANT && !parent.preferredDateTime) {
+				/*if (parent.result === RESULT_NON_COMPLIANT && !parent.preferredDateTime) {
 					duedateempty = true;
 					isValid = false;
 
@@ -1175,7 +1176,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 						);
 						input.reportValidity();
 					}
-				}
+				}*/
 			}
 		}
 
@@ -1188,14 +1189,14 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 				);
 				return;
 			}
-			if (duedateempty) {
+			/*if (duedateempty) {
 				this.showToast(
 					"Error",
 					"Enter a compliance due date for non-compliant items",
 					"error",
 				);
 				return;
-			}
+			}*/
 			if (missingNonCompliantDetails) {
 				this.showToast(
 					"Error",
@@ -1342,9 +1343,10 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 				...(this.inspection || {}),
 				Status: 'Completed'
 			};
-			await this.createViolationsAndNotify();
 
 			const actualStartDateToSend = typeof this.actualStartDate === 'string' ? new Date(this.actualStartDate) : this.actualStartDate;
+
+			await this.createViolationsAndNotify(actualStartDateToSend);
 
 			await completeInspection({
 				visitId: this.recordId,
@@ -1393,7 +1395,7 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 		}
 	}
 
-	async createViolationsAndNotify() {
+	async createViolationsAndNotify(actualStartDate) {
 		try {
 			const definitionToParentViolationMap = {};
 			const violationStatusMap = {};
@@ -1418,7 +1420,8 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 			const violationResult = await createViolationsForInspection({
 				visitId: this.recordId,
 				definitionToParentViolationMap,
-				violationStatusMap
+				violationStatusMap,
+				actualStartDate
 			});
 
 			if (violationResult?.success) {
