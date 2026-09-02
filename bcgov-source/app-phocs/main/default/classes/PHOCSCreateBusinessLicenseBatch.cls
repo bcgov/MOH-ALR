@@ -153,7 +153,8 @@ public without sharing class PHOCSCreateBusinessLicenseBatch
 
         for (Integer index = 0; index < insertResults.size(); index++) {
             Database.SaveResult insertResult = insertResults[index];
-            if (insertResult.isSuccess()) {
+            if (insertResult.isSuccess()){
+				businessLicensesCreatedCount ++;
                 blasToUpdate.add(new BusinessLicenseApplication(
                         Id = sourceBLAs[index].Id,
                         LicensePermitNameId = insertResult.getId()
@@ -183,9 +184,9 @@ public without sharing class PHOCSCreateBusinessLicenseBatch
         '========================================\n' +
         'Completed On: ' + String.valueOf(System.now()) + '\n' +
         'Input BLA Records Count: ' + inputBlaRecordsCount + '\n' +
-        'Business License Records Created Count: ' + businessLicensesCreatedCount + '\n' +
-        'Success Count: ' + successCount + '\n' +
-        'Errors Count: ' + errorCount + '\n';
+        'BL Records Created Count: ' + businessLicensesCreatedCount + '\n' +
+        'BLA Update Success Count: ' + successCount + '\n' +
+        'BLA Update Errors Count: ' + errorCount + '\n';
 
     PHOCSBusinessLicenseBatchSetting__c setting =
         PHOCSBusinessLicenseBatchSetting__c.getOrgDefaults();
