@@ -204,7 +204,7 @@
         <enabled>true</enabled>
         <name>PHOCSReportingUser</name>
     </customPermissions>
-    <description>Read access on PHOCS objects and custom permission for Reporting User</description>
+    <description>Read access on PHOCS objects and custom permission for Dairy Reporting User</description>
     <fieldPermissions>
         <editable>false</editable>
         <field>Account.AccomodationTypeOtherSpecify__c</field>
@@ -5847,16 +5847,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Location.ExternalId__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Location.SiteTreatment__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
         <field>Product2.Family</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -6451,7 +6441,7 @@
         <readable>true</readable>
     </fieldPermissions>
     <hasActivationRequired>false</hasActivationRequired>
-    <label>PHOCS READ Reporting User</label>
+    <label>PHOCS Dairy READ Reporting User</label>
     <objectPermissions>
         <allowCreate>false</allowCreate>
         <allowDelete>false</allowDelete>
@@ -6957,14 +6947,6 @@
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
-        <recordType>Account.DrinkingWaterSourceIntake</recordType>
-        <visible>true</visible>
-    </recordTypeVisibilities>
-    <recordTypeVisibilities>
-        <recordType>Account.DrinkingWaterSystem</recordType>
-        <visible>true</visible>
-    </recordTypeVisibilities>
-    <recordTypeVisibilities>
         <recordType>Account.Facility</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
@@ -6973,7 +6955,15 @@
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
+        <recordType>Account.PHOCSDairyFacility</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
         <recordType>AccountAccountRelation.FacilityLinkage</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <recordType>ActionPlan.ActionPlan</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
@@ -6997,31 +6987,15 @@
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
-        <recordType>Asset.ChildCareService</recordType>
+        <recordType>Asset.DairyProducts</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
-        <recordType>Asset.PHOCSDrinkingWaterSystemComponent</recordType>
+        <recordType>Asset.PHOCSDairyPlantRoomsandEquipment</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
-        <recordType>Asset.PHOCSPersonalServices</recordType>
-        <visible>true</visible>
-    </recordTypeVisibilities>
-    <recordTypeVisibilities>
-        <recordType>Asset.PHOCSRecreationalWater</recordType>
-        <visible>true</visible>
-    </recordTypeVisibilities>
-    <recordTypeVisibilities>
-        <recordType>Asset.PHOCS_Sewerage_Component</recordType>
-        <visible>true</visible>
-    </recordTypeVisibilities>
-    <recordTypeVisibilities>
-        <recordType>Asset.ResidentialCareService</recordType>
-        <visible>true</visible>
-    </recordTypeVisibilities>
-    <recordTypeVisibilities>
-        <recordType>Asset.Treatment_Method</recordType>
+        <recordType>AuthApplicationAsset.PHOCSAuthorizationApplicationAsset</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
@@ -7037,19 +7011,11 @@
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
-        <recordType>BusinessLicenseApplication.ConstructionPermitApplication</recordType>
+        <recordType>BusinessLicenseApplication.DairyWorkerLicence</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
-        <recordType>BusinessLicenseApplication.Evaluation</recordType>
-        <visible>true</visible>
-    </recordTypeVisibilities>
-    <recordTypeVisibilities>
-        <recordType>BusinessLicenseApplication.OperatingPermitApplication</recordType>
-        <visible>true</visible>
-    </recordTypeVisibilities>
-    <recordTypeVisibilities>
-        <recordType>BusinessLicenseApplication.PHOCSExemptions</recordType>
+        <recordType>BusinessLicenseApplication.PHOCSBCCDCDairyPlantLicence</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
@@ -7061,19 +7027,7 @@
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
-        <recordType>Case.PHOCSEvent</recordType>
-        <visible>true</visible>
-    </recordTypeVisibilities>
-    <recordTypeVisibilities>
-        <recordType>Case.PHOCSReportableIncident</recordType>
-        <visible>true</visible>
-    </recordTypeVisibilities>
-    <recordTypeVisibilities>
         <recordType>Case.PHOCSRequestsInquiries</recordType>
-        <visible>true</visible>
-    </recordTypeVisibilities>
-    <recordTypeVisibilities>
-        <recordType>Case.PHOCSWaterAdvisories</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
@@ -7082,6 +7036,10 @@
     </recordTypeVisibilities>
     <recordTypeVisibilities>
         <recordType>Contact.PHOCSContact</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <recordType>Contact.PHOCSDairyPlantWorkerContacts</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
@@ -7097,15 +7055,15 @@
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
+        <recordType>DocumentTemplate.PHOCSDocumentTemplate</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
         <recordType>EnforcementActionViolation__c.PHOCSEnforcementActionViolation</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
         <recordType>Event.PHOCSEvent</recordType>
-        <visible>true</visible>
-    </recordTypeVisibilities>
-    <recordTypeVisibilities>
-        <recordType>Event.PHOCSTemporaryFoodService</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
@@ -7129,11 +7087,7 @@
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
-        <recordType>LabTestMasterList__c.PHOCSAirQualityTest</recordType>
-        <visible>true</visible>
-    </recordTypeVisibilities>
-    <recordTypeVisibilities>
-        <recordType>LabTestMasterList__c.PHOCSDyeTest</recordType>
+        <recordType>LabTestMasterList__c.PHOCSDairyProductEnvironmentalSwabTest</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
@@ -7145,7 +7099,11 @@
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
-        <recordType>LabTestRequired__c.PHOCSDyeTest</recordType>
+        <recordType>LabTestRequired__c.PHOCSDairyEnvironmentalSwabTestRequired</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <recordType>LabTestRequired__c.PHOCSDairyProductTestRequired</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
@@ -7153,31 +7111,19 @@
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
-        <recordType>LabTestRequired__c.PHOCSLeadWaterTest</recordType>
-        <visible>true</visible>
-    </recordTypeVisibilities>
-    <recordTypeVisibilities>
-        <recordType>LabTestRequired__c.PHOCSRadonAirQualityTestRequired</recordType>
-        <visible>true</visible>
-    </recordTypeVisibilities>
-    <recordTypeVisibilities>
         <recordType>LabTestRequired__c.PHOCSWaterLabTestRequired</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
-        <recordType>LabTestRequisition__c.PHOCSDyeTestRequisition</recordType>
+        <recordType>LabTestRequisition__c.PHOCSDairyEnvironmentalSwabTesting</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <recordType>LabTestRequisition__c.PHOCSDairyProductTestRequisition</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
         <recordType>LabTestRequisition__c.PHOCSFoodLabTestRequisition</recordType>
-        <visible>true</visible>
-    </recordTypeVisibilities>
-    <recordTypeVisibilities>
-        <recordType>LabTestRequisition__c.PHOCSLeadWaterTestRequisition</recordType>
-        <visible>true</visible>
-    </recordTypeVisibilities>
-    <recordTypeVisibilities>
-        <recordType>LabTestRequisition__c.PHOCSRadonTestRequisition</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
@@ -7217,15 +7163,19 @@
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
-        <recordType>RegulatoryTrxnFee.PHOCSNonDairyTransactionFee</recordType>
+        <recordType>RegulatoryTrxnFee.PHOCSTransactionFee</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
-        <recordType>RegulatoryTrxnFeeItem.PHOCSNonDairyTransactionFeeItem</recordType>
+        <recordType>RegulatoryTrxnFeeItem.PHOCSRegulatoryTransactionFeeItem</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
         <recordType>Task.Task</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <recordType>ViolationEnforcementAction.PHOCSViolationEnforcementAction</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
