@@ -47,7 +47,7 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Is_License_Type_is_Drinking_Water_Operating_Permit</targetReference>
+            <targetReference>Update_Conditions</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -146,7 +146,8 @@
         </rules>
     </decisions>
     <description>EHIS-5070 Generates a renewal Business Licence when a Renewal Regulatory Transaction Fee is paid in full.
-EHIS-5087 - Relink Exemption BLA from Prior BL to Renewed BL</description>
+EHIS-5087 - Relink Exemption BLA from Prior BL to Renewed BL
+EHIS-5069 - Relink open conditions from old BL to new renewal BL</description>
     <environments>Default</environments>
     <formulas>
         <name>BLContactId</name>
@@ -477,6 +478,37 @@ EHIS-5087 - Relink Exemption BLA from Prior BL to Renewed BL</description>
             </value>
         </inputAssignments>
         <object>BusinessLicense</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Conditions</name>
+        <label>Update Conditions</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Is_License_Type_is_Drinking_Water_Operating_Permit</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Related_BL__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>varOldBLId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Condition_Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Open</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Related_BL__c</field>
+            <value>
+                <elementReference>CreateBusinessLicenseRecord.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Conditions__c</object>
     </recordUpdates>
     <recordUpdates>
         <name>Update_Exemption_BLAs</name>
