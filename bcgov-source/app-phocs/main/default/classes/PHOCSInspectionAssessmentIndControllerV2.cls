@@ -402,8 +402,12 @@ public without sharing class PHOCSInspectionAssessmentIndControllerV2 {
         visitRec.TimeSpentMinutes__c = timeSpent;
         visitRec.FollowUpInspectionRequired__c = followUpInspectionRequired;
         visitRec.EnvironmentalSwabsTaken__c = environmentalSwabsTaken;
-        visitRec.DeliveryMethod__c = deliveryMethod;
-        visitRec.SignatureRefusal__c = signatureRefusal;
+        if(deliveryMethod != null) {
+            visitRec.DeliveryMethod__c = deliveryMethod;
+        }
+        if(signatureRefusal != null) {
+            visitRec.SignatureRefusal__c = signatureRefusal;
+        }
         visitRec.ActionsRequiredByLicenseeOperator__c = actionreqbyLicenseeoperator;
         visitRec.ActionsRequiredByLOMHO__c = actionreqbyLomho;
         
@@ -415,7 +419,7 @@ public without sharing class PHOCSInspectionAssessmentIndControllerV2 {
 */     
     @AuraEnabled(cacheable=true)
     public static Visit getVisitMeta(Id visitId) {
-        return [SELECT Id, PHOCSIsDraft__c, Status, ownerId,VisitType.Name,Account.Type,ActionsRequiredByLicenseeOperator__c,ActionsRequiredByLOMHO__c FROM Visit WHERE Id = :visitId LIMIT 1];
+        return [SELECT Id, PHOCSIsDraft__c, Status,DeliveryMethod__c,SignatureRefusal__c, ownerId,VisitType.Name,Account.Type,ActionsRequiredByLicenseeOperator__c,ActionsRequiredByLOMHO__c FROM Visit WHERE Id = :visitId LIMIT 1];
     }
     
     

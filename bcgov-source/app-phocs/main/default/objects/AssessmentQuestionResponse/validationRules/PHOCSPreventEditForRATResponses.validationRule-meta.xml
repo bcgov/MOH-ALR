@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PHOCSPreventEditForRATResponses</fullName>
+    <active>true</active>
+    <description>Prevents users from editing existing Assessment Question Response records when the related Assessment has the PHOCSAssessment Record Type and an Assessment Type of Risk Assessment or Risk re-assessment.</description>
+    <errorConditionFormula>AND(
+    NOT(ISNEW()),
+    Assessment.RecordType.DeveloperName = &quot;PHOCSAssessment&quot;,
+    OR(
+        ISPICKVAL(Assessment.Type, &quot;Risk re-assessment&quot;),
+        ISPICKVAL(Assessment.Type, &quot;Risk Assessment&quot;)
+    )
+)</errorConditionFormula>
+    <errorMessage>Assessment Question Response cannot be edited for PHOCS Risk Assessments.</errorMessage>
+</ValidationRule>
