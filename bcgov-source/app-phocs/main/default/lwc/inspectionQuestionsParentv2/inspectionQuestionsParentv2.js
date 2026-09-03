@@ -308,6 +308,8 @@ export default class InspectionQuestionsParentv2 extends LightningElement {
 			});
 
 			this.isDraft = visit.PHOCSIsDraft__c === true;
+			this.deliveryMethod = visit.DeliveryMethod__c || '';
+			this.signatureRefusal = visit.SignatureRefusal__c || false;
 			this.showQuestions = false;
 
 			this.routineInspection = visit.VisitType.Name === ROUTINE_INSPECTION;
