@@ -130,4 +130,7 @@ public class BCMOH_Constants {
     //ALR-192
     public final static String orgDisplayName = 'ALR Support Email';
     public final static String emailTemplate = 'UpcomingRenewalmailTemplate';
+    
+    // EHIS-3496
+     public final static String PHOCS_DAIRY_WORKER_RECORD_TYPE_NAME = 'PHOCSDairyPlantWorkerContacts';
 }
