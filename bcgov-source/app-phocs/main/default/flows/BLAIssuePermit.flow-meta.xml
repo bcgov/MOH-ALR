@@ -11,10 +11,10 @@
     <decisions>
         <name>All_Fees_Paid</name>
         <label>All Fees Paid?</label>
-        <locationX>314</locationX>
+        <locationX>248</locationX>
         <locationY>242</locationY>
         <defaultConnector>
-            <targetReference>IssuePermit</targetReference>
+            <targetReference>Get_Current_BL</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -36,10 +36,10 @@
     <decisions>
         <name>Has_Active_Current_BL</name>
         <label>Has Active Current BL</label>
-        <locationX>578</locationX>
-        <locationY>566</locationY>
+        <locationX>446</locationX>
+        <locationY>458</locationY>
         <defaultConnector>
-            <targetReference>GetPermitRecordTypeId</targetReference>
+            <targetReference>IssuePermit</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>No Active Current BL</defaultConnectorLabel>
         <rules>
@@ -67,14 +67,15 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Inactivate_Old_BL</targetReference>
+                <targetReference>ErrorMessageToIssueNew</targetReference>
             </connector>
             <label>Current BL Active</label>
         </rules>
     </decisions>
     <description>EHIS-2615
 EHIS-4849 remove AAA, and Business License will not be issued from Recreational Water Asset
-Regulatory Transaction Fee validation added before issuing permit/Licence as part of EHIS-4594</description>
+Regulatory Transaction Fee validation added before issuing permit/Licence as part of EHIS-4594
+EHIS-5069 restrict to issue new license/permit when there is an existing active BL on the BLA</description>
     <environments>Default</environments>
     <formulas>
         <name>BLContactId</name>
@@ -132,8 +133,8 @@ Regulatory Transaction Fee validation added before issuing permit/Licence as par
     <recordCreates>
         <name>CreateBusinessLicenseRecord</name>
         <label>Create  Business License Record</label>
-        <locationX>842</locationX>
-        <locationY>890</locationY>
+        <locationX>578</locationX>
+        <locationY>782</locationY>
         <connector>
             <targetReference>UpdateBLA</targetReference>
         </connector>
@@ -194,7 +195,7 @@ Regulatory Transaction Fee validation added before issuing permit/Licence as par
     <recordLookups>
         <name>Check_for_unpaid_fees</name>
         <label>Check for unpaid fees</label>
-        <locationX>314</locationX>
+        <locationX>248</locationX>
         <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -229,8 +230,8 @@ Regulatory Transaction Fee validation added before issuing permit/Licence as par
     <recordLookups>
         <name>Get_Current_BL</name>
         <label>Get Current BL</label>
-        <locationX>578</locationX>
-        <locationY>458</locationY>
+        <locationX>446</locationX>
+        <locationY>350</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Has_Active_Current_BL</targetReference>
@@ -254,11 +255,11 @@ Regulatory Transaction Fee validation added before issuing permit/Licence as par
     <recordLookups>
         <name>GetPermitRecordTypeId</name>
         <label>Get Permit RecordType Id</label>
-        <locationX>842</locationX>
+        <locationX>578</locationX>
         <locationY>674</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Inactivate_Facility_BLs</targetReference>
+            <targetReference>CreateBusinessLicenseRecord</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -280,96 +281,10 @@ Regulatory Transaction Fee validation added before issuing permit/Licence as par
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordUpdates>
-        <name>Inactivate_Facility_BLs</name>
-        <label>Inactivate Facility BLs</label>
-        <locationX>842</locationX>
-        <locationY>782</locationY>
-        <connector>
-            <targetReference>CreateBusinessLicenseRecord</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Account__c</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>recordId.AccountId</elementReference>
-            </value>
-        </filters>
-        <filters>
-            <field>RegulatoryAuthorizationTypeId</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>recordId.LicenseTypeId</elementReference>
-            </value>
-        </filters>
-        <filters>
-            <field>Status</field>
-            <operator>EqualTo</operator>
-            <value>
-                <stringValue>Active</stringValue>
-            </value>
-        </filters>
-        <filters>
-            <field>RecordTypeId</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>GetPermitRecordTypeId.Id</elementReference>
-            </value>
-        </filters>
-        <inputAssignments>
-            <field>PeriodEnd</field>
-            <value>
-                <elementReference>$Flow.CurrentDateTime</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Status</field>
-            <value>
-                <stringValue>Inactive</stringValue>
-            </value>
-        </inputAssignments>
-        <object>BusinessLicense</object>
-    </recordUpdates>
-    <recordUpdates>
-        <name>Inactivate_Old_BL</name>
-        <label>Inactivate Old BL</label>
-        <locationX>314</locationX>
-        <locationY>674</locationY>
-        <connector>
-            <isGoTo>true</isGoTo>
-            <targetReference>GetPermitRecordTypeId</targetReference>
-        </connector>
-        <faultConnector>
-            <isGoTo>true</isGoTo>
-            <targetReference>Error</targetReference>
-        </faultConnector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>Get_Current_BL.Id</elementReference>
-            </value>
-        </filters>
-        <inputAssignments>
-            <field>PeriodEnd</field>
-            <value>
-                <elementReference>$Flow.CurrentDateTime</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Status</field>
-            <value>
-                <stringValue>Inactive</stringValue>
-            </value>
-        </inputAssignments>
-        <object>BusinessLicense</object>
-    </recordUpdates>
-    <recordUpdates>
         <name>UpdateBLA</name>
         <label>Update BLA</label>
-        <locationX>842</locationX>
-        <locationY>998</locationY>
+        <locationX>578</locationX>
+        <locationY>890</locationY>
         <faultConnector>
             <isGoTo>true</isGoTo>
             <targetReference>Error</targetReference>
@@ -393,8 +308,8 @@ Regulatory Transaction Fee validation added before issuing permit/Licence as par
     <screens>
         <name>Error</name>
         <label>Error</label>
-        <locationX>1370</locationX>
-        <locationY>998</locationY>
+        <locationX>1106</locationX>
+        <locationY>890</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -415,16 +330,41 @@ Regulatory Transaction Fee validation added before issuing permit/Licence as par
         <showHeader>true</showHeader>
     </screens>
     <screens>
+        <name>ErrorMessageToIssueNew</name>
+        <label>ErrorMessage to issue new License/permit</label>
+        <locationX>314</locationX>
+        <locationY>566</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>Copy_1_of_confirmationMessage</name>
+            <fieldText>&lt;p&gt;A permit/licence has already been generated for this application. Go to the Licence Permit Name field to view the existing permit/licence.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Finish</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
         <name>IssuePermit</name>
         <label>Issue Permit</label>
         <locationX>578</locationX>
-        <locationY>350</locationY>
+        <locationY>566</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <backButtonLabel>Cancel</backButtonLabel>
         <connector>
-            <targetReference>Get_Current_BL</targetReference>
+            <targetReference>GetPermitRecordTypeId</targetReference>
         </connector>
         <fields>
             <name>confirmationMessage</name>
@@ -469,7 +409,7 @@ Regulatory Transaction Fee validation added before issuing permit/Licence as par
         <showHeader>false</showHeader>
     </screens>
     <start>
-        <locationX>188</locationX>
+        <locationX>122</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Check_for_unpaid_fees</targetReference>

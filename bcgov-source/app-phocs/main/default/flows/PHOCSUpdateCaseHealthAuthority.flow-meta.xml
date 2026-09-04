@@ -3,107 +3,6 @@
     <apiVersion>67.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
-        <name>Assign_DairyCase</name>
-        <label>Assign DairyCase</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>isDiaryCase</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </assignmentItems>
-        <connector>
-            <isGoTo>true</isGoTo>
-            <targetReference>Update_Case_Health_Authority</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Assign_HA_fraser</name>
-        <label>Assign HA fraser</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>healthAuthority</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>Fraser Health - FH</stringValue>
-            </value>
-        </assignmentItems>
-        <connector>
-            <isGoTo>true</isGoTo>
-            <targetReference>Update_Case_Health_Authority</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Assign_HA_interior</name>
-        <label>Assign HA interior</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>healthAuthority</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>Interior Health - IH</stringValue>
-            </value>
-        </assignmentItems>
-        <connector>
-            <isGoTo>true</isGoTo>
-            <targetReference>Update_Case_Health_Authority</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Assign_HA_island</name>
-        <label>Assign HA island</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>healthAuthority</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>Island Health - Island</stringValue>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Update_Case_Health_Authority</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Assign_HA_northern</name>
-        <label>Assign HA northern</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>healthAuthority</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>Northern Health - NH</stringValue>
-            </value>
-        </assignmentItems>
-        <connector>
-            <isGoTo>true</isGoTo>
-            <targetReference>Update_Case_Health_Authority</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Assign_HA_vch</name>
-        <label>Assign HA vch</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>healthAuthority</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>Vancouver Coastal Health - VCH</stringValue>
-            </value>
-        </assignmentItems>
-        <connector>
-            <isGoTo>true</isGoTo>
-            <targetReference>Update_Case_Health_Authority</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
         <name>Populate_Case_Type_from_Account_Type</name>
         <label>Populate Case Type from Account Type</label>
         <locationX>0</locationX>
@@ -163,6 +62,57 @@
                 <targetReference>Get_Case_Account</targetReference>
             </connector>
             <label>Account Is Set</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Custom_Metadata_Record</name>
+        <label>Check Custom Metadata Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>RunningUser_has_HA</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Custom_Metadata</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Custom_Metadata.HealthAuthority__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Case_HA</targetReference>
+            </connector>
+            <label>RunningUser has HA</label>
+        </rules>
+        <rules>
+            <name>RunningUser_Dairy</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Custom_Metadata</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Custom_Metadata.HealthAuthority__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Case_Dairy</targetReference>
+            </connector>
+            <label>RunningUser Dairy</label>
         </rules>
     </decisions>
     <decisions>
@@ -284,7 +234,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>Get_User</targetReference>
+            <targetReference>Get_Custom_Metadata</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -298,103 +248,6 @@
                 </rightValue>
             </conditions>
             <label>If PHOCS Facility Enquiry record type</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Check_User_HA</name>
-        <label>Check User HA</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>vch</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Get_User.Email</leftValueReference>
-                <operator>Contains</operator>
-                <rightValue>
-                    <stringValue>vch</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Assign_HA_vch</targetReference>
-            </connector>
-            <label>vch</label>
-        </rules>
-        <rules>
-            <name>interiorhealth</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Get_User.Email</leftValueReference>
-                <operator>Contains</operator>
-                <rightValue>
-                    <stringValue>interiorhealth</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Assign_HA_interior</targetReference>
-            </connector>
-            <label>interiorhealth</label>
-        </rules>
-        <rules>
-            <name>northernhealth</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Get_User.Email</leftValueReference>
-                <operator>Contains</operator>
-                <rightValue>
-                    <stringValue>northernhealth</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Assign_HA_northern</targetReference>
-            </connector>
-            <label>northernhealth</label>
-        </rules>
-        <rules>
-            <name>islandhealth</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Get_User.Email</leftValueReference>
-                <operator>Contains</operator>
-                <rightValue>
-                    <stringValue>islandhealth</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Assign_HA_island</targetReference>
-            </connector>
-            <label>islandhealth</label>
-        </rules>
-        <rules>
-            <name>fraserhealth</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Get_User.Email</leftValueReference>
-                <operator>Contains</operator>
-                <rightValue>
-                    <stringValue>fraserhealth</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Assign_HA_fraser</targetReference>
-            </connector>
-            <label>fraserhealth</label>
-        </rules>
-        <rules>
-            <name>bccdc</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Get_User.Email</leftValueReference>
-                <operator>Contains</operator>
-                <rightValue>
-                    <stringValue>bccdc</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Assign_DairyCase</targetReference>
-            </connector>
-            <label>bccdc</label>
         </rules>
     </decisions>
     <description>EHIS-5000 accommodate Orphan Cases with Owner&apos;s Health Authority that stamp user&apos;s HA</description>
@@ -447,24 +300,24 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
-        <name>Get_User</name>
-        <label>Get User</label>
+        <name>Get_Custom_Metadata</name>
+        <label>Get Custom Metadata</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Check_User_HA</targetReference>
+            <targetReference>Check_Custom_Metadata_Record</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
-            <field>Id</field>
+            <field>User_Assigned_Role__c</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>$Record.OwnerId</elementReference>
+                <elementReference>$User.User_Assigned_Role__c</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>User</object>
+        <object>PHOCSUserRoleHAMapping__mdt</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordUpdates>
@@ -494,20 +347,27 @@
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <recordUpdates>
-        <name>Update_Case_Health_Authority</name>
-        <label>Update Case Health Authority</label>
+        <name>Update_Case_Dairy</name>
+        <label>Update Case Dairy</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>IsDairyCase__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Case_HA</name>
+        <label>Update Case HA</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <inputAssignments>
             <field>HealthAuthority__c</field>
             <value>
-                <elementReference>healthAuthority</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>IsDairyCase__c</field>
-            <value>
-                <elementReference>isDiaryCase</elementReference>
+                <elementReference>Get_Custom_Metadata.HealthAuthority__c</elementReference>
             </value>
         </inputAssignments>
         <inputReference>$Record</inputReference>
@@ -532,21 +392,4 @@
         <triggerType>RecordBeforeSave</triggerType>
     </start>
     <status>Active</status>
-    <variables>
-        <name>healthAuthority</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>isDiaryCase</name>
-        <dataType>Boolean</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <value>
-            <booleanValue>false</booleanValue>
-        </value>
-    </variables>
 </Flow>
