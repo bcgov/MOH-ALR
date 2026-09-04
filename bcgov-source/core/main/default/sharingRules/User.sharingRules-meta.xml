@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
     <sharingCriteriaRules>
-        <fullName>PHOCSUserSharingRuleBAandOfficerDairy</fullName>
+        <fullName>PHOCSShareUsersWithProvincialUsers</fullName>
         <accessLevel>Read</accessLevel>
-        <label>PHOCS User Sharing Rule BA and Officer Dairy</label>
+        <label>PHOCSShareUsersWithProvincialUsers</label>
         <sharedTo>
-            <group>EHISUsersPG</group>
+            <group>PHOCS_Provincial_Reporting</group>
         </sharedTo>
         <criteriaItems>
             <field>IsActive</field>
@@ -13,20 +13,6 @@
             <value>True</value>
         </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
-        <fullName>UserReportingUserRead</fullName>
-        <accessLevel>Read</accessLevel>
-        <label>User- Reporting User Read</label>
-        <sharedTo>
-            <group>PHOCSReportingUserPG</group>
-        </sharedTo>
-        <criteriaItems>
-            <field>IsActive</field>
-            <operation>equals</operation>
-            <value>True</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
         <fullName>UserSharingRuleALRAdmin</fullName>
@@ -104,135 +90,69 @@
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingOwnerRules>
-        <fullName>PHOCSInteriorSharingRuleReportingIH</fullName>
+        <fullName>PHOCSShareUsersWithDairyUsers</fullName>
         <accessLevel>Read</accessLevel>
-        <label>PHOCSInteriorSharingRuleReportingIH</label>
+        <label>PHOCSShareUsersWithDairyUsers</label>
         <sharedTo>
-            <group>EHISIHAReportingUser</group>
+            <roleAndSubordinatesInternal>PHOCS_Dairy</roleAndSubordinatesInternal>
         </sharedTo>
         <sharedFrom>
-            <group>PHOCSBAandOfficerIHPG</group>
+            <roleAndSubordinatesInternal>PHOCS_Dairy</roleAndSubordinatesInternal>
         </sharedFrom>
     </sharingOwnerRules>
     <sharingOwnerRules>
-        <fullName>PHOCSUserDairyBAOfficerSharingRule</fullName>
+        <fullName>PHOCSShareUsersWithFHAUsers</fullName>
         <accessLevel>Read</accessLevel>
-        <label>PHOCSUserDairyBAOfficerSharingRule</label>
+        <label>PHOCSShareUsersWithFHAUsers</label>
         <sharedTo>
-            <group>EHISUsersPG</group>
+            <roleAndSubordinatesInternal>PHOCS_FHA</roleAndSubordinatesInternal>
         </sharedTo>
         <sharedFrom>
-            <group>EHISUsersPG</group>
+            <roleAndSubordinatesInternal>PHOCS_FHA</roleAndSubordinatesInternal>
         </sharedFrom>
     </sharingOwnerRules>
     <sharingOwnerRules>
-        <fullName>PHOCSUserFraserBAOfficerSharingRule</fullName>
+        <fullName>PHOCSShareUsersWithIHAUsers</fullName>
         <accessLevel>Read</accessLevel>
-        <label>PHOCSUserFraserBAOfficerSharingRule</label>
+        <label>PHOCSShareUsersWithIHAUsers</label>
         <sharedTo>
-            <group>PHOCSBAandOfficerFHPG</group>
+            <roleAndSubordinatesInternal>PHOCS_IHA</roleAndSubordinatesInternal>
         </sharedTo>
         <sharedFrom>
-            <group>PHOCSBAandOfficerFHPG</group>
+            <roleAndSubordinatesInternal>PHOCS_IHA</roleAndSubordinatesInternal>
         </sharedFrom>
     </sharingOwnerRules>
     <sharingOwnerRules>
-        <fullName>PHOCSUserInteriorBAOfficerSharingRule</fullName>
+        <fullName>PHOCSShareUsersWithNHAUsers</fullName>
         <accessLevel>Read</accessLevel>
-        <label>PHOCSUserInteriorBAOfficerSharingRule</label>
+        <label>PHOCSShareUsersWithNHAUsers</label>
         <sharedTo>
-            <group>PHOCSBAandOfficerIHPG</group>
+            <roleAndSubordinatesInternal>PHOCS_NHA</roleAndSubordinatesInternal>
         </sharedTo>
         <sharedFrom>
-            <group>PHOCSBAandOfficerIHPG</group>
+            <roleAndSubordinatesInternal>PHOCS_NHA</roleAndSubordinatesInternal>
         </sharedFrom>
     </sharingOwnerRules>
     <sharingOwnerRules>
-        <fullName>PHOCSUserIslandBAOfficerSharingRule</fullName>
+        <fullName>PHOCSShareUsersWithVCHUsers</fullName>
         <accessLevel>Read</accessLevel>
-        <label>PHOCSUserIslandBAOfficerSharingRule</label>
+        <label>PHOCSShareUsersWithVCHUsers</label>
         <sharedTo>
-            <group>PHOCSBAandOfficerIslandPG</group>
+            <roleAndSubordinatesInternal>PHOCS_VCH</roleAndSubordinatesInternal>
         </sharedTo>
         <sharedFrom>
-            <group>PHOCSBAandOfficerIslandPG</group>
+            <roleAndSubordinatesInternal>PHOCS_VCH</roleAndSubordinatesInternal>
         </sharedFrom>
     </sharingOwnerRules>
     <sharingOwnerRules>
-        <fullName>PHOCSUserNorthernBAOfficerSharingRule</fullName>
+        <fullName>PHOCSShareUsersWithVIHAUsers</fullName>
         <accessLevel>Read</accessLevel>
-        <label>PHOCSUserNorthernBAOfficerSharingRule</label>
+        <label>PHOCSShareUsersWithVIHAUsers</label>
         <sharedTo>
-            <group>PHOCSBAandOfficerNHPG</group>
+            <roleAndSubordinatesInternal>PHOCS_VIHA</roleAndSubordinatesInternal>
         </sharedTo>
         <sharedFrom>
-            <group>PHOCSBAandOfficerNHPG</group>
-        </sharedFrom>
-    </sharingOwnerRules>
-    <sharingOwnerRules>
-        <fullName>PHOCSUserSharingRuleReportingDairy</fullName>
-        <accessLevel>Read</accessLevel>
-        <label>PHOCSUserSharingRuleReportingDairy</label>
-        <sharedTo>
-            <group>PHOCSReportingUserPG</group>
-        </sharedTo>
-        <sharedFrom>
-            <group>EHISUsersPG</group>
-        </sharedFrom>
-    </sharingOwnerRules>
-    <sharingOwnerRules>
-        <fullName>PHOCSUserSharingRuleReportingFH</fullName>
-        <accessLevel>Read</accessLevel>
-        <label>PHOCSUserSharingRuleReportingFH</label>
-        <sharedTo>
-            <group>EHISFHAReportingUser</group>
-        </sharedTo>
-        <sharedFrom>
-            <group>PHOCSBAandOfficerFHPG</group>
-        </sharedFrom>
-    </sharingOwnerRules>
-    <sharingOwnerRules>
-        <fullName>PHOCSUserSharingRuleReportingIsland</fullName>
-        <accessLevel>Read</accessLevel>
-        <label>PHOCSUserSharingRuleReportingIsland</label>
-        <sharedTo>
-            <group>EHISVCISReportingUser</group>
-        </sharedTo>
-        <sharedFrom>
-            <group>PHOCSBAandOfficerIslandPG</group>
-        </sharedFrom>
-    </sharingOwnerRules>
-    <sharingOwnerRules>
-        <fullName>PHOCSUserSharingRuleReportingNorthern</fullName>
-        <accessLevel>Read</accessLevel>
-        <label>PHOCSUserSharingRuleReportingNorthern</label>
-        <sharedTo>
-            <group>EHISNHAReportingUser</group>
-        </sharedTo>
-        <sharedFrom>
-            <group>PHOCSBAandOfficerNHPG</group>
-        </sharedFrom>
-    </sharingOwnerRules>
-    <sharingOwnerRules>
-        <fullName>PHOCSUserSharingRuleReportingVancouver</fullName>
-        <accessLevel>Read</accessLevel>
-        <label>PHOCSUserSharingRuleReportingVancouver</label>
-        <sharedTo>
-            <group>EHISVCHReportingUser</group>
-        </sharedTo>
-        <sharedFrom>
-            <group>PHOCSBAandOfficerVCHPG</group>
-        </sharedFrom>
-    </sharingOwnerRules>
-    <sharingOwnerRules>
-        <fullName>PHOCSUserVancouverBAOfficerSharingRule</fullName>
-        <accessLevel>Read</accessLevel>
-        <label>PHOCSUserVancouverBAOfficerSharingRule</label>
-        <sharedTo>
-            <group>PHOCSBAandOfficerVCHPG</group>
-        </sharedTo>
-        <sharedFrom>
-            <group>PHOCSBAandOfficerVCHPG</group>
+            <roleAndSubordinatesInternal>PHOCS_VIHA</roleAndSubordinatesInternal>
         </sharedFrom>
     </sharingOwnerRules>
 </SharingRules>
