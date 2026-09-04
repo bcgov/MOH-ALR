@@ -1,9 +1,6 @@
 /**
  * Token data provider for the PHOCS Inspection Report (EHIS-3844), modelled on
- * CustomTokenInspectionData. Dairy keeps its own provider and template and is not touched here.
- *
- * One superset token map serves all three templates (CCFL / Tobacco and Vapour / all other), which
- * Docgen_Mapping__mdt routes on Account.Type. Tokens a template does not reference are ignored.
+ * CustomTokenInspectionData.
  */
 
 global without sharing class PHOCSInspectionReportTokenData implements omnistudio.VlocityOpenInterface2 {
