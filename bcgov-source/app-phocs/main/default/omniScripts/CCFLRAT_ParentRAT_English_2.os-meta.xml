@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <OmniScript xmlns="http://soap.sforce.com/2006/04/metadata">
     <elementTypeComponentMapping>{&quot;ElementTypeToHTMLTemplateList&quot;:[]}</elementTypeComponentMapping>
-    <isActive>false</isActive>
+    <isActive>true</isActive>
     <isIntegrationProcedure>false</isIntegrationProcedure>
     <isManagedUsingStdDesigner>true</isManagedUsingStdDesigner>
     <isMetadataCacheDisabled>false</isMetadataCacheDisabled>
@@ -27,7 +27,7 @@
   &quot;textKey&quot; : &quot;&quot;,
   &quot;sanitize&quot; : false
 }</propertySetConfig>
-            <sequenceNumber>4.0</sequenceNumber>
+            <sequenceNumber>2.0</sequenceNumber>
             <type>Text Block</type>
         </childElements>
         <childElements>
@@ -42,7 +42,7 @@
   &quot;show&quot; : null,
   &quot;HTMLTemplateId&quot; : &quot;&quot;
 }</propertySetConfig>
-            <sequenceNumber>3.0</sequenceNumber>
+            <sequenceNumber>1.0</sequenceNumber>
             <type>Line Break</type>
         </childElements>
         <childElements>
@@ -52,51 +52,15 @@
             <name>TextBlock1</name>
             <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
             <propertySetConfig>{
-  &quot;controlWidth&quot; : 5,
+  &quot;controlWidth&quot; : 12,
   &quot;label&quot; : &quot;TextBlock1&quot;,
-  &quot;text&quot; : &quot;&lt;p&gt;&lt;strong&gt;Facility Name:&amp;nbsp; &lt;/strong&gt;%facilityName%&lt;/p&gt;&quot;,
+  &quot;text&quot; : &quot;&lt;p&gt;&lt;strong&gt;Facility Name:&amp;nbsp; &lt;/strong&gt;%facilityName%&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &lt;strong&gt;Facility Type&lt;/strong&gt;: %facilityType%&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&lt;strong&gt;Inspection&lt;/strong&gt;: %selectedInspId%&lt;/p&gt;&quot;,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;dataJSON&quot; : false,
   &quot;textKey&quot; : &quot;&quot;,
   &quot;sanitize&quot; : false
 }</propertySetConfig>
             <sequenceNumber>0.0</sequenceNumber>
-            <type>Text Block</type>
-        </childElements>
-        <childElements>
-            <isActive>true</isActive>
-            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-            <level>1.0</level>
-            <name>TextBlock10</name>
-            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-            <propertySetConfig>{
-  &quot;controlWidth&quot; : 4,
-  &quot;label&quot; : &quot;TextBlock1&quot;,
-  &quot;text&quot; : &quot;&lt;p&gt;&lt;strong&gt;Facility Type&lt;/strong&gt;: %facilityType%&lt;/p&gt;&quot;,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;dataJSON&quot; : false,
-  &quot;textKey&quot; : &quot;&quot;,
-  &quot;sanitize&quot; : false
-}</propertySetConfig>
-            <sequenceNumber>1.0</sequenceNumber>
-            <type>Text Block</type>
-        </childElements>
-        <childElements>
-            <isActive>true</isActive>
-            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-            <level>1.0</level>
-            <name>TextBlock11</name>
-            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-            <propertySetConfig>{
-  &quot;controlWidth&quot; : 3,
-  &quot;label&quot; : &quot;TextBlock1&quot;,
-  &quot;text&quot; : &quot;&lt;p&gt;&lt;strong&gt;Inspection&lt;/strong&gt;: %selectedInspId%&lt;/p&gt;&quot;,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;dataJSON&quot; : false,
-  &quot;textKey&quot; : &quot;&quot;,
-  &quot;sanitize&quot; : false
-}</propertySetConfig>
-            <sequenceNumber>2.0</sequenceNumber>
             <type>Text Block</type>
         </childElements>
         <isActive>true</isActive>
@@ -151,7 +115,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>16.0</sequenceNumber>
+        <sequenceNumber>18.0</sequenceNumber>
         <type>Step</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -212,7 +176,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>10.0</sequenceNumber>
+        <sequenceNumber>12.0</sequenceNumber>
         <type>Remote Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -264,14 +228,16 @@
     &quot;preTransformBundle&quot; : &quot;&quot;,
     &quot;postTransformBundle&quot; : &quot;&quot;,
     &quot;Assessment.AssessmentStatus&quot; : &quot;Completed&quot;,
-    &quot;Assessment.Type&quot; : &quot;Risk Assessment&quot;,
+    &quot;Assessment.Type&quot; : &quot;%assessmentType%&quot;,
     &quot;Assessment.AssessmentRating&quot; : &quot;%RiskRating%&quot;,
     &quot;Assessment.CalculatedScore__c&quot; : &quot;%TotalScore%&quot;,
-    &quot;Assessment.ResponseContextId&quot; : &quot;%SearchInspection%&quot;,
+    &quot;Assessment.ResponseContextId&quot; : &quot;%inspectionRecId%&quot;,
     &quot;Assessment.MinimumInspectionFrequency__c&quot; : &quot;%InspectionFrequency%&quot;,
     &quot;Assessment.HealthAuthority__c&quot; : &quot;%facilityHA%&quot;,
     &quot;Assessment.PartAScore__c&quot; : &quot;%PartAScore%&quot;,
-    &quot;Assessment.PartBScore__c&quot; : &quot;%PartBScore%&quot;
+    &quot;Assessment.PartBScore__c&quot; : &quot;%PartBScore%&quot;,
+    &quot;Assessment.ParentId&quot; : &quot;%completedAssessmentId%&quot;,
+    &quot;Assessment.SelectedViolationsJSON__c&quot; : &quot;%selectedViolationsJson%&quot;
   },
   &quot;remoteTimeout&quot; : 30000,
   &quot;preTransformBundle&quot; : &quot;&quot;,
@@ -315,7 +281,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>13.0</sequenceNumber>
+        <sequenceNumber>16.0</sequenceNumber>
         <type>Remote Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -362,7 +328,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>12.0</sequenceNumber>
+        <sequenceNumber>14.0</sequenceNumber>
         <type>DataRaptor Extract Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -427,7 +393,7 @@
   &quot;bundle&quot; : &quot;PHOCSDMExtractInspRecforRAT&quot;,
   &quot;ignoreCache&quot; : false,
   &quot;dataRaptor Input Parameters&quot; : [ {
-    &quot;element&quot; : &quot;SearchInspection&quot;,
+    &quot;element&quot; : &quot;inspectionRecId&quot;,
     &quot;inputParam&quot; : &quot;inspRecId&quot;
   } ],
   &quot;remoteTimeout&quot; : 30000,
@@ -462,7 +428,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>3.0</sequenceNumber>
+        <sequenceNumber>5.0</sequenceNumber>
         <type>DataRaptor Extract Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -475,9 +441,9 @@
   &quot;controlWidth&quot; : 12,
   &quot;label&quot; : &quot;ExtractRelatedInspViolations&quot;,
   &quot;bundle&quot; : &quot;PHOCSDMExtractViolationsForInspRAT&quot;,
-  &quot;ignoreCache&quot; : true,
+  &quot;ignoreCache&quot; : false,
   &quot;dataRaptor Input Parameters&quot; : [ {
-    &quot;element&quot; : &quot;SearchInspection&quot;,
+    &quot;element&quot; : &quot;inspectionRecId&quot;,
     &quot;inputParam&quot; : &quot;inspRecId&quot;
   } ],
   &quot;remoteTimeout&quot; : 30000,
@@ -512,7 +478,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>4.0</sequenceNumber>
+        <sequenceNumber>6.0</sequenceNumber>
         <type>DataRaptor Extract Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -546,7 +512,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>17.0</sequenceNumber>
+        <sequenceNumber>19.0</sequenceNumber>
         <type>Navigate Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -562,7 +528,7 @@
   &quot;show&quot; : null,
   &quot;HTMLTemplateId&quot; : &quot;&quot;
 }</propertySetConfig>
-            <sequenceNumber>3.0</sequenceNumber>
+            <sequenceNumber>1.0</sequenceNumber>
             <type>Line Break</type>
         </childElements>
         <childElements>
@@ -586,7 +552,7 @@
   },
   &quot;HTMLTemplateId&quot; : &quot;&quot;
 }</propertySetConfig>
-            <sequenceNumber>5.0</sequenceNumber>
+            <sequenceNumber>4.0</sequenceNumber>
             <type>Line Break</type>
         </childElements>
         <childElements>
@@ -598,7 +564,16 @@
             <propertySetConfig>{
   &quot;controlWidth&quot; : 12,
   &quot;label&quot; : &quot;phocsCCFLViolationAssessmentLWC&quot;,
-  &quot;show&quot; : null,
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;Routine assessment&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;field&quot; : &quot;ratType&quot;
+      } ]
+    }
+  },
   &quot;conditionType&quot; : &quot;Hide if False&quot;,
   &quot;hide&quot; : false,
   &quot;lwcName&quot; : &quot;phocsCCFLViolationAssessment&quot;,
@@ -608,6 +583,40 @@
     &quot;source&quot; : &quot;%inspectionRecId%&quot;
   } ],
   &quot;disableKeyUpValid&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>5.0</sequenceNumber>
+            <type>Custom Lightning Web Component</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>phocsCCFLViolationReAssessmentLWC</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;phocsCCFLViolationReAssessmentLWC&quot;,
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;ComplaintIncident initiated reassessment&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;field&quot; : &quot;ratType&quot;
+      } ]
+    }
+  },
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;hide&quot; : false,
+  &quot;lwcName&quot; : &quot;phocsCCFLViolationReAssessment&quot;,
+  &quot;bStandalone&quot; : false,
+  &quot;customAttributes&quot; : [ {
+    &quot;name&quot; : &quot;inspectionId&quot;,
+    &quot;source&quot; : &quot;%inspectionRecId%&quot;
+  }, {
+    &quot;name&quot; : &quot;facilityId&quot;,
+    &quot;source&quot; : &quot;%ContextId%&quot;
+  } ]
 }</propertySetConfig>
             <sequenceNumber>6.0</sequenceNumber>
             <type>Custom Lightning Web Component</type>
@@ -619,9 +628,9 @@
             <name>TextBlock2</name>
             <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
             <propertySetConfig>{
-  &quot;controlWidth&quot; : 5,
+  &quot;controlWidth&quot; : 12.0,
   &quot;label&quot; : &quot;TextBlock1&quot;,
-  &quot;text&quot; : &quot;&lt;p&gt;&lt;strong&gt;Facility Name:&amp;nbsp; &lt;/strong&gt;%facilityName%&amp;nbsp;&lt;/p&gt;&quot;,
+  &quot;text&quot; : &quot;&lt;p&gt;&lt;strong&gt;Facility Name:&amp;nbsp; &lt;/strong&gt;%facilityName%&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &lt;strong&gt;Facility Type&lt;/strong&gt;: %facilityType%&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&lt;strong&gt;Inspection&lt;/strong&gt;: %selectedInspId%&lt;/p&gt;&quot;,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;dataJSON&quot; : false,
   &quot;textKey&quot; : &quot;&quot;,
@@ -647,29 +656,15 @@
         &quot;data&quot; : &quot;0&quot;,
         &quot;condition&quot; : &quot;&lt;&gt;&quot;,
         &quot;field&quot; : &quot;openRegViolationCount&quot;
+      }, {
+        &quot;field&quot; : &quot;ratType&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;data&quot; : &quot;Routine assessment&quot;
       } ]
     }
   },
   &quot;dataJSON&quot; : false,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;textKey&quot; : &quot;&quot;,
-  &quot;sanitize&quot; : false
-}</propertySetConfig>
-            <sequenceNumber>4.0</sequenceNumber>
-            <type>Text Block</type>
-        </childElements>
-        <childElements>
-            <isActive>true</isActive>
-            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-            <level>1.0</level>
-            <name>TextBlock6</name>
-            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-            <propertySetConfig>{
-  &quot;controlWidth&quot; : 3,
-  &quot;label&quot; : &quot;TextBlock1&quot;,
-  &quot;text&quot; : &quot;&lt;p&gt;&lt;strong&gt;Inspection&lt;/strong&gt;: %selectedInspId%&lt;/p&gt;&quot;,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;dataJSON&quot; : false,
   &quot;textKey&quot; : &quot;&quot;,
   &quot;sanitize&quot; : false
 }</propertySetConfig>
@@ -680,18 +675,32 @@
             <isActive>true</isActive>
             <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
             <level>1.0</level>
-            <name>TextBlock7</name>
+            <name>TextBlock5</name>
             <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
             <propertySetConfig>{
-  &quot;controlWidth&quot; : 4,
-  &quot;label&quot; : &quot;TextBlock1&quot;,
-  &quot;text&quot; : &quot;&lt;p&gt;&lt;strong&gt;Facility Type&lt;/strong&gt;: %facilityType%&lt;/p&gt;&quot;,
+  &quot;controlWidth&quot; : 12,
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;0&quot;,
+        &quot;condition&quot; : &quot;&lt;&gt;&quot;,
+        &quot;field&quot; : &quot;openRegViolationCount&quot;
+      }, {
+        &quot;field&quot; : &quot;ratType&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;data&quot; : &quot;ComplaintIncident initiated reassessment&quot;
+      } ]
+    }
+  },
+  &quot;label&quot; : &quot;TextBlock4&quot;,
+  &quot;text&quot; : &quot;&lt;p&gt;Select the top three non-compliance items for each category from the inspection report. For each item, select the applicable Scope and Severity. Scope indicates the potential for harm posed by the identified risk, and Severity indicates the degree of harm that could result.&lt;/p&gt;&quot;,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;dataJSON&quot; : false,
   &quot;textKey&quot; : &quot;&quot;,
   &quot;sanitize&quot; : false
 }</propertySetConfig>
-            <sequenceNumber>1.0</sequenceNumber>
+            <sequenceNumber>3.0</sequenceNumber>
             <type>Text Block</type>
         </childElements>
         <childElements>
@@ -787,7 +796,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>6.0</sequenceNumber>
+        <sequenceNumber>7.0</sequenceNumber>
         <type>Step</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -803,20 +812,78 @@
   &quot;Language&quot; : &quot;English&quot;,
   &quot;show&quot; : null
 }</propertySetConfig>
-        <sequenceNumber>9.0</sequenceNumber>
+        <sequenceNumber>11.0</sequenceNumber>
         <type>OmniScript</type>
+    </omniProcessElements>
+    <omniProcessElements>
+        <isActive>true</isActive>
+        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+        <level>0.0</level>
+        <name>PHOCSRATSelectedViolationsService</name>
+        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+        <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;PHOCSRATSelectedViolationsService&quot;,
+  &quot;remoteClass&quot; : &quot;PHOCSRATSelectedViolationsService&quot;,
+  &quot;remoteMethod&quot; : &quot;saveSelectedViolations&quot;,
+  &quot;remoteOptions&quot; : {
+    &quot;preTransformBundle&quot; : &quot;&quot;,
+    &quot;postTransformBundle&quot; : &quot;&quot;
+  },
+  &quot;remoteTimeout&quot; : 30000,
+  &quot;preTransformBundle&quot; : &quot;&quot;,
+  &quot;postTransformBundle&quot; : &quot;&quot;,
+  &quot;sendJSONPath&quot; : &quot;&quot;,
+  &quot;sendJSONNode&quot; : &quot;&quot;,
+  &quot;responseJSONPath&quot; : &quot;&quot;,
+  &quot;responseJSONNode&quot; : &quot;&quot;,
+  &quot;extraPayload&quot; : { },
+  &quot;inProgressMessage&quot; : &quot;In Progress&quot;,
+  &quot;postMessage&quot; : &quot;Done&quot;,
+  &quot;failureNextLabel&quot; : &quot;Continue&quot;,
+  &quot;failureAbortLabel&quot; : &quot;Abort&quot;,
+  &quot;failureGoBackLabel&quot; : &quot;Go Back&quot;,
+  &quot;failureAbortMessage&quot; : &quot;Are you sure?&quot;,
+  &quot;validationRequired&quot; : &quot;Step&quot;,
+  &quot;redirectPageName&quot; : &quot;&quot;,
+  &quot;redirectTemplateUrl&quot; : &quot;vlcAcknowledge.html&quot;,
+  &quot;redirectNextLabel&quot; : &quot;Next&quot;,
+  &quot;redirectNextWidth&quot; : 3,
+  &quot;redirectPreviousLabel&quot; : &quot;Previous&quot;,
+  &quot;redirectPreviousWidth&quot; : 3,
+  &quot;showPersistentComponent&quot; : [ true, false ],
+  &quot;show&quot; : null,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;wpm&quot; : false,
+  &quot;ssm&quot; : false,
+  &quot;message&quot; : { },
+  &quot;pubsub&quot; : false,
+  &quot;svgSprite&quot; : &quot;&quot;,
+  &quot;svgIcon&quot; : &quot;&quot;,
+  &quot;errorMessage&quot; : {
+    &quot;custom&quot; : [ ],
+    &quot;default&quot; : null
+  },
+  &quot;enableDefaultAbort&quot; : false,
+  &quot;enableActionMessage&quot; : false,
+  &quot;useContinuation&quot; : false,
+  &quot;businessCategory&quot; : &quot;&quot;,
+  &quot;businessEvent&quot; : &quot;&quot;
+}</propertySetConfig>
+        <sequenceNumber>15.0</sequenceNumber>
+        <type>Remote Action</type>
     </omniProcessElements>
     <omniProcessElements>
         <childElements>
             <isActive>true</isActive>
             <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
             <level>1.0</level>
-            <name>facilityInformation1</name>
+            <name>facilityInformation</name>
             <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
             <propertySetConfig>{
-  &quot;controlWidth&quot; : 5,
+  &quot;controlWidth&quot; : 12,
   &quot;label&quot; : &quot;TextBlock1&quot;,
-  &quot;text&quot; : &quot;&lt;p&gt;&lt;strong&gt;Facility Name:&amp;nbsp; &lt;/strong&gt;%facilityName%&amp;nbsp;&amp;nbsp;&lt;/p&gt;&quot;,
+  &quot;text&quot; : &quot;&lt;p&gt;&lt;strong&gt;Facility Name:&amp;nbsp; &lt;/strong&gt;%facilityName%&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &lt;strong&gt;Facility Type&lt;/strong&gt;: %facilityType%&lt;/p&gt;&quot;,
   &quot;show&quot; : null,
   &quot;dataJSON&quot; : false,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
@@ -824,24 +891,6 @@
   &quot;sanitize&quot; : false
 }</propertySetConfig>
             <sequenceNumber>0.0</sequenceNumber>
-            <type>Text Block</type>
-        </childElements>
-        <childElements>
-            <isActive>true</isActive>
-            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-            <level>1.0</level>
-            <name>facilityInformation11</name>
-            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-            <propertySetConfig>{
-  &quot;controlWidth&quot; : 4,
-  &quot;label&quot; : &quot;TextBlock1&quot;,
-  &quot;text&quot; : &quot;&lt;p&gt;&lt;strong&gt;Facility Type&lt;/strong&gt;: %facilityType%&lt;/p&gt;&quot;,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;dataJSON&quot; : false,
-  &quot;textKey&quot; : &quot;&quot;,
-  &quot;sanitize&quot; : false
-}</propertySetConfig>
-            <sequenceNumber>1.0</sequenceNumber>
             <type>Text Block</type>
         </childElements>
         <childElements>
@@ -856,43 +905,620 @@
   &quot;show&quot; : null,
   &quot;HTMLTemplateId&quot; : &quot;&quot;
 }</propertySetConfig>
-            <sequenceNumber>2.0</sequenceNumber>
+            <sequenceNumber>1.0</sequenceNumber>
             <type>Line Break</type>
         </childElements>
         <childElements>
             <isActive>true</isActive>
             <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
             <level>1.0</level>
-            <name>LineBreak6</name>
+            <name>ratType</name>
             <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
             <propertySetConfig>{
-  &quot;label&quot; : &quot;LineBreak6&quot;,
-  &quot;padding&quot; : 12,
-  &quot;show&quot; : null,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;
-}</propertySetConfig>
-            <sequenceNumber>4.0</sequenceNumber>
-            <type>Line Break</type>
-        </childElements>
-        <childElements>
-            <isActive>true</isActive>
-            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-            <level>1.0</level>
-            <name>SearchInspection</name>
-            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-            <propertySetConfig>{
-  &quot;controlWidth&quot; : 4,
+  &quot;controlWidth&quot; : 12,
   &quot;label&quot; : &quot;Select reason for risk assessment:&quot;,
-  &quot;showInputWidth&quot; : false,
-  &quot;inputWidth&quot; : 12,
   &quot;required&quot; : true,
   &quot;repeat&quot; : false,
   &quot;repeatClone&quot; : false,
   &quot;repeatLimit&quot; : null,
   &quot;readOnly&quot; : false,
+  &quot;horizontalMode&quot; : true,
   &quot;defaultValue&quot; : null,
   &quot;help&quot; : false,
   &quot;helpText&quot; : &quot;&quot;,
+  &quot;options&quot; : [ {
+    &quot;name&quot; : &quot;Routine assessment&quot;,
+    &quot;developerName&quot; : null,
+    &quot;value&quot; : &quot;Routine assessment&quot;,
+    &quot;autoAdv&quot; : null
+  }, {
+    &quot;name&quot; : &quot;ComplaintIncident initiated reassessment&quot;,
+    &quot;developerName&quot; : null,
+    &quot;value&quot; : &quot;Complaint/Incident initiated reassessment&quot;,
+    &quot;autoAdv&quot; : null
+  } ],
+  &quot;optionSource&quot; : {
+    &quot;type&quot; : &quot;&quot;,
+    &quot;source&quot; : &quot;&quot;
+  },
+  &quot;controllingField&quot; : {
+    &quot;element&quot; : &quot;&quot;,
+    &quot;type&quot; : &quot;&quot;,
+    &quot;source&quot; : &quot;&quot;
+  },
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;hide&quot; : false,
+  &quot;optionWidth&quot; : 100,
+  &quot;optionHeight&quot; : 100,
+  &quot;imageCountInRow&quot; : 3,
+  &quot;enableCaption&quot; : true,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>2.0</sequenceNumber>
+            <type>Radio</type>
+        </childElements>
+        <isActive>true</isActive>
+        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+        <level>0.0</level>
+        <name>ReasonforRiskAssessment</name>
+        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+        <propertySetConfig>{
+  &quot;label&quot; : &quot;Reason for Risk Assessment&quot;,
+  &quot;validationRequired&quot; : true,
+  &quot;previousLabel&quot; : &quot;Previous&quot;,
+  &quot;previousWidth&quot; : 3,
+  &quot;nextLabel&quot; : &quot;Next&quot;,
+  &quot;nextWidth&quot; : 3,
+  &quot;cancelLabel&quot; : &quot;Cancel&quot;,
+  &quot;cancelMessage&quot; : &quot;Are you sure?&quot;,
+  &quot;saveLabel&quot; : &quot;Save for later&quot;,
+  &quot;saveChangesLabel&quot; : &quot;Save Changes&quot;,
+  &quot;autoSaveLabel&quot; : &quot;Auto Save on Assessment Progress&quot;,
+  &quot;saveMessage&quot; : &quot;Are you sure you want to save it for later?&quot;,
+  &quot;completeLabel&quot; : &quot;Complete&quot;,
+  &quot;completeMessage&quot; : &quot;Are you sure you want to complete the script?&quot;,
+  &quot;instruction&quot; : &quot;&quot;,
+  &quot;showPersistentComponent&quot; : [ true, false ],
+  &quot;remoteClass&quot; : &quot;&quot;,
+  &quot;remoteMethod&quot; : &quot;&quot;,
+  &quot;remoteTimeout&quot; : 30000,
+  &quot;remoteOptions&quot; : { },
+  &quot;knowledgeOptions&quot; : {
+    &quot;language&quot; : &quot;English&quot;,
+    &quot;publishStatus&quot; : &quot;Online&quot;,
+    &quot;keyword&quot; : &quot;&quot;,
+    &quot;dataCategoryCriteria&quot; : &quot;&quot;,
+    &quot;remoteTimeout&quot; : 30000,
+    &quot;typeFilter&quot; : &quot;&quot;
+  },
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;instructionKey&quot; : &quot;&quot;,
+  &quot;chartLabel&quot; : null,
+  &quot;allowSaveForLater&quot; : false,
+  &quot;allowSaveChanges&quot; : false,
+  &quot;autoSaveChanges&quot; : false,
+  &quot;errorMessage&quot; : {
+    &quot;custom&quot; : [ ],
+    &quot;default&quot; : null
+  },
+  &quot;wpm&quot; : false,
+  &quot;ssm&quot; : false,
+  &quot;message&quot; : { },
+  &quot;pubsub&quot; : false,
+  &quot;businessCategory&quot; : &quot;&quot;,
+  &quot;businessEvent&quot; : &quot;&quot;
+}</propertySetConfig>
+        <sequenceNumber>2.0</sequenceNumber>
+        <type>Step</type>
+    </omniProcessElements>
+    <omniProcessElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>CalculatedScore</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Calculated Score&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;expression&quot; : &quot;%TotalScore%&quot;,
+  &quot;hide&quot; : false,
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>4.0</sequenceNumber>
+            <type>Formula</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>LineBreak2</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;label&quot; : &quot;LineBreak2&quot;,
+  &quot;padding&quot; : 21,
+  &quot;show&quot; : null,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;
+}</propertySetConfig>
+            <sequenceNumber>1.0</sequenceNumber>
+            <type>Line Break</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>MinimumInspectionFrequency</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Minimum Inspection Frequency&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;expression&quot; : &quot;%InspectionFrequency%&quot;,
+  &quot;hide&quot; : false,
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>6.0</sequenceNumber>
+            <type>Formula</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>PartAScore</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Part A: Inspection Score&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;expression&quot; : &quot;%OutputPartAScore%&quot;,
+  &quot;hide&quot; : false,
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>2.0</sequenceNumber>
+            <type>Formula</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>PartBScore</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Part B: Operational History Score&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;expression&quot; : &quot;%OutputPartBScore%&quot;,
+  &quot;hide&quot; : false,
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>3.0</sequenceNumber>
+            <type>Formula</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>Rating</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 6,
+  &quot;label&quot; : &quot;Rating&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;expression&quot; : &quot;%RiskRating%&quot;,
+  &quot;hide&quot; : false,
+  &quot;show&quot; : null,
+  &quot;mask&quot; : null,
+  &quot;dataType&quot; : null,
+  &quot;hideGroupSep&quot; : false,
+  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;disOnTplt&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>5.0</sequenceNumber>
+            <type>Formula</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>TextBlock3</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;TextBlock1&quot;,
+  &quot;text&quot; : &quot;&lt;p&gt;&lt;strong&gt;Facility Name:&amp;nbsp; &lt;/strong&gt;%facilityName%&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &lt;strong&gt;Facility Type&lt;/strong&gt;: %facilityType%&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&lt;strong&gt;Inspection&lt;/strong&gt;: %selectedInspId%&lt;/p&gt;&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;dataJSON&quot; : false,
+  &quot;textKey&quot; : &quot;&quot;,
+  &quot;sanitize&quot; : false
+}</propertySetConfig>
+            <sequenceNumber>0.0</sequenceNumber>
+            <type>Text Block</type>
+        </childElements>
+        <isActive>true</isActive>
+        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+        <level>0.0</level>
+        <name>RiskScoreOutput</name>
+        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+        <propertySetConfig>{
+  &quot;label&quot; : &quot;Risk Score Output&quot;,
+  &quot;validationRequired&quot; : true,
+  &quot;previousLabel&quot; : &quot;Previous&quot;,
+  &quot;previousWidth&quot; : 3,
+  &quot;nextLabel&quot; : &quot;Finish&quot;,
+  &quot;nextWidth&quot; : 3,
+  &quot;cancelLabel&quot; : &quot;Cancel&quot;,
+  &quot;cancelMessage&quot; : &quot;Are you sure?&quot;,
+  &quot;saveLabel&quot; : &quot;Save for later&quot;,
+  &quot;saveChangesLabel&quot; : &quot;Save Changes&quot;,
+  &quot;saveMessage&quot; : &quot;Are you sure you want to save it for later?&quot;,
+  &quot;completeLabel&quot; : &quot;Complete&quot;,
+  &quot;completeMessage&quot; : &quot;Are you sure you want to complete the script?&quot;,
+  &quot;instruction&quot; : &quot;&quot;,
+  &quot;showPersistentComponent&quot; : [ true, false ],
+  &quot;remoteClass&quot; : &quot;&quot;,
+  &quot;remoteMethod&quot; : &quot;&quot;,
+  &quot;remoteTimeout&quot; : 30000,
+  &quot;remoteOptions&quot; : { },
+  &quot;knowledgeOptions&quot; : {
+    &quot;language&quot; : &quot;English&quot;,
+    &quot;publishStatus&quot; : &quot;Online&quot;,
+    &quot;keyword&quot; : &quot;&quot;,
+    &quot;dataCategoryCriteria&quot; : &quot;&quot;,
+    &quot;remoteTimeout&quot; : 30000,
+    &quot;typeFilter&quot; : &quot;&quot;
+  },
+  &quot;show&quot; : null,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;instructionKey&quot; : &quot;&quot;,
+  &quot;chartLabel&quot; : null,
+  &quot;allowSaveForLater&quot; : true,
+  &quot;allowSaveChanges&quot; : false,
+  &quot;errorMessage&quot; : {
+    &quot;custom&quot; : [ ],
+    &quot;default&quot; : null
+  },
+  &quot;wpm&quot; : false,
+  &quot;ssm&quot; : false,
+  &quot;message&quot; : { },
+  &quot;pubsub&quot; : false,
+  &quot;ariaLevel&quot; : 2,
+  &quot;businessCategory&quot; : &quot;&quot;,
+  &quot;businessEvent&quot; : &quot;&quot;
+}</propertySetConfig>
+        <sequenceNumber>13.0</sequenceNumber>
+        <type>Step</type>
+    </omniProcessElements>
+    <omniProcessElements>
+        <isActive>true</isActive>
+        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+        <level>0.0</level>
+        <name>SetErrorForNoViolationSelected</name>
+        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+        <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;SetErrorForNoViolationSelected&quot;,
+  &quot;validationRequired&quot; : &quot;Step&quot;,
+  &quot;elementErrorMap&quot; : {
+    &quot;phocsCCFLViolationAssessmentLWC&quot; : &quot;Please select at least one violation to proceed next.&quot;
+  },
+  &quot;showPersistentComponent&quot; : [ true, false ],
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;false&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;field&quot; : &quot;hasSelectedViolation&quot;
+      }, {
+        &quot;field&quot; : &quot;openRegViolationCount&quot;,
+        &quot;condition&quot; : &quot;&lt;&gt;&quot;,
+        &quot;data&quot; : &quot;0&quot;
+      } ]
+    }
+  },
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;wpm&quot; : false,
+  &quot;ssm&quot; : false,
+  &quot;message&quot; : { },
+  &quot;pubsub&quot; : false
+}</propertySetConfig>
+        <sequenceNumber>8.0</sequenceNumber>
+        <type>Set Errors</type>
+    </omniProcessElements>
+    <omniProcessElements>
+        <isActive>true</isActive>
+        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+        <level>0.0</level>
+        <name>SetErrorsForIsViolationSelectionValid</name>
+        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+        <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;SetErrorsForIsViolationSelectionValid&quot;,
+  &quot;validationRequired&quot; : &quot;Step&quot;,
+  &quot;elementErrorMap&quot; : {
+    &quot;phocsCCFLViolationAssessmentLWC&quot; : &quot;Scope and Severity must be selected for every checked violation before proceeding.&quot;
+  },
+  &quot;showPersistentComponent&quot; : [ true, false ],
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;false&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;field&quot; : &quot;isViolationSelectionValid&quot;
+      }, {
+        &quot;field&quot; : &quot;openRegViolationCount&quot;,
+        &quot;condition&quot; : &quot;&lt;&gt;&quot;,
+        &quot;data&quot; : &quot;0&quot;
+      } ]
+    }
+  },
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;wpm&quot; : false,
+  &quot;ssm&quot; : false,
+  &quot;message&quot; : { },
+  &quot;pubsub&quot; : false
+}</propertySetConfig>
+        <sequenceNumber>9.0</sequenceNumber>
+        <type>Set Errors</type>
+    </omniProcessElements>
+    <omniProcessElements>
+        <isActive>true</isActive>
+        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+        <level>0.0</level>
+        <name>SetInspId</name>
+        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+        <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;SetInspId&quot;,
+  &quot;elementValueMap&quot; : {
+    &quot;inspectionRecId&quot; : &quot;=IF(%ratType%== &apos;Routine assessment&apos;, %inspectionRoutineSelection%, %inspectionNonRoutineSelection%)&quot;,
+    &quot;assessmentType&quot; : &quot;=IF(%ratType%== &apos;Routine assessment&apos;,\n&apos;Risk Assessment&apos;, &apos;Risk re-assessment&apos;)&quot;
+  },
+  &quot;showPersistentComponent&quot; : [ true, false ],
+  &quot;show&quot; : null,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;wpm&quot; : false,
+  &quot;ssm&quot; : false,
+  &quot;message&quot; : { },
+  &quot;pubsub&quot; : false
+}</propertySetConfig>
+        <sequenceNumber>4.0</sequenceNumber>
+        <type>Set Values</type>
+    </omniProcessElements>
+    <omniProcessElements>
+        <isActive>true</isActive>
+        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+        <level>0.0</level>
+        <name>StandradIP_DiscoveryFramework_PrefillById</name>
+        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+        <propertySetConfig>{
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;StandradIP_DiscoveryFramework_PrefillById&quot;,
+  &quot;integrationProcedureKey&quot; : &quot;DiscoveryFramework_PrefillById&quot;,
+  &quot;useContinuation&quot; : false,
+  &quot;remoteOptions&quot; : {
+    &quot;useFuture&quot; : false,
+    &quot;chainable&quot; : false,
+    &quot;preTransformBundle&quot; : &quot;&quot;,
+    &quot;postTransformBundle&quot; : &quot;&quot;,
+    &quot;&quot; : &quot;%completedAssessmentId%&quot;
+  },
+  &quot;remoteTimeout&quot; : 30000,
+  &quot;preTransformBundle&quot; : &quot;&quot;,
+  &quot;postTransformBundle&quot; : &quot;&quot;,
+  &quot;sendJSONPath&quot; : &quot;&quot;,
+  &quot;sendJSONNode&quot; : &quot;&quot;,
+  &quot;responseJSONPath&quot; : &quot;&quot;,
+  &quot;responseJSONNode&quot; : &quot;&quot;,
+  &quot;extraPayload&quot; : {
+    &quot;ContextId&quot; : &quot;%completedAssessmentId%&quot;
+  },
+  &quot;inProgressMessage&quot; : &quot;In Progress&quot;,
+  &quot;postMessage&quot; : &quot;Done&quot;,
+  &quot;failureNextLabel&quot; : &quot;Continue&quot;,
+  &quot;failureAbortLabel&quot; : &quot;Abort&quot;,
+  &quot;failureGoBackLabel&quot; : &quot;Go Back&quot;,
+  &quot;failureAbortMessage&quot; : &quot;Are you sure?&quot;,
+  &quot;validationRequired&quot; : &quot;Step&quot;,
+  &quot;redirectPageName&quot; : &quot;&quot;,
+  &quot;redirectTemplateUrl&quot; : &quot;vlcAcknowledge.html&quot;,
+  &quot;redirectNextLabel&quot; : &quot;Next&quot;,
+  &quot;redirectNextWidth&quot; : 3,
+  &quot;redirectPreviousLabel&quot; : &quot;Previous&quot;,
+  &quot;redirectPreviousWidth&quot; : 3,
+  &quot;showPersistentComponent&quot; : [ true, false ],
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;ComplaintIncident initiated reassessment&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;field&quot; : &quot;ratType&quot;
+      } ]
+    }
+  },
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;wpm&quot; : false,
+  &quot;ssm&quot; : false,
+  &quot;message&quot; : { },
+  &quot;pubsub&quot; : false,
+  &quot;svgSprite&quot; : &quot;&quot;,
+  &quot;svgIcon&quot; : &quot;&quot;,
+  &quot;errorMessage&quot; : {
+    &quot;custom&quot; : [ ],
+    &quot;default&quot; : null
+  },
+  &quot;enableDefaultAbort&quot; : false,
+  &quot;enableActionMessage&quot; : false,
+  &quot;businessCategory&quot; : &quot;&quot;,
+  &quot;businessEvent&quot; : &quot;&quot;,
+  &quot;sendOnlyExtraPayload&quot; : true
+}</propertySetConfig>
+        <sequenceNumber>10.0</sequenceNumber>
+        <type>Integration Procedure Action</type>
+    </omniProcessElements>
+    <omniProcessElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>inspectionNonRoutineSelection</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 4,
+  &quot;repeatClone&quot; : false,
+  &quot;errorMessage&quot; : {
+    &quot;custom&quot; : [ ]
+  },
+  &quot;readOnly&quot; : false,
+  &quot;label&quot; : &quot;Select inspection related to the assessment:&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : true,
+  &quot;clearValue&quot; : true,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;placeholder&quot; : &quot;&quot;,
+  &quot;dataSource&quot; : {
+    &quot;type&quot; : &quot;SObject&quot;,
+    &quot;mapItems&quot; : {
+      &quot;phase1MapItems&quot; : [ {
+        &quot;InterfaceObjectName__c&quot; : &quot;InspectionType&quot;,
+        &quot;InterfaceFieldAPIName__c&quot; : &quot;Name&quot;,
+        &quot;FilterOperator__c&quot; : &quot;&lt;&gt;&quot;,
+        &quot;FilterValue__c&quot; : &quot;&apos;Routine&apos;&quot;,
+        &quot;InterfaceObjectLookupOrder__c&quot; : 1,
+        &quot;DomainObjectFieldAPIName__c&quot; : &quot;inspTypeRec&quot;
+      }, {
+        &quot;InterfaceObjectName__c&quot; : &quot;Visit&quot;,
+        &quot;InterfaceFieldAPIName__c&quot; : &quot;AccountId&quot;,
+        &quot;FilterOperator__c&quot; : &quot;=&quot;,
+        &quot;FilterValue__c&quot; : &quot;accId&quot;,
+        &quot;InterfaceObjectLookupOrder__c&quot; : 2,
+        &quot;DomainObjectFieldAPIName__c&quot; : &quot;visitRec&quot;
+      }, {
+        &quot;InterfaceObjectName__c&quot; : &quot;Visit&quot;,
+        &quot;InterfaceFieldAPIName__c&quot; : &quot;VisitTypeId&quot;,
+        &quot;FilterOperator__c&quot; : &quot;=&quot;,
+        &quot;FilterValue__c&quot; : &quot;inspTypeRec:Id&quot;,
+        &quot;InterfaceObjectLookupOrder__c&quot; : 2,
+        &quot;DomainObjectFieldAPIName__c&quot; : &quot;visitRec&quot;
+      }, {
+        &quot;InterfaceObjectName__c&quot; : &quot;Visit&quot;,
+        &quot;InterfaceFieldAPIName__c&quot; : &quot;Status&quot;,
+        &quot;FilterOperator__c&quot; : &quot;=&quot;,
+        &quot;FilterValue__c&quot; : &quot;&apos;Completed&apos;&quot;,
+        &quot;InterfaceObjectLookupOrder__c&quot; : 2,
+        &quot;DomainObjectFieldAPIName__c&quot; : &quot;visitRec&quot;
+      }, {
+        &quot;InterfaceObjectName__c&quot; : &quot;Visit&quot;,
+        &quot;InterfaceFieldAPIName__c&quot; : &quot;IsRetracted__c&quot;,
+        &quot;FilterOperator__c&quot; : &quot;=&quot;,
+        &quot;FilterValue__c&quot; : &quot;&apos;false&apos;&quot;,
+        &quot;InterfaceObjectLookupOrder__c&quot; : 2,
+        &quot;DomainObjectFieldAPIName__c&quot; : &quot;visitRec&quot;
+      } ],
+      &quot;phase2MapItems&quot; : [ {
+        &quot;DomainObjectFieldAPIName__c&quot; : &quot;name&quot;,
+        &quot;InterfaceFieldAPIName__c&quot; : &quot;visitRec:Id&quot;,
+        &quot;DomainObjectAPIName__c&quot; : &quot;JSON&quot;,
+        &quot;DomainObjectCreationOrder__c&quot; : 1
+      }, {
+        &quot;DomainObjectFieldAPIName__c&quot; : &quot;value&quot;,
+        &quot;InterfaceFieldAPIName__c&quot; : &quot;visitRec:Name&quot;,
+        &quot;DomainObjectAPIName__c&quot; : &quot;JSON&quot;,
+        &quot;DomainObjectCreationOrder__c&quot; : 1
+      } ],
+      &quot;inputParameters&quot; : [ {
+        &quot;element&quot; : &quot;ContextId&quot;,
+        &quot;inputParam&quot; : &quot;accId&quot;
+      } ]
+    }
+  },
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;ComplaintIncident initiated reassessment&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;field&quot; : &quot;ratType&quot;
+      } ]
+    }
+  }
+}</propertySetConfig>
+            <sequenceNumber>5.0</sequenceNumber>
+            <type>Lookup</type>
+        </childElements>
+        <childElements>
+            <isActive>true</isActive>
+            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+            <level>1.0</level>
+            <name>inspectionRoutineSelection</name>
+            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+            <propertySetConfig>{
+  &quot;accessibleInFutureSteps&quot; : false,
+  &quot;helpText&quot; : &quot;&quot;,
+  &quot;controlWidth&quot; : 4,
+  &quot;repeatClone&quot; : false,
+  &quot;errorMessage&quot; : {
+    &quot;custom&quot; : [ ]
+  },
+  &quot;readOnly&quot; : false,
+  &quot;label&quot; : &quot;Select inspection related to the assessment:&quot;,
+  &quot;showInputWidth&quot; : false,
+  &quot;inputWidth&quot; : 12,
+  &quot;required&quot; : true,
+  &quot;clearValue&quot; : true,
+  &quot;help&quot; : false,
+  &quot;hide&quot; : false,
+  &quot;repeat&quot; : false,
+  &quot;disOnTplt&quot; : false,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;placeholder&quot; : &quot;&quot;,
   &quot;dataSource&quot; : {
     &quot;type&quot; : &quot;SObject&quot;,
     &quot;mapItems&quot; : {
@@ -949,133 +1575,41 @@
       } ]
     }
   },
-  &quot;placeholder&quot; : &quot;&quot;,
-  &quot;show&quot; : null,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;accessibleInFutureSteps&quot; : false,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;hide&quot; : false,
-  &quot;disOnTplt&quot; : false,
-  &quot;clearValue&quot; : true,
-  &quot;errorMessage&quot; : {
-    &quot;custom&quot; : [ ],
-    &quot;default&quot; : null
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;Routine assessment&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;field&quot; : &quot;ratType&quot;
+      } ]
+    }
   }
 }</propertySetConfig>
-            <sequenceNumber>5.0</sequenceNumber>
+            <sequenceNumber>4.0</sequenceNumber>
             <type>Lookup</type>
         </childElements>
         <childElements>
             <isActive>true</isActive>
             <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
             <level>1.0</level>
-            <name>TextBlock5</name>
+            <name>LineBreak7</name>
             <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
             <propertySetConfig>{
-  &quot;controlWidth&quot; : 12,
-  &quot;label&quot; : &quot;TextBlock5&quot;,
-  &quot;text&quot; : &quot;&lt;p&gt;Select the most recent routine inspection from the list below.&lt;/p&gt;&quot;,
-  &quot;show&quot; : null,
-  &quot;dataJSON&quot; : false,
+  &quot;padding&quot; : 12,
+  &quot;label&quot; : &quot;LineBreak6&quot;,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;textKey&quot; : &quot;&quot;,
-  &quot;sanitize&quot; : false
-}</propertySetConfig>
-            <sequenceNumber>3.0</sequenceNumber>
-            <type>Text Block</type>
-        </childElements>
-        <isActive>true</isActive>
-        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-        <level>0.0</level>
-        <name>ReasonforRiskAssessment</name>
-        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-        <propertySetConfig>{
-  &quot;label&quot; : &quot;Reason for Risk Assessment&quot;,
-  &quot;validationRequired&quot; : true,
-  &quot;previousLabel&quot; : &quot;Previous&quot;,
-  &quot;previousWidth&quot; : 3,
-  &quot;nextLabel&quot; : &quot;Next&quot;,
-  &quot;nextWidth&quot; : 3,
-  &quot;cancelLabel&quot; : &quot;Cancel&quot;,
-  &quot;cancelMessage&quot; : &quot;Are you sure?&quot;,
-  &quot;saveLabel&quot; : &quot;Save for later&quot;,
-  &quot;saveChangesLabel&quot; : &quot;Save Changes&quot;,
-  &quot;autoSaveLabel&quot; : &quot;Auto Save on Assessment Progress&quot;,
-  &quot;saveMessage&quot; : &quot;Are you sure you want to save it for later?&quot;,
-  &quot;completeLabel&quot; : &quot;Complete&quot;,
-  &quot;completeMessage&quot; : &quot;Are you sure you want to complete the script?&quot;,
-  &quot;instruction&quot; : &quot;&quot;,
-  &quot;showPersistentComponent&quot; : [ true, false ],
-  &quot;remoteClass&quot; : &quot;&quot;,
-  &quot;remoteMethod&quot; : &quot;&quot;,
-  &quot;remoteTimeout&quot; : 30000,
-  &quot;remoteOptions&quot; : { },
-  &quot;knowledgeOptions&quot; : {
-    &quot;language&quot; : &quot;English&quot;,
-    &quot;publishStatus&quot; : &quot;Online&quot;,
-    &quot;keyword&quot; : &quot;&quot;,
-    &quot;dataCategoryCriteria&quot; : &quot;&quot;,
-    &quot;remoteTimeout&quot; : 30000,
-    &quot;typeFilter&quot; : &quot;&quot;
-  },
-  &quot;show&quot; : null,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;instructionKey&quot; : &quot;&quot;,
-  &quot;chartLabel&quot; : null,
-  &quot;allowSaveForLater&quot; : true,
-  &quot;allowSaveChanges&quot; : false,
-  &quot;autoSaveChanges&quot; : false,
-  &quot;errorMessage&quot; : {
-    &quot;custom&quot; : [ ],
-    &quot;default&quot; : null
-  },
-  &quot;wpm&quot; : false,
-  &quot;ssm&quot; : false,
-  &quot;message&quot; : { },
-  &quot;pubsub&quot; : false,
-  &quot;businessCategory&quot; : &quot;&quot;,
-  &quot;businessEvent&quot; : &quot;&quot;
-}</propertySetConfig>
-        <sequenceNumber>2.0</sequenceNumber>
-        <type>Step</type>
-    </omniProcessElements>
-    <omniProcessElements>
-        <childElements>
-            <isActive>true</isActive>
-            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-            <level>1.0</level>
-            <name>CalculatedScore</name>
-            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-            <propertySetConfig>{
-  &quot;controlWidth&quot; : 6,
-  &quot;label&quot; : &quot;Calculated Score&quot;,
-  &quot;showInputWidth&quot; : false,
-  &quot;inputWidth&quot; : 12,
-  &quot;expression&quot; : &quot;%TotalScore%&quot;,
-  &quot;hide&quot; : false,
-  &quot;show&quot; : null,
-  &quot;mask&quot; : null,
-  &quot;dataType&quot; : null,
-  &quot;hideGroupSep&quot; : false,
-  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;disOnTplt&quot; : false
-}</propertySetConfig>
-            <sequenceNumber>6.0</sequenceNumber>
-            <type>Formula</type>
-        </childElements>
-        <childElements>
-            <isActive>true</isActive>
-            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-            <level>1.0</level>
-            <name>LineBreak2</name>
-            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-            <propertySetConfig>{
-  &quot;label&quot; : &quot;LineBreak2&quot;,
-  &quot;padding&quot; : 21,
-  &quot;show&quot; : null,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;Routine assessment&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;field&quot; : &quot;ratType&quot;
+      } ]
+    }
+  }
 }</propertySetConfig>
             <sequenceNumber>3.0</sequenceNumber>
             <type>Line Break</type>
@@ -1084,108 +1618,26 @@
             <isActive>true</isActive>
             <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
             <level>1.0</level>
-            <name>MinimumInspectionFrequency</name>
+            <name>LineBreak8</name>
             <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
             <propertySetConfig>{
-  &quot;controlWidth&quot; : 6,
-  &quot;label&quot; : &quot;Minimum Inspection Frequency&quot;,
-  &quot;showInputWidth&quot; : false,
-  &quot;inputWidth&quot; : 12,
-  &quot;expression&quot; : &quot;%InspectionFrequency%&quot;,
-  &quot;hide&quot; : false,
-  &quot;show&quot; : null,
-  &quot;mask&quot; : null,
-  &quot;dataType&quot; : null,
-  &quot;hideGroupSep&quot; : false,
-  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;disOnTplt&quot; : false
+  &quot;padding&quot; : 12.0,
+  &quot;label&quot; : &quot;LineBreak1&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;
 }</propertySetConfig>
-            <sequenceNumber>8.0</sequenceNumber>
-            <type>Formula</type>
+            <sequenceNumber>1.0</sequenceNumber>
+            <type>Line Break</type>
         </childElements>
         <childElements>
             <isActive>true</isActive>
             <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
             <level>1.0</level>
-            <name>PartAScore</name>
+            <name>TextBlock6</name>
             <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
             <propertySetConfig>{
-  &quot;controlWidth&quot; : 6,
-  &quot;label&quot; : &quot;Part A: Inspection Score&quot;,
-  &quot;showInputWidth&quot; : false,
-  &quot;inputWidth&quot; : 12,
-  &quot;expression&quot; : &quot;%OutputPartAScore%&quot;,
-  &quot;hide&quot; : false,
-  &quot;show&quot; : null,
-  &quot;mask&quot; : null,
-  &quot;dataType&quot; : null,
-  &quot;hideGroupSep&quot; : false,
-  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;disOnTplt&quot; : false
-}</propertySetConfig>
-            <sequenceNumber>4.0</sequenceNumber>
-            <type>Formula</type>
-        </childElements>
-        <childElements>
-            <isActive>true</isActive>
-            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-            <level>1.0</level>
-            <name>PartBScore</name>
-            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-            <propertySetConfig>{
-  &quot;controlWidth&quot; : 6,
-  &quot;label&quot; : &quot;Part B: Operational History Score&quot;,
-  &quot;showInputWidth&quot; : false,
-  &quot;inputWidth&quot; : 12,
-  &quot;expression&quot; : &quot;%OutputPartBScore%&quot;,
-  &quot;hide&quot; : false,
-  &quot;show&quot; : null,
-  &quot;mask&quot; : null,
-  &quot;dataType&quot; : null,
-  &quot;hideGroupSep&quot; : false,
-  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;disOnTplt&quot; : false
-}</propertySetConfig>
-            <sequenceNumber>5.0</sequenceNumber>
-            <type>Formula</type>
-        </childElements>
-        <childElements>
-            <isActive>true</isActive>
-            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-            <level>1.0</level>
-            <name>Rating</name>
-            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-            <propertySetConfig>{
-  &quot;controlWidth&quot; : 6,
-  &quot;label&quot; : &quot;Rating&quot;,
-  &quot;showInputWidth&quot; : false,
-  &quot;inputWidth&quot; : 12,
-  &quot;expression&quot; : &quot;%RiskRating%&quot;,
-  &quot;hide&quot; : false,
-  &quot;show&quot; : null,
-  &quot;mask&quot; : null,
-  &quot;dataType&quot; : null,
-  &quot;hideGroupSep&quot; : false,
-  &quot;dateFormat&quot; : &quot;MM-dd-yyyy&quot;,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;disOnTplt&quot; : false
-}</propertySetConfig>
-            <sequenceNumber>7.0</sequenceNumber>
-            <type>Formula</type>
-        </childElements>
-        <childElements>
-            <isActive>true</isActive>
-            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-            <level>1.0</level>
-            <name>TextBlock3</name>
-            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-            <propertySetConfig>{
-  &quot;controlWidth&quot; : 5,
+  &quot;controlWidth&quot; : 12.0,
   &quot;label&quot; : &quot;TextBlock1&quot;,
-  &quot;text&quot; : &quot;&lt;p&gt;&lt;strong&gt;Facility Name:&amp;nbsp; &lt;/strong&gt;%facilityName%&lt;/p&gt;&quot;,
+  &quot;text&quot; : &quot;&lt;p&gt;&lt;strong&gt;Facility Name:&amp;nbsp; &lt;/strong&gt;%facilityName%&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &lt;strong&gt;Facility Type&lt;/strong&gt;: %facilityType%&lt;/p&gt;&quot;,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;dataJSON&quot; : false,
   &quot;textKey&quot; : &quot;&quot;,
@@ -1198,34 +1650,26 @@
             <isActive>true</isActive>
             <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
             <level>1.0</level>
-            <name>TextBlock8</name>
+            <name>TextBlock7</name>
             <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
             <propertySetConfig>{
-  &quot;controlWidth&quot; : 4,
-  &quot;label&quot; : &quot;TextBlock1&quot;,
-  &quot;text&quot; : &quot;&lt;p&gt;&lt;strong&gt;Facility Type&lt;/strong&gt;: %facilityType%&lt;/p&gt;&quot;,
+  &quot;controlWidth&quot; : 12,
+  &quot;label&quot; : &quot;TextBlock5&quot;,
+  &quot;text&quot; : &quot;&lt;p&gt;Select the most recent routine inspection from the list below.&lt;/p&gt;&quot;,
   &quot;HTMLTemplateId&quot; : &quot;&quot;,
   &quot;dataJSON&quot; : false,
   &quot;textKey&quot; : &quot;&quot;,
-  &quot;sanitize&quot; : false
-}</propertySetConfig>
-            <sequenceNumber>1.0</sequenceNumber>
-            <type>Text Block</type>
-        </childElements>
-        <childElements>
-            <isActive>true</isActive>
-            <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-            <level>1.0</level>
-            <name>TextBlock9</name>
-            <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-            <propertySetConfig>{
-  &quot;controlWidth&quot; : 3,
-  &quot;label&quot; : &quot;TextBlock1&quot;,
-  &quot;text&quot; : &quot;&lt;p&gt;&lt;strong&gt;Inspection&lt;/strong&gt;: %selectedInspId%&lt;/p&gt;&quot;,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;dataJSON&quot; : false,
-  &quot;textKey&quot; : &quot;&quot;,
-  &quot;sanitize&quot; : false
+  &quot;sanitize&quot; : false,
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;Routine assessment&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;field&quot; : &quot;ratType&quot;
+      } ]
+    }
+  }
 }</propertySetConfig>
             <sequenceNumber>2.0</sequenceNumber>
             <type>Text Block</type>
@@ -1233,28 +1677,13 @@
         <isActive>true</isActive>
         <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
         <level>0.0</level>
-        <name>RiskScoreOutput</name>
+        <name>Step1</name>
         <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
         <propertySetConfig>{
-  &quot;label&quot; : &quot;Risk Score Output&quot;,
-  &quot;validationRequired&quot; : true,
-  &quot;previousLabel&quot; : &quot;Previous&quot;,
-  &quot;previousWidth&quot; : 3,
-  &quot;nextLabel&quot; : &quot;Finish&quot;,
   &quot;nextWidth&quot; : 3,
-  &quot;cancelLabel&quot; : &quot;Cancel&quot;,
-  &quot;cancelMessage&quot; : &quot;Are you sure?&quot;,
-  &quot;saveLabel&quot; : &quot;Save for later&quot;,
-  &quot;saveChangesLabel&quot; : &quot;Save Changes&quot;,
-  &quot;saveMessage&quot; : &quot;Are you sure you want to save it for later?&quot;,
-  &quot;completeLabel&quot; : &quot;Complete&quot;,
-  &quot;completeMessage&quot; : &quot;Are you sure you want to complete the script?&quot;,
-  &quot;instruction&quot; : &quot;&quot;,
-  &quot;showPersistentComponent&quot; : [ true, false ],
-  &quot;remoteClass&quot; : &quot;&quot;,
-  &quot;remoteMethod&quot; : &quot;&quot;,
-  &quot;remoteTimeout&quot; : 30000,
   &quot;remoteOptions&quot; : { },
+  &quot;remoteMethod&quot; : &quot;&quot;,
+  &quot;completeLabel&quot; : &quot;Complete&quot;,
   &quot;knowledgeOptions&quot; : {
     &quot;language&quot; : &quot;English&quot;,
     &quot;publishStatus&quot; : &quot;Online&quot;,
@@ -1263,124 +1692,40 @@
     &quot;remoteTimeout&quot; : 30000,
     &quot;typeFilter&quot; : &quot;&quot;
   },
-  &quot;show&quot; : null,
-  &quot;conditionType&quot; : &quot;Hide if False&quot;,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;instructionKey&quot; : &quot;&quot;,
-  &quot;chartLabel&quot; : null,
-  &quot;allowSaveForLater&quot; : true,
+  &quot;ssm&quot; : false,
+  &quot;saveChangesLabel&quot; : &quot;Save Changes&quot;,
+  &quot;saveLabel&quot; : &quot;Save for later&quot;,
+  &quot;autoSaveChanges&quot; : false,
+  &quot;remoteTimeout&quot; : 30000,
   &quot;allowSaveChanges&quot; : false,
-  &quot;errorMessage&quot; : {
-    &quot;custom&quot; : [ ],
-    &quot;default&quot; : null
-  },
-  &quot;wpm&quot; : false,
-  &quot;ssm&quot; : false,
-  &quot;message&quot; : { },
+  &quot;businessEvent&quot; : &quot;&quot;,
+  &quot;validationRequired&quot; : true,
   &quot;pubsub&quot; : false,
-  &quot;ariaLevel&quot; : 2,
+  &quot;saveMessage&quot; : &quot;Are you sure you want to save it for later?&quot;,
+  &quot;instructionKey&quot; : &quot;&quot;,
+  &quot;cancelLabel&quot; : &quot;Cancel&quot;,
+  &quot;cancelMessage&quot; : &quot;Are you sure?&quot;,
+  &quot;allowSaveForLater&quot; : false,
+  &quot;previousWidth&quot; : 3,
+  &quot;errorMessage&quot; : {
+    &quot;custom&quot; : [ ]
+  },
+  &quot;showPersistentComponent&quot; : [ true, false ],
+  &quot;label&quot; : &quot;Related Inspection&quot;,
+  &quot;message&quot; : { },
+  &quot;autoSaveLabel&quot; : &quot;Auto Save on Assessment Progress&quot;,
+  &quot;wpm&quot; : false,
+  &quot;completeMessage&quot; : &quot;Are you sure you want to complete the script?&quot;,
+  &quot;instruction&quot; : &quot;&quot;,
+  &quot;previousLabel&quot; : &quot;Previous&quot;,
+  &quot;remoteClass&quot; : &quot;&quot;,
   &quot;businessCategory&quot; : &quot;&quot;,
-  &quot;businessEvent&quot; : &quot;&quot;
+  &quot;nextLabel&quot; : &quot;Next&quot;,
+  &quot;conditionType&quot; : &quot;Hide if False&quot;,
+  &quot;HTMLTemplateId&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>11.0</sequenceNumber>
+        <sequenceNumber>3.0</sequenceNumber>
         <type>Step</type>
-    </omniProcessElements>
-    <omniProcessElements>
-        <isActive>true</isActive>
-        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-        <level>0.0</level>
-        <name>SetErrorForNoViolationSelected</name>
-        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-        <propertySetConfig>{
-  &quot;controlWidth&quot; : 12,
-  &quot;label&quot; : &quot;SetErrorForNoViolationSelected&quot;,
-  &quot;validationRequired&quot; : &quot;Step&quot;,
-  &quot;elementErrorMap&quot; : {
-    &quot;phocsCCFLViolationAssessmentLWC&quot; : &quot;Please select at least one violation to proceed next.&quot;
-  },
-  &quot;showPersistentComponent&quot; : [ true, false ],
-  &quot;show&quot; : {
-    &quot;group&quot; : {
-      &quot;operator&quot; : &quot;AND&quot;,
-      &quot;rules&quot; : [ {
-        &quot;data&quot; : &quot;false&quot;,
-        &quot;condition&quot; : &quot;=&quot;,
-        &quot;field&quot; : &quot;hasSelectedViolation&quot;
-      }, {
-        &quot;field&quot; : &quot;openRegViolationCount&quot;,
-        &quot;condition&quot; : &quot;&lt;&gt;&quot;,
-        &quot;data&quot; : &quot;0&quot;
-      } ]
-    }
-  },
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;wpm&quot; : false,
-  &quot;ssm&quot; : false,
-  &quot;message&quot; : { },
-  &quot;pubsub&quot; : false
-}</propertySetConfig>
-        <sequenceNumber>7.0</sequenceNumber>
-        <type>Set Errors</type>
-    </omniProcessElements>
-    <omniProcessElements>
-        <isActive>true</isActive>
-        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-        <level>0.0</level>
-        <name>SetErrorsForIsViolationSelectionValid</name>
-        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-        <propertySetConfig>{
-  &quot;controlWidth&quot; : 12,
-  &quot;label&quot; : &quot;SetErrorsForIsViolationSelectionValid&quot;,
-  &quot;validationRequired&quot; : &quot;Step&quot;,
-  &quot;elementErrorMap&quot; : {
-    &quot;phocsCCFLViolationAssessmentLWC&quot; : &quot;Scope and Severity must be selected for every checked violation before proceeding.&quot;
-  },
-  &quot;showPersistentComponent&quot; : [ true, false ],
-  &quot;show&quot; : {
-    &quot;group&quot; : {
-      &quot;operator&quot; : &quot;AND&quot;,
-      &quot;rules&quot; : [ {
-        &quot;data&quot; : &quot;false&quot;,
-        &quot;condition&quot; : &quot;=&quot;,
-        &quot;field&quot; : &quot;isViolationSelectionValid&quot;
-      }, {
-        &quot;field&quot; : &quot;openRegViolationCount&quot;,
-        &quot;condition&quot; : &quot;&lt;&gt;&quot;,
-        &quot;data&quot; : &quot;0&quot;
-      } ]
-    }
-  },
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;wpm&quot; : false,
-  &quot;ssm&quot; : false,
-  &quot;message&quot; : { },
-  &quot;pubsub&quot; : false
-}</propertySetConfig>
-        <sequenceNumber>8.0</sequenceNumber>
-        <type>Set Errors</type>
-    </omniProcessElements>
-    <omniProcessElements>
-        <isActive>true</isActive>
-        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-        <level>0.0</level>
-        <name>SetInspId</name>
-        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-        <propertySetConfig>{
-  &quot;controlWidth&quot; : 12,
-  &quot;label&quot; : &quot;SetInspId&quot;,
-  &quot;elementValueMap&quot; : {
-    &quot;inspectionRecId&quot; : &quot;%SearchInspection%&quot;
-  },
-  &quot;showPersistentComponent&quot; : [ true, false ],
-  &quot;show&quot; : null,
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;wpm&quot; : false,
-  &quot;ssm&quot; : false,
-  &quot;message&quot; : { },
-  &quot;pubsub&quot; : false
-}</propertySetConfig>
-        <sequenceNumber>5.0</sequenceNumber>
-        <type>Set Values</type>
     </omniProcessElements>
     <omniProcessElements>
         <isActive>true</isActive>
@@ -1425,68 +1770,13 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>14.0</sequenceNumber>
-        <type>DataRaptor Post Action</type>
-    </omniProcessElements>
-    <omniProcessElements>
-        <isActive>true</isActive>
-        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
-        <level>0.0</level>
-        <name>UpdateViolationScopeNSeverity</name>
-        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
-        <propertySetConfig>{
-  &quot;controlWidth&quot; : 12,
-  &quot;label&quot; : &quot;UpdateViolationScopeNSeverity&quot;,
-  &quot;bundle&quot; : &quot;PHOCSDMUpdateViolationRAT&quot;,
-  &quot;remoteTimeout&quot; : 30000,
-  &quot;postTransformBundle&quot; : &quot;&quot;,
-  &quot;sendJSONPath&quot; : &quot;&quot;,
-  &quot;sendJSONNode&quot; : &quot;&quot;,
-  &quot;inProgressMessage&quot; : &quot;In Progress&quot;,
-  &quot;postMessage&quot; : &quot;Done&quot;,
-  &quot;failureNextLabel&quot; : &quot;Continue&quot;,
-  &quot;failureAbortLabel&quot; : &quot;Abort&quot;,
-  &quot;failureGoBackLabel&quot; : &quot;Go Back&quot;,
-  &quot;failureAbortMessage&quot; : &quot;Are you sure?&quot;,
-  &quot;validationRequired&quot; : &quot;Submit&quot;,
-  &quot;redirectPageName&quot; : &quot;&quot;,
-  &quot;redirectTemplateUrl&quot; : &quot;vlcAcknowledge.html&quot;,
-  &quot;redirectNextLabel&quot; : &quot;Next&quot;,
-  &quot;redirectNextWidth&quot; : 3,
-  &quot;redirectPreviousLabel&quot; : &quot;Previous&quot;,
-  &quot;redirectPreviousWidth&quot; : 3,
-  &quot;showPersistentComponent&quot; : [ true, false ],
-  &quot;show&quot; : {
-    &quot;group&quot; : {
-      &quot;operator&quot; : &quot;AND&quot;,
-      &quot;rules&quot; : [ {
-        &quot;data&quot; : &quot;0&quot;,
-        &quot;condition&quot; : &quot;&lt;&gt;&quot;,
-        &quot;field&quot; : &quot;openRegViolationCount&quot;
-      } ]
-    }
-  },
-  &quot;HTMLTemplateId&quot; : &quot;&quot;,
-  &quot;wpm&quot; : false,
-  &quot;ssm&quot; : false,
-  &quot;message&quot; : { },
-  &quot;pubsub&quot; : false,
-  &quot;errorMessage&quot; : {
-    &quot;custom&quot; : [ ],
-    &quot;default&quot; : null
-  },
-  &quot;enableDefaultAbort&quot; : false,
-  &quot;enableActionMessage&quot; : false,
-  &quot;businessCategory&quot; : &quot;&quot;,
-  &quot;businessEvent&quot; : &quot;&quot;
-}</propertySetConfig>
-        <sequenceNumber>15.0</sequenceNumber>
+        <sequenceNumber>17.0</sequenceNumber>
         <type>DataRaptor Post Action</type>
     </omniProcessElements>
     <omniProcessType>OmniScript</omniProcessType>
     <propertySetConfig>{&quot;persistentComponent&quot;:[{&quot;render&quot;:false,&quot;label&quot;:&quot;&quot;,&quot;remoteClass&quot;:&quot;&quot;,&quot;remoteMethod&quot;:&quot;&quot;,&quot;remoteTimeout&quot;:30000,&quot;remoteOptions&quot;:{&quot;preTransformBundle&quot;:&quot;&quot;,&quot;postTransformBundle&quot;:&quot;&quot;},&quot;preTransformBundle&quot;:&quot;&quot;,&quot;postTransformBundle&quot;:&quot;&quot;,&quot;sendJSONPath&quot;:&quot;&quot;,&quot;sendJSONNode&quot;:&quot;&quot;,&quot;responseJSONPath&quot;:&quot;&quot;,&quot;responseJSONNode&quot;:&quot;&quot;,&quot;id&quot;:&quot;vlcCart&quot;,&quot;itemsKey&quot;:&quot;cartItems&quot;,&quot;modalConfigurationSetting&quot;:{&quot;modalHTMLTemplateId&quot;:&quot;vlcProductConfig.html&quot;,&quot;modalController&quot;:&quot;ModalProductCtrl&quot;,&quot;modalSize&quot;:&quot;lg&quot;}},{&quot;render&quot;:false,&quot;dispOutsideOmni&quot;:false,&quot;label&quot;:&quot;&quot;,&quot;remoteClass&quot;:&quot;&quot;,&quot;remoteMethod&quot;:&quot;&quot;,&quot;remoteTimeout&quot;:30000,&quot;remoteOptions&quot;:{&quot;preTransformBundle&quot;:&quot;&quot;,&quot;postTransformBundle&quot;:&quot;&quot;},&quot;preTransformBundle&quot;:&quot;&quot;,&quot;postTransformBundle&quot;:&quot;&quot;,&quot;id&quot;:&quot;vlcKnowledge&quot;,&quot;itemsKey&quot;:&quot;knowledgeItems&quot;,&quot;modalConfigurationSetting&quot;:{&quot;modalHTMLTemplateId&quot;:&quot;&quot;,&quot;modalController&quot;:&quot;&quot;,&quot;modalSize&quot;:&quot;lg&quot;}}],&quot;accessibilityToggle&quot;:true,&quot;allowSaveForLater&quot;:false,&quot;allowSaveChanges&quot;:false,&quot;autoSaveChanges&quot;:false,&quot;saveNameTemplate&quot;:null,&quot;saveExpireInDays&quot;:null,&quot;saveForLaterRedirectPageName&quot;:&quot;sflRedirect&quot;,&quot;saveForLaterRedirectTemplateUrl&quot;:&quot;vlcSaveForLaterAcknowledge.html&quot;,&quot;saveContentEncoded&quot;:false,&quot;saveObjectId&quot;:&quot;%ContextId%&quot;,&quot;saveURLPatterns&quot;:{},&quot;autoSaveOnStepNext&quot;:false,&quot;elementTypeToHTMLTemplateMapping&quot;:{},&quot;seedDataJSON&quot;:{},&quot;trackingCustomData&quot;:{},&quot;enableKnowledge&quot;:false,&quot;bLK&quot;:false,&quot;lkObjName&quot;:null,&quot;knowledgeArticleTypeQueryFieldsMap&quot;:{},&quot;timeTracking&quot;:false,&quot;hideStepChart&quot;:false,&quot;mergeSavedData&quot;:false,&quot;visualforcePagesAvailableInPreview&quot;:{},&quot;cancelType&quot;:&quot;SObject&quot;,&quot;allowCancel&quot;:true,&quot;cancelSource&quot;:&quot;%ContextId%&quot;,&quot;cancelRedirectPageName&quot;:&quot;OmniScriptCancelled&quot;,&quot;cancelRedirectTemplateUrl&quot;:&quot;vlcCancelled.html&quot;,&quot;consoleTabLabel&quot;:&quot;&quot;,&quot;wpm&quot;:false,&quot;ssm&quot;:false,&quot;message&quot;:{},&quot;pubsub&quot;:false,&quot;autoFocus&quot;:false,&quot;currencyCode&quot;:&quot;&quot;,&quot;showInputWidth&quot;:false,&quot;rtpSeed&quot;:false,&quot;consoleTabTitle&quot;:null,&quot;consoleTabIcon&quot;:&quot;custom:custom18&quot;,&quot;errorMessage&quot;:{&quot;custom&quot;:[]},&quot;stylesheet&quot;:{&quot;newport&quot;:&quot;&quot;,&quot;lightning&quot;:&quot;&quot;,&quot;newportRtl&quot;:&quot;&quot;,&quot;lightningRtl&quot;:&quot;&quot;},&quot;stepChartPlacement&quot;:&quot;right&quot;,&quot;disableUnloadWarn&quot;:true,&quot;scrollBehavior&quot;:&quot;auto&quot;,&quot;currentLanguage&quot;:&quot;en_US&quot;}</propertySetConfig>
     <subType>ParentRAT</subType>
     <type>CCFLRAT</type>
-    <uniqueName>CCFLRAT_ParentRAT_English_1</uniqueName>
-    <versionNumber>1.0</versionNumber>
+    <uniqueName>CCFLRAT_ParentRAT_English_2</uniqueName>
+    <versionNumber>2.0</versionNumber>
 </OmniScript>
