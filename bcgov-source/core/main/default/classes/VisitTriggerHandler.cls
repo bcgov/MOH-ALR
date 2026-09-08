@@ -43,15 +43,23 @@ public with Sharing class VisitTriggerHandler {
         try{
             Map<Id, Account> accountsToUpdate = new Map<Id, Account>();            
             List<Visit> inspections = [SELECT Id, AccountId, Account.RiskAssessmentEligibility__c, VisitTypeId,
-                                       VisitType.Name FROM Visit WHERE Id IN: completedInspectionIds];
+                                       Account.Type, VisitType.Name FROM Visit WHERE Id IN: completedInspectionIds];
             
             for (Visit inspection : inspections) {
                 if (inspection.AccountId == null || inspection.Account.RiskAssessmentEligibility__c || inspection.VisitType == null) {
                     continue;
                 }
+                String accountType = inspection.Account.Type;
+                String visitType = inspection.VisitType.Name;
                 
-                if (inspection.VisitType.Name == 'Routine' || inspection.VisitType.Name == 'Routine Follow-up') {
-                    accountsToUpdate.put(inspection.AccountId, new Account(Id = inspection.AccountId, RiskAssessmentEligibility__c = true));
+                if (accountType == 'Child Care' || accountType == 'Residential Care') {                    
+                    if (visitType == 'Routine') {
+                        accountsToUpdate.put(inspection.AccountId, new Account(Id = inspection.AccountId, RiskAssessmentEligibility__c = true));
+                    }
+                } else {
+                    if (visitType == 'Routine' || visitType == 'Routine Follow-up') {
+                        accountsToUpdate.put(inspection.AccountId, new Account(Id = inspection.AccountId, RiskAssessmentEligibility__c = true));
+                    }
                 }
             }
             

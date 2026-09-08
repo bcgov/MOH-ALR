@@ -5,6 +5,7 @@ export default class PhocsAssessmentViolationRelatedList extends LightningElemen
     @api recordId;
     violations = [];
     isLoading = false;
+    isRiskReAssessment = false;
 
     columns = [
         {
@@ -43,6 +44,22 @@ export default class PhocsAssessmentViolationRelatedList extends LightningElemen
         }
     ];
 
+    get displayColumns() {
+        if (this.isRiskReAssessment) {
+            return [
+                ...this.columns,
+                {
+                    label: 'Comment',
+                    fieldName: 'comment',
+                    type: 'text',
+                    wrapText: true
+                }
+            ];
+        }
+
+        return this.columns;
+    }
+
     get hasRecords() {
         return this.violations.length > 0;
     }
@@ -59,20 +76,26 @@ export default class PhocsAssessmentViolationRelatedList extends LightningElemen
         this.isLoading = true;
 
         try {
-            const data = await getRelatedViolations({ assessmentId: this.recordId });
+            const data = await getRelatedViolations({
+                assessmentId: this.recordId
+            });
 
-            this.violations = (data || []).map(row => ({
-                Id: row.Id,
-                Name: row.Name,
-                recordUrl: `/lightning/r/RegulatoryCodeViolation/${row.Id}/view`,
-                regulatoryCodeName: row.RegulatoryCode?.Name || '',
-                inspectionQuestion: row.InspectionAssmntInd?.AssessmentIndDefinition?.Name || '',
-                scope: row.Scope__c || '',
-                severity: row.Severity__c || ''
+            this.isRiskReAssessment = data?.isRiskReAssessment || false;
+
+            this.violations = (data?.violations || []).map(row => ({
+                Id: row.id,
+                Name: row.violationName,
+                recordUrl: `/lightning/r/RegulatoryCodeViolation/${row.id}/view`,
+                regulatoryCodeName: row.regulatoryCode || '',
+                inspectionQuestion: row.inspectionQuestion || '',
+                scope: row.scope || '',
+                severity: row.severity || '',
+                comment: row.comment || ''
             }));
         } catch (error) {
             console.error('Error loading related violations', error);
             this.violations = [];
+            this.isRiskReAssessment = false;
         } finally {
             this.isLoading = false;
         }

@@ -4,8 +4,7 @@
 * @Description: Remote action for serializing the selectedViolations OmniScript array into a JSON string.
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]
 ***********************************************************************************************/
-global with sharing class PHOCSRATSelectedViolationsService implements Callable {
-    
+global with sharing class PHOCSRATSelectedViolationsService implements Callable {    
     private static final String ACTION_SAVE_SELECTED_VIOLATIONS = 'saveSelectedViolations';
     
     /**
@@ -17,12 +16,10 @@ global with sharing class PHOCSRATSelectedViolationsService implements Callable 
     global Object call(String action, Map<String, Object> args) {
         if (String.isBlank(action)) {
             throw buildException('Callable action is required.');
-        }
-        
+        }        
         if (args == null) {
             throw buildException('Callable arguments are required.');
-        }
-        
+        }        
         if (ACTION_SAVE_SELECTED_VIOLATIONS.equalsIgnoreCase(action)) {
             return saveSelectedViolations(args);
         }
@@ -41,8 +38,7 @@ global with sharing class PHOCSRATSelectedViolationsService implements Callable 
         Map<String, Object> output = args.containsKey('output') && args.get('output') instanceof Map<String, Object> ? (Map<String, Object>) args.get('output') : new Map<String, Object>();
         Map<String, Object> options = args.containsKey('options') && args.get('options') instanceof Map<String, Object> ? (Map<String, Object>) args.get('options') : new Map<String, Object>();
         
-        saveSelectedViolations(input, output, options);
-        
+        saveSelectedViolations(input, output, options);        
         return output;
     }
     
@@ -55,8 +51,7 @@ global with sharing class PHOCSRATSelectedViolationsService implements Callable 
     public void saveSelectedViolations(Map<String, Object> input, Map<String, Object> output, Map<String, Object> options) {
         if (input == null) {
             throw buildException('Input is required.');
-        }
-        
+        }        
         List<Object> selectedViolations = getListValue(input.get('selectedViolations'));
         String selectedViolationsJson = JSON.serialize(selectedViolations);
         
@@ -73,7 +68,6 @@ global with sharing class PHOCSRATSelectedViolationsService implements Callable 
         if (value == null) {
             return new List<Object>();
         }
-        
         if (value instanceof List<Object>) {
             return (List<Object>) value;
         }
