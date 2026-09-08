@@ -610,7 +610,7 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
         Assert.areEqual(0, (Decimal) result.get('OutputPartBScore'), 'OutputPartBScore should be zero when no Part B answers are submitted');
         Assert.areEqual(expectedPartAScore, (Decimal) result.get('TotalScore'), 'TotalScore should equal OutputPartAScore');
         Assert.areEqual(expectedPartAScore, (Decimal) result.get('CalculatedScore'), 'CalculatedScore should equal TotalScore');
-        Assert.areEqual(expectedRiskRating, (String) result.get('RiskRating'), 'RiskRating should match the configured rating or remain null');
+        Assert.areEqual(expectedRiskRating, (String) result.get('riskRating'), 'RiskRating should match the configured rating or remain null');
         Assert.areEqual(expectedInspectionFrequency, (String) result.get('InspectionFrequency'), 'InspectionFrequency should match the configured frequency or remain null');
     }
     

@@ -12,19 +12,22 @@
                 </div>
             </div>
         </header>
+
         <div class="slds-card__body slds-card__body_inner">
             <template if:true={isLoading}>
                 <div class="slds-is-relative slds-p-vertical_medium">
                     <lightning-spinner alternative-text="Loading violations" size="small"></lightning-spinner>
                 </div>
             </template>
+
             <template if:true={hasRecords}>
-                <lightning-datatable key-field="Id" data={violations} columns={columns} hide-checkbox-column></lightning-datatable>
+                <lightning-datatable key-field="Id" data={violations} columns={displayColumns} hide-checkbox-column></lightning-datatable>
             </template>
+
             <template if:false={hasRecords}>
                 <template if:false={isLoading}>
                     <div class="slds-text-color_weak slds-p-vertical_small">
-                        No related violations found.
+                        No violations were assessed.
                     </div>
                 </template>
             </template>

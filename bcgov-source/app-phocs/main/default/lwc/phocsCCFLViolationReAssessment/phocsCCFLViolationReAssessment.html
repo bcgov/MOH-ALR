@@ -6,6 +6,14 @@
             </div>
         </template>
 
+        <template if:true={showNoCompletedAssessmentMessage}>
+            <div class="slds-illustration slds-illustration_small slds-p-around_medium slds-text-align_center">
+                <lightning-icon icon-name="utility:warning" size="medium" variant="warning" class="slds-m-bottom_small"></lightning-icon>
+                <p class="slds-text-heading_small">Routine initial assessment required</p>
+                <p class="slds-text-body_small slds-text-color_weak">To complete a Complaint/Incident Initiated Reassessment, first complete at least one Routine Initial Assessment.</p>
+            </div>
+        </template>
+
         <template if:true={hasViolations}>
             <div style="display:flex; justify-content:flex-end; align-items:center; gap:0.75rem;" class="slds-p-bottom_x-small">
                 <span class="slds-text-body_small slds-text-color_weak">{totalCountLabel}</span>
@@ -27,11 +35,12 @@
                                 <thead>
                                     <tr class="slds-line-height_reset slds-text-title_caps">
                                         <th scope="col" style="width:60px;"><div class="slds-truncate" title="Select">Select</div></th>
-                                        <th scope="col" style="width:120px;"><div class="slds-truncate" title="Violation Name">Violation Name</div></th>
-                                        <th scope="col" style="width:110px;"><div class="slds-truncate" title="Regulatory Code">Regulatory Code</div></th>
+                                        <th scope="col" style="width:110px;"><div class="slds-truncate" title="Violation Name">Violation Name</div></th>
+                                        <th scope="col" style="width:100px;"><div class="slds-truncate" title="Regulatory Code">Regulatory Code</div></th>
                                         <th scope="col"><div class="slds-truncate" title="Inspection Question">Inspection Question</div></th>
-                                        <th scope="col" style="width:220px;"><div class="slds-truncate" title="Scope">Scope</div></th>
-                                        <th scope="col" style="width:280px;"><div class="slds-truncate" title="Severity">Severity</div></th>
+                                        <th scope="col" style="width:190px;"><div class="slds-truncate" title="Scope">Scope</div></th>
+                                        <th scope="col" style="width:240px;"><div class="slds-truncate" title="Severity">Severity</div></th>
+                                        <th scope="col" style="width:260px;"><div class="slds-truncate" title="Comments">Comments</div></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -69,6 +78,9 @@
                                                     </select>
                                                 </div>
                                             </td>
+                                            <td>
+                                                <lightning-textarea variant="label-hidden" data-id={violation.id} data-field="comments" value={violation.comments} disabled={violation.commentsDisabled} max-length="255" placeholder="Enter comments (max 255 characters)" onchange={handleValueChange}></lightning-textarea>
+                                            </td>
                                         </tr>
                                     </template>
                                 </tbody>
@@ -79,21 +91,19 @@
             </template>
         </template>
 
-        <template if:false={hasViolations}>
-            <template if:false={isLoading}>
-                <div class="slds-illustration slds-illustration_small slds-p-around_medium slds-text-align_center">
-                    <lightning-icon icon-name="utility:success" size="medium" variant="success" class="slds-m-bottom_small"></lightning-icon>
-                    <p class="slds-text-heading_small slds-text-color_success">No open violations identified</p>
-                    <p class="slds-text-body_small slds-text-color_weak">No open violations were found for the selected inspection. Click the Next button for Part B.</p>
-                </div>
-            </template>
+        <template if:true={showNoViolationsMessage}>
+            <div class="slds-illustration slds-illustration_small slds-p-around_medium slds-text-align_center">
+                <lightning-icon icon-name="utility:success" size="medium" variant="success" class="slds-m-bottom_small"></lightning-icon>
+                <p class="slds-text-heading_small slds-text-color_success">No open violations identified</p>
+                <p class="slds-text-body_small slds-text-color_weak">No open violations were found for the selected inspection. Click the Next button for Part B.</p>
+            </div>
         </template>
 
         <template if:true={showValidationError}>
             <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error slds-m-top_small" role="alert">
                 <span class="slds-assistive-text">Error</span>
                 <lightning-icon icon-name="utility:error" size="x-small" variant="inverse" class="slds-m-right_x-small"></lightning-icon>
-                Scope and Severity must be selected for every checked violation before proceeding.
+                Scope and Severity must be entered for every checked violation before proceeding.
             </div>
         </template>
     </div>
