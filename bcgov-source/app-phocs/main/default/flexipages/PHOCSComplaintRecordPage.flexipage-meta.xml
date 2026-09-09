@@ -38,6 +38,58 @@
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
+                        <valueListItems>
+                            <value>Case.PHOCSpublishToPDS</value>
+                            <visibilityRule>
+                                <booleanFilter>1 AND 4 AND (2 OR 3)</booleanFilter>
+                                <criteria>
+                                    <leftValue>{!Record.RecordType.DeveloperName}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>PHOCSComplaint</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Topic__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Child Care</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Topic__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Residential Care</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Disclose_to_Public__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>false</rightValue>
+                                </criteria>
+                            </visibilityRule>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Case.PHOCSUnpublishToPDS</value>
+                            <visibilityRule>
+                                <booleanFilter>1 AND 4 AND (2 OR 3)</booleanFilter>
+                                <criteria>
+                                    <leftValue>{!Record.RecordType.DeveloperName}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>PHOCSComplaint</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Topic__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Child Care</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Topic__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Residential Care</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Disclose_to_Public__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>true</rightValue>
+                                </criteria>
+                            </visibilityRule>
+                        </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
@@ -140,10 +192,10 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.CreatedDate</fieldItem>
-                <identifier>RecordCreatedDateField</identifier>
+                <fieldItem>Record.Date_Received__c</fieldItem>
+                <identifier>RecordDate_Received_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -198,6 +250,26 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.Priority</fieldItem>
                 <identifier>RecordPriorityField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.IsSubstantiated__c</fieldItem>
+                <identifier>RecordIsSubstantiated_cField2</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Date_Substantiated__c</fieldItem>
+                <identifier>RecordDate_Substantiated_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -828,8 +900,60 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
+                <fieldItem>Record.Disclose_to_Public__c</fieldItem>
+                <identifier>RecordDisclose_to_Public_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-2ebf00d3-01ed-4d88-a475-8b91c0acb861</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <name>Facet-e44bd0bd-0a3a-4e2e-86c2-a9d9e13bf415</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-2ebf00d3-01ed-4d88-a475-8b91c0acb861</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column17</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-e44bd0bd-0a3a-4e2e-86c2-a9d9e13bf415</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column18</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-23da0be5-fbc2-488b-9aa8-6d89b8eb4dc8</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.CreatedById</fieldItem>
                 <identifier>RecordCreatedByIdField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.CreatedDate</fieldItem>
+                <identifier>RecordCreatedDateField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-3a867f36-f253-476d-a8e4-fc1af4ed08dc</name>
@@ -1043,6 +1167,42 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection3</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>columns</name>
+                    <value>Facet-23da0be5-fbc2-488b-9aa8-6d89b8eb4dc8</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>horizontalAlignment</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Web Posting Information</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:fieldSection</componentName>
+                <identifier>flexipage_fieldSection10</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 AND (2 OR 3)</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.RecordType.DeveloperName}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>PHOCSComplaint</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Topic__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Child Care</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Topic__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Residential Care</rightValue>
+                    </criteria>
+                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <itemInstances>
