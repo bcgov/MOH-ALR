@@ -31,7 +31,7 @@ public with sharing class PHOCSCCFLViolationAssessmentController {
             List<RegulatoryCodeViolation> violations = [SELECT Id, RegulatoryCode.Name, RegulatoryCode.Description, Name, Scope__c, Severity__c,
                                                         InspectionAssmntInd.AssessmentIndDefinition.Name, InspectionAssmntInd.AssessmentTask.Name
                                                         FROM RegulatoryCodeViolation WHERE InspectionId = :inspectionId AND Status = 'Open' 
-                                                        AND IsChildViolation__c = false ORDER BY InspectionAssmntInd.AssessmentTask.Name];
+                                                        AND IsChildViolation__c = false AND InspectionAssmntInd.AssessmentTask.Name != 'Operating or advertising without a licence'];
             
             List<ViolationWrapper> results = new List<ViolationWrapper>();
             
@@ -90,7 +90,8 @@ public with sharing class PHOCSCCFLViolationAssessmentController {
                                                                      InspectionAssmntInd.AssessmentIndDefinitionId, InspectionAssmntInd.AssessmentIndDefinition.Name,
                                                                      InspectionAssmntInd.AssessmentTaskId, InspectionAssmntInd.AssessmentTask.Name,
                                                                      InspectionAssmntInd.AssessmentTask.AssessmentTaskDefinitionId FROM RegulatoryCodeViolation
-                                                                     WHERE InspectionId = :responseContextId AND IsChildViolation__c = false AND Status = 'Open'];
+                                                                     WHERE InspectionId = :responseContextId AND IsChildViolation__c = false AND Status = 'Open'
+                                                                     AND InspectionAssmntInd.AssessmentTask.Name != 'Operating or advertising without a licence'];
                 
                 for (RegulatoryCodeViolation violation : completedViolations) {
                     if (violation.InspectionAssmntInd == null || violation.InspectionAssmntInd.AssessmentIndDefinitionId == null || violation.InspectionAssmntInd.AssessmentTask == null || violation.InspectionAssmntInd.AssessmentTask.AssessmentTaskDefinitionId == null) {
@@ -105,7 +106,8 @@ public with sharing class PHOCSCCFLViolationAssessmentController {
                                                         InspectionAssmntInd.AssessmentIndDefinitionId, InspectionAssmntInd.AssessmentIndDefinition.Name,
                                                         InspectionAssmntInd.AssessmentTaskId, InspectionAssmntInd.AssessmentTask.Name, 
                                                         InspectionAssmntInd.AssessmentTask.AssessmentTaskDefinitionId FROM RegulatoryCodeViolation 
-                                                        WHERE InspectionId = :inspectionId AND Status = 'Open' AND IsChildViolation__c = false ORDER BY InspectionAssmntInd.AssessmentTask.Name];
+                                                        WHERE InspectionId = :inspectionId AND Status = 'Open' AND IsChildViolation__c = false 
+                                                        AND InspectionAssmntInd.AssessmentTask.Name != 'Operating or advertising without a licence'];
             
             for (RegulatoryCodeViolation violation : violations) {
                 String violationKey = null;
