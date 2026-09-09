@@ -6,13 +6,14 @@
     <errorConditionFormula>AND(
     NOT($Permission.EHISBypassValidationRuleCustomPermission),
     $Profile.Name &lt;&gt; &apos;System Administrator&apos;,
+    NOT(ISBLANK(AccountId)),
     OR(
         RecordType.DeveloperName = &apos;PHOCSComplaint&apos;,
         RecordType.DeveloperName = &apos;PHOCSReportableIncident&apos;
     ),
     OR(
-        ISPICKVAL(Topic__c, "Child Care"),
-        ISPICKVAL(Topic__c, "Residential Care")
+        ISPICKVAL(Topic__c, &quot;Child Care&quot;),
+        ISPICKVAL(Topic__c, &quot;Residential Care&quot;)
     ),
     NOT(
         OR(
