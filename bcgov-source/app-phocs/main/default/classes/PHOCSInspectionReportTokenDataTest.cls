@@ -12,6 +12,8 @@ public class PHOCSInspectionReportTokenDataTest {
         'Food is stored in a manner that increases the risk of cross-contamination.';
     private static final String Q_CHECKLIST_PARENT = 'Education topics discussed';
     private static final String Q_CHECKLIST_ITEM = 'Second-hand smoke exposure';
+    private static final String Q_COMPLIANT_OBSERVATION = 'Observation recorded on a compliant question';
+    private static final String Q_CHECKLIST_PARENT_NO = 'Education topics not discussed';
 
     @testSetup
     static void setupData() {
@@ -147,13 +149,15 @@ public class PHOCSInspectionReportTokenDataTest {
         AssessmentIndicatorDefinition hygiene = indicatorDef(Q_HYGIENE, null, null);
         AssessmentIndicatorDefinition pests = indicatorDef(Q_PESTS, null, null);
         AssessmentIndicatorDefinition checklistParent = indicatorDef(Q_CHECKLIST_PARENT, null, 'Checklist');
+        AssessmentIndicatorDefinition checklistParentNo = indicatorDef(Q_CHECKLIST_PARENT_NO, null, 'Checklist');
         insert new List<AssessmentIndicatorDefinition>{
-            water, sanitary, equipment, hygiene, pests, checklistParent
+            water, sanitary, equipment, hygiene, pests, checklistParent, checklistParentNo
         };
 
         AssessmentIndicatorDefinition observation = indicatorDef(Q_OBSERVATION, sanitary.Id, null);
         AssessmentIndicatorDefinition checklistItem = indicatorDef(Q_CHECKLIST_ITEM, checklistParent.Id, null);
-        insert new List<AssessmentIndicatorDefinition>{ observation, checklistItem };
+        AssessmentIndicatorDefinition compliantObservation = indicatorDef(Q_COMPLIANT_OBSERVATION, water.Id, null);
+        insert new List<AssessmentIndicatorDefinition>{ observation, checklistItem, compliantObservation };
 
         // The junction rows ARE the question order; one list insert fixes it.
         insert new List<AssessmentTaskIndDefinition>{
@@ -164,22 +168,26 @@ public class PHOCSInspectionReportTokenDataTest {
             junction(foodTaskDef.Id, observation.Id, 5),
             junction(foodTaskDef.Id, checklistParent.Id, 6),
             junction(foodTaskDef.Id, checklistItem.Id, 7),
+            junction(foodTaskDef.Id, compliantObservation.Id, 8),
             junction(premisesTaskDef.Id, pests.Id, 1),
             junction(tobaccoTaskDef.Id, checklistParent.Id, 1),
-            junction(tobaccoTaskDef.Id, checklistItem.Id, 2)
+            junction(tobaccoTaskDef.Id, checklistItem.Id, 2),
+            junction(tobaccoTaskDef.Id, checklistParentNo.Id, 3)
         };
 
         insert new List<InspectionAssessmentInd>{
-            response(foodTask.Id, water.Id, 'Compliant'),
+            responseWithDetail(foodTask.Id, water.Id, 'Compliant'),
             responseWithDetail(foodTask.Id, sanitary.Id, 'PHOCSNonCompliant'),
             response(foodTask.Id, equipment.Id, 'N/S (Not Assessed)'),
             response(foodTask.Id, hygiene.Id, 'N/A (Not Applicable)'),
             ticked(foodTask.Id, observation.Id),
+            ticked(foodTask.Id, compliantObservation.Id),
             response(foodTask.Id, checklistParent.Id, 'Compliant'),
             ticked(foodTask.Id, checklistItem.Id),
             response(premisesTask.Id, pests.Id, 'Compliant'),
             response(tobaccoTask.Id, checklistParent.Id, 'Compliant'),
-            ticked(tobaccoTask.Id, checklistItem.Id)
+            ticked(tobaccoTask.Id, checklistItem.Id),
+            response(tobaccoTask.Id, checklistParentNo.Id, 'PHOCSNonCompliant')
         };
     }
 
@@ -437,6 +445,41 @@ public class PHOCSInspectionReportTokenDataTest {
         System.assertEquals(1, observations.size(),
             'Only the ordinary observation attaches - the ticked checklist item must not');
         System.assertEquals(Q_OBSERVATION, observations[0]);
+
+        System.assertEquals('Needs correction', nonCompliant.get('comments'),
+            'Suppression applies to Compliant rows only - Non Compliant keeps its detail');
+    }
+
+    @isTest
+    static void testCompliantRowShowsQuestionAndStatusOnly() {
+        Id visitId = foodVisitId();
+
+        Test.startTest();
+        Map<String, Object> tokens = runProvider(visitId);
+        Test.stopTest();
+
+        Map<String, Object> category = categoryNamed(tokens, 'Food Sources and Protection');
+        Map<String, Object> compliant;
+        for (Object o : (List<Object>) category.get('questions')) {
+            Map<String, Object> q = (Map<String, Object>) o;
+            if (Q_WATER.equals(q.get('question'))) {
+                compliant = q;
+            }
+        }
+        System.assertNotEquals(null, compliant, 'The compliant question should still be listed');
+
+        System.assertEquals('Compliant', compliant.get('complianceStatus'));
+
+        // It carries comments, a corrective action, a due date and an observation, and none of
+        // them may reach the document.
+        System.assertEquals(false, compliant.get('IF_showObservations'));
+        System.assertEquals(0, ((List<String>) compliant.get('cannedComments')).size());
+        System.assertEquals(false, compliant.get('IF_showComments'));
+        System.assertEquals(null, compliant.get('comments'));
+        System.assertEquals(false, compliant.get('IF_showAction'));
+        System.assertEquals(null, compliant.get('correctiveAction'));
+        System.assertEquals(false, compliant.get('IF_showDueDate'));
+        System.assertEquals(null, compliant.get('complianceDueDate'));
     }
 
     @isTest
@@ -471,7 +514,7 @@ public class PHOCSInspectionReportTokenDataTest {
 
         System.assertEquals(false, tokens.get('IF_showEducationChecklist'),
             'Food facility must not show the T&V education checklist');
-        System.assertEquals(new List<String>(), (List<String>) tokens.get('educationChecklist'));
+        System.assertEquals(0, ((List<Object>) tokens.get('educationChecklist')).size());
     }
 
     @isTest
@@ -483,11 +526,24 @@ public class PHOCSInspectionReportTokenDataTest {
         Test.stopTest();
 
         System.assertEquals(true, tokens.get('IF_showEducationChecklist'));
+
+        // The section repeats per Checklist question, each with its own items beneath it.
+        List<Object> checklist = (List<Object>) tokens.get('educationChecklist');
+        System.assertEquals(1, checklist.size(), 'One Checklist question answered Compliant');
+
+        Map<String, Object> entry = (Map<String, Object>) checklist[0];
+        System.assertEquals(Q_CHECKLIST_PARENT, entry.get('question'));
+        System.assertEquals(true, entry.get('IF_showChecklistItems'));
         System.assertEquals(
             new List<String>{ Q_CHECKLIST_ITEM },
-            (List<String>) tokens.get('educationChecklist'),
-            'The ticked items of a Checklist parent make up the section'
+            (List<String>) entry.get('cannedComments'),
+            'Ticked items sit under the parent question they belong to'
         );
+
+        for (Object o : checklist) {
+            System.assertNotEquals(Q_CHECKLIST_PARENT_NO, ((Map<String, Object>) o).get('question'),
+                'Only Checklist questions answered Compliant belong in the section');
+        }
 
         System.assertEquals(0, ((List<Object>) tokens.get('findings')).size());
         System.assertEquals(false, tokens.get('InspectionFindings'));

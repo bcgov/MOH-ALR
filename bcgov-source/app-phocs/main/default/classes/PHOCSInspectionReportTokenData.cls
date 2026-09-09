@@ -18,6 +18,8 @@ global without sharing class PHOCSInspectionReportTokenData implements omnistudi
 
     private static final String QUESTION_TYPE_CHECKLIST = 'Checklist';
 
+    private static final String RESULT_COMPLIANT = 'Compliant';
+
     private static final Map<String, String> RESULT_LABELS = new Map<String, String>{
         'PHOCSNonCompliant'    => 'Non Compliant',
         'Compliant'            => 'Compliant',
@@ -351,6 +353,7 @@ global without sharing class PHOCSInspectionReportTokenData implements omnistudi
 
             String statusLabel = RESULT_LABELS.containsKey(rec.Result) ? RESULT_LABELS.get(rec.Result) : rec.Result;
             Boolean isNonCompliant = 'PHOCSNonCompliant'.equals(rec.Result);
+            Boolean isCompliant = RESULT_COMPLIANT.equals(rec.Result);
 
             RegulatoryCodeViolation violation = violationByQuestion.get(rec.Id);
 
@@ -368,6 +371,11 @@ global without sharing class PHOCSInspectionReportTokenData implements omnistudi
                 correctedDuringInspection = correctedDuringInspection || violation.Corrected_During_Inspection__c;
             }
 
+            List<String> shownObservations = isCompliant ? new List<String>() : observations;
+            String shownComments = isCompliant ? null : rec.PHOCSInspectionComments__c;
+            String shownAction = isCompliant ? null : correctiveAction;
+            Datetime shownDueDate = isCompliant ? null : complianceDueDate;
+
             Map<String, Object> question = new Map<String, Object>();
             question.put('question', rec.AssessmentIndDefinition.Name);
             question.put('complianceStatus', statusLabel);
@@ -376,14 +384,14 @@ global without sharing class PHOCSInspectionReportTokenData implements omnistudi
             question.put('IF_isNonCompliant', isNonCompliant);
             question.put('IF_statusRed', !correctedDuringInspection && isNonCompliant);
             question.put('IF_statusNormal', !correctedDuringInspection && !isNonCompliant);
-            question.put('cannedComments', observations);
-            question.put('IF_showObservations', !observations.isEmpty());
-            question.put('comments', rec.PHOCSInspectionComments__c);
-            question.put('IF_showComments', String.isNotBlank(rec.PHOCSInspectionComments__c));
-            question.put('correctiveAction', correctiveAction);
-            question.put('IF_showAction', String.isNotBlank(correctiveAction));
-            question.put('complianceDueDate', formatShortDate(dateOf(complianceDueDate)));
-            question.put('IF_showDueDate', complianceDueDate != null);
+            question.put('cannedComments', shownObservations);
+            question.put('IF_showObservations', !shownObservations.isEmpty());
+            question.put('comments', shownComments);
+            question.put('IF_showComments', String.isNotBlank(shownComments));
+            question.put('correctiveAction', shownAction);
+            question.put('IF_showAction', String.isNotBlank(shownAction));
+            question.put('complianceDueDate', formatShortDate(dateOf(shownDueDate)));
+            question.put('IF_showDueDate', shownDueDate != null);
 
             ((List<Object>) category.get('questions')).add(question);
         }
@@ -392,40 +400,72 @@ global without sharing class PHOCSInspectionReportTokenData implements omnistudi
         tokens.put('IF_showFindings', !findings.isEmpty());
         tokens.put('InspectionFindings', !findings.isEmpty());
     }
-
-    // The education checklist is a standalone section, never a row in the findings table.
     private void addEducationChecklist(Map<String, Object> tokens, Id visitId, String facilityType, Map<String, Decimal> questionOrders) {
-        List<String> checklist = new List<String>();
+        List<Object> checklist = new List<Object>();
         if (TOBACCO_TYPE.equals(facilityType)) {
-            // Items are ticked CHILDREN of a Checklist parent. InspectionQuestiontype__c sits on the
-            // parent, so the filter has to reach it through PHOCSParentId__r.
-            List<OrderedIndicator> items = new List<OrderedIndicator>();
-            for (InspectionAssessmentInd rec : [
-                SELECT AssessmentIndDefinitionId, AssessmentTask.SequenceNumber,
-                       AssessmentTask.AssessmentTaskDefinitionId, AssessmentIndDefinition.Name
+            Map<String, List<OrderedIndicator>> itemsByParent = new Map<String, List<OrderedIndicator>>();
+            for (InspectionAssessmentInd child : [
+                SELECT AssessmentTaskId, AssessmentIndDefinitionId, AssessmentTask.AssessmentTaskDefinitionId,
+                       AssessmentIndDefinition.PHOCSParentId__c, AssessmentIndDefinition.Name
                 FROM InspectionAssessmentInd
                 WHERE AssessmentTask.ParentId = :visitId
                   AND AssessmentIndDefinition.PHOCSParentId__c != null
                   AND PHOCSCheckboxResponse__c = true
                   AND AssessmentIndDefinition.PHOCSParentId__r.InspectionQuestiontype__c = :QUESTION_TYPE_CHECKLIST
             ]) {
-                if (String.isNotBlank(rec.AssessmentIndDefinition.Name)) {
-                    items.add(new OrderedIndicator(
-                        rec,
-                        rec.AssessmentTask == null ? null : rec.AssessmentTask.SequenceNumber,
-                        questionOrderOf(questionOrders, rec)
-                    ));
+                if (String.isBlank(child.AssessmentIndDefinition.Name)) {
+                    continue;
                 }
+                String key = child.AssessmentTaskId + '_' + child.AssessmentIndDefinition.PHOCSParentId__c;
+                if (!itemsByParent.containsKey(key)) {
+                    itemsByParent.put(key, new List<OrderedIndicator>());
+                }
+                itemsByParent.get(key).add(new OrderedIndicator(child, null, questionOrderOf(questionOrders, child)));
             }
-            items.sort();
-            for (OrderedIndicator item : items) {
-                checklist.add(item.name);
+            for (List<OrderedIndicator> items : itemsByParent.values()) {
+                items.sort();
+            }
+
+            List<OrderedIndicator> parents = new List<OrderedIndicator>();
+            for (InspectionAssessmentInd rec : [
+                SELECT AssessmentTaskId, AssessmentIndDefinitionId, AssessmentTask.SequenceNumber,
+                       AssessmentTask.AssessmentTaskDefinitionId, AssessmentIndDefinition.Name
+                FROM InspectionAssessmentInd
+                WHERE AssessmentTask.ParentId = :visitId
+                  AND AssessmentIndDefinition.PHOCSParentId__c = null
+                  AND AssessmentIndDefinition.InspectionQuestiontype__c = :QUESTION_TYPE_CHECKLIST
+                  AND Result = :RESULT_COMPLIANT
+            ]) {
+                parents.add(new OrderedIndicator(
+                    rec,
+                    rec.AssessmentTask == null ? null : rec.AssessmentTask.SequenceNumber,
+                    questionOrderOf(questionOrders, rec)
+                ));
+            }
+            parents.sort();
+
+            for (OrderedIndicator parent : parents) {
+                InspectionAssessmentInd rec = parent.indicator;
+                String key = rec.AssessmentTaskId + '_' + rec.AssessmentIndDefinitionId;
+
+                List<String> items = new List<String>();
+                if (itemsByParent.containsKey(key)) {
+                    for (OrderedIndicator item : itemsByParent.get(key)) {
+                        items.add(item.name);
+                    }
+                }
+
+                Map<String, Object> entry = new Map<String, Object>();
+                entry.put('question', parent.name);
+                entry.put('cannedComments', items);
+                // "Hide entire line if blank" - suppresses the "Checklist item(s):" label as well.
+                entry.put('IF_showChecklistItems', !items.isEmpty());
+                checklist.add(entry);
             }
         }
         tokens.put('educationChecklist', checklist);
         tokens.put('IF_showEducationChecklist', !checklist.isEmpty());
     }
-
 
     private void addActionsRequired(Map<String, Object> tokens, Visit visitRec, String inspectionType, String facilityType) {
         List<String> lomho = new List<String>();
@@ -481,7 +521,6 @@ global without sharing class PHOCSInspectionReportTokenData implements omnistudi
         }
         return parts;
     }
-
 
     private static Map<String, String> buildAddress(Account acc) {
         Map<String, String> address = new Map<String, String>();

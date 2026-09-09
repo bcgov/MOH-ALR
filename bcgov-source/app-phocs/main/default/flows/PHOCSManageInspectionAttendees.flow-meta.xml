@@ -1,39 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <name>Navigate_to_page</name>
-        <label>Navigate to page</label>
+        <description>LWC to refresh page data as a workaround because Navigation to Record or Page elements cannot auto navigate to the current Inspection with the recently added/removed Inspection Attendees.</description>
+        <name>Refresh_Page_Data</name>
+        <label>Refresh Page Data</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <actionName>flowruntime:openAPage</actionName>
+        <actionName>c:refreshPageDataAction</actionName>
         <actionType>lwcComponent</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
-        <inputParameters>
-            <name>pageType</name>
-            <value>
-                <stringValue>RecordPage</stringValue>
-            </value>
-        </inputParameters>
         <inputParameters>
             <name>recordId</name>
             <value>
                 <elementReference>recordId</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
-        <inputParameters>
-            <name>objectName</name>
-            <value>
-                <stringValue>Visit</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>pageLocation</name>
-            <value>
-                <stringValue>BrowserTab</stringValue>
-            </value>
-        </inputParameters>
-        <nameSegment>flowruntime:openAPage</nameSegment>
+        <nameSegment>c:refreshPageDataAction</nameSegment>
         <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
     </actionCalls>
     <apiVersion>67.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
@@ -319,7 +304,8 @@
             <label>Not Exist</label>
         </rules>
     </decisions>
-    <description>Add or remove Inspection Attendees (Visited Party) on Visit object (EHIS-2706)</description>
+    <description>Add or remove Inspection Attendees (Visited Party) on Visit object (EHIS-2706)
+EHIS-4811: use LWC to refresh page data as a workaround</description>
     <environments>Default</environments>
     <interviewLabel>PHOCS Manage Inspection Attendees {!$Flow.CurrentDateTime}</interviewLabel>
     <label>PHOCS Manage Inspection Attendees</label>
@@ -839,7 +825,7 @@
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <connector>
-            <targetReference>Navigate_to_page</targetReference>
+            <targetReference>Refresh_Page_Data</targetReference>
         </connector>
         <fields>
             <name>Confirmation</name>
