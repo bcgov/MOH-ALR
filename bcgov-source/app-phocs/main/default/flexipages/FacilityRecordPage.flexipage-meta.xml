@@ -331,7 +331,7 @@
                 <visibilityRule>
                     <booleanFilter>(1 AND 2) OR (3 AND 4)</booleanFilter>
                     <criteria><leftValue>{!Record.Type}</leftValue><operator>EQUAL</operator><rightValue>Food</rightValue></criteria>
-                    <criteria><leftValue>{!Record.CategoryL1__c}</leftValue><operator>NE</operator><rightValue>Temporary Food Premises</rightValue></criteria>
+                    <criteria><leftValue>{!Record.CategoryL1__c}</leftValue><operator>NE</operator><rightValue>Temporary food premises</rightValue></criteria>
                     <criteria><leftValue>{!Record.Type}</leftValue><operator>EQUAL</operator><rightValue>Recreational Water</rightValue></criteria>
                     <criteria><leftValue>{!Record.CategoryL1__c}</leftValue><operator>NE</operator><rightValue>Beach</rightValue></criteria>
                 </visibilityRule>
@@ -343,7 +343,12 @@
                 <fieldItem>Record.PremiseRole__c</fieldItem>
                 <identifier>RecordPremiseRole_cField</identifier>
                 <visibilityRule>
+                    <booleanFilter>1 AND ((2 AND 3) OR (4 AND 5))</booleanFilter>
                     <criteria><leftValue>{!Record.MultiplePremiseFacility__c}</leftValue><operator>EQUAL</operator><rightValue>true</rightValue></criteria>
+                    <criteria><leftValue>{!Record.Type}</leftValue><operator>EQUAL</operator><rightValue>Food</rightValue></criteria>
+                    <criteria><leftValue>{!Record.CategoryL1__c}</leftValue><operator>NE</operator><rightValue>Temporary food premises</rightValue></criteria>
+                    <criteria><leftValue>{!Record.Type}</leftValue><operator>EQUAL</operator><rightValue>Recreational Water</rightValue></criteria>
+                    <criteria><leftValue>{!Record.CategoryL1__c}</leftValue><operator>NE</operator><rightValue>Beach</rightValue></criteria>
                 </visibilityRule>
             </fieldInstance>
         </itemInstances>
