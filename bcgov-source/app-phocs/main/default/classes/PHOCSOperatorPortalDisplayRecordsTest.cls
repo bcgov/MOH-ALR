@@ -87,7 +87,7 @@ private class PHOCSOperatorPortalDisplayRecordsTest {
         System.assertEquals('Wrapper Facility', facilityResult.get('Name'));
 
         RegulatoryTrxnFee fee = [
-            SELECT TotalFeeAmount, OutstandingFeeAmount__c, DueDate
+            SELECT TotalFeeAmount, OutstandingFeeAmount__c, DueDate, Status__c
             FROM RegulatoryTrxnFee
             LIMIT 1
         ];

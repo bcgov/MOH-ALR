@@ -84,7 +84,8 @@ public with sharing class PHOCSOperatorPortalDisplayRecords{
 
         Map<String, SObjectWrapper> wrapperRegistry = new Map<String, SObjectWrapper>{
             'BusinessLicenseApplication' => new BusinessLicenseApplicationListWrapper(),
-            'PortalFacilityBLAList' => new PortalFacilityBLAListWrapper()
+            'PortalFacilityBLAList' => new PortalFacilityBLAListWrapper(),
+            'RegulatoryTrxnFee' => new RegulatoryTransactionFeeListWrapper()
         };
         
         if (recordId == null) {
@@ -186,6 +187,18 @@ public with sharing class PHOCSOperatorPortalDisplayRecords{
 
         return '$' + formattedAmount;
     }
+
+    private static String getPicklistLabel(Schema.SObjectField field, String value) {
+        if (String.isBlank(value)) {
+            return '';
+        }
+        for (Schema.PicklistEntry entry : field.getDescribe().getPicklistValues()) {
+            if (entry.getValue() == value) {
+                return entry.getLabel();
+            }
+        }
+        return value;
+    }
 	
     private static string getBLAStatusSummary(string status){
         Map<string, string> statusSummary = new Map<string,string>{
@@ -236,6 +249,23 @@ public with sharing class PHOCSOperatorPortalDisplayRecords{
             }
             result.put('TotalFeeAmountFormatted', formatCurrency((Decimal) record.get('TotalFeeAmount')));
             result.put('OutstandingFeeAmountFormatted', formatCurrency((Decimal) record.get('OutstandingFeeAmount__c')));
+            result.put('StatusLabel', getPicklistLabel(
+                RegulatoryTrxnFee.Status__c,
+                (String) record.get('Status__c')
+            ));
+            return result;
+        }
+    }
+
+    public class RegulatoryTransactionFeeListWrapper implements SObjectWrapper {
+        public Object wrap(SObject record) {
+            Map<String, Object> result = (Map<String, Object>) JSON.deserializeUntyped(
+                JSON.serialize(record)
+            );
+            result.put('StatusLabel', getPicklistLabel(
+                RegulatoryTrxnFee.Status__c,
+                (String) record.get('Status__c')
+            ));
             return result;
         }
     }
