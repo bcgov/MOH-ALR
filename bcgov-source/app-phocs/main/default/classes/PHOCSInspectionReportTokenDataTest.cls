@@ -69,7 +69,7 @@ public class PHOCSInspectionReportTokenDataTest {
 
         List<AccountContactRelation> toUpsert = new List<AccountContactRelation>();
         toUpsert.add(relationFor(byContact, acc.Id, operator.Id, 'Operator', false));
-        toUpsert.add(relationFor(byContact, acc.Id, owner.Id, 'Owner Contact', true));
+        toUpsert.add(relationFor(byContact, acc.Id, owner.Id, 'Owner', true));
         upsert toUpsert;
 
         ContactPointAddress cpa = new ContactPointAddress(
