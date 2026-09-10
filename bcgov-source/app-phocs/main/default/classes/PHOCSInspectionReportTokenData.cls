@@ -164,7 +164,7 @@ global without sharing class PHOCSInspectionReportTokenData implements omnistudi
                 manager = acr.Contact;
             }
 
-            if (primaryOwner == null && roles.contains('Owner Contact') && acr.PrimaryContact__c == true) {
+            if (primaryOwner == null && roles.contains('Owner') && acr.PrimaryContact__c == true) {
                 primaryOwner = acr.Contact;
             }
         }
