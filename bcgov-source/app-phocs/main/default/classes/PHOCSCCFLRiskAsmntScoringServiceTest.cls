@@ -4,10 +4,12 @@
 * @Description: Test class for PHOCSCCFLRiskAssessmentScoringService.
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]
 *               25 Aug - PHOCS-4817         -  Deepak      - test class for CCFL RAT remote action
+*               02 Sep - PHOCS-4817         -  Deepak      - Added facilityHA to buildArgs, IsActive__c = true
+*               to every dynamic discovery query, and coverage for Rating being filtered by Health Authority
+*               while Risk Matrix/Score/Interval Score are not.
 ***********************************************************************************************/
 @isTest
-public class PHOCSCCFLRiskAsmntScoringServiceTest {
-    
+public class PHOCSCCFLRiskAsmntScoringServiceTest {    
     private static final String ACTION_CALCULATE_SCORE = 'calculateScore';
     
     /**
@@ -23,7 +25,7 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
         
         Test.startTest();
         try {
-            service.call(null, buildArgs('Child Care', new List<Object>(), new Map<String, Object>()));
+            service.call(null, buildArgs('Child Care', null, new List<Object>(), new Map<String, Object>()));
         } catch (AuraHandledException e) {
             exceptionThrown = true;
             Assert.areEqual('Callable action is required.', e.getMessage(), 'Exception message should flag the missing action');
@@ -69,7 +71,7 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
         
         Test.startTest();
         try {
-            service.call('unknownAction', buildArgs('Child Care', new List<Object>(), new Map<String, Object>()));
+            service.call('unknownAction', buildArgs('Child Care', null, new List<Object>(), new Map<String, Object>()));
         } catch (AuraHandledException e) {
             exceptionThrown = true;
             Assert.areEqual('Unsupported callable action: unknownAction', e.getMessage(), 'Exception message should identify the unsupported action');
@@ -88,7 +90,7 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
     @isTest
     public static void testCalculateScore_MissingFacilityType_ThrowsException() {
         PHOCSCCFLRiskAssessmentScoringService service = new PHOCSCCFLRiskAssessmentScoringService();
-        Map<String, Object> args = buildArgs(null, new List<Object>(), new Map<String, Object>());
+        Map<String, Object> args = buildArgs(null, null, new List<Object>(), new Map<String, Object>());
         Boolean exceptionThrown = false;
         
         Test.startTest();
@@ -136,7 +138,7 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
     @isTest
     public static void testCalculateScore_UnconfiguredFacilityType_ReturnsZeroScores() {
         PHOCSCCFLRiskAssessmentScoringService service = new PHOCSCCFLRiskAssessmentScoringService();
-        Map<String, Object> args = buildArgs('PHOCSTest_NonExistent_ProgramArea_XYZ', new List<Object>(), new Map<String, Object>());
+        Map<String, Object> args = buildArgs('PHOCSTest_NonExistent_ProgramArea_XYZ', 'PHOCSTest_NonExistent_HA_XYZ', new List<Object>(), new Map<String, Object>());
         
         Test.startTest();
         Map<String, Object> result = (Map<String, Object>) service.call(ACTION_CALCULATE_SCORE, args);
@@ -163,6 +165,7 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
         
         Map<String, Object> flatArgs = new Map<String, Object>{
             'facilityType' => 'PHOCSTest_NonExistent_ProgramArea_XYZ',
+                'facilityHA' => 'PHOCSTest_NonExistent_HA_XYZ',
                 'selectedViolations' => new List<Object>(),
                 'PartBThreeYearOperationalHistoryAssessment' => new Map<String, Object>()
                 };
@@ -190,6 +193,7 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
             SELECT ProgramArea__c
             FROM PHOCSRiskAssessmentScoring__mdt
             WHERE AssessmentType__c = 'RiskMatrix'
+            AND IsActive__c = true
             LIMIT 1
         ];
         
@@ -211,7 +215,7 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
         
         Test.startTest();
         try {
-            service.call(ACTION_CALCULATE_SCORE, buildArgs(records[0].ProgramArea__c, violations, new Map<String, Object>()));
+            service.call(ACTION_CALCULATE_SCORE, buildArgs(records[0].ProgramArea__c, null, violations, new Map<String, Object>()));
         } catch (AuraHandledException e) {
             exceptionThrown = true;
             Assert.areEqual('Every selected violation must have both Scope and Severity.', e.getMessage(), 'Exception message should flag the missing Scope');
@@ -229,10 +233,10 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
 */
     @isTest
     public static void testCalculateScore_NonMapViolation_IsSkipped() {
-        String programArea = resolveFullyConfiguredProgramArea();
+        ConfiguredScenario scenario = resolveFullyConfiguredScenario();
         
-        if (programArea == null) {
-            Assert.areEqual(true, programArea == null, 'No fully configured program area is available for this test');
+        if (scenario == null) {
+            Assert.areEqual(true, scenario == null, 'No fully configured program area is available for this test');
             return;
         }
         
@@ -243,7 +247,8 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
         Test.startTest();
         service.calculateScore(
             new Map<String, Object>{
-                'facilityType' => programArea,
+                'facilityType' => scenario.programArea,
+                    'facilityHA' => scenario.facilityHA,
                     'selectedViolations' => violations,
                     'PartBThreeYearOperationalHistoryAssessment' => new Map<String, Object>()
                     },
@@ -272,6 +277,7 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
             SELECT ProgramArea__c
             FROM PHOCSRiskAssessmentScoring__mdt
             WHERE AssessmentType__c = 'RiskMatrix'
+            AND IsActive__c = true
             LIMIT 1
         ];
         
@@ -292,7 +298,7 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
             Test.startTest();
         Map<String, Object> result = (Map<String, Object>) service.call(
             ACTION_CALCULATE_SCORE,
-            buildArgs(records[0].ProgramArea__c, violations, new Map<String, Object>())
+            buildArgs(records[0].ProgramArea__c, null, violations, new Map<String, Object>())
         );
         Test.stopTest();
         
@@ -333,7 +339,7 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
                         Test.startTest();
         Map<String, Object> result = (Map<String, Object>) service.call(
             ACTION_CALCULATE_SCORE,
-            buildArgs(scenario.programArea, violations, partBAnswers)
+            buildArgs(scenario.programArea, null, violations, partBAnswers)
         );
         Test.stopTest();
         
@@ -371,7 +377,7 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
                         Test.startTest();
         Map<String, Object> result = (Map<String, Object>) service.call(
             ACTION_CALCULATE_SCORE,
-            buildArgs(scenario.programArea, violations, partBAnswers)
+            buildArgs(scenario.programArea, null, violations, partBAnswers)
         );
         Test.stopTest();
         
@@ -410,7 +416,7 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
                         Test.startTest();
         Map<String, Object> result = (Map<String, Object>) service.call(
             ACTION_CALCULATE_SCORE,
-            buildArgs(scenario.programArea, violations, partBAnswers)
+            buildArgs(scenario.programArea, null, violations, partBAnswers)
         );
         Test.stopTest();
         
@@ -448,7 +454,7 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
                         Test.startTest();
         Map<String, Object> result = (Map<String, Object>) service.call(
             ACTION_CALCULATE_SCORE,
-            buildArgs(scenario.programArea, violations, partBAnswers)
+            buildArgs(scenario.programArea, null, violations, partBAnswers)
         );
         Test.stopTest();
         
@@ -465,18 +471,19 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
 */
     @isTest
     public static void testCalculateScore_MultipleViolations_SumsMatrixScores() {
-        String programArea = resolveFullyConfiguredProgramArea();
+        ConfiguredScenario scenario = resolveFullyConfiguredScenario();
         
-        if (programArea == null) {
-            Assert.areEqual(true, programArea == null, 'No fully configured program area is available for this test');
+        if (scenario == null) {
+            Assert.areEqual(true, scenario == null, 'No fully configured program area is available for this test');
             return;
         }
         
         List<PHOCSRiskAssessmentScoring__mdt> matrixRecords = [
             SELECT QuestionAPIName__c, ResponseValue__c, Score__c
             FROM PHOCSRiskAssessmentScoring__mdt
-            WHERE ProgramArea__c = :programArea
+            WHERE ProgramArea__c = :scenario.programArea
             AND AssessmentType__c = 'RiskMatrix'
+            AND IsActive__c = true
             AND Score__c != null
             LIMIT 2
         ];
@@ -502,7 +509,7 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
         Test.startTest();
         result = (Map<String, Object>) new PHOCSCCFLRiskAssessmentScoringService().call(
             ACTION_CALCULATE_SCORE,
-            buildArgs(programArea, violations, new Map<String, Object>())
+            buildArgs(scenario.programArea, null, violations, new Map<String, Object>())
         );
         Test.stopTest();
         
@@ -514,23 +521,28 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
     /**
 * @author: Deepak
 * @date: 25 Aug 2026
-* @description: Covers the complete scoring flow.
+* @description: Covers the complete scoring flow, including Rating resolution filtered by the
+*              matching Health Authority.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*                     02 Sep - PHOCS-4817 - Deepak - Now resolves and passes a real facilityHA,
+*                     and filters the expected Rating lookup by that same Health Authority to
+*                     match the service's Rating-only HealthAuthority__c filter.
 */
     @isTest
     public static void testCalculateScore_EndToEnd_ReturnsExpectedTotals() {
-        String programArea = resolveFullyConfiguredProgramArea();
+        ConfiguredScenario scenario = resolveFullyConfiguredScenario();
         
-        if (programArea == null) {
-            Assert.areEqual(true, programArea == null, 'No fully configured program area is available for this test');
+        if (scenario == null) {
+            Assert.areEqual(true, scenario == null, 'No fully configured program area is available for this test');
             return;
         }
         
         List<PHOCSRiskAssessmentScoring__mdt> matrixRecords = [
             SELECT QuestionAPIName__c, ResponseValue__c, Score__c
             FROM PHOCSRiskAssessmentScoring__mdt
-            WHERE ProgramArea__c = :programArea
+            WHERE ProgramArea__c = :scenario.programArea
             AND AssessmentType__c = 'RiskMatrix'
+            AND IsActive__c = true
             AND Score__c != null
             LIMIT 1
         ];
@@ -546,8 +558,9 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
         List<PHOCSRiskAssessmentScoring__mdt> intervalRecords = [
             SELECT LowScore__c, HighScore__c, Score__c
             FROM PHOCSRiskAssessmentScoring__mdt
-            WHERE ProgramArea__c = :programArea
+            WHERE ProgramArea__c = :scenario.programArea
             AND AssessmentType__c = 'IntervalScore'
+            AND IsActive__c = true
         ];
         
         Decimal expectedPartAScore;
@@ -570,8 +583,10 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
         List<PHOCSRiskAssessmentScoring__mdt> ratingRecords = [
             SELECT LowScore__c, HighScore__c, ResponseValue__c, InspectionFrequency__c
             FROM PHOCSRiskAssessmentScoring__mdt
-            WHERE ProgramArea__c = :programArea
+            WHERE ProgramArea__c = :scenario.programArea
             AND AssessmentType__c = 'Rating'
+            AND HealthAuthority__c = :scenario.facilityHA
+            AND IsActive__c = true
         ];
         
         String expectedRiskRating;
@@ -601,7 +616,7 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
         Test.startTest();
         result = (Map<String, Object>) new PHOCSCCFLRiskAssessmentScoringService().call(
             ACTION_CALCULATE_SCORE,
-            buildArgs(programArea, violations, new Map<String, Object>())
+            buildArgs(scenario.programArea, scenario.facilityHA, violations, new Map<String, Object>())
         );
         Test.stopTest();
         
@@ -610,8 +625,62 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
         Assert.areEqual(0, (Decimal) result.get('OutputPartBScore'), 'OutputPartBScore should be zero when no Part B answers are submitted');
         Assert.areEqual(expectedPartAScore, (Decimal) result.get('TotalScore'), 'TotalScore should equal OutputPartAScore');
         Assert.areEqual(expectedPartAScore, (Decimal) result.get('CalculatedScore'), 'CalculatedScore should equal TotalScore');
-        Assert.areEqual(expectedRiskRating, (String) result.get('riskRating'), 'RiskRating should match the configured rating or remain null');
-        Assert.areEqual(expectedInspectionFrequency, (String) result.get('InspectionFrequency'), 'InspectionFrequency should match the configured frequency or remain null');
+        Assert.areEqual(expectedRiskRating, (String) result.get('riskRating'), 'RiskRating should match the configured rating for the matching Health Authority');
+        Assert.areEqual(expectedInspectionFrequency, (String) result.get('InspectionFrequency'), 'InspectionFrequency should match the configured frequency for the matching Health Authority');
+    }
+    
+    /**
+* @author: Deepak
+* @date: 02 Sep 2026
+* @description: Covers the Rating-only Health Authority filter: passing a facilityHA that does
+*              not match any Rating record for the program area should return a null Risk Rating
+*              and Inspection Frequency, while Part A (Risk Matrix -> Interval Score), which is
+*              never filtered by Health Authority, still computes normally.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
+    @isTest
+    public static void testCalculateScore_WrongHealthAuthority_RatingIsNullButPartAStillComputes() {
+        ConfiguredScenario scenario = resolveFullyConfiguredScenario();
+        
+        if (scenario == null) {
+            Assert.areEqual(true, scenario == null, 'No fully configured program area is available for this test');
+            return;
+        }
+        
+        List<PHOCSRiskAssessmentScoring__mdt> matrixRecords = [
+            SELECT QuestionAPIName__c, ResponseValue__c, Score__c
+            FROM PHOCSRiskAssessmentScoring__mdt
+            WHERE ProgramArea__c = :scenario.programArea
+            AND AssessmentType__c = 'RiskMatrix'
+            AND IsActive__c = true
+            AND Score__c != null
+            LIMIT 1
+        ];
+        
+        if (matrixRecords.isEmpty()) {
+            Assert.areEqual(true, matrixRecords.isEmpty(), 'No Risk Matrix record is available');
+            return;
+        }
+        
+        PHOCSRiskAssessmentScoring__mdt matrixRecord = matrixRecords[0];
+        
+        List<Object> violations = new List<Object>{
+            new Map<String, Object>{
+                'severity' => matrixRecord.QuestionAPIName__c,
+                    'scope' => matrixRecord.ResponseValue__c
+                    }
+        };
+            
+            Test.startTest();
+        Map<String, Object> result = (Map<String, Object>) new PHOCSCCFLRiskAssessmentScoringService().call(
+            ACTION_CALCULATE_SCORE,
+            buildArgs(scenario.programArea, 'PHOCSTest_NonExistent_HA_XYZ', violations, new Map<String, Object>())
+        );
+        Test.stopTest();
+        
+        Assert.areEqual(matrixRecord.Score__c, (Decimal) result.get('PartAMatrixScore'), 'Risk Matrix scoring should be unaffected by Health Authority');
+        Assert.isNull(result.get('riskRating'), 'Risk Rating should be null when facilityHA does not match any Rating record');
+        Assert.isNull(result.get('InspectionFrequency'), 'Inspection Frequency should be null when facilityHA does not match any Rating record');
     }
     
     /**
@@ -626,6 +695,7 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
             SELECT ProgramArea__c, QuestionAPIName__c, ResponseValue__c, Score__c
             FROM PHOCSRiskAssessmentScoring__mdt
             WHERE AssessmentType__c = 'RiskMatrix'
+            AND IsActive__c = true
             AND Score__c != null
             LIMIT 50
         ];
@@ -646,6 +716,7 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
             FROM PHOCSRiskAssessmentScoring__mdt
             WHERE ProgramArea__c IN :programAreas
             AND AssessmentType__c = 'IntervalScore'
+            AND IsActive__c = true
         ];
         
         Map<String, List<PHOCSRiskAssessmentScoring__mdt>> intervalsByProgramArea = new Map<String, List<PHOCSRiskAssessmentScoring__mdt>>();
@@ -682,7 +753,7 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
             Test.startTest();
         Map<String, Object> result = (Map<String, Object>) new PHOCSCCFLRiskAssessmentScoringService().call(
             ACTION_CALCULATE_SCORE,
-            buildArgs(selectedMatrixRecord.ProgramArea__c, violations, new Map<String, Object>())
+            buildArgs(selectedMatrixRecord.ProgramArea__c, null, violations, new Map<String, Object>())
         );
         Test.stopTest();
         
@@ -693,14 +764,20 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
     /**
 * @author: Deepak
 * @date: 25 Aug 2026
-* @description: Finds a facility type with RiskMatrix, IntervalScore and Rating metadata.
+* @description: Finds a facility type with active RiskMatrix and IntervalScore metadata, and at
+*              least one active Rating record with a populated Health Authority, returning both
+*              the program area and that Health Authority together.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*                     02 Sep - PHOCS-4817 - Deepak - Added IsActive__c = true to every query and
+*                     now returns the matched Rating record's HealthAuthority__c alongside the
+*                     program area.
 */
-    private static String resolveFullyConfiguredProgramArea() {
+    private static ConfiguredScenario resolveFullyConfiguredScenario() {
         List<PHOCSRiskAssessmentScoring__mdt> riskMatrixRecords = [
             SELECT ProgramArea__c
             FROM PHOCSRiskAssessmentScoring__mdt
             WHERE AssessmentType__c = 'RiskMatrix'
+            AND IsActive__c = true
             AND Score__c != null
         ];
         
@@ -715,7 +792,7 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
         }
         
         List<PHOCSRiskAssessmentScoring__mdt> intervalRecords = [SELECT ProgramArea__c FROM PHOCSRiskAssessmentScoring__mdt
-                                                                 WHERE ProgramArea__c IN :candidateProgramAreas AND AssessmentType__c = 'IntervalScore'];
+                                                                 WHERE ProgramArea__c IN :candidateProgramAreas AND AssessmentType__c = 'IntervalScore' AND IsActive__c = true];
         
         Set<String> programAreasWithInterval = new Set<String>();
         
@@ -723,18 +800,23 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
             programAreasWithInterval.add(record.ProgramArea__c);
         }
         
-        List<PHOCSRiskAssessmentScoring__mdt> ratingRecords = [SELECT ProgramArea__c FROM PHOCSRiskAssessmentScoring__mdt
-                                                               WHERE ProgramArea__c IN :candidateProgramAreas AND AssessmentType__c = 'Rating'];
+        List<PHOCSRiskAssessmentScoring__mdt> ratingRecords = [SELECT ProgramArea__c, HealthAuthority__c FROM PHOCSRiskAssessmentScoring__mdt
+                                                               WHERE ProgramArea__c IN :candidateProgramAreas AND AssessmentType__c = 'Rating' AND IsActive__c = true AND HealthAuthority__c != null];
         
-        Set<String> programAreasWithRating = new Set<String>();
+        Map<String, String> healthAuthorityByProgramArea = new Map<String, String>();
         
         for (PHOCSRiskAssessmentScoring__mdt record : ratingRecords) {
-            programAreasWithRating.add(record.ProgramArea__c);
+            if (!healthAuthorityByProgramArea.containsKey(record.ProgramArea__c)) {
+                healthAuthorityByProgramArea.put(record.ProgramArea__c, record.HealthAuthority__c);
+            }
         }
         
         for (String candidate : candidateProgramAreas) {
-            if (programAreasWithInterval.contains(candidate) && programAreasWithRating.contains(candidate)) {
-                return candidate;
+            if (programAreasWithInterval.contains(candidate) && healthAuthorityByProgramArea.containsKey(candidate)) {
+                ConfiguredScenario scenario = new ConfiguredScenario();
+                scenario.programArea = candidate;
+                scenario.facilityHA = healthAuthorityByProgramArea.get(candidate);
+                return scenario;
             }
         }
         
@@ -745,12 +827,13 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
 * @author: Deepak
 * @date: 25 Aug 2026
 * @description: Resolves a valid Part B scoring record and a valid Risk Matrix record for the same facility type.
-*  @Modification Log: [Date] - [Change Reference] - [Description]
+* @Modification Log: [Date] - [Change Reference] - [Description]
+*                     02 Sep - PHOCS-4817 - Deepak - Added IsActive__c = true to both queries.
 */
     private static PartBScenario resolvePartBScenario() {
         List<PHOCSRiskAssessmentScoring__mdt> scoreRecords = [SELECT ProgramArea__c, QuestionAPIName__c, ResponseValue__c, Score__c
                                                               FROM PHOCSRiskAssessmentScoring__mdt WHERE AssessmentType__c = 'Score'
-                                                              AND QuestionAPIName__c != null AND Score__c != null LIMIT 50];
+                                                              AND IsActive__c = true AND QuestionAPIName__c != null AND Score__c != null LIMIT 50];
         
         if (scoreRecords.isEmpty()) {
             return null;
@@ -763,7 +846,7 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
         
         List<PHOCSRiskAssessmentScoring__mdt> matrixRecords = [SELECT ProgramArea__c, QuestionAPIName__c, ResponseValue__c, Score__c
                                                                FROM PHOCSRiskAssessmentScoring__mdt WHERE ProgramArea__c IN :programAreas
-                                                               AND AssessmentType__c = 'RiskMatrix' AND Score__c != null];
+                                                               AND AssessmentType__c = 'RiskMatrix' AND IsActive__c = true AND Score__c != null];
         
         Map<String, PHOCSRiskAssessmentScoring__mdt> matrixRecordByProgramArea = new Map<String, PHOCSRiskAssessmentScoring__mdt>();
         
@@ -796,9 +879,10 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
 * @date: 25 Aug 2026
 * @description: Builds the Callable argument wrapper.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*                     02 Sep - PHOCS-4817 - Deepak - Added facilityHA parameter.
 */
-    private static Map<String, Object> buildArgs(String facilityType, List<Object> selectedViolations, Map<String, Object> partBAnswers) {
-        Map<String, Object> input = new Map<String, Object>{'facilityType' => facilityType, 'selectedViolations' => selectedViolations, 'PartBThreeYearOperationalHistoryAssessment' => partBAnswers};            
+    private static Map<String, Object> buildArgs(String facilityType, String facilityHA, List<Object> selectedViolations, Map<String, Object> partBAnswers) {
+        Map<String, Object> input = new Map<String, Object>{'facilityType' => facilityType, 'facilityHA' => facilityHA, 'selectedViolations' => selectedViolations, 'PartBThreeYearOperationalHistoryAssessment' => partBAnswers};            
             return new Map<String, Object>{'input' => input, 'output' => new Map<String, Object>(), 'options' => new Map<String, Object>()};
                 }
     
@@ -809,5 +893,10 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
         Decimal partBScore;
         String matrixQuestion;
         String matrixResponse;
+    }
+    
+    private class ConfiguredScenario {
+        String programArea;
+        String facilityHA;
     }
 }

@@ -5,9 +5,9 @@
 *               (Risk Matrix + Interval Score Table) with a Part B question-based score, e.g. the CCFL/Tobacco and Vapour RAT.
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]
 *               25 Aug - PHOCS-4817         -  Deepak      - Remote action for CCFL RAT
+*               02 Sep - PHOCS-4817         -  Deepak      - Read facilityHA from input and apply it to Rating metadata only, alongside IsActive__c = true across all assessment types.
 ***********************************************************************************************/
-global with sharing class PHOCSCCFLRiskAssessmentScoringService implements Callable {
-    
+global with sharing class PHOCSCCFLRiskAssessmentScoringService implements Callable {    
     private static final String ACTION_CALCULATE_SCORE = 'calculateScore';
     private static final String ASSESSMENT_TYPE_RISK_MATRIX = 'RiskMatrix';
     private static final String ASSESSMENT_TYPE_SCORE = 'Score';
@@ -56,11 +56,13 @@ global with sharing class PHOCSCCFLRiskAssessmentScoringService implements Calla
     /**
 * @author: Deepak
 * @date: 25 Aug 2026
-* @description: Core scoring flow - resolves the facility type, loads all relevant scoring
-*              metadata in a single query, computes Part A (Risk Matrix -> Interval Score) and Part B
-*              (question-based) scores, determines the overall Risk Rating from the combined total, and
-*              populates the output map.
+* @description: Core scoring flow - resolves the facility type and Health Authority, loads all
+*              relevant scoring metadata in a single query, computes Part A (Risk Matrix ->
+*              Interval Score) and Part B (question-based) scores, determines the overall Risk
+*              Rating from the combined total, and populates the output map.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*                     02 Sep - PHOCS-4817 - Deepak - Reads facilityHA from input and passes it
+*                     into loadScoringMetadata().
 */
     public void calculateScore(Map<String, Object> input, Map<String, Object> output, Map<String, Object> options) {
         if (input == null) {
@@ -73,10 +75,12 @@ global with sharing class PHOCSCCFLRiskAssessmentScoringService implements Calla
             throw buildException('Facility Type is required.');
         }
         
+        String facilityHA = getStringValue(input.get('facilityHA'));
+        
         List<Object> selectedViolations = getListValue(input.get('selectedViolations'));
         Map<String, Object> partBAnswers = getMapValue(input.get('PartBThreeYearOperationalHistoryAssessment'));
         
-        Map<String, List<PHOCSRiskAssessmentScoring__mdt>> scoringMetadata = loadScoringMetadata(facilityType);
+        Map<String, List<PHOCSRiskAssessmentScoring__mdt>> scoringMetadata = loadScoringMetadata(facilityType, facilityHA);
         
         Decimal partAMatrixScore = calculatePartAMatrixScore(selectedViolations, scoringMetadata.get(ASSESSMENT_TYPE_RISK_MATRIX));
         Decimal partAScore = calculateIntervalScore(partAMatrixScore, scoringMetadata.get(ASSESSMENT_TYPE_INTERVAL_SCORE));
@@ -94,12 +98,31 @@ global with sharing class PHOCSCCFLRiskAssessmentScoringService implements Calla
     /**
 * @author: Deepak
 * @date: 25 Aug 2026
-* @description: Loads every PHOCSRiskAssessmentScoring__mdt record for the given facility type
-*              across all four assessment types in one query, and buckets the results by AssessmentType__c.
+* @description: Loads every active PHOCSRiskAssessmentScoring__mdt record for the given facility
+*              type across all four assessment types, and buckets the results by AssessmentType__c.
+*              HealthAuthority__c is only applied to Rating records; Risk Matrix, Score, and
+*              Interval Score records are not filtered by Health Authority. Run as two separate
+*              queries rather than one OR-based query, since SOQL against Custom Metadata Type
+*              objects does not support disjunctions (OR) in the WHERE clause.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*                     02 Sep - PHOCS-4817 - Deepak - Added facilityHA parameter, IsActive__c =
+*                     true, and the Rating-only HealthAuthority__c filter.
+*                     02 Sep - PHOCS-4817 - Deepak - Split into two queries to avoid the "Disjunctions
+*                     not supported" error CMDT SOQL throws on OR conditions.
 */
-    private Map<String, List<PHOCSRiskAssessmentScoring__mdt>> loadScoringMetadata(String facilityType) {
-        List<PHOCSRiskAssessmentScoring__mdt> records = [SELECT DeveloperName, MasterLabel, ProgramArea__c, AssessmentType__c, QuestionAPIName__c, ResponseValue__c, Score__c, LowScore__c, HighScore__c, InspectionFrequency__c FROM PHOCSRiskAssessmentScoring__mdt WHERE ProgramArea__c = :facilityType AND AssessmentType__c IN :new Set<String>{ASSESSMENT_TYPE_RISK_MATRIX, ASSESSMENT_TYPE_SCORE, ASSESSMENT_TYPE_INTERVAL_SCORE, ASSESSMENT_TYPE_RATING}];
+    private Map<String, List<PHOCSRiskAssessmentScoring__mdt>> loadScoringMetadata(String facilityType, String facilityHA) {
+        List<PHOCSRiskAssessmentScoring__mdt> nonRatingRecords = [SELECT DeveloperName, MasterLabel, ProgramArea__c, AssessmentType__c, QuestionAPIName__c,
+                                                                  ResponseValue__c, Score__c, LowScore__c, HighScore__c, InspectionFrequency__c FROM PHOCSRiskAssessmentScoring__mdt
+                                                                  WHERE ProgramArea__c = :facilityType AND IsActive__c = true AND
+                                                                  AssessmentType__c IN :new Set<String>{ASSESSMENT_TYPE_RISK_MATRIX, ASSESSMENT_TYPE_SCORE, ASSESSMENT_TYPE_INTERVAL_SCORE}];
+        
+        List<PHOCSRiskAssessmentScoring__mdt> ratingRecords = [SELECT DeveloperName, MasterLabel, ProgramArea__c, AssessmentType__c, QuestionAPIName__c,
+                                                               ResponseValue__c, Score__c, LowScore__c, HighScore__c, InspectionFrequency__c FROM PHOCSRiskAssessmentScoring__mdt
+                                                               WHERE ProgramArea__c = :facilityType AND AssessmentType__c = :ASSESSMENT_TYPE_RATING AND HealthAuthority__c = :facilityHA AND IsActive__c = true];
+        
+        List<PHOCSRiskAssessmentScoring__mdt> records = new List<PHOCSRiskAssessmentScoring__mdt>();
+        records.addAll(nonRatingRecords);
+        records.addAll(ratingRecords);
         
         Map<String, List<PHOCSRiskAssessmentScoring__mdt>> metadataByType = new Map<String, List<PHOCSRiskAssessmentScoring__mdt>>();
         
@@ -339,8 +362,7 @@ global with sharing class PHOCSCCFLRiskAssessmentScoringService implements Calla
     /**
 * @author: Deepak
 * @date: 25 Aug 2026
-* @description: Safely casts an Object to a List<Object>, returning an empty list for null or
-*              any non-list value.
+* @description: Safely casts an Object to a List<Object>, returning an empty list for null or any non-list value.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     private List<Object> getListValue(Object value) {
@@ -358,8 +380,7 @@ global with sharing class PHOCSCCFLRiskAssessmentScoringService implements Calla
     /**
 * @author: Deepak
 * @date: 25 Aug 2026
-* @description: Safely casts an Object to a Map<String, Object>, returning an empty map for null or
-*              any non-map value.
+* @description: Safely casts an Object to a Map<String, Object>, returning an empty map for null or any non-map value.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     private Map<String, Object> getMapValue(Object value) {
@@ -377,8 +398,7 @@ global with sharing class PHOCSCCFLRiskAssessmentScoringService implements Calla
     /**
 * @author: Deepak
 * @date: 25 Aug 2026
-* @description: Creates an AuraHandledException and explicitly sets its message so that
-*              getMessage() returns the intended validation message in tests and runtime.
+* @description: Creates an AuraHandledException and explicitly sets its message so that getMessage() returns the intended validation message in tests and runtime.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     private static AuraHandledException buildException(String message) {
