@@ -3,53 +3,43 @@
         <div class="slds-p-horizontal_medium slds-p-bottom_medium">
 
             <lightning-tabset active-tab-value={activeTab}>
-                
+
                 <!-- ========================================================= -->
                 <!-- RENEWAL GENERATION                                         -->
                 <!-- ========================================================= -->
-                <lightning-tab
-                    label="Renewal Generation"
-                    value="generation"
-                    onactive={handleGenerationTab}>
+                <lightning-tab label="Renewal Generation" value="generation" onactive={handleGenerationTab}>
 
                     <div class="slds-p-top_medium">
-                           
+
                         <!-- Filters -->
                         <div class="slds-box slds-theme_default slds-m-bottom_medium">
-                             <div><p>
-                            This table displays eligible Drinking Water, Food Premise, and Pool facilities that have not yet had an Operating Permit renewal fee generated for the current renewal cycle. Use the filters to refine the list, select the applicable facilities, and click “Generate Renewals” to generate draft renewal fees.
-                        </p>
+                            <div>
+                                <p>
+                                    This table displays eligible Drinking Water, Food Premise, and Pool facilities that
+                                    have not yet had an Operating Permit renewal fee generated for the current renewal
+                                    cycle. Use the filters to refine the list, select the applicable facilities, and
+                                    click “Generate Renewals” to generate draft renewal fees.
+                                </p>
                             </div>
                             <div class="slds-grid slds-wrap slds-gutters">
                                 <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 filter-dropdown">
-                                    <lightning-combobox
-                                        label="Type"
-                                        value={generationFilters.accountType}
-                                        options={accountTypeOptions}
-                                        onchange={handleGenerationTypeChange}>
+                                    <lightning-combobox label="Type" value={generationFilters.accountType}
+                                        options={accountTypeOptions} onchange={handleGenerationTypeChange}>
                                     </lightning-combobox>
                                 </div>
 
                                 <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 filter-checkbox">
-                                    <lightning-input
-                                        type="checkbox"
-                                        label="Multiple Premise Facility?"
+                                    <lightning-input type="checkbox" label="Multiple Premise Facility?"
                                         checked={generationFilters.multiplePremise}
                                         onchange={handleGenerationMultiplePremiseChange}>
                                     </lightning-input>
                                 </div>
 
                                 <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 filter-buttons">
-                                    <lightning-button
-                                        label="Search"
-                                        variant="brand"
-                                        onclick={searchGeneration}>
+                                    <lightning-button label="Search" variant="brand" onclick={searchGeneration}>
                                     </lightning-button>
 
-                                    <lightning-button
-                                        label="Reset"
-                                        class="slds-m-left_small"
-                                        onclick={resetGeneration}>
+                                    <lightning-button label="Reset" class="slds-m-left_small" onclick={resetGeneration}>
                                     </lightning-button>
                                 </div>
                             </div>
@@ -68,10 +58,7 @@
                             </div>
 
                             <template if:true={showGenerateButton}>
-                                <lightning-button
-                                    label="Generate Renewals"
-                                    variant="brand"
-                                    onclick={generateRenewals}
+                                <lightning-button label="Generate Renewals" variant="brand" onclick={generateRenewals}
                                     disabled={isLoading}>
                                 </lightning-button>
                             </template>
@@ -79,8 +66,7 @@
 
                         <!-- Spinner -->
                         <template if:true={isLoading}>
-                            <lightning-spinner
-                                alternative-text="Loading">
+                            <lightning-spinner alternative-text="Loading">
                             </lightning-spinner>
                         </template>
 
@@ -94,22 +80,15 @@
                         <!-- Datatable -->
                         <template if:true={generationHasRecords}>
                             <div class="datatable-container">
-                            <lightning-datatable
-                                key-field="Id"
-                                data={generationPageData}
-                                columns={generationColumns}
-                                selected-rows={generationSelectedRows}
-                                sorted-by={generationSortedBy}
-                                sorted-direction={generationSortDirection}
-                                onsort={handleGenerationSort}
-                                onrowselection={handleGenerationSelection}>
-                            </lightning-datatable>
+                                <lightning-datatable key-field="Id" data={generationPageData}
+                                    columns={generationColumns} selected-rows={generationSelectedRows}
+                                    sorted-by={generationSortedBy} sorted-direction={generationSortDirection}
+                                    onsort={handleGenerationSort} onrowselection={handleGenerationSelection}>
+                                </lightning-datatable>
                             </div>
                             <!-- Pagination -->
                             <div class="pagination slds-m-top_medium">
-                                <lightning-button
-                                    label="Previous"
-                                    onclick={generationPrevious}
+                                <lightning-button label="Previous" onclick={generationPrevious}
                                     disabled={generationPreviousDisabled}>
                                 </lightning-button>
 
@@ -117,9 +96,7 @@
                                     Page {generationCurrentPage} of {generationTotalPages}
                                 </span>
 
-                                <lightning-button
-                                    label="Next"
-                                    onclick={generationNext}
+                                <lightning-button label="Next" onclick={generationNext}
                                     disabled={generationNextDisabled}>
                                 </lightning-button>
                             </div>
@@ -132,68 +109,51 @@
                 <!-- ========================================================= -->
                 <!-- SEND Fee For RENEWALS                                             -->
                 <!-- ========================================================= -->
-                <lightning-tab
-                    label="Send Renewals"
-                    value="send"
-                    onactive={handleSendTab}>
+                <lightning-tab label="Send Renewals" value="send" onactive={handleSendTab}>
 
                     <div class="slds-p-top_medium">
 
                         <!-- Filters -->
                         <div class="slds-box slds-theme_default slds-m-bottom_medium">
                             <div>
-                                <p>This table displays draft Operating Permit renewal fees ready for review. Review and adjust fee amounts as needed by clicking into the fee record. Use the filters to refine the list, select the applicable facilities, and click “Send Renewals” to send invoices to facility contacts
-                                    </p>
+                                <p>This table displays draft Operating Permit renewal fees ready for review. Review and
+                                    adjust fee amounts as needed by clicking into the fee record. Use the filters to
+                                    refine the list, select the applicable facilities, and click “Send Renewals” to send
+                                    invoices to facility contacts
+                                </p>
                             </div>
                             <div class="slds-grid slds-wrap slds-gutters">
 
-                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 filter-dropdown" >
-                                    <lightning-combobox
-                                        label="Type"
-                                        value={sendFilters.type}
-                                        options={accountTypeOptions}
-                                        onchange={handleSendTypeChange}>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 filter-dropdown">
+                                    <lightning-combobox label="Type" value={sendFilters.type}
+                                        options={accountTypeOptions} onchange={handleSendTypeChange}>
                                     </lightning-combobox>
                                 </div>
 
                                 <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 filter-dropdown">
-                                    <lightning-input
-                                        type="text"
-                                        label="Fee Name"
-                                        value={sendFilters.feeName}
+                                    <lightning-input type="text" label="Fee Name" value={sendFilters.feeName}
                                         onchange={handleSendFeeNameChange}>
                                     </lightning-input>
                                 </div>
 
                                 <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 filter-checkbox">
-                                    <lightning-input
-                                        type="checkbox"
-                                        label="Multiple Premise Facility?"
+                                    <lightning-input type="checkbox" label="Multiple Premise Facility?"
                                         checked={sendFilters.multiplePremise}
                                         onchange={handleSendMultiplePremiseChange}>
                                     </lightning-input>
                                 </div>
 
                                 <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 filter-dropdown">
-                                    <lightning-combobox
-                                        label="Premise Role"
-                                        value={sendFilters.premiseRole}
-                                        options={premiseRoleOptions}
-                                        onchange={handleSendPremiseRoleChange}>
+                                    <lightning-combobox label="Premise Role" value={sendFilters.premiseRole}
+                                        options={premiseRoleOptions} onchange={handleSendPremiseRoleChange}>
                                     </lightning-combobox>
                                 </div>
-                                 <div class="slds-col slds-size_1-of-3 slds-m-top_small"></div>
+                                <div class="slds-col slds-size_1-of-3 slds-m-top_small"></div>
                                 <div class="slds-col slds-size_1-of-3 slds-m-top_small filter-renewalbtn">
-                                    <lightning-button
-                                        label="Search"
-                                        variant="brand"
-                                        onclick={searchSend}>
+                                    <lightning-button label="Search" variant="brand" onclick={searchSend}>
                                     </lightning-button>
 
-                                    <lightning-button
-                                        label="Reset"
-                                        class="slds-m-left_small"
-                                        onclick={resetSend}>
+                                    <lightning-button label="Reset" class="slds-m-left_small" onclick={resetSend}>
                                     </lightning-button>
                                 </div>
                                 <div class="slds-col slds-size_1-of-3 slds-m-top_small"></div>
@@ -213,18 +173,14 @@
                             </div>
 
                             <template if:true={showSendButton}>
-                                <lightning-button
-                                    label="Send Renewals"
-                                    variant="brand"
-                                    onclick={sendRenewals}
+                                <lightning-button label="Send Renewals" variant="brand" onclick={sendRenewals}
                                     disabled={isLoading}>
                                 </lightning-button>
                             </template>
                         </div>
 
                         <template if:true={isLoading}>
-                            <lightning-spinner
-                                alternative-text="Loading">
+                            <lightning-spinner alternative-text="Loading">
                             </lightning-spinner>
                         </template>
 
@@ -238,22 +194,15 @@
                         <!-- Datatable -->
                         <template if:true={sendHasRecords}>
                             <div class="datatable-container">
-                            <lightning-datatable
-                                key-field="Id"
-                                data={sendPageData}
-                                columns={sendColumns}
-                                selected-rows={sendSelectedRows}
-                                sorted-by={sendSortedBy}
-                                sorted-direction={sendSortDirection}
-                                onsort={handleSendSort}
-                                onrowselection={handleSendSelection}>
-                            </lightning-datatable>
+                                <lightning-datatable key-field="Id" data={sendPageData} columns={sendColumns}
+                                    selected-rows={sendSelectedRows} sorted-by={sendSortedBy}
+                                    sorted-direction={sendSortDirection} onsort={handleSendSort}
+                                    onrowselection={handleSendSelection}>
+                                </lightning-datatable>
                             </div>
 
                             <div class="pagination slds-m-top_medium">
-                                <lightning-button
-                                    label="Previous"
-                                    onclick={sendPrevious}
+                                <lightning-button label="Previous" onclick={sendPrevious}
                                     disabled={sendPreviousDisabled}>
                                 </lightning-button>
 
@@ -261,16 +210,408 @@
                                     Page {sendCurrentPage} of {sendTotalPages}
                                 </span>
 
-                                <lightning-button
-                                    label="Next"
-                                    onclick={sendNext}
-                                    disabled={sendNextDisabled}>
+                                <lightning-button label="Next" onclick={sendNext} disabled={sendNextDisabled}>
                                 </lightning-button>
                             </div>
                         </template>
 
                     </div>
                 </lightning-tab>
+                <!-- ========================================================= -->
+                <!-- PAYMENT REMINDERS                                         -->
+                <!-- ========================================================= -->
+                <lightning-tab label="Payment Reminders" value="paymentReminders" onactive={handlePaymentRemindersTab}>
+
+                    <div class="slds-p-top_medium">
+
+                        <!-- Filters -->
+                        <div class="slds-box slds-theme_default slds-m-bottom_medium">
+
+                            <div class="slds-m-bottom_medium">
+                                <p>
+                                    This table displays fees that are due or partially paid.
+                                    Use the filters to refine the list, select the applicable
+                                    facilities, and click “Send Payment Reminders” to notify
+                                    facility contacts.
+                                </p>
+                            </div>
+
+                            <div class="slds-grid slds-wrap slds-gutters">
+
+                                <!-- Type -->
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                    <lightning-combobox label="Type" value={paymentFilters.type}
+                                        options={accountTypeOptions} onchange={handlePaymentTypeChange}>
+                                    </lightning-combobox>
+                                </div>
+
+                                <!-- Fee Name -->
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                    <lightning-input type="text" label="Fee Name" value={paymentFilters.feeName}
+                                        onchange={handlePaymentFeeNameChange}>
+                                    </lightning-input>
+                                </div>
+
+                                <!-- Fee Type -->
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                    <lightning-combobox label="Fee Type" value={paymentFilters.feeType}
+                                        options={feeTypeOptions} onchange={handlePaymentFeeTypeChange}>
+                                    </lightning-combobox>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-1 slds-m-top_small">
+                                    <lightning-button label="Search" variant="brand" onclick={searchPaymentReminders}
+                                        disabled={isLoading}>
+                                    </lightning-button>
+
+                                    <lightning-button label="Reset" class="slds-m-left_small"
+                                        onclick={resetPaymentReminders} disabled={isLoading}>
+                                    </lightning-button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Header -->
+                        <div class="table-header slds-m-bottom_small">
+
+                            <div>
+                                <span class="slds-text-heading_small">
+                    Payment Reminders
+                </span>
+
+                                <span
+                    class="slds-m-left_medium selection-summary"
+                    aria-live="polite">
+                    Selected: {paymentSelectedCount} / {paymentTotalCount}
+                </span>
+                            </div>
+
+                            <template if:true={showPaymentReminderButton}>
+                                <lightning-button label="Send Payment Reminders" variant="brand"
+                                    onclick={openPaymentReminderConfirmation} disabled={isLoading}>
+                                </lightning-button>
+                            </template>
+
+                        </div>
+
+                        <!-- Spinner -->
+                        <template if:true={isLoading}>
+                            <lightning-spinner alternative-text="Loading payment reminders">
+                            </lightning-spinner>
+                        </template>
+
+                        <!-- Empty state -->
+                        <template if:false={paymentHasRecords}>
+                            <div class="empty-state" role="status" aria-live="polite">
+                                No records to display.
+                            </div>
+                        </template>
+
+                        <!-- Datatable -->
+                        <template if:true={paymentHasRecords}>
+
+                            <div class="datatable-container">
+
+                                <lightning-datatable key-field="Id" data={paymentPageData} columns={paymentColumns}
+                                    selected-rows={paymentSelectedRows} sorted-by={paymentSortedBy}
+                                    sorted-direction={paymentSortDirection} onsort={handlePaymentSort}
+                                    onrowselection={handlePaymentSelection}>
+                                </lightning-datatable>
+
+                            </div>
+
+                            <!-- Pagination -->
+                            <div class="pagination slds-m-top_medium" role="navigation"
+                                aria-label="Payment reminder pagination">
+
+                                <lightning-button label="Previous" onclick={paymentPrevious}
+                                    disabled={paymentPreviousDisabled}>
+                                </lightning-button>
+
+                                <span
+                    class="page-label slds-m-horizontal_medium"
+                    aria-live="polite">
+                    Page {paymentCurrentPage} of {paymentTotalPages}
+                </span>
+
+                                <lightning-button label="Next" onclick={paymentNext} disabled={paymentNextDisabled}>
+                                </lightning-button>
+
+                            </div>
+
+                        </template>
+
+                    </div>
+
+                </lightning-tab>
+                <!-- ========================================================= -->
+                <!-- PAYMENT REMINDER CONFIRMATION                             -->
+                <!-- ========================================================= -->
+                <template if:true={showPaymentConfirmation}>
+
+                    <section role="dialog" tabindex="-1" aria-modal="true"
+                        aria-labelledby="payment-confirmation-heading" class="slds-modal slds-fade-in-open">
+
+                        <div class="slds-modal__container">
+
+                            <header class="slds-modal__header">
+
+                                <button
+                    class="slds-button slds-button_icon slds-modal__close"
+                    title="Close"
+                    onclick={closePaymentReminderConfirmation}>
+
+                    <lightning-icon
+                        icon-name="utility:close"
+                        alternative-text="Close"
+                        size="small">
+                    </lightning-icon>
+
+                    <span class="slds-assistive-text">
+                        Close
+                    </span>
+                </button>
+
+                                <h2 id="payment-confirmation-heading" class="slds-text-heading_medium">
+                                    Send Payment Reminders
+                                </h2>
+
+                            </header>
+
+                            <div class="slds-modal__content slds-p-around_medium">
+
+                                <p>
+                                    Emails will be sent to contact(s) on selected facilities
+                                </p>
+
+                                <p class="slds-m-top_medium">
+                                    <strong>{paymentSelectedCount}</strong>
+                                    record(s) are selected.
+                                </p>
+
+                            </div>
+
+                            <footer class="slds-modal__footer">
+
+                                <lightning-button label="Cancel" onclick={closePaymentReminderConfirmation}>
+                                </lightning-button>
+
+                                <lightning-button label="Send Payment Reminders" variant="brand"
+                                    class="slds-m-left_small" onclick={sendPaymentReminders} disabled={isLoading}>
+                                </lightning-button>
+
+                            </footer>
+
+                        </div>
+
+                    </section>
+
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+
+                </template>
+
+                <lightning-tab
+                    label="Late Fee Management"
+                    value="lateFees"
+                    onactive={handleLateFeeManagementTab}>
+
+                    <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
+                        <div class="slds-m-bottom_medium">
+                            <p>
+                                This table displays overdue invoices. Use the filters to
+                                refine the list, select the applicable facilities, specify
+                                the late fee amount, and click "Send Late Fees" to add the
+                                late fee to the existing invoice and send an email reminder
+                                to facility contact(s).
+                            </p>
+                        </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+
+                                <lightning-combobox
+                                    name="lateFeeType"
+                                    label="Type"
+                                    value={lateFeeFilters.type}
+                                    options={lateFeeTypeOptions}
+                                    onchange={handleLateFeeTypeChange}>
+                                </lightning-combobox>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                <lightning-input
+                                    type="text"
+                                    name="lateFeeName"
+                                    label="Fee Name"
+                                    value={lateFeeFilters.feeName}
+                                    onchange={handleLateFeeFeeNameChange}>
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                <lightning-combobox
+                                    name="lateFeeFeeType"
+                                    label="Fee Type"
+                                    value={lateFeeFilters.feeType}
+                                    options={lateFeeFeeTypeOptions}
+                                    onchange={handleLateFeeFeeTypeChange}>
+                                </lightning-combobox>
+                            </div>
+                        <div class="slds-m-bottom_medium">
+
+                                <lightning-button
+                                    label="Search"
+                                    variant="brand"
+                                    onclick={searchLateFees}
+                                    class="slds-m-right_small">
+                                </lightning-button>
+
+                                <lightning-button
+                                    label="Reset"
+                                    onclick={resetLateFees}>
+                                </lightning-button>
+                            </div>
+                        </div>
+                        <!-- Header Controls Section -->
+                        <div class="table-header slds-m-bottom_small slds-grid slds-grid_vertical-align-center slds-grid_align-spread">
+                            <div>
+                                <span class="slds-text-heading_small">Late Fee Accounts</span>
+                                <span class="slds-m-left_medium selection-summary">
+                                    Selected: {lateFeeSelectedCount} / {lateFeeTotalCount}
+                                </span>
+                            </div>
+
+                            <!-- Conditional Button Display: Shows only when 1+ records are checked -->
+                            <template if:true={showSendLateFeeButton}>
+                                <lightning-button 
+                                    label="Send Late Fees" 
+                                    variant="brand" 
+                                    onclick={handleSendLateFees}
+                                    disabled={isLoading}>
+                                </lightning-button>
+                            </template>
+                        </div>
+                        <template if:false={lateFeeHasRecords}>
+                            <div class="slds-align_absolute-center slds-p-around_large" role="status">
+                                No records to display.
+                            </div>
+                        </template>
+                        <template if:true={lateFeeHasRecords}>
+
+                            <lightning-datatable
+                                key-field="Id"
+                                data={lateFeePageData}
+                                columns={lateFeeColumns}
+                                selected-rows={lateFeeSelectedRows}
+                                sorted-by={lateFeeSortedBy}
+                                sorted-direction={lateFeeSortDirection}
+                                onsort={handleLateFeeSort}
+                                onrowselection={handleLateFeeSelection}>
+                               
+                            </lightning-datatable>
+
+                        </template>
+                        <template if:true={lateFeeHasRecords}>
+
+                        <div class="slds-grid slds-grid_align-center slds-grid_vertical-align-center slds-m-top_medium">
+
+                            <lightning-button
+                                label="Previous"
+                                onclick={lateFeePrevious}
+                                disabled={lateFeePreviousDisabled}
+                                class="slds-m-right_small">
+                            </lightning-button>
+
+                            <span class="slds-m-horizontal_medium">
+                                Page {lateFeeCurrentPage} of {lateFeeTotalPages}
+                            </span>
+
+                            <lightning-button
+                                label="Next"
+                                onclick={lateFeeNext}
+                                disabled={lateFeeNextDisabled}>
+                            </lightning-button>
+
+                        </div>
+                    </template> 
+                        
+                    </lightning-tab>
+                    <!-- Modal component -->
+
+                    <template if:true={showLateFeeConfirmation}>
+                        <section
+                            role="dialog"
+                            tabindex="-1"
+                            aria-modal="true"
+                            aria-labelledby="late-fee-modal-heading"
+                            aria-describedby="late-fee-modal-description"
+                            class="slds-modal slds-fade-in-open">
+
+                            <div class="slds-modal__container">
+
+                                <header class="slds-modal__header">
+                                    <h2
+                                        id="late-fee-modal-heading"
+                                        class="slds-text-heading_medium">
+
+                                        Send Late Fees
+
+                                    </h2>
+                                </header>
+
+                                <div
+                                    class="slds-modal__content slds-p-around_medium"
+                                    id="late-fee-modal-description">
+
+                                    <p class="slds-m-bottom_medium">
+                                        Once you specify the late fee amount and click
+                                        'Send Late Fees', the late fee will be added to
+                                        the existing invoices for each of the selected
+                                        records and an email will be sent to the facility
+                                        contact(s).
+                                    </p>
+
+                                    <lightning-input
+                                        type="number"
+                                        name="lateFeeAmount"
+                                        label="Late Fee Amount"
+                                        value={lateFeeAmount}
+                                        min="0.01"
+                                        step="0.01"
+                                        formatter="currency"
+                                        required
+                                        message-when-value-missing="Late Fee Amount must be greater than 0.00$"
+                                        message-when-range-underflow="Late Fee Amount must be greater than 0.00$"
+                                        onchange={handleLateFeeAmountChange}>
+                                    </lightning-input>
+
+                                </div>
+
+                                <footer class="slds-modal__footer">
+
+                                    <lightning-button
+                                        label="Cancel"
+                                        onclick={closeLateFeeConfirmation}
+                                        class="slds-m-right_small">
+                                    </lightning-button>
+
+                                    <lightning-button
+                                        label="Send Late Fees"
+                                        variant="brand"
+                                        onclick={sendLateFees}>
+                                    </lightning-button>
+
+                                </footer>
+
+                            </div>
+                        </section>
+
+                        <div
+                            class="slds-backdrop slds-backdrop_open"
+                            role="presentation">
+                        </div>
+
+                    </template>
 
             </lightning-tabset>
         </div>
