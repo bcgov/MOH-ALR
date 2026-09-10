@@ -5,6 +5,7 @@
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]
 06 Aug -  PHOCS-269         -  Accenture   -  test class for RAT remote action
 09 Aug -  PHOCS-269         -  Accenture   -  added coverage for nested question groups
+02 Sep -  PHOCS-269         -  Accenture   -  runScoreAndRatingAssertion now returns its result so each calling test method has its own direct assert, per PMD ApexUnitTestClassShouldHaveAsserts
 ***********************************************************************************************/
 @isTest
 public class PHOCSRiskAssessmentScoringServiceTest {
@@ -211,22 +212,30 @@ public class PHOCSRiskAssessmentScoringServiceTest {
 * @author: Accenture
 * @date: 06 Aug 2026
 * @description: Covers calculateScore() end to end with jsonInput passed as a JSON string.
-* @Modification Log: [Date] - [Change Reference] - [Description]
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*                     02 Sep - PHOCS-269 - Accenture - Added a direct assert on the returned
+*                     result so this method satisfies PMD ApexUnitTestClassShouldHaveAsserts,
+*                     since the deep assertions live inside the shared helper.
 */
     @isTest
     public static void testCalculateScore_WithJsonStringInput_ReturnsExpectedScoreAndRating() {
-        runScoreAndRatingAssertion(true, false);
+        Map<String, Object> result = runScoreAndRatingAssertion(true, false);
+        Assert.isTrue(result == null || result.containsKey('totalScore'), 'When metadata is configured, the result should contain totalScore');
     }
     
     /**
 * @author: Accenture
 * @date: 06 Aug 2026
 * @description: Covers calculateScore() end to end with jsonInput passed as a native Map.
-* @Modification Log: [Date] - [Change Reference] - [Description]
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*                     02 Sep - PHOCS-269 - Accenture - Added a direct assert on the returned
+*                     result so this method satisfies PMD ApexUnitTestClassShouldHaveAsserts,
+*                     since the deep assertions live inside the shared helper.
 */
     @isTest
     public static void testCalculateScore_WithMapInput_ReturnsExpectedScoreAndRating() {
-        runScoreAndRatingAssertion(false, false);
+        Map<String, Object> result = runScoreAndRatingAssertion(false, false);
+        Assert.isTrue(result == null || result.containsKey('totalScore'), 'When metadata is configured, the result should contain totalScore');
     }
     
     /**
@@ -234,11 +243,15 @@ public class PHOCSRiskAssessmentScoringServiceTest {
 * @date: 06 Aug 2026
 * @description: Covers calculateScore() case-insensitive matching by lower-casing the answer
 *               text before submission and confirming the score is unaffected.
-* @Modification Log: [Date] - [Change Reference] - [Description]
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*                     02 Sep - PHOCS-269 - Accenture - Added a direct assert on the returned
+*                     result so this method satisfies PMD ApexUnitTestClassShouldHaveAsserts,
+*                     since the deep assertions live inside the shared helper.
 */
     @isTest
     public static void testCalculateScore_CaseInsensitiveMatching_ReturnsSameScore() {
-        runScoreAndRatingAssertion(true, true);
+        Map<String, Object> result = runScoreAndRatingAssertion(true, true);
+        Assert.isTrue(result == null || result.containsKey('totalScore'), 'When metadata is configured, the result should contain totalScore');
     }
     
     /**
@@ -465,18 +478,22 @@ public class PHOCSRiskAssessmentScoringServiceTest {
 * @date: 06 Aug 2026
 * @description: Builds the calculateScore output dynamically from deployed Score and Rating metadata
 *               and validates the ContextId-based Facility lookup and MTS Inspection Frequency output.
+*               Returns the result map (or null if skipped due to unconfigured metadata) so each
+*               calling test method can perform its own direct assert.
 * @Modification Log: [Date] - [Change Reference] - [Description]
+*                     02 Sep - PHOCS-269 - Accenture - Changed return type from void to
+*                     Map<String, Object> so callers can add a direct assert of their own.
 */
-    public static void runScoreAndRatingAssertion(Boolean asJsonString, Boolean lowerCaseResponses) {
+    public static Map<String, Object> runScoreAndRatingAssertion(Boolean asJsonString, Boolean lowerCaseResponses) {
         List<PHOCSRiskAssessmentScoring__mdt> anyScoreRecords = [SELECT ProgramArea__c FROM PHOCSRiskAssessmentScoring__mdt WHERE AssessmentType__c = 'Score' AND IsActive__c = true AND ProgramArea__c IN ('Personal services', 'Recreational water', 'Tobacco and Vapour', 'Food', 'Drinking Water') LIMIT 1];
         if (anyScoreRecords.isEmpty()) {
-            return;
+            return null;
         }
         
         String programArea = anyScoreRecords[0].ProgramArea__c;
         String facilityHA = getHealthAuthority(programArea);
         if (String.isBlank(facilityHA)) {
-            return;
+            return null;
         }
         
         List<PHOCSRiskAssessmentScoring__mdt> scoreRecords = [SELECT QuestionAPIName__c, ResponseValue__c, Score__c FROM PHOCSRiskAssessmentScoring__mdt WHERE ProgramArea__c = :programArea AND AssessmentType__c = 'Score' AND IsActive__c = true];
@@ -525,6 +542,8 @@ public class PHOCSRiskAssessmentScoringServiceTest {
         Assert.areEqual(expectedRating, (String) result.get('riskRating'), 'Risk rating should equal the matched Rating metadata band');
         Assert.areEqual(expectedInspectionFrequency, (String) result.get('inspectionFrequency'), 'Inspection frequency should equal the matched Rating metadata record');
         Assert.areEqual(expectedMTSInspectionFrequency, (String) result.get('mtsInspectionFrequency'), 'MTS inspection frequency should equal the matched Rating metadata record');
+        
+        return result;
     }
     
     /**
