@@ -273,4 +273,26 @@ public class TestDataFactory {
         }
         return regAuthRec;
     }
+
+        /**
+     * EHIS-3496 Overload of createContact that allows specifying a Record Type Id.
+     * Used for contacts requiring a specific Record Type (e.g. PHOCS Dairy Plant Worker).
+     */
+    @testVisible
+    public static Contact createContactWithRecordType(Id accountId, String firstName, String lastName, String email, String phone, Boolean isInsert, Id recordTypeId) {
+        Contact contact = new Contact(
+            AccountId    = accountId,
+            FirstName    = firstName,
+            LastName     = lastName,
+            Email        = email,
+            Phone        = phone,
+            RecordTypeId = recordTypeId
+        );
+
+        if (isInsert) {
+            Database.insert(contact);
+        }
+
+        return contact;
+    }
 }
