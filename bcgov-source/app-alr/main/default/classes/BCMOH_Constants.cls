@@ -56,12 +56,15 @@ public class BCMOH_Constants {
     public Final static Date feeDueDate = Date.Today().addDays(30);//ALR-185
     public Final static DateTime feeDueDateTime = DateTime.Now().addDays(30);//ALR-185
     public Final static String cancelledStatus = 'Canceled';//ALR-691
+    public Final static String emailFailedToId = 'Failed to send email to Id:';
+    public Final static String emailFailedRecipient = 'Intended recipient:';
+    public Final static String emailFailedReason = 'Reason:';
     //ALR-560
     public Final static String templatePurpose = 'Renewal';
     //ALR-1726
     public Final static String emailTemplateforRenewal = 'Renewal_Reminder_Email';
     //error handling
-    public Final static String noPrimaryContact = 'No primary contact record or no email id on primary contact';
+    public Final static String noActiveContact = 'No Active contact exists';
     public Final static String noEmailFound = 'Invalid Email';
     public Final static String noOrgWideAddr = 'No valid org wide email address found';
     public Final static String noBLRec = 'No business license record found';
