@@ -592,10 +592,17 @@ public static OperationResponse sendSelectedRenewals(List<Id> regulatoryTransact
             );
         }
 
-        String soql =
-            'SELECT Id, Status__c FROM RegulatoryTrxnFee' +
-            ' WHERE Id IN :regulatoryTransactionFeeIds';
-        List<RegulatoryTrxnFee> fees = Database.query(soql);
+        String soql ='SELECT Id, Status__c ' +
+                        'FROM RegulatoryTrxnFee ' +
+                        'WHERE Id IN :regulatoryTransactionFeeIds';
+                    Map<String, Object> bindVars = new Map<String, Object>{
+                        'regulatoryTransactionFeeIds' => regulatoryTransactionFeeIds
+                    };
+                    List<RegulatoryTrxnFee> fees = Database.queryWithBinds(
+                        soql,
+                        bindVars,
+                        AccessLevel.USER_MODE
+                    );
 
         if (fees.isEmpty()) {
             return new OperationResponse(
@@ -2460,14 +2467,23 @@ private static Map<Id, Account> getAccounts(Set<Id> accountIds) {
         return new Map<Id, Account>();
     }
     
-    String soql =
-    'SELECT Id, Name, Parent.Name, Type, ' +
-    POSTAL_CODE_FIELD + ', ' +
-    'MultiplePremiseFacility__c, ' +
-    PREMISE_ROLE_FIELD +
-    ' FROM Account WHERE Id IN :accountIds';
-    
-    return new Map<Id, Account>((List<Account>)Database.query(soql));
+    String soql ='SELECT Id, Name, Parent.Name, Type, ' +
+                    POSTAL_CODE_FIELD + ', ' +
+                    'MultiplePremiseFacility__c, ' +
+                    PREMISE_ROLE_FIELD +
+                    ' FROM Account WHERE Id IN :accountIds';
+
+                Map<String, Object> bindVars = new Map<String, Object>{
+                    'accountIds' => accountIds
+                };
+
+                return new Map<Id, Account>(
+                    (List<Account>)Database.queryWithBinds(
+                        soql,
+                        bindVars,
+                        AccessLevel.USER_MODE
+                    )
+                );
 }
 
 
