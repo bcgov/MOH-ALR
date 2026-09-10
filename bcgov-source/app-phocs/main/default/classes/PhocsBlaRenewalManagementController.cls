@@ -99,12 +99,15 @@ public with sharing class PhocsBlaRenewalManagementController {
         ' FROM Account';
         
         List<String> conditions = new List<String>();
+        Map<String, Object> bindVars = new Map<String, Object>();
         
         // account status open
         conditions.add('Status__c = :accountStatus');
+        bindVars.put('accountStatus', accountStatus);
         
         if (String.isNotBlank(accountType)) {
             conditions.add('Type = :accountType');
+            bindVars.put('accountType', accountType);
         }
         
         if (multiplePremise == true) {
@@ -118,7 +121,7 @@ public with sharing class PhocsBlaRenewalManagementController {
         // Default sort: Parent Account ascending.
         soql += ' ORDER BY Parent.Name ASC NULLS FIRST, Name ASC';
         
-        List<Account> accounts = Database.query(soql);
+        List<Account> accounts = Database.queryWithBinds(soql, bindVars, AccessLevel.USER_MODE);
         
         Map<Id,Account> acctMap = new Map<Id,Account>();
         acctMap.putAll(accounts);
@@ -2121,11 +2124,7 @@ public static OperationResponse sendLateFees(
         // Validate Amount
         // ----------------------------------------------------
 
-        if (
-            lateFeeAmount == null ||
-            lateFeeAmount <= 0
-        ) {
-
+        if (lateFeeAmount == null || lateFeeAmount <= 0 ) {
             return new OperationResponse(
                 false,
                 'Late Fee Amount must be greater than 0.00$'
@@ -2136,8 +2135,7 @@ public static OperationResponse sendLateFees(
         // Validate Decimal Precision
         // ----------------------------------------------------
 
-        lateFeeAmount =
-            lateFeeAmount.setScale(
+        lateFeeAmount = lateFeeAmount.setScale(
                 2,
                 RoundingMode.HALF_UP
             );
@@ -2146,15 +2144,9 @@ public static OperationResponse sendLateFees(
         // Build the eligible set server-side
         // ----------------------------------------------------
 
-        Set<Id> eligibleFeeIds =
-            getEligibleLateFeeIds(
-                type,
-                feeName,
-                feeType
-            );
+        Set<Id> eligibleFeeIds = getEligibleLateFeeIds( type, feeName, feeType);
 
         if (eligibleFeeIds.isEmpty()) {
-
             return new OperationResponse(
                 false,
                 'No eligible late fee records were found.'
@@ -2165,10 +2157,7 @@ public static OperationResponse sendLateFees(
         // Remove user-deselected records
         // ----------------------------------------------------
 
-        if (
-            deselectedFeeIds != null &&
-            !deselectedFeeIds.isEmpty()
-        ) {
+        if (deselectedFeeIds != null && !deselectedFeeIds.isEmpty()) {
 
             eligibleFeeIds.removeAll(
                 new Set<Id>(
@@ -2206,28 +2195,15 @@ public static OperationResponse sendLateFees(
         // Create Late Fee Items
         // ----------------------------------------------------
 
-        List<RegulatoryTrxnFeeItem>
-            itemsToInsert =
-                new List<RegulatoryTrxnFeeItem>();
-
-        Map<Id, RegulatoryTrxnFee>
-            feeById =
-                new Map<Id, RegulatoryTrxnFee>(
-                    fees
-                );
+        List<RegulatoryTrxnFeeItem> itemsToInsert = new List<RegulatoryTrxnFeeItem>();
+        Map<Id, RegulatoryTrxnFee> feeById = new Map<Id, RegulatoryTrxnFee>(fees);
 
         for (RegulatoryTrxnFee fee : fees) {
-
             RegulatoryTrxnFeeItem lateFeeItem =      new RegulatoryTrxnFeeItem();
-
             lateFeeItem.RegulatoryTrxnFeeId = fee.Id;
-
             lateFeeItem.RecordTypeId = RTFItemRecordTypeId;
-
             lateFeeItem.Name = RTFI_LATE_FEE_NAME;
-
-            lateFeeItem.Status__c =           RTF_STATUS_DUE;
-
+            lateFeeItem.Status__c = RTF_STATUS_DUE;
             lateFeeItem.FeeAmount =  lateFeeAmount;
 
             /*
@@ -2446,9 +2422,7 @@ private static List<RegulatoryTrxnFee>
         RTF_ACCOUNT_FIELD + ', ' +
         'ParentRecordId, ' +
         'DueDate ' +
-        'FROM ' +
-        RTF_OBJECT +
-        ' WHERE Id IN :feeIds' +
+        'FROM RegulatoryTrxnFee WHERE Id IN :feeIds' +
 
         ' AND Status__c IN (\'Due\', \'Partially Paid\')' +
 
@@ -2457,9 +2431,7 @@ private static List<RegulatoryTrxnFee>
         ' AND Id NOT IN (' +
             'SELECT ' +
             RTFI_PARENT_FIELD +
-            ' FROM ' +
-            RTFI_OBJECT +
-            ' WHERE ' +
+            ' FROM RegulatoryTrxnFeeItem WHERE ' +
             RTFI_NAME_FIELD +
             ' = :lateFeeItemName' +
         ')';
@@ -2477,10 +2449,7 @@ private static List<RegulatoryTrxnFee>
             binds,
             AccessLevel.USER_MODE
         );
-}
-
-
-                        
+}                 
                         
   // ============================================================
  // ACCOUNT HELPERS
