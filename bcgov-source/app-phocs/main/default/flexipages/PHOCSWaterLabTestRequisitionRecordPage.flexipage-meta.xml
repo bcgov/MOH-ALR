@@ -15,7 +15,7 @@
                         <valueListItems>
                             <value>CustomButton.LabTestRequisition__c.ViewRequisition</value>
                             <visibilityRule>
-                                <booleanFilter>1 OR 2</booleanFilter>
+                                <booleanFilter>(1 OR 2) AND 3 AND 4</booleanFilter>
                                 <criteria>
                                     <leftValue>{!$Permission.CustomPermission.PHOCSOfficer}</leftValue>
                                     <operator>EQUAL</operator>
@@ -25,6 +25,15 @@
                                     <leftValue>{!$Permission.CustomPermission.PHOCSAdmin}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>true</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.FacilityName__r.Type}</leftValue>
+                                    <operator>NE</operator>
+                                    <rightValue>Dairy</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.FacilityName__r.Name}</leftValue>
+                                    <operator>NE</operator>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
