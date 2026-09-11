@@ -88,7 +88,7 @@ global without sharing class PHOCSRiskAssessmentScoringService implements Callab
 */
     private Account getFacility(Id facilityId) {
         List<Account> facilities = [SELECT Id, Type, HealthAuthority__c, CategoryL1__c, CategoryL2__c, PHOWaterSystemSizeCategory__c
-                                    FROM Account WHERE Id = :facilityId AND RecordTypeId = :FACILITY_RTID LIMIT 1];
+                                    FROM Account WHERE Id = :facilityId LIMIT 1];
         if (facilities.isEmpty()) {
             throwError('The ContextId does not reference a valid Facility Account.');
         }
@@ -131,7 +131,8 @@ global without sharing class PHOCSRiskAssessmentScoringService implements Callab
             throwError('Health Authority is required.');
         }
 
-        if (facilityType != FACILITY_TYPE_DRINKING_WATER && facilityType != FACILITY_TYPE_FOOD && facilityType != FACILITY_TYPE_PERSONAL_SERVICES && facilityType != FACILITY_TYPE_RECREATIONAL_WATER && facilityType != FACILITY_TYPE_TOBACCO_VAPOUR) {
+        if (facilityType != FACILITY_TYPE_DRINKING_WATER && facilityType != FACILITY_TYPE_FOOD && facilityType != FACILITY_TYPE_PERSONAL_SERVICES &&
+            facilityType != FACILITY_TYPE_RECREATIONAL_WATER && facilityType != FACILITY_TYPE_TOBACCO_VAPOUR) {
             throwError('Unsupported facility type: ' + facilityType);
         }
     }
