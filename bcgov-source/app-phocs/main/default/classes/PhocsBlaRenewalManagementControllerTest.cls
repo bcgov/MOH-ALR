@@ -739,7 +739,7 @@ private class PhocsBlaRenewalManagementControllerTest {
          * should match the filter.
          */
         for (
-            PhocsBlaRenewalManagementController.SendRow row :
+            PHOCSSendRenewalsRow  row :
             response.records
         ) {
             System.assertNotEquals(
