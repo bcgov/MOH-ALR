@@ -12,6 +12,14 @@
 *               is reached; added a separate test for PngRenderer's font-validation path using a
 *               character that is valid in Code 39 but assumed unsupported by BarcodeBitmapFont.
 *               Changed test class visibility from private to public per project convention.
+*               09 Sep 2026 - Code 128 Reversion - Deepak - render(String) now encodes via
+*               Code128Encoder again. Reverted Code-39-specific width expectations back to Code
+*               128 values. Restored testUnsupportedHumanReadableCharacter to its original '@'
+*               case, since Code128Encoder.validate() (unlike Code39Encoder) does not reject '@'
+*               -- it falls through to PngRenderer's own font validation as it did originally.
+*               Removed the Code-39-default-path test since Code 128 is the default again;
+*               retained the Code128/Code39 EncodingResult and calculateWidth tests since the
+*               generic render(value, modules) overload still supports both encoders.
 ***********************************************************************************************/
 @isTest
 public class PngRendererTest {
@@ -108,9 +116,11 @@ public class PngRendererTest {
 * @author: Deepak
 * @date: 02 Sep 2026
 * @description: The purpose of this method is to verify the calculated PNG dimensions for the
-*              same requisition number using Code39Encoder, matching the encoder now used by
-*              render(String) by default. Code 39 requires more module units per character than
-*              Code 128, so the expected width is larger for the same input string.
+*              same requisition number using Code39Encoder. Code 128 is the default for
+*              render(String) again, but the generic render(value, modules)/calculateWidth() path
+*              still supports Code 39 output directly, so this coverage is retained. Code 39
+*              requires more module units per character than Code 128, so the expected width is
+*              larger for the same input string.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     @isTest
@@ -125,17 +135,17 @@ public class PngRendererTest {
     
 /**
 * @author: Deepak
-* @date: 02 Sep 2026
+* @date: 09 Sep 2026
 * @description: The purpose of this method is to verify that PngRenderer.render(String), which
-*              now encodes via Code39Encoder by default, produces a PNG whose actual IHDR width
-*              matches the width independently calculated from a Code39Encoder result for the
-*              same value -- confirming render(String) is actually using Code 39, not Code 128.
+*              encodes via Code128Encoder by default, produces a PNG whose actual IHDR width
+*              matches the width independently calculated from a Code128Encoder result for the
+*              same value -- confirming render(String) is actually using Code 128.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     @isTest
-    static void testRenderStringUsesCode39ByDefault() {
+    static void testRenderStringUsesCode128ByDefault() {
         String value = 'PHOCS-ABC123-000456';
-        Code39Encoder.EncodingResult expected = Code39Encoder.encode(value);
+        Code128Encoder.EncodingResult expected = Code128Encoder.encode(value);
         Integer expectedWidth = PngRenderer.calculateWidth(expected.modules.length(), expected.value.length());
         
         Test.startTest();
@@ -225,6 +235,8 @@ public class PngRendererTest {
 *                     02 Sep 2026 - Code 39 Migration - Deepak - Updated expected width from
 *                     242 (Code 128) to 294 (Code 39) for the same 'ABC123' input value. Height
 *                     is unaffected since it depends only on BarcodeBitmapFont, not symbology.
+*                     09 Sep 2026 - Code 128 Reversion - Deepak - Reverted expected width back
+*                     to 242 (Code 128) now that render(String) encodes via Code128Encoder again.
 */
     @isTest
     static void testIhdrUsesOneBitGrayscale() {
@@ -234,7 +246,7 @@ public class PngRendererTest {
         String ihdrData = hex.substring(ihdrPosition + 8, ihdrPosition + 34);
         
         Assert.areEqual(24, ihdrPosition, 'The IHDR chunk should begin at the expected PNG position');
-        Assert.areEqual('00000126', ihdrData.substring(0, 8), 'The PNG width should match the expected Code 39 value');
+        Assert.areEqual('000000F2', ihdrData.substring(0, 8), 'The PNG width should match the expected Code 128 value');
         Assert.areEqual('00000074', ihdrData.substring(8, 16), 'The PNG height should match the expected value');
         Assert.areEqual('01', ihdrData.substring(16, 18), 'The PNG bit depth should be one bit');
         Assert.areEqual('00', ihdrData.substring(18, 20), 'The PNG color type should be grayscale');
@@ -332,41 +344,18 @@ public class PngRendererTest {
 /**
 * @author: Deepak
 * @date: 28 Aug 2026
-* @description: The purpose of this method is to verify that a character outside the Code 39
-*              character set is rejected. Since render(String) now encodes via Code39Encoder,
-*              this rejection now happens in Code39Encoder.validate() before PngRenderer's own
-*              font validation is ever reached.
+* @description: The purpose of this method is to verify that unsupported
+*              human-readable barcode characters are rejected. Code128Encoder.validate() accepts
+*              any ASCII character 32-127 (including '@'), so this rejection happens in
+*              PngRenderer's own font validation, not in the encoder.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
-*                     02 Sep 2026 - Code 39 Migration - Deepak - Updated expected exception
-*                     message. '@' is rejected by Code39Encoder (not part of the Code 39
-*                     character set), not by PngRenderer's font-support check as it was under
-*                     Code 128.
-*/
-    @isTest
-    static void testCharacterOutsideCode39AlphabetRejectedByEncoder() {
-        try {
-            PngRenderer.render('ABC@123');
-            Assert.fail('Expected IllegalArgumentException.');
-        } catch (IllegalArgumentException ex) {
-            Assert.isTrue(ex.getMessage().contains('Code 39 supports only'), 'The exception should be raised by Code39Encoder.validate() for a character outside the Code 39 set.');
-        }
-    }
-    
-/**
-* @author: Deepak
-* @date: 02 Sep 2026
-* @description: The purpose of this method is to verify PngRenderer's own font-support
-*              validation path, using a character that is valid within the Code 39 character
-*              set (so it passes Code39Encoder.validate()) but is assumed unsupported by
-*              BarcodeBitmapFont. NOTE: this assumes BarcodeBitmapFont does not support '$';
-*              confirm against the actual BarcodeBitmapFont character set and adjust the test
-*              character if it does.
-* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*                     09 Sep 2026 - Code 128 Reversion - Deepak - Restored to the original '@'
+*                     case now that render(String) encodes via Code128Encoder again.
 */
     @isTest
     static void testUnsupportedHumanReadableCharacter() {
         try {
-            PngRenderer.render('ABC$123');
+            PngRenderer.render('ABC@123');
             Assert.fail('Expected IllegalArgumentException.');
         } catch (IllegalArgumentException ex) {
             Assert.isTrue(ex.getMessage().contains('Unsupported human-readable barcode character'), 'The exception message should identify the unsupported barcode character');
