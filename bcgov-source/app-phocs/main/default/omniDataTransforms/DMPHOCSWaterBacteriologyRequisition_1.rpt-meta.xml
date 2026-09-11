@@ -10,7 +10,7 @@
   &quot;MHOName&quot; : &quot;Text&quot;,
   &quot;DWOEHOName&quot; : &quot;Text&quot;,
   &quot;DWOEHOPhoneNumber&quot; : &quot;Text&quot;,
-  &quot;DWEHOEmail&quot; : &quot;Text&quot;,
+  &quot;DWOEHOEmail&quot; : &quot;Text&quot;,
   &quot;MHOPhoneNumber&quot; : &quot;Text&quot;,
   &quot;MHOEmail&quot; : &quot;Text&quot;,
   &quot;OutbreakSample&quot; : &quot;Text&quot;,
@@ -28,6 +28,14 @@
   &quot;FacilityAccountNumber&quot; : &quot;Text&quot;,
   &quot;FacilityPopulationServedper24hrs&quot; : &quot;Integer&quot;,
   &quot;IsDrinkingWaterSystem&quot; : &quot;Boolean&quot;,
+  &quot;LabTestRequisitionNumber&quot; : &quot;Text&quot;,
+  &quot;WaterSupplierName&quot; : &quot;Text&quot;,
+  &quot;WaterSupplierPhone&quot; : &quot;Text&quot;,
+  &quot;WaterSupplierEmail&quot; : &quot;Text&quot;,
+  &quot;SiteName&quot; : &quot;Text&quot;,
+  &quot;SiteAddress&quot; : &quot;Text&quot;,
+  &quot;SiteType&quot; : &quot;Text&quot;,
+  &quot;SystemType&quot; : &quot;Text&quot;,
   &quot;LabTestMaster&quot; : {
     &quot;Name&quot; : &quot;Text&quot;,
     &quot;TestId&quot; : &quot;Text&quot;
@@ -231,7 +239,7 @@
         <name>DMPHOCSWaterBacteriologyRequisition</name>
         <outputCreationSequence>1.0</outputCreationSequence>
         <outputFieldFormat>String</outputFieldFormat>
-        <outputFieldName>DWEHOEmail</outputFieldName>
+        <outputFieldName>DWOEHOEmail</outputFieldName>
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
@@ -337,7 +345,7 @@
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
         <globalKey>fe6cdc3d-d8d6-47f6-9425-8ffa3cf28885</globalKey>
-        <inputFieldName>LabTestRequisition:CollectionDateTime__c</inputFieldName>
+        <inputFieldName>FormattedCollectionDateTime</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>DMPHOCSWaterBacteriologyRequisition</name>
@@ -688,6 +696,301 @@
         <outputObjectName>json</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>aa0ea5f7-e4ab-48c4-8730-080d960c633f</globalKey>
+        <inputFieldName>LabTestRequisition:LabTestRequisitionNumber__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>DMPHOCSWaterBacteriologyRequisition</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>String</outputFieldFormat>
+        <outputFieldName>LabTestRequisitionNumber</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>LabTestRequisition:WaterSupplier__c</filterValue>
+        <globalKey>69d6d2b8-82f6-46bd-a537-a406a9302927</globalKey>
+        <inputFieldName>Id</inputFieldName>
+        <inputObjectName>Contact</inputObjectName>
+        <inputObjectQuerySequence>6.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>DMPHOCSWaterBacteriologyRequisition</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>WaterSupplier</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>LIMIT</filterOperator>
+        <filterValue>1</filterValue>
+        <globalKey>e3f8ef9e-30f4-4dc1-b25f-2a55ee324e99</globalKey>
+        <inputObjectName>Contact</inputObjectName>
+        <inputObjectQuerySequence>6.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>DMPHOCSWaterBacteriologyRequisition</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>WaterSupplier</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>f68780c1-b02f-45f2-a3bc-11161034c4ca</globalKey>
+        <inputFieldName>WaterSupplier:Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>DMPHOCSWaterBacteriologyRequisition</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>String</outputFieldFormat>
+        <outputFieldName>WaterSupplierName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>119202ab-5bda-4f26-bd40-7c969536a2cb</globalKey>
+        <inputFieldName>WaterSupplier:Phone</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>DMPHOCSWaterBacteriologyRequisition</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>String</outputFieldFormat>
+        <outputFieldName>WaterSupplierPhone</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>6b6927bc-a4d5-4cbd-a9fe-912b094afc0a</globalKey>
+        <inputFieldName>WaterSupplier:Email</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>DMPHOCSWaterBacteriologyRequisition</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>String</outputFieldFormat>
+        <outputFieldName>WaterSupplierEmail</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>LabTestRequisition:SamplingSite__c</filterValue>
+        <globalKey>653125d7-a68a-420d-8474-aa21c392d028</globalKey>
+        <inputFieldName>Id</inputFieldName>
+        <inputObjectName>Location</inputObjectName>
+        <inputObjectQuerySequence>7.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>DMPHOCSWaterBacteriologyRequisition</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>SamplingSite</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>LIMIT</filterOperator>
+        <filterValue>1</filterValue>
+        <globalKey>50c9103b-c26c-4979-a96e-eaa7228484c6</globalKey>
+        <inputObjectName>Location</inputObjectName>
+        <inputObjectQuerySequence>7.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>DMPHOCSWaterBacteriologyRequisition</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>SamplingSite</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>65283cb9-2c03-486c-b05b-ebd3bc210d52</globalKey>
+        <inputFieldName>SamplingSite:Name</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>DMPHOCSWaterBacteriologyRequisition</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>String</outputFieldFormat>
+        <outputFieldName>SiteName</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>33837498-f88f-4da6-aee4-38140786acd1</globalKey>
+        <inputFieldName>ResolvedSiteAddress</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>DMPHOCSWaterBacteriologyRequisition</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>String</outputFieldFormat>
+        <outputFieldName>SiteAddress</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>383a3f1f-5955-42f9-ae75-628081941ead</globalKey>
+        <inputFieldName>SamplingSite:LocationType</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>DMPHOCSWaterBacteriologyRequisition</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>String</outputFieldFormat>
+        <outputFieldName>SiteType</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>=</filterOperator>
+        <filterValue>LabTestRequisition:Drinking_Water_Component_Name__c</filterValue>
+        <globalKey>568b132d-b104-4a71-ae5c-f31b33da7f2e</globalKey>
+        <inputFieldName>Id</inputFieldName>
+        <inputObjectName>Asset</inputObjectName>
+        <inputObjectQuerySequence>8.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>DMPHOCSWaterBacteriologyRequisition</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>DrinkingWaterComponent</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <filterOperator>LIMIT</filterOperator>
+        <filterValue>1</filterValue>
+        <globalKey>3c182835-f460-430d-ae7b-f08bf72efb82</globalKey>
+        <inputObjectName>Asset</inputObjectName>
+        <inputObjectQuerySequence>8.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>DMPHOCSWaterBacteriologyRequisition</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>DrinkingWaterComponent</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:DrinkingWaterComponent:Street &quot;,/\/\/&quot; var:DrinkingWaterComponent:City &quot;,/\/\/&quot; var:DrinkingWaterComponent:State &quot;,/\/\/&quot; var:DrinkingWaterComponent:PostalCode &quot;,/\/\/&quot; var:DrinkingWaterComponent:Country CONCAT</formulaConverted>
+        <formulaExpression>CONCAT(%DrinkingWaterComponent:Street%, &quot;, &quot;, %DrinkingWaterComponent:City%, &quot;, &quot;, %DrinkingWaterComponent:State%, &quot;, &quot;, %DrinkingWaterComponent:PostalCode%, &quot;, &quot;, %DrinkingWaterComponent:Country%)</formulaExpression>
+        <formulaResultPath>DrinkingWaterComponentAddress</formulaResultPath>
+        <formulaSequence>2.0</formulaSequence>
+        <globalKey>c931f69b-cbf3-44c4-94dc-41e4464f1e8f</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>DMPHOCSWaterBacteriologyRequisition</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:Facility:Physical_Address__Street__s &quot;,/\/\/&quot; var:Facility:Physical_Address__City__s &quot;,/\/\/&quot; var:Facility:Physical_Address__State__s &quot;,/\/\/&quot; var:Facility:Physical_Address__PostalCode__s &quot;,/\/\/&quot; var:Facility:Physical_Address__Country__s CONCAT</formulaConverted>
+        <formulaExpression>CONCAT(%Facility:Physical_Address__Street__s%, &quot;, &quot;, %Facility:Physical_Address__City__s%, &quot;, &quot;, %Facility:Physical_Address__State__s%, &quot;, &quot;, %Facility:Physical_Address__PostalCode__s%, &quot;, &quot;, %Facility:Physical_Address__Country__s%)</formulaExpression>
+        <formulaResultPath>FacilityPhysicalAddress</formulaResultPath>
+        <formulaSequence>3.0</formulaSequence>
+        <globalKey>538bd257-a788-40b8-89cc-e0ece16514a6</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>DMPHOCSWaterBacteriologyRequisition</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| | | var:DrinkingWaterComponent:Street ISBLANK NOT var:DrinkingWaterComponentAddress | | var:Facility:Physical_Address__Street__s ISBLANK NOT var:FacilityPhysicalAddress var:LabTestRequisition:Site_Descriptor__c IF IF</formulaConverted>
+        <formulaExpression>IF(NOT(ISBLANK(%DrinkingWaterComponent:Street%)), %DrinkingWaterComponentAddress%, IF(NOT(ISBLANK(%Facility:Physical_Address__Street__s%)), %FacilityPhysicalAddress%, %LabTestRequisition:Site_Descriptor__c%))</formulaExpression>
+        <formulaResultPath>ResolvedSiteAddress</formulaResultPath>
+        <formulaSequence>4.0</formulaSequence>
+        <globalKey>a10c4a90-f4f0-46fb-874c-d930ee225d65</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>DMPHOCSWaterBacteriologyRequisition</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>7ce681bf-e93b-4d94-85aa-5918a833b869</globalKey>
+        <inputFieldName>LabTestRequisition:SystemType__c</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>DMPHOCSWaterBacteriologyRequisition</name>
+        <outputCreationSequence>1.0</outputCreationSequence>
+        <outputFieldFormat>String</outputFieldFormat>
+        <outputFieldName>SystemType</outputFieldName>
+        <outputObjectName>json</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <formulaConverted>| var:LabTestRequisition:CollectionDateTime__c &quot;MM/dd/yyyy/\/\/hh:mm/\/\/a&quot; FORMATDATETIME</formulaConverted>
+        <formulaExpression>FORMATDATETIME(%LabTestRequisition:CollectionDateTime__c%, &quot;MM/dd/yyyy hh:mm a&quot;)</formulaExpression>
+        <formulaResultPath>FormattedCollectionDateTime</formulaResultPath>
+        <formulaSequence>5.0</formulaSequence>
+        <globalKey>10a43aad-4c4c-4b65-8d62-19a445cbb8a9</globalKey>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>DMPHOCSWaterBacteriologyRequisition</name>
+        <outputCreationSequence>0.0</outputCreationSequence>
+        <outputFieldName>Formula</outputFieldName>
+        <outputObjectName>Formula</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <outputType>JSON</outputType>

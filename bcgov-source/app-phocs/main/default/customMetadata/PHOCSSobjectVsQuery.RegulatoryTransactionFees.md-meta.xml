@@ -8,12 +8,12 @@
     </values>
     <values>
         <field>ObjectQuery__c</field>
-        <value xsi:type="xsd:string">SELECT Id, Name, FeeType__c, Status, DueDate, TotalFeeAmount
+        <value xsi:type="xsd:string">SELECT Id, Name, FeeType__c, Status__c, DueDate, TotalFeeAmount
 FROM RegulatoryTrxnFee
 WHERE AccountId = :recordId
-AND Status IN (&apos;Due&apos;, &apos;Partially Paid&apos;, &apos;Paid&apos;)
+AND Status__c IN (&apos;Due&apos;, &apos;Partially_Paid&apos;, &apos;Paid&apos;)
 AND RecordType.DeveloperName IN (&apos;PHOCSTransactionFee&apos;, &apos;PHOCSNonDairyTransactionFee&apos;)
-ORDER BY Status ASC, DueDate ASC</value>
+ORDER BY Status__c ASC, DueDate ASC</value>
     </values>
     <values>
         <field>ParentFieldAPIName__c</field>

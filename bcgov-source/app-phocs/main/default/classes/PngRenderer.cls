@@ -11,6 +11,10 @@
                 render(String value, String modules) so PngRenderer no longer depends on a
                 specific encoder's type -- any encoder producing a value/modules pair (Code128Encoder,
                 Code39Encoder, or future symbologies) can feed it directly.
+                09 Sep - Code 128 Reversion - Deepak - render(String) now encodes via
+                Code128Encoder again per updated team direction. The symbology-agnostic
+                render(String value, String modules) overload is unchanged and still accepts
+                either encoder's output directly.
 ***********************************************************************************************/
 public with sharing class PngRenderer {
     private static final String CLASS_NAME = 'PngRenderer';
@@ -31,11 +35,13 @@ public with sharing class PngRenderer {
 /**
 * @author: Deepak
 * @date: 28 Aug 2026
-* @description: The purpose of this method is to encode the barcode value using Code39Encoder and
+* @description: The purpose of this method is to encode the barcode value using Code128Encoder and
 *              render it as a PNG image.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
-*                     02 Sep 2026 - Code 39 Migration - Deepak - Encodes via Code39Encoder instead
+*                     02 Sep 2026 - Code 39 Migration - Deepak - Encoded via Code39Encoder instead
 *                     of Code128Encoder.
+*                     09 Sep 2026 - Code 128 Reversion - Deepak - Reverted to encoding via
+*                     Code128Encoder per updated team direction.
 */
     public static Blob render(String value) {
         try {
@@ -43,7 +49,7 @@ public with sharing class PngRenderer {
                 throw new IllegalArgumentException('Barcode value is required.');
             }
 
-            Code39Encoder.EncodingResult encodingResult = Code39Encoder.encode(value);
+            Code128Encoder.EncodingResult encodingResult = Code128Encoder.encode(value);
 
             return render(encodingResult.value, encodingResult.modules);
         } catch (Exception ex) {
