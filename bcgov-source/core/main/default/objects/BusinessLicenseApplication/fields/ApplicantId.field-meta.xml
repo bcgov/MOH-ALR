@@ -2,30 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>ApplicantId</fullName>
     <description>Use contact information for user logged into portal submitting</description>
-    <lookupFilter>
-        <active>true</active>
-        <filterItems>
-            <field>Contact.AccountId</field>
-            <operation>equals</operation>
-            <valueField>$Source.AccountId</valueField>
-        </filterItems>
-        <filterItems>
-            <field>Contact.Active__c</field>
-            <operation>equals</operation>
-            <value>True</value>
-        </filterItems>
-        <filterItems>
-            <field>$Source.RecordTypeId</field>
-            <operation>notEqual</operation>
-            <value>New License</value>
-        </filterItems>
-        <filterItems>
-            <field>$Source.RecordTypeId</field>
-            <operation>notEqual</operation>
-            <value>Renewal</value>
-        </filterItems>
-        <isOptional>false</isOptional>
-    </lookupFilter>
     <trackHistory>false</trackHistory>
     <type>Lookup</type>
 </CustomField>
