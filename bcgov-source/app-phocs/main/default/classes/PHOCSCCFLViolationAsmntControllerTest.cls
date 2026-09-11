@@ -8,6 +8,7 @@
 *               01 Sep -  PHOCS-4817        -  Deepak      -  Added test coverage for getReassessmentViolations.
 *               01 Sep -  PHOCS-4817        -  Deepak      -  Added required Name field on Assessment inserts and corrected Scope__c/Severity__c to valid restricted picklist values.
 *               01 Sep -  PHOCS-271         -  Deepak      -  Updated matched-violation test to assert the completed violation's own data is displayed (not the current violation's), and added coverage for selected being gated on the completed violation's Scope/Severity.
+*               03 Sep -  PHOCS-271         -  Deepak      -  getReassessmentViolations now requires a SelectedViolationsJSON__c match (by violationId, falling back to category/inspectionQuestion) to prepopulate a matched violation. Updated the two matched-violation tests to populate SelectedViolationsJSON__c, and added coverage for the category/inspectionQuestion fallback match and for a composite-key match with no corresponding JSON entry.
 ***********************************************************************************************/
 @isTest
 public class PHOCSCCFLViolationAsmntControllerTest {    
@@ -223,15 +224,16 @@ public class PHOCSCCFLViolationAsmntControllerTest {
     
     /**
 * @author: Deepak
-* @date: 01 Sep 2026
-* @description: Verifies that when a current violation's slot matches a completed violation with
-*                populated Scope/Severity, the returned wrapper displays the completed violation's
-*                own data (Id, category, scope, severity) rather than the current violation's, and
-*                is marked selected.
+* @date: 03 Sep 2026
+* @description: Verifies that when a current violation's slot matches a completed violation via
+*                the composite key, AND the completed Assessment's SelectedViolationsJSON__c has
+*                an entry whose violationId matches the completed violation's own Id, the returned
+*                wrapper displays the completed violation's own data (Id, category) and is
+*                prepopulated/selected from that JSON entry's Scope and Severity.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     @isTest
-    public static void testGetReassessmentViolations_MatchedViolation_DisplaysCompletedViolationAndSelected() {
+    public static void testGetReassessmentViolations_MatchedByJsonViolationId_DisplaysCompletedViolationAndSelected() {
         Map<String, Id> dataMap = createTestData();
         
         Account facility = [SELECT Id FROM Account WHERE Id = :dataMap.get('facilityId') LIMIT 1];
@@ -258,14 +260,24 @@ public class PHOCSCCFLViolationAsmntControllerTest {
                                                                                  RegulatoryCodeId = dataMap.get('regCodeId'),
                                                                                  ComplianceDueDate = System.now().addDays(5),
                                                                                  DateCreated = System.now(),
-                                                                                 Status = 'Open',
-                                                                                 Scope__c = 'Isolated',
-                                                                                 Severity__c = 'Potential for minimal harm');
+                                                                                 Status = 'Open');
         insert completedViolation;
+        
+        String selectedViolationsJson = JSON.serialize(new List<Map<String, Object>>{
+            new Map<String, Object>{
+                'violationId' => String.valueOf(completedViolation.Id),
+                'category' => 'Completed Assessment Task',
+                'regulatoryCode' => 'Test Regulatory Code',
+                'inspectionQuestion' => 'Test Assessment Definition',
+                'scope' => 'Isolated',
+                'severity' => 'Potential for minimal harm',
+                'comments' => null
+            }
+        });
         
         Assessment completedAssessment = new Assessment(Name = 'Test Completed Assessment', RecordTypeId = recordTypePHOCSAssessment, AccountId = facility.Id,
                                                         ResponseContextId = completedInspection.Id, Type = 'Risk Assessment',
-                                                        AssessmentStatus = 'Completed');
+                                                        AssessmentStatus = 'Completed', SelectedViolationsJSON__c = selectedViolationsJson);
         insert completedAssessment;
         
         RegulatoryCodeViolation currentViolation = new RegulatoryCodeViolation(RecordTypeId = recordTypePHOCSRegulatoryCodeViolation,
@@ -286,21 +298,20 @@ public class PHOCSCCFLViolationAsmntControllerTest {
         Assert.areEqual(1, result.violations.size(), 'One matched violation slot should be returned.');
         Assert.areEqual(completedViolation.Id, result.violations[0].id, 'On a match, the wrapper should display the completed violation, not the current violation.');
         Assert.areEqual('Completed Assessment Task', result.violations[0].category, 'Category should reflect the completed violations own AssessmentTask, not the current violations.');
-        Assert.isTrue(result.violations[0].selected, 'The violation should be selected when the matched completed violation has both Scope and Severity populated.');
-        Assert.areEqual('Isolated', result.violations[0].scope, 'Scope should come from the matched completed violation.');
-        Assert.areEqual('Potential for minimal harm', result.violations[0].severity, 'Severity should come from the matched completed violation.');
+        Assert.isTrue(result.violations[0].selected, 'The violation should be selected when the matched JSON entry has both Scope and Severity populated.');
+        Assert.areEqual('Isolated', result.violations[0].scope, 'Scope should come from the matched SelectedViolationsJSON__c entry.');
+        Assert.areEqual('Potential for minimal harm', result.violations[0].severity, 'Severity should come from the matched SelectedViolationsJSON__c entry.');
     }
     
     /**
 * @author: Deepak
-* @date: 01 Sep 2026
-* @description: Verifies that when a current violation's slot matches a completed violation that is
-*                missing Scope or Severity, the wrapper still displays the completed violation's own
-*                data but is not marked selected.
+* @date: 03 Sep 2026
+* @description: Verifies that when the matched JSON entry (by violationId) has null Scope/Severity,
+*                the wrapper still displays the completed violation's own data but is not selected.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     @isTest
-    public static void testGetReassessmentViolations_MatchedViolationMissingScopeOrSeverity_NotSelected() {
+    public static void testGetReassessmentViolations_MatchedJsonEntryMissingScopeOrSeverity_NotSelected() {
         Map<String, Id> dataMap = createTestData();
         
         Account facility = [SELECT Id FROM Account WHERE Id = :dataMap.get('facilityId') LIMIT 1];
@@ -330,6 +341,165 @@ public class PHOCSCCFLViolationAsmntControllerTest {
                                                                                  Status = 'Open');
         insert completedViolation;
         
+        String selectedViolationsJson = JSON.serialize(new List<Map<String, Object>>{
+            new Map<String, Object>{
+                'violationId' => String.valueOf(completedViolation.Id),
+                'category' => 'Completed Assessment Task No Scope',
+                'regulatoryCode' => 'Test Regulatory Code',
+                'inspectionQuestion' => 'Test Assessment Definition',
+                'scope' => null,
+                'severity' => null,
+                'comments' => null
+            }
+        });
+        
+        Assessment completedAssessment = new Assessment(Name = 'Test Completed Assessment', RecordTypeId = recordTypePHOCSAssessment, AccountId = facility.Id,
+                                                        ResponseContextId = completedInspection.Id, Type = 'Risk Assessment',
+                                                        AssessmentStatus = 'Completed', SelectedViolationsJSON__c = selectedViolationsJson);
+        insert completedAssessment;
+        
+        RegulatoryCodeViolation currentViolation = new RegulatoryCodeViolation(RecordTypeId = recordTypePHOCSRegulatoryCodeViolation,
+                                                                               InspectionId = dataMap.get('inspId'),
+                                                                               InspectionAssmntIndId = dataMap.get('inspAsmIndId'),
+                                                                               RegulatoryCodeId = dataMap.get('regCodeId'),
+                                                                               ComplianceDueDate = System.now().addDays(5),
+                                                                               DateCreated = System.now(),
+                                                                               Status = 'Open');
+        insert currentViolation;
+        
+        Test.startTest();
+        PHOCSCCFLViolationAssessmentController.ReassessmentResponse result = PHOCSCCFLViolationAssessmentController.getReassessmentViolations(dataMap.get('inspId'), dataMap.get('facilityId'));
+        Test.stopTest();
+        
+        Assert.areEqual(1, result.violations.size(), 'One matched violation slot should be returned.');
+        Assert.areEqual(completedViolation.Id, result.violations[0].id, 'On a JSON violationId match, the wrapper should display the completed violation even when Scope/Severity are null.');
+        Assert.isFalse(result.violations[0].selected, 'The violation should not be selected when the matched JSON entry is missing Scope or Severity.');
+    }
+    
+    /**
+* @author: Deepak
+* @date: 03 Sep 2026
+* @description: Verifies the category/inspectionQuestion fallback match: when the JSON's
+*                violationId does not correspond to the matched completed violation's Id, but a
+*                JSON entry's category/inspectionQuestion matches the current violation's
+*                Assessment Task/Indicator Definition names, Scope and Severity are still
+*                prepopulated from that entry.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
+    @isTest
+    public static void testGetReassessmentViolations_MatchedByCategoryAndQuestionFallback_PrepopulatesScopeSeverity() {
+        Map<String, Id> dataMap = createTestData();
+        
+        Account facility = [SELECT Id FROM Account WHERE Id = :dataMap.get('facilityId') LIMIT 1];
+        Schema.Location loc = [SELECT Id FROM Location WHERE Id = :dataMap.get('locationId') LIMIT 1];
+        InspectionType inspType = [SELECT Id FROM InspectionType LIMIT 1];
+        
+        Visit completedInspection = new Visit(InspectionMethod__c = 'Scheduled on Site Inspection', AccountId = facility.Id, PlaceId = loc.Id,
+                                              PlannedVisitStartTime = System.now().addDays(-10), RecordTypeId = recordTypePHOCSInspection,
+                                              VisitTypeId = inspType.Id);
+        insert completedInspection;
+        
+        AssessmentTask completedAssessmentTask = new AssessmentTask(Name = 'Completed Assessment Task', ParentId = completedInspection.Id,
+                                                                    AssessmentTaskDefinitionId = dataMap.get('assessmentTaskDefinitionId'),
+                                                                    TaskType = 'InspectionChecklist');
+        insert completedAssessmentTask;
+        
+        InspectionAssessmentInd completedInspAsmInd = new InspectionAssessmentInd(AssessmentTaskId = completedAssessmentTask.Id,
+                                                                                  AssessmentIndDefinitionId = dataMap.get('indDefId'));
+        insert completedInspAsmInd;
+        
+        RegulatoryCodeViolation completedViolation = new RegulatoryCodeViolation(RecordTypeId = recordTypePHOCSRegulatoryCodeViolation,
+                                                                                 InspectionId = completedInspection.Id,
+                                                                                 InspectionAssmntIndId = completedInspAsmInd.Id,
+                                                                                 RegulatoryCodeId = dataMap.get('regCodeId'),
+                                                                                 ComplianceDueDate = System.now().addDays(5),
+                                                                                 DateCreated = System.now(),
+                                                                                 Status = 'Open');
+        insert completedViolation;
+        
+        RegulatoryCodeViolation currentViolation = new RegulatoryCodeViolation(RecordTypeId = recordTypePHOCSRegulatoryCodeViolation,
+                                                                               InspectionId = dataMap.get('inspId'),
+                                                                               InspectionAssmntIndId = dataMap.get('inspAsmIndId'),
+                                                                               RegulatoryCodeId = dataMap.get('regCodeId'),
+                                                                               ComplianceDueDate = System.now().addDays(5),
+                                                                               DateCreated = System.now(),
+                                                                               Status = 'Open');
+        insert currentViolation;
+        
+        // A JSON entry whose violationId does NOT match the completed violation's Id, so the
+        // controller must fall back to matching category/inspectionQuestion against the CURRENT
+        // violation's own AssessmentTask.Name ('Test Assessment Task') and
+        // AssessmentIndDefinition.Name ('Test Assessment Definition'), not the completed
+        // violation's task name.
+        String selectedViolationsJson = JSON.serialize(new List<Map<String, Object>>{
+            new Map<String, Object>{
+                'violationId' => '0fv000000000000AAA',
+                'category' => 'Test Assessment Task',
+                'regulatoryCode' => 'Test Regulatory Code',
+                'inspectionQuestion' => 'Test Assessment Definition',
+                'scope' => 'Pattern',
+                'severity' => 'Potential for significant harm',
+                'comments' => 'Fallback match comment'
+            }
+        });
+        
+        Assessment completedAssessment = new Assessment(Name = 'Test Completed Assessment', RecordTypeId = recordTypePHOCSAssessment, AccountId = facility.Id,
+                                                        ResponseContextId = completedInspection.Id, Type = 'Risk Assessment',
+                                                        AssessmentStatus = 'Completed', SelectedViolationsJSON__c = selectedViolationsJson);
+        insert completedAssessment;
+        
+        Test.startTest();
+        PHOCSCCFLViolationAssessmentController.ReassessmentResponse result = PHOCSCCFLViolationAssessmentController.getReassessmentViolations(dataMap.get('inspId'), dataMap.get('facilityId'));
+        Test.stopTest();
+        
+        Assert.areEqual(1, result.violations.size(), 'One matched violation slot should be returned.');
+        Assert.areEqual(completedViolation.Id, result.violations[0].id, 'The wrapper should still display the completed violation found via the composite key.');
+        Assert.isTrue(result.violations[0].selected, 'The violation should be selected via the category/inspectionQuestion fallback match.');
+        Assert.areEqual('Pattern', result.violations[0].scope, 'Scope should come from the category/inspectionQuestion fallback-matched JSON entry.');
+        Assert.areEqual('Potential for significant harm', result.violations[0].severity, 'Severity should come from the category/inspectionQuestion fallback-matched JSON entry.');
+    }
+    
+    /**
+* @author: Deepak
+* @date: 03 Sep 2026
+* @description: Verifies that a composite-key match with no corresponding entry in
+*                SelectedViolationsJSON__c (neither by violationId nor by category/
+*                inspectionQuestion) falls back to displaying the plain current violation.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
+    @isTest
+    public static void testGetReassessmentViolations_MatchedButNoJsonEntry_DisplaysCurrentViolation() {
+        Map<String, Id> dataMap = createTestData();
+        
+        Account facility = [SELECT Id FROM Account WHERE Id = :dataMap.get('facilityId') LIMIT 1];
+        Schema.Location loc = [SELECT Id FROM Location WHERE Id = :dataMap.get('locationId') LIMIT 1];
+        InspectionType inspType = [SELECT Id FROM InspectionType LIMIT 1];
+        
+        Visit completedInspection = new Visit(InspectionMethod__c = 'Scheduled on Site Inspection', AccountId = facility.Id, PlaceId = loc.Id,
+                                              PlannedVisitStartTime = System.now().addDays(-10), RecordTypeId = recordTypePHOCSInspection,
+                                              VisitTypeId = inspType.Id);
+        insert completedInspection;
+        
+        AssessmentTask completedAssessmentTask = new AssessmentTask(Name = 'Completed Assessment Task', ParentId = completedInspection.Id,
+                                                                    AssessmentTaskDefinitionId = dataMap.get('assessmentTaskDefinitionId'),
+                                                                    TaskType = 'InspectionChecklist');
+        insert completedAssessmentTask;
+        
+        InspectionAssessmentInd completedInspAsmInd = new InspectionAssessmentInd(AssessmentTaskId = completedAssessmentTask.Id,
+                                                                                  AssessmentIndDefinitionId = dataMap.get('indDefId'));
+        insert completedInspAsmInd;
+        
+        RegulatoryCodeViolation completedViolation = new RegulatoryCodeViolation(RecordTypeId = recordTypePHOCSRegulatoryCodeViolation,
+                                                                                 InspectionId = completedInspection.Id,
+                                                                                 InspectionAssmntIndId = completedInspAsmInd.Id,
+                                                                                 RegulatoryCodeId = dataMap.get('regCodeId'),
+                                                                                 ComplianceDueDate = System.now().addDays(5),
+                                                                                 DateCreated = System.now(),
+                                                                                 Status = 'Open');
+        insert completedViolation;
+        
+        // SelectedViolationsJSON__c is left blank, so no violationId or category/inspectionQuestion
+        // match is possible even though the composite key matches a completed violation.
         Assessment completedAssessment = new Assessment(Name = 'Test Completed Assessment', RecordTypeId = recordTypePHOCSAssessment, AccountId = facility.Id,
                                                         ResponseContextId = completedInspection.Id, Type = 'Risk Assessment',
                                                         AssessmentStatus = 'Completed');
@@ -348,9 +518,9 @@ public class PHOCSCCFLViolationAsmntControllerTest {
         PHOCSCCFLViolationAssessmentController.ReassessmentResponse result = PHOCSCCFLViolationAssessmentController.getReassessmentViolations(dataMap.get('inspId'), dataMap.get('facilityId'));
         Test.stopTest();
         
-        Assert.areEqual(1, result.violations.size(), 'One matched violation slot should be returned.');
-        Assert.areEqual(completedViolation.Id, result.violations[0].id, 'On a match, the wrapper should display the completed violation even when it is missing Scope/Severity.');
-        Assert.isFalse(result.violations[0].selected, 'The violation should not be selected when the matched completed violation is missing Scope or Severity.');
+        Assert.areEqual(1, result.violations.size(), 'One current violation should be returned.');
+        Assert.areEqual(currentViolation.Id, result.violations[0].id, 'With no matching JSON entry, the wrapper should fall back to the current violation, not the completed one.');
+        Assert.isFalse(result.violations[0].selected, 'A violation with no matching JSON entry should not be selected.');
     }
     
     /**
