@@ -7,7 +7,8 @@
     RecordType.DeveloperName = &quot;PHOCSAssessment&quot;,
     NOT($Permission.EHISBypassValidationRuleCustomPermission),
     NOT(ISNEW()),
-    ISPICKVAL(PRIORVALUE(Type), &quot;Risk Assessment&quot;),
+	OR(ISPICKVAL(PRIORVALUE(Type), &quot;Risk re-assessment&quot;),
+    ISPICKVAL(PRIORVALUE(Type), &quot;Risk Assessment&quot;)),
     ISPICKVAL(PRIORVALUE(AssessmentStatus), &quot;Completed&quot;)
 )</errorConditionFormula>
     <errorMessage>Assessment record cannot be edited once the status is marked as Completed</errorMessage>
