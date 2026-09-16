@@ -855,7 +855,32 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                     'AccountName'=> caseRecord.Account.Name,
                     'AccountPhone'=> caseRecord.Account.Phone,
                     'AccountWebsite'=> caseRecord.Account.Website,
-                    'PopulationServedper24hrs' => caseRecord.Account.PopulationServedper24hrs__c 
+                    'PopulationServedper24hrs' => caseRecord.Account.PopulationServedper24hrs__c,
+                    'AccountType' => caseRecord.Account?.Type,
+                    'HealthAuthority__c' => caseRecord.Account?.HealthAuthority__c,
+                    'TotalMaximumCapacity' => caseRecord.Account?.TotalMaximumCapacity__c,
+                    'RiskRating' => caseRecord.Account?.RiskRating__c,
+                    'ComplaintTopicType' => caseRecord.ComplaintTopicType__c,
+                    'Date_Received__c' => caseRecord.Date_Received__c,
+                    'Date_Substantiated__c' => caseRecord.Date_Substantiated__c,
+                    'PhysicalAddress' => caseRecord.Account?.HideAddressonPublicSite__c == true ? '' 
+                            : getAddress(caseRecord.Account?.Physical_Address__c),
+                                'PhysicalAddressStreet' => caseRecord.Account?.Physical_Address__c?.getStreet(),
+                                'PhysicalAddressCity' => caseRecord.Account?.Physical_Address__c?.getCity(),
+                                'PhysicalAddressState' => caseRecord.Account?.Physical_Address__c?.getState(),
+                                'PhysicalAddressPostalCode' => caseRecord.Account?.Physical_Address__c?.getPostalCode(),
+                                'PhysicalAddressCountry' => caseRecord.Account?.Physical_Address__c?.getCountry(),
+                                 'ActionsRequiredbyLicenseeOperator__c' =>
+                                        caseRecord.Interaction_Summaries__r != null &&
+                                        !caseRecord.Interaction_Summaries__r.isEmpty()
+                                            ? caseRecord.Interaction_Summaries__r[0].ActionsRequiredbyLicenseeOperator__c
+                                            : null,
+                                 'ActionsRequiredbyLOMHO__c' =>
+                                        caseRecord.Interaction_Summaries__r != null &&
+                                        !caseRecord.Interaction_Summaries__r.isEmpty()
+                                            ? caseRecord.Interaction_Summaries__r[0].ActionsRequiredbyLOMHO__c
+                                            : null
+                    
                     };
                         return result;
         }
