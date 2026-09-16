@@ -93,7 +93,7 @@ export default class PHOCSBLARenewalManagement extends LightningElement {
         {
             label: 'Operating Months',
             fieldName: 'operatingMonths',
-            type: 'number',
+            type: 'text',
             sortable: true
         },
         {
@@ -334,7 +334,7 @@ paymentColumns = [
     {
         label: 'Operating Months',
         fieldName: 'operatingMonths',
-        type: 'number',
+        type: 'text',
         sortable: true
     },
     {
@@ -392,12 +392,18 @@ lateFeeColumns = [
             },
             target: '_self'
         }
-    },
+    },    
     {
-        label: 'Account Name',
-        fieldName: 'accountName',
-        type: 'text',
-        sortable: true
+            label: 'Account Name',
+            fieldName: 'accountUrl',
+            type: 'url',
+            sortable: true,
+            typeAttributes: {
+                label: {
+                    fieldName: 'accountName'
+                },
+                target: '_self'
+            }
     },
     {
         label: 'Physical Address (ZIP/Postal Code)',
@@ -461,7 +467,7 @@ lateFeeColumns = [
     {
         label: 'Operating Months',
         fieldName: 'operatingMonths',
-        type: 'number',
+        type: 'text',
         sortable: true
     },
     {

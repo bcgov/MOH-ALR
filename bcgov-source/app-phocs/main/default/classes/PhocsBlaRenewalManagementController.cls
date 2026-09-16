@@ -108,19 +108,15 @@ public with sharing class PhocsBlaRenewalManagementController {
         if (String.isNotBlank(accountType)) {
             conditions.add('Type = :accountType');
             bindVars.put('accountType', accountType);
-        }
-        
+        }        
         if (multiplePremise == true) {
             conditions.add('MultiplePremiseFacility__c = true');
-        }
-        
+        }        
         if (!conditions.isEmpty()) {
             soql += ' WHERE ' + String.join(conditions, ' AND ');
-        }
-        
+        }        
         // Default sort: Parent Account ascending.
-        soql += ' ORDER BY Parent.Name ASC NULLS FIRST, Name ASC';
-        
+        soql += ' ORDER BY Parent.Name ASC NULLS FIRST, Name ASC';        
         List<Account> accounts = Database.queryWithBinds(soql, bindVars, AccessLevel.USER_MODE);
         
         Map<Id,Account> acctMap = new Map<Id,Account>();
@@ -161,6 +157,7 @@ public with sharing class PhocsBlaRenewalManagementController {
             if(account.get(CATEGORY_L2_FIELD)!= null)
             row.categoryL2 = (String) account.get(CATEGORY_L2_FIELD);
             if(account.get(OPERATING_MONTHS_FIELD)!= null)
+            system.debug('===>'+account.get(OPERATING_MONTHS_FIELD));
             row.operatingMonths = (String)account.get(OPERATING_MONTHS_FIELD);
             if(account.get(MULTIPLE_PREMISE_FIELD)!= null)
             row.multiplePremise = toBoolean(account.get(MULTIPLE_PREMISE_FIELD));
@@ -432,7 +429,7 @@ public static SendResponse getSendRenewals(String type, String feeName, Boolean 
     String rtfSoql = 'SELECT Id,Name, ' + RTF_ACCOUNT_FIELD + ', ' +
     'ParentRecordId,ParentRecord.Name, Status__c FROM RegulatoryTrxnFee' +
     ' WHERE Status__c = :RTF_STATUS_DRAFT'+
-    ' AND '+ RTF_FEETYPE_FIELD + ' = :RTF_FEETYPE_RENEWAL';  
+    ' AND FeeType__c = :RTF_FEETYPE_RENEWAL';  
     
     Schema.SObjectType rtfType = Schema.getGlobalDescribe().get(RTF_OBJECT);
     
@@ -563,9 +560,9 @@ public static SendResponse getSendRenewals(String type, String feeName, Boolean 
         row.feeUrl = '/lightning/r/' + row.Id + '/view';
         row.feeName =  currentFeeName;
         row.feeAmount = currentFeeAmount;
+        //row.operatingMonths =        
         row.multiplePremise = currentMultiplePremise;
-        row.premiseRole = currentPremiseRole;
-        
+        row.premiseRole = currentPremiseRole;        
         response.records.add(row);
     }
     
@@ -615,6 +612,10 @@ public static OperationResponse sendSelectedRenewals(List<Id> regulatoryTransact
             fee.put(
                 'Status__c',
                 'Due'
+            );
+            fee.put(
+                'PaymentReminder__c',
+                'Send Renewal'
             );
         }
 
@@ -726,7 +727,7 @@ public static PHOCSRenewalPaymentReminderResponse getPaymentReminders(
 
     String baseWhere =  'Status__c IN (\'Due\', \'Partially Paid\')';
 
-    baseWhere += ' AND ' + RTF_FEETYPE_FIELD + ' != NULL';            
+    baseWhere += ' AND FeeType__c != NULL';            
 
     Map<String, Object> binds =
         new Map<String, Object>();
@@ -737,8 +738,7 @@ public static PHOCSRenewalPaymentReminderResponse getPaymentReminders(
     }
 
     if (String.isNotBlank(feeType)) {
-        baseWhere += ' AND ' + RTF_FEETYPE_FIELD +
-            ' = :feeType';
+        baseWhere += ' AND FeeType__c = :feeType';
         binds.put('feeType', feeType);
     }
 
@@ -795,7 +795,7 @@ public static PHOCSRenewalPaymentReminderResponse getPaymentReminders(
         'AccountId, ' +
         'ParentRecordId, ParentRecord.Name, ' +
         'Status__c, ' +
-        RTF_FEETYPE_FIELD + ', ' +
+        'FeeType__c, ' +
         'DueDate, ' +
         'Account.Id, ' +
         'Account.Name, ' +
@@ -1004,7 +1004,7 @@ private static Set<Id> getEligiblePaymentReminderIds(String type, String feeName
 
     if (String.isNotBlank(feeType)) {
         whereClause +=
-            ' AND ' + RTF_FEETYPE_FIELD + ' = :feeType';
+            ' AND FeeType__c = :feeType';
 
         binds.put('feeType', feeType);
     }
@@ -1171,8 +1171,7 @@ public static PHOCSRenewalLateFeeResponse getLateFeeManagement(
 
     if (String.isNotBlank(feeType)) {
         whereClause +=
-            ' AND ' + RTF_FEETYPE_FIELD +
-            ' = :feeType';
+            ' AND FeeType__c = :feeType';
 
         binds.put('feeType', feeType);
     }
@@ -1228,7 +1227,7 @@ public static PHOCSRenewalLateFeeResponse getLateFeeManagement(
         'AccountId, ' +
         'ParentRecordId,ParentRecord.Name, ' +
         'Status__c, ' +
-        RTF_FEETYPE_FIELD + ', ' +
+        'FeeType__c, ' +
         'DueDate, ' +
         'Account.Id, ' +
         'Account.Name, ' +
@@ -1526,7 +1525,7 @@ public static PHOCSRenewalLateFeeManagementResponse getLateFeeManagementRecords(
             'AccountId, ' +
             'ParentRecordId,ParentRecord.Name, ' +
             'Status__c, ' +
-            RTF_FEETYPE_FIELD + ', ' +
+            'FeeType__c, ' +
             'DueDate, ' +
 
             'Account.Id, ' +
@@ -1940,10 +1939,8 @@ private static FeeQueryContext buildFeeQueryContext(
     }
 
     if (String.isNotBlank(feeType)) {
-
-        conditions.add(
-            RTF_FEETYPE_FIELD +
-            ' = :feeType'
+        conditions.add(            
+            'FeeType__c = :feeType'
         );
 
         context.binds.put(
