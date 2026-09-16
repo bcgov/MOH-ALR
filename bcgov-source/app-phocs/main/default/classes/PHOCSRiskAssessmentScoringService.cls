@@ -5,6 +5,7 @@
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
                 06 Aug -  PHOCS-269         -  Deepak      -  remote action for RAT
                 09 Aug -  PHOCS-269         -  Deepak      -  flatten nested question groups
+                03 Sep -  PHOCS-269         -  Deepak      -  Drinking Water standalone facility in Interior Health forces a fixed inspection frequency regardless of Risk Rating
 ***********************************************************************************************/
 global without sharing class PHOCSRiskAssessmentScoringService implements Callable {
     private static final String ACTION_CALCULATE_SCORE = 'calculateScore';
@@ -15,6 +16,17 @@ global without sharing class PHOCSRiskAssessmentScoringService implements Callab
     private static final String FACILITY_TYPE_PERSONAL_SERVICES = 'Personal services';
     private static final String FACILITY_TYPE_RECREATIONAL_WATER = 'Recreational water';
     private static final String FACILITY_TYPE_TOBACCO_VAPOUR = 'Tobacco and Vapour';
+    private static final String HEALTH_AUTHORITY_INTERIOR_HEALTH = 'Interior Health';
+    private static final String HEALTH_AUTHORITY_VCH = 'Vancouver Coastal Health - VCH';
+    private static final String CATEGORY_L1_STANDALONE_WATER_SYSTEM = 'Stand Alone Water System';
+    private static final String STANDALONE_INTERIOR_HEALTH_INSPECTION_FREQUENCY = '1 inspection per year';
+    private static final String CATEGORY_L2_INDOOR_SPRAY_POOL = 'Indoor spray pool';
+    private static final String CATEGORY_L2_OUTDOOR_SPRAY_POOL = 'Outdoor spray pool';
+    private static final String CATEGORY_L3_NON_RECIRCULATING = 'Non-recirculating';
+    private static final String CATEGORY_L2_INDOOR_WADING_POOL = 'Indoor wading pool';
+    private static final String CATEGORY_L2_OUTDOOR_WADING_POOL = 'Outdoor wading pool';
+    private static final String INSPECTION_FREQUENCY_ONE_PER_YEAR = '1 inspection per year';
+    private static final String INSPECTION_FREQUENCY_TWO_PER_YEAR = '2 inspection per year';
     private static final Id FACILITY_RTID = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('Facility').getRecordTypeId();
 
 /**
@@ -63,6 +75,7 @@ global without sharing class PHOCSRiskAssessmentScoringService implements Callab
         String facilityHA = facility.HealthAuthority__c;
         String categoryL1 = facility.CategoryL1__c;
         String categoryL2 = facility.CategoryL2__c;
+        String categoryL3 = facility.CategoryL3__c;
         String waterSystemSizeCategory = facility.PHOWaterSystemSizeCategory__c;
 
         validateFacility(facilityType, facilityHA);
@@ -74,7 +87,7 @@ global without sharing class PHOCSRiskAssessmentScoringService implements Callab
         Map<String, Decimal> scoreLookup = buildScoreLookupMap(scoreRecords);
         Decimal totalScore = calculateTotalScore(responses, scoreLookup);
 
-        RatingResult ratingResult = determineRiskRating(facilityType, totalScore, facilityHA, categoryL1, categoryL2, waterSystemSizeCategory);
+        RatingResult ratingResult = determineRiskRating(facilityType, totalScore, facilityHA, categoryL1, categoryL2, categoryL3, waterSystemSizeCategory);
 
         populateOutput(outMap, totalScore, ratingResult.riskRating, ratingResult.inspectionFrequency, ratingResult.mtsInspectionFrequency);
     }
@@ -87,7 +100,7 @@ global without sharing class PHOCSRiskAssessmentScoringService implements Callab
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     private Account getFacility(Id facilityId) {
-        List<Account> facilities = [SELECT Id, Type, HealthAuthority__c, CategoryL1__c, CategoryL2__c, PHOWaterSystemSizeCategory__c
+        List<Account> facilities = [SELECT Id, Type, HealthAuthority__c, CategoryL1__c, CategoryL2__c, CategoryL3__c, PHOWaterSystemSizeCategory__c
                                     FROM Account WHERE Id = :facilityId LIMIT 1];
         if (facilities.isEmpty()) {
             throwError('The ContextId does not reference a valid Facility Account.');
@@ -196,7 +209,8 @@ global without sharing class PHOCSRiskAssessmentScoringService implements Callab
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     private List<PHOCSRiskAssessmentScoring__mdt> loadScoringMetadata(String programArea, String assessmentType) {
-        return [SELECT QuestionAPIName__c, ResponseValue__c, Score__c, LowScore__c, HighScore__c, InspectionFrequency__c FROM PHOCSRiskAssessmentScoring__mdt WHERE ProgramArea__c = :programArea AND AssessmentType__c = :assessmentType AND IsActive__c = true];
+        return [SELECT QuestionAPIName__c, ResponseValue__c, Score__c, LowScore__c, HighScore__c, InspectionFrequency__c FROM PHOCSRiskAssessmentScoring__mdt
+                WHERE ProgramArea__c = :programArea AND AssessmentType__c = :assessmentType AND IsActive__c = true];
     }
 
 /**
@@ -207,7 +221,9 @@ global without sharing class PHOCSRiskAssessmentScoringService implements Callab
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     private List<PHOCSRiskAssessmentScoring__mdt> loadRatingMetadata(String programArea, String facilityHA) {
-        return [SELECT ResponseValue__c, LowScore__c, HighScore__c, InspectionFrequency__c, MTSInspectionFrequency__c, CategoryL1__c, CategoryL2__c FROM PHOCSRiskAssessmentScoring__mdt WHERE ProgramArea__c = :programArea AND HealthAuthority__c = :facilityHA AND AssessmentType__c = :ASSESSMENT_TYPE_RATING AND IsActive__c = true];
+        return [SELECT ResponseValue__c, LowScore__c, HighScore__c, InspectionFrequency__c, MTSInspectionFrequency__c, CategoryL1__c, CategoryL2__c 
+                FROM PHOCSRiskAssessmentScoring__mdt WHERE ProgramArea__c = :programArea AND HealthAuthority__c = :facilityHA 
+                AND AssessmentType__c = :ASSESSMENT_TYPE_RATING AND IsActive__c = true];
     }
 
 /**
@@ -286,9 +302,9 @@ global without sharing class PHOCSRiskAssessmentScoringService implements Callab
 * on the Facility's Type. Throws for any unsupported facility type.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
-    private RatingResult determineRiskRating(String facilityType, Decimal totalScore, String facilityHA, String categoryL1, String categoryL2, String waterSystemSizeCategory) {
+    private RatingResult determineRiskRating(String facilityType, Decimal totalScore, String facilityHA, String categoryL1, String categoryL2, String categoryL3, String waterSystemSizeCategory) {
         if (facilityType == FACILITY_TYPE_DRINKING_WATER) {
-            return determineDrinkingWaterRiskRating(totalScore, facilityHA, waterSystemSizeCategory);
+            return determineDrinkingWaterRiskRating(totalScore, facilityHA, waterSystemSizeCategory, categoryL1);
         }
 
         if (facilityType == FACILITY_TYPE_FOOD) {
@@ -300,7 +316,7 @@ global without sharing class PHOCSRiskAssessmentScoringService implements Callab
         }
 
         if (facilityType == FACILITY_TYPE_RECREATIONAL_WATER) {
-            return determineRecreationalWaterRiskRating(totalScore, facilityHA);
+            return determineRecreationalWaterRiskRating(totalScore, facilityHA, categoryL2, categoryL3);
         }
 
         if (facilityType == FACILITY_TYPE_TOBACCO_VAPOUR) {
@@ -314,24 +330,35 @@ global without sharing class PHOCSRiskAssessmentScoringService implements Callab
 /**
 * @author: Deepak
 * @date: 14 Jul 2026
-* @description: Determines the Risk Rating for a Drinking Water facility. Resolves CategoryL1 as
-* Large or Small Drinking Water System from the water system size category, then matches on
-* score range and that resolved category.
+* @description: Determines the Risk Rating for a Drinking Water facility. Resolves the CMDT
+* category as Large or Small Drinking Water System from the water system size category, then
+* matches on score range and that resolved category. If the Facility's own CategoryL1__c is
+* Stand Alone Water System and the Facility Health Authority is Interior Health, the resulting
+* Inspection Frequency is overridden to a fixed 1 inspection per year regardless of the
+* computed Risk Rating - this applies to both Large and Small water systems alike.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*                     03 Sep 2026 - Deepak - Added the accountCategoryL1 parameter and the
+*                     standalone Interior Health inspection frequency override.
 */
-    private RatingResult determineDrinkingWaterRiskRating(Decimal totalScore, String facilityHA, String waterSystemSizeCategory) {
-        String categoryL1;
+    private RatingResult determineDrinkingWaterRiskRating(Decimal totalScore, String facilityHA, String waterSystemSizeCategory, String accountCategoryL1) {
+        String sizeCategory;
 
         if (!String.isBlank(waterSystemSizeCategory) && waterSystemSizeCategory.contains('Large')) {
-            categoryL1 = 'Large Drinking Water System';
+            sizeCategory = 'Large Drinking Water System';
         } else if (!String.isBlank(waterSystemSizeCategory) && waterSystemSizeCategory.contains('Small')) {
-            categoryL1 = 'Small Drinking Water System';
+            sizeCategory = 'Small Drinking Water System';
         } else {
             throwError('Drinking Water system size could not be determined.');
         }
 
         List<PHOCSRiskAssessmentScoring__mdt> ratingRecords = loadRatingMetadata(FACILITY_TYPE_DRINKING_WATER, facilityHA);
-        return findRatingByScoreAndCategory(totalScore, ratingRecords, categoryL1, null);
+        RatingResult result = findRatingByScoreAndCategory(totalScore, ratingRecords, sizeCategory, null);
+
+        if (accountCategoryL1 == CATEGORY_L1_STANDALONE_WATER_SYSTEM && facilityHA == HEALTH_AUTHORITY_INTERIOR_HEALTH) {
+            result.inspectionFrequency = STANDALONE_INTERIOR_HEALTH_INSPECTION_FREQUENCY;
+        }
+
+        return result;
     }
 
 /**
@@ -368,12 +395,32 @@ global without sharing class PHOCSRiskAssessmentScoringService implements Callab
 * @author: Deepak
 * @date: 14 Jul 2026
 * @description: Determines the Risk Rating for a Recreational Water facility via plain
-* score-range matching.
+* score-range matching. If Facility HA is Vancouver Coastal Health - VCH and the facility is a
+* non-recirculating spray pool (CategoryL2__c = Indoor spray pool or Outdoor spray pool, and
+* CategoryL3__c = Non-recirculating), the resulting Inspection Frequency is overridden to a
+* fixed 1 inspection per year. If instead it is a wading pool (CategoryL2__c = Indoor wading
+* pool or Outdoor wading pool), the override is 2 inspection per year. Either override applies
+* regardless of the computed Risk Rating.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*                     03 Sep 2026 - Deepak - Added categoryL2/categoryL3 parameters and the
+*                     VCH spray pool/wading pool inspection frequency overrides.
 */
-    private RatingResult determineRecreationalWaterRiskRating(Decimal totalScore, String facilityHA) {
+    private RatingResult determineRecreationalWaterRiskRating(Decimal totalScore, String facilityHA, String categoryL2, String categoryL3) {
         List<PHOCSRiskAssessmentScoring__mdt> ratingRecords = loadRatingMetadata(FACILITY_TYPE_RECREATIONAL_WATER, facilityHA);
-        return findRatingByScore(totalScore, ratingRecords);
+        RatingResult result = findRatingByScore(totalScore, ratingRecords);
+
+        if (facilityHA == HEALTH_AUTHORITY_VCH) {
+            Boolean isNonRecirculatingSprayPool = (categoryL2 == CATEGORY_L2_INDOOR_SPRAY_POOL || categoryL2 == CATEGORY_L2_OUTDOOR_SPRAY_POOL) && categoryL3 == CATEGORY_L3_NON_RECIRCULATING;
+            Boolean isWadingPool = categoryL2 == CATEGORY_L2_INDOOR_WADING_POOL || categoryL2 == CATEGORY_L2_OUTDOOR_WADING_POOL;
+
+            if (isNonRecirculatingSprayPool) {
+                result.inspectionFrequency = INSPECTION_FREQUENCY_ONE_PER_YEAR;
+            } else if (isWadingPool) {
+                result.inspectionFrequency = INSPECTION_FREQUENCY_TWO_PER_YEAR;
+            }
+        }
+
+        return result;
     }
 
 /**
