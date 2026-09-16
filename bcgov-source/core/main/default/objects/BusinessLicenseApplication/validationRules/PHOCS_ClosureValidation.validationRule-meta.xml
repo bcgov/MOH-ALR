@@ -4,6 +4,15 @@
     <active>true</active>
     <errorConditionFormula>AND(
     NOT( $Permission.EHISBypassValidationRuleCustomPermission ),
+$Profile.Name &lt;&gt; &apos;System Administrator&apos;,
+    /* Exclude Record Types */
+    NOT(
+        OR(
+            RecordType.DeveloperName = &quot;DairyWorkerLicence&quot;,
+            RecordType.DeveloperName = &quot;PHOCSBCCDCDairyPlantLicence&quot;
+        )
+    ),
+
     OR(
 RecordType.DeveloperName = &quot;New_License_Application_Record_Type&quot;,
 RecordType.DeveloperName = &quot;PHOCSBCCDCDairyPlantLicence&quot;,
