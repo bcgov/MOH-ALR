@@ -250,7 +250,7 @@ global with sharing class PHOCSLabResults {
             requisition.LabTestRequisitionNumber__c = wrapper.requisitionNumber;
             requisition.DWOEHOName__c = wrapper.dWOEHOName;
             requisition.SpecimenSource__c = getMappedValue(mappingConfig, ATTR_TYPE_SPECIMEN_SOURCE, wrapper.specimenSource, DEFAULT_SPECIMEN_SOURCE);
-            requisition.BoilAdvisory__c = wrapper.boilAdvisory;
+            requisition.BoilAdvisory__c = wrapper.boilAdvisory != null ? wrapper.boilAdvisory : 'No';
             requisition.SampleType__c = getMappedValue(mappingConfig, ATTR_TYPE_SAMPLE_TYPE, wrapper.sampleType, null);
             requisition.CollectionDateTime__c = wrapper.reportedOn;
             requisition.RecordTypeId = LAB_REQUISITION_RTID;
