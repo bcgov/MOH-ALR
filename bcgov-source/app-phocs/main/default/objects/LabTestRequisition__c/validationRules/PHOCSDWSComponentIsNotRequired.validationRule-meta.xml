@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PHOCSDWSComponentIsNotRequired</fullName>
+    <active>true</active>
+    <description>Prevents Drinking_Water_Component_Name__c from being populated when the related Facility has the PHOCS Facility record type.</description>
+    <errorConditionFormula>AND(
+    RecordType.DeveloperName = &quot;PHOCSWaterLabTestRequisition&quot;,
+    FacilityName__r.RecordType.DeveloperName = &quot;Facility&quot;,
+    NOT(ISBLANK(Drinking_Water_Component_Name__c))
+)</errorConditionFormula>
+    <errorDisplayField>Drinking_Water_Component_Name__c</errorDisplayField>
+    <errorMessage>Drinking Water Component Name must be blank when the Facility is a PHOCS Facility record type.</errorMessage>
+</ValidationRule>

@@ -4,10 +4,12 @@
     <active>true</active>
     <description>This Water Lab Test Requisition has been Completed and is read-only.</description>
     <errorConditionFormula>AND(
+    NOT(ISNEW()),
     RecordType.DeveloperName = &quot;PHOCSWaterLabTestRequisition&quot;,
     $Profile.Name &lt;&gt; &quot;System Administrator&quot;,
     $Profile.Name &lt;&gt; &quot;Salesforce API Only System Integrations&quot;,
-    ISPICKVAL(PRIORVALUE(Status__c), &quot;Completed&quot;)
+    ISPICKVAL(PRIORVALUE(Status__c), &quot;Completed&quot;),
+    NOT(ISBLANK(SubmittedDateTime__c))
 )</errorConditionFormula>
     <errorMessage>This Lab Requisition is Completed and cannot be edited.</errorMessage>
 </ValidationRule>
