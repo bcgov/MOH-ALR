@@ -1,0 +1,58 @@
+<template>
+    <template if:true={hasViolations}>
+        <div class="table-container">
+            <table class="violation-table">
+                <thead>
+                    <tr>
+                        <th class="questions-header">
+                            Contraventions and Observations​
+                        </th>
+                        <th class="actions-header">
+                            Corrective Action Description​
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <template for:each={violations} for:item="violation">
+                        <tr key={violation.violationId}>
+                            <td class="questions-column">
+                                <div class="question-value">
+                                    {violation.PHOCSAssessmentIndicatorDefinition}
+                                    <span class="additional-fields">
+                                        [{violation.RegAuthority} {violation.RegCode}]
+                                     </span>
+                                </div>
+
+                                <template for:each={violation.childQuestions} for:item="childQuestion">
+                                    <template if:true={childQuestion}>
+                                        <div key={childQuestion} class="child-question">
+                                            • {childQuestion}
+                                        </div>
+                                    </template>
+                                </template>
+
+                                <template if:true={violation.result}>
+                                    <div class="result-value">
+                                        • {violation.result}
+                                    </div>
+                                </template>
+                            </td>
+                            <td class="actions-column">
+                                <template if:true={violation.actionDescription}>
+                                    <span class="action-bullet">•</span>
+                                    <span class="action-text">{violation.actionDescription}</span>
+                                </template>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+    </template>
+    <template if:false={hasViolations}>
+        <div class="no-data">
+            No regulatory code violations found.
+        </div>
+    </template>
+</template>
