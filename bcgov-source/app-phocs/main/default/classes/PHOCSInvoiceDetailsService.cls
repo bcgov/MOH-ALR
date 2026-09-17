@@ -264,7 +264,121 @@ public with sharing class PHOCSInvoiceDetailsService {
         }
         String tokenDataJson = JSON.serialize(invoiceDetails);
         String documentTitle = buildInvoiceDocumentTitle(regulatoryTrxnFeeId);
-        return PHOCSDocumentGenerationService.generateDocument('PHOCSInvoiceTemplate', tokenDataJson, regulatoryTrxnFeeId, documentTitle);
+        return generateInvoicePdf(regulatoryTrxnFeeId, invoiceDetails, documentTitle);
+    }
+
+    /**
+* @author: Deepak
+* @date: 2026-09-17
+* @description: Generates invoice documents for multiple fees using bulk-loaded invoice data.
+* @param regulatoryTrxnFeeIds RegulatoryTrxnFee Ids to generate invoice PDFs for.
+* @return List<Id> inserted DocumentGenerationProcess record Ids, in input order where a fee exists.
+*/
+    public static List<Id> generateInvoicePdf(List<Id> regulatoryTrxnFeeIds) {
+        List<Id> documentIds = new List<Id>();
+        if (regulatoryTrxnFeeIds == null || regulatoryTrxnFeeIds.isEmpty()) {
+            return documentIds;
+        }
+
+        Set<Id> feeIds = new Set<Id>(regulatoryTrxnFeeIds);
+        Map<Id, RegulatoryTrxnFee> feesById = new Map<Id, RegulatoryTrxnFee>([
+            SELECT Id, Name, TotalFeePaid__c, OutstandingFeeAmount__c, DueDate,
+                   CreatedDate, AccountId, AccountName__c
+            FROM RegulatoryTrxnFee
+            WHERE Id IN :feeIds
+        ]);
+
+        if (feesById.isEmpty()) {
+            return documentIds;
+        }
+
+        Map<Id, List<RegulatoryTrxnFeeItem>> itemsByFeeId = new Map<Id, List<RegulatoryTrxnFeeItem>>();
+        for (RegulatoryTrxnFeeItem item : [
+            SELECT Id, RegulatoryTrxnFeeId, FeeAmount, FeeType__c, CreatedDate
+            FROM RegulatoryTrxnFeeItem
+            WHERE RegulatoryTrxnFeeId IN :feesById.keySet()
+        ]) {
+            if (!itemsByFeeId.containsKey(item.RegulatoryTrxnFeeId)) {
+                itemsByFeeId.put(item.RegulatoryTrxnFeeId, new List<RegulatoryTrxnFeeItem>());
+            }
+            itemsByFeeId.get(item.RegulatoryTrxnFeeId).add(item);
+        }
+
+        Set<Id> accountIds = new Set<Id>();
+        for (RegulatoryTrxnFee fee : feesById.values()) {
+            if (fee.AccountId != null) {
+                accountIds.add(fee.AccountId);
+            }
+        }
+
+        Map<Id, Account> billingAccountsById = new Map<Id, Account>();
+        Set<Id> healthAuthorityIds = new Set<Id>();
+        if (!accountIds.isEmpty()) {
+            for (Account account : [
+                SELECT Id, Name, AccountNumberRTPrefixed__c, BillingStreet, BillingState,
+                       BillingCity, BillingPostalCode, HierarchyHAId__c, HealthAuthority__c
+                FROM Account
+                WHERE Id IN :accountIds
+            ]) {
+                billingAccountsById.put(account.Id, account);
+                if (account.HierarchyHAId__c != null) {
+                    healthAuthorityIds.add(account.HierarchyHAId__c);
+                }
+            }
+        }
+
+        Map<Id, Account> healthAuthorityAccountsById = new Map<Id, Account>();
+        if (!healthAuthorityIds.isEmpty()) {
+            healthAuthorityAccountsById = new Map<Id, Account>([
+                SELECT Id, Name, HAGSTNumber__c, HAAddress__c, HAFax__c, HAPhone__c, HAEmail__c
+                FROM Account
+                WHERE Id IN :healthAuthorityIds
+            ]);
+        }
+
+        PHOCSEnvironmentConfiguration__mdt envConfig = getDefaultEnvironmentConfiguration();
+        for (Id feeId : regulatoryTrxnFeeIds) {
+            RegulatoryTrxnFee fee = feesById.get(feeId);
+            if (fee == null) {
+                continue;
+            }
+
+            Account billingAccount = billingAccountsById.get(fee.AccountId);
+            Account healthAuthorityAccount = billingAccount == null
+                ? null
+                : healthAuthorityAccountsById.get(billingAccount.HierarchyHAId__c);
+            InvoiceDetailsWrapper invoiceDetails = transform(
+                fee,
+                billingAccount,
+                healthAuthorityAccount,
+                itemsByFeeId.containsKey(feeId)
+                    ? itemsByFeeId.get(feeId)
+                    : new List<RegulatoryTrxnFeeItem>(),
+                envConfig
+            );
+
+            documentIds.add(generateInvoicePdf(
+                feeId,
+                invoiceDetails,
+                buildInvoiceDocumentTitle(fee)
+            ));
+        }
+
+        return documentIds;
+    }
+
+    private static Id generateInvoicePdf(
+        Id regulatoryTrxnFeeId,
+        InvoiceDetailsWrapper invoiceDetails,
+        String documentTitle
+    ) {
+        String tokenDataJson = JSON.serialize(invoiceDetails);
+        return PHOCSDocumentGenerationService.generateDocument(
+            'PHOCSInvoiceTemplate',
+            tokenDataJson,
+            regulatoryTrxnFeeId,
+            documentTitle
+        );
     }
 
     /**
@@ -279,6 +393,10 @@ public with sharing class PHOCSInvoiceDetailsService {
         if (feeRecords.isEmpty()) {
             return null;
         }
-        return feeRecords[0].AccountName__c + '_' + feeRecords[0].Name + '_Invoice';
+        return buildInvoiceDocumentTitle(feeRecords[0]);
+    }
+
+    private static String buildInvoiceDocumentTitle(RegulatoryTrxnFee fee) {
+        return fee.AccountName__c + '_' + fee.Name + '_Invoice';
     }
 }

@@ -29,8 +29,6 @@ public with sharing class PHOCSInvoiceGenerationQueueable implements Queueable {
 * @param context the Queueable execution context.
 */
     public void execute(QueueableContext context) {
-        for (Id regulatoryTrxnFeeId : regulatoryTrxnFeeIds) {
-            PHOCSInvoiceDetailsService.generateInvoicePdf(regulatoryTrxnFeeId);
-        }
+        PHOCSInvoiceDetailsService.generateInvoicePdf(regulatoryTrxnFeeIds);
     }
 }
