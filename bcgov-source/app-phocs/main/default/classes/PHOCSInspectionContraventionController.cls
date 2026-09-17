@@ -9,6 +9,16 @@ global without sharing class PHOCSInspectionContraventionController {
             return results;
         }
         
+        Case caseRecord = [
+            SELECT Id, RecordType.DeveloperName
+            FROM Case
+            WHERE Id = :caseId
+            LIMIT 1
+        ];
+        
+        if (caseRecord.RecordType.DeveloperName != 'PHOCSComplaint') {
+            return results;
+        }
         // Get completed inspections for the Case
         Set<Id> inspectionIds = new Set<Id>();
         
