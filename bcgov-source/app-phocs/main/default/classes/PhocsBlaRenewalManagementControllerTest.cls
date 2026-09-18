@@ -757,6 +757,17 @@ private class PhocsBlaRenewalManagementControllerTest {
                 row.multiplePremise
             );
         }
+
+        PhocsBlaRenewalManagementController.SendResponse filteredResponse =
+            PhocsBlaRenewalManagementController.getSendRenewals(
+                accountType,
+                'No Matching Fee',
+                false,
+                'No Matching Premise Role'
+            );
+
+        System.assertNotEquals(null, filteredResponse);
+        System.assertEquals(0, filteredResponse.records.size());
     }
     
     
@@ -893,6 +904,98 @@ private class PhocsBlaRenewalManagementControllerTest {
         System.assertEquals(true, reminderResponse.success);
         System.assertEquals(true, lateFeeResponse.success);
         System.assertEquals(false, invalidLateFeeResponse.success);
+    }
+
+    @IsTest
+    static void testDefaultPaginationAndNoMatchBranches() {
+        createOverdueRenewalFees();
+
+        Test.startTest();
+        PHOCSRenewalPaymentReminderResponse paymentResponse =
+            PhocsBlaRenewalManagementController.getPaymentReminders(
+                null,
+                null,
+                null,
+                null,
+                0,
+                'accountName',
+                'asc'
+            );
+        PHOCSRenewalLateFeeResponse lateFeeResponse =
+            PhocsBlaRenewalManagementController.getLateFeeManagement(
+                null,
+                null,
+                null,
+                null,
+                0,
+                'accountName',
+                'asc'
+            );
+        PHOCSRenewalLateFeeManagementResponse lateFeeRecordsResponse =
+            PhocsBlaRenewalManagementController.getLateFeeManagementRecords(
+                null,
+                null,
+                null,
+                null,
+                0,
+                'accountName',
+                'asc'
+            );
+        PhocsBlaRenewalManagementController.OperationResponse noReminderResponse =
+            PhocsBlaRenewalManagementController.sendPaymentReminders(
+                'No Matching Account Type',
+                null,
+                null,
+                null
+            );
+        PhocsBlaRenewalManagementController.OperationResponse noLateFeeResponse =
+            PhocsBlaRenewalManagementController.sendLateFees(
+                'No Matching Account Type',
+                null,
+                null,
+                null,
+                10
+            );
+        Test.stopTest();
+
+        System.assertEquals(1, paymentResponse.pageNumber);
+        System.assertEquals(50, paymentResponse.pageSize);
+        System.assertEquals(1, lateFeeResponse.pageNumber);
+        System.assertEquals(50, lateFeeResponse.pageSize);
+        System.assertEquals(1, lateFeeRecordsResponse.pageNumber);
+        System.assertEquals(50, lateFeeRecordsResponse.pageSize);
+        System.assertEquals(false, noReminderResponse.success);
+        System.assertEquals(false, noLateFeeResponse.success);
+    }
+
+    @IsTest
+    static void testDeselectAllPaymentAndLateFees() {
+        List<RegulatoryTrxnFee> fees = createOverdueRenewalFees();
+        List<Id> feeIds = new List<Id>();
+        for (RegulatoryTrxnFee fee : fees) {
+            feeIds.add(fee.Id);
+        }
+
+        Test.startTest();
+        PhocsBlaRenewalManagementController.OperationResponse noReminderResponse =
+            PhocsBlaRenewalManagementController.sendPaymentReminders(
+                null,
+                null,
+                null,
+                feeIds
+            );
+        PhocsBlaRenewalManagementController.OperationResponse noLateFeeResponse =
+            PhocsBlaRenewalManagementController.sendLateFees(
+                null,
+                null,
+                null,
+                feeIds,
+                10
+            );
+        Test.stopTest();
+
+        System.assertEquals(false, noReminderResponse.success);
+        System.assertEquals(false, noLateFeeResponse.success);
     }
 
     private static List<RegulatoryTrxnFee> createOverdueRenewalFees() {
