@@ -401,19 +401,13 @@ public with sharing class PhocsBlaRenewalManagementController {
         response.accountTypeOptions = getAccountTypeOptions();
         response.premiseRoleOptions = getPremiseRoleOptions();
         
-        // Query RTF REcords
-        String rtfSoql = 'SELECT Id,Name, AccountId, ParentRecordId,ParentRecord.Name, Status__c FROM RegulatoryTrxnFee' +
-            ' WHERE Status__c = :RTF_STATUS_DRAFT AND FeeType__c = :RTF_FEETYPE_RENEWAL';
-        
-        Schema.SObjectType rtfType = Schema.getGlobalDescribe().get(RTF_OBJECT);
-        
-        if (rtfType == null) {
-            throw new AuraHandledException(
-                'Object ' + RTF_OBJECT + ' does not exist in this org.'
-            );
-        }
-        
-        List<RegulatoryTrxnFee> fees = Database.query(rtfSoql);
+        // Query RTF records with compile-time SOQL and bound filter values.
+        List<RegulatoryTrxnFee> fees = [
+            SELECT Id, Name, AccountId, ParentRecordId, ParentRecord.Name, Status__c
+            FROM RegulatoryTrxnFee
+            WHERE Status__c = :RTF_STATUS_DRAFT
+            AND FeeType__c = :RTF_FEETYPE_RENEWAL
+        ];
         
         if (fees.isEmpty()) {
             return response;
@@ -431,24 +425,12 @@ public with sharing class PhocsBlaRenewalManagementController {
         
         Map<Id, Account> accounts = getAccounts(accountIds);
         
-        //Query RTFI separately instead of relying on an assumed
-        
-        String itemSoql =
-            'SELECT Id, ' +
-            RTFI_PARENT_FIELD + ', ' +
-            RTFI_NAME_FIELD + ', ' +
-            RTFI_AMOUNT_FIELD +
-            ' FROM ' + RTFI_OBJECT +
-            ' WHERE ' + RTFI_PARENT_FIELD + ' IN :feeIds';
-        
-        Schema.SObjectType itemType = Schema.getGlobalDescribe().get(RTFI_OBJECT);
-        
-        if (itemType == null) {
-            throw new AuraHandledException(
-                'Object ' + RTFI_OBJECT + ' does not exist in this org.'
-            );
-        }
-        List<RegulatoryTrxnFeeItem> items = Database.query(itemSoql);
+        // Query fee items separately using a bound collection.
+        List<RegulatoryTrxnFeeItem> items = [
+            SELECT Id, RegulatoryTrxnFeeId, Name, FeeAmount
+            FROM RegulatoryTrxnFeeItem
+            WHERE RegulatoryTrxnFeeId IN :feeIds
+        ];
         
         Map<Id, SObject> itemByFee = new Map<Id, SObject>();
         for (SObject item : items) {
