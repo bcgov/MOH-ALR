@@ -33,7 +33,7 @@ public class PHOCSLabResultsTest {
                                                                UnitOfMeasure__c = 'Count/100mL', RecordTypeId = LAB_TEST_RT);
         insert eColi;
 
-        LabTestRequisition__c existingRequisition = new LabTestRequisition__c(RecordTypeId = LAB_REQ_RT, LabTestRequisitionNumber__c = UPDATE_REQ_NUMBER, Status__c = 'Submitted',
+        LabTestRequisition__c existingRequisition = new LabTestRequisition__c(RecordTypeId = LAB_REQ_RT, LabTestRequisitionNumber__c = UPDATE_REQ_NUMBER, Status__c = 'Requested',
                                                                               ToLaboratory__c = 'BCCDC', TestCategory__c = 'Bacteriological');
         insert existingRequisition;
     }
@@ -109,7 +109,7 @@ public class PHOCSLabResultsTest {
 
         List<LabTestRequisition__c> requisitions = [SELECT Id, Status__c FROM LabTestRequisition__c WHERE LabTestRequisitionNumber__c = :UPDATE_REQ_NUMBER];
         Assert.areEqual(1, requisitions.size(), 'Expected the existing requisition, not a new one');
-        Assert.areNotEqual('In Progress', requisitions[0].Status__c, 'Expected status to have been updated from its original value');
+        Assert.areNotEqual('Requested', requisitions[0].Status__c, 'Expected status to have been updated from its original value');
     }
 
 /**
