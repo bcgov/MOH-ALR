@@ -1,0 +1,268 @@
+<template>
+    <template if:true={loading}>
+        <div class="page-loading" role="status" aria-live="polite">
+            <lightning-spinner
+                alternative-text="Loading requisition data"
+                size="medium">
+            </lightning-spinner>
+        </div>
+    </template>
+
+    <template if:true={showList}>
+        <section class="slds-card">
+            <div class="slds-grid slds-grid_align-end slds-p-horizontal_medium slds-p-top_medium slds-m-bottom_medium">
+                <div class="slds-m-top_small">
+                    <lightning-button variant="brand" label="New Requisition" onclick={handleNew}></lightning-button>
+                </div>
+            </div>
+            <lightning-datatable
+                if:true={hasRows}
+                key-field="rowKey"
+                data={rows}
+                columns={columns}
+                hide-checkbox-column
+                onrowaction={handleRowAction}>
+            </lightning-datatable>
+            <p if:false={hasRows} class="slds-text-color_weak slds-p-around_medium">
+                No lab test requisitions have been created for this facility.
+            </p>
+        </section>
+    </template>
+
+    <template if:true={showForm}>
+        <section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open slds-modal_large">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <lightning-button-icon class="slds-modal__close" icon-name="utility:close" variant="bare"
+                        alternative-text="Close" onclick={closeModals}></lightning-button-icon>
+                    <h2 class="slds-text-heading_medium">{modalTitle}</h2>
+                </header>
+                <div class="form-content slds-modal__content slds-p-around_medium">
+                    <lightning-spinner if:true={formLoading}
+                        alternative-text="Loading form fields"
+                        size="medium">
+                    </lightning-spinner>
+                    <lightning-record-edit-form
+                        object-api-name="LabTestRequisition__c"
+                        record-id={selectedId}
+                        record-type-id={context.waterRequisitionRecordTypeId}
+                        onload={handleFormLoad}
+                        onsubmit={handleSubmit}
+                        onsuccess={handleSuccess}
+                        onerror={handleError}>
+
+                        <lightning-messages></lightning-messages>
+                        <div if:true={validationMessage}
+                            class="slds-notify slds-notify_alert slds-alert_error slds-m-bottom_medium"
+                            role="alert">
+                            {validationMessage}
+                        </div>
+                        <lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
+                            <lightning-accordion-section name="requisition" label="Requisition Details">
+                                <div class="slds-grid slds-wrap slds-gutters slds-p-top_small">
+                                    <lightning-input-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2"
+                                        field-name="FacilityName__c" value={facilityId} disabled>
+                                    </lightning-input-field>
+                                    <lightning-input class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2"
+                                        type="text" label="Status" value={selectedStatus} variant="label-inline" disabled>
+                                    </lightning-input>
+                                    <template if:true={showDrinkingWaterFacilityFields}>
+                                        <div class="component-picker slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                            <label class="component-picker-label">
+                                                <abbr class="slds-required" title="required">*</abbr>
+                                                Drinking Water Component Name
+                                            </label>
+                                            <lightning-input type="search" label="Drinking Water Component Name"
+                                                variant="label-hidden" value={componentSearchTerm}
+                                                onfocus={handleComponentFocus} oninput={handleComponentSearch}
+                                                onblur={handleComponentBlur}>
+                                            </lightning-input>
+                                            <template if:true={showComponentOptions}>
+                                                <div class="component-options slds-dropdown slds-dropdown_length-5">
+                                                    <ul class="slds-listbox slds-listbox_vertical" role="listbox">
+                                                        <template for:each={filteredComponentOptions} for:item="option">
+                                                            <li key={option.value} class="slds-listbox__item" role="presentation">
+                                                                <button type="button" class="slds-listbox__option slds-listbox__option_plain slds-media slds-media_small slds-media_center"
+                                                                    data-value={option.value} data-label={option.label}
+                                                                    onclick={handleComponentSelect}>
+                                                                    <span class="slds-media__body">
+                                                                        <span class="slds-truncate" title={option.label}>{option.label}</span>
+                                                                    </span>
+                                                                </button>
+                                                            </li>
+                                                        </template>
+                                                    </ul>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </template>
+                                    <lightning-input-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2"
+                                        field-name="ToLaboratory__c" value="BCCDC" disabled>
+                                    </lightning-input-field>
+                                </div>
+                            </lightning-accordion-section>
+
+                            <lightning-accordion-section name="sample" label="Sample Information">
+                                <div class="slds-grid slds-wrap slds-gutters slds-p-top_small">
+                                    <lightning-input-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2"
+                                        field-name="SampleType__c" required onchange={handleSampleTypeChange}>
+                                    </lightning-input-field>
+                                    <template if:true={isDrinkingWaterSample}>
+                                        <lightning-input-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2"
+                                            field-name="Type__c" required>
+                                        </lightning-input-field>
+                                    </template>
+                                    <lightning-input-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2"
+                                        field-name="SampleReason__c">
+                                    </lightning-input-field>
+                                    <lightning-input-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2"
+                                        field-name="TestCategory__c" value="Bacteriological" disabled>
+                                    </lightning-input-field>
+                                    <template if:true={isDrinkingWaterSample}>
+                                        <lightning-input-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2"
+                                            field-name="SpecimenSource__c" required>
+                                        </lightning-input-field>
+                                        <lightning-input-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2"
+                                            field-name="SubmittedforDWPA__c" required>
+                                        </lightning-input-field>
+                                        <lightning-input-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2"
+                                            field-name="BoilAdvisory__c" required>
+                                        </lightning-input-field>
+                                    </template>
+                                    <template if:true={isSewageSample}>
+                                        <lightning-input-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2"
+                                            field-name="SewageOnlyContaminationLevel__c">
+                                        </lightning-input-field>
+                                    </template>
+                                    <lightning-input-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2"
+                                        field-name="TestVolumeIfOvergrown__c">
+                                    </lightning-input-field>
+                                    <lightning-input-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2"
+                                        field-name="PreviousSampleOvergrown__c">
+                                    </lightning-input-field>
+                                </div>
+                            </lightning-accordion-section>
+
+                            <lightning-accordion-section name="site" label="Sampling Site Information">
+                                <div class="slds-grid slds-wrap slds-gutters slds-p-top_small">
+                                    <template if:true={isDrinkingWaterSample}>
+                                        <lightning-input-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2"
+                                            field-name="Site_Treatment__c" required>
+                                        </lightning-input-field>
+                                    </template>
+                                    <lightning-input-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2"
+                                        field-name="Site_Descriptor__c" required>
+                                    </lightning-input-field>
+                                    <lightning-input-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2"
+                                        field-name="Site_Number__c">
+                                    </lightning-input-field>
+                                </div>
+                            </lightning-accordion-section>
+
+                            <lightning-accordion-section name="sampler" label="Sampler Information">
+                                <div class="slds-grid slds-wrap slds-gutters slds-p-top_small">
+                                    <lightning-input-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2"
+                                        field-name="SamplerName__c" required>
+                                    </lightning-input-field>
+                                    <lightning-input-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2"
+                                        field-name="SamplerPhoneNumber__c">
+                                    </lightning-input-field>
+                                    <lightning-input-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2"
+                                        field-name="SamplerEmail__c">
+                                    </lightning-input-field>
+                                </div>
+                            </lightning-accordion-section>
+                        </lightning-accordion>
+
+                        <div class="slds-m-top_medium slds-text-align_right">
+                            <lightning-button label="Cancel" onclick={closeModals}></lightning-button>
+                            <lightning-button class="slds-m-left_small" type="submit" variant="brand" label="Save"></lightning-button>
+                        </div>
+                    </lightning-record-edit-form>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <template if:true={showDetailPage}>
+        <section class="slds-card detail-page">
+            <header class="detail-page-header slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                <div>
+                    <div class="slds-text-title_bold">Lab Test Requisition</div>
+                    <h1 class="slds-text-heading_medium">{selectedName}</h1>
+                </div>
+                <div class="slds-grid slds-grid_vertical-align-center">
+                    <lightning-button icon-name="utility:back" label="Back" onclick={handleBackToFacility}></lightning-button>
+                    <lightning-button if:true={selectedEditable} class="slds-m-left_small" label="Edit"
+                        onclick={handleEditFromDetails}></lightning-button>
+                    <lightning-button class="slds-m-left_small" variant="brand" label="View Requisition Form"
+                        onclick={handleViewRequisitionForm}></lightning-button>
+                </div>
+            </header>
+            <div class="slds-p-around_medium">
+                    <lightning-record-view-form object-api-name="LabTestRequisition__c" record-id={selectedId}>
+                        <lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
+                            <lightning-accordion-section name="requisition" label="Requisition Details">
+                                <div class="detail-grid slds-grid slds-wrap">
+                                    <lightning-output-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2" field-name="Name"></lightning-output-field>
+                                    <lightning-output-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2" field-name="Status__c"></lightning-output-field>
+                                    <div class="facility-detail-field slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                        <div class="slds-form-element slds-form-element_horizontal">
+                                            <span class="slds-form-element__label">Facility Name</span>
+                                            <div class="slds-form-element__control">
+                                                <button type="button" class="slds-button slds-button_reset slds-text-link facility-link"
+                                                    onclick={handleFacilityNameClick}>
+                                                    {facilityName}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <lightning-output-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2" field-name="ToLaboratory__c"></lightning-output-field>
+                                    <template if:true={showDrinkingWaterFacilityFields}>
+                                        <lightning-output-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2" field-name="Drinking_Water_Component_Name__c"></lightning-output-field>
+                                    </template>
+                                </div>
+                            </lightning-accordion-section>
+                            <lightning-accordion-section name="sample" label="Sample Information">
+                                <div class="detail-grid slds-grid slds-wrap">
+                                    <lightning-output-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2" field-name="SampleType__c"></lightning-output-field>
+                                    <template if:true={isDrinkingWaterSample}>
+                                        <lightning-output-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2" field-name="Type__c"></lightning-output-field>
+                                    </template>
+                                    <lightning-output-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2" field-name="SampleReason__c"></lightning-output-field>
+                                    <lightning-output-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2" field-name="TestCategory__c"></lightning-output-field>
+                                    <template if:true={isDrinkingWaterSample}>
+                                        <lightning-output-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2" field-name="SpecimenSource__c"></lightning-output-field>
+                                        <lightning-output-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2" field-name="SubmittedforDWPA__c"></lightning-output-field>
+                                        <lightning-output-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2" field-name="BoilAdvisory__c"></lightning-output-field>
+                                    </template>
+                                    <template if:true={isSewageSample}>
+                                        <lightning-output-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2" field-name="SewageOnlyContaminationLevel__c"></lightning-output-field>
+                                    </template>
+                                    <lightning-output-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2" field-name="TestVolumeIfOvergrown__c"></lightning-output-field>
+                                    <lightning-output-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2" field-name="PreviousSampleOvergrown__c"></lightning-output-field>
+                                </div>
+                            </lightning-accordion-section>
+                            <lightning-accordion-section name="site" label="Sampling Site Information">
+                                <div class="detail-grid slds-grid slds-wrap">
+                                    <template if:true={isDrinkingWaterSample}>
+                                        <lightning-output-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2" field-name="Site_Treatment__c"></lightning-output-field>
+                                    </template>
+                                    <lightning-output-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2" field-name="Site_Descriptor__c"></lightning-output-field>
+                                    <lightning-output-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2" field-name="Site_Number__c"></lightning-output-field>
+                                </div>
+                            </lightning-accordion-section>
+                            <lightning-accordion-section name="sampler" label="Sampler Information">
+                                <div class="detail-grid slds-grid slds-wrap">
+                                    <lightning-output-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2" field-name="SamplerName__c"></lightning-output-field>
+                                    <lightning-output-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2" field-name="SamplerPhoneNumber__c"></lightning-output-field>
+                                    <lightning-output-field class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2" field-name="SamplerEmail__c"></lightning-output-field>
+                                </div>
+                            </lightning-accordion-section>
+                        </lightning-accordion>
+                    </lightning-record-view-form>
+            </div>
+        </section>
+    </template>
+</template>

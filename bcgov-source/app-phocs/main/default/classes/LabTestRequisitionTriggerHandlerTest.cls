@@ -116,4 +116,39 @@ public class LabTestRequisitionTriggerHandlerTest {
         }
         Test.stopTest();
     }
+
+    @isTest
+    public static void assignsWaterRequisitionToNonCcflHealthAuthorityQueue() {
+        Id facilityRecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName()
+            .get('Facility').getRecordTypeId();
+        Account facility = new Account(
+            Name = 'Fraser Portal Facility',
+            RecordTypeId = facilityRecordTypeId,
+            Type = 'Food',
+            HealthAuthority__c = 'Fraser Health - FH'
+        );
+        insert facility;
+
+        Id waterRecordTypeId = Schema.SObjectType.LabTestRequisition__c.getRecordTypeInfosByDeveloperName()
+            .get('PHOCSWaterLabTestRequisition').getRecordTypeId();
+        Id queueId = [
+            SELECT Id FROM Group
+            WHERE Type = 'Queue' AND DeveloperName = 'Fraser_Admin_Intake_Queue'
+            LIMIT 1
+        ].Id;
+
+        LabTestRequisition__c requisition = new LabTestRequisition__c(
+            FacilityName__c = facility.Id,
+            RecordTypeId = waterRecordTypeId
+        );
+        insert requisition;
+
+        requisition = [
+            SELECT OwnerId, HealthAuthority__c
+            FROM LabTestRequisition__c
+            WHERE Id = :requisition.Id
+        ];
+        Assert.areEqual(queueId, requisition.OwnerId);
+        Assert.areEqual('Fraser Health - FH', requisition.HealthAuthority__c);
+    }
 }
