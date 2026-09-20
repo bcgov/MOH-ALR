@@ -2,6 +2,8 @@
  * @description Service class for creating violations from non-compliant inspection questions
  * @author PHOCS Dev Team
  * @date 2025-12-14
+ * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+ *                    18 Sep -  EHIS-4852        -  PHOCS Dev Team   -  Added retractVisitViolations().
  */
 public with sharing class InspectionViolationService {
     public static Id recordTypePHOCSInspectionAssessmentInd = Schema.SObjectType.InspectionAssessmentInd.getRecordTypeInfosByDeveloperName().get('PHOCSInspectionAssessmentInd').getRecordTypeId();
@@ -443,6 +445,41 @@ public with sharing class InspectionViolationService {
         }        
         return result;
     }    
+
+/**
+* @author: PHOCS Dev Team
+* @date: 18 Sep 2026
+* @description: Retract violations related to inspections whose IsRetracted__c checkbox has changed to true.
+*               Open -> Retracted, Resolved -> Open. Any other status is left as is.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*                    18 Sep -  EHIS-4852         -  PHOCS Dev Team  -  Initial version.
+*/
+    public static void retractVisitViolations(Set<Id> visitIds) {
+        if (visitIds == null || visitIds.isEmpty()) {
+            return;
+        }
+
+        try {
+            List<RegulatoryCodeViolation> violationsToUpdate = new List<RegulatoryCodeViolation>();
+
+            for (RegulatoryCodeViolation vio : [SELECT Id, Status FROM RegulatoryCodeViolation WHERE InspectionId IN :visitIds]) {
+                if (vio.Status == 'Open') {
+                    vio.Status = 'Retracted';
+                    violationsToUpdate.add(vio);
+                } else if (vio.Status == 'Resolved') {
+                    vio.Status = 'Open';
+                    violationsToUpdate.add(vio);
+                }
+            }
+
+            if (!violationsToUpdate.isEmpty()) {
+                update violationsToUpdate;
+            }
+        } catch (Exception ex) {
+            LogService.logAndPublish(className, 'retractVisitViolations', String.valueOf(visitIds), ex);
+            throw ex;
+        }
+    }
 
     /**
      * @description Wrapper class for violation creation result
