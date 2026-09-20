@@ -5,6 +5,7 @@
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
                 17 Dec -  PHOCS-2873        -  Accenture   -  Display selected canned comments details on parent violation.
                 03 Jun -  EHIS-2668         -  Accenture   -  Fetch child violation hierarchy with associated canned comments.
+                21 Sep -  EHIS-4852         -  Accenture   -  Cover Inspection retracted flag in getViolationHierarchy.
 ***********************************************************************************************/
 @isTest
 public class RegulatoryCodeViolationRelControllerTest{
@@ -163,7 +164,36 @@ public class RegulatoryCodeViolationRelControllerTest{
         
         Assert.areNotEqual(0, results.size(), 'Related violations should be returned');
         Assert.areNotEqual(null, wrapper.violationId, 'Violation Id should be populated');
+        for (RegulatoryCodeViolationRelatedController.ViolationHierarchyWrapper w : results) {
+            Assert.areEqual(false, w.isRetracted, 'Retracted flag should be false when the Inspection is not retracted');
+        }
         
+    }
+    
+/**
+* @author: Deepak
+* @date: 20 Sep 2026
+* @description: The purpose of this method is to cover Testcoverage of getViolationHierarchy when the Inspection is retracted.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/      
+    @isTest
+    public static void getViolationHierarchyRetractedTest(){
+        
+        createTestData();
+        Visit insp = [SELECT Id, IsRetracted__c FROM Visit LIMIT 1];
+        insp.IsRetracted__c = true;
+        update insp;
+        
+        RegulatoryCodeViolation getParentRCV = [SELECT Id FROM RegulatoryCodeViolation WHERE InspectionAssmntInd.AssessmentIndDefinition.PHOCSParentId__c = NULL LIMIT 1];
+        
+        Test.startTest();        
+        List<RegulatoryCodeViolationRelatedController.ViolationHierarchyWrapper> results = RegulatoryCodeViolationRelatedController.getViolationHierarchy(getParentRCV.Id);
+        Test.stopTest();
+        
+        Assert.areNotEqual(0, results.size(), 'Related violations should be returned');
+        for (RegulatoryCodeViolationRelatedController.ViolationHierarchyWrapper w : results) {
+            Assert.areEqual(true, w.isRetracted, 'Retracted flag should be true when the Inspection is retracted');
+        }
     }
    
 }
