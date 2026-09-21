@@ -171,7 +171,7 @@ public class RegulatoryCodeViolationRelControllerTest{
     }
     
 /**
-* @author: Deepak
+* @author: Wen
 * @date: 20 Sep 2026
 * @description: The purpose of this method is to cover Testcoverage of getViolationHierarchy when the Inspection is retracted.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
