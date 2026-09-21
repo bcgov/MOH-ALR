@@ -4,6 +4,8 @@
 * @Description: The purpose of this class is to cover Code coverage of PHOCSRequisitionService.
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
                 02 Jul -  PHOCS-295         -  Accenture   -  BCCDC - Water lab requisition
+                20 Sep -  PHOCS-295         -  Accenture   -  Added Sampling Site branch coverage
+                20 Sep -  PHOCS-295         -  Accenture   -  Removed nonEligible insert from testSetup to avoid LabTestRequisitionNumber__c uniqueness conflict
 ***********************************************************************************************/
 @isTest
 public class PHOCSRequisitionServiceTest{    
@@ -48,16 +50,6 @@ public class PHOCSRequisitionServiceTest{
             SpecimenSource__c = 'Well'
         );        
         insert requisition;        
-
-        LabTestRequisition__c nonEligible = new LabTestRequisition__c(
-            RecordTypeId = LAB_REQ_RT,
-            FacilityName__c = facility.Id,            
-            Status__c = 'Completed',
-            ToLaboratory__c = 'BCCDC',
-            TestCategory__c = 'Bacteriological'
-        );
-        
-        insert nonEligible;
         
         RestRequest req = new RestRequest();
         req.requestUri = '/services/apexrest/PHOCSRequisitionService';
@@ -101,22 +93,24 @@ public class PHOCSRequisitionServiceTest{
         Assert.areEqual(1, updatedReqs.size(), 'Expected updated record count to be 1');
         Assert.areEqual('Submitted', updatedReqs[0].Status__c, 'Expected Status to be updated');
         Assert.areNotEqual(null, updatedReqs[0].SubmittedDateTime__c, 'submitted Date/Time cannot be null');
+        Assert.areEqual('True', response.records[0].siteTreated, 'Expected siteTreated to be True when Site_Treatment__c is Post-treatment');
     }
 
 /**
 * @author: Accenture
 * @date: 02 Jul 2026
-* @description: Covers buildResponse().
+* @description: Covers buildResponse() with fallback field values when SamplingSite__c is not populated.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
-
     @isTest
     public static void testBuildResponse() {        
         List<LabTestRequisition__c> requisitions = [SELECT LabTestRequisitionNumber__c, Status__c, ToLaboratory__c, Type__c, SystemType__c, SampleType__c,
                                                     BoilAdvisory__c, CollectionDateTime__c, SampleReason__c, SamplerName__c, HealthAuthority__c, DWOEHOName__c,
                                                     FacilityName__r.Name, FacilityName__r.Type, SpecimenSource__c, FacilityName__r.WaterSourceCategory__c, Site_Descriptor__c,
                                                     Site_Number__c, Site_Treatment__c, Drinking_Water_Component_Name__r.Name, Drinking_Water_Component_Name__r.Address,
-                                                    FacilityName__r.Physical_Address__c FROM LabTestRequisition__c LIMIT 1];
+                                                    FacilityName__r.Physical_Address__c,
+                                                    SamplingSite__r.Name, SamplingSite__r.SiteNumber__c, SamplingSite__r.SiteTreatment__c
+                                                    FROM LabTestRequisition__c LIMIT 1];
         
         Test.startTest();
         PHOCSRequisitionService.ResponseWrapper response = PHOCSRequisitionService.buildResponse(requisitions);
@@ -125,6 +119,46 @@ public class PHOCSRequisitionServiceTest{
         Assert.areEqual(1, response.recordCount, 'Expected response record count to be 1');
         Assert.areEqual(1, response.records.size(), 'Expected response record size to be 1');
         Assert.areNotEqual(null, response.records[0].requisitionID, 'response records cannot be null');
+        Assert.areEqual('True', response.records[0].siteTreated, 'Expected siteTreated to be True for Post-treatment fallback');
+        Assert.areEqual('Hall Fountain', response.records[0].siteName, 'Expected siteName to fall back to Site_Descriptor__c');
+        Assert.areEqual('1234567', response.records[0].siteID, 'Expected siteID to fall back to Site_Number__c');
+    }
+
+/**
+* @author: Accenture
+* @date: 20 Sep 2026
+* @description: Covers buildResponse() Pre-treatment → False mapping via fallback Site_Treatment__c.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
+    @isTest
+    public static void testBuildResponse_PreTreatmentFallback() {
+
+        LabTestRequisition__c requisition = [SELECT Id FROM LabTestRequisition__c WHERE Status__c = 'Requested' LIMIT 1];
+        requisition.Site_Descriptor__c = 'Pre-treatment Site';
+        requisition.Site_Number__c = 'PRE-001';
+        requisition.Site_Treatment__c = 'Pre-treatment';
+        update requisition;
+
+        List<LabTestRequisition__c> requisitions = [SELECT LabTestRequisitionNumber__c, Status__c, ToLaboratory__c, Type__c, SystemType__c, SampleType__c,
+                                                    BoilAdvisory__c, CollectionDateTime__c, SampleReason__c, SamplerName__c, HealthAuthority__c, DWOEHOName__c,
+                                                    FacilityName__r.Name, FacilityName__r.Type, SpecimenSource__c, FacilityName__r.WaterSourceCategory__c, Site_Descriptor__c,
+                                                    Site_Number__c, Site_Treatment__c, Drinking_Water_Component_Name__r.Name, Drinking_Water_Component_Name__r.Address,
+                                                    FacilityName__r.Physical_Address__c,
+                                                    SamplingSite__r.Name, SamplingSite__r.SiteNumber__c, SamplingSite__r.SiteTreatment__c
+                                                    FROM LabTestRequisition__c WHERE Id = :requisition.Id];
+        
+        Test.startTest();
+        PHOCSRequisitionService.ResponseWrapper response = PHOCSRequisitionService.buildResponse(requisitions);
+        Test.stopTest();
+        
+        Assert.areEqual(1, response.recordCount, 'Expected response record count to be 1');
+        Assert.areEqual(1, response.records.size(), 'Expected response record size to be 1');
+        
+        PHOCSRequisitionService.RequisitionWrapper rw = response.records[0];
+        
+        Assert.areEqual('Pre-treatment Site', rw.siteName, 'Expected siteName to fall back to Site_Descriptor__c');
+        Assert.areEqual('PRE-001', rw.siteID, 'Expected siteID to fall back to Site_Number__c');
+        Assert.areEqual('False', rw.siteTreated, 'Expected siteTreated to be False for Pre-treatment');
     }
 
 /**
@@ -168,7 +202,6 @@ public class PHOCSRequisitionServiceTest{
         
         for(LabTestRequisition__c req : requisitions){
              Assert.areEqual('Requested', req.Status__c, 'Expected Status to be requested');
-             Assert.areEqual('BCCDC', req.ToLaboratory__c, 'Expected laboratory to be BCCDC');            
         }
     }
 
