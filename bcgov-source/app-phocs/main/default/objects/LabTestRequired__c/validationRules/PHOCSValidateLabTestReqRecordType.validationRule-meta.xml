@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PHOCSValidateLabTestReqRecordType</fullName>
+    <active>true</active>
+    <description>Validates that the Lab Test Required record type matches the related Lab Test Requisition record type when a Lab Test Requisition is specified. Prevents creation of an incorrect Lab Test Required/Requisition combination.</description>
+    <errorConditionFormula>AND(
+    NOT(ISBLANK(LabTestRequisition__c)),
+    OR(
+        AND(
+            $RecordType.DeveloperName = &quot;PHOCSWaterLabTestRequired&quot;,
+            LabTestRequisition__r.RecordType.DeveloperName &lt;&gt; &quot;PHOCSWaterLabTestRequisition&quot;
+        ),
+        AND(
+            $RecordType.DeveloperName = &quot;PHOCSRadonAirQualityTestRequired&quot;,
+            LabTestRequisition__r.RecordType.DeveloperName &lt;&gt; &quot;PHOCSRadonTestRequisition&quot;
+        ),
+        AND(
+            $RecordType.DeveloperName = &quot;PHOCSFoodLabTestRequired&quot;,
+            LabTestRequisition__r.RecordType.DeveloperName &lt;&gt; &quot;PHOCSFoodLabTestRequisition&quot;
+        ),
+        AND(
+            $RecordType.DeveloperName = &quot;PHOCSDyeTest&quot;,
+            LabTestRequisition__r.RecordType.DeveloperName &lt;&gt; &quot;PHOCSDyeTestRequisition&quot;
+        )
+    )
+)</errorConditionFormula>
+    <errorMessage>Select a Lab Test type that matches the Lab Requisition type.</errorMessage>
+</ValidationRule>
