@@ -17,8 +17,8 @@ public with sharing class PhocsHealthAuthorityHandler {
     
     // Cache metadata config to avoid repeated queries
     private static Map<String, PHOCSHealthAuthorityConfig__mdt> metadataConfigCache = new Map<String, PHOCSHealthAuthorityConfig__mdt>();
-    public static User currentUser = [SELECT Id, UserRole.Name FROM User WHERE Id = :UserInfo.getUserId()];
-    public static String roleName = currentUser.UserRole?.Name;
+    public static User currentUser = [SELECT Id, User_Assigned_Role__c FROM User WHERE Id = :UserInfo.getUserId()];
+    public static String roleName = currentUser.User_Assigned_Role__c;
     
 /**
 * @author: Accenture
@@ -31,7 +31,7 @@ public with sharing class PhocsHealthAuthorityHandler {
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static void populateHealthAuthority(List<SObject> childRecords) {
-        IF(roleName != null && !roleName.contains('Dairy')){
+        IF((roleName == null || !roleName.contains('Dairy'))){
 
         PHOCSBypassHealthAuthorityHandler__c bypassSetting = PHOCSBypassHealthAuthorityHandler__c.getInstance();
         
