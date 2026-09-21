@@ -1406,10 +1406,16 @@
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection6</identifier>
                 <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.PHOWaterSystemSizeCategory__c}</leftValue>
                         <operator>CONTAINS</operator>
                         <rightValue>Small Water System</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.CategoryL1__c}</leftValue>
+                        <operator>NE</operator>
+                        <rightValue>Bulk Water Hauler</rightValue>
                     </criteria>
                 </visibilityRule>
             </componentInstance>
@@ -2857,10 +2863,16 @@
                 <componentName>lst:dynamicRelatedList</componentName>
                 <identifier>lst_dynamicRelatedList13</identifier>
                 <visibilityRule>
+                    <booleanFilter>1 OR 2</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.PHOWaterSystemSizeCategory__c}</leftValue>
                         <operator>CONTAINS</operator>
                         <rightValue>Small Water System</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.CategoryL1__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Bulk Water Hauler</rightValue>
                     </criteria>
                 </visibilityRule>
             </componentInstance>
