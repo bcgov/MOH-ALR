@@ -5,6 +5,7 @@
     <description>This validation rule prevents users from manually selecting the Submitted status for Water Lab Test Requisition records. The Submitted status is reserved for the integration process. Users must select a different status to save the record.</description>
     <errorConditionFormula>AND(
     ISPICKVAL(Status__c, &quot;Submitted&quot;),
+				ISBLANK(SubmittedDateTime__c),
     RecordType.DeveloperName = &quot;PHOCSWaterLabTestRequisition&quot;,
     $Profile.Name &lt;&gt; &quot;Salesforce API Only System Integrations&quot;,
 				$Profile.Name &lt;&gt; &quot;System Administrator&quot;

@@ -5,6 +5,7 @@
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]
                 15 Sep -  EHIS-910          -  Deepak      -  Initial version
                 15 Sep -  EHIS-910          -  Deepak      -  updated wrapper field references to match the PHOCSInvoiceTemplate merge token renames
+                17 Sep -  EHIS-910          -  Deepak      -  added bulk generateInvoicePdf(List<Id>) test covering one-process-per-fee and empty-list guard
 ***********************************************************************************************/
 @isTest
 public class PHOCSInvoiceDetailsServiceTest {
@@ -28,13 +29,13 @@ public class PHOCSInvoiceDetailsServiceTest {
         insert billingAccount;
     }
 
-    /**
-* @author: Deepak
-* @date: 15 Sep 2026
-* @description: The purpose of this method is to cover Testcoverage of getInvoiceDetails,
-*                  verifying every renamed/formatted field, the health-authority flags, and a
-*                  single line item's wrapper fields.
-* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+/**
+ * @author: Deepak
+ * @date: 15 Sep 2026
+ * @description: The purpose of this method is to cover Testcoverage of getInvoiceDetails,
+ *                  verifying every renamed/formatted field, the health-authority flags, and a
+ *                  single line item's wrapper fields.
+ * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     @isTest
     public static void getInvoiceDetails_PopulatesWrapperFields_ForSingleLineItemFee_Test() {
@@ -98,12 +99,12 @@ public class PHOCSInvoiceDetailsServiceTest {
         Assert.areEqual(item.FeeAmount, result.RTFTotalFeeAmount, 'RTFTotalFeeAmount should equal the single line item FeeAmount.');
     }
 
-    /**
-* @author: Deepak
-* @date: 15 Sep 2026
-* @description: The purpose of this method is to cover Testcoverage of getInvoiceDetails when a
-*                  fee has multiple line items, verifying RTFTotalFeeAmount sums every item.
-* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+/**
+ * @author: Deepak
+ * @date: 15 Sep 2026
+ * @description: The purpose of this method is to cover Testcoverage of getInvoiceDetails when a
+ *                  fee has multiple line items, verifying RTFTotalFeeAmount sums every item.
+ * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     @isTest
     public static void getInvoiceDetails_SumsAllLineItems_ForMultiLineItemFee_Test() {
@@ -146,12 +147,12 @@ public class PHOCSInvoiceDetailsServiceTest {
         Assert.areEqual(expectedTotal, result.RTFTotalFeeAmount, 'RTFTotalFeeAmount should be the sum of all line item FeeAmounts.');
     }
 
-    /**
-* @author: Deepak
-* @date: 15 Sep 2026
-* @description: The purpose of this method is to cover Testcoverage of the not-found path,
-*                  verifying null is returned when no RegulatoryTrxnFee matches the given Id.
-* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+/**
+ * @author: Deepak
+ * @date: 15 Sep 2026
+ * @description: The purpose of this method is to cover Testcoverage of the not-found path,
+ *                  verifying null is returned when no RegulatoryTrxnFee matches the given Id.
+ * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     @isTest
     public static void getInvoiceDetails_ReturnsNull_WhenFeeNotFound_Test() {
@@ -174,13 +175,13 @@ public class PHOCSInvoiceDetailsServiceTest {
         Assert.isNull(result, 'A null wrapper should be returned when no RegulatoryTrxnFee matches the Id.');
     }
 
-    /**
-* @author: Deepak
-* @date: 15 Sep 2026
-* @description: The purpose of this method is to cover Testcoverage of generateInvoicePdf,
-*                  verifying the DocumentGenerationProcess request carries the
-*                  RegulatoryTrxnFee's own Id as ReferenceObject.
-* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+/**
+ * @author: Deepak
+ * @date: 15 Sep 2026
+ * @description: The purpose of this method is to cover Testcoverage of generateInvoicePdf,
+ *                  verifying the DocumentGenerationProcess request carries the
+ *                  RegulatoryTrxnFee's own Id as ReferenceObject.
+ * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     @isTest
     public static void generateInvoicePdf_CreatesRequest_WithFeeIdAsReferenceObject_Test() {
@@ -228,15 +229,15 @@ public class PHOCSInvoiceDetailsServiceTest {
         Assert.areEqual(fee.Name, tokenData.RegulatoryTrxnFeeName, 'The serialized TokenData should reflect the fee used to build it.');
     }
 
-    /**
-* @author: Deepak
-* @date: 15 Sep 2026
-* @description: Links a test ContentVersion to a test DocumentTemplate via
-*                  DocumentTemplateContentDoc, since generateDocument resolves
-*                  templateContentVersionId through that junction rather than by
-*                  ContentVersion.Title alone.
-* @param documentTemplateId Id of the DocumentTemplate to link.
-* @param contentVersionId Id of the ContentVersion whose ContentDocument should be linked.
+/**
+ * @author: Deepak
+ * @date: 15 Sep 2026
+ * @description: Links a test ContentVersion to a test DocumentTemplate via
+ *                  DocumentTemplateContentDoc, since generateDocument resolves
+ *                  templateContentVersionId through that junction rather than by
+ *                  ContentVersion.Title alone.
+ * @param documentTemplateId Id of the DocumentTemplate to link.
+ * @param contentVersionId Id of the ContentVersion whose ContentDocument should be linked.
 */
     private static void linkTemplateContentVersion(Id documentTemplateId, Id contentVersionId) {
         ContentVersion contentVersion = [SELECT Id, ContentDocumentId FROM ContentVersion WHERE Id = :contentVersionId LIMIT 1];
@@ -248,14 +249,14 @@ public class PHOCSInvoiceDetailsServiceTest {
         insert templateContentDocLink;
     }
 
-    /**
-* @author: Deepak
-* @date: 15 Sep 2026
-* @description: The purpose of this method is to cover Testcoverage of the
-*                  generateInvoicePdf(Id, InvoiceDetailsWrapper) overload, verifying a
-*                  caller-supplied wrapper is submitted directly without re-running
-*                  getInvoiceDetails.
-* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+/**
+ * @author: Deepak
+ * @date: 15 Sep 2026
+ * @description: The purpose of this method is to cover Testcoverage of the
+ *                  generateInvoicePdf(Id, InvoiceDetailsWrapper) overload, verifying a
+ *                  caller-supplied wrapper is submitted directly without re-running
+ *                  getInvoiceDetails.
+ * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     @isTest
     public static void generateInvoicePdf_WrapperOverload_SubmitsSuppliedWrapper_Test() {
@@ -301,12 +302,12 @@ public class PHOCSInvoiceDetailsServiceTest {
         Assert.areEqual('Caller-Supplied-Fee-Name', tokenData.RegulatoryTrxnFeeName, 'TokenData should reflect the caller-supplied wrapper, not a freshly queried one.');
     }
 
-    /**
-* @author: Deepak
-* @date: 15 Sep 2026
-* @description: The purpose of this method is to cover Testcoverage of the
-*                  generateInvoicePdf(Id, InvoiceDetailsWrapper) overload's null-wrapper path.
-* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+/**
+ * @author: Deepak
+ * @date: 15 Sep 2026
+ * @description: The purpose of this method is to cover Testcoverage of the
+ *                  generateInvoicePdf(Id, InvoiceDetailsWrapper) overload's null-wrapper path.
+ * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     @isTest
     public static void generateInvoicePdf_WrapperOverload_ReturnsNull_WhenWrapperIsNull_Test() {
@@ -320,13 +321,13 @@ public class PHOCSInvoiceDetailsServiceTest {
         Assert.areEqual(0, generatedProcesses.size(), 'No DocumentGenerationProcess record should be created when the supplied wrapper is null.');
     }
 
-    /**
-* @author: Deepak
-* @date: 15 Sep 2026
-* @description: The purpose of this method is to cover Testcoverage of generateInvoicePdf when
-*                  no RegulatoryTrxnFee matches the given Id, verifying null is returned and no
-*                  DocumentGenerationProcess is created.
-* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+/**
+ * @author: Deepak
+ * @date: 15 Sep 2026
+ * @description: The purpose of this method is to cover Testcoverage of generateInvoicePdf when
+ *                  no RegulatoryTrxnFee matches the given Id, verifying null is returned and no
+ *                  DocumentGenerationProcess is created.
+ * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     @isTest
     public static void generateInvoicePdf_ReturnsNull_WhenFeeNotFound_Test() {
@@ -358,5 +359,114 @@ public class PHOCSInvoiceDetailsServiceTest {
 
         List<DocumentGenerationProcess> generatedProcesses = [SELECT Id FROM DocumentGenerationProcess];
         Assert.areEqual(0, generatedProcesses.size(), 'No DocumentGenerationProcess record should be created when the fee is not found.');
+    }
+
+/**
+ * @author: Deepak
+ * @date: 17 Sep 2026
+ * @description: Covers the bulk generateInvoicePdf(List<Id>) overload - verifying one
+ *                  DocumentGenerationProcess is created per valid fee Id, that a missing fee Id
+ *                  is skipped without failing the batch, and that each process carries the
+ *                  correct ReferenceObject.
+ * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
+    @isTest
+    public static void generateInvoicePdf_BulkOverload_CreatesOneProcessPerValidFee_Test() {
+        Account billingAccount = [SELECT Id FROM Account WHERE Name = 'ABC ChildCare Inc' LIMIT 1];
+
+        RegulatoryTrxnFee feeA = new RegulatoryTrxnFee(
+            AccountId = billingAccount.Id,
+            RecordTypeId = RT_PHOCS_NON_DAIRY_TXN_FEE,
+            Status__c = 'Due',
+            FeeType__c = FEE_TYPE_RENEWAL,
+            DueDate = Datetime.newInstance(2026, 4, 11, 19, 0, 0)
+        );
+        RegulatoryTrxnFee feeB = new RegulatoryTrxnFee(
+            AccountId = billingAccount.Id,
+            RecordTypeId = RT_PHOCS_NON_DAIRY_TXN_FEE,
+            Status__c = 'Due',
+            FeeType__c = FEE_TYPE_RENEWAL,
+            DueDate = Datetime.newInstance(2026, 7, 24, 19, 0, 0)
+        );
+        insert new List<RegulatoryTrxnFee>{ feeA, feeB };
+
+        RegulatoryTrxnFeeItem itemA = new RegulatoryTrxnFeeItem(
+            RegulatoryTrxnFeeId = feeA.Id,
+            Name = 'Bulk Line Item A',
+            FeeAmount = 100
+        );
+        RegulatoryTrxnFeeItem itemB = new RegulatoryTrxnFeeItem(
+            RegulatoryTrxnFeeId = feeB.Id,
+            Name = 'Bulk Line Item B',
+            FeeAmount = 200
+        );
+        insert new List<RegulatoryTrxnFeeItem>{ itemA, itemB };
+
+        // Insert and immediately delete a third fee to get a valid but non-existent Id.
+        RegulatoryTrxnFee deletedFee = new RegulatoryTrxnFee(
+            AccountId = billingAccount.Id,
+            RecordTypeId = RT_PHOCS_NON_DAIRY_TXN_FEE,
+            Status__c = 'Due',
+            FeeType__c = FEE_TYPE_RENEWAL
+        );
+        insert deletedFee;
+        Id missingFeeId = deletedFee.Id;
+        delete deletedFee;
+
+        DocumentTemplate template = new DocumentTemplate(
+            Name = 'PHOCSInvoiceTemplate',
+            Type = 'MicrosoftWord',
+            TokenMappingType = 'JSON',
+            TokenMappingMethodType = 'OmniDataTransform'
+        );
+        insert template;
+
+        ContentVersion templateContentVersion = new ContentVersion(
+            Title = 'PHOCSInvoiceTemplate',
+            PathOnClient = 'PHOCSInvoiceTemplate.docx',
+            VersionData = Blob.valueOf('Test template content')
+        );
+        insert templateContentVersion;
+        linkTemplateContentVersion(template.Id, templateContentVersion.Id);
+
+        Test.startTest();
+        List<Id> resultIds = PHOCSInvoiceDetailsService.generateInvoicePdf(new List<Id>{ feeA.Id, feeB.Id, missingFeeId });
+        Test.stopTest();
+
+        Assert.areEqual(2, resultIds.size(), 'Two DocumentGenerationProcess Ids should be returned for two valid fees; the missing fee is skipped.');
+
+        for (Id resultId : resultIds) {
+            Assert.isNotNull(resultId, 'Each returned Id should be non-null.');
+        }
+
+        List<DocumentGenerationProcess> generatedProcesses = [SELECT Id, ReferenceObject FROM DocumentGenerationProcess ORDER BY CreatedDate ASC];
+        Assert.areEqual(2, generatedProcesses.size(), 'Exactly two DocumentGenerationProcess records should be created.');
+
+        Set<Id> referenceObjectIds = new Set<Id>();
+        for (DocumentGenerationProcess process : generatedProcesses) {
+            referenceObjectIds.add(process.ReferenceObject);
+        }
+
+        Assert.isTrue(referenceObjectIds.contains(feeA.Id), 'A process with feeA as ReferenceObject should exist.');
+        Assert.isTrue(referenceObjectIds.contains(feeB.Id), 'A process with feeB as ReferenceObject should exist.');
+    }
+
+/**
+ * @author: Deepak
+ * @date: 17 Sep 2026
+ * @description: Covers the bulk generateInvoicePdf(List<Id>) overload's empty-list guard,
+ *                  verifying an empty list is returned immediately with no DML.
+ * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
+    @isTest
+    public static void generateInvoicePdf_BulkOverload_ReturnsEmptyList_WhenInputIsEmpty_Test() {
+        Test.startTest();
+        List<Id> resultIds = PHOCSInvoiceDetailsService.generateInvoicePdf(new List<Id>());
+        Test.stopTest();
+
+        Assert.areEqual(0, resultIds.size(), 'An empty list should be returned when the input list is empty.');
+
+        List<DocumentGenerationProcess> generatedProcesses = [SELECT Id FROM DocumentGenerationProcess];
+        Assert.areEqual(0, generatedProcesses.size(), 'No DocumentGenerationProcess records should be created for an empty input list.');
     }
 }
