@@ -9,7 +9,7 @@
                         <valueListItems>
                             <value>Case.PHOCSpublishToPDS</value>
                             <visibilityRule>
-                                <booleanFilter>1 AND 4 AND (2 OR 3)</booleanFilter>
+                                <booleanFilter>1 AND 4 AND 5 AND (2 OR 3)</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.RecordType.DeveloperName}</leftValue>
                                     <operator>EQUAL</operator>
@@ -30,12 +30,17 @@
                                     <operator>EQUAL</operator>
                                     <rightValue>false</rightValue>
                                 </criteria>
+                                <criteria>
+                                    <leftValue>{!$Permission.CustomPermission.PHOCSPublishUnpublishInspection}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>true</rightValue>
+                                </criteria>
                             </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>Case.PHOCSUnpublishToPDS</value>
                             <visibilityRule>
-                                <booleanFilter>1 AND 4 AND (2 OR 3)</booleanFilter>
+                                <booleanFilter>1 AND 4 AND 5 AND (2 OR 3)</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.RecordType.DeveloperName}</leftValue>
                                     <operator>EQUAL</operator>
@@ -53,6 +58,11 @@
                                 </criteria>
                                 <criteria>
                                     <leftValue>{!Record.Disclose_to_Public__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>true</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!$Permission.CustomPermission.PHOCSPublishUnpublishInspection}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>true</rightValue>
                                 </criteria>
