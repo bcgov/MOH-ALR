@@ -87,14 +87,17 @@ global with sharing class PHOCSRequisitionService {
                 rw.siteSource = req.SpecimenSource__c;
                 rw.eHO = req.DWOEHOName__c;
                 rw.samplerName = req.SamplerName__c;
-                rw.facilityBoilAdvisory = req.BoilAdvisory__c;
-                rw.siteName = req.Site_Descriptor__c;
-                rw.siteAddress = req.Drinking_Water_Component_Name__r != null && req.Drinking_Water_Component_Name__r.Address != null
-                                 ? formatAddress(req.Drinking_Water_Component_Name__r.Address) : (req.FacilityName__r != null && req.FacilityName__r.Physical_Address__c != null
-                                 ? formatAddress(req.FacilityName__r.Physical_Address__c) : req.Site_Descriptor__c);
-                rw.siteTreated = req.Site_Treatment__c != null ? (req.Site_Treatment__c == 'Post-treatment' ? 'True' : 'False') : null;
-                rw.siteID = req.Site_Number__c;
-                requisitionWrappers.add(rw);
+                rw.facilityBoilAdvisory = req.BoilAdvisory__c; 
+                rw.siteName = req.SamplingSite__r != null ? req.SamplingSite__r.Name : req.Site_Descriptor__c;
+                rw.siteID = req.SamplingSite__r != null ? req.SamplingSite__r.SiteNumber__c : req.Site_Number__c;
+                String treatment = req.SamplingSite__r != null ? req.SamplingSite__r.SiteTreatment__c : req.Site_Treatment__c;
+                rw.siteTreated = treatment != null ? (treatment == 'Post-treatment' ? 'True' : 'False') : null;                
+                rw.siteAddress = (req.Drinking_Water_Component_Name__r != null && req.Drinking_Water_Component_Name__r.Address != null)
+                    ? formatAddress(req.Drinking_Water_Component_Name__r.Address) 
+                    : (req.FacilityName__r != null  && req.FacilityName__r.Physical_Address__c != null
+                       ? formatAddress(req.FacilityName__r.Physical_Address__c) : req.Site_Descriptor__c);
+                           
+                           requisitionWrappers.add(rw);
             }
             
             ResponseWrapper response = new ResponseWrapper();

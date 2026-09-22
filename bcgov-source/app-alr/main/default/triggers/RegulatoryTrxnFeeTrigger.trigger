@@ -5,6 +5,7 @@
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]  
                             ALR- 40             ACN-ALR       Fee calculation for newly added unit(s)
 							EHIS-3081			ACN-PHOCS	  populate Health Authority from parent
+							EHIS-901     		ACN-PHOCS	  generate invoice PDF when PaymentReminder__c changes to Send Renewal or Late Fee Generated
 ***********************************************************************************************/
 trigger RegulatoryTrxnFeeTrigger on RegulatoryTrxnFee (before insert, before update, after insert, after update, before delete, after delete, after undelete) {
      TriggerHandler handler = new RegulatoryTrxnFeeTriggerHandler();
@@ -46,8 +47,14 @@ trigger RegulatoryTrxnFeeTrigger on RegulatoryTrxnFee (before insert, before upd
              }
          }
      }
+
+    // ----- PHOCS -----
     if(Trigger.isBefore && (Trigger.isInsert || Trigger.isUpdate)){
         PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new);         
     }
-    
+
+    if(Trigger.isAfter && Trigger.isUpdate){
+        RegulatoryTrxnFeeTriggerHandler.generateInvoiceOnPaymentReminderChange(Trigger.new, Trigger.oldMap);
+    }
+
  }
