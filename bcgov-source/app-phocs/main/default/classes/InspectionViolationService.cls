@@ -468,7 +468,8 @@ public with sharing class InspectionViolationService {
 
             // Rule 2: violations that were resolved in a retracted inspection are reopened.
             for (RegulatoryCodeViolation vio : [SELECT Id, Status, ResolvedIn__c FROM RegulatoryCodeViolation
-                                                WHERE ResolvedIn__c IN :visitIds AND Status = :STATUS_RESOLVED]) {
+                                                WHERE ResolvedIn__c IN :visitIds AND Status = :STATUS_RESOLVED
+                                                AND RecordTypeId = :recordTypePHOCSRegulatoryCodeViolation]) {
                 vio.Status = STATUS_OPEN;
                 violationsToUpdate.put(vio.Id, vio);
             }
@@ -476,7 +477,8 @@ public with sharing class InspectionViolationService {
             // Rule 1: violations raised in a retracted inspection are retracted. Applied last so it wins
             // over rule 2 when the same violation was both raised and resolved in the retracted inspection.
             for (RegulatoryCodeViolation vio : [SELECT Id, Status FROM RegulatoryCodeViolation
-                                                WHERE InspectionId IN :visitIds]) {
+                                                WHERE InspectionId IN :visitIds
+                                                AND RecordTypeId = :recordTypePHOCSRegulatoryCodeViolation]) {
                 if (vio.Status != STATUS_RETRACTED) {
                     vio.Status = STATUS_RETRACTED;
                     violationsToUpdate.put(vio.Id, vio);
