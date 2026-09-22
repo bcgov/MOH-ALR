@@ -3,7 +3,6 @@
  * @author PHOCS Dev Team
  * @date 2025-12-14
  * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
- *                    18 Sep -  EHIS-4852        -  PHOCS Dev Team   -  Added retractVisitViolations().
  *                    22 Sep -  EHIS-4852        -  PHOCS Dev Team   -  Retract inspection violations and reopen violations resolved in it.
  */
 public with sharing class InspectionViolationService {
@@ -452,15 +451,12 @@ public with sharing class InspectionViolationService {
 
 /**
 * @author: PHOCS Dev Team
-* @date: 18 Sep 2026
-* @description: Handle violations impacted by inspections whose IsRetracted__c checkbox has changed to true.
+* @date: 22 Sep 2026
+* @description: Handle violations impacted by inspections whose IsRetracted__c checkbox has changed to true (EHIS-4852).
 *               1. Every violation raised in a retracted inspection (InspectionId) becomes Retracted.
 *               2. Every violation that was Resolved in a retracted inspection (ResolvedIn__c) goes back to Open,
 *                  because the resolution is no longer valid. Rule 1 wins when a violation matches both.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
-*                    18 Sep -  EHIS-4852         -  PHOCS Dev Team  -  Initial version.
-*                    22 Sep -  EHIS-4852         -  PHOCS Dev Team  -  Retract all violations of the inspection and
-*                                                                      reopen violations resolved in it.
 */
     public static void retractVisitViolations(Set<Id> visitIds) {
         if (visitIds == null || visitIds.isEmpty()) {
