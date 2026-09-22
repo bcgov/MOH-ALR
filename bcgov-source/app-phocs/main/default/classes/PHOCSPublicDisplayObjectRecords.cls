@@ -995,7 +995,10 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                     'SamplingSiteName'   => lab.LabTestRequisition__r?.SamplingSite__r?.Name,               
                     'SampleTestType'     => lab.Test__r?.SampleTestType__c,
                     'ParameterType'      => lab.Test__r?.ParameterType__c,  
-                    'CollectionDateTime' => lab.LabTestRequisition__r?.CollectionDateTime__c
+                    'CollectionDateTime' => lab.LabTestRequisition__r?.CollectionDateTime__c,
+                    'DrinkingWaterComponentName' => lab.LabTestRequisition__r.Drinking_Water_Component_Name__r.Name,
+                    'SiteTreatment' => lab.LabTestRequisition__r.SamplingSite__r.SiteTreatment__c,
+                    'SiteDescriptor' => lab.LabTestRequisition__r.SamplingSite__r.Name
                     };            
                         return result;
         }
