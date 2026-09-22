@@ -2,6 +2,8 @@
 * @description Test class for InspectionViolationService
 * @author PHOCS Dev Team
 * @date 2025-12-14
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*                    22 Sep -  EHIS-4852        -  PHOCS Dev Team   -  Cover retractVisitViolations().
 */
 @isTest
 public class InspectionViolationServiceTest {
@@ -461,5 +463,138 @@ public class InspectionViolationServiceTest {
             System.assertNotEquals(dataEntryStamp, vio.DateCreated, 'The date supplied on submit must take precedence over the Actual Start Time stored on the Visit');
             System.assertNotEquals(vio.CreatedDate.date(), vio.DateCreated.date(), 'System CreatedDate should remain the submission date, separate from the violation date');
         }
+    }
+
+/**
+* @description Helper: creates a violation for the retraction tests.
+*/
+    private static RegulatoryCodeViolation buildViolation(Id inspectionId, Id assmntIndId, String status, Id resolvedInId) {
+        RegulatoryCodeViolation vio = new RegulatoryCodeViolation(
+            RecordTypeId = InspectionViolationService.recordTypePHOCSRegulatoryCodeViolation,
+            InspectionId = inspectionId,
+            InspectionAssmntIndId = assmntIndId,
+            DateCreated = System.now(),
+            ComplianceDueDate = System.now().addDays(5),
+            Status = status
+        );
+        if (resolvedInId != null) {
+            vio.ResolvedIn__c = resolvedInId;
+            vio.DateResolved = System.now();
+        }
+        return vio;
+    }
+
+/**
+* @description Rule 1: every violation raised in a retracted inspection is set to Retracted,
+*              whatever its previous status was.
+*/
+    @isTest
+    static void testRetractVisitViolations_RetractsInspectionViolations() {
+        Visit testVisit = [SELECT Id FROM Visit LIMIT 1];
+        AssessmentTask testTask = [SELECT Id FROM AssessmentTask WHERE ParentId = :testVisit.Id LIMIT 1];
+        AssessmentIndicatorDefinition parentIndicator = [SELECT Id FROM AssessmentIndicatorDefinition WHERE PHOCSParentId__c = null LIMIT 1];
+
+        InspectionAssessmentInd response = new InspectionAssessmentInd(
+            AssessmentTaskId = testTask.Id,
+            AssessmentIndDefinitionId = parentIndicator.Id,
+            RecordTypeId = InspectionViolationService.recordTypePHOCSInspectionAssessmentInd,
+            Result = InspectionViolationService.RESULT_NON_COMPLIANT
+        );
+        insert response;
+
+        List<RegulatoryCodeViolation> violations = new List<RegulatoryCodeViolation>();
+        violations.add(buildViolation(testVisit.Id, response.Id, 'Open', null));
+        violations.add(buildViolation(testVisit.Id, response.Id, 'Resolved', null));
+        insert violations;
+
+        Test.startTest();
+        InspectionViolationService.retractVisitViolations(new Set<Id>{ testVisit.Id });
+        Test.stopTest();
+
+        for (RegulatoryCodeViolation vio : [SELECT Id, Status FROM RegulatoryCodeViolation WHERE Id IN :violations]) {
+            System.assertEquals('Retracted', vio.Status, 'Every violation of a retracted inspection should be Retracted');
+        }
+    }
+
+/**
+* @description Rule 2: a violation that was Resolved in the retracted inspection goes back to Open,
+*              while the inspection where it was raised is untouched.
+*/
+    @isTest
+    static void testRetractVisitViolations_ReopensViolationsResolvedInVisit() {
+        Visit retractedVisit = [SELECT Id, AccountId, PlaceId FROM Visit LIMIT 1];
+        AssessmentTask testTask = [SELECT Id FROM AssessmentTask WHERE ParentId = :retractedVisit.Id LIMIT 1];
+        AssessmentIndicatorDefinition parentIndicator = [SELECT Id FROM AssessmentIndicatorDefinition WHERE PHOCSParentId__c = null LIMIT 1];
+
+        // The inspection where the violation was originally raised
+        Visit originalVisit = new Visit(
+            AccountId = retractedVisit.AccountId,
+            PlaceId = retractedVisit.PlaceId,
+            PlannedVisitStartTime = DateTime.now().addDays(-30),
+            PlannedVisitEndTime = DateTime.now().addDays(-30).addHours(2)
+        );
+        insert originalVisit;
+
+        InspectionAssessmentInd response = new InspectionAssessmentInd(
+            AssessmentTaskId = testTask.Id,
+            AssessmentIndDefinitionId = parentIndicator.Id,
+            RecordTypeId = InspectionViolationService.recordTypePHOCSInspectionAssessmentInd,
+            Result = InspectionViolationService.RESULT_NON_COMPLIANT
+        );
+        insert response;
+
+        RegulatoryCodeViolation resolvedVio = buildViolation(originalVisit.Id, response.Id, 'Resolved', retractedVisit.Id);
+        insert resolvedVio;
+
+        Test.startTest();
+        InspectionViolationService.retractVisitViolations(new Set<Id>{ retractedVisit.Id });
+        Test.stopTest();
+
+        RegulatoryCodeViolation reopened = [SELECT Id, Status, InspectionId, ResolvedIn__c, DateResolved FROM RegulatoryCodeViolation WHERE Id = :resolvedVio.Id];
+        System.assertEquals('Open', reopened.Status, 'A violation resolved in a retracted inspection should be reopened');
+        System.assertEquals(retractedVisit.Id, reopened.ResolvedIn__c, 'ResolvedIn should be left untouched');
+        System.assertNotEquals(null, reopened.DateResolved, 'DateResolved should be left untouched');
+        System.assertEquals(originalVisit.Id, reopened.InspectionId, 'Inspection should still reference where the violation was raised');
+    }
+
+/**
+* @description A violation both raised and resolved in the retracted inspection is Retracted, not reopened.
+*/
+    @isTest
+    static void testRetractVisitViolations_RetractTakesPrecedenceOverReopen() {
+        Visit testVisit = [SELECT Id FROM Visit LIMIT 1];
+        AssessmentTask testTask = [SELECT Id FROM AssessmentTask WHERE ParentId = :testVisit.Id LIMIT 1];
+        AssessmentIndicatorDefinition parentIndicator = [SELECT Id FROM AssessmentIndicatorDefinition WHERE PHOCSParentId__c = null LIMIT 1];
+
+        InspectionAssessmentInd response = new InspectionAssessmentInd(
+            AssessmentTaskId = testTask.Id,
+            AssessmentIndDefinitionId = parentIndicator.Id,
+            RecordTypeId = InspectionViolationService.recordTypePHOCSInspectionAssessmentInd,
+            Result = InspectionViolationService.RESULT_NON_COMPLIANT
+        );
+        insert response;
+
+        RegulatoryCodeViolation vio = buildViolation(testVisit.Id, response.Id, 'Resolved', testVisit.Id);
+        insert vio;
+
+        Test.startTest();
+        InspectionViolationService.retractVisitViolations(new Set<Id>{ testVisit.Id });
+        Test.stopTest();
+
+        RegulatoryCodeViolation updated = [SELECT Id, Status FROM RegulatoryCodeViolation WHERE Id = :vio.Id];
+        System.assertEquals('Retracted', updated.Status, 'A violation raised in the retracted inspection should be Retracted');
+    }
+
+/**
+* @description Null and empty inputs are ignored without any DML.
+*/
+    @isTest
+    static void testRetractVisitViolations_NoVisitIds() {
+        Test.startTest();
+        InspectionViolationService.retractVisitViolations(null);
+        InspectionViolationService.retractVisitViolations(new Set<Id>());
+        Test.stopTest();
+
+        System.assertEquals(0, [SELECT COUNT() FROM RegulatoryCodeViolation WHERE Status = 'Retracted'], 'Nothing should be retracted when no inspection is retracted');
     }
 }
