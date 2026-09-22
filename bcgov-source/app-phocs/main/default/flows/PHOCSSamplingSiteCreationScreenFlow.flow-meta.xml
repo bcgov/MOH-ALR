@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>PredefineAssessments</name>
+        <label>PredefineAssessments</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>newSamplingSiteDetails.ParentAccount__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>CreateSamplingSite</targetReference>
+        </connector>
+    </assignments>
     <assignments>
         <name>PrepSamplingSiteDetails</name>
         <label>Prep Sampling Site Details</label>
@@ -58,7 +74,7 @@
             <name>Null</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>newSamplingSiteDetails.SiteTreatment__c</leftValueReference>
+                <leftValueReference>Site_Treatment</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
@@ -71,6 +87,22 @@
             <label>Null</label>
         </rules>
     </decisions>
+    <dynamicChoiceSets>
+        <name>SiteStatus</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>SiteStatus__c</picklistField>
+        <picklistObject>Location</picklistObject>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>SiteTreatment</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>SiteTreatment__c</picklistField>
+        <picklistObject>Location</picklistObject>
+    </dynamicChoiceSets>
     <environments>Default</environments>
     <formulas>
         <name>ErrorMessageParsed</name>
@@ -154,7 +186,7 @@
         <inputAssignments>
             <field>ParentId</field>
             <value>
-                <elementReference>newSamplingSiteDetails.Id</elementReference>
+                <elementReference>CreateSamplingSiteRecord.Id</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -189,7 +221,7 @@
         <inputAssignments>
             <field>LocationId</field>
             <value>
-                <elementReference>newSamplingSiteDetails.Id</elementReference>
+                <elementReference>CreateSamplingSiteRecord.Id</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -218,7 +250,80 @@
         <faultConnector>
             <targetReference>SamplingSiteRecordError</targetReference>
         </faultConnector>
-        <inputReference>newSamplingSiteDetails</inputReference>
+        <inputAssignments>
+            <field>AutomatedMonitoringParameters__c</field>
+            <value>
+                <elementReference>newSamplingSiteDetails.AutomatedMonitoringParameters__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>AutomatedMonitoring__c</field>
+            <value>
+                <elementReference>newSamplingSiteDetails.AutomatedMonitoring__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>DedicatedSamplingStation__c</field>
+            <value>
+                <elementReference>newSamplingSiteDetails.DedicatedSamplingStation__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <elementReference>newSamplingSiteDetails.Description</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Latitude</field>
+            <value>
+                <elementReference>LocationLatitude</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Longitude</field>
+            <value>
+                <elementReference>LocationLongitude</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>newSamplingSiteDetails.Name</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ParentAccount__c</field>
+            <value>
+                <elementReference>newSamplingSiteDetails.ParentAccount__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ProvinciallyFundedSampling__c</field>
+            <value>
+                <elementReference>newSamplingSiteDetails.ProvinciallyFundedSampling__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SiteNumber__c</field>
+            <value>
+                <elementReference>Site_Number</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SiteStatus__c</field>
+            <value>
+                <elementReference>Site_Status</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SiteTreatment__c</field>
+            <value>
+                <elementReference>Site_Treatment</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Location</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
     <screens>
         <name>AddressCreationError</name>
@@ -303,34 +408,6 @@
                     </styleProperties>
                 </fields>
                 <fields>
-                    <fieldType>ObjectProvided</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <objectFieldReference>SamplingSiteAddress.Address</objectFieldReference>
-                    <styleProperties>
-                        <verticalAlignment>
-                            <stringValue>top</stringValue>
-                        </verticalAlignment>
-                        <width>
-                            <stringValue>12</stringValue>
-                        </width>
-                    </styleProperties>
-                </fields>
-                <fields>
-                    <fieldType>ObjectProvided</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <objectFieldReference>newSamplingSiteDetails.DrivingDirections</objectFieldReference>
-                    <styleProperties>
-                        <verticalAlignment>
-                            <stringValue>top</stringValue>
-                        </verticalAlignment>
-                        <width>
-                            <stringValue>12</stringValue>
-                        </width>
-                    </styleProperties>
-                </fields>
-                <fields>
                     <name>Location</name>
                     <fieldText>&lt;p&gt;&lt;strong style=&quot;font-size: 12px;&quot;&gt;Location&lt;/strong&gt;&lt;/p&gt;</fieldText>
                     <fieldType>DisplayText</fieldType>
@@ -348,6 +425,7 @@
                     <dataType>String</dataType>
                     <fieldText>Latitude</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -363,6 +441,7 @@
                     <dataType>String</dataType>
                     <fieldText>Longitude</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <styleProperties>
                         <verticalAlignment>
@@ -388,7 +467,7 @@
                     <fieldType>ObjectProvided</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
-                    <objectFieldReference>newSamplingSiteDetails.SiteNumber__c</objectFieldReference>
+                    <objectFieldReference>newSamplingSiteDetails.ParentAccount__c</objectFieldReference>
                     <styleProperties>
                         <verticalAlignment>
                             <stringValue>top</stringValue>
@@ -399,10 +478,12 @@
                     </styleProperties>
                 </fields>
                 <fields>
-                    <fieldType>ObjectProvided</fieldType>
+                    <name>Site_Number</name>
+                    <dataType>String</dataType>
+                    <fieldText>Site Number</fieldText>
+                    <fieldType>InputField</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <objectFieldReference>newSamplingSiteDetails.SiteStatus__c</objectFieldReference>
+                    <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
                             <stringValue>top</stringValue>
@@ -413,10 +494,13 @@
                     </styleProperties>
                 </fields>
                 <fields>
-                    <fieldType>ObjectProvided</fieldType>
+                    <name>Site_Status</name>
+                    <choiceReferences>SiteStatus</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Site Status</fieldText>
+                    <fieldType>DropdownBox</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <objectFieldReference>newSamplingSiteDetails.SiteTreatment__c</objectFieldReference>
+                    <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
                             <stringValue>top</stringValue>
@@ -427,9 +511,13 @@
                     </styleProperties>
                 </fields>
                 <fields>
-                    <name>Required</name>
-                    <fieldText>&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 12px; color: rgb(186, 5, 23);&quot;&gt;Complete this field.&lt;/span&gt;&lt;/p&gt;</fieldText>
-                    <fieldType>DisplayText</fieldType>
+                    <name>Site_Treatment</name>
+                    <choiceReferences>SiteTreatment</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Site Treatment</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
                     <styleProperties>
                         <verticalAlignment>
                             <stringValue>top</stringValue>
@@ -479,6 +567,17 @@
                         </width>
                     </styleProperties>
                 </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>SamplingInformationSection_Column2</name>
+                <fieldType>Region</fieldType>
                 <fields>
                     <fieldType>ObjectProvided</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
@@ -517,17 +616,6 @@
                         </conditions>
                     </visibilityRule>
                 </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>6</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <fields>
-                <name>SamplingInformationSection_Column2</name>
-                <fieldType>Region</fieldType>
                 <fields>
                     <fieldType>ObjectProvided</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
@@ -608,7 +696,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>CreateSamplingSite</targetReference>
+            <targetReference>PredefineAssessments</targetReference>
         </connector>
     </start>
     <status>Active</status>

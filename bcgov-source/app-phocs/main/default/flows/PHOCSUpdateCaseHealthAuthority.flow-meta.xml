@@ -250,7 +250,40 @@
             <label>If PHOCS Facility Enquiry record type</label>
         </rules>
     </decisions>
-    <description>EHIS-5000 accommodate Orphan Cases with Owner&apos;s Health Authority that stamp user&apos;s HA</description>
+    <decisions>
+        <name>On_Create_Case_Check_Custom_Metadata_Record</name>
+        <label>On Create Case Check Custom Metadata Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Set_Case_Health_Authority</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>On_Create_RunningUser_Dairy</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>On_Create_Case_Get_Custom_Metadata</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>On_Create_Case_Get_Custom_Metadata.HealthAuthority__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>On_Create_Case_Update_Case_Dairy</targetReference>
+            </connector>
+            <label>On Create RunningUser Dairy</label>
+        </rules>
+    </decisions>
+    <description>EHIS-5700 bugfix latest - v15
+EHIS-5000 accommodate Orphan Cases with Owner&apos;s Health Authority that stamp user&apos;s HA</description>
     <environments>Default</environments>
     <formulas>
         <name>Is_Insert</name>
@@ -285,7 +318,7 @@
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Set_Case_Health_Authority</targetReference>
+            <targetReference>On_Create_Case_Get_Custom_Metadata</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -320,6 +353,27 @@
         <object>PHOCSUserRoleHAMapping__mdt</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <recordLookups>
+        <name>On_Create_Case_Get_Custom_Metadata</name>
+        <label>On Create Case Get Custom Metadata</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>On_Create_Case_Check_Custom_Metadata_Record</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>User_Assigned_Role__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$User.User_Assigned_Role__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>PHOCSUserRoleHAMapping__mdt</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <recordUpdates>
         <name>Clear_Plan_Monitoring</name>
         <label>Clear Plan Monitoring</label>
@@ -330,6 +384,19 @@
         </connector>
         <inputAssignments>
             <field>DoesthePlanRequireMonitoring__c</field>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>On_Create_Case_Update_Case_Dairy</name>
+        <label>On Create Case Update Case Dairy</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>IsDairyCase__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
         </inputAssignments>
         <inputReference>$Record</inputReference>
     </recordUpdates>
