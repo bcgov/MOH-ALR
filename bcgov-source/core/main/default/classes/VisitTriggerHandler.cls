@@ -4,6 +4,7 @@
 * @Description: The purpose of this class is to create methods which can be used by different trigger events.
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
                 02 Jul -  PHOCS-269         -  Accenture   -  Update the RiskAssessmentEligibility__c on Account.
+                18 Sep -  PHCOS-4852        -  Accenture   -  Get Retracted inspections for further actions on related violations
 ***********************************************************************************************/
 public with Sharing class VisitTriggerHandler {
     public static Id recordTypeALRInspection = Schema.SObjectType.Visit.getRecordTypeInfosByDeveloperName().get('Inspection').getRecordTypeId();
@@ -14,6 +15,8 @@ public with Sharing class VisitTriggerHandler {
     
     public static void afterUpdate(List<Visit> newList, Map<Id, Visit> oldMap) {
         Set<Id> completedInspectionIds = new Set<Id>();
+        Set<Id> retractedInspectionIds = new Set<Id>();
+
         for (Visit insp : newList) {
             Visit oldInsp = oldMap.get(insp.Id);
             if (insp.Status == 'Completed' && oldInsp.Status != 'Completed') {
@@ -25,11 +28,20 @@ public with Sharing class VisitTriggerHandler {
                     completedInspectionIds.add(insp.Id);
                 }
             }
+
+            if (insp.IsRetracted__c && !oldInsp.IsRetracted__c && insp.RecordTypeId == recordTypePHOCSInspection){
+                retractedInspectionIds.add(insp.Id);
+            }
+            
         }
         
         if (!completedInspectionIds.isEmpty()) {
             PHOCSInspectionAssessmentIndBatch.delInsInd(completedInspectionIds);
             updateRiskAssessmentEligibility(completedInspectionIds);
+        }
+
+        if (!retractedInspectionIds.isEmpty()) {
+            InspectionViolationService.retractVisitViolations(retractedInspectionIds);
         }
     }
 

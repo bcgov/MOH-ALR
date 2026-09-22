@@ -2,12 +2,17 @@
  * @description Service class for creating violations from non-compliant inspection questions
  * @author PHOCS Dev Team
  * @date 2025-12-14
+ * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+ *                    22 Sep -  EHIS-4852        -  PHOCS Dev Team   -  Retract inspection violations and reopen violations resolved in it.
  */
 public with sharing class InspectionViolationService {
     public static Id recordTypePHOCSInspectionAssessmentInd = Schema.SObjectType.InspectionAssessmentInd.getRecordTypeInfosByDeveloperName().get('PHOCSInspectionAssessmentInd').getRecordTypeId();
     public static Id recordTypePHOCSRegulatoryCodeViolation = Schema.SObjectType.RegulatoryCodeViolation.getRecordTypeInfosByDeveloperName().get('PHOCSRegulatoryCodeViolation').getRecordTypeId();
     public static final String RESULT_NON_COMPLIANT = 'PHOCSNonCompliant';  
     public static final String RESULT_COMPLIANT = 'Compliant';  
+    public static final String STATUS_OPEN = 'Open';
+    public static final String STATUS_RESOLVED = 'Resolved';
+    public static final String STATUS_RETRACTED = 'Retracted';
     public static String className = 'InspectionViolationService';
 
     /**
@@ -443,6 +448,51 @@ public with sharing class InspectionViolationService {
         }        
         return result;
     }    
+
+/**
+* @author: PHOCS Dev Team
+* @date: 22 Sep 2026
+* @description: Handle violations impacted by inspections whose IsRetracted__c checkbox has changed to true (EHIS-4852).
+*               1. Every violation raised in a retracted inspection (InspectionId) becomes Retracted.
+*               2. Every violation that was Resolved in a retracted inspection (ResolvedIn__c) goes back to Open,
+*                  because the resolution is no longer valid. Rule 1 wins when a violation matches both.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
+    public static void retractVisitViolations(Set<Id> visitIds) {
+        if (visitIds == null || visitIds.isEmpty()) {
+            return;
+        }
+
+        try {
+            Map<Id, RegulatoryCodeViolation> violationsToUpdate = new Map<Id, RegulatoryCodeViolation>();
+
+            // Rule 2: violations that were resolved in a retracted inspection are reopened.
+            for (RegulatoryCodeViolation vio : [SELECT Id, Status, ResolvedIn__c FROM RegulatoryCodeViolation
+                                                WHERE ResolvedIn__c IN :visitIds AND Status = :STATUS_RESOLVED
+                                                AND RecordTypeId = :recordTypePHOCSRegulatoryCodeViolation]) {
+                vio.Status = STATUS_OPEN;
+                violationsToUpdate.put(vio.Id, vio);
+            }
+
+            // Rule 1: violations raised in a retracted inspection are retracted. Applied last so it wins
+            // over rule 2 when the same violation was both raised and resolved in the retracted inspection.
+            for (RegulatoryCodeViolation vio : [SELECT Id, Status FROM RegulatoryCodeViolation
+                                                WHERE InspectionId IN :visitIds
+                                                AND RecordTypeId = :recordTypePHOCSRegulatoryCodeViolation]) {
+                if (vio.Status != STATUS_RETRACTED) {
+                    vio.Status = STATUS_RETRACTED;
+                    violationsToUpdate.put(vio.Id, vio);
+                }
+            }
+
+            if (!violationsToUpdate.isEmpty()) {
+                update violationsToUpdate.values();
+            }
+        } catch (Exception ex) {
+            LogService.logAndPublish(className, 'retractVisitViolations', String.valueOf(visitIds), ex);
+            throw ex;
+        }
+    }
 
     /**
      * @description Wrapper class for violation creation result
