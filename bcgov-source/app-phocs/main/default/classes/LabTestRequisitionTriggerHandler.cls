@@ -27,6 +27,12 @@ public with sharing class LabTestRequisitionTriggerHandler {
     
     @TestVisible
     private static Boolean throwExceptionForTest = false;
+    // ─── Inner class: elevates ONLY DML, not queries ─────────────────────────
+    private without sharing class ElevatedDml {
+        public void doUpdate(List<SObject> records) {
+            update records;
+        }
+    }
 
     public static void assignWaterRequisitionsToHealthAuthorityQueue(List<LabTestRequisition__c> newRecords) {
         Id waterRecordTypeId = Schema.SObjectType.LabTestRequisition__c
@@ -197,7 +203,7 @@ public with sharing class LabTestRequisitionTriggerHandler {
             }
 
             if (!requisitionsToUpdate.isEmpty()) {
-                update requisitionsToUpdate;
+                                new ElevatedDml().doUpdate(requisitionsToUpdate); // ← elevated
             }
         } catch (Exception ex) {
             LogService.logAndPublish(CLASS_NAME, 'updateDairyRequisitionFlag', JSON.serialize(newRequisitions), ex);

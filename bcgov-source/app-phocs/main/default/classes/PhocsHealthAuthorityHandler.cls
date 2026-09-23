@@ -6,6 +6,7 @@
 *               PHOCSHealthAuthorityConfig__mdt custom metadata, allowing new objects to be
 *               supported without code changes.
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]
+			  :  21-09-2026	 - Restrict Healthauthority population for dairy users -  Rahul Patle
 ***********************************************************************************************/
 public with sharing class PhocsHealthAuthorityHandler {
     
@@ -16,6 +17,8 @@ public with sharing class PhocsHealthAuthorityHandler {
     
     // Cache metadata config to avoid repeated queries
     private static Map<String, PHOCSHealthAuthorityConfig__mdt> metadataConfigCache = new Map<String, PHOCSHealthAuthorityConfig__mdt>();
+    public static User currentUser = [SELECT Id, User_Assigned_Role__c FROM User WHERE Id = :UserInfo.getUserId()];
+    public static String roleName = currentUser.User_Assigned_Role__c;
     
 /**
 * @author: Accenture
@@ -28,7 +31,8 @@ public with sharing class PhocsHealthAuthorityHandler {
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static void populateHealthAuthority(List<SObject> childRecords) {
-        
+        IF((roleName == null || !roleName.contains('Dairy'))){
+
         PHOCSBypassHealthAuthorityHandler__c bypassSetting = PHOCSBypassHealthAuthorityHandler__c.getInstance();
         
         if (bypassSetting != null && bypassSetting.BypassHealthAuthorityHandler__c) {
@@ -127,6 +131,7 @@ public with sharing class PhocsHealthAuthorityHandler {
             for (SObject rec : childRecords) {
                 rec.addError('Unable to populate Health Authority: ' + e.getMessage());
             }
+        }
         }
     }
 }
