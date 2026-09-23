@@ -221,7 +221,14 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         List<Object> results = new List<Object>();
         
         List<SObject> queryResults = Database.query(queryConfig.ObjectQuery__c);// NOPMD
-        for (SObject sObj : queryResults) {        
+        for (SObject sObj : queryResults) {
+            
+             // Format Multi-Select Picklist for FlexCard Data Table
+            String ComplaintTopicTypeList = (String) sObj.get('ComplaintTopicType__c');
+        
+            if (String.isNotBlank(ComplaintTopicTypeList)) {
+                sObj.put('ComplaintTopicType__c', ComplaintTopicTypeList.replace(';', '; '));
+            }
             if (wrapper != null) {
                 results.add(wrapper.wrap(sObj));
             } else {
@@ -863,6 +870,9 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                     'TotalMaximumCapacity' => caseRecord.Account?.TotalMaximumCapacity__c,
                     'RiskRating' => caseRecord.Account?.RiskRating__c,
                     'ComplaintTopicType' => caseRecord.ComplaintTopicType__c,
+                    'ComplaintTopicTypeRecord' => String.isNotBlank(caseRecord.ComplaintTopicType__c)
+                            ? caseRecord.ComplaintTopicType__c.replaceAll(';', '<br/>')
+                            : null,
                     'Date_Received__c' => caseRecord.Date_Received__c,
                     'Date_Substantiated__c' => caseRecord.Date_Substantiated__c,
                     'PhysicalAddress' => caseRecord.Account?.HideAddressonPublicSite__c == true ? '' 
@@ -872,15 +882,29 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                                 'PhysicalAddressState' => caseRecord.Account?.Physical_Address__c?.getState(),
                                 'PhysicalAddressPostalCode' => caseRecord.Account?.Physical_Address__c?.getPostalCode(),
                                 'PhysicalAddressCountry' => caseRecord.Account?.Physical_Address__c?.getCountry(),
-                                 'ActionsRequiredbyLicenseeOperator__c' =>
-                                        caseRecord.Interaction_Summaries__r != null &&
-                                        !caseRecord.Interaction_Summaries__r.isEmpty()
-                                            ? caseRecord.Interaction_Summaries__r[0].ActionsRequiredbyLicenseeOperator__c
-                                            : null,
-                                 'ActionsRequiredbyLOMHO__c' =>
-                                        caseRecord.Interaction_Summaries__r != null &&
-                                        !caseRecord.Interaction_Summaries__r.isEmpty()
-                                            ? caseRecord.Interaction_Summaries__r[0].ActionsRequiredbyLOMHO__c
+                                'ActionsRequiredbyLicenseeOperator__c' =>
+                                                String.isNotBlank(
+                                                    caseRecord.Interaction_Summaries__r != null &&
+                                                    !caseRecord.Interaction_Summaries__r.isEmpty()
+                                                        ? caseRecord.Interaction_Summaries__r[0].ActionsRequiredbyLicenseeOperator__c
+                                                        : null
+                                                )
+                                                ? (
+                                                    caseRecord.Interaction_Summaries__r[0].ActionsRequiredbyLicenseeOperator__c
+                                                        .replaceAll(';', '<br/>')
+                                                  )
+                                                : null,
+                                    'ActionsRequiredbyLOMHO__c' =>
+                                            String.isNotBlank(
+                                                caseRecord.Interaction_Summaries__r != null &&
+                                                !caseRecord.Interaction_Summaries__r.isEmpty()
+                                                    ? caseRecord.Interaction_Summaries__r[0].ActionsRequiredbyLOMHO__c
+                                                    : null
+                                            )
+                                            ? (
+                                                caseRecord.Interaction_Summaries__r[0].ActionsRequiredbyLOMHO__c
+                                                    .replaceAll(';', '<br/>')
+                                              )
                                             : null
                     
                     };
