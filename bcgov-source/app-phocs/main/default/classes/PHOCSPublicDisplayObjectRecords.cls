@@ -221,7 +221,14 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         List<Object> results = new List<Object>();
         
         List<SObject> queryResults = Database.query(queryConfig.ObjectQuery__c);// NOPMD
-        for (SObject sObj : queryResults) {        
+        for (SObject sObj : queryResults) {
+            
+             // Format Multi-Select Picklist for FlexCard Data Table
+            String ComplaintTopicTypeList = (String) sObj.get('ComplaintTopicType__c');
+        
+            if (String.isNotBlank(ComplaintTopicTypeList)) {
+                sObj.put('ComplaintTopicType__c', ComplaintTopicTypeList.replace(';', '; '));
+            }
             if (wrapper != null) {
                 results.add(wrapper.wrap(sObj));
             } else {
@@ -863,6 +870,9 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                     'TotalMaximumCapacity' => caseRecord.Account?.TotalMaximumCapacity__c,
                     'RiskRating' => caseRecord.Account?.RiskRating__c,
                     'ComplaintTopicType' => caseRecord.ComplaintTopicType__c,
+                    'ComplaintTopicTypeRecord' => String.isNotBlank(caseRecord.ComplaintTopicType__c)
+                            ? caseRecord.ComplaintTopicType__c.replaceAll(';', '<br/>')
+                            : null,
                     'Date_Received__c' => caseRecord.Date_Received__c,
                     'Date_Substantiated__c' => caseRecord.Date_Substantiated__c,
                     'PhysicalAddress' => caseRecord.Account?.HideAddressonPublicSite__c == true ? '' 
