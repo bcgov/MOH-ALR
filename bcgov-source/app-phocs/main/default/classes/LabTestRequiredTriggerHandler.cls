@@ -74,7 +74,7 @@ public with sharing class LabTestRequiredTriggerHandler {
             Map<Id, Account> facilitiesById = new Map<Id, Account>();
 
             if (!facilityIds.isEmpty()) {
-                facilitiesById = new Map<Id, Account>([SELECT Id, HealthAuthority__c FROM Account WHERE Id IN :facilityIds]);
+                facilitiesById = new Map<Id, Account>([SELECT Id, HealthAuthority__c, Type FROM Account WHERE Id IN :facilityIds]);
             }
 
             for (LabTestRequired__c labTestRequired : newRecords) {
