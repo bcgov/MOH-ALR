@@ -98,6 +98,7 @@ public with sharing class LabTestRequiredTriggerHandler {
 
                         if (facility != null) {
                             labTestRequired.HealthAuthority__c = facility.HealthAuthority__c;
+						labTestRequired.isDairy__c = facility.type == 'Dairy' ? true : false;
                         }
                     }
                 } else if (facilityChanged && labTestRequired.FacilityName__c != null) {
@@ -105,6 +106,8 @@ public with sharing class LabTestRequiredTriggerHandler {
 
                     if (facility != null) {
                         labTestRequired.HealthAuthority__c = facility.HealthAuthority__c;
+						labTestRequired.isDairy__c = facility.type == 'Dairy' ? true : false;
+
                     }
                 }
             }
