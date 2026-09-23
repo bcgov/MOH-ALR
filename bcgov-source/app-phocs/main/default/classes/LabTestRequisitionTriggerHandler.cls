@@ -35,32 +35,30 @@ public with sharing class LabTestRequisitionTriggerHandler {
     }
 
     public static void assignWaterRequisitionsToHealthAuthorityQueue(List<LabTestRequisition__c> newRecords) {
-        Id waterRecordTypeId = Schema.SObjectType.LabTestRequisition__c
-            .getRecordTypeInfosByDeveloperName().get(PHOCS_WATER_LAB_TEST_REQUISITION_RECORD_TYPE).getRecordTypeId();
+        Id waterRecordTypeId = Schema.SObjectType.LabTestRequisition__c.getRecordTypeInfosByDeveloperName().get(PHOCS_WATER_LAB_TEST_REQUISITION_RECORD_TYPE).getRecordTypeId();
+        Id dairyRecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get(PHOCS_DAIRY_FACILITY_RECORD_TYPE).getRecordTypeId();
         Set<Id> facilityIds = new Set<Id>();
-        for (LabTestRequisition__c requisition : newRecords) {
-            if (requisition.RecordTypeId == waterRecordTypeId && requisition.FacilityName__c != null) {
+        for (LabTestRequisition__c requisition : newRecords) {          
+            if (requisition.RecordTypeId == waterRecordTypeId && requisition.FacilityName__c != null ) {
                 facilityIds.add(requisition.FacilityName__c);
             }
         }
         if (facilityIds.isEmpty()) {
             return;
         }
-
-        Map<Id, Account> facilities = new Map<Id, Account>([
-            SELECT Id, HealthAuthority__c
-            FROM Account
-            WHERE Id IN :facilityIds
-        ]);
+        
+        Map<Id, Account> facilities = new Map<Id, Account>([SELECT Id, RecordTypeId, HealthAuthority__c
+            FROM Account WHERE Id IN :facilityIds AND RecordTypeId != :dairyRecordTypeId]);
+        
+        if (facilities.isEmpty()) {
+            return;
+        }
         Map<String, Id> queueIdsByDeveloperName = new Map<String, Id>();
-        for (Group queue : [
-            SELECT Id, DeveloperName
-            FROM Group
-            WHERE Type = 'Queue' AND DeveloperName IN :ADMIN_QUEUE_BY_HEALTH_AUTHORITY.values()
-        ]) {
+        for (Group queue : [SELECT Id, DeveloperName FROM Group
+            WHERE Type = 'Queue' AND DeveloperName IN :ADMIN_QUEUE_BY_HEALTH_AUTHORITY.values()]) {
             queueIdsByDeveloperName.put(queue.DeveloperName, queue.Id);
         }
-
+        
         for (LabTestRequisition__c requisition : newRecords) {
             Account facility = facilities.get(requisition.FacilityName__c);
             if (requisition.RecordTypeId != waterRecordTypeId || facility == null) {
@@ -74,24 +72,7 @@ public with sharing class LabTestRequisitionTriggerHandler {
         }
     }
 
-    public static void shareQueueOwnedRequisitionsWithCreator(List<LabTestRequisition__c> newRecords) {
-        List<LabTestRequisition__Share> shares = new List<LabTestRequisition__Share>();
-        for (LabTestRequisition__c requisition : newRecords) {
-            if (requisition.OwnerId != null && String.valueOf(requisition.OwnerId).startsWith('00G')
-                && requisition.CreatedById != null) {
-                shares.add(new LabTestRequisition__Share(
-                    ParentId = requisition.Id,
-                    UserOrGroupId = requisition.CreatedById,
-                    AccessLevel = 'Edit',
-                    RowCause = Schema.LabTestRequisition__Share.RowCause.Manual
-                ));
-            }
-        }
-        if (!shares.isEmpty()) {
-            Database.insert(shares, false);
-        }
-    }
-
+   
 /**
 * @author: Deepak
 * @date: 02 Jul 2026
