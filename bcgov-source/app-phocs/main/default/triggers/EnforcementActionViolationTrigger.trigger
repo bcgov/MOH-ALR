@@ -13,4 +13,8 @@ trigger EnforcementActionViolationTrigger on EnforcementActionViolation__c (befo
     if (Trigger.isBefore && Trigger.isUpdate) {
         EnforcementActionViolationHandler.validateDuplicateRecords(Trigger.new, Trigger.oldMap);
     }
+    if(Trigger.isBefore && (Trigger.isInsert || Trigger.isUpdate )){
+        PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new);         
+    }
+    
 }

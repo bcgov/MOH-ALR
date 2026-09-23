@@ -1,111 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
-    <classAccesses>
-        <apexClass>RegulatoryCodeViolationRelatedController</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
+    <description>This permission set is created for the access of assessment and assessment questions response object as part of EHIS -3372</description>
     <fieldPermissions>
         <editable>true</editable>
-        <field>RegulatoryCodeViolation.Asset__c</field>
+        <field>Assessment.AccountId</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>RegulatoryCodeViolation.Corrected_During_Inspection__c</field>
+        <field>Assessment.AssessmentLanguage</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>RegulatoryCodeViolation.ExternalId__c</field>
+        <field>Assessment.AssessmentRating</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>RegulatoryCodeViolation.HealthAuthority__c</field>
+        <field>Assessment.AssessorId</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>RegulatoryCodeViolation.IncludeInScore__c</field>
+        <field>Assessment.CaseId</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Assessment.CompletedDateTime</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Assessment.ContactId</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Assessment.EffectiveDateTime</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Assessment.ExpirationDateTime</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Assessment.Identifier</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>RegulatoryCodeViolation.IsChildViolation__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>RegulatoryCodeViolation.IsDairy__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>RegulatoryCodeViolation.OperatorResponse__c</field>
+        <field>Assessment.NameHyperLink__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>RegulatoryCodeViolation.PHOCSAssessmentIndDefinitionId__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>RegulatoryCodeViolation.PHOCSAssessmentIndDefinitionParentId__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>RegulatoryCodeViolation.PHOCSAssessmentIndicatorDefinition__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>RegulatoryCodeViolation.PHOCSIsBelongsToPHOCS__c</field>
+        <field>Assessment.Name__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>RegulatoryCodeViolation.PHOCSParentAccountID__c</field>
+        <field>Assessment.OmniProcessId</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>RegulatoryCodeViolation.PHOCSParentId__c</field>
+        <field>Assessment.ParentId</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>RegulatoryCodeViolation.ResolvedIn__c</field>
+        <field>Assessment.ResponseContextId</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>RegulatoryCodeViolation.ResponseContextId</field>
+        <field>Assessment.Type</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>RegulatoryCodeViolation.ResponseId</field>
+        <field>AssessmentQuestion.Description</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>RegulatoryCodeViolation.Scope__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>RegulatoryCodeViolation.Severity__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>RegulatoryCodeViolation.UserScore__c</field>
+        <field>AssessmentQuestion.RelatedQuestionId</field>
         <readable>true</readable>
     </fieldPermissions>
     <hasActivationRequired>false</hasActivationRequired>
-    <label>EHIS PHOCS CRE Regulatory Code Violation</label>
+    <label>PHOCS Dairy Assessment Permission Set</label>
     <license>Salesforce</license>
     <objectPermissions>
         <allowCreate>true</allowCreate>
@@ -113,16 +100,20 @@
         <allowEdit>true</allowEdit>
         <allowRead>true</allowRead>
         <modifyAllRecords>false</modifyAllRecords>
-        <object>RegulatoryCodeViolation</object>
+        <object>Assessment</object>
         <viewAllFields>false</viewAllFields>
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
-    <recordTypeVisibilities>
-        <recordType>RegulatoryCodeViolation.PHOCSRegulatoryCodeViolation</recordType>
-        <visible>true</visible>
-    </recordTypeVisibilities>
     <tabSettings>
-        <tab>standard-RegulatoryCodeViolation</tab>
+        <tab>standard-Assessment</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>standard-AssessmentQuestion</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>standard-AssessmentQuestionResponse</tab>
         <visibility>Visible</visibility>
     </tabSettings>
 </PermissionSet>
