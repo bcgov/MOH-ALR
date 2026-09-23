@@ -4,7 +4,8 @@
 * @Description: The purpose of this class is to cover Code coverage of LabTestRequisitionTriggerHandler.
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
                 02 Jul -  PHOCS-4682        -  Accenture   -  Update the Lab Requisition Number.
-                28 Aug -  Barcode Generation - Accenture - Validate asynchronous barcode generation.
+                28 Aug -  Barcode Generation - Accenture   - Validate asynchronous barcode generation.
+                15 Sep -  EHIS-5712         -  Deepak      -  added coverage for updateDairyRequisitionFlag on insert and update
 ***********************************************************************************************/
 @isTest
 public class LabTestRequisitionTriggerHandlerTest {
@@ -14,7 +15,11 @@ public class LabTestRequisitionTriggerHandlerTest {
         Id rtPHOCSFacilityRecordType = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('Facility').getRecordTypeId();
         
         Account facility = new Account(Name = 'Test Facility', RecordTypeId = rtPHOCSFacilityRecordType);
-        insert facility;           
+        insert facility;
+
+        Id rtPHOCSDairyFacilityRecordType = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('PHOCSDairyFacility').getRecordTypeId();
+        Account dairyFacility = new Account(Name = 'Test Dairy Facility', RecordTypeId = rtPHOCSDairyFacilityRecordType);
+        insert dairyFacility;
     }
     
 /**
@@ -150,5 +155,103 @@ public class LabTestRequisitionTriggerHandlerTest {
         ];
         Assert.areEqual(queueId, requisition.OwnerId);
         Assert.areEqual('Fraser Health - FH', requisition.HealthAuthority__c);
+    }
+
+/**
+* @author: Deepak
+* @date: 15 Sep 2026
+* @description: The purpose of this method is to cover Testcoverage of updateDairyRequisitionFlag
+*              on insert, verifying IsDairy__c is set true when FacilityName__c points to a
+*              PHOCSDairyFacility Account.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
+    @isTest
+    public static void updateDairyRequisitionFlag_SetsTrue_WhenFacilityIsDairy_Test() {
+        Account dairyFacility = [SELECT Id FROM Account WHERE Name = 'Test Dairy Facility' LIMIT 1];
+        Id dairyRequisitionRecordTypeId = Schema.SObjectType.LabTestRequisition__c.getRecordTypeInfosByDeveloperName().get('PHOCSDairyProductTestRequisition').getRecordTypeId();
+
+        LabTestRequisition__c requisition = new LabTestRequisition__c(FacilityName__c = dairyFacility.Id, RecordTypeId = dairyRequisitionRecordTypeId);
+
+        Test.startTest();
+        insert requisition;
+        Test.stopTest();
+
+        LabTestRequisition__c requisitionRec = [SELECT Id, IsDairy__c FROM LabTestRequisition__c WHERE Id = :requisition.Id LIMIT 1];
+        Assert.areEqual(true, requisitionRec.IsDairy__c, 'IsDairy__c should be true when FacilityName__c is a PHOCSDairyFacility Account.');
+    }
+
+/**
+* @author: Deepak
+* @date: 15 Sep 2026
+* @description: The purpose of this method is to cover Testcoverage of updateDairyRequisitionFlag
+*              on insert, verifying IsDairy__c is set false when FacilityName__c points to a
+*              non-dairy Account.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
+    @isTest
+    public static void updateDairyRequisitionFlag_SetsFalse_WhenFacilityIsNotDairy_Test() {
+        Account facility = [SELECT Id FROM Account WHERE Name = 'Test Facility' LIMIT 1];
+        Id dairyRequisitionRecordTypeId = Schema.SObjectType.LabTestRequisition__c.getRecordTypeInfosByDeveloperName().get('PHOCSDairyProductTestRequisition').getRecordTypeId();
+
+        LabTestRequisition__c requisition = new LabTestRequisition__c(FacilityName__c = facility.Id, RecordTypeId = dairyRequisitionRecordTypeId);
+
+        Test.startTest();
+        insert requisition;
+        Test.stopTest();
+
+        LabTestRequisition__c requisitionRec = [SELECT Id, IsDairy__c FROM LabTestRequisition__c WHERE Id = :requisition.Id LIMIT 1];
+        Assert.areEqual(false, requisitionRec.IsDairy__c, 'IsDairy__c should be false when FacilityName__c is not a PHOCSDairyFacility Account.');
+    }
+
+/**
+* @author: Deepak
+* @date: 15 Sep 2026
+* @description: The purpose of this method is to cover Testcoverage of updateDairyRequisitionFlag
+*              on update, verifying IsDairy__c flips to true when FacilityName__c changes from a
+*              non-dairy Account to a PHOCSDairyFacility Account.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
+    @isTest
+    public static void updateDairyRequisitionFlag_UpdatesToTrue_WhenFacilityChangedToDairy_Test() {
+        Account facility = [SELECT Id FROM Account WHERE Name = 'Test Facility' LIMIT 1];
+        Account dairyFacility = [SELECT Id FROM Account WHERE Name = 'Test Dairy Facility' LIMIT 1];
+        Id dairyRequisitionRecordTypeId = Schema.SObjectType.LabTestRequisition__c.getRecordTypeInfosByDeveloperName().get('PHOCSDairyProductTestRequisition').getRecordTypeId();
+
+        LabTestRequisition__c requisition = new LabTestRequisition__c(FacilityName__c = facility.Id, RecordTypeId = dairyRequisitionRecordTypeId);
+        insert requisition;
+
+        Test.startTest();
+        requisition.FacilityName__c = dairyFacility.Id;
+        update requisition;
+        Test.stopTest();
+
+        LabTestRequisition__c requisitionRec = [SELECT Id, IsDairy__c FROM LabTestRequisition__c WHERE Id = :requisition.Id LIMIT 1];
+        Assert.areEqual(true, requisitionRec.IsDairy__c, 'IsDairy__c should become true when FacilityName__c changes to a PHOCSDairyFacility Account.');
+    }
+
+/**
+* @author: Deepak
+* @date: 15 Sep 2026
+* @description: The purpose of this method is to cover Testcoverage of updateDairyRequisitionFlag
+*              on update, verifying IsDairy__c flips to false when FacilityName__c changes away
+*              from a PHOCSDairyFacility Account.
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
+    @isTest
+    public static void updateDairyRequisitionFlag_UpdatesToFalse_WhenFacilityChangedAwayFromDairy_Test() {
+        Account facility = [SELECT Id FROM Account WHERE Name = 'Test Facility' LIMIT 1];
+        Account dairyFacility = [SELECT Id FROM Account WHERE Name = 'Test Dairy Facility' LIMIT 1];
+        Id dairyRequisitionRecordTypeId = Schema.SObjectType.LabTestRequisition__c.getRecordTypeInfosByDeveloperName().get('PHOCSDairyProductTestRequisition').getRecordTypeId();
+
+        LabTestRequisition__c requisition = new LabTestRequisition__c(FacilityName__c = dairyFacility.Id, RecordTypeId = dairyRequisitionRecordTypeId);
+        insert requisition;
+
+        Test.startTest();
+        requisition.FacilityName__c = facility.Id;
+        update requisition;
+        Test.stopTest();
+
+        LabTestRequisition__c requisitionRec = [SELECT Id, IsDairy__c FROM LabTestRequisition__c WHERE Id = :requisition.Id LIMIT 1];
+        Assert.areEqual(false, requisitionRec.IsDairy__c, 'IsDairy__c should become false when FacilityName__c changes away from a PHOCSDairyFacility Account.');
     }
 }
