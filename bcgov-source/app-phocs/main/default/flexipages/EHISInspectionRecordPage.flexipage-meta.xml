@@ -375,32 +375,6 @@
                             </visibilityRule>
                         </valueListItems>
                         <valueListItems>
-                            <value>Visit.Add_Inspection_Task</value>
-                            <visibilityRule>
-                                <booleanFilter>(1 OR 2) AND 3 AND 4</booleanFilter>
-                                <criteria>
-                                    <leftValue>{!$Permission.CustomPermission.PHOCSOfficer}</leftValue>
-                                    <operator>EQUAL</operator>
-                                    <rightValue>true</rightValue>
-                                </criteria>
-                                <criteria>
-                                    <leftValue>{!$Permission.CustomPermission.PHOCSAdmin}</leftValue>
-                                    <operator>EQUAL</operator>
-                                    <rightValue>true</rightValue>
-                                </criteria>
-                                <criteria>
-                                    <leftValue>{!Record.Status}</leftValue>
-                                    <operator>NE</operator>
-                                    <rightValue>Completed</rightValue>
-                                </criteria>
-                                <criteria>
-                                    <leftValue>{!Record.IsRetracted__c}</leftValue>
-                                    <operator>EQUAL</operator>
-                                    <rightValue>false</rightValue>
-                                </criteria>
-                            </visibilityRule>
-                        </valueListItems>
-                        <valueListItems>
                             <value>Visit.PHOCSNewInspection</value>
                             <visibilityRule>
                                 <booleanFilter>(1 OR 2) AND 3 AND 4</booleanFilter>
@@ -681,32 +655,6 @@
                                     <leftValue>{!$Permission.CustomPermission.PHOCSAdmin}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>true</rightValue>
-                                </criteria>
-                                <criteria>
-                                    <leftValue>{!Record.IsRetracted__c}</leftValue>
-                                    <operator>EQUAL</operator>
-                                    <rightValue>false</rightValue>
-                                </criteria>
-                            </visibilityRule>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Visit.Add_Inspection_Task</value>
-                            <visibilityRule>
-                                <booleanFilter>(1 OR 2) AND 3 AND 4</booleanFilter>
-                                <criteria>
-                                    <leftValue>{!$Permission.CustomPermission.PHOCSOfficer}</leftValue>
-                                    <operator>EQUAL</operator>
-                                    <rightValue>true</rightValue>
-                                </criteria>
-                                <criteria>
-                                    <leftValue>{!$Permission.CustomPermission.PHOCSAdmin}</leftValue>
-                                    <operator>EQUAL</operator>
-                                    <rightValue>true</rightValue>
-                                </criteria>
-                                <criteria>
-                                    <leftValue>{!Record.Status}</leftValue>
-                                    <operator>NE</operator>
-                                    <rightValue>Completed</rightValue>
                                 </criteria>
                                 <criteria>
                                     <leftValue>{!Record.IsRetracted__c}</leftValue>
@@ -1016,32 +964,6 @@
                             </visibilityRule>
                         </valueListItems>
                         <valueListItems>
-                            <value>Visit.Add_Inspection_Task</value>
-                            <visibilityRule>
-                                <booleanFilter>(1 OR 2) AND 3 AND 4</booleanFilter>
-                                <criteria>
-                                    <leftValue>{!$Permission.CustomPermission.PHOCSOfficer}</leftValue>
-                                    <operator>EQUAL</operator>
-                                    <rightValue>true</rightValue>
-                                </criteria>
-                                <criteria>
-                                    <leftValue>{!$Permission.CustomPermission.PHOCSAdmin}</leftValue>
-                                    <operator>EQUAL</operator>
-                                    <rightValue>true</rightValue>
-                                </criteria>
-                                <criteria>
-                                    <leftValue>{!Record.Status}</leftValue>
-                                    <operator>NE</operator>
-                                    <rightValue>Completed</rightValue>
-                                </criteria>
-                                <criteria>
-                                    <leftValue>{!Record.IsRetracted__c}</leftValue>
-                                    <operator>EQUAL</operator>
-                                    <rightValue>false</rightValue>
-                                </criteria>
-                            </visibilityRule>
-                        </valueListItems>
-                        <valueListItems>
                             <value>Visit.PHOCSNewInspection</value>
                             <visibilityRule>
                                 <booleanFilter>(1 OR 2) AND 3 AND 4</booleanFilter>
@@ -1318,32 +1240,6 @@
                                     <leftValue>{!$Permission.CustomPermission.PHOCSAdmin}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>true</rightValue>
-                                </criteria>
-                                <criteria>
-                                    <leftValue>{!Record.IsRetracted__c}</leftValue>
-                                    <operator>EQUAL</operator>
-                                    <rightValue>false</rightValue>
-                                </criteria>
-                            </visibilityRule>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Visit.Add_Inspection_Task</value>
-                            <visibilityRule>
-                                <booleanFilter>(1 OR 2) AND 3 AND 4</booleanFilter>
-                                <criteria>
-                                    <leftValue>{!$Permission.CustomPermission.PHOCSOfficer}</leftValue>
-                                    <operator>EQUAL</operator>
-                                    <rightValue>true</rightValue>
-                                </criteria>
-                                <criteria>
-                                    <leftValue>{!$Permission.CustomPermission.PHOCSAdmin}</leftValue>
-                                    <operator>EQUAL</operator>
-                                    <rightValue>true</rightValue>
-                                </criteria>
-                                <criteria>
-                                    <leftValue>{!Record.Status}</leftValue>
-                                    <operator>NE</operator>
-                                    <rightValue>Completed</rightValue>
                                 </criteria>
                                 <criteria>
                                     <leftValue>{!Record.IsRetracted__c}</leftValue>
@@ -2168,6 +2064,11 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>adminFilters</name>
+                    <valueList>
+                        <valueListItems>
+                            <value>Status|NOT_EQUAL|[&quot;Error&quot;]</value>
+                        </valueListItems>
+                    </valueList>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>maxRecordsToDisplay</name>

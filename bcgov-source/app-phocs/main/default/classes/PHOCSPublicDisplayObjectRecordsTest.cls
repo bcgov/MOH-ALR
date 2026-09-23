@@ -84,6 +84,7 @@ private class PHOCSPublicDisplayObjectRecordsTest {
     
     @isTest
     static void testGetRecordDetails() {
+        Id assetRecordtypeId = Schema.SObjectType.Asset.getRecordTypeInfosByDeveloperName().get('PHOCSDrinkingWaterSystemComponent').getRecordTypeId();
         Test.startTest();
         Account acc = createTestAccount();
         
@@ -96,10 +97,10 @@ private class PHOCSPublicDisplayObjectRecordsTest {
         Case caseRec = new Case(AccountId=acc.Id, Status = 'Open');
         insert caseRec;
 
-        Asset assetRec1 = new Asset(AccountId=acc.Id, Name = 'Asset 1', Status = 'Active');
+        Asset assetRec1 = new Asset(AccountId=acc.Id, Name = 'Asset 1', Status = 'Active', RecordtypeId = assetRecordtypeId);
         insert assetRec1;
 
-        Asset assetRec2 = new Asset(AccountId=acc.Id, Name = 'Asset 2', Status = 'Active');
+        Asset assetRec2 = new Asset(AccountId=acc.Id, Name = 'Asset 2', Status = 'Active', RecordtypeId = assetRecordtypeId);
         insert assetRec2;
 
         Schema.Location locationRec = new Schema.Location(ParentAccount__c=acc.Id, Name='Location Test', SiteTreatment__c='Raw');
@@ -150,7 +151,8 @@ private class PHOCSPublicDisplayObjectRecordsTest {
                 'configName' => 'InspectionRecordDetail'
                 };     
                     runTestCallMethod('getRecordDetails', input);
-
+        
+        
         input = new Map<String, Object>{
             'recordId' => caseRec.Id,
                 'configName' => 'FacilityWaterAdvisoryDetail'

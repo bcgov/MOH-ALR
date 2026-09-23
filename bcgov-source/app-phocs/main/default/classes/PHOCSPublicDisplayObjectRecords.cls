@@ -284,7 +284,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         String query =
             'SELECT Id, Name, Type, Physical_Address__City__s, CategoryL1__c, CategoryL2__c, ' +
             'HealthAuthority__c, Phone, ParentAccount__r.Name, FacilityCHSAText__c, Physical_Address__c, ' +
-            'PHOCSNumberOfInspections__c, PHOCSOutstandingViolations__c, PHOCSLastInspectionDate__c,LicenseDetail__c, ' +
+            'PHOCSNumberOfInspections__c, RiskRating__c, PHOCSOutstandingViolations__c, PHOCSLastInspectionDate__c,LicenseDetail__c, ' +
             'HideAddressonPublicSite__c,HidePhoneonPublicSite__c, OWLPublicRetentionActive__c ' +
             'FROM Account';
         
@@ -783,6 +783,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 'Categories' => joinCategories(accRecord),
                 'ConnectionNumber' => transformConnectionNumber(accRecord),
                 'TotalMaximumCapacity__c'  => accRecord.TotalMaximumCapacity__c,
+                'RiskRating' => accRecord.RiskRating__c,
                 'AssetTypes' => joinAssetTypes(accRecord),
                 'HealthAuthority__c' => accRecord.HealthAuthority__c,
                 'Phone' => accRecord.HidePhoneonPublicSite__c ? '' : formatPhoneNumber(accRecord.Phone),
@@ -823,6 +824,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 'Id' => accRecord.Id,
                     'Type'=> accRecord.Type,
                     'CategoryL1__c'=> accRecord.CategoryL1__c,
+                    'RiskRating' => accRecord.RiskRating__c,
                     'CategoryL2__c'=> accRecord.CategoryL2__c,
                     'FacilityCHSAText__c'=> accRecord.FacilityCHSAText__c,
                     'HealthAuthority__c'=> accRecord.HealthAuthority__c, 
@@ -913,6 +915,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                         'Categories' => joinCategories(inspection.Account),
                         'ConnectionNumber' => transformConnectionNumber(inspection.Account),
                         'TotalMaximumCapacity'  => inspection.Account.TotalMaximumCapacity__c,
+                        'RiskRating' => inspection.Account.RiskRating__c,
                         'AssetTypes' => joinAssetTypes(inspection.Account),
                         'HealthAuthority' => inspection.Account?.HealthAuthority__c,
                         'FacilityCHSAText' => inspection.Account?.FacilityCHSAText__c,
