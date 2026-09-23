@@ -5,6 +5,7 @@
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
                 17 Dec -  PHOCS-2873        -  Accenture   -  Display selected canned comments details on parent violation.
                 28 May -  EHIS-2668         -  Accenture   -  Fetch child violation hierarchy with associated canned comments.
+                21 Sep -  EHIS-4852         -  Accenture   -  Return Inspection retracted flag for the Violation History LWC.
 ***********************************************************************************************/
 public with sharing class RegulatoryCodeViolationRelatedController {
     public static String className = 'RegulatoryCodeViolationRelatedController';
@@ -58,7 +59,7 @@ public with sharing class RegulatoryCodeViolationRelatedController {
                 return new List<ViolationHierarchyWrapper>();
             }
             
-            List<RegulatoryCodeViolation> childViolations = [SELECT Id, Name, CreatedDate, ComplianceDueDate, InspectionId, Inspection.Name, DaysOpen, Inspection.Owner.Name,
+            List<RegulatoryCodeViolation> childViolations = [SELECT Id, Name, CreatedDate, ComplianceDueDate, InspectionId, Inspection.Name, Inspection.IsRetracted__c, DaysOpen, Inspection.Owner.Name,
                                                              Status, CorrectiveActionDescription, InspectionAssmntIndId, InspectionAssmntInd.AssessmentIndDefinitionId, 
                                                              InspectionAssmntInd.PHOCSInspectionComments__c, InspectionAssmntInd.AssessmentIndDefinition.Name,
                                                              InspectionAssmntInd.AssessmentIndDefinition.Description FROM RegulatoryCodeViolation 
@@ -127,6 +128,7 @@ public with sharing class RegulatoryCodeViolationRelatedController {
                 wrapper.violationUrl = '/' + vio.Id;                
                 wrapper.inspectionName = vio.Inspection != null ? vio.Inspection.Name : '';
                 wrapper.inspectionUrl = vio.InspectionId != null ? '/' + vio.InspectionId : '';                
+                wrapper.isRetracted = vio.Inspection != null && vio.Inspection.IsRetracted__c;
                 wrapper.status = vio.Status;
                 wrapper.createdDate = vio.CreatedDate;                
                 wrapper.daysOpen = vio.DaysOpen;                
@@ -155,6 +157,7 @@ public with sharing class RegulatoryCodeViolationRelatedController {
         @AuraEnabled public String violationUrl;       
         @AuraEnabled public String inspectionName;
         @AuraEnabled public String inspectionUrl;
+        @AuraEnabled public Boolean isRetracted;
         @AuraEnabled public String status;
         @AuraEnabled public Datetime createdDate;
         @AuraEnabled public Integer daysOpen;

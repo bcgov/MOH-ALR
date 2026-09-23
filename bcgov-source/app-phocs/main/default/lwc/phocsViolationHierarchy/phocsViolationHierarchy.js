@@ -52,6 +52,8 @@ export default class PhocsViolationHierarchy extends LightningElement {
                     ...item,
                     accordionLabel: `Inspection ${item.inspectionName}`,
                     hasComments: item.cannedComments && item.cannedComments.length > 0,
+                    // Show the red "Retracted" flag only when the Inspection's IsRtracted__c is true
+                    isRetracted: item.isRetracted === true,
                     rowId: item.violationId
                 };
             });
