@@ -16,7 +16,7 @@ global without sharing class PHOCSRiskAssessmentScoringService implements Callab
     private static final String FACILITY_TYPE_PERSONAL_SERVICES = 'Personal services';
     private static final String FACILITY_TYPE_RECREATIONAL_WATER = 'Recreational water';
     private static final String FACILITY_TYPE_TOBACCO_VAPOUR = 'Tobacco and Vapour';
-    private static final String HEALTH_AUTHORITY_INTERIOR_HEALTH = 'Interior Health';
+    private static final String HEALTH_AUTHORITY_INTERIOR_HEALTH = 'Interior Health - IH';
     private static final String HEALTH_AUTHORITY_VCH = 'Vancouver Coastal Health - VCH';
     private static final String CATEGORY_L1_STANDALONE_WATER_SYSTEM = 'Stand Alone Water System';
     private static final String STANDALONE_INTERIOR_HEALTH_INSPECTION_FREQUENCY = '1 inspection per year';
