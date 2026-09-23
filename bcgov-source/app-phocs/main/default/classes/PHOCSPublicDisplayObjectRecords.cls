@@ -882,15 +882,29 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                                 'PhysicalAddressState' => caseRecord.Account?.Physical_Address__c?.getState(),
                                 'PhysicalAddressPostalCode' => caseRecord.Account?.Physical_Address__c?.getPostalCode(),
                                 'PhysicalAddressCountry' => caseRecord.Account?.Physical_Address__c?.getCountry(),
-                                 'ActionsRequiredbyLicenseeOperator__c' =>
-                                        caseRecord.Interaction_Summaries__r != null &&
-                                        !caseRecord.Interaction_Summaries__r.isEmpty()
-                                            ? caseRecord.Interaction_Summaries__r[0].ActionsRequiredbyLicenseeOperator__c
-                                            : null,
-                                 'ActionsRequiredbyLOMHO__c' =>
-                                        caseRecord.Interaction_Summaries__r != null &&
-                                        !caseRecord.Interaction_Summaries__r.isEmpty()
-                                            ? caseRecord.Interaction_Summaries__r[0].ActionsRequiredbyLOMHO__c
+                                'ActionsRequiredbyLicenseeOperator__c' =>
+                                                String.isNotBlank(
+                                                    caseRecord.Interaction_Summaries__r != null &&
+                                                    !caseRecord.Interaction_Summaries__r.isEmpty()
+                                                        ? caseRecord.Interaction_Summaries__r[0].ActionsRequiredbyLicenseeOperator__c
+                                                        : null
+                                                )
+                                                ? (
+                                                    caseRecord.Interaction_Summaries__r[0].ActionsRequiredbyLicenseeOperator__c
+                                                        .replaceAll(';', '<br/>')
+                                                  )
+                                                : null,
+                                    'ActionsRequiredbyLOMHO__c' =>
+                                            String.isNotBlank(
+                                                caseRecord.Interaction_Summaries__r != null &&
+                                                !caseRecord.Interaction_Summaries__r.isEmpty()
+                                                    ? caseRecord.Interaction_Summaries__r[0].ActionsRequiredbyLOMHO__c
+                                                    : null
+                                            )
+                                            ? (
+                                                caseRecord.Interaction_Summaries__r[0].ActionsRequiredbyLOMHO__c
+                                                    .replaceAll(';', '<br/>')
+                                              )
                                             : null
                     
                     };
