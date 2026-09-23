@@ -467,10 +467,12 @@ public with sharing class InspectionViolationService {
             Map<Id, RegulatoryCodeViolation> violationsToUpdate = new Map<Id, RegulatoryCodeViolation>();
 
             // Rule 2: violations that were resolved in a retracted inspection are reopened.
-            for (RegulatoryCodeViolation vio : [SELECT Id, Status, ResolvedIn__c FROM RegulatoryCodeViolation
+            for (RegulatoryCodeViolation vio : [SELECT Id, Status, ResolvedIn__c, DateResolved FROM RegulatoryCodeViolation
                                                 WHERE ResolvedIn__c IN :visitIds AND Status = :STATUS_RESOLVED
                                                 AND RecordTypeId = :recordTypePHOCSRegulatoryCodeViolation]) {
                 vio.Status = STATUS_OPEN;
+                vio.ResolvedIn__c = null;
+                vio.DateResolved = null;
                 violationsToUpdate.put(vio.Id, vio);
             }
 
