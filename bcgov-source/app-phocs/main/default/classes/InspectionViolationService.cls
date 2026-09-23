@@ -344,8 +344,8 @@ public with sharing class InspectionViolationService {
                 return result;
             }
             
-            Map<Id, AssessmentTask> taskMap = new Map<Id, AssessmentTask>([SELECT Id, ParentId, Parent.AccountId, Parent.ContextId, Parent.Account.HealthAuthority__c
-                                                                           FROM AssessmentTask WHERE Id IN :assessmentTaskIds]); 
+            Map<Id, AssessmentTask> taskMap = new Map<Id, AssessmentTask>([SELECT Id, ParentId, Parent.AccountId, Parent.ContextId, Parent.Account.HealthAuthority__c,
+                                                                           Parent.Account.Type FROM AssessmentTask WHERE Id IN :assessmentTaskIds]); 
             
             // Supplied by the submit screen: completeInspection() writes it to the Visit only AFTER this method runs.
             Datetime inspectionDate = actualStartDate != null ? actualStartDate : System.now();
@@ -398,6 +398,7 @@ public with sharing class InspectionViolationService {
                     vio.Status = ind.CorrectedDuringInspection__c == true ? 'Resolved' : 'Open';
                     vio.DateResolved = ind.CorrectedDuringInspection__c == true ? System.Now() : null;
                     vio.HealthAuthority__c = taskMap.get(ind.AssessmentTaskId)?.Parent?.Account?.HealthAuthority__c;
+                    vio.IsDairy__c = taskMap.get(ind.AssessmentTaskId)?.Parent?.Account?.Type == 'Dairy';
                     if (parentViolationId != null && validParentViolationMap.containsKey(parentViolationId)){
                         vio.PHOCSParentId__c = parentViolationId;
                     }
