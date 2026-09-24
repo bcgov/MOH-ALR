@@ -552,8 +552,8 @@ public class InspectionViolationServiceTest {
 
         RegulatoryCodeViolation reopened = [SELECT Id, Status, InspectionId, ResolvedIn__c, DateResolved FROM RegulatoryCodeViolation WHERE Id = :resolvedVio.Id];
         System.assertEquals('Open', reopened.Status, 'A violation resolved in a retracted inspection should be reopened');
-        System.assertEquals(retractedVisit.Id, reopened.ResolvedIn__c, 'ResolvedIn should be left untouched');
-        System.assertNotEquals(null, reopened.DateResolved, 'DateResolved should be left untouched');
+        System.assertEquals(null, reopened.ResolvedIn__c, 'ResolvedIn__c should be cleared when the resolution is retracted');
+        System.assertEquals(null, reopened.DateResolved, 'DateResolved should be cleared when the resolution is retracted');
         System.assertEquals(originalVisit.Id, reopened.InspectionId, 'Inspection should still reference where the violation was raised');
     }
 

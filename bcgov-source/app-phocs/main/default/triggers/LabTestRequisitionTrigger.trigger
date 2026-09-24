@@ -13,7 +13,7 @@ trigger LabTestRequisitionTrigger on LabTestRequisition__c (before insert, after
     if (Trigger.isAfter) {
         if (Trigger.isInsert) {
             LabTestRequisitionTriggerHandler.populateLabTestRequisitionNumber(Trigger.new);
-            LabTestRequisitionTriggerHandler.shareQueueOwnedRequisitionsWithCreator(Trigger.new);
+            //LabTestRequisitionTriggerHandler.shareQueueOwnedRequisitionsWithCreator(Trigger.new);
         }
         LabTestRequisitionTriggerHandler.updateDairyRequisitionFlag(Trigger.new, Trigger.oldMap, Trigger.isUpdate);
     }
