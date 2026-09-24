@@ -221,13 +221,19 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         List<Object> results = new List<Object>();
         
         List<SObject> queryResults = Database.query(queryConfig.ObjectQuery__c);// NOPMD
-        for (SObject sObj : queryResults) {
+        for (SObject sObj : queryResults) { 
             
-             // Format Multi-Select Picklist for FlexCard Data Table
-            String ComplaintTopicTypeList = (String) sObj.get('ComplaintTopicType__c');
+                     // Added as part Substantiated Complaints data table 
+            if (configName == 'FacilitySubstantiatedCaseList') {
         
-            if (String.isNotBlank(ComplaintTopicTypeList)) {
-                sObj.put('ComplaintTopicType__c', ComplaintTopicTypeList.replace(';', '; '));
+                String complaintTopicType = (String)sObj.get('ComplaintTopicType__c');
+        
+                if (String.isNotBlank(complaintTopicType)) {
+                    sObj.put(
+                        'ComplaintTopicType__c',
+                        complaintTopicType.replace(';', '; ')
+                    );
+                }
             }
             if (wrapper != null) {
                 results.add(wrapper.wrap(sObj));
@@ -882,6 +888,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                                 'PhysicalAddressState' => caseRecord.Account?.Physical_Address__c?.getState(),
                                 'PhysicalAddressPostalCode' => caseRecord.Account?.Physical_Address__c?.getPostalCode(),
                                 'PhysicalAddressCountry' => caseRecord.Account?.Physical_Address__c?.getCountry(),
+                                'AssetTypes' => joinAssetTypes(caseRecord.Account),
                                 'ActionsRequiredbyLicenseeOperator__c' =>
                                                 String.isNotBlank(
                                                     caseRecord.Interaction_Summaries__r != null &&
