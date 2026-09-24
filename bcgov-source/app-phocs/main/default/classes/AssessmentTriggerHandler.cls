@@ -15,9 +15,13 @@
  *               17 Sep -  EHIS-5027         -  Deepak      -  Bulkified (no SOQL in loop), excluded Error records from
  *                                                             reconciliation, set the PHOCSInspection record type, and
  *                                                             counted migrated inspections toward the required frequency
+ *               17 Sep -  EHIS-5027         -  Deepak      -  Blank MinimumInspectionFrequency__c/MTSInspectionFrequency__c
+ *                                                             now resolves to a zero-record config, so a Completed RAT left
+ *                                                             with a blank frequency voids any existing future RAT-generated
+ *                                                             inspections via the same surplus-cleanup path, instead of being
+ *                                                             silently ignored
  ***********************************************************************************************/
 public with sharing class AssessmentTriggerHandler {
-
     private static final Id ASSESSMENT_RTID = Schema.SObjectType.Assessment.getRecordTypeInfosByDeveloperName().get('PHOCSAssessment').getRecordTypeId();
     private static final Id INSPECTION_RTID = Schema.SObjectType.Visit.getRecordTypeInfosByDeveloperName().get('PHOCSInspection').getRecordTypeId();
     private static final String ASSESSMENT_STATUS_COMPLETED = 'Completed';
@@ -66,6 +70,8 @@ public with sharing class AssessmentTriggerHandler {
                         '1 inspection every 2 years' => new IntervalConfig(24, 1),
                         '1 inspection every 4 years' => new IntervalConfig(48, 1)
                         };
+    
+    private static final IntervalConfig ZERO_INSPECTIONS = new IntervalConfig(0, 0);
 
 /**
  * @author: Deepak
@@ -89,6 +95,7 @@ public with sharing class AssessmentTriggerHandler {
  *              All queries run before the loop so the handler stays bulk safe.
  * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
  *                    17 Sep - EHIS-5027          - Deepak       - Bulkified and merged initial generation with frequency-change recalculation into one reconcile path.
+ *                    17 Sep - EHIS-5027          - Deepak       - Resolves a blank frequency to ZERO_INSPECTIONS instead of passing null through to reconcileSchedule.
 */
     public static void PHOCSRATInspectionGenerationService(List<Assessment> newAssessments) {
         List<Assessment> qualifyingAssessments = filterQualifyingAssessments(newAssessments);
@@ -154,12 +161,12 @@ public with sharing class AssessmentTriggerHandler {
             }
 
             reconcileSchedule(assessment, originatingInspection, anchor, INSPECTION_TYPE_ROUTINE, inspectionTypeIdsByValue.get(INSPECTION_TYPE_ROUTINE),
-                              ROUTINE_INTERVALS.get(assessment.MinimumInspectionFrequency__c), ratGeneratedByKey, migratedCountByKey,
+                              resolveIntervalConfig(ROUTINE_INTERVALS, assessment.MinimumInspectionFrequency__c), ratGeneratedByKey, migratedCountByKey,
                               inspectionsToInsert, inspectionsToUpdate);
 
             if (originatingInspection.Account != null && originatingInspection.Account.Type == FACILITY_TYPE_TOBACCO_VAPOUR) {
                 reconcileSchedule(assessment, originatingInspection, anchor, INSPECTION_TYPE_MTS, inspectionTypeIdsByValue.get(INSPECTION_TYPE_MTS),
-                                  MTS_INTERVALS.get(assessment.MTSInspectionFrequency__c), ratGeneratedByKey, migratedCountByKey,
+                                  resolveIntervalConfig(MTS_INTERVALS, assessment.MTSInspectionFrequency__c), ratGeneratedByKey, migratedCountByKey,
                                   inspectionsToInsert, inspectionsToUpdate);
             }
         }
@@ -171,6 +178,24 @@ public with sharing class AssessmentTriggerHandler {
         if (!inspectionsToInsert.isEmpty()) {
             insert inspectionsToInsert;
         }
+    }
+
+/**
+ * @author: Deepak
+ * @date: 17 Sep 2026
+ * @description: Resolves a frequency picklist value to its IntervalConfig. A blank value resolves
+ *              to ZERO_INSPECTIONS (0 inspections/year), not null - this is what lets
+ *              reconcileSchedule void any existing future RAT-generated inspections through its
+ *              normal surplus-cleanup path rather than silently doing nothing. A genuinely
+ *              unrecognized non-blank value still resolves to null, and reconcileSchedule still
+ *              no-ops for it, since its intent isn't known.
+ * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
+    private static IntervalConfig resolveIntervalConfig(Map<String, IntervalConfig> intervalsByFrequency, String frequencyValue) {
+        if (String.isBlank(frequencyValue)) {
+            return ZERO_INSPECTIONS;
+        }
+        return intervalsByFrequency.get(frequencyValue);
     }
 
 /**
@@ -288,12 +313,15 @@ public with sharing class AssessmentTriggerHandler {
  * @date: 17 Sep 2026
  * @description: Reconciles one facility's schedule for a single inspection type against the newly
  *              determined frequency. Existing RAT-generated future records are re-dated to the new
- *              schedule first, any surplus beyond the new frequency is marked Error (AC#7 decrease),
- *              and any shortfall is inserted as new Planned records (AC#7 increase). A facility with
- *              no existing future schedule simply falls through to inserting the full set, which is
- *              the AC#1-AC#4 initial generation case. Non-RAT-generated future inspections
- *              (historical/migrated) are never modified but do reduce the number of slots that need
- *              filling. Does nothing when the frequency value has no configured interval mapping.
+ *              schedule first, any surplus beyond the new frequency is marked Error (AC#7 decrease,
+ *              which also covers a blank frequency resolved to ZERO_INSPECTIONS - every existing
+ *              RAT-generated record becomes surplus and none are re-dated), and any shortfall is
+ *              inserted as new Planned records (AC#7 increase). A facility with no existing future
+ *              schedule simply falls through to inserting the full set, which is the AC#1-AC#4
+ *              initial generation case. Non-RAT-generated future inspections (historical/migrated)
+ *              are never modified but do reduce the number of slots that need filling. Does nothing
+ *              when config is null, i.e. the frequency value is non-blank but has no configured
+ *              interval mapping.
  * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     private static void reconcileSchedule(Assessment assessment, Visit originatingInspection, Datetime anchor, String typeValue, Id visitTypeId,
