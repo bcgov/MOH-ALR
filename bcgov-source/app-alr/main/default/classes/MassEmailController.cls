@@ -33,6 +33,7 @@ public with sharing class MassEmailController {
     Public Static Map<Id, BusinessLicenseApplication> blaMap = new Map<Id, BusinessLicenseApplication>();
     Public Static Map<Id, List<Id>> blaContactMap = new Map<Id, List<Id>>();
     Public Static Map<Id, AccountContactRelation> accContactMap = new Map<Id, AccountContactRelation>();
+    Public Static Map<Id, AccountContactRelation> contactAcrMap = new Map<Id, AccountContactRelation>();
     Public Static Map<Id, Account> accMap = new Map<Id, Account>();
     Public Static Map<Id, BusinessLicense> blMap = new Map<Id, BusinessLicense>();
     Public Static Map<Id, Integer> blaTotalAlUnitsMap = new Map<Id, Integer>();
@@ -46,6 +47,9 @@ public with sharing class MassEmailController {
     Public Static Map<Id, String> blaErrMap = new Map<Id, String>();
     Public Static Map<Id, String> blaSuccessMap = new Map<Id, String>();
     Public Static List<BusinessLicenseApplication> blaUpdateList = new List<BusinessLicenseApplication>();
+    Public Static List<Id> msgContactOrderList = new List<Id>();
+    private static final String RENEWAL_DETAIL_SEPARATOR = '<br/>';
+    private static final Integer RENEWAL_DETAIL_MAX_LENGTH = 32768;
     
     //method to to send email to records
     @AuraEnabled
@@ -124,7 +128,7 @@ public with sharing class MassEmailController {
                                                 activeAccRec.AccountContactRelations[0]);
                     }
                    else {
-                        blaErrMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, BCMOH_Constants.noPrimaryContact);
+                        blaErrMap.put(activeAccRec.BusinessLicenseApplicationAccount[0].Id, BCMOH_Constants.noActiveContact);
                     }
                     if(activeAccRec.Assets.size() != 0) {
                         Integer unitCounter = 0;
@@ -201,7 +205,7 @@ public with sharing class MassEmailController {
         Map<Id, List<AccountContactRelation>> acrMap = new Map<Id, List<AccountContactRelation>>();
     
         List<AccountContactRelation> acrListContacts = [
-            SELECT Id, ContactId, AccountId, IsActive, Contact.Email
+            SELECT Id, ContactId, AccountId, IsActive, Contact.Email, Contact.Name
             FROM AccountContactRelation
             WHERE AccountId IN :accountIds  
             AND IsActive = true 
@@ -213,6 +217,7 @@ public with sharing class MassEmailController {
                 acrMap.put(acr.AccountId, new List<AccountContactRelation>());
             }
             acrMap.get(acr.AccountId).add(acr);
+            contactAcrMap.put(acr.ContactId, acr);
         }
     
         return acrMap;
@@ -411,6 +416,7 @@ public with sharing class MassEmailController {
                                contactId = conId;
                                Messaging.SingleEmailMessage emailMsgRec = BCMOH_UtilityClass.setEmailParams(contactId, NULL, orgWideAddrId, attachIds, whatId, emailBody, subjectValue, emailHtmlBody);//ALR-827 - added emailHtmlBody
                                singleEmailMsgList.add(emailMsgRec);
+                               msgContactOrderList.add(contactId);
                            }   
                            
                        }
@@ -617,33 +623,32 @@ public with sharing class MassEmailController {
     //update bla success and error maps after sending email
     public static void getEmailStatus(Messaging.SendEmailResult[] emailResultList, 
                                       List<Messaging.SingleEmailMessage> singleEmailMsgList, Map<Id, List<Id>> whatIdTargetMap) {
-    Map<List<Id>, String> targetIdErrorMap = new Map<List<Id>, String>();
+    Map<Id, String> targetIdErrorMap = new Map<Id, String>();
     try {
-        for(Messaging.SendEmailResult eResRec : emailResultList) {
+        for(Integer i = 0; i < emailResultList.size(); i++) {
+            Messaging.SendEmailResult eResRec = emailResultList[i];
+            Id targetContactId = msgContactOrderList[i];
             if(!eResRec.isSuccess()) {
                 for(Messaging.SendEmailError err : eResRec.getErrors()) {
-                   //targetIdErrorMap.put(err.getTargetObjectId(), err.getMessage());
+                targetIdErrorMap.put(targetContactId, err.getMessage());
                 }
             } 
         }
-        for(Messaging.SingleEmailMessage msgRec : singleEmailMsgList) {
-            String sentDetails;
-            if(targetIdErrorMap.containsKey(whatIdTargetMap.get(msgRec.whatId))) {
-                blaErrMap.put(msgRec.whatId, targetIdErrorMap.get(whatIdTargetMap.get(msgRec.whatId)));
+        for(Integer i = 0; i < singleEmailMsgList.size(); i++) {
+            Messaging.SingleEmailMessage msgRec = singleEmailMsgList[i];
+            Id targetContactId = msgContactOrderList[i];
+            AccountContactRelation targetAcr = contactAcrMap.get(targetContactId);
+
+            if(targetIdErrorMap.containsKey(targetContactId)) {
+                String errDetail = buildFailureDetail(targetAcr, targetIdErrorMap.get(targetContactId));
+                blaErrMap.put(msgRec.whatId, appendDetail(blaErrMap.get(msgRec.whatId), errDetail));
             }
             else {
-                if (accContactMap.get(msgRec.whatId)==null){
-                sentDetails = BCMOH_Constants.emailSentToId+' '+
-                '. '+BCMOH_Constants.emailSentTo+' '+'. '+BCMOH_Constants.sentTime+' '+datetime.now().format();//add to const
-                }
-                else{
-                sentDetails = BCMOH_Constants.emailSentToId+' '+accContactMap.get(msgRec.whatId).Contact.Email+
-                    '. '+BCMOH_Constants.emailSentTo+' '+accContactMap.get(msgRec.whatId).Contact.Name+'. '+BCMOH_Constants.sentTime+' '+datetime.now().format();//add to const
-                }
-                blaSuccessMap.put(msgRec.whatId, sentDetails);
-            }
+                String sentDetails = buildSuccessDetail(targetAcr);
+                blaSuccessMap.put(msgRec.whatId, appendDetail(blaSuccessMap.get(msgRec.whatId), sentDetails));
             }
         }
+    }
                                           catch(exception err) {
         LogService.logAndPublish(className, 'updateTargetRecsStatus', '', err);
     }
@@ -662,19 +667,7 @@ public with sharing class MassEmailController {
             for (Id blaId : blaIds) {
                 BusinessLicenseApplication blaRec = blaMap.get(blaId);
                 if (blaRec != null) {
-                    // Update BLAs based on the map they are present in
-                    if (blaErrMap.containsKey(blaId)) {
-                        String renewalMsg = blaErrMap.get(blaId).length() > 255 ? blaErrMap.get(blaId).Substring(0, 255) : blaErrMap.get(blaId);
-                        String errMsg = blaErrMap.get(blaId);
-                        errMsg = blaRec.RenewalDetail__c != null ? blaRec.RenewalDetail__c + ' ; ' + renewalMsg : renewalMsg;
-                        blaRec.Status = BCMOH_Constants.errorBlaStatus;
-                        blaRec.RenewalDetail__c = errMsg;
-                    } else if (blaSuccessMap.containsKey(blaId)) {
-                        String renewalMsg = blaSuccessMap.get(blaId).length() > 255 ? blaSuccessMap.get(blaId).Substring(0, 255) : blaSuccessMap.get(blaId);
-                        String succMsg = String.isEmpty(blaRec.RenewalDetail__c) ? renewalMsg : blaRec.RenewalDetail__c + ' ; ' + renewalMsg;
-                        blaRec.Status = BCMOH_Constants.sentBlaStatus;
-                        blaRec.RenewalDetail__c = succMsg;
-                    }
+                    setBlaStatusAndRenewalDetail(blaRec, blaId);
                     blaUpdateList.add(blaRec);
                 }
                 else {
@@ -688,7 +681,25 @@ public with sharing class MassEmailController {
             LogService.logAndPublish(className, 'updateBlaStatus', '', err);
         }
     }
-    
+
+    // Helper method to set the Status and RenewalDetail__c fields of a BLA record based on the success and error maps.
+    private static void setBlaStatusAndRenewalDetail(BusinessLicenseApplication blaRec, Id blaId) {
+        Boolean hasErr = blaErrMap.containsKey(blaId);
+        Boolean hasSuccess = blaSuccessMap.containsKey(blaId);
+
+        if (hasErr && hasSuccess) {
+            String combined = appendDetail(blaSuccessMap.get(blaId), blaErrMap.get(blaId));
+            blaRec.RenewalDetail__c = buildRenewalDetailValue(blaRec.RenewalDetail__c, combined);
+            blaRec.Status = BCMOH_Constants.errorBlaStatus;
+        } else if (hasErr) {
+            blaRec.RenewalDetail__c = buildRenewalDetailValue(blaRec.RenewalDetail__c, blaErrMap.get(blaId));
+            blaRec.Status = BCMOH_Constants.errorBlaStatus;
+        } else if (hasSuccess) {
+            blaRec.RenewalDetail__c = buildRenewalDetailValue(blaRec.RenewalDetail__c, blaSuccessMap.get(blaId));
+            blaRec.Status = BCMOH_Constants.sentBlaStatus;
+        }
+    }
+
     public Static Id getAccountId(Id blaId) {
         return [SELECT AccountId FROM BusinessLicenseApplication WHERE Id = :blaId][0].AccountId;
     }
@@ -749,5 +760,35 @@ public with sharing class MassEmailController {
         } catch (Exception err) {
             LogService.logAndPublish(className, 'updateLateFeeBlaStatus', '', err);
         }
+    }
+
+    // appends a new detail related to the contact to an existing string, with the separator in between.
+    private static String appendDetail(String existing, String newDetail) {
+        return String.isEmpty(existing) ? newDetail : existing + RENEWAL_DETAIL_SEPARATOR + newDetail;
+    }
+
+    // builds the "email sent" log line for single contact when sucessfully sent.
+    private static String buildSuccessDetail(AccountContactRelation acr) {
+        return BCMOH_Constants.emailSentToId+' '+acr.Contact.Email+
+            '. '+BCMOH_Constants.emailSentTo+' '+acr.Contact.Name+'. '+BCMOH_Constants.sentTime+' '+datetime.now().format();
+    }
+
+    // builds the "email failed" log line for single contact, including the failure reason
+    private static String buildFailureDetail(AccountContactRelation acr, String failureReason) {
+        return BCMOH_Constants.emailFailedToId+' '+acr.Contact.Email+
+            '. '+BCMOH_Constants.emailFailedRecipient+' '+acr.Contact.Name+'. '+BCMOH_Constants.emailFailedReason+' '+failureReason;
+    }
+
+      // Append new content to existing RenewalDetail__c, but truncate to field limit first.
+    private static String buildRenewalDetailValue(String existingValue, String newContent) {
+        return appendDetail(existingValue, truncateToFieldLimit(newContent));
+    }
+
+    // Truncate a string to the maximum length of the RenewalDetail__c field,
+    private static String truncateToFieldLimit(String msg) {
+         if (msg == null) {
+            return msg;
+        }
+        return msg.length() > RENEWAL_DETAIL_MAX_LENGTH ? msg.Substring(0, RENEWAL_DETAIL_MAX_LENGTH) : msg;
     }
 }
