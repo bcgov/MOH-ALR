@@ -115,8 +115,8 @@ public with sharing class AssessmentTriggerHandler {
             return;
         }
 
-        Map<Id, Visit> originatingInspectionsById = new Map<Id, Visit>([SELECT Id, AccountId, PlaceId, ActualVisitStartTime, Account.Type FROM Visit
-                                                                        WHERE Id IN :assessmentByOriginatingInspectionId.keySet()
+        Map<Id, Visit> originatingInspectionsById = new Map<Id, Visit>([SELECT Id, AccountId, PlaceId, ActualVisitStartTime, Account.Type, Account.HealthAuthority__c
+                                                                        FROM Visit WHERE Id IN :assessmentByOriginatingInspectionId.keySet()
                                                                         AND RecordTypeId =: INSPECTION_RTID]);
 
         Set<Id> facilityIds = new Set<Id>();
@@ -408,6 +408,7 @@ public with sharing class AssessmentTriggerHandler {
             AccountId = originatingInspection.AccountId,
             PlaceId = originatingInspection.PlaceId,
             PlannedVisitStartTime = plannedStartTime,
+            HealthAuthority__c = originatingInspection?.Account?.HealthAuthority__c,
             RATGenerated__c = true
         );
     }
