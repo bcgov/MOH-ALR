@@ -21,7 +21,7 @@ public with sharing class AccountContactRelationController {
             relations = [
                 SELECT Id, Contact.Id, Contact.Name, Contact.Phone, Contact.Email, IsActive, PrimaryContact__c, Roles
                 FROM AccountContactRelation
-                WHERE AccountId = :accountId AND IsActive = true
+                WHERE AccountId = :accountId AND IsActive = true and contact.recordtype.DeveloperName != : BCMOH_Constants.PHOCS_DAIRY_WORKER_RECORD_TYPE_NAME
                 ORDER BY PrimaryContact__c DESC
                 LIMIT 3
             ];
