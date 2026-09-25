@@ -603,6 +603,154 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         }
         return details;
     }
+   // Added By Janvi EHIS-563 (Start)
+private static ViolationEnforcementActionDetails getViolationEnforcementActionDetails(Account accRecord) {
+    ViolationEnforcementActionDetails details = new ViolationEnforcementActionDetails();
+
+    if (accRecord == null) {
+        return details;
+    }
+
+    List<String> bannerBlocks = new List<String>();
+
+    for (ViolationEnforcementAction vea : [
+        SELECT Id,
+               Name,
+               Type,
+               Facility_Type__c,
+               FacilityTypeCategory__c,
+               DateCreated,
+               Closure_Reason__c,Violation.Inspection.AccountId, Violation.PHOCSParentAccountID__c
+        FROM ViolationEnforcementAction
+        WHERE RecordType.DeveloperName = 'PHOCSViolationEnforcementAction'
+        AND Status = 'Open'
+        AND  Violation.PHOCSParentAccountID__c = :accRecord.Id
+        AND Facility_Type__c = :accRecord.Type
+        AND (
+            (
+                Type = 'Closure Order'
+                AND Facility_Type__c IN (
+                    'Food',
+                    'Personal Services Establishment',
+                    'Recreational Water'
+                )
+            )
+            OR
+            (
+                Type = 'Prohibition Order'
+                AND Facility_Type__c = 'Tobacco and Vapour'
+            )
+        )
+        ORDER BY LastModifiedDate DESC
+    ]) {
+System.debug('VEA found: ' + vea.Id);
+    System.debug('VEA Type: ' + vea.Type);
+    System.debug('VEA Facility Type: ' + vea.Facility_Type__c);
+        details.hasViolationEnforcementActions = true;
+
+        String bannerText = '';
+        String reasonLine = ''; // *** CHANGED: Added for separate Reason line ***
+
+        String issuedDateText = vea.DateCreated != null
+            ? vea.DateCreated.format('yyyy-MM-dd')
+            : '';
+
+        if (vea.Type == 'Closure Order') {
+
+            String reasonText = '';
+
+            if (String.isNotBlank(vea.Closure_Reason__c)) {
+                List<String> reasons = new List<String>();
+
+                for (String reason : vea.Closure_Reason__c.split(';')) {
+                    if (String.isNotBlank(reason)) {
+                        reasons.add(reason.trim());
+                    }
+                }
+
+                reasonText = String.join(reasons, ', ');
+            }
+
+            bannerText =
+                'This facility is under a Closure Order issued on ' +
+                issuedDateText +
+                '.'; // *** CHANGED: Added period and kept only main text here ***
+
+            if (String.isNotBlank(reasonText)) {
+                reasonLine = // *** CHANGED: Reason moved to separate line ***
+                    '<div style="' +
+                    'margin-top:6px;' +
+                    'font-size:15px;' +
+                    'font-weight:400;' + // *** CHANGED: Reason values are NOT bold ***
+                    '">' +
+                    '<strong>Reason(s):</strong> ' +
+                    reasonText.escapeHtml4() +
+                    '</div>';
+            }
+
+        } else if (
+            vea.Type == 'Prohibition Order' &&
+            vea.Facility_Type__c == 'Tobacco and Vapour'
+        ) {
+
+            bannerText =
+                'Tobacco/Vapour Sales Prohibited - ' +
+                'This retailer is prohibited from selling certain tobacco ' +
+                'and/or vapour products effective ' +
+                issuedDateText +
+                '.'; // *** CHANGED: Added period ***
+        }
+
+        String bannerBlock =
+            '<div style="' +
+            'display:flex;' +
+            'align-items:flex-start;' +
+            'gap:12px;' +
+            'margin-bottom:12px;' +
+            'padding:14px 16px;' +
+            'background:#BA0517;' +
+            'border-radius:4px;' +
+            'border:none;' +
+            'box-shadow:0 1px 2px rgba(0,0,0,0.15);' +
+            '">' +
+
+            '<div style="' +
+            'font-size:20px;' +
+            'line-height:1;' +
+            'margin-top:2px;' +
+            'flex-shrink:0;' +
+            'color:#fff;' +
+            '">' +
+            '⚠' +
+            '</div>' +
+
+            '<div style="color:#FFFFFF;">' +
+
+            '<div style="' +
+            'font-weight:700;' +
+            'font-size:16px;' +
+            'margin-bottom:4px;' +
+            '">' +
+            bannerText.escapeHtml4() +
+            '</div>' +
+
+            reasonLine + // *** CHANGED: Added separate Reason line ***
+
+            '</div>' +
+
+            '</div>';
+
+        bannerBlocks.add(bannerBlock);
+    }
+
+    if (details.hasViolationEnforcementActions) {
+        details.violationEnforcementActionBannerHtml =
+            String.join(bannerBlocks, '');
+    }
+
+    return details;
+}
+// Added By Janvi EHIS-563 (End)
     
     private static String getFacilitiesFilter(String programArea, String filterItems, String operatingWithoutLicence) {
         String returnQuery;
@@ -781,11 +929,18 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         public Boolean hasBeachAdvisories = false;
         public String beachAdvisoryBannerHtml = '';
     }
+    //Added By Janvi EHIS-563 (Start)
+    public class ViolationEnforcementActionDetails {
+    public Boolean hasViolationEnforcementActions = false;
+    public String violationEnforcementActionBannerHtml = '';
+}// Added By Janvi EHIS-563(End)
+    
     public class AccountDetailsWrapper implements SObjectWrapper {
         public Object wrap(SObject record) {
             Account accRecord = (Account) record;           
             WaterAdvisoryDetails advisoryDetails = getWaterAdvisoryDetails(accRecord);
             BeachAdvisoryDetails beachAdvisoryDetails = getBeachAdvisoryDetails(accRecord);//added for EHIS-3277
+            ViolationEnforcementActionDetails violationEnforcementActionDetails = getViolationEnforcementActionDetails(accRecord); //Added for EHIS-563
             
             Map<String, Object> result = new Map<String, Object>{
                 'Id' => accRecord.Id,
@@ -817,7 +972,9 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 'HasWaterAdvisories' => advisoryDetails.hasWaterAdvisories,
                 'WaterAdvisoryReasonSummary' => advisoryDetails.waterAdvisoryReasonSummary,
                 'HasBeachAdvisories' => beachAdvisoryDetails.hasBeachAdvisories,//added for EHIS-3277
-                'BeachAdvisoryBannerHtml' => beachAdvisoryDetails.beachAdvisoryBannerHtml //added for EHIS-3277
+                'BeachAdvisoryBannerHtml' => beachAdvisoryDetails.beachAdvisoryBannerHtml, //added for EHIS-3277
+                'HasViolationEnforcementActions' => violationEnforcementActionDetails.hasViolationEnforcementActions,// Added for EHIS-563
+                'ViolationEnforcementActionBannerHtml' => violationEnforcementActionDetails.violationEnforcementActionBannerHtml // Added for EHIS-563
                     };
                         return result;
         }
@@ -956,6 +1113,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         public Object wrap(SObject record) {
             Visit inspection = (Visit) record;
             WaterAdvisoryDetails advisoryDetails = getWaterAdvisoryDetails(inspection.Account);
+             ViolationEnforcementActionDetails violationEnforcementActionDetails = getViolationEnforcementActionDetails(inspection.Account); //Added for EHIS-563
             
             Map<String, Object> result = new Map<String, Object>{
                 'Id' => inspection.Id,
@@ -992,7 +1150,9 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                                 'PhysicalAddressCountry' => inspection.Account?.Physical_Address__c?.getCountry(),
                                 
                                 'HasWaterAdvisories' => advisoryDetails.hasWaterAdvisories,
-                                'WaterAdvisoryReasonSummary' => advisoryDetails.waterAdvisoryReasonSummary
+                                'WaterAdvisoryReasonSummary' => advisoryDetails.waterAdvisoryReasonSummary,
+                                'HasViolationEnforcementActions' => violationEnforcementActionDetails.hasViolationEnforcementActions,// Added for EHIS-563 
+                                'ViolationEnforcementActionBannerHtml' => violationEnforcementActionDetails.violationEnforcementActionBannerHtml // Added for EHIS-563
                                 };
                                     
                                     return result;

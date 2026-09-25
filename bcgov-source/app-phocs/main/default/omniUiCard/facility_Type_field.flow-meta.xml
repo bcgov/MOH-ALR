@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>68.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Food_Facility_Category</name>
+        <label>Food Facility Category</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.FacilityTypeCategory__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Food</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Personal_Services_Establishment_FC</name>
+        <label>Personal Services Establishment FC</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.FacilityTypeCategory__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Personal Services Establishment</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Recreational_Water_FC</name>
+        <label>Recreational Water FC</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.FacilityTypeCategory__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Recreational Water</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <name>Facility_type</name>
+        <label>Facility type</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Is_Food</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Facility_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Food</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Food_Facility_Category</targetReference>
+            </connector>
+            <label>Is Food?</label>
+        </rules>
+        <rules>
+            <name>Is_PSE</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Facility_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Personal Services Establishment</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Personal_Services_Establishment_FC</targetReference>
+            </connector>
+            <label>Is PSE?</label>
+        </rules>
+        <rules>
+            <name>Is_Recreational_Water</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Facility_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Recreational Water</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Recreational_Water_FC</targetReference>
+            </connector>
+            <label>Is Recreational Water?</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <interviewLabel>facility Type field {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>facility Type field</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>get_violation</name>
+        <label>get violation</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Update_facility_type</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Violation.Name</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>RegulatoryCodeViolation</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_facility_type</name>
+        <label>Update facility type</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Facility_type</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Facility_Type__c</field>
+            <value>
+                <elementReference>get_violation.PHOCSParentAccountID__r.Type</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>get_violation</targetReference>
+        </connector>
+        <object>ViolationEnforcementAction</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

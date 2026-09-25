@@ -437,6 +437,204 @@ private class PHOCSPublicDisplayObjectRecordsTest {
         Integer reasonLineCount = bannerHtml.split('Reason:').size() - 1;        
         System.assertEquals(2,reasonLineCount,'Expected Reason line only for cases where ReasonForAdvisory__c is populated');
     }
+    // Added for EHIS-563 (Start)
+@isTest
+static void testGetRecordDetails_ViolationEnforcementActionBanner() {
+
+    // Create Account
+    Account closureAccount = new Account(
+        Name = 'Test Recreational Water Facility',
+        Type = 'Recreational Water'
+    );
+    insert closureAccount;
+
+    // Get VEA Record Type
+    Id veaRtId = Schema.SObjectType.ViolationEnforcementAction
+        .getRecordTypeInfosByDeveloperName()
+        .get('PHOCSViolationEnforcementAction')
+        .getRecordTypeId();
+
+    // Create Regulatory Code Violation
+    RegulatoryCodeViolation rcv = new RegulatoryCodeViolation(
+        DateCreated = Date.today(),
+        PHOCSParentAccountID__c = closureAccount.Id
+    );
+    insert rcv;
+
+    System.assertNotEquals(
+        null,
+        rcv.Id,
+        'Regulatory Code Violation should be created'
+    );
+
+    // Create Closure Order VEA
+    ViolationEnforcementAction vea1 =
+        new ViolationEnforcementAction(
+            ViolationId = rcv.Id,
+            RecordTypeId = veaRtId,
+            Status = 'Open',
+            Type = 'Closure Order',
+            Facility_Type__c = 'Recreational Water',
+            DateCreated = Date.today()
+        );
+
+    insert vea1;
+
+    // Confirm VEA exists
+    System.assertEquals(
+        1,
+        [
+            SELECT COUNT()
+            FROM ViolationEnforcementAction
+            WHERE Id = :vea1.Id
+            AND RecordType.DeveloperName =
+                'PHOCSViolationEnforcementAction'
+            AND Status = 'Open'
+        ],
+        'Expected Closure Order VEA to exist'
+    );
+
+    Test.startTest();
+
+    PHOCSPublicDisplayObjectRecords handler =
+        new PHOCSPublicDisplayObjectRecords();
+
+    Map<String, Object> input = new Map<String, Object>{
+        'recordId' => closureAccount.Id,
+        'configName' => 'FacilityDetail'
+    };
+
+    Map<String, Object> args = new Map<String, Object>{
+        'input' => input,
+        'output' => new Map<String, Object>(),
+        'options' => new Map<String, Object>()
+    };
+
+    handler.call('getRecordDetails', args);
+
+    Test.stopTest();
+
+    Map<String, Object> output =
+        (Map<String, Object>) args.get('output');
+
+    List<Object> results =
+        (List<Object>) output.get('result');
+
+    System.assert(
+        !results.isEmpty(),
+        'Expected one result from getRecordDetails'
+    );
+
+    Map<String, Object> record =
+        (Map<String, Object>) results[0];
+
+    System.assertEquals(
+        true,
+        record.get('HasViolationEnforcementActions'),
+        'Expected Violation Enforcement Actions to be true'
+    );
+
+    String bannerHtml =
+        (String) record.get(
+            'ViolationEnforcementActionBannerHtml'
+        );
+
+    System.assert(
+        String.isNotBlank(bannerHtml),
+        'Expected ViolationEnforcementActionBannerHtml to be populated'
+    );
+
+    System.assert(
+        bannerHtml.contains(
+            'This facility is under a Closure Order issued on'
+        ),
+        'Expected Closure Order banner text'
+    );
+}
+// RegulatoryTrxnFeeItemDetailsWrapper method
+
+@isTest
+static void testRegulatoryTrxnFeeItemDetailsWrapper() {
+
+    // Create parent Regulatory Transaction Fee
+    RegulatoryTrxnFee fee = new RegulatoryTrxnFee(
+    //   Name = 'FEE-000001517',
+     Status ='DRAFT' 
+    );
+    insert fee;
+
+    // Create Regulatory Transaction Fee Item
+    RegulatoryTrxnFeeItem feeItem = new RegulatoryTrxnFeeItem(
+        Name = 'Test Fee Item',
+        FeeAmount = 100,
+        RegulatoryTrxnFeeId = fee.Id,
+        Comments = 'Test comments',
+         Status__c = 'Due'
+    );
+    insert feeItem;
+
+    // Query the relationship because the wrapper uses
+    // regulatoryTrxnFeeItemRecord.RegulatoryTrxnFee.Id
+    // and RegulatoryTrxnFee.Name
+    feeItem = [
+        SELECT Id,
+               Name,
+               FeeAmount,
+               RegulatoryTrxnFee.Id,
+               RegulatoryTrxnFee.Name,
+               Comments, Status__c
+        FROM RegulatoryTrxnFeeItem
+        WHERE Id = :feeItem.Id
+    ];
+
+    Test.startTest();
+
+    PHOCSPublicDisplayObjectRecords.RegulatoryTrxnFeeItemDetailsWrapper wrapper =
+        new PHOCSPublicDisplayObjectRecords.RegulatoryTrxnFeeItemDetailsWrapper();
+
+    Map<String, Object> result =
+        (Map<String, Object>) wrapper.wrap(feeItem);
+
+    Test.stopTest();
+
+    // Validate wrapper output
+    System.assertEquals(
+        feeItem.Id,
+        result.get('Id'),
+        'Expected Fee Item Id'
+    );
+
+    System.assertEquals(
+        feeItem.Name,
+        result.get('Name'),
+        'Expected Fee Item Name'
+    );
+
+    System.assertEquals(
+        feeItem.FeeAmount,
+        result.get('FeeAmount'),
+        'Expected Fee Amount'
+    );
+
+    System.assertEquals(
+        fee.Id,
+        result.get('RegulatoryTrxnFeeId'),
+        'Expected Regulatory Transaction Fee Id'
+    );
+
+    System.assertEquals(
+        fee.Name,
+        result.get('FEE-000001517'),
+        'Expected Regulatory Transaction Fee Name'
+    );
+
+    System.assertEquals(
+        feeItem.Comments,
+        result.get('Comments'),
+        'Expected Comments'
+    );
+}
+// Added by janvi for EHIS-563 (End)
     @isTest
     static void testGetInspectionResults_EmptyResult() {
         Account acc = createTestAccount();      
