@@ -52,7 +52,7 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>CreateSamplingSiteRecord</targetReference>
+            <targetReference>get_Related_Account</targetReference>
         </connector>
     </assignments>
     <customProperties>
@@ -87,6 +87,7 @@
             <label>Null</label>
         </rules>
     </decisions>
+    <description>Adding Health Authority to Location</description>
     <dynamicChoiceSets>
         <name>SiteStatus</name>
         <dataType>Picklist</dataType>
@@ -275,6 +276,12 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>HealthAuthority__c</field>
+            <value>
+                <elementReference>get_Related_Account.HealthAuthority__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>Latitude</field>
             <value>
                 <elementReference>LocationLatitude</elementReference>
@@ -325,6 +332,27 @@
         <object>Location</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
+    <recordLookups>
+        <name>get_Related_Account</name>
+        <label>get Related Account</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>CreateSamplingSiteRecord</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Account</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <screens>
         <name>AddressCreationError</name>
         <label>Address Creation Error</label>

@@ -38,8 +38,6 @@ public class AssessmentTriggerHandlerTest {
         };
         insert inspectionTypes;
 
-        // A Visit cannot be inserted directly as Completed, so insert it Planned first and then
-        // move it to Completed with its Actual Visit Start Time populated.
         Visit originatingInspection = new Visit(InspectionMethod__c = 'Scheduled on Site Inspection', AccountId = facility.Id, PlaceId = loc.Id,
                                                 PlannedVisitStartTime = actualStartTime, RecordTypeId = recordTypePHOCSInspection,
                                                 VisitTypeId = inspectionTypes[0].Id);
