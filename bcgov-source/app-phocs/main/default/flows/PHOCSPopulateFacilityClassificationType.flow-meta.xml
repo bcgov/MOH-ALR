@@ -8,9 +8,10 @@
         <name>ClassificationTypeFormula</name>
         <dataType>String</dataType>
         <expression>IF(
-    {!$Record.Account.PHOWaterSystemSizeCategory__c} = &apos;Small Water System 50-500&apos;,    &apos;SWS&apos;,
+   CONTAINS({!$Record.Account.PHOWaterSystemSizeCategory__c}, &apos;Small Water System&apos;),
+     &apos;SWS&apos;,
     IF(
-        {!$Record.Account.PHOWaterSystemSizeCategory__c} = &apos;Large Water System &gt;100,000&apos;,
+       CONTAINS({!$Record.Account.PHOWaterSystemSizeCategory__c}, &apos;Large Water System&apos;),      
         CASE( {!$Record.Type__c},
             &apos;Treatment&apos;, &apos;WT&apos;,
             &apos;Distribution&apos;, &apos;WD&apos;,
