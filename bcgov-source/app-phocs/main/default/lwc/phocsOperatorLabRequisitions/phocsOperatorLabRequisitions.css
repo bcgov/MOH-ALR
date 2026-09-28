@@ -1,0 +1,110 @@
+.page-loading {
+    position: relative;
+    width: 100%;
+    min-height: 12rem;
+}
+
+.form-content {
+    position: relative;
+}
+
+.field-value {
+    padding: 0.25rem 0.75rem 1rem;
+}
+
+.slds-modal__content {
+    min-height: 12rem;
+}
+
+.component-picker {
+    position: relative;
+    display: grid;
+    grid-template-columns: 33% minmax(0, 1fr);
+    column-gap: 0;
+    align-items: start;
+}
+
+.component-picker-label {
+    padding-top: 0.45rem;
+    color: #706e6b;
+    line-height: 1.25;
+    white-space: normal;
+}
+
+.component-options {
+    position: absolute;
+    top: 100%;
+    left: 33%;
+    right: 0;
+    width: 67%;
+    min-width: 0;
+    max-width: none;
+    margin-top: 0.125rem;
+    transform: none;
+    z-index: 10;
+}
+
+.component-options button {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 0;
+    background: #fff;
+    color: #181818;
+    text-align: left;
+    cursor: pointer;
+}
+
+.component-options button:hover,
+.component-options button:focus {
+    background: #f3f3f3;
+}
+
+@media screen and (max-width: 48rem) {
+    .component-picker {
+        grid-template-columns: 1fr;
+    }
+
+    .component-options {
+        left: 0;
+        width: 100%;
+    }
+}
+
+.detail-page {
+    border: 1px solid #c9c9c9;
+}
+
+.detail-page-header {
+    padding: 0.75rem 1rem;
+    background: #f3f3f3;
+    border-bottom: 1px solid #c9c9c9;
+}
+
+:host,
+lightning-accordion-section {
+    --slds-c-accordion-summary-color-background: #f3f3f3;
+}
+
+lightning-accordion-section + lightning-accordion-section {
+    margin-top: 0.5rem;
+}
+
+.detail-grid {
+    column-gap: 2rem;
+}
+
+.detail-grid > lightning-output-field,
+.detail-grid > .facility-detail-field {
+    flex: 0 0 calc(50% - 1rem);
+    max-width: calc(50% - 1rem);
+}
+
+@media screen and (max-width: 48rem) {
+    .detail-grid > lightning-output-field,
+    .detail-grid > .facility-detail-field {
+        flex-basis: 100%;
+        max-width: 100%;
+    }
+
+}
