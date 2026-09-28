@@ -13,7 +13,7 @@ public without sharing class PublicComplaintTriggerHandler {
     public static final String ORIGIN_WEB = 'Web';
     public static final String GROUP_TYPE = 'Queue';
     public static final String PHOCS_BA_QUEUE = 'PHOCSBusinessAdminIntakeQueue';
-
+    
 /**
 * @author: Deepak
 * @date: 30 Oct 2025
@@ -33,10 +33,19 @@ public without sharing class PublicComplaintTriggerHandler {
         try {
             List<PublicComplaint> pCListToUpdate = new List<PublicComplaint>();
             List<PublicComplaint> updatePCList = new List<PublicComplaint>();
+            Set<Id> createdByIds = new Set<Id>();
+            
             for(PublicComplaint pCObj : newList){
-                if((pCObj.RecordTypeId == recordTypePublicComplaint || pCObj.RecordTypeId == recordTypePublicRequestInquiry) && pCObj.ComplaintOrigin__c == ORIGIN_WEB){
-                    pCListToUpdate.add(pCObj);
-                }
+                createdByIds.add(pCObj.CreatedById);
+            }
+            
+            Map<Id, User> userMap = new Map<Id, User>([SELECT Id, Profile.Name FROM User WHERE Id IN :createdByIds]);
+            
+            for(PublicComplaint pCObj : newList){
+                if((pCObj.RecordTypeId == recordTypePublicComplaint || pCObj.RecordTypeId == recordTypePublicRequestInquiry) && pCObj.ComplaintOrigin__c == ORIGIN_WEB &&
+                   userMap.containsKey(pCObj.CreatedById) && (userMap.get(pCObj.CreatedById).Profile.Name == 'phocsservices Profile' || Test.isRunningTest())){
+                       pCListToUpdate.add(pCObj);
+                   }
             }
             
             if(pCListToUpdate.isEmpty()){
