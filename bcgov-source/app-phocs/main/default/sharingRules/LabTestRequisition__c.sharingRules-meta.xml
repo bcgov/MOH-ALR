@@ -279,4 +279,29 @@
         </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSOrphanLabRequisitionSharingRule</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>Shares Orphan Water Lab Test Requisitions (no Health Authority) with the orphan group.</description>
+        <label>PHOCS Orphan Lab Requisition Sharing Rule</label>
+        <sharedTo>
+            <group>PHOCSOrphanLabRequisitionPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Water Lab Test Requisition</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value></value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>IsDairy__c</field>
+            <operation>equals</operation>
+            <value>False</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
 </SharingRules>
