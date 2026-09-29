@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PHOCSPublicComplaintNonCCFLTopicRestrict</fullName>
+    <active>true</active>
+    <description>Prevents non-CCFL users from creating a PHOCS Public Complaint with Topic as Child Care or Residential Care.</description>
+    <errorConditionFormula>AND(
+    RecordType.DeveloperName = &quot;PHOCSPublicComplaint&quot;,
+    AND(
+        NOT($Permission.PHOCSFHAChildCareResidentialCareAccess),
+        NOT($Permission.PHOCSIHAChildCareResidentialCareAccess),
+        NOT($Permission.PHOCSNHAChildCareResidentialCareAccess),
+        NOT($Permission.PHOCSVCHChildCareResidentialCareAccess),
+        NOT($Permission.PHOCSVIHAChildCareResidentialCareAccess)
+    ),
+    OR(
+        ISPICKVAL(Topic__c, &quot;Child Care&quot;),
+        ISPICKVAL(Topic__c, &quot;Residential Care&quot;)
+    )
+)</errorConditionFormula>
+    <errorMessage>As a non-CCFL user, you cannot create a PHOCS Public Complaint with Topic as Child Care or Residential Care.</errorMessage>
+</ValidationRule>
