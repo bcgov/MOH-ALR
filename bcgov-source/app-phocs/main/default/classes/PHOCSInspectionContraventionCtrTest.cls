@@ -24,7 +24,7 @@ private class PHOCSInspectionContraventionCtrTest {
             Status = 'Open',
             Origin = 'Web',
             Type = 'Drinking Water',
-            TypeOfAdvisory__c = 'Water quality advisory',
+           // TypeOfAdvisory__c = 'Water quality advisory',
             ReasonForAdvisory__c = 'Chemical & physical parameters in excess'
         );
         insert complaintcase;
