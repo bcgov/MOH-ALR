@@ -3,6 +3,7 @@
         <div class="slds-p-horizontal_medium slds-p-bottom_medium">
 
             <lightning-tabset active-tab-value={activeTab}>
+
                 <!-- ========================================================= -->
                 <!-- RENEWAL GENERATION                                         -->
                 <!-- ========================================================= -->
@@ -414,10 +415,8 @@
                     label="Late Fee Management"
                     value="lateFees"
                     onactive={handleLateFeeManagementTab}>
-                 <div class="slds-p-top_medium">
-                    
-                    
-                        <div class="slds-box slds-theme_default slds-m-bottom_medium">
+
+                    <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
                         <div class="slds-m-bottom_medium">
                             <p>
                                 This table displays overdue invoices. Use the filters to
@@ -427,8 +426,9 @@
                                 to facility contact(s).
                             </p>
                         </div>
-                         <div class="slds-grid slds-wrap slds-gutters">
-                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">                                
+
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+
                                 <lightning-combobox
                                     name="lateFeeType"
                                     label="Type"
@@ -457,7 +457,8 @@
                                     onchange={handleLateFeeFeeTypeChange}>
                                 </lightning-combobox>
                             </div>
-                        <div class="slds-col slds-size_1-of-1 slds-m-top_small">
+                        <div class="slds-m-bottom_medium">
+
                                 <lightning-button
                                     label="Search"
                                     variant="brand"
@@ -469,9 +470,7 @@
                                     label="Reset"
                                     onclick={resetLateFees}>
                                 </lightning-button>
-                        </div>
-                        </div>
-                        </div>
+                            </div>
                         </div>
                         <!-- Header Controls Section -->
                         <div class="table-header slds-m-bottom_small slds-grid slds-grid_vertical-align-center slds-grid_align-spread">
@@ -534,7 +533,8 @@
                             </lightning-button>
 
                         </div>
-                    </template>                     
+                    </template> 
+                        
                     </lightning-tab>
                     <!-- Modal component -->
 
