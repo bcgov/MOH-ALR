@@ -10,7 +10,7 @@
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Fraser_Admin</name>
-            <conditionLogic>1 AND (2 OR 3 OR 4 OR 5 OR 6 OR 7)</conditionLogic>
+            <conditionLogic>1 AND (2 OR 3 OR 4 OR 5 OR 6 OR 7 OR 8) AND 9</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.HealthAuthority__c</leftValueReference>
                 <operator>EqualTo</operator>
@@ -29,7 +29,7 @@
                 <leftValueReference>$Record.Topic__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
-                    <stringValue>Personal Services Establishments</stringValue>
+                    <stringValue>Personal Service Establishments</stringValue>
                 </rightValue>
             </conditions>
             <conditions>
@@ -57,7 +57,21 @@
                 <leftValueReference>$Record.Topic__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
-                    <stringValue>Tobacco and Vapour</stringValue>
+                    <stringValue>Tobacco and Vapour Control</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Topic__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Recreational Water</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.ComplaintOrigin__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Web</stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -67,7 +81,7 @@
         </rules>
         <rules>
             <name>Fraser_CCFL</name>
-            <conditionLogic>1 AND (2 OR 3)</conditionLogic>
+            <conditionLogic>1 AND (2 OR 3) AND 4</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.HealthAuthority__c</leftValueReference>
                 <operator>EqualTo</operator>
@@ -89,6 +103,13 @@
                     <stringValue>Residential Care</stringValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>$Record.ComplaintOrigin__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Web</stringValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>Get_Fraser_CCFL_Queue</targetReference>
             </connector>
@@ -96,7 +117,7 @@
         </rules>
         <rules>
             <name>Northern_Admin</name>
-            <conditionLogic>1 AND (2 OR 3 OR 4 OR 5 OR 6 OR 7 OR 8)</conditionLogic>
+            <conditionLogic>1 AND (2 OR 3 OR 4 OR 5 OR 6 OR 7 OR 8) AND 9</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.HealthAuthority__c</leftValueReference>
                 <operator>EqualTo</operator>
@@ -122,7 +143,7 @@
                 <leftValueReference>$Record.Topic__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
-                    <stringValue>Personal Services Establishments</stringValue>
+                    <stringValue>Personal Service Establishments</stringValue>
                 </rightValue>
             </conditions>
             <conditions>
@@ -150,7 +171,14 @@
                 <leftValueReference>$Record.Topic__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
-                    <stringValue>Tobacco and Vapour</stringValue>
+                    <stringValue>Tobacco and Vapour Control</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.ComplaintOrigin__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Web</stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -160,7 +188,7 @@
         </rules>
         <rules>
             <name>Northern_CCFL</name>
-            <conditionLogic>1 AND (2 OR 3)</conditionLogic>
+            <conditionLogic>1 AND (2 OR 3) AND 4</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.HealthAuthority__c</leftValueReference>
                 <operator>EqualTo</operator>
@@ -182,6 +210,13 @@
                     <stringValue>Residential Care</stringValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>$Record.ComplaintOrigin__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Web</stringValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>Get_Northern_CCFL_Queue</targetReference>
             </connector>
@@ -189,7 +224,7 @@
         </rules>
         <rules>
             <name>Interior_admin</name>
-            <conditionLogic>1 AND ( 2 OR 3 OR 4 OR 5 OR 6 OR 7 OR 8)</conditionLogic>
+            <conditionLogic>1 AND ( 2 OR 3 OR 4 OR 5 OR 6 OR 7 OR 8) AND 9</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.HealthAuthority__c</leftValueReference>
                 <operator>EqualTo</operator>
@@ -244,6 +279,13 @@
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Sewerage</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.ComplaintOrigin__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Web</stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -253,7 +295,7 @@
         </rules>
         <rules>
             <name>Interior_CCFL</name>
-            <conditionLogic>1 AND ( 2 OR 3 )</conditionLogic>
+            <conditionLogic>1 AND ( 2 OR 3 ) AND 4</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.HealthAuthority__c</leftValueReference>
                 <operator>EqualTo</operator>
@@ -275,6 +317,13 @@
                     <stringValue>Residential Care</stringValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>$Record.ComplaintOrigin__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Web</stringValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>Get_Interior_CCFL_Queue</targetReference>
             </connector>
@@ -282,7 +331,7 @@
         </rules>
         <rules>
             <name>Island_Admin</name>
-            <conditionLogic>1 AND ( 2 OR 3 OR 4 OR 5 OR 6 OR 7 OR 8 )</conditionLogic>
+            <conditionLogic>1 AND ( 2 OR 3 OR 4 OR 5 OR 6 OR 7 OR 8 ) AND 9</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.HealthAuthority__c</leftValueReference>
                 <operator>EqualTo</operator>
@@ -337,6 +386,13 @@
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Tobacco and Vapour Control</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.ComplaintOrigin__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Web</stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -346,7 +402,7 @@
         </rules>
         <rules>
             <name>Island_CCFL</name>
-            <conditionLogic>1 AND ( 2 OR 3 )</conditionLogic>
+            <conditionLogic>1 AND ( 2 OR 3 ) AND 4</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.HealthAuthority__c</leftValueReference>
                 <operator>EqualTo</operator>
@@ -368,6 +424,13 @@
                     <stringValue>Residential Care</stringValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>$Record.ComplaintOrigin__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Web</stringValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>Get_Island_CCFL_Queue</targetReference>
             </connector>
@@ -375,7 +438,7 @@
         </rules>
         <rules>
             <name>Vancouver_Admin</name>
-            <conditionLogic>1 AND ( 2 OR 3 OR 4 OR 5 OR 6 OR 7 OR 8 )</conditionLogic>
+            <conditionLogic>1 AND ( 2 OR 3 OR 4 OR 5 OR 6 OR 7 OR 8 ) AND 9</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.HealthAuthority__c</leftValueReference>
                 <operator>EqualTo</operator>
@@ -432,6 +495,13 @@
                     <stringValue>Tobacco and Vapour Control</stringValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>$Record.ComplaintOrigin__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Web</stringValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>Get_Vancouver_Admin_Queue</targetReference>
             </connector>
@@ -439,7 +509,7 @@
         </rules>
         <rules>
             <name>Vancouver_CCFL</name>
-            <conditionLogic>1 AND ( 2 OR 3 )</conditionLogic>
+            <conditionLogic>1 AND ( 2 OR 3 ) AND 4</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.HealthAuthority__c</leftValueReference>
                 <operator>EqualTo</operator>
@@ -459,6 +529,13 @@
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Residential Care</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.ComplaintOrigin__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Web</stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -475,19 +552,26 @@
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Valid_Record_Type</name>
-            <conditionLogic>or</conditionLogic>
+            <conditionLogic>(1 OR 2) AND 3</conditionLogic>
             <conditions>
-                <leftValueReference>$Record.PHOCSRecordtype__c</leftValueReference>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>PHOCSPublicRequestInquiry</stringValue>
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>$Record.PHOCSRecordtype__c</leftValueReference>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>PHOCSPublicComplaint</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.CreatedBy.Profile.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>phocsservices Profile</stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -496,7 +580,8 @@
             <label>Valid Record Type</label>
         </rules>
     </decisions>
-    <description>EHIS-4563</description>
+    <description>EHIS-5793 - Adding the record origin flag to Web &amp; only for phocsservices Profile users
+EHIS-4563 - Development of Flow</description>
     <environments>Default</environments>
     <interviewLabel>Case Public Complaint Queue Assignment {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Case Record Public Complaint Queue Assignment</label>
