@@ -23,8 +23,8 @@ private class PHOCSInspectionContraventionCtrTest {
             RecordTypeId = caseRtId,
             Status = 'Open',
             Origin = 'Web',
-            Type = 'Recreational Water',
-            //TypeOfAdvisory__c = 'Beach Closure',
+            Type = 'Drinking Water',
+            TypeOfAdvisory__c = 'Water quality advisory',
             ReasonForAdvisory__c = 'Chemical & physical parameters in excess'
         );
         insert complaintcase;
