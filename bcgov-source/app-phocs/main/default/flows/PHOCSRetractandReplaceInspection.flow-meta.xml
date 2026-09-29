@@ -162,7 +162,8 @@
             <label>Replace Inspection</label>
         </rules>
     </decisions>
-    <description>PHOCS Retract and Replace inspection EHIS-3356, 3414, 4356</description>
+    <description>PHOCS Retract and Replace inspection EHIS-3356, 3414, 4356
+Only child inspection with Status Completed will be retraced based on Parent Inspection EHIS-4852</description>
     <dynamicChoiceSets>
         <name>VisitPriorityChoices</name>
         <dataType>Picklist</dataType>
@@ -576,6 +577,13 @@
             <operator>EqualTo</operator>
             <value>
                 <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Status</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Completed</stringValue>
             </value>
         </filters>
         <inputAssignments>

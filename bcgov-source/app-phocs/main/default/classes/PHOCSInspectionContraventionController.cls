@@ -44,18 +44,19 @@ global without sharing class PHOCSInspectionContraventionController {
         
         List<RegulatoryCodeViolation> violations = [
             SELECT Id,
-                   PHOCSAssessmentIndicatorDefinition__c,
-                   InspectionAssmntInd.Result,
-                   InspectionAssmntInd.CorrectiveActionDescription__c,
-                   RegulatoryCode.Name,
-                   RegulatoryCode.RegulatoryAuthority.Name,
-                   InspectionAssmntInd.PHOCSInspectionComments__c,
-                   PHOCSAssessmentIndDefinitionId__c,
-                   IsChildViolation__c,
-            	   Corrected_During_Inspection__c
+            PHOCSAssessmentIndicatorDefinition__c,
+            InspectionAssmntInd.Result,
+            InspectionAssmntInd.CorrectiveActionDescription__c,
+            RegulatoryCode.Name,
+            RegulatoryCode.RegulatoryAuthority.Name,
+            InspectionAssmntInd.PHOCSInspectionComments__c,
+            PHOCSAssessmentIndDefinitionId__c,
+            IsChildViolation__c,
+            Corrected_During_Inspection__c
             FROM RegulatoryCodeViolation
             WHERE inspectionid IN :inspectionIds
             AND Corrected_During_Inspection__c = false
+            AND PHOCSParentId__c = null
             ORDER BY CreatedDate ASC
         ];
         
@@ -72,13 +73,17 @@ global without sharing class PHOCSInspectionContraventionController {
             
             // CHILD VIOLATION
             if (violation.IsChildViolation__c == true) {
-                
-                if (currentParent != null) {
+                if (
+                    currentParent != null &&
+                    String.isNotBlank(violation.PHOCSAssessmentIndicatorDefinition__c) &&
+                    !currentParent.childQuestions.contains(
+                        violation.PHOCSAssessmentIndicatorDefinition__c
+                    )
+                ) {
                     currentParent.childQuestions.add(
                         violation.PHOCSAssessmentIndicatorDefinition__c
                     );
                 }
-                
                 continue;
             }
             
@@ -92,7 +97,7 @@ global without sharing class PHOCSInspectionContraventionController {
                 violation.PHOCSAssessmentIndicatorDefinition__c;
             
             wrapper.result =
-            violation.InspectionAssmntInd.PHOCSInspectionComments__c;
+                violation.InspectionAssmntInd.PHOCSInspectionComments__c;
             
             wrapper.actionDescription =
                 violation.InspectionAssmntInd.CorrectiveActionDescription__c;

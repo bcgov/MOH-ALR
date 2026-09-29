@@ -138,7 +138,13 @@ public with sharing class ComplaintCaseTriggerHandler {
             for (Case newCase : casesToProcessMap.values()) {
                 Account account = newCase.AccountId != null ? accountMap.get(newCase.AccountId) : null;
                 Case caseToUpdate = new Case(Id = newCase.Id);
-                caseToUpdate.IsDairyCase__c = account != null && account.RecordType.DeveloperName == 'PHOCSDairyFacility';
+                if (account != null && account.RecordType.DeveloperName == 'PHOCSDairyFacility') {
+                    caseToUpdate.IsDairyCase__c = true;
+                }else if (account == null && newCase.IsDairyCase__c == true) {
+                    caseToUpdate.IsDairyCase__c = true;
+                }else {
+                    caseToUpdate.IsDairyCase__c = false;
+                }
                 casesToUpdate.add(caseToUpdate);
             }
             

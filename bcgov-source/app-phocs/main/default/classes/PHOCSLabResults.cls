@@ -4,6 +4,7 @@
 * @Description: The purpose of this class is to REST service that receives inbound PHOCS Lab Results from BCCDC. Currently supports Water Lab Results and is designed for future expansion to additional laboratory integrations.
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
                 21 Jul -  PHOCS-4529        -  Accenture   -  REST service that receives inbound PHOCS Lab Results from BCCDC.
+                20 Sep -  PHOCS-4529        -  Accenture   -  Removed Site_Descriptor__c, Site_Number__c, Site_Treatment__c population on create; added SamplingSite__r fields to requisition query.
 ***********************************************************************************************/
 @RestResource(urlMapping='/PHOCSLabResults/*')
 global with sharing class PHOCSLabResults {
@@ -209,13 +210,16 @@ global with sharing class PHOCSLabResults {
 * @date: 21 Jul 2026
 * @description: Returns an existing requisition or creates a new one.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*                    20 Sep - PHOCS-4529 - Accenture - Added SamplingSite__r fields to query.
 */
     public static LabTestRequisition__c getOrCreateLabTestRequisition(LabTestRequisitionWrapper wrapper, Map<String, Map<String, String>> mappingConfig) {
         try {
             if (Test.isRunningTest() && throwTestException){
                 throw new DmlException('Test Exception');
             }
-            List<LabTestRequisition__c> requisitions = [SELECT Id, Status__c, LabTestRequisitionNumber__c, CollectionDateTime__c FROM LabTestRequisition__c 
+            List<LabTestRequisition__c> requisitions = [SELECT Id, Status__c, LabTestRequisitionNumber__c, CollectionDateTime__c,
+                                                        SamplingSite__r.Name, SamplingSite__r.SiteNumber__c, SamplingSite__r.SiteTreatment__c
+                                                        FROM LabTestRequisition__c 
                                                         WHERE LabTestRequisitionNumber__c =: wrapper.requisitionNumber AND RecordTypeId =: LAB_REQUISITION_RTID LIMIT 1];
             
             if (!requisitions.isEmpty()) {
@@ -236,6 +240,7 @@ global with sharing class PHOCSLabResults {
 * @date: 21 Jul 2026
 * @description: Creates a new Lab Test Requisition.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*                    20 Sep - PHOCS-4529 - Accenture - Removed Site_Descriptor__c, Site_Number__c, Site_Treatment__c population; these are driven by the SamplingSite__c lookup.
 */
     public static LabTestRequisition__c createLabTestRequisition(LabTestRequisitionWrapper wrapper, Map<String, Map<String, String>> mappingConfig) {
         try {
@@ -255,10 +260,6 @@ global with sharing class PHOCSLabResults {
             requisition.CollectionDateTime__c = wrapper.reportedOn;
             requisition.RecordTypeId = LAB_REQUISITION_RTID;
             requisition.TestCategory__c = getMappedValue(mappingConfig, ATTR_TYPE_TEST_CATEGORY, wrapper.testCategory, null);
-            requisition.Site_Descriptor__c = wrapper.samplingSiteName;
-            requisition.Site_Number__c = wrapper.samplingSiteID;
-            String jsonValue = wrapper.samplingSiteTreatment == null ? null : wrapper.samplingSiteTreatment.toUpperCase();
-            requisition.Site_Treatment__c = mappingConfig.get('SamplingSiteTreatment').get(jsonValue);
             requisition.Status__c = wrapper.requisitionStatus == 'F' ? STATUS_COMPLETED : STATUS_SUBMITTED;
             
             SObjectAccessDecision decision = Security.stripInaccessible(AccessType.CREATABLE, new List<SObject>{ requisition });
@@ -687,10 +688,7 @@ global with sharing class PHOCSLabResults {
         public String requisitionNumber;
         public String facilityName;
         public String dWOEHOName;
-        public String samplingSiteName;
         public String samplingSiteAddress;
-        public String samplingSiteID;
-        public String samplingSiteTreatment;
         public String systemType;
         public String specimenSource;
         public String boilAdvisory;

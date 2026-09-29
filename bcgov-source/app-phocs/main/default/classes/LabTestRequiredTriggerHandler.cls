@@ -4,6 +4,7 @@
 * @Description: The purpose of this class is to Trigger on different trigger handler context.
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description] 
                 26 Jun -  PHOCS-295         -  Accenture   -  BCCDC - Water lab requisition
+				23-09-2026 - EHIS-5751  - PHOCS HA users were able to see radon air quality lab test records. As for this recordtype HA was not getting populated as it was not added in supported rec type list.
 ***********************************************************************************************/
 public with sharing class LabTestRequiredTriggerHandler {
     private static final String CLASS_NAME = 'LabTestRequiredTriggerHandler';
@@ -14,7 +15,8 @@ public with sharing class LabTestRequiredTriggerHandler {
         'PHOCSDyeTest',
         'PHOCSFoodLabTestRequired',
         'PHOCSLeadWaterTest',
-        'PHOCSWaterLabTestRequired'
+        'PHOCSWaterLabTestRequired',
+		'PHOCSRadonAirQualityTestRequired'
     };
 
 /**
@@ -72,7 +74,7 @@ public with sharing class LabTestRequiredTriggerHandler {
             Map<Id, Account> facilitiesById = new Map<Id, Account>();
 
             if (!facilityIds.isEmpty()) {
-                facilitiesById = new Map<Id, Account>([SELECT Id, HealthAuthority__c FROM Account WHERE Id IN :facilityIds]);
+                facilitiesById = new Map<Id, Account>([SELECT Id, HealthAuthority__c, Type FROM Account WHERE Id IN :facilityIds]);
             }
 
             for (LabTestRequired__c labTestRequired : newRecords) {
@@ -96,6 +98,7 @@ public with sharing class LabTestRequiredTriggerHandler {
 
                         if (facility != null) {
                             labTestRequired.HealthAuthority__c = facility.HealthAuthority__c;
+						labTestRequired.isDairy__c = facility.type == 'Dairy' ? true : false;
                         }
                     }
                 } else if (facilityChanged && labTestRequired.FacilityName__c != null) {
@@ -103,6 +106,8 @@ public with sharing class LabTestRequiredTriggerHandler {
 
                     if (facility != null) {
                         labTestRequired.HealthAuthority__c = facility.HealthAuthority__c;
+						labTestRequired.isDairy__c = facility.type == 'Dairy' ? true : false;
+
                     }
                 }
             }

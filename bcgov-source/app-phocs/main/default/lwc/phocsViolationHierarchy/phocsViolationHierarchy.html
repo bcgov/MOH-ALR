@@ -22,7 +22,12 @@
 						<lightning-accordion-section key={item.violationId} name={item.violationId} label="">
 							<div slot="actions" class="accordion-header"> <span class="inspection-header">
             Inspection {item.inspectionName}
-        </span> <span class="inspection-date">
+        </span>
+        <!-- Retracted flag: only rendered when the Inspection's IsRtracted__c = true -->
+        <template if:true={item.isRetracted}>
+            <span class="retracted-flag">Retracted</span>
+        </template>
+        <span class="inspection-date">
             <lightning-formatted-date-time
                 value={item.createdDate}
                 year="numeric"

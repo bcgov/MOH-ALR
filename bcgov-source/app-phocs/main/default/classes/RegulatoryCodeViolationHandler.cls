@@ -4,10 +4,12 @@
 * @Description: The purpose of this class is to create methods which can be used by different trigger events.
 * @Revision(s): [Date] - [Change Reference] - [Changed By] - [Description]   
                 28 May -  EHIS-2668         -  Accenture   -  Close subsequent child records.
+                21 Sep -  EHIS-4852         -  Accenture   -  Retract child records
 ***********************************************************************************************/
 public with sharing class RegulatoryCodeViolationHandler {
     public static String className = 'RegulatoryCodeViolationHandler';
     public static final String STATUS_RESOLVED = 'Resolved';
+    public static final String STATUS_RETRACTED = 'Retracted';
     public static Id recordTypePHOCSRegulatoryCodeViolation = Schema.SObjectType.RegulatoryCodeViolation.getRecordTypeInfosByDeveloperName().get('PHOCSRegulatoryCodeViolation').getRecordTypeId();
     
 /**
@@ -15,6 +17,7 @@ public with sharing class RegulatoryCodeViolationHandler {
 * @date: 28 May 2026
 * @description: The purpose of this method is to Close subsequent child records.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*                    21 Sep -  EHIS-4852         -  Accenture   -  Retract child records
 */ 
     public static void syncChildViolationStatus(List<RegulatoryCodeViolation> newList, Map<Id, RegulatoryCodeViolation> oldMap){
         Set<Id> parentViolationIds = new Set<Id>();
@@ -28,7 +31,7 @@ public with sharing class RegulatoryCodeViolationHandler {
                     continue;
                 }
                 
-                if(newRec.PHOCSParentId__c == null && newRec.Status == STATUS_RESOLVED){
+                if(newRec.PHOCSParentId__c == null && (newRec.Status == STATUS_RESOLVED || newRec.Status == STATUS_RETRACTED)){
                     parentViolationIds.add(newRec.Id);
                     parentStatusMap.put(newRec.Id,newRec.Status);
                     parentResolvedInMap.put(newRec.Id,newRec.ResolvedIn__c);

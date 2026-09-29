@@ -85,6 +85,42 @@ public class RegulatoryCodeViolationHandlerTest {
             Assert.areNotEqual(null, child.DateResolved, 'DateResolved should be populated when child is resolved.');
         }
     }
+
+/**
+* @author: Wen
+* @date: 21 Sep 2026
+* @description: The purpose of this method is to cover positive test coverage of syncChildViolationStatus.
+*               Children are retracted when parent violation is retracted
+* @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
+    @isTest
+    public static void testSyncChildViolationStatus_RetractChildren() {
+        Map<String, Id> dataMap = createTestData();
+        
+        RegulatoryCodeViolation parent = new RegulatoryCodeViolation(RecordTypeId = recordTypePHOCSRegulatoryCodeViolation, InspectionId = dataMap.get('inspId'),
+                                                                     InspectionAssmntIndId = dataMap.get('inspAsmIndId'), ComplianceDueDate = System.now().addDays(5),
+                                                                     DateCreated = System.now(), Status = 'Open');
+        insert parent;
+        
+        List<RegulatoryCodeViolation> childViolationsToInsert = new List<RegulatoryCodeViolation>();
+        childViolationsToInsert.add(new RegulatoryCodeViolation(RecordTypeId = recordTypePHOCSRegulatoryCodeViolation, InspectionId = dataMap.get('inspId'),
+                                                                InspectionAssmntIndId = dataMap.get('inspAsmIndId'), ComplianceDueDate = System.now().addDays(5),
+                                                                DateCreated= System.now(), Status = 'Open', PHOCSParentId__c= parent.Id));
+        childViolationsToInsert.add(new RegulatoryCodeViolation(RecordTypeId = recordTypePHOCSRegulatoryCodeViolation, InspectionId = dataMap.get('inspId'),
+                                                                InspectionAssmntIndId = dataMap.get('inspAsmIndId'), ComplianceDueDate = System.now().addDays(10), 
+                                                                DateCreated= System.now(), Status = 'Open', PHOCSParentId__c= parent.Id));
+        insert childViolationsToInsert;
+        
+        Test.startTest();
+        parent.Status = 'Retracted';
+        update parent;
+        Test.stopTest();
+        
+        List<RegulatoryCodeViolation> updatedChildren = [SELECT Id, Status FROM RegulatoryCodeViolation WHERE PHOCSParentId__c = :parent.Id];
+        for (RegulatoryCodeViolation child : updatedChildren) {
+            Assert.areEqual('Retracted', child.Status, 'Child status should be updated to Retracted when parent is Retracted.');
+        }
+    }
     
 /**
 * @author: Deepak
