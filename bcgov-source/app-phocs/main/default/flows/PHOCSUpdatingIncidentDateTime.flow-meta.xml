@@ -15,7 +15,29 @@
             </value>
         </assignmentItems>
     </assignments>
-    <description>Set System-required field IncidentDate value as ReceivedDate to avoid creation error on PHOCS specific record type on PublicComplaint object</description>
+    <decisions>
+        <name>Check_the_PHOCS_Recordtype</name>
+        <label>Check the PHOCS Recordtype</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>IsPHOCSPublicRequestInquiryRT</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>PHOCSPublicRequestInquiry</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_IncidentDate</targetReference>
+            </connector>
+            <label>IsPHOCSPublicRequestInquiryRT</label>
+        </rules>
+    </decisions>
+    <description>Set System-required field IncidentDate value as ReceivedDate to avoid creation error on PHOCS specific record type on PublicComplaint object and adding the RT check to decision element.</description>
     <environments>Default</environments>
     <interviewLabel>PHOCS Updating Incident Date/Time {!$Flow.CurrentDateTime}</interviewLabel>
     <label>PHOCS Updating Incident Date/Time</label>
@@ -42,16 +64,9 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Set_IncidentDate</targetReference>
+            <targetReference>Check_the_PHOCS_Recordtype</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
-        <filters>
-            <field>PHOCSRecordtype__c</field>
-            <operator>EqualTo</operator>
-            <value>
-                <stringValue>PHOCSPublicRequestInquiry</stringValue>
-            </value>
-        </filters>
         <filters>
             <field>IncidentDate</field>
             <operator>IsNull</operator>
