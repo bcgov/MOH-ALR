@@ -390,7 +390,7 @@ private class PHOCSPublicDisplayObjectRecordsTest {
             Origin = 'Web',
             Type = 'Recreational Water',
             TypeOfAdvisory__c = 'Beach Closure',
-            ReasonForAdvisory__c = 'Chemical & physical parameters in excess'
+            ReasonForAdvisory__c = 'Algae Bloom'
         );       
         Case c2 = new Case(
             AccountId = acc.Id,
@@ -399,7 +399,7 @@ private class PHOCSPublicDisplayObjectRecordsTest {
             Origin = 'Web',
             Type = 'Recreational Water',
             TypeOfAdvisory__c = 'Not Suitable for Swimming',
-            ReasonForAdvisory__c = 'Excessive turbidity'
+            ReasonForAdvisory__c = 'Algae Bloom'
         );       
         Case c3 = new Case(
             AccountId = acc.Id,
