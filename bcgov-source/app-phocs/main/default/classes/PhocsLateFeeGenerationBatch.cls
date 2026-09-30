@@ -16,7 +16,7 @@ public class PhocsLateFeeGenerationBatch implements Database.Batchable<SObject>,
             SELECT Id, Status__c, ParentRecordId, DueDate
             FROM RegulatoryTrxnFee
             WHERE Id IN :feeIds
-            AND Status__c IN ('Due', 'Partially Paid')
+            AND Status__c IN ('Due', 'Partially_Paid')
             AND DueDate < TODAY
             AND Id NOT IN (
                 SELECT RegulatoryTrxnFeeId
@@ -35,6 +35,7 @@ public class PhocsLateFeeGenerationBatch implements Database.Batchable<SObject>,
             lateFeeItem.RegulatoryTrxnFeeId = fee.Id;
             lateFeeItem.RecordTypeId = RTFItemRecordTypeId;
             lateFeeItem.Name = RTFI_LATE_FEE_NAME;
+            lateFeeItem.FeeType__c='Late Fees';
             lateFeeItem.Status__c = 'Due';
             lateFeeItem.FeeAmount = lateFeeAmount;
             itemsToInsert.add(lateFeeItem);
