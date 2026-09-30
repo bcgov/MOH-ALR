@@ -9,7 +9,7 @@
                         <valueListItems>
                             <value>Case.PHOCSNewInspection</value>
                             <visibilityRule>
-                                <booleanFilter>1 OR 2</booleanFilter>
+                                <booleanFilter>(1 OR 2) AND 3</booleanFilter>
                                 <criteria>
                                     <leftValue>{!$Permission.CustomPermission.PHOCSAdmin}</leftValue>
                                     <operator>EQUAL</operator>
@@ -19,6 +19,11 @@
                                     <leftValue>{!$Permission.CustomPermission.PHOCSOfficer}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>true</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Account.Type}</leftValue>
+                                    <operator>NE</operator>
+                                    <rightValue>Sewerage</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
@@ -54,6 +59,10 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>hideChatterActions</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>hideSlackAction</name>
                     <value>false</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
