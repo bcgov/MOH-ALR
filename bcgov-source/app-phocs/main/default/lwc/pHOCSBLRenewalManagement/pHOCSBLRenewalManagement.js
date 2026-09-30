@@ -15,6 +15,15 @@ import sendLateFeesServer from '@salesforce/apex/PhocsBlaRenewalManagementContro
 
 const PAGE_SIZE = 50;
 
+// Maps URL-type column fieldNames to the property that holds
+// the value to actually sort by.
+const SORT_FIELD_MAP = {
+    accountUrl: 'accountName',
+    parentAccountUrl: 'parentAccountName',
+    blaUrl: 'blaId',
+    feeUrl: 'feeId'
+};
+
 export default class PHOCSBLARenewalManagement extends LightningElement {
 
     activeTab = 'generation';
@@ -40,8 +49,14 @@ export default class PHOCSBLARenewalManagement extends LightningElement {
     generationPageData = [];
 
     generationCurrentPage = 1;
-    generationSortedBy = 'parentAccountName';
+
+    // Column-facing sort state (must match the column fieldName
+    // so the datatable arrow and asc/desc toggle work).
+    generationSortedBy = 'parentAccountUrl';
     generationSortDirection = 'asc';
+
+    // Data-facing sort field (resolved property used for sorting).
+    generationSortField = 'parentAccountName';
 
     // Contains ALL selected IDs, including records on pages
     // that aren't currently visible.
@@ -125,8 +140,9 @@ export default class PHOCSBLARenewalManagement extends LightningElement {
     sendPageData = [];
 
     sendCurrentPage = 1;
-    sendSortedBy = 'parentAccountName';
+    sendSortedBy = 'parentAccountUrl';
     sendSortDirection = 'asc';
+    sendSortField = 'parentAccountName';
 
     sendSelectedIds = new Set();
 
@@ -162,7 +178,7 @@ export default class PHOCSBLARenewalManagement extends LightningElement {
             sortable: true
         },
         {
-            label: 'BLA Id',
+            label: 'BLA ID',
             fieldName: 'blaUrl',
             type: 'url',
             sortable: true,
@@ -212,188 +228,56 @@ export default class PHOCSBLARenewalManagement extends LightningElement {
     ];
 
     // ============================================================
-// PAYMENT REMINDERS
-// ============================================================
+    // PAYMENT REMINDERS
+    // ============================================================
 
-@track paymentFilters = {
-    type: '',
-    feeName: '',
-    feeType: ''
-};
+    @track paymentFilters = {
+        type: '',
+        feeName: '',
+        feeType: ''
+    };
 
-paymentPageData = [];
-paymentCurrentPage = 1;
-paymentTotalCount = 0;
+    paymentPageData = [];
+    paymentCurrentPage = 1;
+    paymentTotalCount = 0;
 
-paymentSortedBy = 'accountName';
-paymentSortDirection = 'asc';
+    paymentSortedBy = 'parentAccountUrl';
+    paymentSortDirection = 'asc';
+    paymentSortField = 'parentAccountName';
 
-paymentSelectedIds = new Set();
+    paymentSelectedIds = new Set();
 
-/*
- * Important:
- *
- * We don't maintain every selected ID in the browser.
- *
- * All records are selected by default, so we maintain only the
- * IDs explicitly deselected by the user.
- *
- * This allows 50,000+ eligible records to remain selectable
- * without putting 50,000 IDs into browser memory.
- */
-paymentDeselectedIds = new Set();
+    /*
+     * Important:
+     *
+     * We don't maintain every selected ID in the browser.
+     *
+     * All records are selected by default, so we maintain only the
+     * IDs explicitly deselected by the user.
+     *
+     * This allows 50,000+ eligible records to remain selectable
+     * without putting 50,000 IDs into browser memory.
+     */
+    paymentDeselectedIds = new Set();
 
-feeTypeOptions = [];
+    feeTypeOptions = [];
 
-showPaymentConfirmation = false;
+    showPaymentConfirmation = false;
 
-paymentColumns = [
-    {
-        label: 'Parent Account',
-        fieldName: 'parentAccountUrl',
-        type: 'url',
-        sortable: true,
-        typeAttributes: {
-            label: {
-                fieldName: 'parentAccountName'
-            },
-            target: '_self'
-        }
-    },
-    {
-        label: 'Account Name',
-        fieldName: 'accountUrl',
-        type: 'url',
-        sortable: true,
-        typeAttributes: {
-            label: {
-                fieldName: 'accountName'
-            },
-            target: '_self'
-        }
-    },
-    {
-        label: 'Physical Address (ZIP/Postal Code)',
-        fieldName: 'postalCode',
-        type: 'text',
-        sortable: true
-    },
-    {
-        label: 'BLA ID',
-        fieldName: 'blaUrl',
-        type: 'url',
-        sortable: true,
-        typeAttributes: {
-            label: {
-                fieldName: 'blaId'
-            },
-            target: '_self'
-        }
-    },
-    {
-        label: 'Fee ID',
-        fieldName: 'feeUrl',
-        type: 'url',
-        sortable: true,
-        typeAttributes: {
-            label: {
-                fieldName: 'feeId'
-            },
-            target: '_self'
-        }
-    },
-    {
-        label: 'Fee Name',
-        fieldName: 'feeName',
-        type: 'url',
-        sortable: true,
-        typeAttributes: {
-            label: {
-                fieldName: 'feeNameLabel'
-            },
-            target: '_self'
-        }
-    },
-    {
-        label: 'Fee Amount',
-        fieldName: 'feeAmount',
-        type: 'currency',
-        sortable: true
-    },
-    {
-        label: 'Due Date',
-        fieldName: 'dueDate',
-        type: 'date',
-        sortable: true,
-        typeAttributes: {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-        }
-    },
-    {
-        label: 'Operating Months',
-        fieldName: 'operatingMonths',
-        type: 'text',
-        sortable: true
-    },
-    {
-        label: 'Multi Premise Facility?',
-        fieldName: 'multiplePremise',
-        type: 'boolean',
-        sortable: true
-    },
-    {
-        label: 'Premise Role',
-        fieldName: 'premiseRole',
-        type: 'text',
-        sortable: true
-    }
-];
-
-// ============================================================
-// LATE FEE MANAGEMENT
-// ============================================================
-
-@track lateFeeFilters = {
-    type: '',
-    feeName: '',
-    feeType: ''
-};
-//@track lateFeeSelectedCount = []; // added
-
-lateFeePageData = [];
-lateFeeCurrentPage = 1;
-lateFeeTotalCount = 0;
-
-
-lateFeeSortedBy = 'accountName';
-lateFeeSortDirection = 'asc';
-
-lateFeeDeselectedIds = new Set();
-
-lateFeeTypeOptions = [];
-lateFeeFeeTypeOptions = [];
-
-lateFeeLoaded = false;
-
-showLateFeeConfirmation = false;
-lateFeeAmount = null;
-
-lateFeeColumns = [
-    {
-        label: 'Parent Account',
-        fieldName: 'parentAccountUrl',
-        type: 'url',
-        sortable: true,
-        typeAttributes: {
-            label: {
-                fieldName: 'parentAccountName'
-            },
-            target: '_self'
-        }
-    },    
-    {
+    paymentColumns = [
+        {
+            label: 'Parent Account',
+            fieldName: 'parentAccountUrl',
+            type: 'url',
+            sortable: true,
+            typeAttributes: {
+                label: {
+                    fieldName: 'parentAccountName'
+                },
+                target: '_self'
+            }
+        },
+        {
             label: 'Account Name',
             fieldName: 'accountUrl',
             type: 'url',
@@ -404,89 +288,216 @@ lateFeeColumns = [
                 },
                 target: '_self'
             }
-    },
-    {
-        label: 'Physical Address (ZIP/Postal Code)',
-        fieldName: 'postalCode',
-        type: 'text',
-        sortable: true
-    },
-    {
-        label: 'BLA ID',
-        fieldName: 'blaUrl',
-        type: 'url',
-        sortable: true,
-        typeAttributes: {
-            label: {
-                fieldName: 'blaId'
-            },
-            target: '_self'
+        },
+        {
+            label: 'Physical Address (ZIP/Postal Code)',
+            fieldName: 'postalCode',
+            type: 'text',
+            sortable: true
+        },
+        {
+            label: 'BLA ID',
+            fieldName: 'blaUrl',
+            type: 'url',
+            sortable: true,
+            typeAttributes: {
+                label: {
+                    fieldName: 'blaId'
+                },
+                target: '_self'
+            }
+        },
+        {
+            label: 'Fee ID',
+            fieldName: 'feeUrl',
+            type: 'url',
+            sortable: true,
+            typeAttributes: {
+                label: {
+                    fieldName: 'feeId'
+                },
+                target: '_self'
+            }
+        },
+        {
+            label: 'Fee Name',
+            fieldName: 'feeName',
+            type: 'text',
+            sortable: true
+        },
+        {
+            label: 'Fee Amount',
+            fieldName: 'feeAmount',
+            type: 'currency',
+            sortable: true
+        },
+        {
+            label: 'Due Date',
+            fieldName: 'dueDate',
+            type: 'date',
+            sortable: true,
+            typeAttributes: {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            }
+        },
+        {
+            label: 'Operating Months',
+            fieldName: 'operatingMonths',
+            type: 'text',
+            sortable: true
+        },
+        {
+            label: 'Multi Premise Facility?',
+            fieldName: 'multiplePremise',
+            type: 'boolean',
+            sortable: true
+        },
+        {
+            label: 'Premise Role',
+            fieldName: 'premiseRole',
+            type: 'text',
+            sortable: true
         }
-    },
-    {
-        label: 'Fee ID',
-        fieldName: 'feeUrl',
-        type: 'url',
-        sortable: true,
-        typeAttributes: {
-            label: {
-                fieldName: 'feeId'
-            },
-            target: '_self'
-        }
-    },
-    {
-        label: 'Fee Name',
-        fieldName: 'feeName',
-        type: 'url',
-        sortable: true,
-        typeAttributes: {
-            label: {
-                fieldName: 'feeNameLabel'
-            },
-            target: '_self'
-        }
-    },
-    {
-        label: 'Fee Amount',
-        fieldName: 'feeAmount',
-        type: 'currency',
-        sortable: true
-    },
-    {
-        label: 'Due Date',
-        fieldName: 'dueDate',
-        type: 'date',
-        sortable: true,
-        typeAttributes: {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-        }
-    },
-    {
-        label: 'Operating Months',
-        fieldName: 'operatingMonths',
-        type: 'text',
-        sortable: true
-    },
-    {
-        label: 'Multi Premise Facility?',
-        fieldName: 'multiplePremise',
-        type: 'boolean',
-        sortable: true
-    },
-    {
-        label: 'Premise Role',
-        fieldName: 'premiseRole',
-        type: 'text',
-        sortable: true
-    }
-];
+    ];
 
+    // ============================================================
+    // LATE FEE MANAGEMENT
+    // ============================================================
+
+    @track lateFeeFilters = {
+        type: '',
+        feeName: '',
+        feeType: ''
+    };
+
+    lateFeePageData = [];
+    lateFeeCurrentPage = 1;
+    lateFeeTotalCount = 0;
+
+    lateFeeSortedBy = 'parentAccountUrl';
+    lateFeeSortDirection = 'asc';
+    lateFeeSortField = 'parentAccountName';
+
+    lateFeeDeselectedIds = new Set();
+
+    lateFeeTypeOptions = [];
+    lateFeeFeeTypeOptions = [];
+
+    lateFeeLoaded = false;
+
+    showLateFeeConfirmation = false;
+    lateFeeAmount = null;
+
+    lateFeeColumns = [
+        {
+            label: 'Parent Account',
+            fieldName: 'parentAccountUrl',
+            type: 'url',
+            sortable: true,
+            typeAttributes: {
+                label: {
+                    fieldName: 'parentAccountName'
+                },
+                target: '_self'
+            }
+        },
+        {
+            label: 'Account Name',
+            fieldName: 'accountUrl',
+            type: 'url',
+            sortable: true,
+            typeAttributes: {
+                label: {
+                    fieldName: 'accountName'
+                },
+                target: '_self'
+            }
+        },
+        {
+            label: 'Physical Address (ZIP/Postal Code)',
+            fieldName: 'postalCode',
+            type: 'text',
+            sortable: true
+        },
+        {
+            label: 'BLA ID',
+            fieldName: 'blaUrl',
+            type: 'url',
+            sortable: true,
+            typeAttributes: {
+                label: {
+                    fieldName: 'blaId'
+                },
+                target: '_self'
+            }
+        },
+        {
+            label: 'Fee ID',
+            fieldName: 'feeUrl',
+            type: 'url',
+            sortable: true,
+            typeAttributes: {
+                label: {
+                    fieldName: 'feeId'
+                },
+                target: '_self'
+            }
+        },
+        {
+            label: 'Fee Name',
+            fieldName: 'feeName',
+            type: 'text',
+            sortable: true
+        },
+        {
+            label: 'Fee Amount',
+            fieldName: 'feeAmount',
+            type: 'currency',
+            sortable: true
+        },
+        {
+            label: 'Due Date',
+            fieldName: 'dueDate',
+            type: 'date',
+            sortable: true,
+            typeAttributes: {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            }
+        },
+        {
+            label: 'Operating Months',
+            fieldName: 'operatingMonths',
+            type: 'text',
+            sortable: true
+        },
+        {
+            label: 'Multi Premise Facility?',
+            fieldName: 'multiplePremise',
+            type: 'boolean',
+            sortable: true
+        },
+        {
+            label: 'Premise Role',
+            fieldName: 'premiseRole',
+            type: 'text',
+            sortable: true
+        }
+    ];
 
     connectedCallback() {
         this.loadGeneration();
+    }
+
+    // ============================================================
+    // SORT HELPERS
+    // ============================================================
+
+    resolveSortField(fieldName) {
+        return SORT_FIELD_MAP[fieldName] || fieldName;
     }
 
     // ============================================================
@@ -559,7 +570,13 @@ lateFeeColumns = [
     // ============================================================
 
     handleGenerationSort(event) {
+        // Raw column fieldName — lets the datatable toggle
+        // asc/desc and show the arrow on the right column.
         this.generationSortedBy = event.detail.fieldName;
+
+        // Resolved property used for the actual sort.
+        this.generationSortField = this.resolveSortField(event.detail.fieldName);
+
         this.generationSortDirection = event.detail.sortDirection;
 
         this.sortGenerationData();
@@ -568,9 +585,8 @@ lateFeeColumns = [
     }
 
     sortGenerationData() {
-        const field = this.generationSortedBy;
+        const field = this.generationSortField;
         const direction = this.generationSortDirection === 'asc' ? 1 : -1;
-
         this.generationAllData = [...this.generationAllData].sort(
             (a, b) => {
                 let valueA = a[field];
@@ -608,38 +624,39 @@ lateFeeColumns = [
     // ============================================================
     // GENERATION SELECTION
     // ============================================================
+
     handleGenerationSelection(event) {
 
-    // Create a NEW Set from the existing selection.
-    // Do not directly mutate this.generationSelectedIds.
-    const updatedSelectedIds = new Set(
-        this.generationSelectedIds
-    );
+        // Create a NEW Set from the existing selection.
+        // Do not directly mutate this.generationSelectedIds.
+        const updatedSelectedIds = new Set(
+            this.generationSelectedIds
+        );
 
-    // IDs displayed on the current page
-    const currentPageIds = new Set(
-        this.generationPageData.map(row => row.Id)
-    );
+        // IDs displayed on the current page
+        const currentPageIds = new Set(
+            this.generationPageData.map(row => row.Id)
+        );
 
-    // IDs still selected on the current page
-    const selectedOnCurrentPage = new Set(
-        event.detail.selectedRows.map(row => row.Id)
-    );
+        // IDs still selected on the current page
+        const selectedOnCurrentPage = new Set(
+            event.detail.selectedRows.map(row => row.Id)
+        );
 
-    // Remove all current-page records from the global selection.
-    currentPageIds.forEach(id => {
-        updatedSelectedIds.delete(id);
-    });
+        // Remove all current-page records from the global selection.
+        currentPageIds.forEach(id => {
+            updatedSelectedIds.delete(id);
+        });
 
-    // Add back only records that are still selected.
-    selectedOnCurrentPage.forEach(id => {
-        updatedSelectedIds.add(id);
-    });
+        // Add back only records that are still selected.
+        selectedOnCurrentPage.forEach(id => {
+            updatedSelectedIds.add(id);
+        });
 
-    // IMPORTANT:
-    // Assign a NEW Set so LWC detects the change and rerenders.
-    this.generationSelectedIds = updatedSelectedIds;
-}
+        // IMPORTANT:
+        // Assign a NEW Set so LWC detects the change and rerenders.
+        this.generationSelectedIds = updatedSelectedIds;
+    }
 
     // ============================================================
     // GENERATION PAGINATION
@@ -674,11 +691,11 @@ lateFeeColumns = [
     async generateRenewals() {
         if (!this.generationSelectedIds.size) {
             this.showError({
-            body: {
-                message: 'Please select at least one account.'
-            }
-        });
-        return;
+                body: {
+                    message: 'Please select at least one account.'
+                }
+            });
+            return;
         }
 
         this.isLoading = true;
@@ -686,27 +703,27 @@ lateFeeColumns = [
         try {
             const response = await generateRenewalRecords({
                 accountIds: Array.from(this.generationSelectedIds)
-            });            
+            });
 
             // Reload both tabs so newly created RTF records
             // become available in Send Renewals.
             if (response?.success) {
-            this.showSuccess(response.message);
-            //this.showSuccess(' 1 Renewals Generated Successfully');
-            // Reload from Salesforce database
-            await this.loadGeneration();
+                this.showSuccess(response.message);
 
-            if (this.activeTab === 'send') {
-                await this.loadSend();
-            }
-        } else {
-            this.showError({
-                body: {
-                    message: response?.message ||
-                        'Renewal generation failed.'
+                // Reload from Salesforce database
+                await this.loadGeneration();
+
+                if (this.activeTab === 'send') {
+                    await this.loadSend();
                 }
-            });
-        }
+            } else {
+                this.showError({
+                    body: {
+                        message: response?.message ||
+                            'Renewal generation failed.'
+                    }
+                });
+            }
         } catch (error) {
             this.showError(error);
         } finally {
@@ -809,6 +826,7 @@ lateFeeColumns = [
 
     handleSendSort(event) {
         this.sendSortedBy = event.detail.fieldName;
+        this.sendSortField = this.resolveSortField(event.detail.fieldName);
         this.sendSortDirection = event.detail.sortDirection;
 
         this.sortSendData();
@@ -817,7 +835,7 @@ lateFeeColumns = [
     }
 
     sortSendData() {
-        const field = this.sendSortedBy;
+        const field = this.sendSortField;
         const direction = this.sendSortDirection === 'asc' ? 1 : -1;
 
         this.sendAllData = [...this.sendAllData].sort((a, b) => {
@@ -907,31 +925,28 @@ lateFeeColumns = [
     async sendRenewals() {
         if (!this.sendSelectedIds.size) {
             this.showError({
-            body: {
-                message: 'Please select at least one renewal.'
-            }
-        });
-        return;
+                body: {
+                    message: 'Please select at least one renewal.'
+                }
+            });
+            return;
         }
 
         this.isLoading = true;
 
         try {
-             const response = await sendSelectedRenewals({
+            const response = await sendSelectedRenewals({
                 regulatoryTransactionFeeIds:
                     Array.from(this.sendSelectedIds)
-            });           
+            });
 
             if (response?.success) {
-
                 this.showSuccess(response.message);
-                 //this.showSuccess('Renewal invoices have been generated successfully and contacts have been notified.');
+
                 // Important:
                 // Query Salesforce again after the update.
                 await this.loadSend();
-
             } else {
-
                 this.showError({
                     body: {
                         message: response?.message ||
@@ -1063,541 +1078,542 @@ lateFeeColumns = [
         );
     }
 
-    //========================================================
-    //========================================================
+    // ============================================================
+    // PAYMENT REMINDERS
+    // ============================================================
+
     async loadPaymentReminders() {
-    this.isLoading = true;
+        this.isLoading = true;
 
-    try {
-        const result = await getPaymentReminders({
-            type: this.paymentFilters.type,
-            feeName: this.paymentFilters.feeName,
-            feeType: this.paymentFilters.feeType,
-            pageNumber: this.paymentCurrentPage,
-            pageSize: PAGE_SIZE,
-            sortBy: this.paymentSortedBy,
-            sortDirection: this.paymentSortDirection
-        });
+        try {
+            const result = await getPaymentReminders({
+                type: this.paymentFilters.type,
+                feeName: this.paymentFilters.feeName,
+                feeType: this.paymentFilters.feeType,
+                pageNumber: this.paymentCurrentPage,
+                pageSize: PAGE_SIZE,
+                sortBy: this.paymentSortField,
+                sortDirection: this.paymentSortDirection
+            });
 
-        this.paymentPageData = result.records || [];
-        this.paymentTotalCount = result.totalCount || 0;
+            this.paymentPageData = result.records || [];
+            this.paymentTotalCount = result.totalCount || 0;
 
-        this.accountTypeOptions = [
-            { label: 'All', value: '' },
-            ...(result.accountTypeOptions || [])
-        ];
+            this.accountTypeOptions = [
+                { label: 'All', value: '' },
+                ...(result.accountTypeOptions || [])
+            ];
 
-        this.feeTypeOptions = [
-            { label: 'All', value: '' },
-            ...(result.feeTypeOptions || [])
-        ];
-
-    } catch (error) {
-        this.showError(error);
-    } finally {
-        this.isLoading = false;
+            this.feeTypeOptions = [
+                { label: 'All', value: '' },
+                ...(result.feeTypeOptions || [])
+            ];
+        } catch (error) {
+            this.showError(error);
+        } finally {
+            this.isLoading = false;
+        }
     }
-}
 
-handlePaymentRemindersTab() {
-    this.activeTab = 'paymentReminders';
+    handlePaymentRemindersTab() {
+        this.activeTab = 'paymentReminders';
 
-    if (!this.paymentPageData.length && !this.paymentLoaded) {
-        this.paymentLoaded = true;
+        if (!this.paymentPageData.length && !this.paymentLoaded) {
+            this.paymentLoaded = true;
+            this.paymentCurrentPage = 1;
+            this.resetPaymentSelection();
+            this.loadPaymentReminders();
+        }
+    }
+
+    handlePaymentTypeChange(event) {
+        this.paymentFilters.type = event.detail.value;
+    }
+
+    handlePaymentFeeNameChange(event) {
+        this.paymentFilters.feeName = event.target.value;
+    }
+
+    handlePaymentFeeTypeChange(event) {
+        this.paymentFilters.feeType = event.detail.value;
+    }
+
+    searchPaymentReminders() {
+        /*
+         * A new search represents a new result set.
+         * Therefore all matching records start selected.
+         */
         this.paymentCurrentPage = 1;
         this.resetPaymentSelection();
         this.loadPaymentReminders();
     }
-}
 
-handlePaymentTypeChange(event) {
-    this.paymentFilters.type = event.detail.value;
-}
+    resetPaymentReminders() {
+        this.paymentFilters = {
+            type: '',
+            feeName: '',
+            feeType: ''
+        };
 
-handlePaymentFeeNameChange(event) {
-    this.paymentFilters.feeName = event.target.value;
-}
-
-handlePaymentFeeTypeChange(event) {
-    this.paymentFilters.feeType = event.detail.value;
-}
-
-searchPaymentReminders() {
-    /*
-     * A new search represents a new result set.
-     * Therefore all matching records start selected.
-     */
-    this.paymentCurrentPage = 1;
-    this.resetPaymentSelection();
-    this.loadPaymentReminders();
-}
-
-resetPaymentReminders() {
-    this.paymentFilters = {
-        type: '',
-        feeName: '',
-        feeType: ''
-    };
-
-    this.paymentCurrentPage = 1;
-    this.resetPaymentSelection();
-    this.loadPaymentReminders();
-}
-
-handlePaymentSort(event) {
-    this.paymentSortedBy = event.detail.fieldName;
-    this.paymentSortDirection = event.detail.sortDirection;
-    this.paymentCurrentPage = 1;
-
-    /*
-     * Sorting does not change the result set, so selection remains
-     * unchanged.
-     */
-    this.loadPaymentReminders();
-}
-
-handlePaymentSelection(event) {
-
-    const updatedDeselectedIds =
-        new Set(this.paymentDeselectedIds);
-
-    const selectedOnCurrentPage = new Set(
-        event.detail.selectedRows.map(row => row.Id)
-    );
-
-    // Only update records belonging to the current page.
-    this.paymentPageData.forEach(row => {
-
-        if (selectedOnCurrentPage.has(row.Id)) {
-
-            // User selected this record.
-            updatedDeselectedIds.delete(row.Id);
-
-        } else {
-
-            // User deselected this record.
-            updatedDeselectedIds.add(row.Id);
-        }
-    });
-
-    // IMPORTANT: assign a new Set so LWC rerenders.
-    this.paymentDeselectedIds = updatedDeselectedIds;
-}
-
-resetPaymentSelection() {
-    this.paymentDeselectedIds = new Set();
-}
-
-paymentNext() {
-    if (!this.paymentNextDisabled) {
-        this.paymentCurrentPage++;
+        this.paymentCurrentPage = 1;
+        this.resetPaymentSelection();
         this.loadPaymentReminders();
     }
-}
 
-paymentPrevious() {
-    if (!this.paymentPreviousDisabled) {
-        this.paymentCurrentPage--;
+    handlePaymentSort(event) {
+        this.paymentSortedBy = event.detail.fieldName;
+        this.paymentSortField = this.resolveSortField(event.detail.fieldName);
+        this.paymentSortDirection = event.detail.sortDirection;
+        this.paymentCurrentPage = 1;
+
+        /*
+         * Sorting does not change the result set, so selection remains
+         * unchanged.
+         */
         this.loadPaymentReminders();
     }
-}
 
-resetPaymentSelection() {
-    this.paymentDeselectedIds = new Set();
-}
+    handlePaymentSelection(event) {
 
-openPaymentReminderConfirmation() {
-    if (this.paymentSelectedCount > 0) {
-        this.showPaymentConfirmation = true;
-    }
-}
+        const updatedDeselectedIds =
+            new Set(this.paymentDeselectedIds);
 
-closePaymentReminderConfirmation() {
-    this.showPaymentConfirmation = false;
-}
+        const selectedOnCurrentPage = new Set(
+            event.detail.selectedRows.map(row => row.Id)
+        );
 
-async sendPaymentReminders() {
+        // Only update records belonging to the current page.
+        this.paymentPageData.forEach(row => {
 
-    if (this.paymentSelectedCount === 0) {
-        this.showError({
-            body: {
-                message: 'Please select at least one record.'
+            if (selectedOnCurrentPage.has(row.Id)) {
+
+                // User selected this record.
+                updatedDeselectedIds.delete(row.Id);
+
+            } else {
+
+                // User deselected this record.
+                updatedDeselectedIds.add(row.Id);
             }
         });
-        return;
+
+        // IMPORTANT: assign a new Set so LWC rerenders.
+        this.paymentDeselectedIds = updatedDeselectedIds;
     }
 
-    this.isLoading = true;
+    resetPaymentSelection() {
+        this.paymentDeselectedIds = new Set();
+    }
 
-    try {
+    paymentNext() {
+        if (!this.paymentNextDisabled) {
+            this.paymentCurrentPage++;
+            this.loadPaymentReminders();
+        }
+    }
 
-        const response = await sendPaymentRemindersServer({
-            type: this.paymentFilters.type,
-            feeName: this.paymentFilters.feeName,
-            feeType: this.paymentFilters.feeType,
-            deselectedFeeIds:
-                Array.from(this.paymentDeselectedIds)
-        });
+    paymentPrevious() {
+        if (!this.paymentPreviousDisabled) {
+            this.paymentCurrentPage--;
+            this.loadPaymentReminders();
+        }
+    }
 
-        if (response?.success) {
+    openPaymentReminderConfirmation() {
+        if (this.paymentSelectedCount > 0) {
+            this.showPaymentConfirmation = true;
+        }
+    }
 
-            this.showPaymentConfirmation = false;
+    closePaymentReminderConfirmation() {
+        this.showPaymentConfirmation = false;
+    }
 
-            this.showSuccess(
-                'Emails will be sent to contact(s) on selected facilities'
-            );
+    async sendPaymentReminders() {
 
-            /*
-             * Reload after the operation so the table reflects the
-             * current Salesforce state.
-             */
-            this.resetPaymentSelection();
-            this.paymentCurrentPage = 1;
-
-            await this.loadPaymentReminders();
-
-        } else {
-
+        if (this.paymentSelectedCount === 0) {
             this.showError({
                 body: {
-                    message:
-                        response?.message ||
-                        'Unable to send payment reminders.'
+                    message: 'Please select at least one record.'
                 }
             });
+            return;
         }
 
-    } catch (error) {
-        this.showError(error);
-    } finally {
-        this.isLoading = false;
+        this.isLoading = true;
+
+        try {
+            const response = await sendPaymentRemindersServer({
+                type: this.paymentFilters.type,
+                feeName: this.paymentFilters.feeName,
+                feeType: this.paymentFilters.feeType,
+                deselectedFeeIds:
+                    Array.from(this.paymentDeselectedIds)
+            });
+
+            if (response?.success) {
+
+                this.showPaymentConfirmation = false;
+
+                this.showSuccess(
+                    'Emails will be sent to contact(s) on selected facilities'
+                );
+
+                /*
+                 * Reload after the operation so the table reflects the
+                 * current Salesforce state.
+                 */
+                this.resetPaymentSelection();
+                this.paymentCurrentPage = 1;
+
+                await this.loadPaymentReminders();
+
+            } else {
+                this.showError({
+                    body: {
+                        message:
+                            response?.message ||
+                            'Unable to send payment reminders.'
+                    }
+                });
+            }
+        } catch (error) {
+            this.showError(error);
+        } finally {
+            this.isLoading = false;
+        }
     }
-}
 
-// ============================================================
-// PAYMENT REMINDER GETTERS
-// ============================================================
+    // ============================================================
+    // PAYMENT REMINDER GETTERS
+    // ============================================================
 
-get paymentLoaded() {
-    return this._paymentLoaded === true;
-}
-
-set paymentLoaded(value) {
-    this._paymentLoaded = value;
-}
-
-get paymentHasRecords() {
-    return this.paymentTotalCount > 0;
-}
-
-get paymentTotalPages() {
-    return Math.max(
-        1,
-        Math.ceil(this.paymentTotalCount / PAGE_SIZE)
-    );
-}
-
-get paymentPreviousDisabled() {
-    return this.paymentCurrentPage <= 1;
-}
-
-get paymentNextDisabled() {
-    return (
-        this.paymentCurrentPage >=
-        this.paymentTotalPages
-    );
-}
-
-// ============================================================
-// PAYMENT REMINDER GETTERS
-// ============================================================
-
-get paymentSelectedCount() {
-    return Math.max(
-        0,
-        this.paymentTotalCount -
-        this.paymentDeselectedIds.size
-    );
-}
-
-get showPaymentReminderButton() {
-    return this.paymentSelectedCount > 0;
-}
-
-get paymentSelectedRows() {
-    return this.paymentPageData
-        .filter(row =>
-            !this.paymentDeselectedIds.has(row.Id)
-        )
-        .map(row => row.Id);
-}
-// Late fee management
-async loadLateFeeManagement() {
-    this.isLoading = true;    
-    try {
-        const result = await getLateFeeManagementRecords({
-            type: this.lateFeeFilters.type,
-            feeName: this.lateFeeFilters.feeName,
-            feeType: this.lateFeeFilters.feeType,
-            pageNumber: this.lateFeeCurrentPage,
-            pageSize: PAGE_SIZE,
-            sortBy: this.lateFeeSortedBy,
-            sortDirection: this.lateFeeSortDirection
-        });
-
-        this.lateFeePageData = result.records || [];
-        this.lateFeeTotalCount = result.totalCount || 0;
-
-        this.lateFeeTypeOptions = [
-            { label: 'All', value: '' },
-            ...(result.typeOptions || [])
-        ];
-
-        this.lateFeeFeeTypeOptions = [
-            { label: 'All', value: '' },
-            ...(result.feeTypeOptions || [])
-        ];
-
-    } catch (error) {
-        //alert(JSON.stringify(error));
-        this.showError(error);
-    } finally {
-        this.isLoading = false;
+    get paymentLoaded() {
+        return this._paymentLoaded === true;
     }
-}
-handleLateFeeManagementTab() {
-    this.activeTab = 'lateFees';
 
-    if (!this.lateFeeLoaded) {
-        this.lateFeeLoaded = true;
+    set paymentLoaded(value) {
+        this._paymentLoaded = value;
+    }
+
+    get paymentHasRecords() {
+        return this.paymentTotalCount > 0;
+    }
+
+    get paymentTotalPages() {
+        return Math.max(
+            1,
+            Math.ceil(this.paymentTotalCount / PAGE_SIZE)
+        );
+    }
+
+    get paymentPreviousDisabled() {
+        return this.paymentCurrentPage <= 1;
+    }
+
+    get paymentNextDisabled() {
+        return (
+            this.paymentCurrentPage >=
+            this.paymentTotalPages
+        );
+    }
+
+    get paymentSelectedCount() {
+        return Math.max(
+            0,
+            this.paymentTotalCount -
+            this.paymentDeselectedIds.size
+        );
+    }
+
+    get showPaymentReminderButton() {
+        return this.paymentSelectedCount > 0;
+    }
+
+    get paymentSelectedRows() {
+        return this.paymentPageData
+            .filter(row =>
+                !this.paymentDeselectedIds.has(row.Id)
+            )
+            .map(row => row.Id);
+    }
+
+    // ============================================================
+    // LATE FEE MANAGEMENT
+    // ============================================================
+
+    async loadLateFeeManagement() {
+        this.isLoading = true;
+        try {
+            const result = await getLateFeeManagementRecords({
+                type: this.lateFeeFilters.type,
+                feeName: this.lateFeeFilters.feeName,
+                feeType: this.lateFeeFilters.feeType,
+                pageNumber: this.lateFeeCurrentPage,
+                pageSize: PAGE_SIZE,
+                sortBy: this.lateFeeSortField,
+                sortDirection: this.lateFeeSortDirection
+            });
+
+            this.lateFeePageData = result.records || [];
+            this.lateFeeTotalCount = result.totalCount || 0;
+
+            this.lateFeeTypeOptions = [
+                { label: 'All', value: '' },
+                ...(result.typeOptions || [])
+            ];
+
+            this.lateFeeFeeTypeOptions = [
+                { label: 'All', value: '' },
+                ...(result.feeTypeOptions || [])
+            ];
+        } catch (error) {
+            this.showError(error);
+        } finally {
+            this.isLoading = false;
+        }
+    }
+
+    handleLateFeeManagementTab() {
+        this.activeTab = 'lateFees';
+
+        if (!this.lateFeeLoaded) {
+            this.lateFeeLoaded = true;
+            this.lateFeeCurrentPage = 1;
+            this.resetLateFeeSelection();
+
+            this.loadLateFeeManagement();
+        }
+    }
+
+    handleLateFeeTypeChange(event) {
+        this.lateFeeFilters.type = event.detail.value;
+    }
+
+    handleLateFeeFeeNameChange(event) {
+        this.lateFeeFilters.feeName = event.target.value;
+    }
+
+    handleLateFeeFeeTypeChange(event) {
+        this.lateFeeFilters.feeType = event.detail.value;
+    }
+
+    searchLateFees() {
+        this.lateFeeCurrentPage = 1;
+
+        // A search creates a new result set.
+        this.resetLateFeeSelection();
+
+        this.loadLateFeeManagement();
+    }
+
+    resetLateFees() {
+        this.lateFeeFilters = {
+            type: '',
+            feeName: '',
+            feeType: ''
+        };
+
         this.lateFeeCurrentPage = 1;
         this.resetLateFeeSelection();
 
         this.loadLateFeeManagement();
     }
-}
-handleLateFeeTypeChange(event) {
-    this.lateFeeFilters.type = event.detail.value;
-}
 
-handleLateFeeFeeNameChange(event) {
-    this.lateFeeFilters.feeName = event.target.value;
-}
+    handleLateFeeSort(event) {
+        this.lateFeeSortedBy = event.detail.fieldName;
+        this.lateFeeSortField = this.resolveSortField(event.detail.fieldName);
+        this.lateFeeSortDirection = event.detail.sortDirection;
 
-handleLateFeeFeeTypeChange(event) {
-    this.lateFeeFilters.feeType = event.detail.value;
-}
+        this.lateFeeCurrentPage = 1;
 
-searchLateFees() {
-    this.lateFeeCurrentPage = 1;
+        // Sorting doesn't change which records are eligible.
+        // Therefore selection remains unchanged.
+        this.loadLateFeeManagement();
+    }
 
-    // A search creates a new result set.
-    this.resetLateFeeSelection();
+    handleLateFeeSelection(event) {
+        const updatedDeselectedIds =
+            new Set(this.lateFeeDeselectedIds);
 
-    this.loadLateFeeManagement();
-}
+        const selectedOnCurrentPage = new Set(
+            event.detail.selectedRows.map(row => row.Id)
+        );
 
-resetLateFees() {
-    this.lateFeeFilters = {
-        type: '',
-        feeName: '',
-        feeType: ''
-    };
+        this.lateFeePageData.forEach(row => {
+            if (selectedOnCurrentPage.has(row.Id)) {
+                updatedDeselectedIds.delete(row.Id);
+            } else {
+                updatedDeselectedIds.add(row.Id);
+            }
+        });
 
-    this.lateFeeCurrentPage = 1;
-    this.resetLateFeeSelection();
+        // Always assign a new Set.
+        this.lateFeeDeselectedIds = updatedDeselectedIds;
+    }
 
-    this.loadLateFeeManagement();
-}
-handleLateFeeSort(event) {
-    this.lateFeeSortedBy = event.detail.fieldName;
-    this.lateFeeSortDirection = event.detail.sortDirection;
-
-    this.lateFeeCurrentPage = 1;
-
-    // Sorting doesn't change which records are eligible.
-    // Therefore selection remains unchanged.
-    this.loadLateFeeManagement();
-}
-handleLateFeeSelection(event) {
-    //const selectedRows = event.detail.selectedRows; // added
-    const updatedDeselectedIds =
-        new Set(this.lateFeeDeselectedIds);
-
-    const selectedOnCurrentPage = new Set(
-        event.detail.selectedRows.map(row => row.Id)
-    );
-
-    this.lateFeePageData.forEach(row => {
-        if (selectedOnCurrentPage.has(row.Id)) {
-            updatedDeselectedIds.delete(row.Id);
-        } else {
-            updatedDeselectedIds.add(row.Id);
+    lateFeeNext() {
+        if (!this.lateFeeNextDisabled) {
+            this.lateFeeCurrentPage++;
+            this.loadLateFeeManagement();
         }
-    });
-
-    // Always assign a new Set.
-    this.lateFeeDeselectedIds = updatedDeselectedIds;
-}
-lateFeeNext() {
-    if (!this.lateFeeNextDisabled) {
-        this.lateFeeCurrentPage++;
-        this.loadLateFeeManagement();
-    }
-}
-
-lateFeePrevious() {
-    if (!this.lateFeePreviousDisabled) {
-        this.lateFeeCurrentPage--;
-        this.loadLateFeeManagement();
-    }
-}
-
-resetLateFeeSelection() {
-    this.lateFeeDeselectedIds = new Set();
-}
-get lateFeeHasRecords() {
-    return this.lateFeeTotalCount > 0;
-}
-
-get lateFeeTotalPages() {
-    return Math.max(
-        1,
-        Math.ceil(this.lateFeeTotalCount / PAGE_SIZE)
-    );
-}
-
-get lateFeePreviousDisabled() {
-    return this.lateFeeCurrentPage <= 1;
-}
-
-get lateFeeNextDisabled() {
-    return (
-        this.lateFeeCurrentPage >=
-        this.lateFeeTotalPages
-    );
-}
-
-get lateFeeSelectedCount() {
-    
-    return Math.max(
-        0,
-        this.lateFeeTotalCount -
-        this.lateFeeDeselectedIds.size
-    );
-}
-
-get showSendLateFeeButton() {
-    return this.lateFeeSelectedCount > 0;
-}
-
-get lateFeeSelectedRows() {
-    return this.lateFeePageData
-        .filter(
-            row => !this.lateFeeDeselectedIds.has(row.Id)
-        )
-        .map(row => row.Id);
-}
-handleLateFeeAmountChange(event) {
-    const value = event.target.value;
-
-    this.lateFeeAmount =
-        value === '' ? null : Number(value);
-}
-isLateFeeAmountValid() {
-    return (
-        this.lateFeeAmount !== null &&
-        Number.isFinite(this.lateFeeAmount) &&
-        this.lateFeeAmount > 0
-    );
-}
-isLateFeeModalOpen = false;
-// Logic triggered when clicking 'Send Late Fees'
-handleSendLateFees() {
-    // Open the popup modal
-    this.openLateFeeConfirmation();
-}
-openLateFeeConfirmation() {
-    if (this.lateFeeSelectedCount === 0) {
-        this.showError({
-            body: {
-                message: 'Please select at least one record.'
-            }
-        });
-        return;
     }
 
-    this.lateFeeAmount = null;
-    this.showLateFeeConfirmation = true;
-}
-closeLateFeeConfirmation() {
-    this.showLateFeeConfirmation = false;
-    this.lateFeeAmount = null;
-}
-async sendLateFees() {
-
-    if (this.lateFeeSelectedCount === 0) {
-        this.showError({
-            body: {
-                message: 'Please select at least one record.'
-            }
-        });
-        return;
+    lateFeePrevious() {
+        if (!this.lateFeePreviousDisabled) {
+            this.lateFeeCurrentPage--;
+            this.loadLateFeeManagement();
+        }
     }
 
-    if (!this.isLateFeeAmountValid()) {
-        this.showError({
-            body: {
-                message:
-                    'Late Fee Amount must be greater than 0.00$'
-            }
-        });
-        return;
+    resetLateFeeSelection() {
+        this.lateFeeDeselectedIds = new Set();
     }
 
-    this.isLoading = true;
+    get lateFeeHasRecords() {
+        return this.lateFeeTotalCount > 0;
+    }
 
-    try {
-        const response = await sendLateFeesServer({
-            type: this.lateFeeFilters.type,
-            feeName: this.lateFeeFilters.feeName,
-            feeType: this.lateFeeFilters.feeType,
-            deselectedFeeIds:
-                Array.from(this.lateFeeDeselectedIds),
-            lateFeeAmount: this.lateFeeAmount
-        });
+    get lateFeeTotalPages() {
+        return Math.max(
+            1,
+            Math.ceil(this.lateFeeTotalCount / PAGE_SIZE)
+        );
+    }
 
-        if (response?.success) {
+    get lateFeePreviousDisabled() {
+        return this.lateFeeCurrentPage <= 1;
+    }
 
-            this.showLateFeeConfirmation = false;
+    get lateFeeNextDisabled() {
+        return (
+            this.lateFeeCurrentPage >=
+            this.lateFeeTotalPages
+        );
+    }
 
-            this.showSuccess(
-                'Late fees have been generated and emails will be sent to contact(s) on the selected facilities'
-            );
+    get lateFeeSelectedCount() {
+        return Math.max(
+            0,
+            this.lateFeeTotalCount -
+            this.lateFeeDeselectedIds.size
+        );
+    }
 
-            this.lateFeeAmount = null;
-            this.resetLateFeeSelection();
-            this.lateFeeCurrentPage = 1;
+    get showSendLateFeeButton() {
+        return this.lateFeeSelectedCount > 0;
+    }
 
-            await this.loadLateFeeManagement();
+    get lateFeeSelectedRows() {
+        return this.lateFeePageData
+            .filter(
+                row => !this.lateFeeDeselectedIds.has(row.Id)
+            )
+            .map(row => row.Id);
+    }
 
-        } else {
+    handleLateFeeAmountChange(event) {
+        const value = event.target.value;
+
+        this.lateFeeAmount =
+            value === '' ? null : Number(value);
+    }
+
+    isLateFeeAmountValid() {
+        return (
+            this.lateFeeAmount !== null &&
+            Number.isFinite(this.lateFeeAmount) &&
+            this.lateFeeAmount > 0
+        );
+    }
+
+    isLateFeeModalOpen = false;
+
+    // Logic triggered when clicking 'Send Late Fees'
+    handleSendLateFees() {
+        // Open the popup modal
+        this.openLateFeeConfirmation();
+    }
+
+    openLateFeeConfirmation() {
+        if (this.lateFeeSelectedCount === 0) {
+            this.showError({
+                body: {
+                    message: 'Please select at least one record.'
+                }
+            });
+            return;
+        }
+
+        this.lateFeeAmount = null;
+        this.showLateFeeConfirmation = true;
+    }
+
+    closeLateFeeConfirmation() {
+        this.showLateFeeConfirmation = false;
+        this.lateFeeAmount = null;
+    }
+
+    async sendLateFees() {
+
+        if (this.lateFeeSelectedCount === 0) {
+            this.showError({
+                body: {
+                    message: 'Please select at least one record.'
+                }
+            });
+            return;
+        }
+
+        if (!this.isLateFeeAmountValid()) {
             this.showError({
                 body: {
                     message:
-                        response?.message ||
-                        'Unable to generate late fees.'
+                        'Late Fee Amount must be greater than 0.00$'
                 }
             });
+            return;
         }
 
-    } catch (error) {
-        this.showError(error);
-    } finally {
-        this.isLoading = false;
+        this.isLoading = true;
+
+        try {
+            const response = await sendLateFeesServer({
+                type: this.lateFeeFilters.type,
+                feeName: this.lateFeeFilters.feeName,
+                feeType: this.lateFeeFilters.feeType,
+                deselectedFeeIds:
+                    Array.from(this.lateFeeDeselectedIds),
+                lateFeeAmount: this.lateFeeAmount
+            });
+
+            if (response?.success) {
+
+                this.showLateFeeConfirmation = false;
+
+                this.showSuccess(
+                    'Late fees have been generated and emails will be sent to contact(s) on the selected facilities'
+                );
+
+                this.lateFeeAmount = null;
+                this.resetLateFeeSelection();
+                this.lateFeeCurrentPage = 1;
+
+                await this.loadLateFeeManagement();
+
+            } else {
+                this.showError({
+                    body: {
+                        message:
+                            response?.message ||
+                            'Unable to generate late fees.'
+                    }
+                });
+            }
+        } catch (error) {
+            this.showError(error);
+        } finally {
+            this.isLoading = false;
+        }
     }
-}
-
-
-
 }

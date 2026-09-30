@@ -118,7 +118,7 @@
                                 <p>This table displays draft Operating Permit renewal fees ready for review. Review and
                                     adjust fee amounts as needed by clicking into the fee record. Use the filters to
                                     refine the list, select the applicable facilities, and click “Send Renewals” to send
-                                    invoices to facility contacts
+                                    invoices to facility contacts.
                                 </p>
                             </div>
                             <div class="slds-grid slds-wrap slds-gutters">
@@ -228,10 +228,8 @@
 
                             <div class="slds-m-bottom_medium">
                                 <p>
-                                    This table displays fees that are due or partially paid.
-                                    Use the filters to refine the list, select the applicable
-                                    facilities, and click “Send Payment Reminders” to notify
-                                    facility contacts.
+                                    This table displays any invoices that have been sent but have not yet been paid. Use the filters to refine the list, 
+                                    select the applicable facilities, and click “Send Payment Reminders” to send email reminders to facility contact(s).
                                 </p>
                             </div>
 
@@ -429,13 +427,16 @@
                         </div>
                          <div class="slds-grid slds-wrap slds-gutters">
                             <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">                                
-                                <lightning-combobox
+                                <!--lightning-combobox
                                     name="lateFeeType"
                                     label="Type"
                                     value={lateFeeFilters.type}
                                     options={lateFeeTypeOptions}
                                     onchange={handleLateFeeTypeChange}>
-                                </lightning-combobox>
+                                </lightning-combobox-->
+                                <lightning-combobox name="accountType" label="Type" value={lateFeeFilters.type}
+                                        options={accountTypeOptions} onchange={handleLateFeeTypeChange}>
+                                    </lightning-combobox>
                             </div>
 
                             <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
@@ -574,7 +575,7 @@
                                     <lightning-input
                                         type="number"
                                         name="lateFeeAmount"
-                                        label="Late Fee Amount"
+                                        label="Late Fee Amount(to be added to each invoice)"
                                         value={lateFeeAmount}
                                         min="0.01"
                                         step="0.01"
