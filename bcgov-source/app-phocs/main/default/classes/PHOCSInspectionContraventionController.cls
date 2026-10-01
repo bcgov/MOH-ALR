@@ -40,8 +40,6 @@ global without sharing class PHOCSInspectionContraventionController {
         }
         
         // Get Regulatory Code Violations
-        
-        
         List<RegulatoryCodeViolation> violations = [
             SELECT Id,
             PHOCSAssessmentIndicatorDefinition__c,
@@ -52,7 +50,9 @@ global without sharing class PHOCSInspectionContraventionController {
             InspectionAssmntInd.PHOCSInspectionComments__c,
             PHOCSAssessmentIndDefinitionId__c,
             IsChildViolation__c,
-            Corrected_During_Inspection__c
+            Corrected_During_Inspection__c,
+            InspectionAssmntInd.AssessmentIndDefinitionId,
+            InspectionAssmntInd.AssessmentIndDefinition.PHOCSParentId__c
             FROM RegulatoryCodeViolation
             WHERE inspectionid IN :inspectionIds
             AND Corrected_During_Inspection__c = false
@@ -60,34 +60,20 @@ global without sharing class PHOCSInspectionContraventionController {
             ORDER BY CreatedDate ASC
         ];
         
-        
-        
         if (violations.isEmpty()) {
             return results;
         }
         
-        // Keep track of the current parent violation
-        ViolationWrapper currentParent = null;
         
+        // Map Parent Assessment Indicator Definition Id to wrapper
+        Map<Id, ViolationWrapper> parentWrappersByDefinitionId = new Map<Id, ViolationWrapper>();
+        
+        // Create all PARENT wrappers
         for (RegulatoryCodeViolation violation : violations) {
-            
-            // CHILD VIOLATION
             if (violation.IsChildViolation__c == true) {
-                if (
-                    currentParent != null &&
-                    String.isNotBlank(violation.PHOCSAssessmentIndicatorDefinition__c) &&
-                    !currentParent.childQuestions.contains(
-                        violation.PHOCSAssessmentIndicatorDefinition__c
-                    )
-                ) {
-                    currentParent.childQuestions.add(
-                        violation.PHOCSAssessmentIndicatorDefinition__c
-                    );
-                }
                 continue;
             }
             
-            // PARENT VIOLATION
             ViolationWrapper wrapper = new ViolationWrapper();
             
             wrapper.violationId =
@@ -111,12 +97,52 @@ global without sharing class PHOCSInspectionContraventionController {
             // Add parent to results
             results.add(wrapper);
             
-            // Make this the current parent
-            currentParent = wrapper;
+            // Store parent using its Assessment Indicator Definition Id
+            if (
+                violation.InspectionAssmntInd.AssessmentIndDefinitionId != null
+            ) {
+                parentWrappersByDefinitionId.put(
+                    violation.InspectionAssmntInd.AssessmentIndDefinitionId,
+                    wrapper
+                );
+            }
         }
+        
+        // Add CHILD questions to parent
+        
+        for (RegulatoryCodeViolation violation : violations) {
+            if (violation.IsChildViolation__c != true) {
+                continue;
+            }
+            
+            String childQuestion =
+                violation.PHOCSAssessmentIndicatorDefinition__c;
+            
+            Id parentDefinitionId =
+                violation.InspectionAssmntInd
+                .AssessmentIndDefinition
+                .PHOCSParentId__c;
+            
+            if (
+                parentDefinitionId != null &&
+                String.isNotBlank(childQuestion) &&
+                parentWrappersByDefinitionId.containsKey(parentDefinitionId)
+            ) {
+                
+                ViolationWrapper parentWrapper =
+                    parentWrappersByDefinitionId.get(parentDefinitionId);
+                
+                // restrict duplicate child
+                if (!parentWrapper.childQuestions.contains(childQuestion)) {
+                    parentWrapper.childQuestions.add(childQuestion);
+                }
+            }
+        }
+        
         
         return results;
     }
+    
     
     
     public class ViolationWrapper {
