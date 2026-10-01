@@ -631,7 +631,7 @@ private static ViolationEnforcementActionDetails getViolationEnforcementActionDe
                 Type = 'Closure Order'
                 AND Facility_Type__c IN (
                     'Food',
-                    'Personal Services Establishment',
+                    'Personal Services',
                     'Recreational Water'
                 )
             )
