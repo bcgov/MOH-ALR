@@ -531,8 +531,28 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
+                <fieldItem>Record.WaterLicenseApplicationNumber__c</fieldItem>
+                <identifier>RecordWaterLicenseApplicationNumber_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.PODNumber__c</fieldItem>
                 <identifier>RecordPODNumber_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.PurposeUseCode__c</fieldItem>
+                <identifier>RecordPurposeUseCode_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -551,8 +571,32 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
+                <fieldItem>Record.AquiferNumber__c</fieldItem>
+                <identifier>RecordAquiferNumber_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-4e7e5ced-71c6-4025-a9d9-d3cb2f7423ae</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.SourceAssessmentCompleted__c</fieldItem>
                 <identifier>RecordSource_Assessment_Completed_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.SourceAcceptedAdditionalConditions__c</fieldItem>
+                <identifier>RecordSource_Accepted_Additional_Conditions_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -573,50 +617,6 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.GARPScreeningOutcome__c</fieldItem>
                 <identifier>RecordGARP_Screening_Outcome_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-4e7e5ced-71c6-4025-a9d9-d3cb2f7423ae</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.WaterLicenseApplicationNumber__c</fieldItem>
-                <identifier>RecordWaterLicenseApplicationNumber_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.PurposeUseCode__c</fieldItem>
-                <identifier>RecordPurposeUseCode_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.AquiferNumber__c</fieldItem>
-                <identifier>RecordAquiferNumber_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.SourceAcceptedAdditionalConditions__c</fieldItem>
-                <identifier>RecordSource_Accepted_Additional_Conditions_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -820,32 +820,21 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>label</name>
-                    <value>Groundwater Source Intake Information</value>
+                    <value>Source Intake Information</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection7</identifier>
                 <visibilityRule>
+                    <booleanFilter>1 OR 2</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.CategoryL1__c}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>Groundwater</rightValue>
                     </criteria>
-                </visibilityRule>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>flexcardName</name>
-                    <value>PHOCSWaterRightsSystem</value>
-                </componentInstanceProperties>
-                <componentName>runtime_omnistudio:flexcard</componentName>
-                <identifier>runtime_omnistudio_flexcard</identifier>
-                <visibilityRule>
                     <criteria>
                         <leftValue>{!Record.CategoryL1__c}</leftValue>
                         <operator>EQUAL</operator>
-                        <rightValue>Groundwater</rightValue>
+                        <rightValue>Surface Water</rightValue>
                     </criteria>
                 </visibilityRule>
             </componentInstance>
