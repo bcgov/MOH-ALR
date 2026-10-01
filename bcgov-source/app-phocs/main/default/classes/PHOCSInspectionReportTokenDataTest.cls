@@ -345,14 +345,18 @@ public class PHOCSInspectionReportTokenDataTest {
         System.assertEquals('Maise Davis', tokens.get('primaryOwner'));
 
         System.assertEquals(null, tokens.get('operatorMobile'));
+        System.assertEquals(true, tokens.get('IF_showOperatorEmail'));
         System.assertEquals(true, tokens.get('IF_showOperatorPhone'));
         System.assertEquals(false, tokens.get('IF_showOperatorMobile'));
 
+        System.assertEquals(null, tokens.get('primaryOwnerEmail'));
+        System.assertEquals(false, tokens.get('IF_showPrimaryOwnerEmail'));
         System.assertEquals('250-555-0101', tokens.get('primaryOwnerPhone'));
         System.assertEquals('250-555-0199', tokens.get('primaryOwnerMobile'));
         System.assertEquals(true, tokens.get('IF_showPrimaryOwnerPhone'));
         System.assertEquals(true, tokens.get('IF_showPrimaryOwnerMobile'));
 
+        System.assertEquals(false, tokens.get('IF_showManagerEmail'));
         System.assertEquals(false, tokens.get('IF_showManagerPhone'));
         System.assertEquals(false, tokens.get('IF_showManagerMobile'));
     }
