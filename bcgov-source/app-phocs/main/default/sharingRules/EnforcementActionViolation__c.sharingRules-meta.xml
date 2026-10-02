@@ -1,20 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
     <sharingCriteriaRules>
-        <fullName>EAVtoallHA_s</fullName>
-        <accessLevel>Read</accessLevel>
-        <label>EAV to all HA&apos;s</label>
-        <sharedTo>
-            <group>PHOCSAllHAReportingUsersPG</group>
-        </sharedTo>
-        <criteriaItems>
-            <field>RecordTypeId</field>
-            <operation>equals</operation>
-            <value>PHOCS Enforcement Action Violation</value>
-        </criteriaItems>
-        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
-    </sharingCriteriaRules>
-    <sharingCriteriaRules>
         <fullName>PHOCSEAVFraserBASharingRule</fullName>
         <accessLevel>Edit</accessLevel>
         <label>PHOCSEAVFraserBASharingRule</label>
@@ -68,6 +54,82 @@
             <field>HealthAuthority__c</field>
             <operation>equals</operation>
             <value>Island Health - Island</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSEAVSSharingRuleReportingFHA</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS EAVS Sharing Rule Reporting FHA</label>
+        <sharedTo>
+            <group>EHISFHAReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Enforcement Action Violation</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Fraser Health - FH</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSEAVSSharingRuleReportingIH</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS EAVS Sharing Rule Reporting IH</label>
+        <sharedTo>
+            <group>EHISIHAReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Interior Health - IH</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Enforcement Action Violation</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSEAVSSharingRuleReportingNH</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS EAVS Sharing Rule Reporting NH</label>
+        <sharedTo>
+            <group>EHISNHAReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Enforcement Action Violation</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Northern Health - NH</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSEAVSSharingRuleReportingVIHA</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS EAVS Sharing Rule Reporting VIHA</label>
+        <sharedTo>
+            <group>EHISVCISReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Island Health - Island</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Enforcement Action Violation</value>
         </criteriaItems>
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
@@ -147,5 +209,24 @@
             <value>Island Health - Island,Interior Health - IH,Fraser Health - FH,Northern Health - NH,Vancouver Coastal Health - VCH</value>
         </criteriaItems>
         <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCS_EAVS_Sharing_Rule_Reporting_VCH</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS EAVS Sharing Rule Reporting VCH</label>
+        <sharedTo>
+            <group>EHISVCHReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Vancouver Coastal Health - VCH</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Enforcement Action Violation</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
 </SharingRules>

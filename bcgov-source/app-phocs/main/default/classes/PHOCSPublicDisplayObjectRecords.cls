@@ -631,7 +631,7 @@ private static ViolationEnforcementActionDetails getViolationEnforcementActionDe
                 Type = 'Closure Order'
                 AND Facility_Type__c IN (
                     'Food',
-                    'Personal Services Establishment',
+                    'Personal Services',
                     'Recreational Water'
                 )
             )
@@ -1152,7 +1152,7 @@ System.debug('VEA found: ' + vea.Id);
                                 'HasWaterAdvisories' => advisoryDetails.hasWaterAdvisories,
                                 'WaterAdvisoryReasonSummary' => advisoryDetails.waterAdvisoryReasonSummary,
                                 'HasViolationEnforcementActions' => violationEnforcementActionDetails.hasViolationEnforcementActions,// Added for EHIS-563 
-                                'ViolationEnforcementActionBannerHtml' => violationEnforcementActionDetails.violationEnforcementActionBannerHtml // Added for EHIS-563
+                'ViolationEnforcementActionBannerHtml' => violationEnforcementActionDetails.violationEnforcementActionBannerHtml // Added for EHIS-563
                                 };
                                     
                                     return result;
@@ -1183,10 +1183,10 @@ System.debug('VEA found: ' + vea.Id);
                     'ResultValue' => lab.ResultValue__c,
                     'TestId' => lab.Test__c,
                     'TestName' => lab.Test__r ?.Name,           
-                    'SamplingSiteName'   => lab.LabTestRequisition__r?.SamplingSite__r?.Name,               
-                    'SampleTestType'     => lab.Test__r?.SampleTestType__c,
-                    'ParameterType'      => lab.Test__r?.ParameterType__c,  
-                    'CollectionDateTime' => lab.LabTestRequisition__r?.CollectionDateTime__c,
+                    'SamplingSiteName'   => lab.LabTestRequisition__r?.SamplingSite__r?.Name,
+                    'SampleTestType'     => lab.SampleTestType__c,
+                    'ParameterType'      => lab.Test__r?.ParameterType__c,
+                    'CollectionDateTime' => lab.LabTestRequisition__r?.CollectionDateTime__c?.formatGmt('yyyy-MM-dd hh:mma'),
                     'DrinkingWaterComponentName' => lab.LabTestRequisition__r.Drinking_Water_Component_Name__r.Name,
                     'SiteTreatment' => lab.LabTestRequisition__r.SamplingSite__r.SiteTreatment__c,
                     'SiteDescriptor' => lab.LabTestRequisition__r.SamplingSite__r.Name

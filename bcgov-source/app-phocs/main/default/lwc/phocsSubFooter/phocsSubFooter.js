@@ -16,7 +16,7 @@ import InterierLogo from '@salesforce/resourceUrl/SubFooter_InterierHealth';
 import northernLogo from '@salesforce/resourceUrl/SubFooter_NorthernHealth';
 import vchWebLink from '@salesforce/label/c.SubFooter_WebLink_VCH';
 import fraserWebLink from '@salesforce/label/c.SubFooter_WebLink_Fraser';
-import interierLink from '@salesforce/label/c.SubFooter_WebLink_Interier';
+import interierWebLink from '@salesforce/label/c.SubFooter_WebLink_Interier';
 import islandWebLink from '@salesforce/label/c.SubFooter_WebLink_Island';
 import northernWebLink from '@salesforce/label/c.SubFooter_WebLink_Northern';
 import fraserContactLink from '@salesforce/label/c.SubFooter_ContactLink_Fraser';
@@ -35,7 +35,7 @@ const FIELDS = [
 ];
 
 export default class AccountHealthAuthorityCard extends LightningElement {
-    @api recordId;
+    @api recordId = '001Aq0000112dfJIAQ';
     @api isHAExists;
     account;
     logoUrl;

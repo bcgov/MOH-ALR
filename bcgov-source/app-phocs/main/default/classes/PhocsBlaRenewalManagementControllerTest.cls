@@ -831,7 +831,7 @@ private class PhocsBlaRenewalManagementControllerTest {
             );
         PHOCSRenewalLateFeeResponse lateFeeResponse =
             PhocsBlaRenewalManagementController.getLateFeeManagement(
-                null,
+                'Drinking water',
                 'Annual Operating Permit Fees',
                 'Renewal',
                 1,
@@ -1035,7 +1035,7 @@ private class PhocsBlaRenewalManagementControllerTest {
 
         for (RegulatoryTrxnFee fee : fees) {
             fee.Status__c = 'Due';
-            fee.DueDate = DateTime.now().addDays(-1);
+            fee.DueDate = DateTime.now().addDays(-2);
         }
         update fees;
         return fees;

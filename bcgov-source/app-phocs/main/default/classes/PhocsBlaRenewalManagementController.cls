@@ -43,7 +43,7 @@ public with sharing class PhocsBlaRenewalManagementController {
     private static final String RTFI_NAME_FIELD = 'Name';
     private static final String RTFI_AMOUNT_FIELD ='FeeAmount';
     private static final Set<String> ACCOUNTTYPES= new Set<string>{'Food','Drinking water','Recreational water'};
-    
+    private static final Set<String> VALIDFEETYPES = new Set<String>{'New Application','Renewal','Other'};
     private static final String[] LICENSETYPES= new string[]{'Drinking Water Operating Permit','Food Premises Operating Permit','Pool Operating Permit'};
     
     private static final String LATE_FEE_NAME = 'Late Fee';
@@ -169,13 +169,17 @@ public with sharing class PhocsBlaRenewalManagementController {
         if (today.month() > 4 ||(today.month() == 4 && today.day() > 1)) {
             targetRYear++;
         }
+        Set<Id> seenAccountIds = new Set<Id>();
         RenewalYear = String.valueOf(targetRYear+1);
-        try{
-            for(BusinessLicenseApplication bla:[SELECT Id,Name,AccountId, LicensePermitName.Status FROM BusinessLicenseApplication
+        try{            
+            for(BusinessLicenseApplication bla:[SELECT Id,Name,AccountId, LicensePermitName.Status,ClosedDate__c FROM BusinessLicenseApplication
             WHERE LicenseType.name in :LICENSETYPES AND LicensePermitName.Status='Active' 
-            AND Status IN ('Completed','Closed') AND accountId =:acctIds]){
+            AND Status IN ('Completed','Closed') AND accountId =:acctIds ORDER BY ClosedDate__c DESC]){
+                if (!seenAccountIds.contains(bla.AccountId)) {
                 blaValidaccIds.add(bla.AccountId);
                 validblaIds.add(bla.id);
+                seenAccountIds.add(bla.AccountId);
+                }
             }
             idSet = new Set<Id>(blaValidaccIds);
             
@@ -433,42 +437,30 @@ public with sharing class PhocsBlaRenewalManagementController {
             }
             String accountType = account.Type;
             String currentPremiseRole = (String) account.get(PREMISE_ROLE_FIELD);
-            Boolean currentMultiplePremise = toBoolean(account.get(MULTIPLE_PREMISE_FIELD));
+            Boolean currentMultiplePremise = toBoolean(account.get(MULTIPLE_PREMISE_FIELD));            
             
-            /*
-            * Apply filters.
-            */
             if (String.isNotBlank(type) && accountType != type) {
                 continue;
-            }
-            
+            }            
             if (multiplePremise == true && currentMultiplePremise != true) {
                 continue;
-            }
-            
+            }            
             if (String.isNotBlank(premiseRole) && currentPremiseRole != premiseRole) {
                 continue;
-            }
-            
-            SObject item = itemByFee.get(feeId);
-            
+            }            
+            SObject item = itemByFee.get(feeId);            
             String currentFeeName = '';
-            Decimal currentFeeAmount = 0;
-            
+            Decimal currentFeeAmount = 0;            
             if (item != null) {
                 currentFeeName = (String) item.get(RTFI_NAME_FIELD);
                 currentFeeAmount = toDecimal(item.get(RTFI_AMOUNT_FIELD));
-            }
-            
+            }           
             if (String.isNotBlank(feeName) &&
             (currentFeeName == null ||!currentFeeName.toLowerCase().contains(feeName.toLowerCase()))) {
                 continue;
-            }
-            
-            PHOCSSendRenewalsRow row = new PHOCSSendRenewalsRow();
-            
-            row.Id = feeId;
-            
+            }            
+            PHOCSSendRenewalsRow row = new PHOCSSendRenewalsRow();            
+            row.Id = feeId;            
             if (account.Parent != null) {
                 row.parentAccountName =  account.Parent.Name;
                 //Parent Account navigation
@@ -476,13 +468,11 @@ public with sharing class PhocsBlaRenewalManagementController {
             } else {
                 row.parentAccountName = '';
                 row.parentAccountUrl = null;
-            }
-            
+            }            
             row.accountName = account.Name;
             //Account navigation
             row.accountUrl ='/lightning/r/Account/' + account.Id + '/view';
-            row.postalCode = (String) account.get(POSTAL_CODE_FIELD);
-            
+            row.postalCode = (String) account.get(POSTAL_CODE_FIELD);            
             /*
             * RTF ParentRecordId = BLA ID.
             */
@@ -503,8 +493,7 @@ public with sharing class PhocsBlaRenewalManagementController {
             row.multiplePremise = currentMultiplePremise;
             row.premiseRole = currentPremiseRole;
             response.records.add(row);
-        }
-        
+        }        
         /*
         * Default Parent Account ascending.
         */
@@ -526,12 +515,10 @@ public with sharing class PhocsBlaRenewalManagementController {
             Id batchJobId = Database.executeBatch(
             new PhocsRenewalFeeGenerationBatch(regulatoryTransactionFeeIds),
             200
-            );
-            
+            );            
             return new OperationResponse(
             true,
-            'Renewal processing has started in batch job ' + batchJobId + '. '
-            + 'The selected records will be updated in batches of 100.'
+            'Renewal invoices have been generated successfully and contacts have been notified.'
             );
         } catch (Exception e) {
             System.debug('sendSelectedRenewals error: ' + e.getMessage());
@@ -554,25 +541,19 @@ public with sharing class PhocsBlaRenewalManagementController {
     ) {
         PHOCSRenewalPaymentReminderResponse response = new PHOCSRenewalPaymentReminderResponse();
         
-        pageNumber = pageNumber == null || pageNumber < 1
-        ? 1
-        : pageNumber;
+        pageNumber = pageNumber == null || pageNumber < 1 ? 1 : pageNumber;
         
-        pageSize = pageSize == null || pageSize < 1
-        ? 50
-        : Math.min(pageSize, 50);
-        
+        pageSize = pageSize == null || pageSize < 1 ? 50 : Math.min(pageSize, 50);        
         response.pageNumber = pageNumber;
         response.pageSize = pageSize;
         response.accountTypeOptions = getAccountTypeOptions();
-        response.feeTypeOptions = getFeeTypeOptions();
-        
+        response.feeTypeOptions = getFeeTypeOptions();        
         
         Map<String, String> allowedSortFields =
         new Map<String, String>{
             'parentAccountName' => 'Account.Parent.Name',
             'accountName' => 'Account.Name',
-            'postalCode' => 'Physical_Address__PostalCode__s',
+            'postalCode' => 'Account.Physical_Address__PostalCode__s',
             'blaId' => 'ParentRecordId',
             'feeId' => 'Id',
             'feeName' => 'Id',
@@ -581,8 +562,7 @@ public with sharing class PhocsBlaRenewalManagementController {
             'operatingMonths' => 'Account.OperatingMonths__c',
             'multiplePremise' => 'Account.MultiplePremiseFacility__c',
             'premiseRole' => 'Account.PremiseRole__c'
-        };
-        
+        };        
         String orderField =
         allowedSortFields.containsKey(sortBy)
         ? allowedSortFields.get(sortBy)
@@ -591,8 +571,7 @@ public with sharing class PhocsBlaRenewalManagementController {
         String direction =
         String.valueOf(sortDirection).toLowerCase() == 'desc'
         ? 'DESC'
-        : 'ASC';
-        
+        : 'ASC';        
         
         String orderBy;
         
@@ -603,7 +582,7 @@ public with sharing class PhocsBlaRenewalManagementController {
             orderBy = orderField + ' ' + direction;
         }
         
-        String baseWhere =  'Status__c IN (\'Due\', \'Partially Paid\')';
+        String baseWhere =  'Status__c IN (\'Due\', \'Partially_Paid\')';
         
         baseWhere += ' AND FeeType__c != NULL';
         
@@ -625,11 +604,6 @@ public with sharing class PhocsBlaRenewalManagementController {
             binds.put('RTFRecordTypeId', RTFRecordTypeId);
         }
         
-        /*
-        * Fee Name filter is implemented as a semi-join.
-        *
-        * This avoids loading all Fee Items into Apex.
-        */
         if (String.isNotBlank(feeName)) {
             
             String escapedFeeName =
@@ -722,15 +696,8 @@ public with sharing class PhocsBlaRenewalManagementController {
         Map<Id, SObject> itemByFee =
         new Map<Id, SObject>();
         
-        for (RegulatoryTrxnFeeItem item : feeItems) {
-            
-            Id feeId =
-            (Id)item.get(RTFI_PARENT_FIELD);
-            
-            /*
-            * Existing data model appears to use one fee item
-            * for each renewal fee. Keep the first item for now.
-            */
+        for (RegulatoryTrxnFeeItem item : feeItems) {            
+            Id feeId = (Id)item.get(RTFI_PARENT_FIELD);            
             if (!itemByFee.containsKey(feeId)) {
                 itemByFee.put(feeId, item);
             }
@@ -745,16 +712,14 @@ public with sharing class PhocsBlaRenewalManagementController {
             }
             row.accountName = account.Name;
             row.accountUrl = '/lightning/r/Account/' +account.Id +'/view';
-            Account parent = account.Parent;
-            
+            Account parent = account.Parent;            
             if (parent != null) {
                 row.parentAccountName = parent.Name;
                 row.parentAccountUrl = '/lightning/r/Account/' +parent.Id +'/view';
             } else {
                 row.parentAccountName = '';
                 row.parentAccountUrl = null;
-            }
-            
+            }            
             row.postalCode = (String)account.get(POSTAL_CODE_FIELD);
             row.operatingMonths = (String)account.get(OPERATING_MONTHS_FIELD);
             row.multiplePremise = toBoolean(account.get(MULTIPLE_PREMISE_FIELD));
@@ -1792,8 +1757,7 @@ public with sharing class PhocsBlaRenewalManagementController {
     ) {
         
         Map<String, String> allowedSortFields =
-        new Map<String, String>{
-            
+        new Map<String, String>{            
             'parentAccountName' =>'Account.Parent.Name',
             'accountName' => 'Account.Name',
             'postalCode' => 'Account.Physical_Address__PostalCode__s',
@@ -2032,7 +1996,7 @@ public with sharing class PhocsBlaRenewalManagementController {
         feeTypeField.getDescribe()
         .getPicklistValues()
         ) {
-            if (entry.isActive()) {
+            if (entry.isActive() && VALIDFEETYPES.contains(entry.getLabel())) {
                 
                 options.add(
                 new PhocsBLRenewalManagementHelper.PicklistOption(

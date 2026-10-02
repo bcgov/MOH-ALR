@@ -179,11 +179,13 @@ global without sharing class PHOCSInspectionReportTokenData implements omnistudi
     private void putContact(Map<String, Object> tokens, String prefix, Contact c) {
         String phone = c == null ? null : c.Phone;
         String mobile = c == null ? null : c.MobilePhone;
+        String email = c == null ? null : c.Email;
 
         tokens.put(prefix, c == null ? null : c.Name);
-        tokens.put(prefix + 'Email', c == null ? null : c.Email);
+        tokens.put(prefix + 'Email', email);
         tokens.put(prefix + 'Phone', String.isBlank(phone) ? null : phone.trim());
         tokens.put(prefix + 'Mobile', String.isBlank(mobile) ? null : mobile.trim());
+        tokens.put(showFlag(prefix, 'Email'), String.isNotBlank(email));
         tokens.put(showFlag(prefix, 'Phone'), String.isNotBlank(phone));
         tokens.put(showFlag(prefix, 'Mobile'), String.isNotBlank(mobile));
 

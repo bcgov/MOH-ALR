@@ -16,11 +16,21 @@
     <filters>
         <field>CASES.RECORDTYPE</field>
         <operation>notEqual</operation>
-        <value>Case.PHOCSComplaint,Case.PHOCSReportableIncident</value>
+        <value>Case.PHOCSReportableIncident</value>
     </filters>
     <filters>
         <field>HealthAuthority__c</field>
         <operation>notEqual</operation>
+    </filters>
+    <filters>
+        <field>OWNER_NAME</field>
+        <operation>contains</operation>
+        <value>Intake Queue</value>
+    </filters>
+    <filters>
+        <field>OWNER_NAME</field>
+        <operation>notContain</operation>
+        <value>CCFL</value>
     </filters>
     <label>Case Intake</label>
     <sharedTo>
