@@ -5,8 +5,8 @@
     <customErrors>
         <name>PA_Address_Error</name>
         <label>PA Address Error</label>
-        <locationX>842</locationX>
-        <locationY>924</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <customErrorMessages>
             <errorMessage>Error in Creating Physical Address Address Records</errorMessage>
             <isFieldError>false</isFieldError>
@@ -15,8 +15,8 @@
     <customErrors>
         <name>PA_Associated_Location_Error</name>
         <label>PA Associated Location Error</label>
-        <locationX>578</locationX>
-        <locationY>1140</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <customErrorMessages>
             <errorMessage>Error in Creating Physical Address Associated Location Records</errorMessage>
             <isFieldError>false</isFieldError>
@@ -25,8 +25,8 @@
     <customErrors>
         <name>PA_Location_Error</name>
         <label>PA Location Error</label>
-        <locationX>1106</locationX>
-        <locationY>816</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <customErrorMessages>
             <errorMessage>Error in Creating Physical Address Location Record</errorMessage>
             <isFieldError>false</isFieldError>
@@ -35,8 +35,8 @@
     <customErrors>
         <name>PL_Associated_Location_Error</name>
         <label>PL Associated Location Error</label>
-        <locationX>1898</locationX>
-        <locationY>924</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <customErrorMessages>
             <errorMessage>Error in Creating Physical Location Associated Location Records</errorMessage>
             <isFieldError>false</isFieldError>
@@ -45,18 +45,159 @@
     <customErrors>
         <name>PL_Location_Error</name>
         <label>PL Location Error</label>
-        <locationX>2162</locationX>
-        <locationY>816</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <customErrorMessages>
             <errorMessage>Error in Creating Physical Location Location Records</errorMessage>
             <isFieldError>false</isFieldError>
         </customErrorMessages>
     </customErrors>
     <decisions>
+        <name>Check_Facility_Record_Type</name>
+        <label>Check Facility Record Type</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Is_ALR_RecordType</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Residence</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_PL_Location_Record</targetReference>
+            </connector>
+            <label>Is ALR RecordType</label>
+        </rules>
+        <rules>
+            <name>IS_PHOCS_RecordType</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>DrinkingWaterSystem</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>DrinkingWaterSourceIntake</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Facility</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>PHOCSDairyFacility</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_PHOCS_LocationRecordType</targetReference>
+            </connector>
+            <label>IS PHOCS RecordType</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Facility_RecordType</name>
+        <label>Check Facility RecordType</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Is_ALR_RT</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Residence</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_PA_Location_Records</targetReference>
+            </connector>
+            <label>Is ALR RT</label>
+        </rules>
+        <rules>
+            <name>IS_PHOCS_RT</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>DrinkingWaterSystem</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>DrinkingWaterSourceIntake</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Facility</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>PHOCSDairyFacility</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Related_Address_Record</targetReference>
+            </connector>
+            <label>IS PHOCS RT</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_Related_Address_Rec_Check</name>
+        <label>Is Related Address Rec Check</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Get_PHOCS_Location_RecordType</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Is_Present</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Related_Address_Record.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Associated_Location_Record</targetReference>
+            </connector>
+            <label>Is Present</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Location_Type_Check</name>
         <label>Location Type Check</label>
-        <locationX>1304</locationX>
-        <locationY>384</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Physical_Address</name>
@@ -69,7 +210,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Get_PA_Location_Records</targetReference>
+                <targetReference>Check_Facility_RecordType</targetReference>
             </connector>
             <label>Physical Address</label>
         </rules>
@@ -99,8 +240,8 @@
     <decisions>
         <name>PA_Location_Records_Check</name>
         <label>PA Location Records Check</label>
-        <locationX>182</locationX>
-        <locationY>600</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <defaultConnector>
             <targetReference>Create_PA_Location_Record</targetReference>
         </defaultConnector>
@@ -124,10 +265,10 @@
     <decisions>
         <name>PL_Location_Records_Check</name>
         <label>PL Location Records Check</label>
-        <locationX>1502</locationX>
-        <locationY>600</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>Create_PL_Location_Record</targetReference>
+            <targetReference>Check_Facility_Record_Type</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -149,8 +290,8 @@
     <decisions>
         <name>Record_Type_Check</name>
         <label>Record Type Check</label>
-        <locationX>1997</locationX>
-        <locationY>276</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Recordtype_Check</name>
@@ -197,7 +338,8 @@
         </rules>
     </decisions>
     <description>Flow to create or Update  Location , Address , Associated Location Records
-Update changes related to EHIS-3070 AC#3</description>
+Update changes related to EHIS-3070 AC#3
+EHIS-5861: Adding PHOCS RecordType Id and HA values</description>
     <environments>Default</environments>
     <formulas>
         <description>Concat Lat and Long</description>
@@ -227,10 +369,36 @@ Update changes related to EHIS-3070 AC#3</description>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordCreates>
+        <name>Create_Associated_Location_Record</name>
+        <label>Create Associated Location Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>LocationId</field>
+            <value>
+                <elementReference>Get_Related_Address_Record.ParentId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ParentRecordId</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Type</field>
+            <value>
+                <stringValue>Physical Location</stringValue>
+            </value>
+        </inputAssignments>
+        <object>AssociatedLocation</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
         <name>Create_PA_Address_Records</name>
         <label>Create PA Address Records</label>
-        <locationX>314</locationX>
-        <locationY>816</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <assignRecordIdToReference>AddressId</assignRecordIdToReference>
         <connector>
             <targetReference>Update_Location_Record</targetReference>
@@ -309,8 +477,8 @@ Update changes related to EHIS-3070 AC#3</description>
     <recordCreates>
         <name>Create_PA_AssosciatedLocation_Records</name>
         <label>Create PA AssosciatedLocation Records</label>
-        <locationX>314</locationX>
-        <locationY>1032</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <faultConnector>
             <targetReference>PA_Associated_Location_Error</targetReference>
         </faultConnector>
@@ -338,8 +506,8 @@ Update changes related to EHIS-3070 AC#3</description>
     <recordCreates>
         <name>Create_PA_AssosciatedLocation_Records_new</name>
         <label>Create PA AssosciatedLocation Records</label>
-        <locationX>50</locationX>
-        <locationY>708</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <inputAssignments>
             <field>LocationId</field>
             <value>
@@ -364,13 +532,169 @@ Update changes related to EHIS-3070 AC#3</description>
     <recordCreates>
         <name>Create_PA_Location_Record</name>
         <label>Create PA Location Record</label>
-        <locationX>314</locationX>
-        <locationY>708</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <assignRecordIdToReference>LocationId</assignRecordIdToReference>
         <connector>
             <targetReference>Create_PA_Address_Records</targetReference>
         </connector>
         <faultConnector>
+            <targetReference>PA_Location_Error</targetReference>
+        </faultConnector>
+        <inputAssignments>
+            <field>DrivingDirections</field>
+            <value>
+                <elementReference>$Record.PhysicalDrivingDirections__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Latitude</field>
+            <value>
+                <elementReference>$Record.Physical_Address__Latitude__s</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>LocationType</field>
+            <value>
+                <stringValue>Physical Location</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Longitude</field>
+            <value>
+                <elementReference>$Record.Physical_Address__Longitude__s</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>$Record.Physical_Address__Street__s</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Location</object>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_PHOCS_Address_Records</name>
+        <label>Create PHOCS Address Records</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignRecordIdToReference>AddressId</assignRecordIdToReference>
+        <connector>
+            <targetReference>Update_PHOCS_Location_Record</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>PA_Address_Error</targetReference>
+        </faultConnector>
+        <inputAssignments>
+            <field>AddressType</field>
+            <value>
+                <stringValue>Physical Address</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>City</field>
+            <value>
+                <elementReference>$Record.Physical_Address__City__s</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Country</field>
+            <value>
+                <elementReference>$Record.Physical_Address__CountryCode__s</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>DrivingDirections</field>
+            <value>
+                <elementReference>$Record.PhysicalDrivingDirections__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Latitude</field>
+            <value>
+                <elementReference>$Record.Physical_Address__Latitude__s</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>LocationType</field>
+            <value>
+                <stringValue>Physical Location</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Longitude</field>
+            <value>
+                <elementReference>$Record.Physical_Address__Longitude__s</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ParentId</field>
+            <value>
+                <elementReference>LocationId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PostalCode</field>
+            <value>
+                <elementReference>$Record.Physical_Address__PostalCode__s</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>State</field>
+            <value>
+                <elementReference>$Record.Physical_Address__StateCode__s</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Street</field>
+            <value>
+                <elementReference>$Record.Physical_Address__Street__s</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Address</object>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_PHOCS_Associated_Location_Record</name>
+        <label>Create PHOCS Associated Location Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>PA_Associated_Location_Error</targetReference>
+        </faultConnector>
+        <inputAssignments>
+            <field>LocationId</field>
+            <value>
+                <elementReference>LocationId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ParentRecordId</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Type</field>
+            <value>
+                <stringValue>Physical Location</stringValue>
+            </value>
+        </inputAssignments>
+        <object>AssociatedLocation</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_PHOCS_Location_Record</name>
+        <label>Create PHOCS Location Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignRecordIdToReference>LocationId</assignRecordIdToReference>
+        <connector>
+            <targetReference>Create_PHOCS_Address_Records</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
             <targetReference>PA_Location_Error</targetReference>
         </faultConnector>
         <inputAssignments>
@@ -409,13 +733,19 @@ Update changes related to EHIS-3070 AC#3</description>
                 <elementReference>$Record.Physical_Address__Street__s</elementReference>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <elementReference>Get_PHOCS_Location_RecordType.Id</elementReference>
+            </value>
+        </inputAssignments>
         <object>Location</object>
     </recordCreates>
     <recordCreates>
         <name>Create_PL_AssosciatedLocation_Records</name>
         <label>Create PL AssosciatedLocation Records</label>
-        <locationX>1634</locationX>
-        <locationY>816</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <faultConnector>
             <targetReference>PL_Associated_Location_Error</targetReference>
         </faultConnector>
@@ -443,8 +773,8 @@ Update changes related to EHIS-3070 AC#3</description>
     <recordCreates>
         <name>Create_PL_AssosciatedLocation_Records_new</name>
         <label>Create PL AssosciatedLocation Records</label>
-        <locationX>1370</locationX>
-        <locationY>708</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <inputAssignments>
             <field>LocationId</field>
             <value>
@@ -469,8 +799,8 @@ Update changes related to EHIS-3070 AC#3</description>
     <recordCreates>
         <name>Create_PL_Location_Record</name>
         <label>Create PL Location Record</label>
-        <locationX>1634</locationX>
-        <locationY>708</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <assignRecordIdToReference>LocationId</assignRecordIdToReference>
         <connector>
             <targetReference>Create_PL_AssosciatedLocation_Records</targetReference>
@@ -510,11 +840,68 @@ Update changes related to EHIS-3070 AC#3</description>
         </inputAssignments>
         <object>Location</object>
     </recordCreates>
+    <recordCreates>
+        <name>CreatePHOCSLocationRecord</name>
+        <label>Create PHOCS Location Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignRecordIdToReference>LocationId</assignRecordIdToReference>
+        <connector>
+            <targetReference>Create_PL_AssosciatedLocation_Records</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>PL_Location_Error</targetReference>
+        </faultConnector>
+        <inputAssignments>
+            <field>DrivingDirections</field>
+            <value>
+                <elementReference>$Record.PhysicalDrivingDirections__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>HealthAuthority__c</field>
+            <value>
+                <elementReference>$Record.HealthAuthority__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Latitude</field>
+            <value>
+                <elementReference>$Record.PhysicalLocation__Latitude__s</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>LocationType</field>
+            <value>
+                <stringValue>Physical Location</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Longitude</field>
+            <value>
+                <elementReference>$Record.PhysicalLocation__Longitude__s</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>LocName</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <elementReference>Get_PHOCS_LocationRecordType.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Location</object>
+    </recordCreates>
     <recordLookups>
         <name>Get_PA_Location_Records</name>
         <label>Get PA Location Records</label>
-        <locationX>182</locationX>
-        <locationY>492</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>PA_Location_Records_Check</targetReference>
@@ -532,10 +919,66 @@ Update changes related to EHIS-3070 AC#3</description>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
+        <name>Get_PHOCS_Location_RecordType</name>
+        <label>Get PHOCS Location RecordType</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Create_PHOCS_Location_Record</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SobjectType</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Location</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>PHOCSSamplingSite</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>RecordType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_PHOCS_LocationRecordType</name>
+        <label>Get PHOCS Location RecordType</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>CreatePHOCSLocationRecord</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SobjectType</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Location</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>PHOCSSamplingSite</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>RecordType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>Get_PL_Location_Records</name>
         <label>Get PL Location Records</label>
-        <locationX>1502</locationX>
-        <locationY>492</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>PL_Location_Records_Check</targetReference>
@@ -552,11 +995,53 @@ Update changes related to EHIS-3070 AC#3</description>
         <object>Location</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <recordLookups>
+        <name>Get_Related_Address_Record</name>
+        <label>Get Related Address Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Is_Related_Address_Rec_Check</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>AddressType</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Physical Address</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>LocationType</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Physical Location</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Street</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Physical_Address__Street__s</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>City</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Physical_Address__City__s</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Address</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <recordUpdates>
         <name>Update_Location_Record</name>
         <label>Update Location Record</label>
-        <locationX>314</locationX>
-        <locationY>924</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <connector>
             <targetReference>Create_PA_AssosciatedLocation_Records</targetReference>
         </connector>
@@ -576,8 +1061,32 @@ Update changes related to EHIS-3070 AC#3</description>
         </inputAssignments>
         <object>Location</object>
     </recordUpdates>
+    <recordUpdates>
+        <name>Update_PHOCS_Location_Record</name>
+        <label>Update PHOCS Location Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Create_PHOCS_Associated_Location_Record</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>LocationId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>VisitorAddressId</field>
+            <value>
+                <elementReference>AddressId</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Location</object>
+    </recordUpdates>
     <start>
-        <locationX>765</locationX>
+        <locationX>0</locationX>
         <locationY>0</locationY>
         <filterLogic>or</filterLogic>
         <filters>
