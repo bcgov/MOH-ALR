@@ -127,13 +127,13 @@ public class BCMOH_Constants {
 	public Final static List<String> LateFeeStatuses = new List<String>{'', 'Ready to Send'};  
     public final static String EXCEPMESSAGE = 'This is exception for testing and code coverage';
     public final static String ItemEntityName = 'AssessmentTask.Name';
+    public final static String ItemEntityAssessmentTaskDefinitionId = 'AssessmentTask.AssessmentTaskDefinitionId'; // EHIS-4069
 	public final static String TaskType = 'InspectionChecklist';
     public final static String resultt = 'Non-compliant';
 	public final static String nulltest = 'null';
     //ALR-192
     public final static String orgDisplayName = 'ALR Support Email';
     public final static String emailTemplate = 'UpcomingRenewalmailTemplate';
-    
     // EHIS-3496
      public final static String PHOCS_DAIRY_WORKER_RECORD_TYPE_NAME = 'PHOCSDairyPlantWorkerContacts';
 }
