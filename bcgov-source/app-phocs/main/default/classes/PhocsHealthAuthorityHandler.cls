@@ -31,8 +31,7 @@ public with sharing class PhocsHealthAuthorityHandler {
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static void populateHealthAuthority(List<SObject> childRecords) {
-        IF((roleName == null || !roleName.contains('Dairy'))){
-
+        
         PHOCSBypassHealthAuthorityHandler__c bypassSetting = PHOCSBypassHealthAuthorityHandler__c.getInstance();
         
         if (bypassSetting != null && bypassSetting.BypassHealthAuthorityHandler__c) {
@@ -131,7 +130,6 @@ public with sharing class PhocsHealthAuthorityHandler {
             for (SObject rec : childRecords) {
                 rec.addError('Unable to populate Health Authority: ' + e.getMessage());
             }
-        }
         }
     }
 }
