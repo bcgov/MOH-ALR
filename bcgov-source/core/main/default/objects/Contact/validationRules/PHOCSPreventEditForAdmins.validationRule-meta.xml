@@ -4,10 +4,12 @@
     <active>true</active>
     <description>Prevents edits to PHOCS Contacts associated with Business Entity or Facility Accounts unless the user has the PHOCS Admin permission.</description>
     <errorConditionFormula>AND(
-NOT(ISNEW()),
-$RecordType.DeveloperName = &quot;PHOCSContact&quot;,
-Account.RecordType.DeveloperName = &quot;Business_Entity&quot;,
-$Permission.PHOCSAdmin
+    NOT(ISNEW()),
+    $RecordType.DeveloperName = &quot;PHOCSContact&quot;,
+    Account.RecordType.DeveloperName = &quot;Business_Entity&quot;,
+    $Permission.PHOCSAdmin,
+    $Profile.Name &lt;&gt; &quot;System Administrator&quot;,
+				OwnerId &lt;&gt; $User.Id
 )</errorConditionFormula>
     <errorMessage>Business Admin cannot edit this Contact record.</errorMessage>
 </ValidationRule>
