@@ -61,33 +61,8 @@
             <stringValue>{&quot;location&quot;:&quot;top&quot;,&quot;type&quot;:&quot;simple&quot;}</stringValue>
         </value>
     </customProperties>
-    <decisions>
-        <name>Check_Site_Treatment_Field</name>
-        <label>Check Site Treatment Field</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnector>
-            <targetReference>PrepSamplingSiteDetails</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>Null</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Site_Treatment</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <isGoTo>true</isGoTo>
-                <targetReference>CreateSamplingSite</targetReference>
-            </connector>
-            <label>Null</label>
-        </rules>
-    </decisions>
-    <description>Adding Health Authority to Location</description>
+    <description>Adding Health Authority to Location
+v25: No need of Address Mapping and updating RecordTypeId mapping</description>
     <dynamicChoiceSets>
         <name>SiteStatus</name>
         <dataType>Picklist</dataType>
@@ -150,104 +125,10 @@
     </processMetadataValues>
     <processType>Flow</processType>
     <recordCreates>
-        <name>CreateAddress</name>
-        <label>Create Address</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <connector>
-            <targetReference>CreateAssociatedLocationRecord</targetReference>
-        </connector>
-        <faultConnector>
-            <targetReference>AddressCreationError</targetReference>
-        </faultConnector>
-        <inputAssignments>
-            <field>City</field>
-            <value>
-                <elementReference>SamplingSiteAddress.City</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Country</field>
-            <value>
-                <elementReference>SamplingSiteAddress.Country</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>DrivingDirections</field>
-            <value>
-                <elementReference>newSamplingSiteDetails.DrivingDirections</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>LocationType</field>
-            <value>
-                <stringValue>Sampling Site</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>ParentId</field>
-            <value>
-                <elementReference>CreateSamplingSiteRecord.Id</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>PostalCode</field>
-            <value>
-                <elementReference>SamplingSiteAddress.PostalCode</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>State</field>
-            <value>
-                <elementReference>SamplingSiteAddress.State</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Street</field>
-            <value>
-                <elementReference>SamplingSiteAddress.Street</elementReference>
-            </value>
-        </inputAssignments>
-        <object>Address</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordCreates>
-    <recordCreates>
-        <name>CreateAssociatedLocationRecord</name>
-        <label>Create Associated Location Record</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <faultConnector>
-            <targetReference>AssociatedLocationCreationError</targetReference>
-        </faultConnector>
-        <inputAssignments>
-            <field>LocationId</field>
-            <value>
-                <elementReference>CreateSamplingSiteRecord.Id</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>ParentRecordId</field>
-            <value>
-                <elementReference>recordId</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Type</field>
-            <value>
-                <stringValue>Sampling Site</stringValue>
-            </value>
-        </inputAssignments>
-        <object>AssociatedLocation</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordCreates>
-    <recordCreates>
         <name>CreateSamplingSiteRecord</name>
         <label>Create Sampling Site Record</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <connector>
-            <targetReference>CreateAddress</targetReference>
-        </connector>
         <faultConnector>
             <targetReference>SamplingSiteRecordError</targetReference>
         </faultConnector>
@@ -312,6 +193,12 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <elementReference>Get_PHOCS_Location_RT.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>SiteNumber__c</field>
             <value>
                 <elementReference>Site_Number</elementReference>
@@ -333,13 +220,41 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
     <recordLookups>
+        <name>Get_PHOCS_Location_RT</name>
+        <label>Get PHOCS Location RT</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>CreateSamplingSiteRecord</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SobjectType</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Location</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>PHOCSSamplingSite</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>RecordType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>get_Related_Account</name>
         <label>get Related Account</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>CreateSamplingSiteRecord</targetReference>
+            <targetReference>Get_PHOCS_Location_RT</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -354,56 +269,6 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <screens>
-        <name>AddressCreationError</name>
-        <label>Address Creation Error</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <allowBack>true</allowBack>
-        <allowFinish>true</allowFinish>
-        <allowPause>false</allowPause>
-        <backButtonLabel>Back</backButtonLabel>
-        <fields>
-            <name>Copy_3_of_ErrorMessage</name>
-            <fieldText>&lt;p&gt;&lt;span style=&quot;color: rgb(28, 27, 27); font-size: 18px; font-family: sans-serif;&quot;&gt;Error while creating Address&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong style=&quot;font-size: 14px; color: rgb(255, 10, 10);&quot;&gt;&amp;nbsp;{!$Flow.FaultMessage}&lt;/strong&gt;&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
-            <styleProperties>
-                <verticalAlignment>
-                    <stringValue>top</stringValue>
-                </verticalAlignment>
-                <width>
-                    <stringValue>12</stringValue>
-                </width>
-            </styleProperties>
-        </fields>
-        <showFooter>true</showFooter>
-        <showHeader>true</showHeader>
-    </screens>
-    <screens>
-        <name>AssociatedLocationCreationError</name>
-        <label>AssociatedLocationCreationError</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <allowBack>true</allowBack>
-        <allowFinish>true</allowFinish>
-        <allowPause>false</allowPause>
-        <backButtonLabel>Back</backButtonLabel>
-        <fields>
-            <name>AssociatedLocationError</name>
-            <fieldText>&lt;p&gt;&lt;span style=&quot;color: rgb(28, 27, 27); font-size: 18px; font-family: sans-serif;&quot;&gt;Error while creating Associated Location.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong style=&quot;color: rgb(244, 7, 7); font-size: 16px;&quot;&gt;{!ErrorMessageParsed}&lt;/strong&gt;&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
-            <styleProperties>
-                <verticalAlignment>
-                    <stringValue>top</stringValue>
-                </verticalAlignment>
-                <width>
-                    <stringValue>12</stringValue>
-                </width>
-            </styleProperties>
-        </fields>
-        <showFooter>true</showFooter>
-        <showHeader>true</showHeader>
-    </screens>
-    <screens>
         <name>CreateSamplingSite</name>
         <label>Create Sampling Site</label>
         <locationX>0</locationX>
@@ -412,7 +277,7 @@
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <connector>
-            <targetReference>Check_Site_Treatment_Field</targetReference>
+            <targetReference>PrepSamplingSiteDetails</targetReference>
         </connector>
         <fields>
             <name>SiteInformationSection</name>
