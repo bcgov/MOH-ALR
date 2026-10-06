@@ -626,7 +626,7 @@ public class PHOCSCCFLRiskAsmntScoringServiceTest {
         Assert.areEqual(expectedPartAScore, (Decimal) result.get('TotalScore'), 'TotalScore should equal OutputPartAScore');
         Assert.areEqual(expectedPartAScore, (Decimal) result.get('CalculatedScore'), 'CalculatedScore should equal TotalScore');
         Assert.areEqual(expectedRiskRating, (String) result.get('riskRating'), 'RiskRating should match the configured rating for the matching Health Authority');
-        Assert.areEqual(expectedInspectionFrequency, (String) result.get('InspectionFrequency'), 'InspectionFrequency should match the configured frequency for the matching Health Authority');
+        Assert.areEqual(expectedInspectionFrequency, (String) result.get('inspectionFrequency'), 'InspectionFrequency should match the configured frequency for the matching Health Authority');
     }
     
     /**
