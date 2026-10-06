@@ -336,7 +336,7 @@ global with sharing class PHOCSCCFLRiskAssessmentScoringService implements Calla
         outMap.put('TotalScore', totalScore == null ? 0 : totalScore);
         outMap.put('CalculatedScore', totalScore == null ? 0 : totalScore);
         outMap.put('riskRating', riskRating);
-        outMap.put('InspectionFrequency', inspectionFrequency);
+        outMap.put('inspectionFrequency', inspectionFrequency);
     }
     
     /**
