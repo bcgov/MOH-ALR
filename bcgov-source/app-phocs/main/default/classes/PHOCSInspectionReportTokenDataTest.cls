@@ -48,14 +48,14 @@ public class PHOCSInspectionReportTokenDataTest {
             LastName = 'Wingham',
             FirstName = 'Bill',
             Email = 'bill.wingham@example.com',
-            Phone = '604-123-7890'
+            Phone = '6041237890'
         );
         Contact owner = new Contact(
             AccountId = acc.Id,
             LastName = 'Davis',
             FirstName = 'Maise',
-            Phone = '250-555-0101',
-            MobilePhone = '250-555-0199'
+            Phone = '2505550101',
+            MobilePhone = '2505550199'
         );
         insert new List<Contact>{ operator, owner };
 
@@ -340,7 +340,7 @@ public class PHOCSInspectionReportTokenDataTest {
 
         System.assertEquals('Bill Wingham', tokens.get('operator'));
         System.assertEquals('bill.wingham@example.com', tokens.get('operatorEmail'));
-        System.assertEquals('604-123-7890', tokens.get('operatorPhone'));
+        System.assertEquals('6041237890', tokens.get('operatorPhone'));
         System.assertEquals('Bill Wingham', tokens.get('legalName'));
         System.assertEquals('Maise Davis', tokens.get('primaryOwner'));
 
@@ -351,8 +351,8 @@ public class PHOCSInspectionReportTokenDataTest {
 
         System.assertEquals(null, tokens.get('primaryOwnerEmail'));
         System.assertEquals(false, tokens.get('IF_showPrimaryOwnerEmail'));
-        System.assertEquals('250-555-0101', tokens.get('primaryOwnerPhone'));
-        System.assertEquals('250-555-0199', tokens.get('primaryOwnerMobile'));
+        System.assertEquals('2505550101', tokens.get('primaryOwnerPhone'));
+        System.assertEquals('2505550199', tokens.get('primaryOwnerMobile'));
         System.assertEquals(true, tokens.get('IF_showPrimaryOwnerPhone'));
         System.assertEquals(true, tokens.get('IF_showPrimaryOwnerMobile'));
 
@@ -370,12 +370,12 @@ public class PHOCSInspectionReportTokenDataTest {
         Test.stopTest();
 
         System.assertEquals(
-            new List<String>{ 'Phone: 604-123-7890' },
+            new List<String>{ 'Phone: 6041237890' },
             (List<String>) tokens.get('operatorContactNumbers'),
             'Operator has no mobile, so only the phone line is emitted'
         );
         System.assertEquals(
-            new List<String>{ 'Phone: 250-555-0101', 'Mobile: 250-555-0199' },
+            new List<String>{ 'Phone: 2505550101', 'Mobile: 2505550199' },
             (List<String>) tokens.get('primaryOwnerContactNumbers'),
             'Both numbers present means both lines, phone first'
         );
