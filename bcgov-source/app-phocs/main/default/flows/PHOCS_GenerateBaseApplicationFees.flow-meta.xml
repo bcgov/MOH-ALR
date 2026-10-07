@@ -444,9 +444,10 @@ AND(
         <connector>
             <targetReference>GetGenerateApplicationFeeMetadata</targetReference>
         </connector>
-        <filterFormula>(({!$Record.RecordType.DeveloperName}==&apos;OperatingPermitApplication&apos; ) || ({!$Record.RecordType.DeveloperName}==&apos;ConstructionPermitApplication&apos; ) ||({!$Record.RecordType.DeveloperName}==&apos;PHOCSRecordofSewerageSystem&apos; ) )&amp;&amp; TEXT({!$Record.Status})==&apos;Closed&apos;  &amp;&amp; ISCHANGED({!$Record.ClosureReason__c}) &amp;&amp; (Text({!$Record.ClosureReason__c})==&apos;Approved&apos; || Text({!$Record.ClosureReason__c})==&apos;Accepted&apos;)</filterFormula>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+        <filterFormula>(((({!$Record.RecordType.DeveloperName}==&apos;OperatingPermitApplication&apos; ) || ({!$Record.RecordType.DeveloperName}==&apos;ConstructionPermitApplication&apos; ) )&amp;&amp; TEXT({!$Record.Status})==&apos;Closed&apos;  &amp;&amp;  (Text({!$Record.ClosureReason__c})==&apos;Approved&apos; || Text({!$Record.ClosureReason__c})==&apos;Accepted&apos;))||(({!$Record.RecordType.DeveloperName}==&apos;PHOCSRecordofSewerageSystem&apos; )&amp;&amp; TEXT({!$Record.Status})==&apos;Submitted&apos; ))</filterFormula>
         <object>BusinessLicenseApplication</object>
-        <recordTriggerType>Update</recordTriggerType>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
