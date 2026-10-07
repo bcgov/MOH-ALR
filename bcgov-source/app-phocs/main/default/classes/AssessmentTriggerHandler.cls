@@ -32,6 +32,7 @@ public with sharing class AssessmentTriggerHandler {
     private static final String VISIT_STATUS_PLANNED = 'Planned';
     private static final String VISIT_STATUS_COMPLETED = 'Completed';
     private static final String VISIT_STATUS_ERROR = 'Error';
+    private static final String VISIT_STATUS_ABANDONED = 'Abandoned';
     private static final String PACIFIC_TIME_ZONE = 'America/Los_Angeles';
 
 /**
@@ -285,7 +286,7 @@ public with sharing class AssessmentTriggerHandler {
 
         for (Visit futureInspection : [SELECT Id, AccountId, VisitTypeId, Status, PlannedVisitStartTime, RATGenerated__c FROM Visit
                                        WHERE AccountId IN :facilityIds AND VisitTypeId IN :inspectionTypeIds
-                                       AND Status NOT IN (:VISIT_STATUS_COMPLETED, :VISIT_STATUS_ERROR)
+                                       AND Status NOT IN (:VISIT_STATUS_COMPLETED, :VISIT_STATUS_ERROR, :VISIT_STATUS_ABANDONED)
                                        AND PlannedVisitStartTime >= :nowValue AND RecordTypeId =: INSPECTION_RTID
                                        ORDER BY PlannedVisitStartTime ASC]) {
             String typeValue = inspectionTypeValuesById.get(futureInspection.VisitTypeId);
