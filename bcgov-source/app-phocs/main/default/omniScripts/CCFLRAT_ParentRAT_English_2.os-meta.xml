@@ -151,7 +151,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>18.0</sequenceNumber>
+        <sequenceNumber>19.0</sequenceNumber>
         <type>Step</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -212,7 +212,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>12.0</sequenceNumber>
+        <sequenceNumber>13.0</sequenceNumber>
         <type>Remote Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -317,7 +317,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>16.0</sequenceNumber>
+        <sequenceNumber>17.0</sequenceNumber>
         <type>Remote Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -364,7 +364,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>14.0</sequenceNumber>
+        <sequenceNumber>15.0</sequenceNumber>
         <type>DataRaptor Extract Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -548,7 +548,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>19.0</sequenceNumber>
+        <sequenceNumber>20.0</sequenceNumber>
         <type>Navigate Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -652,7 +652,8 @@
   }, {
     &quot;name&quot; : &quot;facilityId&quot;,
     &quot;source&quot; : &quot;%ContextId%&quot;
-  } ]
+  } ],
+  &quot;disableKeyUpValid&quot; : false
 }</propertySetConfig>
             <sequenceNumber>8.0</sequenceNumber>
             <type>Custom Lightning Web Component</type>
@@ -884,7 +885,7 @@
   &quot;Language&quot; : &quot;English&quot;,
   &quot;show&quot; : null
 }</propertySetConfig>
-        <sequenceNumber>11.0</sequenceNumber>
+        <sequenceNumber>12.0</sequenceNumber>
         <type>OmniScript</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -942,7 +943,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>15.0</sequenceNumber>
+        <sequenceNumber>16.0</sequenceNumber>
         <type>Remote Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -1348,7 +1349,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>13.0</sequenceNumber>
+        <sequenceNumber>14.0</sequenceNumber>
         <type>Step</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -1423,6 +1424,43 @@
   &quot;pubsub&quot; : false
 }</propertySetConfig>
         <sequenceNumber>9.0</sequenceNumber>
+        <type>Set Errors</type>
+    </omniProcessElements>
+    <omniProcessElements>
+        <isActive>true</isActive>
+        <isOmniScriptEmbeddable>false</isOmniScriptEmbeddable>
+        <level>0.0</level>
+        <name>SetErrorsForNonCompletedAssessment</name>
+        <omniProcessVersionNumber>0.0</omniProcessVersionNumber>
+        <propertySetConfig>{
+  &quot;elementErrorMap&quot; : {
+    &quot;phocsCCFLViolationReAssessmentLWC&quot; : &quot;Routine initial assessment required.&quot;
+  },
+  &quot;controlWidth&quot; : 12,
+  &quot;wpm&quot; : false,
+  &quot;show&quot; : {
+    &quot;group&quot; : {
+      &quot;operator&quot; : &quot;AND&quot;,
+      &quot;rules&quot; : [ {
+        &quot;data&quot; : &quot;false&quot;,
+        &quot;condition&quot; : &quot;=&quot;,
+        &quot;field&quot; : &quot;isViolationSelectionValid&quot;
+      }, {
+        &quot;field&quot; : &quot;completedAssessmentId&quot;,
+        &quot;condition&quot; : &quot;&lt;&gt;&quot;,
+        &quot;data&quot; : &quot;null&quot;
+      } ]
+    }
+  },
+  &quot;showPersistentComponent&quot; : [ true, false ],
+  &quot;label&quot; : &quot;SetErrorsForNonCompletedAssessment&quot;,
+  &quot;validationRequired&quot; : &quot;Step&quot;,
+  &quot;ssm&quot; : false,
+  &quot;message&quot; : { },
+  &quot;HTMLTemplateId&quot; : &quot;&quot;,
+  &quot;pubsub&quot; : false
+}</propertySetConfig>
+        <sequenceNumber>10.0</sequenceNumber>
         <type>Set Errors</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -1518,7 +1556,7 @@
   &quot;businessEvent&quot; : &quot;&quot;,
   &quot;sendOnlyExtraPayload&quot; : true
 }</propertySetConfig>
-        <sequenceNumber>10.0</sequenceNumber>
+        <sequenceNumber>11.0</sequenceNumber>
         <type>Integration Procedure Action</type>
     </omniProcessElements>
     <omniProcessElements>
@@ -1914,7 +1952,7 @@
   &quot;businessCategory&quot; : &quot;&quot;,
   &quot;businessEvent&quot; : &quot;&quot;
 }</propertySetConfig>
-        <sequenceNumber>17.0</sequenceNumber>
+        <sequenceNumber>18.0</sequenceNumber>
         <type>DataRaptor Post Action</type>
     </omniProcessElements>
     <omniProcessType>OmniScript</omniProcessType>

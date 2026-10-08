@@ -20,6 +20,10 @@
  *                                                             with a blank frequency voids any existing future RAT-generated
  *                                                             inspections via the same surplus-cleanup path, instead of being
  *                                                             silently ignored
+ *               08 Oct -  EHIS-5027         -  Deepak      -  Anchor date now always uses ActualVisitStartTime of the
+ *                                                             originating inspection (the one linked to the RAT via
+ *                                                             ResponseContextId) instead of the most recently completed
+ *                                                             Routine inspection for the facility; removed loadAnchorDates()
  ***********************************************************************************************/
 public with sharing class AssessmentTriggerHandler {
     private static final Id ASSESSMENT_RTID = Schema.SObjectType.Assessment.getRecordTypeInfosByDeveloperName().get('PHOCSAssessment').getRecordTypeId();
@@ -71,7 +75,7 @@ public with sharing class AssessmentTriggerHandler {
                         '1 inspection every 2 years' => new IntervalConfig(24, 1),
                         '1 inspection every 4 years' => new IntervalConfig(48, 1)
                         };
-    
+
     private static final IntervalConfig ZERO_INSPECTIONS = new IntervalConfig(0, 0);
 
 /**
@@ -93,10 +97,14 @@ public with sharing class AssessmentTriggerHandler {
  *              status, Risk Assessment/Risk re-assessment type), resolves every facility's anchor
  *              date and existing future schedule up front, then reconciles each facility's Routine
  *              (and, for Tobacco and Vapour, MTS) schedule against the newly determined frequency.
- *              All queries run before the loop so the handler stays bulk safe.
+ *              All queries run before the loop so the handler stays bulk safe. The schedule anchor
+ *              is always the ActualVisitStartTime of the originating inspection (the specific
+ *              Routine inspection linked to the RAT via ResponseContextId), not the most recently
+ *              completed Routine inspection for the facility.
  * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
- *                    17 Sep - EHIS-5027          - Deepak       - Bulkified and merged initial generation with frequency-change recalculation into one reconcile path.
- *                    17 Sep - EHIS-5027          - Deepak       - Resolves a blank frequency to ZERO_INSPECTIONS instead of passing null through to reconcileSchedule.
+ *                    17 Sep - EHIS-5027 - Deepak - Bulkified and merged initial generation with frequency-change recalculation into one reconcile path.
+ *                    17 Sep - EHIS-5027 - Deepak - Resolves a blank frequency to ZERO_INSPECTIONS instead of passing null through to reconcileSchedule.
+ *                    08 Oct - EHIS-5027 - Deepak - Removed loadAnchorDates(); anchor is now always originatingInspection.ActualVisitStartTime.
 */
     public static void PHOCSRATInspectionGenerationService(List<Assessment> newAssessments) {
         List<Assessment> qualifyingAssessments = filterQualifyingAssessments(newAssessments);
@@ -137,7 +145,6 @@ public with sharing class AssessmentTriggerHandler {
             inspectionTypeValuesById.put(inspectionTypeIdsByValue.get(typeValue), typeValue);
         }
 
-        Map<Id, Datetime> anchorByFacilityId = loadAnchorDates(facilityIds, inspectionTypeIdsByValue.get(INSPECTION_TYPE_ROUTINE));
         Map<String, List<Visit>> ratGeneratedByKey = new Map<String, List<Visit>>();
         Map<String, Integer> migratedCountByKey = new Map<String, Integer>();
         loadExistingFutureSchedule(facilityIds, inspectionTypeValuesById, ratGeneratedByKey, migratedCountByKey);
@@ -153,9 +160,9 @@ public with sharing class AssessmentTriggerHandler {
                 continue;
             }
 
-            Datetime anchor = anchorByFacilityId.containsKey(originatingInspection.AccountId)
-                ? anchorByFacilityId.get(originatingInspection.AccountId)
-                : originatingInspection.ActualVisitStartTime;
+            // Anchor is always the ActualVisitStartTime of the specific inspection that
+            // triggered the RAT - not the most recently completed inspection for the facility.
+            Datetime anchor = originatingInspection.ActualVisitStartTime;
 
             if (anchor == null) {
                 continue;
@@ -220,48 +227,20 @@ public with sharing class AssessmentTriggerHandler {
 /**
  * @author: Deepak
  * @date: 03 Sep 2026
- * @description: Loads the InspectionType record Id for each of Routine and MTS, keyed by the
- *              InspectionTypes__c picklist value. ASSUMPTION: exactly one canonical InspectionType
- *              record exists per value - if duplicates exist, the first one encountered wins silently.
+ * @description: Loads the InspectionType record Id for each of Routine and MTS, keyed by Name.
+ *              ASSUMPTION: exactly one canonical InspectionType record exists per Name - if
+ *              duplicates exist, the first one encountered wins silently.
  * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     private static Map<String, Id> loadInspectionTypeIds() {
         Map<String, Id> result = new Map<String, Id>();
-        
+
         for (InspectionType inspType : [SELECT Id, Name FROM InspectionType WHERE Name IN (:INSPECTION_TYPE_ROUTINE, :INSPECTION_TYPE_MTS)]) {
             if (!result.containsKey(inspType.Name)) {
                 result.put(inspType.Name, inspType.Id);
             }
         }
         return result;
-    }
-
-/**
- * @author: Deepak
- * @date: 17 Sep 2026
- * @description: Resolves every facility's scheduling anchor in a single query - the Actual Visit
- *              Start Time of its most recently completed Routine inspection. Per AC#2 and AC#3 both
- *              the Routine and the MTS schedules anchor on the most recently completed Routine
- *              inspection. Historical/migrated inspections are included as long as they are
- *              Completed with an Actual Visit Start Time populated.
- * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
-*/
-    private static Map<Id, Datetime> loadAnchorDates(Set<Id> facilityIds, Id routineVisitTypeId) {
-        Map<Id, Datetime> anchorByFacilityId = new Map<Id, Datetime>();
-
-        if (routineVisitTypeId == null) {
-            return anchorByFacilityId;
-        }
-
-        for (Visit completedInspection : [SELECT Id, AccountId, ActualVisitStartTime FROM Visit
-                                          WHERE AccountId IN :facilityIds AND VisitTypeId = :routineVisitTypeId
-                                          AND Status = :VISIT_STATUS_COMPLETED AND ActualVisitStartTime != null
-                                          ORDER BY ActualVisitStartTime DESC]) {
-            if (!anchorByFacilityId.containsKey(completedInspection.AccountId)) {
-                anchorByFacilityId.put(completedInspection.AccountId, completedInspection.ActualVisitStartTime);
-            }
-        }
-        return anchorByFacilityId;
     }
 
 /**
