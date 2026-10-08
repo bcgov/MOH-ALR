@@ -12,6 +12,7 @@ public class PHOCSLateFeeManagementRow {
     @AuraEnabled public String feeName;
     @AuraEnabled public Decimal feeAmount;
     @AuraEnabled public Date dueDate;
+    @AuraEnabled public String emailStatus;
     @AuraEnabled public String operatingMonths;
     @AuraEnabled public Boolean multiplePremise;
     @AuraEnabled public String premiseRole;

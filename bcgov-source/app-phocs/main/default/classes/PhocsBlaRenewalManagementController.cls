@@ -49,10 +49,7 @@ public with sharing class PhocsBlaRenewalManagementController {
     private static final String LATE_FEE_NAME = 'Late Fee';
     private static final String RTFI_LATE_FEE_NAME = 'Late Fee';
     private static final String RTF_STATUS_DUE = 'Due';
-    private static final String RTF_STATUS_PARTIALLY_PAID = 'Partially Paid';
-    private static final String PAYMENT_REMINDER_SEND = 'Send Reminder';
-    private static final String PAYMENT_REMINDER_LATE_FEE_VALUE = 'Send Late Fee';
-    private static final String RTF_NOTIFICATION_FIELD = 'PaymentReminder__c';
+    private static final String RTF_STATUS_PARTIALLY_PAID = 'Partially Paid';    
     private static final String RTF_FEE_TYPE_REGULATORY_TRANSACTION = 'Regulatory Transaction Fee';
     
     
@@ -649,6 +646,7 @@ public with sharing class PhocsBlaRenewalManagementController {
         'Status__c, ' +
         'FeeType__c, ' +
         'DueDate, ' +
+        'EmailStatus__c, ' +
         'Account.Id, ' +
         'Account.Name, ' +
         'Account.Parent.Id, ' +
@@ -741,6 +739,7 @@ public with sharing class PhocsBlaRenewalManagementController {
             ) {
                 row.dueDate = ((Datetime)dueDateValue).date();
             }
+            row.emailStatus = String.valueOf(fee.get('EmailStatus__c'));
             SObject item = itemByFee.get(row.Id);
             
             if (item != null) {
@@ -1318,6 +1317,7 @@ public with sharing class PhocsBlaRenewalManagementController {
             'Status__c, ' +
             'FeeType__c, ' +
             'DueDate, ' +
+            'EmailStatus__c, ' +
             'Account.Id, ' +
             'Account.Name, ' +
             'Account.Type, ' +
@@ -1512,7 +1512,7 @@ public with sharing class PhocsBlaRenewalManagementController {
                     row.dueDate =
                     ((Datetime)dueDateValue).date();
                 }
-                
+                row.emailStatus =String.valueOf(fee.get('EmailStatus__c'));
                 // Fee Item
                 SObject item =
                 itemByFee.get(row.Id);
@@ -1799,8 +1799,7 @@ public with sharing class PhocsBlaRenewalManagementController {
         }
         
         for (RegulatoryTrxnFee fee : fees) {
-            fee.PaymentReminder__c =
-            PAYMENT_REMINDER_SEND;
+            fee.EmailStatus__c ='Payment Reminder Queued';
         }
         
         Database.SaveResult[] results =
