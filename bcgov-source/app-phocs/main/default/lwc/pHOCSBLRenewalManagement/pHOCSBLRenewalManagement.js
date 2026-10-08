@@ -359,6 +359,11 @@ export default class PHOCSBLARenewalManagement extends LightningElement {
             fieldName: 'premiseRole',
             type: 'text',
             sortable: true
+        },{
+            label: 'Email Status',
+            fieldName: 'emailStatus',
+            type: 'text',
+            sortable: true
         }
     ];
 
@@ -483,6 +488,12 @@ export default class PHOCSBLARenewalManagement extends LightningElement {
         {
             label: 'Premise Role',
             fieldName: 'premiseRole',
+            type: 'text',
+            sortable: true
+        },
+        {
+            label: 'Email Status',
+            fieldName: 'emailStatus',
             type: 'text',
             sortable: true
         }
