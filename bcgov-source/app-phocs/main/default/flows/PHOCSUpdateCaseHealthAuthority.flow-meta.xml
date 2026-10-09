@@ -234,7 +234,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>Get_Custom_Metadata</targetReference>
+            <targetReference>GetRunningUserRecord</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -283,7 +283,8 @@
         </rules>
     </decisions>
     <description>EHIS-5700 bugfix latest - v15
-EHIS-5000 accommodate Orphan Cases with Owner&apos;s Health Authority that stamp user&apos;s HA</description>
+EHIS-5000 accommodate Orphan Cases with Owner&apos;s Health Authority that stamp user&apos;s HA
+EHIS-5910 Updating the flow to UserRoleId</description>
     <environments>Default</environments>
     <formulas>
         <name>Is_Insert</name>
@@ -318,7 +319,7 @@ EHIS-5000 accommodate Orphan Cases with Owner&apos;s Health Authority that stamp
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>On_Create_Case_Get_Custom_Metadata</targetReference>
+            <targetReference>Get_Running_User_Record</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -346,11 +347,53 @@ EHIS-5000 accommodate Orphan Cases with Owner&apos;s Health Authority that stamp
             <field>User_Assigned_Role__c</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>$User.User_Assigned_Role__c</elementReference>
+                <elementReference>GetRunningUserRecord.UserRole.DeveloperName</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>PHOCSUserRoleHAMapping__mdt</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Running_User_Record</name>
+        <label>Get Running User Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>On_Create_Case_Get_Custom_Metadata</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$User.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>User</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>GetRunningUserRecord</name>
+        <label>GetRunningUserRecord</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Custom_Metadata</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$User.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>User</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
@@ -367,7 +410,7 @@ EHIS-5000 accommodate Orphan Cases with Owner&apos;s Health Authority that stamp
             <field>User_Assigned_Role__c</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>$User.User_Assigned_Role__c</elementReference>
+                <elementReference>Get_Running_User_Record.UserRole.DeveloperName</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
