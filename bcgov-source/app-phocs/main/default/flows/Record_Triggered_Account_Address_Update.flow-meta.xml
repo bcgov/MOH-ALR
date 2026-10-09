@@ -75,64 +75,6 @@
         </rules>
     </decisions>
     <decisions>
-        <name>Check_Facility_Record_Type</name>
-        <label>Check Facility Record Type</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>Is_ALR_RecordType</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Residence</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Create_PL_Location_Record</targetReference>
-            </connector>
-            <label>Is ALR RecordType</label>
-        </rules>
-        <rules>
-            <name>IS_PHOCS_RecordType</name>
-            <conditionLogic>or</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>DrinkingWaterSystem</stringValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>DrinkingWaterSourceIntake</stringValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Facility</stringValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>PHOCSDairyFacility</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Get_PHOCS_Location_Record_Type</targetReference>
-            </connector>
-            <label>IS PHOCS RecordType</label>
-        </rules>
-    </decisions>
-    <decisions>
         <name>Check_Facility_RecordType</name>
         <label>Check Facility RecordType</label>
         <locationX>0</locationX>
@@ -191,6 +133,64 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Check_FacilityRecordType</name>
+        <label>Check Facility Record Type</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Is_ALR_RecType</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Residence</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_PL_Location_Records</targetReference>
+            </connector>
+            <label>Is ALR RecType</label>
+        </rules>
+        <rules>
+            <name>Is_PHOCS_RecType</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>DrinkingWaterSystem</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>DrinkingWaterSourceIntake</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Facility</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>PHOCSDairyFacility</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_PHOCS_Location_Record_Type</targetReference>
+            </connector>
+            <label>Is PHOCS RecType</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>LocationType_Check</name>
         <label>LocationType Check</label>
         <locationX>0</locationX>
@@ -229,7 +229,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Get_PL_Location_Records</targetReference>
+                <targetReference>Check_FacilityRecordType</targetReference>
             </connector>
             <label>Physical Location Records</label>
         </rules>
@@ -342,6 +342,38 @@
         </rules>
     </decisions>
     <decisions>
+        <name>PHOCS_Location_Record_Check</name>
+        <label>PHOCS Location Record Check</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Create_PHOCS_LocationRecord</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Is_PL_Update</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_PHOCS_Location_Records.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_AssociatedLocation_Records.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_PHOCS_Associated_Location_Rec</targetReference>
+            </connector>
+            <label>Is PL Update</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>PL_Associated_Location_Check1</name>
         <label>PL Associated Location Check</label>
         <locationX>0</locationX>
@@ -372,7 +404,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>Check_Facility_Record_Type</targetReference>
+            <targetReference>Create_PL_Location_Record</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -450,7 +482,8 @@
     </decisions>
     <description>Flow to Update or create Location , Address , Associated Location Records - final
 Update changes related to EHIS-3070 AC#3
-EHIS-5861: Adding PHOCS RecordTypeId and HA values</description>
+EHIS-5861: Adding PHOCS RecordTypeId and HA values
+EHIS-5861: Adding Health Authority Field value to Address Object</description>
     <environments>Default</environments>
     <formulas>
         <description>Concat Lat and Long</description>
@@ -654,6 +687,12 @@ EHIS-5861: Adding PHOCS RecordTypeId and HA values</description>
             <field>DrivingDirections</field>
             <value>
                 <elementReference>$Record.PhysicalDrivingDirections__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>HealthAuthority__c</field>
+            <value>
+                <elementReference>$Record.HealthAuthority__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -1019,6 +1058,13 @@ EHIS-5861: Adding PHOCS RecordTypeId and HA values</description>
                 <elementReference>$Record.Physical_Address__City__s</elementReference>
             </value>
         </filters>
+        <filters>
+            <field>HealthAuthority__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.HealthAuthority__c</elementReference>
+            </value>
+        </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>Address</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
@@ -1030,7 +1076,7 @@ EHIS-5861: Adding PHOCS RecordTypeId and HA values</description>
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Create_PHOCS_LocationRecord</targetReference>
+            <targetReference>Get_PHOCS_Location_Records</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -1049,6 +1095,43 @@ EHIS-5861: Adding PHOCS RecordTypeId and HA values</description>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>RecordType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_PHOCS_Location_Records</name>
+        <label>Get PHOCS Location Records</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>PHOCS_Location_Record_Check</targetReference>
+        </connector>
+        <filterLogic>or</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>LocName</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>RecordTypeId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_PHOCS_Location_Record_Type.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>HealthAuthority__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.HealthAuthority__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Location</object>
+        <sortField>LastModifiedDate</sortField>
+        <sortOrder>Desc</sortOrder>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
@@ -1206,6 +1289,27 @@ EHIS-5861: Adding PHOCS RecordTypeId and HA values</description>
             <field>LocationId</field>
             <value>
                 <elementReference>LocationId</elementReference>
+            </value>
+        </inputAssignments>
+        <object>AssociatedLocation</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_PHOCS_Associated_Location_Rec</name>
+        <label>Update PHOCS Associated Location Rec</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_AssociatedLocation_Records.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>LocationId</field>
+            <value>
+                <elementReference>Get_PHOCS_Location_Records.Id</elementReference>
             </value>
         </inputAssignments>
         <object>AssociatedLocation</object>
