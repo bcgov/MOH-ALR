@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Portal Facility Water Source List</label>
+    <protected>false</protected>
+    <values>
+        <field>ChildSobjectAPIName__c</field>
+        <value xsi:type="xsd:string">PortalFacilityWaterSourceList</value>
+    </values>
+    <values>
+        <field>ObjectQuery__c</field>
+        <value xsi:type="xsd:string">SELECT Id,
+RelatedAccount.Name,
+RelatedAccount.Id,
+RelatedAccount.Status__c,
+Name,
+RelatedAccount.CategoryL1__c,
+RelatedAccount.CategoryL2__c,
+RelatedAccount.UseDescription__c,
+Account.Name
+FROM AccountAccountRelation
+WHERE AccountId = :recordId
+AND RelatedAccount.RecordType.DeveloperName = &apos;DrinkingWaterSourceIntake&apos;</value>
+    </values>
+    <values>
+        <field>ParentFieldAPIName__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>ParentSobjectAPIName__c</field>
+        <value xsi:type="xsd:string">Account</value>
+    </values>
+    <values>
+        <field>SobjectAPIName__c</field>
+        <value xsi:type="xsd:string">AccountAccountRelation</value>
+    </values>
+    <values>
+        <field>Type__c</field>
+        <value xsi:type="xsd:string">Related</value>
+    </values>
+</CustomMetadata>
