@@ -223,7 +223,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         List<SObject> queryResults = Database.query(queryConfig.ObjectQuery__c);// NOPMD
         for (SObject sObj : queryResults) { 
             
-                     // Added as part Substantiated Complaints data table 
+                     // Only format for the specific FlexCard/Data Table
             if (configName == 'FacilitySubstantiatedCaseList') {
         
                 String complaintTopicType = (String)sObj.get('ComplaintTopicType__c');
@@ -603,6 +603,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
         }
         return details;
     }
+    
    // Added By Janvi EHIS-563 (Start)
 private static ViolationEnforcementActionDetails getViolationEnforcementActionDetails(Account accRecord) {
     ViolationEnforcementActionDetails details = new ViolationEnforcementActionDetails();
@@ -1189,7 +1190,14 @@ System.debug('VEA found: ' + vea.Id);
                     'CollectionDateTime' => lab.LabTestRequisition__r?.CollectionDateTime__c?.format('yyyy-MM-dd hh:mma','America/Vancouver'),
                     'DrinkingWaterComponentName' => lab.LabTestRequisition__r.Drinking_Water_Component_Name__r.Name,
                     'SiteTreatment' => lab.LabTestRequisition__r.SamplingSite__r.SiteTreatment__c,
-                    'SiteDescriptor' => lab.LabTestRequisition__r.SamplingSite__r.Name
+                    'SiteDescriptor' => lab.LabTestRequisition__r.SamplingSite__r.Name,
+                    'LabTestRequisitionName' => lab.LabTestRequisition__r.Name,
+                    'SampleType' => lab.LabTestRequisition__r.SampleType__c,
+                    'Status' => lab.LabTestRequisition__r.Status__c,
+                    'ResultCodeDescription__c' => lab.ResultCodeDescription__c,
+                    'LabTestRequisitionId' => lab.LabTestRequisition__c,
+                    'Id' => lab.Id,
+                    'AccountId' => lab.FacilityName__c
                     };            
                         return result;
         }

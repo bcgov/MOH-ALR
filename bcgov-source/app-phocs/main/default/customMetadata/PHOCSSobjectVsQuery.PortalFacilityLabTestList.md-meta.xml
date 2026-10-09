@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Portal Facility LabTest List</label>
+    <protected>false</protected>
+    <values>
+        <field>ChildSobjectAPIName__c</field>
+        <value xsi:type="xsd:string">LabTestRequired__c</value>
+    </values>
+    <values>
+        <field>ObjectQuery__c</field>
+        <value xsi:type="xsd:string">SELECT Id,
+LabTestRequisition__r.Drinking_Water_Component_Name__r.Name,
+LabTestRequisition__r.Name,
+LabTestRequisition__r.SampleType__c,
+LabTestRequisition__r.Status__c,
+LabTestRequisition__r.Site_Treatment__c,
+LabTestRequisition__r.SamplingSite__r.Name,
+SampleTestType__c,
+LabTestMasterListName__c,
+ResultValue__c,
+UnitOfMeasure__c,
+ResultCodeDescription__c,
+LabTestRequisition__r.CollectionDateTime__c,
+FacilityName__c,
+Name,
+TestCategory__c,
+Unit_of_Measure__c,
+Test__c,
+Test__r.Id,
+LabTestRequisition__r.SamplingSite__r.SiteTreatment__c,
+Test__r.Name,
+Test__r.ParameterType__c,
+LabTestRequisition__c
+FROM LabTestRequired__c
+WHERE LabTestRequisition__r.FacilityName__c =:recordId
+AND LabTestRequisition__r.Status__c =&apos;Completed&apos;
+AND LabTestRequisition__r.RecordType.Name = &apos;PHOCS Water Lab Test Requisition&apos;
+AND RecordType.Name = &apos;PHOCS Water Lab Test Required&apos;
+ORDER BY LabTestRequisition__r.CollectionDateTime__c DESC NULLS LAST LIMIT 200</value>
+    </values>
+    <values>
+        <field>ParentFieldAPIName__c</field>
+        <value xsi:type="xsd:string">FacilityName__c</value>
+    </values>
+    <values>
+        <field>ParentSobjectAPIName__c</field>
+        <value xsi:type="xsd:string">AccountId</value>
+    </values>
+    <values>
+        <field>SobjectAPIName__c</field>
+        <value xsi:type="xsd:string">LabTestRequired__c</value>
+    </values>
+    <values>
+        <field>Type__c</field>
+        <value xsi:type="xsd:string">Related</value>
+    </values>
+</CustomMetadata>
