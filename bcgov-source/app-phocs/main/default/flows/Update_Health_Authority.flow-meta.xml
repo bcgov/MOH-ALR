@@ -4,8 +4,8 @@
         <description>Apex action to pass hyperlink and get Salesforce Id from hyperlink</description>
         <name>Extract_SF_ID_From_Hyperlink</name>
         <label>Extract SF ID From Hyperlink</label>
-        <locationX>1821</locationX>
-        <locationY>923</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <actionName>PHOCSCustomConfiguration</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -30,8 +30,8 @@
     <customErrors>
         <name>Error</name>
         <label>Error</label>
-        <locationX>1810</locationX>
-        <locationY>1571</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <customErrorMessages>
             <errorMessage>You can only create facilities associated with your Health Authority.</errorMessage>
             <isFieldError>false</isFieldError>
@@ -41,8 +41,8 @@
         <description>Check Health Authority based on Facility HA and User HA</description>
         <name>Check_Account_Health_Authority</name>
         <label>Check Account Health Authority</label>
-        <locationX>710</locationX>
-        <locationY>1463</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>InteriorHA</name>
@@ -124,8 +124,8 @@
         <description>Check Health Authority based on Facility HA and User HA</description>
         <name>Check_Account_User_Health_Authority_Alignment</name>
         <label>Check Account &amp; User Health Authority Alignment</label>
-        <locationX>1678</locationX>
-        <locationY>1463</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <defaultConnector>
             <targetReference>Error</targetReference>
         </defaultConnector>
@@ -149,8 +149,8 @@
     <decisions>
         <name>Check_Bypass_Condition</name>
         <label>Check Bypass Condition</label>
-        <locationX>1392</locationX>
-        <locationY>1355</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Bypass_Validation</name>
@@ -205,37 +205,14 @@
         </rules>
     </decisions>
     <decisions>
-        <description>Update Health Authority Only if Facility Hierarchy is changed</description>
-        <name>Check_Facility_Hierarchy_Changed</name>
-        <label>Check Facility Hierarchy Changed</label>
-        <locationX>2519</locationX>
-        <locationY>431</locationY>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>Facility_Hierarchy_Changed</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.FacilityHierarchy__c</leftValueReference>
-                <operator>IsChanged</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>CheckFacilityHierarchy</targetReference>
-            </connector>
-            <label>Facility Hierarchy Changed</label>
-        </rules>
-    </decisions>
-    <decisions>
         <description>To Check if Facility Hierarchy exists in Account</description>
         <name>Check_Facility_Hierarchy_exists</name>
         <label>Check Facility Hierarchy exists</label>
-        <locationX>1821</locationX>
-        <locationY>1031</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
-            <name>Outcome_1_of_Check_Facility_Hierarchy_exists</name>
+            <name>Is_Check_Facility_Hierarchy_Exists</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>getHyperlinkSFID</leftValueReference>
@@ -247,18 +224,40 @@
             <connector>
                 <targetReference>Get_Facility_Hierarchy</targetReference>
             </connector>
-            <label>Outcome 1 of Check Facility Hierarchy exists</label>
+            <label>Is Check Facility Hierarchy Exists</label>
         </rules>
     </decisions>
     <decisions>
-        <name>CheckFacilityHierarchy</name>
-        <label>Check Facility Hierarchy</label>
-        <locationX>2299</locationX>
-        <locationY>815</locationY>
-        <defaultConnectorLabel>Default</defaultConnectorLabel>
+        <description>Check Entry Conditions</description>
+        <name>CheckEntryConditions</name>
+        <label>CheckEntryConditions</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>End</defaultConnectorLabel>
         <rules>
-            <name>FacilityHierarchyNotNull</name>
-            <conditionLogic>and</conditionLogic>
+            <name>UpdateHAField</name>
+            <conditionLogic>(1 AND 2) OR (3 AND 4)</conditionLogic>
+            <conditions>
+                <leftValueReference>checkIsNewRecord</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.FacilityHierarchy__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.FacilityHierarchy__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
             <conditions>
                 <leftValueReference>$Record.FacilityHierarchy__c</leftValueReference>
                 <operator>IsNull</operator>
@@ -269,70 +268,7 @@
             <connector>
                 <targetReference>Extract_SF_ID_From_Hyperlink</targetReference>
             </connector>
-            <label>Facility Hierarchy Not Null</label>
-        </rules>
-        <rules>
-            <name>FacilityHierarchyNull</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.FacilityHierarchy__c</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>UpdateHealthAuthorityToNull</targetReference>
-            </connector>
-            <label>Facility Hierarchy Null</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <description>Check if record is created</description>
-        <name>CheckIsNew</name>
-        <label>CheckIsNew</label>
-        <locationX>2299</locationX>
-        <locationY>323</locationY>
-        <defaultConnector>
-            <targetReference>Check_Facility_Hierarchy_Changed</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Record Update</defaultConnectorLabel>
-        <rules>
-            <name>NewRecord</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>checkIsNewRecord</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Is_Facility_Hierarchy_Present</targetReference>
-            </connector>
-            <label>New Record</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Is_Facility_Hierarchy_Present</name>
-        <label>Is Facility Hierarchy Present</label>
-        <locationX>2079</locationX>
-        <locationY>431</locationY>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>Facility_Hierarchy_Present</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.FacilityHierarchy__c</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>CheckFacilityHierarchy</targetReference>
-            </connector>
-            <label>Facility Hierarchy Present</label>
+            <label>UpdateHAField</label>
         </rules>
     </decisions>
     <description>Bug Fix - 2520 Update record fix 
@@ -340,7 +276,8 @@ Bug Fix - For New Record and Update Record
 Bug fix - On creation Facility Hierarchy Updates
 test -v8
 Flow to update Health Authority Field - EHIS-188 - Bug fix
-EHIS-5000 Prevent Creation of Facilities for Another Health Authority</description>
+EHIS-5000 Prevent Creation of Facilities for Another Health Authority
+EHIS-5910 Updating the flow to UserRoleId</description>
     <environments>Default</environments>
     <formulas>
         <description>Check if record is created</description>
@@ -373,11 +310,11 @@ EHIS-5000 Prevent Creation of Facilities for Another Health Authority</descripti
         <description>To extract facility Hierarchy account record</description>
         <name>Get_Facility_Hierarchy</name>
         <label>Get Facility Hierarchy</label>
-        <locationX>1392</locationX>
-        <locationY>1139</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Get_User_Custom_Metadata</targetReference>
+            <targetReference>Get_Running_User_Record</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -392,11 +329,32 @@ EHIS-5000 Prevent Creation of Facilities for Another Health Authority</descripti
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
+        <name>Get_Running_User_Record</name>
+        <label>Get Running User Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_User_Custom_Metadata</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$User.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>User</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <description>Get PHOCS User Role HA Mapping custom metadata</description>
         <name>Get_User_Custom_Metadata</name>
         <label>Get User Custom Metadata</label>
-        <locationX>1392</locationX>
-        <locationY>1247</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Check_Bypass_Condition</targetReference>
@@ -406,7 +364,7 @@ EHIS-5000 Prevent Creation of Facilities for Another Health Authority</descripti
             <field>User_Assigned_Role__c</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>$User.User_Assigned_Role__c</elementReference>
+                <elementReference>Get_Running_User_Record.UserRole.DeveloperName</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
@@ -417,8 +375,8 @@ EHIS-5000 Prevent Creation of Facilities for Another Health Authority</descripti
         <description>Update Account Field Health Authority to Fraser Health - FH</description>
         <name>Fraser_Health_FH</name>
         <label>Fraser Health - FH</label>
-        <locationX>314</locationX>
-        <locationY>1571</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <inputAssignments>
             <field>HealthAuthority__c</field>
             <value>
@@ -431,8 +389,8 @@ EHIS-5000 Prevent Creation of Facilities for Another Health Authority</descripti
         <description>Update Account Field Health Authority to Interior Health - IH</description>
         <name>Interior_Health_IH</name>
         <label>Interior Health - IH</label>
-        <locationX>50</locationX>
-        <locationY>1571</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <inputAssignments>
             <field>HealthAuthority__c</field>
             <value>
@@ -445,8 +403,8 @@ EHIS-5000 Prevent Creation of Facilities for Another Health Authority</descripti
         <description>Update Account Field Health Authority - Island Health - Island</description>
         <name>Island_Health_Island</name>
         <label>Island Health - Island</label>
-        <locationX>842</locationX>
-        <locationY>1571</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <inputAssignments>
             <field>HealthAuthority__c</field>
             <value>
@@ -459,8 +417,8 @@ EHIS-5000 Prevent Creation of Facilities for Another Health Authority</descripti
         <description>Update Account Field Health Authority to Northern Health - NH</description>
         <name>Northern_Health_NH</name>
         <label>Northern Health - NH</label>
-        <locationX>1106</locationX>
-        <locationY>1571</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <inputAssignments>
             <field>HealthAuthority__c</field>
             <value>
@@ -472,8 +430,8 @@ EHIS-5000 Prevent Creation of Facilities for Another Health Authority</descripti
     <recordUpdates>
         <name>Update_Facility_Health_Authority</name>
         <label>Update Facility Health Authority</label>
-        <locationX>1546</locationX>
-        <locationY>1571</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <inputAssignments>
             <field>HealthAuthority__c</field>
             <value>
@@ -483,29 +441,11 @@ EHIS-5000 Prevent Creation of Facilities for Another Health Authority</descripti
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <recordUpdates>
-        <name>UpdateHealthAuthorityToNull</name>
-        <label>Update Health Authority To Null</label>
-        <locationX>2514</locationX>
-        <locationY>923</locationY>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>HealthAuthority__c</field>
-            <operator>IsNull</operator>
-            <value>
-                <booleanValue>false</booleanValue>
-            </value>
-        </filters>
-        <inputAssignments>
-            <field>HealthAuthority__c</field>
-        </inputAssignments>
-        <inputReference>$Record</inputReference>
-    </recordUpdates>
-    <recordUpdates>
         <description>Update Account Field  Health Authority to Vancouver Coastal Health - VCH</description>
         <name>Vancouver_Coastal_Health_VCH</name>
         <label>Vancouver Coastal Health - VCH</label>
-        <locationX>578</locationX>
-        <locationY>1571</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <inputAssignments>
             <field>HealthAuthority__c</field>
             <value>
@@ -515,10 +455,10 @@ EHIS-5000 Prevent Creation of Facilities for Another Health Authority</descripti
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <start>
-        <locationX>2173</locationX>
+        <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>CheckIsNew</targetReference>
+            <targetReference>CheckEntryConditions</targetReference>
         </connector>
         <object>Account</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
