@@ -270,21 +270,6 @@
             </connector>
             <label>UpdateHAField</label>
         </rules>
-        <rules>
-            <name>Is_FacilityHierarchy_Null</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.FacilityHierarchy__c</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>UpdateHealthAuthorityToNull</targetReference>
-            </connector>
-            <label>Is FacilityHierarchy Null</label>
-        </rules>
     </decisions>
     <description>Bug Fix - 2520 Update record fix 
 Bug Fix - For New Record and Update Record
@@ -452,24 +437,6 @@ EHIS-5910 Updating the flow to UserRoleId</description>
             <value>
                 <elementReference>Get_User_Custom_Metadata.HealthAuthority__c</elementReference>
             </value>
-        </inputAssignments>
-        <inputReference>$Record</inputReference>
-    </recordUpdates>
-    <recordUpdates>
-        <name>UpdateHealthAuthorityToNull</name>
-        <label>Update Health Authority To Null</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>HealthAuthority__c</field>
-            <operator>IsNull</operator>
-            <value>
-                <booleanValue>false</booleanValue>
-            </value>
-        </filters>
-        <inputAssignments>
-            <field>HealthAuthority__c</field>
         </inputAssignments>
         <inputReference>$Record</inputReference>
     </recordUpdates>
