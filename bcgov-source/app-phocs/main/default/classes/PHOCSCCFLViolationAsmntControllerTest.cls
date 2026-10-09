@@ -9,6 +9,7 @@
 *               01 Sep -  PHOCS-4817        -  Deepak      -  Added required Name field on Assessment inserts and corrected Scope__c/Severity__c to valid restricted picklist values.
 *               01 Sep -  PHOCS-271         -  Deepak      -  Updated matched-violation test to assert the completed violation's own data is displayed (not the current violation's), and added coverage for selected being gated on the completed violation's Scope/Severity.
 *               03 Sep -  PHOCS-271         -  Deepak      -  getReassessmentViolations now requires a SelectedViolationsJSON__c match (by violationId, falling back to category/inspectionQuestion) to prepopulate a matched violation. Updated the two matched-violation tests to populate SelectedViolationsJSON__c, and added coverage for the category/inspectionQuestion fallback match and for a composite-key match with no corresponding JSON entry.
+*               07 Oct -  PHOCS-271         -  Deepak      -  Updated testGetReassessmentViolations_MatchedButNoJsonEntry_DisplaysCurrentViolation to assert completedViolation.Id (base set is now completed violations); updated fallback test JSON category to match completed violation's AssessmentTask name.
 ***********************************************************************************************/
 @isTest
 public class PHOCSCCFLViolationAsmntControllerTest {    
@@ -381,10 +382,12 @@ public class PHOCSCCFLViolationAsmntControllerTest {
 * @date: 03 Sep 2026
 * @description: Verifies the category/inspectionQuestion fallback match: when the JSON's
 *                violationId does not correspond to the matched completed violation's Id, but a
-*                JSON entry's category/inspectionQuestion matches the current violation's
-*                Assessment Task/Indicator Definition names, Scope and Severity are still
+*                JSON entry's category/inspectionQuestion matches the completed violation's own
+*                AssessmentTask and AssessmentIndDefinition names, Scope and Severity are still
 *                prepopulated from that entry.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*                    07 Oct - PHOCS-271 - Deepak - Updated JSON category to match the completed
+*                    violation's AssessmentTask name since the base set is now completed violations.
 */
     @isTest
     public static void testGetReassessmentViolations_MatchedByCategoryAndQuestionFallback_PrepopulatesScopeSeverity() {
@@ -426,15 +429,14 @@ public class PHOCSCCFLViolationAsmntControllerTest {
                                                                                Status = 'Open');
         insert currentViolation;
         
-        // A JSON entry whose violationId does NOT match the completed violation's Id, so the
-        // controller must fall back to matching category/inspectionQuestion against the CURRENT
-        // violation's own AssessmentTask.Name ('Test Assessment Task') and
-        // AssessmentIndDefinition.Name ('Test Assessment Definition'), not the completed
-        // violation's task name.
+        // violationId does NOT match the completed violation's Id, so the controller falls back
+        // to matching category/inspectionQuestion against the BASE (completed) violation's own
+        // AssessmentTask.Name ('Completed Assessment Task') and
+        // AssessmentIndDefinition.Name ('Test Assessment Definition').
         String selectedViolationsJson = JSON.serialize(new List<Map<String, Object>>{
             new Map<String, Object>{
                 'violationId' => '0fv000000000000AAA',
-                'category' => 'Test Assessment Task',
+                'category' => 'Completed Assessment Task',
                 'regulatoryCode' => 'Test Regulatory Code',
                 'inspectionQuestion' => 'Test Assessment Definition',
                 'scope' => 'Pattern',
@@ -464,8 +466,12 @@ public class PHOCSCCFLViolationAsmntControllerTest {
 * @date: 03 Sep 2026
 * @description: Verifies that a composite-key match with no corresponding entry in
 *                SelectedViolationsJSON__c (neither by violationId nor by category/
-*                inspectionQuestion) falls back to displaying the plain current violation.
+*                inspectionQuestion) returns the completed violation unselected, since the base
+*                set is now completed violations.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*                    07 Oct - PHOCS-271 - Deepak - Updated assertion from currentViolation.Id to
+*                    completedViolation.Id; the base set is completed violations so the completed
+*                    violation is always returned when the composite key matches, even with no JSON.
 */
     @isTest
     public static void testGetReassessmentViolations_MatchedButNoJsonEntry_DisplaysCurrentViolation() {
@@ -499,7 +505,7 @@ public class PHOCSCCFLViolationAsmntControllerTest {
         insert completedViolation;
         
         // SelectedViolationsJSON__c is left blank, so no violationId or category/inspectionQuestion
-        // match is possible even though the composite key matches a completed violation.
+        // match is possible. The completed violation is still returned as the base, but unselected.
         Assessment completedAssessment = new Assessment(Name = 'Test Completed Assessment', RecordTypeId = recordTypePHOCSAssessment, AccountId = facility.Id,
                                                         ResponseContextId = completedInspection.Id, Type = 'Risk Assessment',
                                                         AssessmentStatus = 'Completed');
@@ -518,8 +524,8 @@ public class PHOCSCCFLViolationAsmntControllerTest {
         PHOCSCCFLViolationAssessmentController.ReassessmentResponse result = PHOCSCCFLViolationAssessmentController.getReassessmentViolations(dataMap.get('inspId'), dataMap.get('facilityId'));
         Test.stopTest();
         
-        Assert.areEqual(1, result.violations.size(), 'One current violation should be returned.');
-        Assert.areEqual(currentViolation.Id, result.violations[0].id, 'With no matching JSON entry, the wrapper should fall back to the current violation, not the completed one.');
+        Assert.areEqual(1, result.violations.size(), 'One violation should be returned.');
+        Assert.areEqual(completedViolation.Id, result.violations[0].id, 'With no matching JSON entry, the wrapper should display the completed violation since it is the base set.');
         Assert.isFalse(result.violations[0].selected, 'A violation with no matching JSON entry should not be selected.');
     }
     
@@ -597,7 +603,7 @@ public class PHOCSCCFLViolationAsmntControllerTest {
         
         Assert.isTrue(result.hasCompletedAssessment, 'A completed Risk Assessment should be found.');
         Assert.areEqual(1, result.violations.size(), 'One current violation should be returned.');
-        Assert.areEqual(currentViolation.Id, result.violations[0].id, 'With no match, the wrapper should display the current violation.');
+        Assert.areEqual(currentViolation.Id, result.violations[0].id, 'With no match in completed violations, the wrapper should display the current violation.');
         Assert.isFalse(result.violations[0].selected, 'A violation without a matching completed violation should not be selected.');
         Assert.areEqual(null, result.violations[0].scope, 'Scope should not be prepopulated when no matching violation exists.');
         Assert.areEqual(null, result.violations[0].severity, 'Severity should not be prepopulated when no matching violation exists.');
