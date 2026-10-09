@@ -5,10 +5,16 @@
     <label>Backup Owner</label>
     <lookupFilter>
         <active>true</active>
+        <booleanFilter>1 OR 2</booleanFilter>
         <filterItems>
             <field>User.IsActive</field>
             <operation>equals</operation>
             <value>True</value>
+        </filterItems>
+        <filterItems>
+            <field>$Profile.Name</field>
+            <operation>equals</operation>
+            <value>System Administrator</value>
         </filterItems>
         <isOptional>false</isOptional>
     </lookupFilter>
