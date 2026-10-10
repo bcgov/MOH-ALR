@@ -128,10 +128,6 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>RTFItemRecord.FeeAmount</assignToReference>
-            <operator>Assign</operator>
-        </assignmentItems>
-        <assignmentItems>
             <assignToReference>RTFItemRecord.Status__c</assignToReference>
             <operator>Assign</operator>
             <value>
@@ -444,9 +440,14 @@ AND(
         <connector>
             <targetReference>GetGenerateApplicationFeeMetadata</targetReference>
         </connector>
-        <filterFormula>(({!$Record.RecordType.DeveloperName}==&apos;OperatingPermitApplication&apos; ) || ({!$Record.RecordType.DeveloperName}==&apos;ConstructionPermitApplication&apos; ) ||({!$Record.RecordType.DeveloperName}==&apos;PHOCSRecordofSewerageSystem&apos; ) )&amp;&amp; TEXT({!$Record.Status})==&apos;Closed&apos;  &amp;&amp; ISCHANGED({!$Record.ClosureReason__c}) &amp;&amp; (Text({!$Record.ClosureReason__c})==&apos;Approved&apos; || Text({!$Record.ClosureReason__c})==&apos;Accepted&apos;)</filterFormula>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+        <filterFormula>(((({!$Record.RecordType.DeveloperName}==&apos;OperatingPermitApplication&apos; ) || ({!$Record.RecordType.DeveloperName}==&apos;ConstructionPermitApplication&apos;)) &amp;&amp; 
+(({!$Record.LicenseType.Name}==&apos;Drinking Water Operating Permit&apos;)||({!$Record.LicenseType.Name}==&apos;Food Premises Operating Permit&apos;)||({!$Record.LicenseType.Name}==&apos;Pool Operating Permit&apos;)) &amp;&amp;
+ TEXT({!$Record.Status})==&apos;Closed&apos;  &amp;&amp;  (Text({!$Record.ClosureReason__c})==&apos;Approved&apos; || Text({!$Record.ClosureReason__c})==&apos;Accepted&apos;))||
+((({!$Record.LicenseType.Name}==&apos;Industrial Camp Sewerage System of Approval&apos;)||({!$Record.LicenseType.Name}==&apos;Record of Sewerage System&apos;)||({!$Record.LicenseType.Name}==&apos;Sewerage Holding Tank Permit to Construct&apos;)) 
+&amp;&amp; TEXT({!$Record.Status})==&apos;Submitted&apos;))</filterFormula>
         <object>BusinessLicenseApplication</object>
-        <recordTriggerType>Update</recordTriggerType>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
