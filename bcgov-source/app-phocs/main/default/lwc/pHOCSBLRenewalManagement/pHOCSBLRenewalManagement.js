@@ -52,11 +52,11 @@ export default class PHOCSBLARenewalManagement extends LightningElement {
 
     // Column-facing sort state (must match the column fieldName
     // so the datatable arrow and asc/desc toggle work).
-    generationSortedBy = 'parentAccountUrl';
+    generationSortedBy = 'accountUrl';
     generationSortDirection = 'asc';
 
     // Data-facing sort field (resolved property used for sorting).
-    generationSortField = 'parentAccountName';
+    generationSortField = 'accountName';
 
     // Contains ALL selected IDs, including records on pages
     // that aren't currently visible.
@@ -140,9 +140,9 @@ export default class PHOCSBLARenewalManagement extends LightningElement {
     sendPageData = [];
 
     sendCurrentPage = 1;
-    sendSortedBy = 'parentAccountUrl';
+    sendSortedBy = 'accountUrl';
     sendSortDirection = 'asc';
-    sendSortField = 'parentAccountName';
+    sendSortField = 'accountName';
 
     sendSelectedIds = new Set();
 
@@ -241,9 +241,9 @@ export default class PHOCSBLARenewalManagement extends LightningElement {
     paymentCurrentPage = 1;
     paymentTotalCount = 0;
 
-    paymentSortedBy = 'parentAccountUrl';
+    paymentSortedBy = 'accountUrl';
     paymentSortDirection = 'asc';
-    paymentSortField = 'parentAccountName';
+    paymentSortField = 'accountName';
 
     paymentSelectedIds = new Set();
 
@@ -381,9 +381,9 @@ export default class PHOCSBLARenewalManagement extends LightningElement {
     lateFeeCurrentPage = 1;
     lateFeeTotalCount = 0;
 
-    lateFeeSortedBy = 'parentAccountUrl';
+    lateFeeSortedBy = 'accountUrl';
     lateFeeSortDirection = 'asc';
-    lateFeeSortField = 'parentAccountName';
+    lateFeeSortField = 'accountName';
 
     lateFeeDeselectedIds = new Set();
 
