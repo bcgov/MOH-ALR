@@ -515,7 +515,7 @@ public with sharing class PhocsBlaRenewalManagementController {
             );            
             return new OperationResponse(
             true,
-            'Renewal invoices have been generated successfully and contacts have been notified.'
+            'Renewal invoices have been generated and facility contact(s) will be notified.'
             );
         } catch (Exception e) {
             System.debug('sendSelectedRenewals error: ' + e.getMessage());
