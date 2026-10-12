@@ -161,7 +161,7 @@ public with sharing class PHOCSRenewalMgmtEmailScheduler implements Schedulable 
                 continue;
             }
             Id contactId = contactIdsByEmail.get(emailAddress.toLowerCase());
-            EmailTemplate template = templatesByName.get(getTemplateName(fee.EmailStatus__c));
+            EmailTemplate template = templatesByName.get(getTemplateName(fee.EmailStatus__c,fee.FeeType__c));
             if (contactId == null || template == null) {
                 continue;
             }
@@ -235,16 +235,14 @@ public with sharing class PHOCSRenewalMgmtEmailScheduler implements Schedulable 
         return populatedContent + templateContent.substring(previousEnd);
     }
 
-    private static String getTemplateName(String paymentReminder) {
-        if (paymentReminder == 'Invoice Notification Queued') {
-            return NEWINVOICE_TEMPLATE;
+    private static String getTemplateName(String paymentReminder, String feetype) {
+        if (paymentReminder == 'Invoice Notification Queued' ||paymentReminder == 'Late Fee Notification Queued'){
+            if(feetype=='Renewal') return RENEWALINVOICE_TEMPLATE;            
+            else return NEWINVOICE_TEMPLATE;
         }
         if (paymentReminder == 'Payment Reminder Queued') {
             return REMINDER_TEMPLATE;
-        }
-        if (paymentReminder == 'Late Fee Notification Queued') {
-            return RENEWALINVOICE_TEMPLATE;
-        }
+        }        
         return null;
     }
 
