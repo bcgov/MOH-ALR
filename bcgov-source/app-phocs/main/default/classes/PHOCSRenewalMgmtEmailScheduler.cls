@@ -17,6 +17,13 @@ public with sharing class PHOCSRenewalMgmtEmailScheduler implements Schedulable 
     private static final String NO_EMAIL_FOUND ='No Email Found';
 
     public static Map<String, EmailTemplate> testTemplates;
+    // Find the verified PHOCS Org-Wide Email Address
+    public static List<OrgWideEmailAddress> oweaList = [
+        SELECT Id, Address, DisplayName
+        FROM OrgWideEmailAddress
+        WHERE Address = :'ehis.project@gov.bc.ca'
+        LIMIT 1
+    ];
 
     public void execute(SchedulableContext sc) {
         sendFeeEmails(getFeeContactEmails());
@@ -154,7 +161,7 @@ public with sharing class PHOCSRenewalMgmtEmailScheduler implements Schedulable 
                 continue;
             }
             Id contactId = contactIdsByEmail.get(emailAddress.toLowerCase());
-            EmailTemplate template = templatesByName.get(getTemplateName(fee.EmailStatus__c));
+            EmailTemplate template = templatesByName.get(getTemplateName(fee.EmailStatus__c,fee.FeeType__c));
             if (contactId == null || template == null) {
                 continue;
             }
@@ -167,6 +174,7 @@ public with sharing class PHOCSRenewalMgmtEmailScheduler implements Schedulable 
             email.setSubject(populateMergeFields(template.Subject, fee));
             email.setHtmlBody(populateMergeFields(template.HtmlValue, fee));
             email.setPlainTextBody(populateMergeFields(template.Body, fee));
+   			email.setOrgWideEmailAddressId(oweaList[0].Id);
 
             Id contentVersionId = latestVersionByFeeId.get(fee.Id);
             if (contentVersionId != null) {
@@ -192,7 +200,6 @@ public with sharing class PHOCSRenewalMgmtEmailScheduler implements Schedulable 
         }
     }
     
-    @TestVisible
     private static String populateMergeFields(
         String templateContent,
         RegulatoryTrxnFee fee
@@ -228,16 +235,14 @@ public with sharing class PHOCSRenewalMgmtEmailScheduler implements Schedulable 
         return populatedContent + templateContent.substring(previousEnd);
     }
 
-    private static String getTemplateName(String paymentReminder) {
-        if (paymentReminder == 'Invoice Notification Queued') {
-            return NEWINVOICE_TEMPLATE;
+    private static String getTemplateName(String paymentReminder, String feetype) {
+        if (paymentReminder == 'Invoice Notification Queued' ||paymentReminder == 'Late Fee Notification Queued'){
+            if(feetype=='Renewal') return RENEWALINVOICE_TEMPLATE;            
+            else return NEWINVOICE_TEMPLATE;
         }
         if (paymentReminder == 'Payment Reminder Queued') {
             return REMINDER_TEMPLATE;
-        }
-        if (paymentReminder == 'Late Fee Notification Queued') {
-            return RENEWALINVOICE_TEMPLATE;
-        }
+        }        
         return null;
     }
 

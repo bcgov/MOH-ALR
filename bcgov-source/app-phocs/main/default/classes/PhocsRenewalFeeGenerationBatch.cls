@@ -7,7 +7,7 @@ public class PhocsRenewalFeeGenerationBatch implements Database.Batchable<SObjec
 
     public Database.QueryLocator start(Database.BatchableContext bc) {
         return Database.getQueryLocator([
-            SELECT Id, Status__c
+            SELECT Id, Status__c,EmailStatus__c
             FROM RegulatoryTrxnFee
             WHERE Id IN :feeIds
         ]);
@@ -16,7 +16,7 @@ public class PhocsRenewalFeeGenerationBatch implements Database.Batchable<SObjec
     public void execute(Database.BatchableContext bc, List<RegulatoryTrxnFee> scope) {
         for (RegulatoryTrxnFee fee : scope) {
             fee.Status__c = 'Due';
-            fee.PaymentReminder__c='Send Renewal';
+            fee.EmailStatus__c='Invoice Notification Queued';
         }
 
         if (!scope.isEmpty()) {

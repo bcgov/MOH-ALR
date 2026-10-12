@@ -12,8 +12,8 @@ public class RegulatoryTrxnFeeTriggerHandlerTest {
 
     private static final String HA_NORTHERN = 'Northern Health - NH';
     private static final String FEE_TYPE_RENEWAL = 'Renewal';
-    private static final String PAYMENT_REMINDER_SEND_RENEWAL = 'Send Renewal';
-    private static final String PAYMENT_REMINDER_LATE_FEE_GENERATED = 'Late Fee Generated';
+    private static final String PAYMENT_REMINDER_SEND_RENEWAL = 'Invoice Notification Queued';
+    private static final String PAYMENT_REMINDER_LATE_FEE_GENERATED = 'Late Fee Notification Queued';
     private static final Id RT_PHOCS_NON_DAIRY_TXN_FEE = Schema.SObjectType.RegulatoryTrxnFee.getRecordTypeInfosByDeveloperName().get('PHOCSNonDairyTransactionFee').getRecordTypeId();
 
     @testSetup
@@ -78,7 +78,7 @@ public class RegulatoryTrxnFeeTriggerHandlerTest {
         insert oldFee;
 
         RegulatoryTrxnFee newFee = oldFee.clone(true, true, false, false);
-        newFee.PaymentReminder__c = PAYMENT_REMINDER_SEND_RENEWAL;
+        newFee.emailStatus__c = PAYMENT_REMINDER_SEND_RENEWAL;
 
         Test.startTest();
         RegulatoryTrxnFeeTriggerHandler.generateInvoiceOnPaymentReminderChange(
@@ -88,7 +88,7 @@ public class RegulatoryTrxnFeeTriggerHandlerTest {
         Test.stopTest();
 
         List<AsyncApexJob> jobs = [SELECT Id, Status, ExtendedStatus FROM AsyncApexJob WHERE ApexClass.Name = 'PHOCSInvoiceGenerationQueueable'];
-        Assert.areEqual(1, jobs.size(), 'Calling generateInvoiceOnPaymentReminderChange directly should enqueue PHOCSInvoiceGenerationQueueable when PaymentReminder__c changes to a qualifying value.');
+        Assert.areEqual(1, jobs.size(), 'Calling generateInvoiceOnPaymentReminderChange directly should enqueue PHOCSInvoiceGenerationQueueable when emailStatus__c changes to a qualifying value.');
         Assert.areEqual('Completed', jobs[0].Status, 'The queueable job should have completed successfully. ExtendedStatus: ' + jobs[0].ExtendedStatus);
     }
 
@@ -97,7 +97,7 @@ public class RegulatoryTrxnFeeTriggerHandlerTest {
 * @date: 15 Sep 2026
 * @description: The purpose of this method is to cover Testcoverage of
 *                  generateInvoiceOnPaymentReminderChange, verifying updating a Due,
-*                  PHOCSNonDairyTransactionFee fee's PaymentReminder__c to 'Send Renewal'
+*                  PHOCSNonDairyTransactionFee fee's emailStatus__c to 'Send Renewal'
 *                  generates a DocumentGenerationProcess.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -114,7 +114,7 @@ public class RegulatoryTrxnFeeTriggerHandlerTest {
         insert fee;
 
         Test.startTest();
-        fee.PaymentReminder__c = PAYMENT_REMINDER_SEND_RENEWAL;
+        fee.emailStatus__c = PAYMENT_REMINDER_SEND_RENEWAL;
         update fee;
         Test.stopTest();
 
@@ -123,7 +123,7 @@ public class RegulatoryTrxnFeeTriggerHandlerTest {
         Assert.areEqual('Completed', jobs[0].Status, 'The queueable job should have completed successfully. ExtendedStatus: ' + jobs[0].ExtendedStatus);
 
         List<DocumentGenerationProcess> generatedProcesses = [SELECT Id, ReferenceObject FROM DocumentGenerationProcess];
-        Assert.areEqual(1, generatedProcesses.size(), 'A DocumentGenerationProcess should be created when PaymentReminder__c changes to Send Renewal.');
+        Assert.areEqual(1, generatedProcesses.size(), 'A DocumentGenerationProcess should be created when emailStatus__c changes to Send Renewal.');
         Assert.areEqual(fee.Id, generatedProcesses[0].ReferenceObject, 'ReferenceObject should be the RegulatoryTrxnFee Id.');
     }
 
@@ -132,7 +132,7 @@ public class RegulatoryTrxnFeeTriggerHandlerTest {
 * @date: 15 Sep 2026
 * @description: The purpose of this method is to cover Testcoverage of
 *                  generateInvoiceOnPaymentReminderChange, verifying updating a Due,
-*                  PHOCSNonDairyTransactionFee fee's PaymentReminder__c to 'Late Fee Generated'
+*                  PHOCSNonDairyTransactionFee fee's emailStatus__c to 'Late Fee Generated'
 *                  generates a DocumentGenerationProcess.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -149,7 +149,7 @@ public class RegulatoryTrxnFeeTriggerHandlerTest {
         insert fee;
 
         Test.startTest();
-        fee.PaymentReminder__c = PAYMENT_REMINDER_LATE_FEE_GENERATED;
+        fee.emailStatus__c = PAYMENT_REMINDER_LATE_FEE_GENERATED;
         update fee;
         Test.stopTest();
 
@@ -158,7 +158,7 @@ public class RegulatoryTrxnFeeTriggerHandlerTest {
         Assert.areEqual('Completed', jobs[0].Status, 'The queueable job should have completed successfully. ExtendedStatus: ' + jobs[0].ExtendedStatus);
 
         List<DocumentGenerationProcess> generatedProcesses = [SELECT Id, ReferenceObject FROM DocumentGenerationProcess];
-        Assert.areEqual(1, generatedProcesses.size(), 'A DocumentGenerationProcess should be created when PaymentReminder__c changes to Late Fee Generated.');
+        Assert.areEqual(1, generatedProcesses.size(), 'A DocumentGenerationProcess should be created when emailStatus__c changes to Late Fee Generated.');
         Assert.areEqual(fee.Id, generatedProcesses[0].ReferenceObject, 'ReferenceObject should be the RegulatoryTrxnFee Id.');
     }
 
@@ -166,7 +166,7 @@ public class RegulatoryTrxnFeeTriggerHandlerTest {
 * @author: Deepak
 * @date: 15 Sep 2026
 * @description: The purpose of this method is to cover Testcoverage of the no-op path,
-*                  verifying no DocumentGenerationProcess is created when PaymentReminder__c
+*                  verifying no DocumentGenerationProcess is created when emailStatus__c
 *                  does not actually change.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -179,7 +179,7 @@ public class RegulatoryTrxnFeeTriggerHandlerTest {
             RecordTypeId = RT_PHOCS_NON_DAIRY_TXN_FEE,
             Status__c = 'Due',
             FeeType__c = FEE_TYPE_RENEWAL,
-            PaymentReminder__c = PAYMENT_REMINDER_SEND_RENEWAL
+            emailStatus__c = PAYMENT_REMINDER_SEND_RENEWAL
         );
         insert fee;
 
@@ -189,7 +189,7 @@ public class RegulatoryTrxnFeeTriggerHandlerTest {
         Test.stopTest();
 
         List<DocumentGenerationProcess> generatedProcesses = [SELECT Id FROM DocumentGenerationProcess];
-        Assert.areEqual(0, generatedProcesses.size(), 'No DocumentGenerationProcess should be created when PaymentReminder__c does not change.');
+        Assert.areEqual(0, generatedProcesses.size(), 'No DocumentGenerationProcess should be created when emailStatus__c does not change.');
     }
 
     /**
@@ -197,7 +197,7 @@ public class RegulatoryTrxnFeeTriggerHandlerTest {
 * @date: 15 Sep 2026
 * @description: The purpose of this method is to cover Testcoverage of the non-qualifying-value
 *                  path, verifying no DocumentGenerationProcess is created when
-*                  PaymentReminder__c changes to a value other than Send Renewal or Late Fee
+*                  emailStatus__c changes to a value other than Send Renewal or Late Fee
 *                  Generated.
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
@@ -210,17 +210,17 @@ public class RegulatoryTrxnFeeTriggerHandlerTest {
             RecordTypeId = RT_PHOCS_NON_DAIRY_TXN_FEE,
             Status__c = 'Due',
             FeeType__c = FEE_TYPE_RENEWAL,
-            PaymentReminder__c = PAYMENT_REMINDER_SEND_RENEWAL
+            emailStatus__c = PAYMENT_REMINDER_SEND_RENEWAL
         );
         insert fee;
 
         Test.startTest();
-        fee.PaymentReminder__c = null;
+        fee.emailStatus__c = null;
         update fee;
         Test.stopTest();
 
         List<DocumentGenerationProcess> generatedProcesses = [SELECT Id FROM DocumentGenerationProcess];
-        Assert.areEqual(0, generatedProcesses.size(), 'No DocumentGenerationProcess should be created when PaymentReminder__c changes to a non-qualifying value.');
+        Assert.areEqual(0, generatedProcesses.size(), 'No DocumentGenerationProcess should be created when emailStatus__c changes to a non-qualifying value.');
     }
 }
     //test data setup
