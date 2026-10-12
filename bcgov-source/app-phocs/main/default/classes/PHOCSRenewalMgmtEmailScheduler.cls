@@ -17,6 +17,13 @@ public with sharing class PHOCSRenewalMgmtEmailScheduler implements Schedulable 
     private static final String NO_EMAIL_FOUND ='No Email Found';
 
     public static Map<String, EmailTemplate> testTemplates;
+    // Find the verified PHOCS Org-Wide Email Address
+    public static List<OrgWideEmailAddress> oweaList = [
+        SELECT Id, Address, DisplayName
+        FROM OrgWideEmailAddress
+        WHERE Address = :'ehis.project@gov.bc.ca'
+        LIMIT 1
+    ];
 
     public void execute(SchedulableContext sc) {
         sendFeeEmails(getFeeContactEmails());
@@ -167,6 +174,7 @@ public with sharing class PHOCSRenewalMgmtEmailScheduler implements Schedulable 
             email.setSubject(populateMergeFields(template.Subject, fee));
             email.setHtmlBody(populateMergeFields(template.HtmlValue, fee));
             email.setPlainTextBody(populateMergeFields(template.Body, fee));
+   			email.setOrgWideEmailAddressId(oweaList[0].Id);
 
             Id contentVersionId = latestVersionByFeeId.get(fee.Id);
             if (contentVersionId != null) {
@@ -192,7 +200,6 @@ public with sharing class PHOCSRenewalMgmtEmailScheduler implements Schedulable 
         }
     }
     
-    @TestVisible
     private static String populateMergeFields(
         String templateContent,
         RegulatoryTrxnFee fee
