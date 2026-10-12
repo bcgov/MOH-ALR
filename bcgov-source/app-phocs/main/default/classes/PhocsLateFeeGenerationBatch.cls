@@ -2,8 +2,8 @@ public class PhocsLateFeeGenerationBatch implements Database.Batchable<SObject>,
     private Set<Id> feeIds;
     private Decimal lateFeeAmount;
 	private static final String RTFI_LATE_FEE_NAME = 'Late Fee';
-    private static final String PAYMENT_REMINDER_LATE_FEE_VALUE = 'Send Late Fee';
-    private static final String RTF_NOTIFICATION_FIELD = 'PaymentReminder__c';
+    private static final String RTF_NOTIFICATION_VALUE = 'Late Fee Notification Queued';
+    private static final String RTF_NOTIFICATION_FIELD = 'EmailStatus__c';
     private static final Id RTFItemRecordTypeId = Schema.SObjectType.RegulatoryTrxnFeeItem.getRecordTypeInfosByDeveloperName().get('PHOCSNonDairyTransactionFeeItem').getRecordTypeId();
     
     public PhocsLateFeeGenerationBatch(Set<Id> feeIds, Decimal lateFeeAmount) {
@@ -13,7 +13,7 @@ public class PhocsLateFeeGenerationBatch implements Database.Batchable<SObject>,
 
     public Database.QueryLocator start(Database.BatchableContext bc) {
         return Database.getQueryLocator([
-            SELECT Id, Status__c, ParentRecordId, DueDate
+            SELECT Id, Status__c, ParentRecordId, DueDate,EmailStatus__c
             FROM RegulatoryTrxnFee
             WHERE Id IN :feeIds
             AND Status__c IN ('Due', 'Partially_Paid')
@@ -64,7 +64,7 @@ public class PhocsLateFeeGenerationBatch implements Database.Batchable<SObject>,
             for (Id feeId : successfullyProcessedFeeIds) {
                 RegulatoryTrxnFee fee = feeById.get(feeId);
                 if (fee != null) {
-                    fee.put(RTF_NOTIFICATION_FIELD, PAYMENT_REMINDER_LATE_FEE_VALUE);
+                    fee.put(RTF_NOTIFICATION_FIELD, RTF_NOTIFICATION_VALUE);
                     feesToNotify.add(fee);
                 }
             }

@@ -13,8 +13,8 @@ public without sharing class RegulatoryTrxnFeeTriggerHandler implements TriggerH
 
     private static final Id RT_PHOCS_NON_DAIRY_TRANSACTION_FEE = Schema.SObjectType.RegulatoryTrxnFee.getRecordTypeInfosByDeveloperName().get('PHOCSNonDairyTransactionFee').getRecordTypeId();
     private static final String STATUS_DUE = 'Due';
-    private static final String PAYMENT_REMINDER_SEND_RENEWAL = 'Send Renewal';
-    private static final String PAYMENT_REMINDER_LATE_FEE_GENERATED = 'Late Fee Generated';
+    private static final String PAYMENT_REMINDER_SEND_RENEWAL = 'Invoice Notification Queued';
+    private static final String PAYMENT_REMINDER_LATE_FEE_GENERATED = 'Late Fee Notification Queued';
 
     //beforeInsert
     public void beforeInsert(List<RegulatoryTrxnFee> newRegTransList) {
@@ -43,7 +43,7 @@ public without sharing class RegulatoryTrxnFeeTriggerHandler implements TriggerH
     public void afterUndelete(List<RegulatoryTrxnFee> oldRegTransList, Map<ID, SObject> newRegTransMap) {
     }
 
-    //PHOCS: generates the invoice PDF when PaymentReminder__c changes to Send Renewal or Late
+    //PHOCS: generates the invoice PDF when emailStatus__c changes to Send Renewal or Late
     //Fee Generated on a Due, PHOCSNonDairyTransactionFee record type fee. Called directly from
     //the trigger's PHOCS section, not from afterUpdate above. Runs asynchronously via
     //PHOCSInvoiceGenerationQueueable so the calling transaction isn't blocked by the per-record
@@ -53,9 +53,9 @@ public without sharing class RegulatoryTrxnFeeTriggerHandler implements TriggerH
 
         for (RegulatoryTrxnFee newFee : newRegTransList) {
             RegulatoryTrxnFee oldFee = (RegulatoryTrxnFee) oldRegTransMap.get(newFee.Id);
-            Boolean paymentReminderChanged = (oldFee.PaymentReminder__c != newFee.PaymentReminder__c);
+            Boolean paymentReminderChanged = (oldFee.emailStatus__c != newFee.emailStatus__c);
             Boolean statusChanged = (oldFee.Status__c != newFee.Status__c);
-            Boolean paymentReminderTriggersInvoice = (newFee.PaymentReminder__c == PAYMENT_REMINDER_SEND_RENEWAL || newFee.PaymentReminder__c == PAYMENT_REMINDER_LATE_FEE_GENERATED);
+            Boolean paymentReminderTriggersInvoice = (newFee.emailStatus__c == PAYMENT_REMINDER_SEND_RENEWAL || newFee.emailStatus__c == PAYMENT_REMINDER_LATE_FEE_GENERATED);
 
             if ((paymentReminderChanged || statusChanged) && paymentReminderTriggersInvoice && newFee.Status__c == STATUS_DUE && newFee.RecordTypeId == RT_PHOCS_NON_DAIRY_TRANSACTION_FEE) {
                 feeIdsToGenerateInvoiceFor.add(newFee.Id);
