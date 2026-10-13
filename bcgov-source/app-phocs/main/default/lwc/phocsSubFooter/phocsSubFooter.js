@@ -36,7 +36,7 @@ const FIELDS = [
 
 export default class AccountHealthAuthorityCard extends LightningElement {
     @api recordId = '001Aq0000112dfJIAQ';
-    @api isHAExists;
+    @api isHAExists = false;
     account;
     logoUrl;
 
@@ -55,15 +55,24 @@ export default class AccountHealthAuthorityCard extends LightningElement {
             console.error('Error loading Account', error);
         }
     }
-     @wire(CurrentPageReference)
+
+    @wire(CurrentPageReference)
     getStateParameters(currentPageReference) {
         if (currentPageReference) {
-            // Checks standard Salesforce page recordId first, then defaults to custom query attributes
-            this.recordId = currentPageReference.attributes.recordId 
-                || currentPageReference.state.recordId 
-                || currentPageReference.state.c__recordId; // Common OmniStudio URL syntax
+            const activeRecordId = currentPageReference.attributes?.recordId 
+                || currentPageReference.state?.recordId 
+                || currentPageReference.state?.c__recordId;
             
-            console.log('Caught Record ID from URL:', this.recordId);
+            if (activeRecordId) {
+                this.recordId = activeRecordId;
+
+            } else {
+                this.isHAExists = false; 
+                this.recordId = null;
+                this.websiteUrl = null;
+                this.contactUrl = null;
+                this.logoUrl = null;
+            }
         }
     }
 
