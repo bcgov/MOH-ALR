@@ -32,141 +32,209 @@ public with sharing class PHOCSRenewalMgmtEmailScheduler implements Schedulable 
     /**
      * Returns the first eligible recipient email for each fee modified today.
      */
-    public static Map<RegulatoryTrxnFee, String> getFeeContactEmails() {
-        List<RegulatoryTrxnFee> fees = [
-            SELECT Id, Name, AccountId, AccountName__c, DueDate, FeeType__c,
-                   GlobalPayPaymentLinkId__c, GlobalPayPaymentLink__c,
-                   GlobalPayPaymentStatus__c, HealthAuthority__c,
-                   InvoiceTemplateName__c, InvoiceTemplate__c,
-                   OutstandingFeeAmount__c, ParentRecordId, PaymentDate__c,
-                   EmailStatus__c, PHOCSCustomerID__c,
-                   PHOCSMonerisTicketNumber__c, ReceiptTemplateName__c,
-                   ReceiptTemplate__c, ReferenceNumber__c, RenewalYear__c,
-                   Status, Status__c, TotalFeeAmount, TotalFeePaid__c
-            FROM RegulatoryTrxnFee
-            WHERE EmailStatus__c IN :EMAIL_STATUS_VALUES            
-        ];
+    public static Map<RegulatoryTrxnFee, List<String>> getFeeContactEmails() {
+    List<RegulatoryTrxnFee> fees = [
+        SELECT Id, Name, AccountId, AccountName__c, DueDate, FeeType__c,
+               GlobalPayPaymentLinkId__c, GlobalPayPaymentLink__c,
+               GlobalPayPaymentStatus__c, HealthAuthority__c,
+               InvoiceTemplateName__c, InvoiceTemplate__c,
+               OutstandingFeeAmount__c, ParentRecordId, PaymentDate__c,
+               EmailStatus__c, PHOCSCustomerID__c,
+               PHOCSMonerisTicketNumber__c, ReceiptTemplateName__c,
+               ReceiptTemplate__c, ReferenceNumber__c, RenewalYear__c,
+               Status, Status__c, TotalFeeAmount, TotalFeePaid__c
+        FROM RegulatoryTrxnFee
+        WHERE EmailStatus__c IN :EMAIL_STATUS_VALUES
+    ];
 
-        Map<RegulatoryTrxnFee, String> feeToEmails = new Map<RegulatoryTrxnFee, String>();
-        if (fees.isEmpty()) {
-            return feeToEmails;
-        }
+    Map<RegulatoryTrxnFee, List<String>> feeToEmails =
+        new Map<RegulatoryTrxnFee, List<String>>();
 
-        Set<Id> accountIds = new Set<Id>();
-        for (RegulatoryTrxnFee fee : fees) {
-            if (fee.ParentRecordId != null && fee.AccountId != null) {
-                accountIds.add(fee.AccountId);
-            }
-        }
-
-        Map<Id, Account> accountsById = new Map<Id, Account>([
-            SELECT Id, ParentId
-            FROM Account
-            WHERE Id IN :accountIds
-        ]);
-        for (Account account : accountsById.values()) {
-            if (account.ParentId != null) {
-                accountIds.add(account.ParentId);
-            }
-        }
-
-        Map<Id, List<AccountContactRelation>> contactsByAccount =
-            getActiveContactsByAccount(accountIds);
-
-        for (RegulatoryTrxnFee fee : fees) {
-            Account account = accountsById.get(fee.AccountId);
-            if (fee.ParentRecordId == null || account == null) {
-                continue;
-            }
-            Id accountId = fee.AccountId;
-            Id parentAccountId = account.ParentId;
-            String email = findEmail(
-                contactsByAccount.get(parentAccountId),
-                contactsByAccount.get(accountId)
-            );
-
-            if (String.isNotBlank(email)) {
-                feeToEmails.put(fee, email);
-            }else{
-                feeToEmails.put(fee, NO_EMAIL_FOUND);
-            }
-        }        
+    if (fees.isEmpty()) {
         return feeToEmails;
     }
+
+    Set<Id> accountIds = new Set<Id>();
+
+    for (RegulatoryTrxnFee fee : fees) {
+        if (fee.ParentRecordId != null && fee.AccountId != null) {
+            accountIds.add(fee.AccountId);
+        }
+    }
+
+    Map<Id, Account> accountsById = new Map<Id, Account>([
+        SELECT Id, ParentId
+        FROM Account
+        WHERE Id IN :accountIds
+    ]);
+
+    for (Account account : accountsById.values()) {
+        if (account.ParentId != null) {
+            accountIds.add(account.ParentId);
+        }
+    }
+
+    Map<Id, List<AccountContactRelation>> contactsByAccount =
+        getActiveContactsByAccount(accountIds);
+
+    for (RegulatoryTrxnFee fee : fees) {
+        Account account = accountsById.get(fee.AccountId);
+
+        if (fee.ParentRecordId == null || account == null) {
+            continue;
+        }
+
+        List<String> emails = findEmail(
+            contactsByAccount.get(account.ParentId),
+            contactsByAccount.get(account.Id)
+        );
+
+        if (emails.isEmpty()) {
+            feeToEmails.put(fee, new List<String>{NO_EMAIL_FOUND});
+        } else {
+            feeToEmails.put(fee, emails);
+        }
+    }
+
+    return feeToEmails;
+}
 
     /**
      * Sends one templated email per fee and attaches its latest linked file version.
      */
-    public static void sendFeeEmails(Map<RegulatoryTrxnFee, String> feeToEmails) {
-        if (feeToEmails == null || feeToEmails.isEmpty()) {
-            return;
+    public static void sendFeeEmails(
+    Map<RegulatoryTrxnFee, List<String>> feeToEmails
+) {
+    if (feeToEmails == null || feeToEmails.isEmpty()) {
+        return;
+    }
+
+    Set<String> emailAddresses = new Set<String>();
+    Set<Id> feeIds = new Set<Id>();
+    Map<Id, List<String>> emailsByFeeId = new Map<Id, List<String>>();
+    Map<Id, RegulatoryTrxnFee> feesById = new Map<Id, RegulatoryTrxnFee>();
+
+    List<RegulatoryTrxnFee> feesToUpdate = new List<RegulatoryTrxnFee>();
+
+    for (RegulatoryTrxnFee fee : feeToEmails.keySet()) {
+        if (fee == null) {
+            continue;
         }
 
-        Set<String> emailAddresses = new Set<String>();
-        Set<Id> feeIds = new Set<Id>();
-        List<RegulatoryTrxnFee> feesToUpdate = new List<RegulatoryTrxnFee>();
-        for (RegulatoryTrxnFee fee : feeToEmails.keySet()) {
-            String emailAddress = feeToEmails.get(fee);
-            if (fee != null && String.isNotBlank(emailAddress) && emailAddress != NO_EMAIL_FOUND) {
-                emailAddresses.add(emailAddress.toLowerCase());
-                feeIds.add(fee.Id);
-            } else if (emailAddress == NO_EMAIL_FOUND) {
+        List<String> recipients = feeToEmails.get(fee);
+        List<String> validRecipients = new List<String>();
+
+        if (recipients != null) {
+            for (String recipient : recipients) {
+                if (String.isNotBlank(recipient) &&
+                    recipient != NO_EMAIL_FOUND) {
+                    validRecipients.add(recipient);
+                    emailAddresses.add(recipient.toLowerCase());
+                }
+            }
+        }
+
+        if (validRecipients.isEmpty()) {
+            if (recipients != null && recipients.contains(NO_EMAIL_FOUND)) {
                 feesToUpdate.add(new RegulatoryTrxnFee(
                     Id = fee.Id,
-                        EmailStatus__c = 'No Email Found'
-                    ));
+                    EmailStatus__c = 'No Email Found'
+                ));
+            }
+            continue;
+        }
+
+        feeIds.add(fee.Id);
+        emailsByFeeId.put(fee.Id, validRecipients);
+        feesById.put(fee.Id, fee);
+    }
+
+    if (!feesToUpdate.isEmpty()) {
+        update feesToUpdate;
+    }
+
+    if (emailsByFeeId.isEmpty()) {
+        return;
+    }
+
+    if (oweaList.isEmpty()) {
+        System.debug(LoggingLevel.ERROR,
+            'No verified Org-Wide Email Address found.');
+        return;
+    }
+
+    Map<String, Id> contactIdsByEmail = new Map<String, Id>();
+
+    for (Contact contact : [
+        SELECT Id, Email
+        FROM Contact
+        WHERE Email IN :emailAddresses
+    ]) {
+        if (String.isNotBlank(contact.Email)) {
+            String normalizedEmail = contact.Email.toLowerCase();
+
+            if (!contactIdsByEmail.containsKey(normalizedEmail)) {
+                contactIdsByEmail.put(normalizedEmail, contact.Id);
             }
         }
+    }
 
-        if (emailAddresses.isEmpty()) {
-            if (!feesToUpdate.isEmpty()) {
-                update feesToUpdate;
-            }
-            return;
+    Map<String, EmailTemplate> templatesByName =
+        new Map<String, EmailTemplate>();
+
+    Set<String> templateNames = new Set<String>{
+        NEWINVOICE_TEMPLATE,
+        REMINDER_TEMPLATE,
+        RENEWALINVOICE_TEMPLATE
+    };
+
+    for (EmailTemplate template : [
+        SELECT Id, Name, Subject, HtmlValue, Body
+        FROM EmailTemplate
+        WHERE Name IN :templateNames
+    ]) {
+        templatesByName.put(template.Name, template);
+    }
+
+    if (testTemplates != null) {
+        templatesByName.putAll(testTemplates);
+    }
+
+    Map<Id, Id> latestVersionByFeeId =
+        getLatestFileVersionByFeeId(feeIds);
+
+    List<Messaging.SingleEmailMessage> emails =
+        new List<Messaging.SingleEmailMessage>();
+
+    List<Id> emailFeeIds = new List<Id>();
+
+    for (Id feeId : emailsByFeeId.keySet()) {
+        RegulatoryTrxnFee fee = feesById.get(feeId);
+
+        EmailTemplate template = templatesByName.get(
+            getTemplateName(fee.EmailStatus__c, fee.FeeType__c)
+        );
+
+        if (template == null) {
+            System.debug(LoggingLevel.ERROR,
+                'No email template found for fee ' + feeId);
+            continue;
         }
 
-        Map<String, Id> contactIdsByEmail = new Map<String, Id>();
-        for (Contact contact : [
-            SELECT Id, Email
-            FROM Contact
-            WHERE Email IN :emailAddresses
-        ]) {
-            contactIdsByEmail.put(contact.Email.toLowerCase(), contact.Id);
-        }
+        for (String emailAddress : emailsByFeeId.get(feeId)) {
+            Id contactId = contactIdsByEmail.get(
+                emailAddress.toLowerCase()
+            );
 
-        Map<String, EmailTemplate> templatesByName = new Map<String, EmailTemplate>();
-        Set<String> templateNames = new Set<String>{
-            NEWINVOICE_TEMPLATE,
-            REMINDER_TEMPLATE,
-            RENEWALINVOICE_TEMPLATE
-        };
-        for (EmailTemplate template : [
-            SELECT Id, Name, Subject, HtmlValue, Body
-            FROM EmailTemplate
-            WHERE Name IN :templateNames
-        ]) {
-            templatesByName.put(template.Name, template);
-        }
-        if (testTemplates != null) {
-            templatesByName.putAll(testTemplates);
-        }
-
-        Map<Id, Id> latestVersionByFeeId = getLatestFileVersionByFeeId(feeIds);
-        List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
-        List<RegulatoryTrxnFee> orderedFees = new List<RegulatoryTrxnFee>();
-
-        for (RegulatoryTrxnFee fee : feeToEmails.keySet()) {
-            String emailAddress = feeToEmails.get(fee);
-            if (String.isBlank(emailAddress) || emailAddress == NO_EMAIL_FOUND) {
+            if (contactId == null) {
+                System.debug(LoggingLevel.ERROR,
+                    'No Contact found for email ' + emailAddress);
                 continue;
             }
-            Id contactId = contactIdsByEmail.get(emailAddress.toLowerCase());
-            EmailTemplate template = templatesByName.get(getTemplateName(fee.EmailStatus__c,fee.FeeType__c));
-            if (contactId == null || template == null) {
-                continue;
-            }
 
-            Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
+            Messaging.SingleEmailMessage email =
+                new Messaging.SingleEmailMessage();
+
             email.setTargetObjectId(contactId);
             email.setTreatTargetObjectAsRecipient(false);
             email.setToAddresses(new List<String>{emailAddress});
@@ -174,31 +242,70 @@ public with sharing class PHOCSRenewalMgmtEmailScheduler implements Schedulable 
             email.setSubject(populateMergeFields(template.Subject, fee));
             email.setHtmlBody(populateMergeFields(template.HtmlValue, fee));
             email.setPlainTextBody(populateMergeFields(template.Body, fee));
-   			email.setOrgWideEmailAddressId(oweaList[0].Id);
+            email.setOrgWideEmailAddressId(oweaList[0].Id);
 
             Id contentVersionId = latestVersionByFeeId.get(fee.Id);
-            if (contentVersionId != null) {
-                email.setEntityAttachments(new List<Id>{contentVersionId});
-            }
-            emails.add(email);
-            orderedFees.add(fee);
-        }
 
-        if (!emails.isEmpty()) {
-            List<Messaging.SendEmailResult> results = Messaging.sendEmail(emails, false);
-            for (Integer index = 0; index < results.size(); index++) {
-                if (results[index].isSuccess()) {
-                    feesToUpdate.add(new RegulatoryTrxnFee(
-                        Id = orderedFees[index].Id,
-                        EmailStatus__c = 'Sent'
-                    ));
+            if (contentVersionId != null) {
+                email.setEntityAttachments(
+                    new List<Id>{contentVersionId}
+                );
+            }
+
+            emails.add(email);
+            emailFeeIds.add(fee.Id);
+        }
+    }
+
+    Set<Id> successfullySentFeeIds = new Set<Id>();
+
+    if (!emails.isEmpty()) {
+        // Send in chunks to respect the Messaging.sendEmail limit.
+        for (Integer startIndex = 0;
+             startIndex < emails.size();
+             startIndex += 10) {
+
+            List<Messaging.SingleEmailMessage> emailBatch =
+                new List<Messaging.SingleEmailMessage>();
+
+            List<Id> feeIdBatch = new List<Id>();
+
+            for (Integer i = startIndex;
+                 i < Math.min(startIndex + 10, emails.size());
+                 i++) {
+                emailBatch.add(emails[i]);
+                feeIdBatch.add(emailFeeIds[i]);
+            }
+
+            List<Messaging.SendEmailResult> results =
+                Messaging.sendEmail(emailBatch, false);
+
+            for (Integer i = 0; i < results.size(); i++) {
+                if (results[i].isSuccess()) {
+                    successfullySentFeeIds.add(feeIdBatch[i]);
+                } else {
+                    for (Messaging.SendEmailError err :
+                         results[i].getErrors()) {
+                        System.debug(LoggingLevel.ERROR,
+                            'Email failed for fee ' + feeIdBatch[i] +
+                            ': ' + err.getMessage());
+                    }
                 }
             }
         }
-        if (!feesToUpdate.isEmpty()) {
-            update feesToUpdate;
-        }
     }
+
+    for (Id feeId : successfullySentFeeIds) {
+        feesToUpdate.add(new RegulatoryTrxnFee(
+            Id = feeId,
+            EmailStatus__c = 'Sent'
+        ));
+    }
+
+    if (!feesToUpdate.isEmpty()) {
+        update feesToUpdate;
+    }
+}
     
     private static String populateMergeFields(
         String templateContent,
@@ -321,11 +428,15 @@ public with sharing class PHOCSRenewalMgmtEmailScheduler implements Schedulable 
         return contactsByAccount;
     }
 
-    private static String findEmail(
-        List<AccountContactRelation> parentContacts,
-        List<AccountContactRelation> accountContacts
-    ) {
-        List<List<AccountContactRelation>> roleTiers = new List<List<AccountContactRelation>>{
+    private static List<String> findEmail(
+    List<AccountContactRelation> parentContacts,
+    List<AccountContactRelation> accountContacts
+) {
+    List<String> emails = new List<String>();
+    Set<String> uniqueEmails = new Set<String>();
+
+    List<List<AccountContactRelation>> roleTiers =
+        new List<List<AccountContactRelation>>{
             getContactsWithRole(parentContacts, BILLING_CONTACT_ROLE, false),
             getContactsWithRole(accountContacts, BILLING_CONTACT_ROLE, false),
             getContactsWithRole(parentContacts, OWNER_ROLE, false),
@@ -333,14 +444,21 @@ public with sharing class PHOCSRenewalMgmtEmailScheduler implements Schedulable 
             getContactsWithRole(parentContacts, OPERATOR_ROLE, true),
             getContactsWithRole(accountContacts, OPERATOR_ROLE, true)
         };
-        for (List<AccountContactRelation> tier : roleTiers) {
-            if (!tier.isEmpty()) {
-                return tier[0].Contact.Email;
+
+    for (List<AccountContactRelation> tier : roleTiers) {
+        for (AccountContactRelation relation : tier) {
+            String email = relation.Contact.Email;
+
+            if (String.isNotBlank(email) &&
+                !uniqueEmails.contains(email.trim().toLowerCase())) {
+                uniqueEmails.add(email.trim().toLowerCase());
+                emails.add(email.trim());
             }
         }
-
-        return null;
     }
+
+    return emails;
+}
 
     private static List<AccountContactRelation> getContactsWithRole(
         List<AccountContactRelation> contacts,
