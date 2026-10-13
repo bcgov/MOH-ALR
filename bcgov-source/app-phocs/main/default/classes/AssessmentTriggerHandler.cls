@@ -24,6 +24,10 @@
  *                                                             so the anchor is the most recently completed non-retracted
  *                                                             Routine inspection for the facility, falling back to the
  *                                                             originating inspection's ActualVisitStartTime when none exists
+ *               08 Oct -  EHIS-5027         -  Deepak      -  PlaceId on generated inspections now resolved from the
+ *                                                             facility's current Location record (matched by Account street
+ *                                                             address and Health Authority) via loadFacilityPlaceIds(),
+ *                                                             falling back to the originating inspection's PlaceId
  ***********************************************************************************************/
 public with sharing class AssessmentTriggerHandler {
     private static final Id ASSESSMENT_RTID = Schema.SObjectType.Assessment.getRecordTypeInfosByDeveloperName().get('PHOCSAssessment').getRecordTypeId();
@@ -123,7 +127,8 @@ public with sharing class AssessmentTriggerHandler {
             return;
         }
 
-        Map<Id, Visit> originatingInspectionsById = new Map<Id, Visit>([SELECT Id, AccountId, PlaceId, ActualVisitStartTime, Account.Type, Account.HealthAuthority__c
+        Map<Id, Visit> originatingInspectionsById = new Map<Id, Visit>([SELECT Id, AccountId, PlaceId, ActualVisitStartTime, Account.Type,
+                                                                        Account.HealthAuthority__c, Account.Physical_Address__Street__s
                                                                         FROM Visit WHERE Id IN :assessmentByOriginatingInspectionId.keySet()
                                                                         AND RecordTypeId =: INSPECTION_RTID]);
 
@@ -145,6 +150,7 @@ public with sharing class AssessmentTriggerHandler {
         }
 
         Map<Id, Datetime> anchorByFacilityId = loadAnchorDates(facilityIds, inspectionTypeIdsByValue.get(INSPECTION_TYPE_ROUTINE));
+        Map<Id, Id> placeIdByFacilityId = loadFacilityPlaceIds(originatingInspectionsById.values());
         Map<String, List<Visit>> ratGeneratedByKey = new Map<String, List<Visit>>();
         Map<String, Integer> migratedCountByKey = new Map<String, Integer>();
         loadExistingFutureSchedule(facilityIds, inspectionTypeValuesById, ratGeneratedByKey, migratedCountByKey);
@@ -168,12 +174,16 @@ public with sharing class AssessmentTriggerHandler {
                 continue;
             }
 
-            reconcileSchedule(assessment, originatingInspection, anchor, INSPECTION_TYPE_ROUTINE, inspectionTypeIdsByValue.get(INSPECTION_TYPE_ROUTINE),
+            Id inspectionPlaceId = placeIdByFacilityId.containsKey(originatingInspection.AccountId)
+                ? placeIdByFacilityId.get(originatingInspection.AccountId)
+                : originatingInspection.PlaceId;
+
+            reconcileSchedule(assessment, originatingInspection, inspectionPlaceId, anchor, INSPECTION_TYPE_ROUTINE, inspectionTypeIdsByValue.get(INSPECTION_TYPE_ROUTINE),
                               resolveIntervalConfig(ROUTINE_INTERVALS, assessment.MinimumInspectionFrequency__c), ratGeneratedByKey, migratedCountByKey,
                               inspectionsToInsert, inspectionsToUpdate);
 
             if (originatingInspection.Account != null && originatingInspection.Account.Type == FACILITY_TYPE_TOBACCO_VAPOUR) {
-                reconcileSchedule(assessment, originatingInspection, anchor, INSPECTION_TYPE_MTS, inspectionTypeIdsByValue.get(INSPECTION_TYPE_MTS),
+                reconcileSchedule(assessment, originatingInspection, inspectionPlaceId, anchor, INSPECTION_TYPE_MTS, inspectionTypeIdsByValue.get(INSPECTION_TYPE_MTS),
                                   resolveIntervalConfig(MTS_INTERVALS, assessment.MTSInspectionFrequency__c), ratGeneratedByKey, migratedCountByKey,
                                   inspectionsToInsert, inspectionsToUpdate);
             }
@@ -276,6 +286,75 @@ public with sharing class AssessmentTriggerHandler {
 
 /**
  * @author: Deepak
+ * @date: 08 Oct 2026
+ * @description: Resolves the current Location record Id for each facility by matching the
+ *              Account's Physical Address street against Location.Name and Account.HealthAuthority__c
+ *              against Location.HealthAuthority__c. This ensures generated inspections always
+ *              carry the facility's current address rather than the originating inspection's
+ *              PlaceId, which may be stale if the account address has changed. Falls back to the
+ *              originating inspection's PlaceId per facility when no matching Location is found.
+ * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
+*/
+    private static Map<Id, Id> loadFacilityPlaceIds(List<Visit> originatingInspections) {
+        Map<Id, Id> placeIdByFacilityId = new Map<Id, Id>();
+
+        Set<Id> facilityIds = new Set<Id>();
+        Map<Id, String> streetByFacilityId = new Map<Id, String>();
+        Map<Id, String> haByFacilityId = new Map<Id, String>();
+
+        for (Visit originatingInspection : originatingInspections) {
+            if (originatingInspection.AccountId == null || originatingInspection.Account == null) {
+                continue;
+            }
+            facilityIds.add(originatingInspection.AccountId);
+            if (String.isNotBlank(originatingInspection.Account.Physical_Address__Street__s)) {
+                streetByFacilityId.put(originatingInspection.AccountId, originatingInspection.Account.Physical_Address__Street__s);
+            }
+            if (String.isNotBlank(originatingInspection.Account.HealthAuthority__c)) {
+                haByFacilityId.put(originatingInspection.AccountId, originatingInspection.Account.HealthAuthority__c);
+            }
+        }
+
+        if (facilityIds.isEmpty()) {
+            return placeIdByFacilityId;
+        }
+
+        for (Account acc : [SELECT Id,
+                                   (SELECT Id, LocationId, Location.Name, Location.HealthAuthority__c
+                                    FROM AssociatedLocations)
+                            FROM Account WHERE Id IN :facilityIds]) {
+            if (acc.AssociatedLocations == null || acc.AssociatedLocations.isEmpty()) {
+                continue;
+            }
+
+            String expectedStreet = streetByFacilityId.get(acc.Id);
+            String expectedHA = haByFacilityId.get(acc.Id);
+
+            for (AssociatedLocation al : acc.AssociatedLocations) {
+                if (al.Location == null) {
+                    continue;
+                }
+
+                if (String.isBlank(expectedStreet) || !expectedStreet.equals(al.Location.Name)) {
+                    continue;
+                }
+
+                if (String.isNotBlank(expectedHA) && !expectedHA.equals(al.Location.HealthAuthority__c)) {
+                    continue;
+                }
+
+                if (!placeIdByFacilityId.containsKey(acc.Id)) {
+                    placeIdByFacilityId.put(acc.Id, al.LocationId);
+                }
+                break;
+            }
+        }
+
+        return placeIdByFacilityId;
+    }
+
+/**
+ * @author: Deepak
  * @date: 17 Sep 2026
  * @description: Loads every facility's existing future, uncompleted inspections in a single query
  *              and splits them per facility/inspection type into the RAT-generated records
@@ -335,7 +414,7 @@ public with sharing class AssessmentTriggerHandler {
  *              interval mapping.
  * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
-    private static void reconcileSchedule(Assessment assessment, Visit originatingInspection, Datetime anchor, String typeValue, Id visitTypeId,
+    private static void reconcileSchedule(Assessment assessment, Visit originatingInspection, Id inspectionPlaceId, Datetime anchor, String typeValue, Id visitTypeId,
                                           IntervalConfig config, Map<String, List<Visit>> ratGeneratedByKey, Map<String, Integer> migratedCountByKey,
                                           List<Visit> inspectionsToInsert, List<Visit> inspectionsToUpdate) {
         if (config == null || visitTypeId == null) {
@@ -382,7 +461,7 @@ public with sharing class AssessmentTriggerHandler {
         }
 
         for (Integer i = reusedCount; i < targetDates.size(); i++) {
-            inspectionsToInsert.add(buildInspection(assessment, originatingInspection, visitTypeId, targetDates[i]));
+            inspectionsToInsert.add(buildInspection(assessment, originatingInspection, inspectionPlaceId, visitTypeId, targetDates[i]));
         }
     }
 
@@ -410,14 +489,14 @@ public with sharing class AssessmentTriggerHandler {
  *                    17 Sep - EHIS-5027 - Deepak - Set the PHOCSInspection record type and removed
  *                    the CreatedById assignment pending the audit-fields permission decision.
 */
-    private static Visit buildInspection(Assessment assessment, Visit originatingInspection, Id visitTypeId, Datetime plannedStartTime) {
+    private static Visit buildInspection(Assessment assessment, Visit originatingInspection, Id inspectionPlaceId, Id visitTypeId, Datetime plannedStartTime) {
         return new Visit(
             RecordTypeId = INSPECTION_RTID,
             Status = VISIT_STATUS_PLANNED,
             VisitTypeId = visitTypeId,
             OwnerId = assessment.CreatedById,
             AccountId = originatingInspection.AccountId,
-            PlaceId = originatingInspection.PlaceId,
+            PlaceId = inspectionPlaceId,
             PlannedVisitStartTime = plannedStartTime,
             HealthAuthority__c = originatingInspection?.Account?.HealthAuthority__c,
             RATGenerated__c = true
