@@ -5,6 +5,12 @@
     <description>Prevents non-CCFL users from creating a PHOCS Public Complaint with Topic as Child Care or Residential Care.</description>
     <errorConditionFormula>AND(
     RecordType.DeveloperName = &quot;PHOCSPublicComplaint&quot;,
+				
+				OR(
+        $Profile.Name = &quot;System Administrator&quot;,
+        $Profile.Name = &quot;EHIS Standard User&quot;
+    ),
+				
     AND(
         NOT($Permission.PHOCSFHAChildCareResidentialCareAccess),
         NOT($Permission.PHOCSIHAChildCareResidentialCareAccess),
