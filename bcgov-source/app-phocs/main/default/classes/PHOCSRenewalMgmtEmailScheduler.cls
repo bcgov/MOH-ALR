@@ -261,10 +261,9 @@ public with sharing class PHOCSRenewalMgmtEmailScheduler implements Schedulable 
 
     if (!emails.isEmpty()) {
         // Send in chunks to respect the Messaging.sendEmail limit.
-        Integer batchSize = 100;
         for (Integer startIndex = 0;
              startIndex < emails.size();
-             startIndex += batchSize) {
+             startIndex += 10) {
 
             List<Messaging.SingleEmailMessage> emailBatch =
                 new List<Messaging.SingleEmailMessage>();
@@ -272,7 +271,7 @@ public with sharing class PHOCSRenewalMgmtEmailScheduler implements Schedulable 
             List<Id> feeIdBatch = new List<Id>();
 
             for (Integer i = startIndex;
-                 i < Math.min(startIndex + batchSize, emails.size());
+                 i < Math.min(startIndex + 10, emails.size());
                  i++) {
                 emailBatch.add(emails[i]);
                 feeIdBatch.add(emailFeeIds[i]);
