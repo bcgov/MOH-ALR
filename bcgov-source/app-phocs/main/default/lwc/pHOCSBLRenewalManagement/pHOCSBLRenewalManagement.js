@@ -32,7 +32,7 @@ export default class PHOCSBLARenewalManagement extends LightningElement {
     // ============================================================
     // OPTIONS
     // ============================================================
-
+    paymentAccountTypeOptions = [];
     accountTypeOptions = [];
     premiseRoleOptions = [];
 
@@ -1109,8 +1109,7 @@ export default class PHOCSBLARenewalManagement extends LightningElement {
 
             this.paymentPageData = result.records || [];
             this.paymentTotalCount = result.totalCount || 0;
-
-            this.accountTypeOptions = [
+            this.paymentAccountTypeOptions  = [
                 { label: 'All', value: '' },
                 ...(result.accountTypeOptions || [])
             ];
@@ -1368,10 +1367,9 @@ export default class PHOCSBLARenewalManagement extends LightningElement {
 
             this.lateFeePageData = result.records || [];
             this.lateFeeTotalCount = result.totalCount || 0;
-
             this.lateFeeTypeOptions = [
                 { label: 'All', value: '' },
-                ...(result.typeOptions || [])
+                ...(result.accountTypeOptions || [])
             ];
 
             this.lateFeeFeeTypeOptions = [
