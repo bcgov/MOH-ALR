@@ -99,6 +99,29 @@
             <label>Check For Environmental  Sample Reason</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>Decision_2</name>
+        <label>Decision 2</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Food_Recordtype</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordTypeId</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>GetPHOCSFoodLabTestRequiredRT.Id</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>GetAerobicColonyCountLabTestMasterListRecord</targetReference>
+            </connector>
+            <label>Food Recordtype</label>
+        </rules>
+    </decisions>
+    <description>BugFix - 5970</description>
     <environments>Default</environments>
     <interviewLabel>PHOCS Auto-Create Food Lab Test Required Records {!$Flow.CurrentDateTime}</interviewLabel>
     <label>PHOCS Auto-Create Food Lab Test Required Records</label>
@@ -212,7 +235,7 @@
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>GetAerobicColonyCountLabTestMasterListRecord</targetReference>
+            <targetReference>Decision_2</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
