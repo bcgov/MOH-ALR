@@ -53,7 +53,7 @@
     <apiVersion>65.0</apiVersion>
     <decisions>
         <name>ALRDataAnalystUserCheck</name>
-        <label>ALRDataAnalystUserCheck</label>
+        <label>ALRDataAnalystUserCheck Or PHOCS</label>
         <locationX>182</locationX>
         <locationY>134</locationY>
         <defaultConnector>
@@ -68,6 +68,20 @@
                 <operator>EqualTo</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Permission.PHOCSAdmin</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Permission.PHOCSOfficer</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
