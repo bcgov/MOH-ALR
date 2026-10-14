@@ -484,7 +484,7 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
                 'margin-bottom:8px;' +
                 'font-size:16px;' +
                 '">' +
-                'This facility is currently going under a ' +
+                'This facility is currently under a ' +
                 advisory.TypeOfAdvisory__c +
                 '</div>' +
                 
