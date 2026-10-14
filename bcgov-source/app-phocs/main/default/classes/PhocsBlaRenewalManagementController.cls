@@ -50,7 +50,7 @@ public with sharing class PhocsBlaRenewalManagementController {
     private static final String LATE_FEE_NAME = 'Late Fee';
     private static final String RTFI_LATE_FEE_NAME = 'Late Fee';
     private static final String RTF_STATUS_DUE = 'Due';
-    private static final String RTF_STATUS_PARTIALLY_PAID = 'Partially Paid';    
+    private static final String RTF_STATUS_PARTIALLY_PAID = 'Partially_Paid';    
     private static final String RTF_FEE_TYPE_REGULATORY_TRANSACTION = 'Regulatory Transaction Fee';
     
     
@@ -817,7 +817,7 @@ public with sharing class PhocsBlaRenewalManagementController {
     private static Set<Id> getEligiblePaymentReminderIds(String type, String feeName, String feeType) {
         Set<String> eligibleStatuses = new Set<String>{RTF_STATUS_DUE, RTF_STATUS_PARTIALLY_PAID};
         List<RegulatoryTrxnFee> records = [
-        SELECT Id, FeeType__c, Account.Type
+        SELECT Id, FeeType__c, Account.Type, Status__c, EmailStatus__c
         FROM RegulatoryTrxnFee
         WHERE Status__c IN :eligibleStatuses
         WITH USER_MODE
@@ -861,7 +861,7 @@ public with sharing class PhocsBlaRenewalManagementController {
         Set<String> eligibleStatuses = new Set<String>{RTF_STATUS_DUE, RTF_STATUS_PARTIALLY_PAID};
         
         return [
-        SELECT Id, Status__c, AccountId, ParentRecordId
+        SELECT Id, Status__c, AccountId, ParentRecordId, EmailStatus__c
         FROM RegulatoryTrxnFee
         WHERE Id IN :feeIds
         AND Status__c IN :eligibleStatuses
@@ -1665,7 +1665,7 @@ public with sharing class PhocsBlaRenewalManagementController {
         
         FeeQueryContext context = new FeeQueryContext();
         List<String> conditions = new List<String>();
-        conditions.add('Status__c IN (\'Due\', \'Partially Paid\')'
+        conditions.add('Status__c IN (\'Due\', \'Partially_Paid\')'
         );
         
         if (String.isNotBlank(type)) {
