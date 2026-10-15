@@ -897,8 +897,7 @@ public with sharing class PhocsBlaRenewalManagementController {
         response.pageNumber = pageNumber;
         response.pageSize = pageSize;
         
-        response.accountTypeOptions = 
-        getPaymentReminderAccountTypeOptions(); //EHIS-5966
+        response.accountTypeOptions = getLateFeeAccountTypeOptions(); //EHIS-5974
         
         response.feeTypeOptions =
         getFeeTypeOptions();
@@ -1244,7 +1243,7 @@ public with sharing class PhocsBlaRenewalManagementController {
             // Picklists
             // ----------------------------------------------------
             
-            response.accountTypeOptions = getPaymentReminderAccountTypeOptions(); //EHIS-5966
+            response.accountTypeOptions = getLateFeeAccountTypeOptions(); //EHIS-5974
             
             response.feeTypeOptions = getFeeTypeOptions();
             
@@ -1920,12 +1919,77 @@ public with sharing class PhocsBlaRenewalManagementController {
 * @Author:      Yuvashree Perumal 
 * @Date:        13/10/2026
 * @Description: EHIS-5966 - Type field dropdown values for Payment Reminder and Late fee management.
+* ModifiedDate: 15/10/2026
 ***********************************************************************************************/ 
-    private static List<PhocsBLRenewalManagementHelper.PicklistOption> getPaymentReminderAccountTypeOptions() {
+private static List<PhocsBLRenewalManagementHelper.PicklistOption> getPaymentReminderAccountTypeOptions() {
+    Set<String> availableTypes = new Set<String>();
+    List<AggregateResult> groupedTypes = [
+        SELECT Account.Type accountType
+        FROM RegulatoryTrxnFee
+        WHERE Status__c IN (:RTF_STATUS_DUE, :RTF_STATUS_PARTIALLY_PAID)
+        AND FeeType__c != NULL
+        AND RecordTypeId = :RTFRecordTypeId
+        AND Account.Type != NULL
+        AND Account.Type IN :PAYMENT_LATE_FEE_ACCOUNT_TYPES
+        WITH USER_MODE
+        GROUP BY Account.Type
+    ];
+
+    for (AggregateResult groupedType : groupedTypes) {
+        String accountType =
+            (String) groupedType.get('accountType');
+
+        if (String.isNotBlank(accountType)) {
+            availableTypes.add(accountType);
+        }
+    }
+
+    return buildAccountTypeOptions(availableTypes);
+}
+    private static List<PhocsBLRenewalManagementHelper.PicklistOption> getLateFeeAccountTypeOptions() {
+    Set<String> availableTypes = new Set<String>();
+    List<AggregateResult> groupedTypes = [
+        SELECT Account.Type accountType
+        FROM RegulatoryTrxnFee
+        WHERE Status__c IN (:RTF_STATUS_DUE, :RTF_STATUS_PARTIALLY_PAID)
+        AND DueDate < TODAY
+        AND RecordTypeId = :RTFRecordTypeId
+        AND Account.Type != NULL
+        AND Account.Type IN :PAYMENT_LATE_FEE_ACCOUNT_TYPES
+        AND Id NOT IN (
+            SELECT RegulatoryTrxnFeeId
+            FROM RegulatoryTrxnFeeItem
+            WHERE Name = :RTFI_LATE_FEE_NAME
+        )
+        WITH USER_MODE
+        GROUP BY Account.Type
+    ];
+
+    for (AggregateResult groupedType : groupedTypes) {
+        String accountType =
+            (String) groupedType.get('accountType');
+
+        if (String.isNotBlank(accountType)) {
+            availableTypes.add(accountType);
+        }
+    }
+
+    return buildAccountTypeOptions(availableTypes);
+}
+    
+private static List<PhocsBLRenewalManagementHelper.PicklistOption> buildAccountTypeOptions(Set<String> availableTypes) {
     List<PhocsBLRenewalManagementHelper.PicklistOption> options = new List<PhocsBLRenewalManagementHelper.PicklistOption>();
+
+    if (availableTypes == null || availableTypes.isEmpty()) {
+        return options;
+    }
+
     Schema.DescribeFieldResult describe = Account.Type.getDescribe();
     for (Schema.PicklistEntry entry : describe.getPicklistValues()) {
-        if (entry.isActive() && PAYMENT_LATE_FEE_ACCOUNT_TYPES.contains(entry.getLabel())) {
+
+        if (
+            entry.isActive() && availableTypes.contains(entry.getValue())
+        ) {
             options.add(
                 new PhocsBLRenewalManagementHelper.PicklistOption(
                     entry.getLabel(),
@@ -1957,7 +2021,6 @@ public with sharing class PhocsBlaRenewalManagementController {
         
         return options;
     }
-    
     
     private static List<PhocsBLRenewalManagementHelper.PicklistOption> getPremiseRoleOptions() {
         
