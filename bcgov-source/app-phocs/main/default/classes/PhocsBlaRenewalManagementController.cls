@@ -49,7 +49,7 @@ public with sharing class PhocsBlaRenewalManagementController {
     private static final String LATE_FEE_NAME = 'Late Fee';
     private static final String RTFI_LATE_FEE_NAME = 'Late Fee';
     private static final String RTF_STATUS_DUE = 'Due';
-    private static final String RTF_STATUS_PARTIALLY_PAID = 'Partially Paid';    
+    private static final String RTF_STATUS_PARTIALLY_PAID = 'Partially_Paid';    
     private static final String RTF_FEE_TYPE_REGULATORY_TRANSACTION = 'Regulatory Transaction Fee';
     
     
@@ -1664,7 +1664,7 @@ public with sharing class PhocsBlaRenewalManagementController {
         
         FeeQueryContext context = new FeeQueryContext();
         List<String> conditions = new List<String>();
-        conditions.add('Status__c IN (\'Due\', \'Partially Paid\')'
+        conditions.add('Status__c IN (\'Due\', \'Partially_Paid\')'
         );
         
         if (String.isNotBlank(type)) {
