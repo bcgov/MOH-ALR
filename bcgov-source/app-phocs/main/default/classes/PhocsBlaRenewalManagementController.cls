@@ -25,7 +25,7 @@ public with sharing class PhocsBlaRenewalManagementController {
     private static final String MULTIPLE_PREMISE_FIELD = 'MultiplePremiseFacility__c';
     private static final String PREMISE_ROLE_FIELD = 'PremiseRole__c';
     
-    // Regulatory Transaction Fee
+    // Regulatory Transaction Fee  
     private static final String RTF_OBJECT ='RegulatoryTrxnFee';
     private static final String RTF_ACCOUNT_FIELD ='AccountId';
     private static final String RTF_PARENT_RECORD_FIELD = 'ParentRecordId';
