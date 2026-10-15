@@ -34,10 +34,12 @@ ComplaintTopicType__c,
 Account.RiskRating__c,
 Account.HideAddressonPublicSite__c,
 Account.HidePhoneonPublicSite__c,
+Disclose_to_Public__c,
 Date_Substantiated__c,
 Date_Received__c,( SELECT ID,Name,ActionsRequiredbyLicenseeOperator__c,ActionsRequiredbyLOMHO__c from Interaction_Summaries__r LIMIT 1)
 From Case
 WHERE Id = :recordId
+AND Disclose_to_Public__c = true
 LIMIT 1</value>
     </values>
     <values>
