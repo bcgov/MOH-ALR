@@ -25,7 +25,7 @@ public with sharing class PhocsBlaRenewalManagementController {
     private static final String MULTIPLE_PREMISE_FIELD = 'MultiplePremiseFacility__c';
     private static final String PREMISE_ROLE_FIELD = 'PremiseRole__c';
     
-    // Regulatory Transaction Fee
+    // Regulatory Transaction Fee  
     private static final String RTF_OBJECT ='RegulatoryTrxnFee';
     private static final String RTF_ACCOUNT_FIELD ='AccountId';
     private static final String RTF_PARENT_RECORD_FIELD = 'ParentRecordId';
@@ -43,6 +43,7 @@ public with sharing class PhocsBlaRenewalManagementController {
     private static final String RTFI_NAME_FIELD = 'Name';
     private static final String RTFI_AMOUNT_FIELD ='FeeAmount';
     private static final Set<String> ACCOUNTTYPES= new Set<string>{'Food','Drinking water','Recreational water'};
+    private static final Set<String> PAYMENT_LATE_FEE_ACCOUNT_TYPES = new Set<String>{'Food','Drinking water','Recreational water','Child care','Residential care','Sewerage','Industrial camps','Personal services','Tobacco and vapour'}; //EHIS-5966   
     private static final Set<String> VALIDFEETYPES = new Set<String>{'New Application','Renewal','Other'};
     private static final String[] LICENSETYPES= new string[]{'Drinking Water Operating Permit','Food Premises Operating Permit','Pool Operating Permit'};
     
@@ -543,7 +544,7 @@ public with sharing class PhocsBlaRenewalManagementController {
         pageSize = pageSize == null || pageSize < 1 ? 50 : Math.min(pageSize, 50);        
         response.pageNumber = pageNumber;
         response.pageSize = pageSize;
-        response.accountTypeOptions = getAccountTypeOptions();
+        response.accountTypeOptions = getPaymentReminderAccountTypeOptions();//EHIS-5966
         response.feeTypeOptions = getFeeTypeOptions();        
         
         Map<String, String> allowedSortFields =
@@ -816,7 +817,7 @@ public with sharing class PhocsBlaRenewalManagementController {
     private static Set<Id> getEligiblePaymentReminderIds(String type, String feeName, String feeType) {
         Set<String> eligibleStatuses = new Set<String>{RTF_STATUS_DUE, RTF_STATUS_PARTIALLY_PAID};
         List<RegulatoryTrxnFee> records = [
-        SELECT Id, FeeType__c, Account.Type
+        SELECT Id, FeeType__c, Account.Type, Status__c, EmailStatus__c
         FROM RegulatoryTrxnFee
         WHERE Status__c IN :eligibleStatuses
         WITH USER_MODE
@@ -860,7 +861,7 @@ public with sharing class PhocsBlaRenewalManagementController {
         Set<String> eligibleStatuses = new Set<String>{RTF_STATUS_DUE, RTF_STATUS_PARTIALLY_PAID};
         
         return [
-        SELECT Id, Status__c, AccountId, ParentRecordId
+        SELECT Id, Status__c, AccountId, ParentRecordId, EmailStatus__c
         FROM RegulatoryTrxnFee
         WHERE Id IN :feeIds
         AND Status__c IN :eligibleStatuses
@@ -896,8 +897,7 @@ public with sharing class PhocsBlaRenewalManagementController {
         response.pageNumber = pageNumber;
         response.pageSize = pageSize;
         
-        response.accountTypeOptions =
-        getAccountTypeOptions();
+        response.accountTypeOptions = getLateFeeAccountTypeOptions(); //EHIS-5974
         
         response.feeTypeOptions =
         getFeeTypeOptions();
@@ -1243,7 +1243,7 @@ public with sharing class PhocsBlaRenewalManagementController {
             // Picklists
             // ----------------------------------------------------
             
-            response.accountTypeOptions = getAccountTypeOptions();
+            response.accountTypeOptions = getLateFeeAccountTypeOptions(); //EHIS-5974
             
             response.feeTypeOptions = getFeeTypeOptions();
             
@@ -1915,7 +1915,92 @@ public with sharing class PhocsBlaRenewalManagementController {
         WITH USER_MODE
         ]);
     }
+/**********************************************************************************************
+* @Author:      Yuvashree Perumal 
+* @Date:        13/10/2026
+* @Description: EHIS-5966 - Type field dropdown values for Payment Reminder and Late fee management.
+* ModifiedDate: 15/10/2026
+***********************************************************************************************/ 
+private static List<PhocsBLRenewalManagementHelper.PicklistOption> getPaymentReminderAccountTypeOptions() {
+    Set<String> availableTypes = new Set<String>();
+    List<AggregateResult> groupedTypes = [
+        SELECT Account.Type accountType
+        FROM RegulatoryTrxnFee
+        WHERE Status__c IN (:RTF_STATUS_DUE, :RTF_STATUS_PARTIALLY_PAID)
+        AND FeeType__c != NULL
+        AND RecordTypeId = :RTFRecordTypeId
+        AND Account.Type != NULL
+        AND Account.Type IN :PAYMENT_LATE_FEE_ACCOUNT_TYPES
+        WITH USER_MODE
+        GROUP BY Account.Type
+    ];
+
+    for (AggregateResult groupedType : groupedTypes) {
+        String accountType =
+            (String) groupedType.get('accountType');
+
+        if (String.isNotBlank(accountType)) {
+            availableTypes.add(accountType);
+        }
+    }
+
+    return buildAccountTypeOptions(availableTypes);
+}
+    private static List<PhocsBLRenewalManagementHelper.PicklistOption> getLateFeeAccountTypeOptions() {
+    Set<String> availableTypes = new Set<String>();
+    List<AggregateResult> groupedTypes = [
+        SELECT Account.Type accountType
+        FROM RegulatoryTrxnFee
+        WHERE Status__c IN (:RTF_STATUS_DUE, :RTF_STATUS_PARTIALLY_PAID)
+        AND DueDate < TODAY
+        AND RecordTypeId = :RTFRecordTypeId
+        AND Account.Type != NULL
+        AND Account.Type IN :PAYMENT_LATE_FEE_ACCOUNT_TYPES
+        AND Id NOT IN (
+            SELECT RegulatoryTrxnFeeId
+            FROM RegulatoryTrxnFeeItem
+            WHERE Name = :RTFI_LATE_FEE_NAME
+        )
+        WITH USER_MODE
+        GROUP BY Account.Type
+    ];
+
+    for (AggregateResult groupedType : groupedTypes) {
+        String accountType =
+            (String) groupedType.get('accountType');
+
+        if (String.isNotBlank(accountType)) {
+            availableTypes.add(accountType);
+        }
+    }
+
+    return buildAccountTypeOptions(availableTypes);
+}
     
+private static List<PhocsBLRenewalManagementHelper.PicklistOption> buildAccountTypeOptions(Set<String> availableTypes) {
+    List<PhocsBLRenewalManagementHelper.PicklistOption> options = new List<PhocsBLRenewalManagementHelper.PicklistOption>();
+
+    if (availableTypes == null || availableTypes.isEmpty()) {
+        return options;
+    }
+
+    Schema.DescribeFieldResult describe = Account.Type.getDescribe();
+    for (Schema.PicklistEntry entry : describe.getPicklistValues()) {
+
+        if (
+            entry.isActive() && availableTypes.contains(entry.getValue())
+        ) {
+            options.add(
+                new PhocsBLRenewalManagementHelper.PicklistOption(
+                    entry.getLabel(),
+                    entry.getValue()
+                )
+            );
+        }
+    }
+
+    return options;
+}
     
     private static List<PhocsBLRenewalManagementHelper.PicklistOption> getAccountTypeOptions() {
         
@@ -1936,7 +2021,6 @@ public with sharing class PhocsBlaRenewalManagementController {
         
         return options;
     }
-    
     
     private static List<PhocsBLRenewalManagementHelper.PicklistOption> getPremiseRoleOptions() {
         
