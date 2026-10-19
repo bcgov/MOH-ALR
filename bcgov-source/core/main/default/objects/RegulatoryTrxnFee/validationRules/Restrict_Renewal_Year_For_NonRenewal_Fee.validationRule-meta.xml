@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Restrict_Renewal_Year_For_NonRenewal_Fee</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    NOT( $Permission.EHISBypassValidationRuleCustomPermission ),
+    $Profile.Name &lt;&gt; &quot;System Administrator&quot;,
+    /* Exclude Record Types */
+    NOT(RecordType.DeveloperName = &quot;PHOCSTransactionFee&quot;),
+    NOT(ISPICKVAL(FeeType__c, &quot;Renewal&quot;)),
+    NOT(ISBLANK(RenewalYear__c))
+)</errorConditionFormula>
+    <errorMessage>Renewal Year can only be entered when Fee Type is Renewal.</errorMessage>
+</ValidationRule>
