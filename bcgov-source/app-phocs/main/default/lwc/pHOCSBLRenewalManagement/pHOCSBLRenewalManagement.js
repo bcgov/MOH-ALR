@@ -324,7 +324,7 @@ export default class PHOCSBLARenewalManagement extends LightningElement {
             fieldName: 'feeName',
             type: 'text',
             sortable: true
-        },
+        },        
         {
             label: 'Fee Amount',
             fieldName: 'feeAmount',
@@ -953,10 +953,30 @@ export default class PHOCSBLARenewalManagement extends LightningElement {
 
             if (response?.success) {
                 this.showSuccess(response.message);
+                // Capture successfully submitted record IDs.
+                const submittedRenewalIds = new Set(
+                    this.sendSelectedIds
+                    );
 
+    // Remove submitted records from the current UI list.
+    this.sendAllData = this.sendAllData.filter(
+        row => !submittedRenewalIds.has(row.Id)
+    );
+
+    // Clear selected records.
+    this.sendSelectedIds = new Set();
+
+    // Adjust pagination if the current page becomes invalid.
+    if (this.sendCurrentPage > this.sendTotalPages) {
+        this.sendCurrentPage = this.sendTotalPages;
+    }
+
+    // Refresh the displayed page.
+    this.refreshSendPage();
+             
                 // Important:
                 // Query Salesforce again after the update.
-                await this.loadSend();
+                //await this.loadSend();
             } else {
                 this.showError({
                     body: {
