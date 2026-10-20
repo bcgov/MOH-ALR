@@ -14,14 +14,13 @@ private class PHOCSCreateBusinessLicenseBatchTest {
             );
         insert setting;
 
-        // Create Account
-        Account acc = new Account(Name = 'Test Account');
-        insert acc;
-
         // Retrieve an existing License Type
         RegulatoryAuthorizationType licenseType = New RegulatoryAuthorizationType(Name='Drinking Water Operating Permit');
         Insert licenseType;
-
+         
+ 		// Create Account
+        Account acc = new Account(Name = 'Test Account', LicenseType__c = licenseType.Id);
+        insert acc;
         // Create BLA
         BusinessLicenseApplication bla = new BusinessLicenseApplication(AccountId = acc.Id,LicenseTypeId = licenseType.Id,Status = 'Closed', AppliedDate=System.now());
         insert bla;
