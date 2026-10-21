@@ -181,9 +181,6 @@ global without sharing class PHOCSPublicDisplayObjectRecords implements Callable
             soqlQuery = getRecordDetailsQuery(recordId);
         }
         
-        System.debug('CONFIG NAME: ' + configName);
-		System.debug('SOQL QUERY: ' + soqlQuery);
-        
         List<SObject> queryResults = Database.query(soqlQuery);// NOPMD
         if(!queryResults.isEmpty()){
             if(wrapper != null){
