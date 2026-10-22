@@ -61,8 +61,39 @@
             <stringValue>{&quot;location&quot;:&quot;top&quot;,&quot;type&quot;:&quot;simple&quot;}</stringValue>
         </value>
     </customProperties>
-    <description>Adding Health Authority to Location
-v25: No need of Address Mapping and updating RecordTypeId mapping</description>
+    <description>Adding Fields as part of EHIS-5759</description>
+    <dynamicChoiceSets>
+        <name>SampleAnalysisType</name>
+        <dataType>Multipicklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>SampleAnalysisType__c</picklistField>
+        <picklistObject>Location</picklistObject>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>SamplingFrequency</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>SamplingFrequency__c</picklistField>
+        <picklistObject>Location</picklistObject>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>SamplingMonths</name>
+        <dataType>Multipicklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>SamplingMonths__c</picklistField>
+        <picklistObject>Location</picklistObject>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>SamplingReason</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>SamplingReason__c</picklistField>
+        <picklistObject>Location</picklistObject>
+    </dynamicChoiceSets>
     <dynamicChoiceSets>
         <name>SiteStatus</name>
         <dataType>Picklist</dataType>
@@ -125,10 +156,72 @@ v25: No need of Address Mapping and updating RecordTypeId mapping</description>
     </processMetadataValues>
     <processType>Flow</processType>
     <recordCreates>
+        <name>Create_Address</name>
+        <label>Create Address</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Update_Address</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>City</field>
+            <value>
+                <elementReference>SamplingSiteAddress.City</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Country</field>
+            <value>
+                <elementReference>SamplingSiteAddress.Country</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>HealthAuthority__c</field>
+            <value>
+                <elementReference>get_Related_Account.HealthAuthority__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>LocationType</field>
+            <value>
+                <stringValue>Sampling Site</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ParentId</field>
+            <value>
+                <elementReference>CreateSamplingSiteRecord.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PostalCode</field>
+            <value>
+                <elementReference>SamplingSiteAddress.PostalCode</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>State</field>
+            <value>
+                <elementReference>SamplingSiteAddress.State</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Street</field>
+            <value>
+                <elementReference>SamplingSiteAddress.Street</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Address</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
         <name>CreateSamplingSiteRecord</name>
         <label>Create Sampling Site Record</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <connector>
+            <targetReference>Create_Address</targetReference>
+        </connector>
         <faultConnector>
             <targetReference>SamplingSiteRecordError</targetReference>
         </faultConnector>
@@ -181,9 +274,21 @@ v25: No need of Address Mapping and updating RecordTypeId mapping</description>
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>NumberOfSamples__c</field>
+            <value>
+                <elementReference>NumberofSamples</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OtherSamplingFrequency__c</field>
+            <value>
+                <elementReference>OtherSamplingFrequency</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>ParentAccount__c</field>
             <value>
-                <elementReference>newSamplingSiteDetails.ParentAccount__c</elementReference>
+                <elementReference>recordId</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -196,6 +301,30 @@ v25: No need of Address Mapping and updating RecordTypeId mapping</description>
             <field>RecordTypeId</field>
             <value>
                 <elementReference>Get_PHOCS_Location_RT.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SampleAnalysisType__c</field>
+            <value>
+                <elementReference>Sample_Analysis_Type</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SamplingFrequency__c</field>
+            <value>
+                <elementReference>Sampling_Frequency</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SamplingMonths__c</field>
+            <value>
+                <elementReference>Sampling_Months</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SamplingReason__c</field>
+            <value>
+                <elementReference>Sampling_Reason</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -214,6 +343,12 @@ v25: No need of Address Mapping and updating RecordTypeId mapping</description>
             <field>SiteTreatment__c</field>
             <value>
                 <elementReference>Site_Treatment</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>VisitorAddressId</field>
+            <value>
+                <elementReference>SamplingSiteAddress.Parent.VisitorAddressId</elementReference>
             </value>
         </inputAssignments>
         <object>Location</object>
@@ -268,6 +403,34 @@ v25: No need of Address Mapping and updating RecordTypeId mapping</description>
         <object>Account</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <recordUpdates>
+        <name>Update_Address</name>
+        <label>Update Address Field</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>ParentAccount__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>CreateSamplingSiteRecord.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>VisitorAddressId</field>
+            <value>
+                <elementReference>Create_Address.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Location</object>
+    </recordUpdates>
     <screens>
         <name>CreateSamplingSite</name>
         <label>Create Sampling Site</label>
@@ -291,6 +454,20 @@ v25: No need of Address Mapping and updating RecordTypeId mapping</description>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <objectFieldReference>newSamplingSiteDetails.Name</objectFieldReference>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <fieldType>ObjectProvided</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <objectFieldReference>SamplingSiteAddress.Address</objectFieldReference>
                     <styleProperties>
                         <verticalAlignment>
                             <stringValue>top</stringValue>
@@ -357,52 +534,6 @@ v25: No need of Address Mapping and updating RecordTypeId mapping</description>
                 <name>SiteInformationSection_Column2</name>
                 <fieldType>Region</fieldType>
                 <fields>
-                    <name>ParentAccount</name>
-                    <extensionName>flowruntime:lookup</extensionName>
-                    <fieldType>ComponentInstance</fieldType>
-                    <inputParameters>
-                        <name>fieldApiName</name>
-                        <value>
-                            <stringValue>ParentAccount__c</stringValue>
-                        </value>
-                    </inputParameters>
-                    <inputParameters>
-                        <name>label</name>
-                        <value>
-                            <stringValue>Parent Account</stringValue>
-                        </value>
-                    </inputParameters>
-                    <inputParameters>
-                        <name>objectApiName</name>
-                        <value>
-                            <stringValue>Location</stringValue>
-                        </value>
-                    </inputParameters>
-                    <inputParameters>
-                        <name>required</name>
-                        <value>
-                            <booleanValue>true</booleanValue>
-                        </value>
-                    </inputParameters>
-                    <inputParameters>
-                        <name>recordId</name>
-                        <value>
-                            <elementReference>recordId</elementReference>
-                        </value>
-                    </inputParameters>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                    <storeOutputAutomatically>true</storeOutputAutomatically>
-                    <styleProperties>
-                        <verticalAlignment>
-                            <stringValue>top</stringValue>
-                        </verticalAlignment>
-                        <width>
-                            <stringValue>12</stringValue>
-                        </width>
-                    </styleProperties>
-                </fields>
-                <fields>
                     <name>Site_Number</name>
                     <dataType>String</dataType>
                     <fieldText>Site Number</fieldText>
@@ -452,6 +583,154 @@ v25: No need of Address Mapping and updating RecordTypeId mapping</description>
                         </width>
                     </styleProperties>
                 </fields>
+                <fields>
+                    <name>Sampling_Reason</name>
+                    <choiceReferences>SamplingReason</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Sampling Reason</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithHeader</regionContainerType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Sample_Analysis_Type</name>
+            <choiceReferences>SampleAnalysisType</choiceReferences>
+            <dataType>String</dataType>
+            <fieldText>Sample Analysis Type</fieldText>
+            <fieldType>MultiSelectPicklist</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Sampling_Details</name>
+            <fieldText>Sampling Details</fieldText>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Sampling_Details_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Sampling_Frequency</name>
+                    <choiceReferences>SamplingFrequency</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Sampling Frequency</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>OtherSamplingFrequency</name>
+                    <dataType>String</dataType>
+                    <fieldText>Other Sampling Frequency</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>Sampling_Frequency</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <stringValue>Other</stringValue>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
+                <fields>
+                    <name>Sampling_Months</name>
+                    <choiceReferences>SamplingMonths</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Sampling Months</fieldText>
+                    <fieldType>MultiSelectPicklist</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>Sampling_Details_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>NumberofSamples</name>
+                    <dataType>Number</dataType>
+                    <fieldText>Number of Samples</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <scale>0</scale>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
                 <inputParameters>
                     <name>width</name>
                     <value>
@@ -473,7 +752,7 @@ v25: No need of Address Mapping and updating RecordTypeId mapping</description>
         </fields>
         <fields>
             <name>SamplingInformationSection</name>
-            <fieldText>Sampling Information</fieldText>
+            <fieldText>Additional Information</fieldText>
             <fieldType>RegionContainer</fieldType>
             <fields>
                 <name>SamplingInformationSection_Column1</name>

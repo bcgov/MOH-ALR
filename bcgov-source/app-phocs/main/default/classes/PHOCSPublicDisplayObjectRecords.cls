@@ -1026,7 +1026,7 @@ System.debug('VEA found: ' + vea.Id);
                     'ReasonForAdvisory'=> caseRecord.ReasonForAdvisory__c,
                     'AccountId' => caseRecord.AccountId,
                     'AccountName'=> caseRecord.Account.Name,
-                    'AccountPhone'=> caseRecord.Account.Phone,
+                    'AccountPhone'=> caseRecord.Account?.Phone =='' ? '' : formatPhoneNumber(caseRecord.Account?.Phone),
                     'AccountWebsite'=> caseRecord.Account.Website,
                     'PopulationServedper24hrs' => caseRecord.Account.PopulationServedper24hrs__c,
                     'AccountType' => caseRecord.Account?.Type,
