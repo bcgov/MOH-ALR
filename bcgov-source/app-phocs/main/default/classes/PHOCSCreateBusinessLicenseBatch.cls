@@ -41,7 +41,7 @@ public without sharing class PHOCSCreateBusinessLicenseBatch
     private static final String ACTIVE_STATUS = 'Active';
     private static final String CLOSED_STATUS = 'Closed';
 
-    private String createdByUserName;
+    private String migrationUserName;
     private Datetime createdDateStart;
     private Datetime createdDateEnd;
         
@@ -73,7 +73,7 @@ public without sharing class PHOCSCreateBusinessLicenseBatch
             );
         }
 
-        createdByUserName = batchSetting.CreatedByUserName__c.trim();
+        migrationUserName = batchSetting.CreatedByUserName__c.trim();
         createdDateStart = batchSetting.CreatedDateStart__c;
         createdDateEnd = batchSetting.CreatedDateEnd__c;
     }
@@ -101,7 +101,7 @@ public without sharing class PHOCSCreateBusinessLicenseBatch
               AND Status= :CLOSED_STATUS
               AND AccountId != NULL
               AND LicenseType.Id != NULL
-              AND CreatedBy.Username = :createdByUserName
+              AND ( CreatedBy.Username = :migrationUserName OR LastModifiedBy.Username = :migrationUserName)
               AND CreatedDate >= :createdDateStart
               AND CreatedDate <= :createdDateEnd 
         ]);
