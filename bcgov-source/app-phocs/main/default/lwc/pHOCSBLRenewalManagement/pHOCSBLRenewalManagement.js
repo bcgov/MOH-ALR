@@ -20,6 +20,7 @@ const PAGE_SIZE = 50;
 const SORT_FIELD_MAP = {
     accountUrl: 'accountName',
     parentAccountUrl: 'parentAccountName',
+    operatingMonths: 'operatingMonthsSortKey',
     blaUrl: 'blaId',
     feeUrl: 'feeId'
 };
@@ -211,7 +212,10 @@ export default class PHOCSBLARenewalManagement extends LightningElement {
             label: 'Fee Amount',
             fieldName: 'feeAmount',
             type: 'currency',
-            sortable: true
+            sortable: true,
+            typeAttributes: {
+            currencyCode: 'CAD'
+        }
         },
         {
             label: 'Multiple Premise Facility?',
@@ -328,8 +332,9 @@ export default class PHOCSBLARenewalManagement extends LightningElement {
         {
             label: 'Fee Amount',
             fieldName: 'feeAmount',
-            type: 'currency',
+            type: 'number',
             sortable: true
+            
         },
         {
             label: 'Due Date',
