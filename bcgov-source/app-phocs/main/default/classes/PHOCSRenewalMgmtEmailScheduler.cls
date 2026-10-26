@@ -5,7 +5,7 @@ public with sharing class PHOCSRenewalMgmtEmailScheduler implements Schedulable 
             'Late Fee Notification Queued'
             };
                 
-                private static final String BILLING_CONTACT_ROLE = 'Billing Contact';
+    private static final String BILLING_CONTACT_ROLE = 'Billing Contact';
     private static final String OWNER_ROLE = 'Owner';
     private static final String OPERATOR_ROLE = 'Operator';
     private static final String SECONDARY_OPERATOR_ROLE = 'Secondary Operator';
@@ -316,7 +316,7 @@ public with sharing class PHOCSRenewalMgmtEmailScheduler implements Schedulable 
                 formattedValue = '$' + String.valueOf(fieldValue);
             } else if (fieldName == 'DueDate' && fieldValue instanceof Datetime) {
                 // Remove the time component from a Datetime field.
-                formattedValue = ((Datetime) fieldValue).format('MMM d, yyyy');
+                formattedValue = ((Datetime) fieldValue).formatGmt('yyyy-MM-dd');
             } else {
                 formattedValue = String.valueOf(fieldValue);
             }
@@ -330,11 +330,11 @@ public with sharing class PHOCSRenewalMgmtEmailScheduler implements Schedulable 
 }
     
     private static String getTemplateName(String paymentReminder, String feetype) {
-        if (paymentReminder == 'Invoice Notification Queued' ||paymentReminder == 'Late Fee Notification Queued'){
+        if (paymentReminder == 'Invoice Notification Queued'){
             if(feetype=='Renewal') return RENEWALINVOICE_TEMPLATE;            
             else return NEWINVOICE_TEMPLATE;
         }
-        if (paymentReminder == 'Payment Reminder Queued') {
+        if (paymentReminder == 'Payment Reminder Queued' ||paymentReminder == 'Late Fee Notification Queued') {
             return REMINDER_TEMPLATE;
         }        
         return null;
