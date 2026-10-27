@@ -11,7 +11,9 @@ public class PHOCSSendRenewalsRow {
         @AuraEnabled public String feeId;
         @AuraEnabled public String feeUrl;
         @AuraEnabled public String feeName;
-        @AuraEnabled public Decimal feeAmount;
+        @AuraEnabled public Decimal feeAmount;        
         @AuraEnabled public Boolean multiplePremise;
         @AuraEnabled public String premiseRole;
+		@AuraEnabled public String operatingMonthsSortKey;
+
     }

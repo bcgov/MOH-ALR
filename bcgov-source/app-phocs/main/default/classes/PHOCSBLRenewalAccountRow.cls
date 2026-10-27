@@ -11,4 +11,6 @@ public class PHOCSBLRenewalAccountRow {
         @AuraEnabled public String operatingMonths;
         @AuraEnabled public Boolean multiplePremise;
         @AuraEnabled public String premiseRole;
+		@AuraEnabled public String operatingMonthsSortKey;
+
     }
