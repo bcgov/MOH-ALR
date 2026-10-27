@@ -55,25 +55,6 @@
     <name>DRUpdateAccountContactRelation</name>
     <nullInputsIncludedInOutput>false</nullInputsIncludedInOutput>
     <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:Contact/\/\/Details:Roles &quot;;&quot; var:Contact/\/\/Details:Roles3 CONCAT</formulaConverted>
-        <formulaExpression>CONCAT(%Contact Details:Roles%, &quot;;&quot;,%Contact Details:Roles3%)</formulaExpression>
-        <formulaResultPath>ALRSelectedRole</formulaResultPath>
-        <formulaSequence>2.0</formulaSequence>
-        <globalKey>25bd7050-c025-4b4d-b5e0-017e2a2ae1fe</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>DRUpdateAccountContactRelation</name>
-        <omniDataTransformation>0kdAq000003tMhJ</omniDataTransformation>
-        <omniDataTransformationId>0kdAq000003tMhJ</omniDataTransformationId>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
         <disabled>true</disabled>
         <filterGroup>0.0</filterGroup>
         <filterOperator>=</filterOperator>
@@ -88,23 +69,6 @@
         <outputFieldName>Id</outputFieldName>
         <outputObjectName>Account</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>2afa3ed3-1b72-4d4b-bb76-c0a8ef52bce0</globalKey>
-        <inputFieldName>phocsSelectedRole</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>DRUpdateAccountContactRelation</name>
-        <omniDataTransformation>0kdAq000002p18v</omniDataTransformation>
-        <omniDataTransformationId>0kdAq000002p18v</omniDataTransformationId>
-        <outputCreationSequence>2.0</outputCreationSequence>
-        <outputFieldName>Roles</outputFieldName>
-        <outputObjectName>AccountContactRelation</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -192,20 +156,66 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:Contact/\/\/Details:phocsRoles1 &quot;;&quot; var:Contact/\/\/Details:phocsRoles2 CONCAT</formulaConverted>
-        <formulaExpression>CONCAT(%Contact Details:phocsRoles1%, &quot;;&quot;,%Contact Details:phocsRoles2%)</formulaExpression>
-        <formulaResultPath>phocsSelectedRole</formulaResultPath>
+        <formulaConverted>| | | var:Contact/\/\/Details:Roles ISBLANK NOT | | var:Contact/\/\/Details:Roles3 ISBLANK NOT OR | | | var:Contact/\/\/Details:Roles ISBLANK &quot;&quot; var:Contact/\/\/Details:Roles IF | | | var:Contact/\/\/Details:Roles ISBLANK NOT | | var:Contact/\/\/Details:Roles3 ISBLANK NOT AND &quot;,/\/\/&quot; &quot;&quot; IF | | var:Contact/\/\/Details:Roles3 ISBLANK &quot;&quot; var:Contact/\/\/Details:Roles3 IF CONCAT | | | var:Contact/\/\/Details:phocsRoles1 ISBLANK &quot;&quot; var:Contact/\/\/Details:phocsRoles1 IF | | | var:Contact/\/\/Details:phocsRoles1 ISBLANK NOT | | var:Contact/\/\/Details:phocsRoles2 ISBLANK NOT AND &quot;,/\/\/&quot; &quot;&quot; IF | | var:Contact/\/\/Details:phocsRoles2 ISBLANK &quot;&quot; var:Contact/\/\/Details:phocsRoles2 IF CONCAT IF</formulaConverted>
+        <formulaExpression>IF(
+  OR(
+    NOT(ISBLANK(%Contact Details:Roles%)),
+    NOT(ISBLANK(%Contact Details:Roles3%))
+  ),
+  CONCAT(
+    IF(ISBLANK(%Contact Details:Roles%), &quot;&quot;, %Contact Details:Roles%),
+    IF(
+      AND(
+        NOT(ISBLANK(%Contact Details:Roles%)),
+        NOT(ISBLANK(%Contact Details:Roles3%))
+      ),
+      &quot;, &quot;,
+      &quot;&quot;
+    ),
+    IF(ISBLANK(%Contact Details:Roles3%), &quot;&quot;, %Contact Details:Roles3%)
+  ),
+  CONCAT(
+    IF(ISBLANK(%Contact Details:phocsRoles1%), &quot;&quot;, %Contact Details:phocsRoles1%),
+    IF(
+      AND(
+        NOT(ISBLANK(%Contact Details:phocsRoles1%)),
+        NOT(ISBLANK(%Contact Details:phocsRoles2%))
+      ),
+      &quot;, &quot;,
+      &quot;&quot;
+    ),
+    IF(ISBLANK(%Contact Details:phocsRoles2%), &quot;&quot;, %Contact Details:phocsRoles2%)
+  )
+)</formulaExpression>
+        <formulaResultPath>SelectedRoles</formulaResultPath>
         <formulaSequence>1.0</formulaSequence>
-        <globalKey>e81c618c-5189-4e7a-9c0e-8e8619402fc3</globalKey>
+        <globalKey>1f39bb84-e060-4872-843b-3bfac06d8149</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>DRUpdateAccountContactRelation</name>
-        <omniDataTransformation>0kdAq000002p18p</omniDataTransformation>
-        <omniDataTransformationId>0kdAq000002p18p</omniDataTransformationId>
+        <omniDataTransformation>0kdAq000003uBgb</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003uBgb</omniDataTransformationId>
         <outputCreationSequence>0.0</outputCreationSequence>
         <outputFieldName>Formula</outputFieldName>
         <outputObjectName>Formula</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
+        <upsertKey>false</upsertKey>
+    </omniDataTransformItem>
+    <omniDataTransformItem>
+        <disabled>false</disabled>
+        <filterGroup>0.0</filterGroup>
+        <globalKey>67e43028-5bbe-4fbb-a39a-2a289be75ba4</globalKey>
+        <inputFieldName>SelectedRoles</inputFieldName>
+        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
+        <linkedObjectSequence>0.0</linkedObjectSequence>
+        <name>DRUpdateAccountContactRelation</name>
+        <omniDataTransformation>0kdAq000003uBiD</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003uBiD</omniDataTransformationId>
+        <outputCreationSequence>2.0</outputCreationSequence>
+        <outputFieldName>Roles</outputFieldName>
+        <outputObjectName>AccountContactRelation</outputObjectName>
+        <requiredForUpsert>false</requiredForUpsert>
+        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
@@ -222,23 +232,6 @@
         <outputFieldName>Roles</outputFieldName>
         <outputObjectName>AccountContactRelation</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>64650b73-5ff1-48cf-85ad-574c70c36553</globalKey>
-        <inputFieldName>ALRSelectedRole</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>DRUpdateAccountContactRelation</name>
-        <omniDataTransformation>0kdAq000003tMiv</omniDataTransformation>
-        <omniDataTransformationId>0kdAq000003tMiv</omniDataTransformationId>
-        <outputCreationSequence>2.0</outputCreationSequence>
-        <outputFieldName>Roles</outputFieldName>
-        <outputObjectName>AccountContactRelation</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
         <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
