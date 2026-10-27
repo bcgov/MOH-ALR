@@ -4,12 +4,21 @@
     <active>true</active>
     <description>Prevents updates to PHOCS Violation records when Status is Resolved, unless the user has the EHIS Bypass Validation Rule custom permission or the Status is changed due to Inspection retraction.</description>
     <errorConditionFormula>AND(
-    RecordType.DeveloperName = &quot;PHOCSRegulatoryCodeViolation&quot;,
-    NOT(ISNEW()),
-    NOT($Permission.EHISBypassValidationRuleCustomPermission),
-    ISPICKVAL(Status, &quot;Resolved&quot;),
-    NOT(ISCHANGED(Status)),
-    NOT(ISCHANGED(DateResolved))
+  RecordType.DeveloperName = &quot;PHOCSRegulatoryCodeViolation&quot;,
+  NOT(ISNEW()),
+  NOT($Permission.EHISBypassValidationRuleCustomPermission),
+  OR(
+    AND(
+      ISPICKVAL(Status, &quot;Resolved&quot;),
+      NOT(ISCHANGED(Status)),
+      NOT(ISCHANGED(DateResolved))
+    ),
+    AND(
+      ISPICKVAL(PRIORVALUE(Status), &quot;Resolved&quot;),
+      ISCHANGED(Status),
+      NOT(ISPICKVAL(Status, &quot;Retracted&quot;))
+    )
+  )
 )</errorConditionFormula>
     <errorMessage>Violation record cannot be edited once the status is marked as Resolved</errorMessage>
 </ValidationRule>
