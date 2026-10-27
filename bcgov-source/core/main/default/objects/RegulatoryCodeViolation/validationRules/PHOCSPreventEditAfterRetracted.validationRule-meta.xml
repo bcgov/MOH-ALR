@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PHOCSPreventEditAfterRetracted</fullName>
+    <active>true</active>
+    <description>Prevents changes to PHOCS Regulatory Code Violation records once Status is Resolved.</description>
+    <errorConditionFormula>AND(
+  RecordType.DeveloperName = &quot;PHOCSRegulatoryCodeViolation&quot;,
+  NOT(ISNEW()),
+  NOT($Permission.EHISBypassValidationRuleCustomPermission),
+  OR(
+    AND(
+      ISPICKVAL(Status, &quot;Retracted&quot;),
+      NOT(ISCHANGED(Status)),
+      NOT(ISCHANGED(DateResolved))
+    ),
+    AND(
+      ISPICKVAL(PRIORVALUE(Status), &quot;Retracted&quot;),
+      ISCHANGED(Status)
+    )
+  )
+)</errorConditionFormula>
+    <errorMessage>Violation record cannot be edited once the status is marked as Retracted.</errorMessage>
+</ValidationRule>
