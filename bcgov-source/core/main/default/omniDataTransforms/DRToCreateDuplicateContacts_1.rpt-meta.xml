@@ -168,16 +168,45 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:Contact/\/\/Details:Roles &quot;;&quot; var:Contact/\/\/Details:Roles3 CONCAT</formulaConverted>
-        <formulaExpression>CONCAT(%Contact Details:Roles%, &quot;;&quot;,%Contact Details:Roles3%)</formulaExpression>
-        <formulaResultPath>ALRSelectedRole</formulaResultPath>
-        <formulaSequence>2.0</formulaSequence>
-        <globalKey>5c71b0aa-f303-4e35-9d4b-2a689d2dd0c0</globalKey>
+        <formulaConverted>| | | var:Contact/\/\/Details:Roles ISBLANK NOT | | var:Contact/\/\/Details:Roles3 ISBLANK NOT OR | | | var:Contact/\/\/Details:Roles ISBLANK &quot;&quot; var:Contact/\/\/Details:Roles IF | | | var:Contact/\/\/Details:Roles ISBLANK NOT | | var:Contact/\/\/Details:Roles3 ISBLANK NOT AND &quot;,/\/\/&quot; &quot;&quot; IF | | var:Contact/\/\/Details:Roles3 ISBLANK &quot;&quot; var:Contact/\/\/Details:Roles3 IF CONCAT | | | var:Contact/\/\/Details:phocsRoles1 ISBLANK &quot;&quot; var:Contact/\/\/Details:phocsRoles1 IF | | | var:Contact/\/\/Details:phocsRoles1 ISBLANK NOT | | var:Contact/\/\/Details:phocsRoles2 ISBLANK NOT AND &quot;,/\/\/&quot; &quot;&quot; IF | | var:Contact/\/\/Details:phocsRoles2 ISBLANK &quot;&quot; var:Contact/\/\/Details:phocsRoles2 IF CONCAT IF</formulaConverted>
+        <formulaExpression>IF(
+  OR(
+    NOT(ISBLANK(%Contact Details:Roles%)),
+    NOT(ISBLANK(%Contact Details:Roles3%))
+  ),
+  CONCAT(
+    IF(ISBLANK(%Contact Details:Roles%), &quot;&quot;, %Contact Details:Roles%),
+    IF(
+      AND(
+        NOT(ISBLANK(%Contact Details:Roles%)),
+        NOT(ISBLANK(%Contact Details:Roles3%))
+      ),
+      &quot;, &quot;,
+      &quot;&quot;
+    ),
+    IF(ISBLANK(%Contact Details:Roles3%), &quot;&quot;, %Contact Details:Roles3%)
+  ),
+  CONCAT(
+    IF(ISBLANK(%Contact Details:phocsRoles1%), &quot;&quot;, %Contact Details:phocsRoles1%),
+    IF(
+      AND(
+        NOT(ISBLANK(%Contact Details:phocsRoles1%)),
+        NOT(ISBLANK(%Contact Details:phocsRoles2%))
+      ),
+      &quot;, &quot;,
+      &quot;&quot;
+    ),
+    IF(ISBLANK(%Contact Details:phocsRoles2%), &quot;&quot;, %Contact Details:phocsRoles2%)
+  )
+)</formulaExpression>
+        <formulaResultPath>SelectedRoles</formulaResultPath>
+        <formulaSequence>1.0</formulaSequence>
+        <globalKey>dcc4352a-06c3-4d0e-b0fb-50e11ce585d8</globalKey>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>DRToCreateDuplicateContacts</name>
-        <omniDataTransformation>0kdAq000003tMnl</omniDataTransformation>
-        <omniDataTransformationId>0kdAq000003tMnl</omniDataTransformationId>
+        <omniDataTransformation>0kdAq000003uBjp</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003uBjp</omniDataTransformationId>
         <outputCreationSequence>0.0</outputCreationSequence>
         <outputFieldName>Formula</outputFieldName>
         <outputObjectName>Formula</outputObjectName>
@@ -187,30 +216,13 @@
     <omniDataTransformItem>
         <disabled>false</disabled>
         <filterGroup>0.0</filterGroup>
-        <globalKey>b73b80a0-8d06-4cdb-84f1-9b9ad599f5ce</globalKey>
-        <inputFieldName>ALRSelectedRole</inputFieldName>
+        <globalKey>e9899667-c327-4cfd-b324-ebdc58a861f1</globalKey>
+        <inputFieldName>SelectedRoles</inputFieldName>
         <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
         <linkedObjectSequence>0.0</linkedObjectSequence>
         <name>DRToCreateDuplicateContacts</name>
-        <omniDataTransformation>0kdAq000003tMpN</omniDataTransformation>
-        <omniDataTransformationId>0kdAq000003tMpN</omniDataTransformationId>
-        <outputCreationSequence>2.0</outputCreationSequence>
-        <outputFieldName>Roles</outputFieldName>
-        <outputObjectName>AccountContactRelation</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <transformValuesMappings>{ }</transformValuesMappings>
-        <upsertKey>false</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <globalKey>457648ec-a9f6-4677-b03e-9fda678e0b89</globalKey>
-        <inputFieldName>phocsSelectedRoles</inputFieldName>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>DRToCreateDuplicateContacts</name>
-        <omniDataTransformation>0kdAq000002p17W</omniDataTransformation>
-        <omniDataTransformationId>0kdAq000002p17W</omniDataTransformationId>
+        <omniDataTransformation>0kdAq000003uBlR</omniDataTransformation>
+        <omniDataTransformationId>0kdAq000003uBlR</omniDataTransformationId>
         <outputCreationSequence>2.0</outputCreationSequence>
         <outputFieldName>Roles</outputFieldName>
         <outputObjectName>AccountContactRelation</outputObjectName>
@@ -332,25 +344,6 @@
         <outputObjectName>AccountContactRelation</outputObjectName>
         <requiredForUpsert>false</requiredForUpsert>
         <upsertKey>true</upsertKey>
-    </omniDataTransformItem>
-    <omniDataTransformItem>
-        <disabled>false</disabled>
-        <filterGroup>0.0</filterGroup>
-        <formulaConverted>| var:Contact/\/\/Details:phocsRoles1 &quot;;&quot; var:Contact/\/\/Details:phocsRoles2 CONCAT</formulaConverted>
-        <formulaExpression>CONCAT(%Contact Details:phocsRoles1%, &quot;;&quot;,%Contact Details:phocsRoles2%)</formulaExpression>
-        <formulaResultPath>phocsSelectedRoles</formulaResultPath>
-        <formulaSequence>1.0</formulaSequence>
-        <globalKey>9ac7e9a2-6616-48b0-8c15-39be3496eac9</globalKey>
-        <inputObjectQuerySequence>0.0</inputObjectQuerySequence>
-        <linkedObjectSequence>0.0</linkedObjectSequence>
-        <name>DRToCreateDuplicateContacts</name>
-        <omniDataTransformation>0kdAq000002p17M</omniDataTransformation>
-        <omniDataTransformationId>0kdAq000002p17M</omniDataTransformationId>
-        <outputCreationSequence>0.0</outputCreationSequence>
-        <outputFieldName>Formula</outputFieldName>
-        <outputObjectName>Formula</outputObjectName>
-        <requiredForUpsert>false</requiredForUpsert>
-        <upsertKey>false</upsertKey>
     </omniDataTransformItem>
     <omniDataTransformItem>
         <disabled>false</disabled>
