@@ -127,7 +127,7 @@
 .review-nav-btn lightning-icon { --sds-c-icon-color-foreground-default: currentColor; }
 .review-question-comment { font-size: 0.6875rem; color: var(--phocs-color-neutral); padding: var(--phocs-spacing-xxs) var(--phocs-spacing-xs); background: #f9f9f9; border-radius: var(--phocs-border-radius-sm); font-style: italic; }
 
-/* Tablet+ (768px+) */
+/* Tablet+ (768px+) 
 @media screen and (min-width: 768px) {
     .inspection-container { padding: var(--phocs-spacing-sm); }
     .question-card { padding: var(--phocs-spacing-md); margin: var(--phocs-spacing-xs) var(--phocs-spacing-md); }
@@ -141,9 +141,9 @@
     .section-title { font-size: 1rem; }
     .review-summary { justify-content: center; }
     .review-stat { min-width: 90px; flex: 0 1 auto; }
-}
+}*/
 
-/* Desktop (1024px+) */
+/* Desktop (1024px+) 
 @media screen and (min-width: 1024px) {
     .inspection-container { max-width: 1400px; padding: var(--phocs-spacing-md); }
     .question-card { padding: var(--phocs-spacing-md) var(--phocs-spacing-lg); }
@@ -153,7 +153,7 @@
     .modal-content-scrollable { max-height: 450px; }
     .review-stat-value { font-size: 1.5rem; }
     .review-question-text { font-size: 0.8125rem; }
-}
+}*/
 
 /* Large Desktop (1440px+) */
 @media screen and (min-width: 1440px) { .inspection-container { max-width: 1600px; } }
@@ -164,10 +164,10 @@
 
 /* Print */
 @media print { .submit-container, .regulatory-codes-btn, .file-upload-container, .review-nav-btn { display: none; } .question-card { break-inside: avoid; page-break-inside: avoid; } }
-
+ /*
 .button-progress-wrapper {
-    width: 220px; /* same width as button */
-}
+    width: 220px; same width as button 
+}*/
 
 .full-width-btn {
     width: 80%;
@@ -220,13 +220,13 @@
     pointer-events: none;
 }
 
-/* Desktop / Tablet layout */
+/* Desktop / Tablet layout
 .question-row {
     display: flex;
     align-items: center; 
     gap: 0.75rem;
     width: 100%;
-}
+} */
 
 .question-col {
     flex: 5;
@@ -308,7 +308,7 @@
     margin-left: 8px;
 }
 
-/* Mobile responsiveness */
+/* Mobile responsiveness 
 @media screen and (max-width: 768px) {
     .question-row {
         flex-direction: column;
@@ -326,9 +326,9 @@
     }
 
     .regulatory-codes-btn {
-        width: auto; /* button doesn't stretch unnecessarily */
-    }
-
+        width: auto; /* button doesn't stretch unnecessarily 
+    }*/
+/*
     .noncompliant-helper-text {
        font-size: 0.75rem;
        font-weight: 500;
@@ -337,4 +337,131 @@
         clear: both; 
     }
 
+}*/
+/* ============================================================
+   RESPONSIVE LAYER (container-query based, zoom safe)
+   ============================================================ */
+:host { display: block; min-width: 0; }
+
+.inspection-container {
+    container-type: inline-size;
+    container-name: inspection;
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+/* ---------- Fluid typography ---------- */
+.section-title   { font-size: clamp(0.875rem, 0.8rem + 0.4vw, 1rem); overflow-wrap: anywhere; }
+.question-text   { font-size: clamp(0.8125rem, 0.75rem + 0.3vw, 0.9375rem); overflow-wrap: anywhere; }
+.section-progress,
+.progress-text   { font-size: clamp(0.6875rem, 0.65rem + 0.2vw, 0.8125rem); }
+
+/* ---------- Header / section rows wrap instead of overflowing ---------- */
+.section-header .slds-grid { flex-wrap: wrap; gap: 0.25rem 0.5rem; }
+.section-status-indicators { flex-wrap: wrap; }
+
+/* ---------- Question row ---------- */
+.question-row {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    width: 100%;
+}
+.question-text {
+    flex: 1 1 18rem;
+    min-width: 0;
+}
+.question-controls {
+    flex: 1 1 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.25rem 0.5rem;
+    width: auto;
+    min-width: 0;
+}
+.compliance-button-group {
+    display: flex;
+    flex-wrap: wrap;
+    flex: 1 1 auto;
+    justify-content: flex-end;
+    gap: 0.25rem;
+    min-width: 0;
+}
+
+/* ---------- Buttons: wrap text, shrink, grow ---------- */
+.compliance-btn,
+.regulatory-codes-btn {
+    height: auto;
+    min-height: 28px;
+    min-width: 0;
+    padding: 0.25rem 0.625rem;
+    white-space: normal;
+    line-height: 1.2;
+    font-size: clamp(0.6875rem, 0.65rem + 0.2vw, 0.8125rem);
+}
+.compliance-btn      { flex: 1 1 auto; }
+.regulatory-codes-btn{ flex: 0 0 auto; }
+
+/* ---------- Child questions (question-col / button-col) ---------- */
+.question-col { flex: 1 1 14rem; min-width: 0; }
+.button-col   { flex: 0 0 auto; display: flex; justify-content: flex-end; }
+
+/* ---------- Violation row ---------- */
+.violation-details { flex-wrap: wrap; height: auto; }
+.violation-history { min-width: 0; }
+
+/* ---------- Top action row / progress ---------- */
+.action-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; width: 100%; }
+.button-progress-wrapper { width: 100%; }
+.full-width-btn { flex: 0 1 14rem; min-width: 0; }
+.progress-container { flex: 1 1 10rem; min-width: 0; }
+
+/* ---------- Sticky footer buttons wrap ---------- */
+.submit-container,
+.submit-container .slds-grid {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+.submit-container .slds-m-right_small { margin-right: 0; }
+
+/* ---------- Review modal ---------- */
+.review-meta-label { min-width: 0; flex: 0 0 auto; }
+.review-meta-row   { flex-wrap: wrap; }
+.review-summary    { flex-wrap: wrap; }
+.review-stat       { flex: 1 1 5rem; min-width: 0; }
+.modal-content-scrollable { max-height: 60vh; }
+
+/* ============================================================
+   CONTAINER BREAKPOINTS (based on the component's width)
+   ============================================================ */
+
+/* Narrow: ~ tablet column, zoomed browser, side-by-side layouts */
+@container inspection (max-width: 700px) {
+    .question-text            { flex-basis: 100%; }
+    .question-controls        { flex-basis: 100%; justify-content: flex-start; }
+    .compliance-button-group  { justify-content: flex-start; }
+    .comments-upload-row      { flex-direction: column; }
+    .violation-history        { margin-left: 0; justify-content: flex-start; }
+    .review-meta-row          { flex-direction: column; gap: 0.125rem; }
+}
+
+/* Very narrow: phones, heavy zoom */
+@container inspection (max-width: 480px) {
+    .compliance-btn           { flex: 1 1 calc(50% - 0.25rem); }
+    .regulatory-codes-btn     { flex: 1 1 100%; }
+    .submit-container .slds-grid,
+    .submit-container lightning-button { width: 100%; }
+    .submit-container lightning-button { display: block; }
+    .full-width-btn           { flex: 1 1 100%; }
+    .button-col               { flex: 1 1 100%; justify-content: flex-start; }
+}
+
+/* Roomy: wide desktop, more padding */
+@container inspection (min-width: 1000px) {
+    .question-card { padding: var(--phocs-spacing-md) var(--phocs-spacing-lg); }
 }
