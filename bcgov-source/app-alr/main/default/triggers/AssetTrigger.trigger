@@ -41,6 +41,11 @@ trigger AssetTrigger on Asset (before insert, before update, after insert, after
         }*/
     if(Trigger.isBefore && (Trigger.isInsert || Trigger.isUpdate)){
         PhocsHealthAuthorityHandler.populateHealthAuthority(Trigger.new);         
+    }    
+    if(Trigger.isAfter && Trigger.isInsert){
+        AssetTriggerHandler.afterInsert(Trigger.new);
     }
-          
+    if(Trigger.isAfter && Trigger.isUpdate){
+        AssetTriggerHandler.afterUpdate(Trigger.new, Trigger.oldMap);
+    }          
 }
