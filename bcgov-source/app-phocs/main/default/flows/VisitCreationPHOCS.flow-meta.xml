@@ -75,6 +75,51 @@
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
+        <name>AssignBLAContextID</name>
+        <label>AssignBLAContextID</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>AssignedContextId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>BLAContextId.recordId</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Visit_Record_Creation</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>AssignContextId</name>
+        <label>AssignContextId</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>AssignedContextId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>ContextId.recordId</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Visit_Record_Creation</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Default</name>
+        <label>Default</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>AssignedContextId</assignToReference>
+            <operator>Assign</operator>
+        </assignmentItems>
+        <connector>
+            <targetReference>Visit_Record_Creation</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>followUpInspectionTypeAssignment</name>
         <label>followUpInspectionTypeAssignment</label>
         <locationX>0</locationX>
@@ -502,6 +547,46 @@
         </rules>
     </decisions>
     <decisions>
+        <name>CheckContextSobjectType</name>
+        <label>CheckContextSobjectType</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Default</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>CaseContext</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>GetSobjectType</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Case</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>AssignContextId</targetReference>
+            </connector>
+            <label>Case Context</label>
+        </rules>
+        <rules>
+            <name>BLAContext</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>GetSobjectType</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>BLA</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>AssignBLAContextID</targetReference>
+            </connector>
+            <label>BLA Context</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Decision_Based_on_Context</name>
         <label>Decision Based on Context</label>
         <locationX>0</locationX>
@@ -612,7 +697,8 @@ V19 - Adding instructional text conditionally EHIS-3867
 V21 - Removing Inspection creation from Asset (Recreational Water) EHIS-4849
 V23 - Removed Actual start date/Time from new Inspection page for EHIS-4099
 V26- Added isDairy Check for visit record for dairy related inspections. EHIS-5751
-V28- UpdatedInspection Rec Mapping to the IsDairy field, EHIS-6115</description>
+V28- UpdatedInspection Rec Mapping to the IsDairy field, EHIS-6115
+Bugfix - added BLA and Case check for follow up inspection -V3</description>
     <dynamicChoiceSets>
         <name>CCRCInspTypeChoiceSet</name>
         <dataType>String</dataType>
@@ -872,6 +958,15 @@ V28- UpdatedInspection Rec Mapping to the IsDairy field, EHIS-6115</description>
       )
     )
   )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>GetSobjectType</name>
+        <dataType>String</dataType>
+        <expression>CASE(LEFT({!Get_Insp_Record.ContextId}, 3),
+  &quot;0f0&quot;, &quot;BLA&quot;,
+  &quot;500&quot;, &quot;Case&quot;,
+  &quot;Unknown&quot;
 )</expression>
     </formulas>
     <interviewLabel>VisitCreationPHOCS {!$Flow.CurrentDateTime}</interviewLabel>
@@ -2422,7 +2517,7 @@ V28- UpdatedInspection Rec Mapping to the IsDairy field, EHIS-6115</description>
         <inputAssignments>
             <field>ContextId</field>
             <value>
-                <elementReference>ContextId.recordId</elementReference>
+                <elementReference>AssignedContextId</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -7684,7 +7779,7 @@ V28- UpdatedInspection Rec Mapping to the IsDairy field, EHIS-6115</description>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <connector>
-            <targetReference>Visit_Record_Creation</targetReference>
+            <targetReference>CheckContextSobjectType</targetReference>
         </connector>
         <fields>
             <name>DisplayInfos</name>
@@ -8036,7 +8131,7 @@ V28- UpdatedInspection Rec Mapping to the IsDairy field, EHIS-6115</description>
                     <inputParameters>
                         <name>fieldApiName</name>
                         <value>
-                            <stringValue>ContextId</stringValue>
+                            <stringValue>CaseContextId__c</stringValue>
                         </value>
                     </inputParameters>
                     <inputParameters>
@@ -8074,6 +8169,72 @@ V28- UpdatedInspection Rec Mapping to the IsDairy field, EHIS-6115</description>
                             <stringValue>12</stringValue>
                         </width>
                     </styleProperties>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>GetSobjectType</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <stringValue>Case</stringValue>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
+                <fields>
+                    <name>BLAContextId</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>BLAContextId__c</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Context</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Visit</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>Get_Insp_Record.ContextId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>false</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>GetSobjectType</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <stringValue>BLA</stringValue>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
                 </fields>
                 <fields>
                     <name>Inspection_Priority</name>
@@ -9739,6 +9900,13 @@ V28- UpdatedInspection Rec Mapping to the IsDairy field, EHIS-6115</description>
     </start>
     <status>Active</status>
     <variables>
+        <name>AssignedContextId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
         <name>inspecTypeId</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
@@ -9750,6 +9918,13 @@ V28- UpdatedInspection Rec Mapping to the IsDairy field, EHIS-6115</description>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>objectApiName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
