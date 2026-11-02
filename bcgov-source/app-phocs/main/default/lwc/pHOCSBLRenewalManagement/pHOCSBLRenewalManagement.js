@@ -344,7 +344,8 @@ export default class PHOCSBLARenewalManagement extends LightningElement {
             typeAttributes: {
                 year: 'numeric',
                 month: '2-digit',
-                day: '2-digit'
+                day: '2-digit',
+                timeZone: 'UTC'
             }
         },
         {
@@ -475,7 +476,8 @@ export default class PHOCSBLARenewalManagement extends LightningElement {
             typeAttributes: {
                 year: 'numeric',
                 month: '2-digit',
-                day: '2-digit'
+                day: '2-digit',
+                timeZone: 'UTC'
             }
         },
         {
