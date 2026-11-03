@@ -3,23 +3,20 @@
     <fullName>Island_Health_queue</fullName>
     <active>true</active>
     <errorConditionFormula>AND(
-ISCHANGED(OwnerId),
-
-HealthAuthority__c = &quot;Island Health - Island&quot;,
-
-$Profile.Name &lt;&gt; &quot;System Administrator&quot;,
-
-OR(
-AND(
-NOT(ISBLANK(Owner:Queue.DeveloperName)),
-NOT(CONTAINS(Owner:Queue.DeveloperName, &quot;Island&quot;))
-),
-
-AND(
-ISBLANK(Owner:Queue.DeveloperName),
-NOT(CONTAINS(Owner:User.UserRole.Name, &quot;VIHA&quot;))
-)
-)
+    ISCHANGED(OwnerId),
+    HealthAuthority__c = &quot;Island Health - Island&quot;,
+    $Profile.Name &lt;&gt; &quot;System Administrator&quot;,
+    $Profile.Name &lt;&gt; &quot;MOH Standard User&quot;,
+    OR(
+        AND(
+            NOT(ISBLANK(Owner:Queue.DeveloperName)),
+            NOT(CONTAINS(Owner:Queue.DeveloperName, &quot;Island&quot;))
+        ),
+        AND(
+            ISBLANK(Owner:Queue.DeveloperName),
+            NOT(CONTAINS(Owner:User.UserRole.Name, &quot;VIHA&quot;))
+        )
+    )
 )</errorConditionFormula>
     <errorMessage>Records can only be assigned to queues that belong to your Health Authority.</errorMessage>
 </ValidationRule>
