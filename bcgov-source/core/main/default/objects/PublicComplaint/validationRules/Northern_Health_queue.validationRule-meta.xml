@@ -4,17 +4,14 @@
     <active>true</active>
     <errorConditionFormula>AND(
     ISCHANGED(OwnerId),
-
     ISPICKVAL(HealthAuthority__c, &quot;Northern Health - NH&quot;),
-
     $Profile.Name &lt;&gt; &quot;System Administrator&quot;,
-
+    $Profile.Name &lt;&gt; &quot;MOH Standard User&quot;,
     OR(
         AND(
             NOT(ISBLANK(Owner:Queue.DeveloperName)),
             NOT(CONTAINS(Owner:Queue.DeveloperName, &quot;Northern&quot;))
         ),
-
         AND(
             ISBLANK(Owner:Queue.DeveloperName),
             NOT(CONTAINS(Owner:User.UserRole.Name, &quot;NHA&quot;))
