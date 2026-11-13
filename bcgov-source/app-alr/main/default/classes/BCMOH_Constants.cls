@@ -26,6 +26,7 @@ public class BCMOH_Constants {
     public Final static String blaCreatedStatus = 'Ready for Renewal';
     public Final static String blaExcludedStatus = 'Excluded';
     public Final static String feeType = 'Renewal Unit Fee';
+    public Final static String annualRenewalFeeType = 'Annual Renewal Fee';
     public Final static String feeStatus = 'Paid';
     public Final static List<String> renewalEligibleStatuses = new List<String>{'Cancelled', 'Completed'};
     public Final static String blaClosedStatus = 'Closed';

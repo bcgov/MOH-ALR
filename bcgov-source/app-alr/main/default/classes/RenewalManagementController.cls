@@ -180,6 +180,12 @@ public with sharing class RenewalManagementController {
 
     //create transaction fee ITEM records
     public static List<RegulatoryTrxnFeeItem> createTransFeeItemRecords(Map<Id, Account> renewalFeeAccMap, Map<Id, RegulatoryTrxnFee> transFeeMap) {//COF , Map<String, RegulatoryAuthorizationType> regAuthNameMap) {
+        //no Annual Renewal Fee for callers that do not pass the eligible accounts
+        return createTransFeeItemRecords(renewalFeeAccMap, transFeeMap, new Set<Id>());
+    }
+
+    //create transaction fee ITEM records - annualFeeAccIds: accounts eligible for the one time Annual Renewal Fee
+    public static List<RegulatoryTrxnFeeItem> createTransFeeItemRecords(Map<Id, Account> renewalFeeAccMap, Map<Id, RegulatoryTrxnFee> transFeeMap, Set<Id> annualFeeAccIds) {
         Id transFeeItemRT;
         Map<Id, RegulatoryTrxnFeeItem> transFeeItemAccMap = new Map<Id, RegulatoryTrxnFeeItem>();
         List<RegulatoryTrxnFeeItem> transFeeItemList = new List<RegulatoryTrxnFeeItem>();
@@ -190,6 +196,12 @@ public with sharing class RenewalManagementController {
                     RegulatoryTrxnFeeItem transFeeItemRec = createTransFeeItemRecord(transFeeItemRT, transFeeMap.get(accRec.Id).Id, assetRec.Id, assetRec.Type__c, amtVal, assetRec.Quantity, feeType);
                     transFeeItemList.add(transFeeItemRec);
                 }
+                //one time Annual Renewal Fee - only for eligible accounts and only when the License Type has the fee configured
+                Decimal annualFee = accRec.LicenseType__r.AnnualRenewalFee__c;
+                if(annualFeeAccIds != NULL && annualFeeAccIds.contains(accRec.Id) && annualFee != NULL && annualFee > 0
+                   && transFeeMap.get(accRec.Id) != NULL) {
+                    transFeeItemList.add(createAnnualRenewalFeeItemRecord(transFeeMap.get(accRec.Id).Id, annualFee));
+                } 
             }
             //Insert RegulatoryTrxnFeeItem records
             Database.SaveResult[] srList = Database.Insert(transFeeItemList, false);
@@ -211,7 +223,20 @@ public with sharing class RenewalManagementController {
          Quantity__c = quantValue,
          FeeAmount = amtValue * quantValue,
          FeeType__c = feeType);
-         return transFeeItemRec;  
+         return transFeeItemRec;
+     }
+
+    //method to form the one time Annual Renewal Fee RegulatoryTrxnFeeItem record (not linked to a unit)
+     public static RegulatoryTrxnFeeItem createAnnualRenewalFeeItemRecord(Id regTrxnFeeId, Decimal amtValue) {
+         RegulatoryTrxnFeeItem transFeeItemRec = new RegulatoryTrxnFeeItem(
+         RecordTypeId = Schema.SObjectType.RegulatoryTrxnFeeItem.getRecordTypeInfosByDeveloperName().get('ALRTransactionFeeItem').getRecordTypeId(),
+         RegulatoryTrxnFeeId = regTrxnFeeId,
+         Name = BCMOH_Constants.annualRenewalFeeType,
+         Amount__c = amtValue,
+         Quantity__c = 1,
+         FeeAmount = amtValue,
+         FeeType__c = BCMOH_Constants.annualRenewalFeeType);
+         return transFeeItemRec;
      }
 
 

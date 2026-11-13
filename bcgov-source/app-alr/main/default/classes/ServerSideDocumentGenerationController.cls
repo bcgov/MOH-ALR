@@ -132,6 +132,15 @@ public with sharing class ServerSideDocumentGenerationController {
         try {
             //1) Get doc title
             contentDocumentTitle = docNameWithTitleMap.get(tempName);//null check not needed as attribute is passed FROM for looping of map
+            contentDocumentTitle = docNameWithTitleMap.get(tempName);
+
+            System.debug(LoggingLevel.DEBUG, 'tempName: ' + tempName);
+            System.debug(LoggingLevel.DEBUG, 'contentDocumentTitle: ' + contentDocumentTitle);
+            System.debug(LoggingLevel.DEBUG, 'invoiceIdMerge: ' + BCMOH_Constants.invoiceIdMerge);
+            System.debug(LoggingLevel.DEBUG, 'accId: ' + accId);
+            System.debug(LoggingLevel.DEBUG, 'transFeeMap1.get(accId): ' + transFeeMap1.get(accId));
+            System.debug(LoggingLevel.DEBUG, 'blaMap contains accId: ' + blaMap.containsKey(accId));
+
             if(contentDocumentTitle.contains(BCMOH_Constants.invoiceIdMerge) && transFeeMap1.get(accId) == NULL) {
                 blaErrMap.put(blaMap.get(accId).Id, BCMOH_Constants.docDataNotFetched+': '+BCMOH_Constants.regulatoryTransactionFee);
                 return NULL;//go to next iteration
@@ -292,7 +301,26 @@ public with sharing class ServerSideDocumentGenerationController {
         try {
             RegulatoryTrxnFee feeRec = transFeeMap1.get(accId);
             documentMappingData1.put('InvoiceId', feeRec.Name);//ALR-775
-            Decimal totalFeeAmount = feeRec.TotalFeeAmount; 
+            Decimal totalFeeAmount = feeRec.TotalFeeAmount;
+            //Annual Renewal Fee - make sure the invoice total includes the Annual Renewal Fee item even if the header total does not
+            Decimal annualFeeTotal = 0;
+            for(RegulatoryTrxnFeeItem annualRec : transFeeItemMap1.values()) {
+                if(annualRec.RegulatoryTrxnFeeId == feeRec.Id && annualRec.Name == BCMOH_Constants.annualRenewalFeeType && annualRec.FeeAmount != NULL) {
+                    annualFeeTotal += annualRec.FeeAmount;
+                }
+            }
+            if(totalFeeAmount != NULL && annualFeeTotal > 0) {
+                Decimal unitFeeTotal = 0;
+                for(RegulatoryTrxnFeeItem unitRec : transFeeItemMap1.values()) {
+                    if(unitRec.RegulatoryTrxnFeeId == feeRec.Id && unitRec.Name != BCMOH_Constants.annualRenewalFeeType && unitRec.FeeAmount != NULL) {
+                        unitFeeTotal += unitRec.FeeAmount;
+                    }
+                }
+                //header total already includes the annual fee when it is at least the unit items plus the annual fee
+                if(totalFeeAmount < unitFeeTotal + annualFeeTotal) {
+                    totalFeeAmount = unitFeeTotal + annualFeeTotal;
+                }
+            } 
             String formattedTotalFeeAmount = TotalFeeAmount.setScale(2).toPlainString();
 
                     if (formattedTotalFeeAmount.indexOf('.') == -1) {
@@ -314,10 +342,17 @@ public with sharing class ServerSideDocumentGenerationController {
                     }
                      results += '.' + decimalParts;
                     documentMappingData1.put('TotalFeeAmount','$'+ results.toString());
-                    
+
+            //Annual Renewal Fee tokens - blank unless the renewal fee has an Annual Renewal Fee item
+            documentMappingData1.put('AnnualFeeName', '');
+            documentMappingData1.put('AnnualFeeAmount', '');
 
             for(RegulatoryTrxnFeeItem transRec : transFeeItemMap1.values()) {
-                
+
+                if(transRec.RegulatoryTrxnFeeId == feeRec.Id && transRec.Name == BCMOH_Constants.annualRenewalFeeType && transRec.FeeAmount != NULL) {
+                    documentMappingData1.put('AnnualFeeName', BCMOH_Constants.annualRenewalFeeType);
+                    documentMappingData1.put('AnnualFeeAmount', '$' + transRec.FeeAmount.setScale(2).toPlainString());
+                 } 
                  if(transRec.RegulatoryTrxnFeeId == feeRec.Id && BCMOH_Constants.allALUnitTypes.contains(transRec.Name) &&
                    transRec.Quantity__c != NULL && transRec.Quantity__c > 0) {
                    count++;

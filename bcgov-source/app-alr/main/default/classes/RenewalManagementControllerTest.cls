@@ -160,6 +160,57 @@ public class RenewalManagementControllerTest {
         List<RegulatoryTrxnFeeItem> regTrans = [SELECT Id FROM RegulatoryTrxnFeeItem LIMIT 10];
         Assert.isNotNull(regTrans.size());
     }
+    //Annual Renewal Fee - added for an account included in the renewal when the License Type has the fee configured
+    @isTest
+    static void annualRenewalFeeAddedForIncludedAccountTest() {
+        RegulatoryAuthorizationType licenseType = [SELECT Id FROM RegulatoryAuthorizationType LIMIT 1];
+        licenseType.AnnualRenewalFee__c = 500;
+        update licenseType;
+        List<Id> accIds = new List<Id>();
+        for(Account accRec : [SELECT Id FROM Account WHERE Name = 'residenceAccount1' LIMIT 1]) {
+            accIds.add(accRec.Id);
+        }
+        Test.startTest();
+        RenewalManagementControllerBatch.enqueueJob(accIds);
+        Test.stopTest();
+        List<RegulatoryTrxnFeeItem> annualItems = [SELECT Id, Name, Amount__c, Quantity__c, FeeAmount, FeeType__c, Unit__c, RegulatoryTrxnFee.FeeType__c
+                                                   FROM RegulatoryTrxnFeeItem WHERE Name =: BCMOH_Constants.annualRenewalFeeType];
+        Assert.areEqual(1, annualItems.size(), 'One Annual Renewal Fee item expected for the included account');
+        Assert.areEqual(500, annualItems[0].Amount__c);
+        Assert.areEqual(1, annualItems[0].Quantity__c);
+        Assert.areEqual(500, annualItems[0].FeeAmount);
+        Assert.areEqual(BCMOH_Constants.annualRenewalFeeType, annualItems[0].FeeType__c);
+        Assert.isNull(annualItems[0].Unit__c);
+        Assert.areEqual(BCMOH_Constants.feeType, annualItems[0].RegulatoryTrxnFee.FeeType__c, 'Item must sit on the Renewal Unit Fee header');
+        //unit fee items are still created as before
+        Assert.isTrue([SELECT COUNT() FROM RegulatoryTrxnFeeItem WHERE FeeType__c =: BCMOH_Constants.feeType AND Unit__c != NULL] > 0);
+    }
+    //Annual Renewal Fee - not added for an account that is not included in the renewal (Excluded)
+    @isTest
+    static void annualRenewalFeeNotAddedForExcludedAccountTest() {
+        RegulatoryAuthorizationType licenseType = [SELECT Id FROM RegulatoryAuthorizationType LIMIT 1];
+        licenseType.AnnualRenewalFee__c = 500;
+        update licenseType;
+        Test.startTest();
+        RenewalManagementControllerBatch.enqueueJob(new List<Id>());
+        Test.stopTest();
+        Assert.areEqual(0, [SELECT COUNT() FROM RegulatoryTrxnFeeItem WHERE Name =: BCMOH_Constants.annualRenewalFeeType]);
+        //unit fee items are still created as before
+        Assert.isTrue([SELECT COUNT() FROM RegulatoryTrxnFeeItem WHERE FeeType__c =: BCMOH_Constants.feeType AND Unit__c != NULL] > 0);
+    }
+    //Annual Renewal Fee - not added when the License Type does not have the fee configured
+    @isTest
+    static void annualRenewalFeeNotAddedWhenNotConfiguredTest() {
+        List<Id> accIds = new List<Id>();
+        for(Account accRec : [SELECT Id FROM Account WHERE Name = 'residenceAccount1' LIMIT 1]) {
+            accIds.add(accRec.Id);
+        }
+        Test.startTest();
+        RenewalManagementControllerBatch.enqueueJob(accIds);
+        Test.stopTest();
+        Assert.areEqual(0, [SELECT COUNT() FROM RegulatoryTrxnFeeItem WHERE Name =: BCMOH_Constants.annualRenewalFeeType]);
+        Assert.isTrue([SELECT COUNT() FROM RegulatoryTrxnFeeItem WHERE FeeType__c =: BCMOH_Constants.feeType AND Unit__c != NULL] > 0);
+    }
     //invocable method in RenewalManagementController
     @isTest
     static void getAccountIdsTest() {

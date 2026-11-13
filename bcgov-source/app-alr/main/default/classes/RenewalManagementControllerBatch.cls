@@ -38,9 +38,11 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
         RenewalProcessCriteria__mdt renewalCriteriaRec = RenewalProcessCriteria__mdt.getInstance(renewalName);
         String accRecType = renewalCriteriaRec.AccountRecordType__c;
         List<String> accStatuses = renewalCriteriaRec.AccountStatuses__c.split(';');
+        List<Id> recordListIds = new List<Id>{ Id.valueOf('001bZ00000NAhplQAD') };
         String query = 'SELECT Id, Status__c, LicenseType__c,'
             +' LicenseType__r.RegulatoryAuthCategory, LicenseType__r.UnitFee__c,'
             +' LicenseType__r.OneTimeFee__c, LicenseType__r.PartialUnitFee__c, LicenseType__r.LateFee__c,'
+            +' LicenseType__r.AnnualRenewalFee__c,'//Annual Renewal Fee
             +' Name, RegId__c, LicenseType__r.Name, Phone, Fax, ParentId, Parent.Name, Parent.Phone, Parent.BillingAddress,'//ALR-560
             +' (SELECT Id, Location.VisitorAddress.Address FROM AssociatedLocations LIMIT 1),'//ALR-560
             +' (SELECT RegistrationCertificate__c FROM AccountBusinessLicenses__r WHERE Status =: activeStatusBl LIMIT 1),'//ALR-560
@@ -51,7 +53,8 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
             +' AND Type__c IN: allALUnitTypes AND Quantity > 0)'//ALR-769 - added type check, ALR-726 - quantity to be greater than 0
             +' FROM Account'
             +' WHERE recordType.DeveloperName =: accRecType AND LicenseType__c != NULL'
-            +' AND Status__c IN: Accountstatus';
+            +' AND Status__c IN: Accountstatus'
+            +' AND Id IN: recordListIds';
         return Database.getQueryLocator(query);
     }
 
@@ -59,6 +62,7 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
         Map<Id, String> blaStatusMap = new Map<Id, String>();
         Map<Id, Account> renewalAccMap = new Map<Id, Account>();
         Map<Id, Account> renewalFeeAccMap = new Map<Id, Account>();
+        Set<Id> annualFeeAccIds = new Set<Id>();//Annual Renewal Fee - eligible (Ready for Renewal) accounts only
         List<Id> includedAccIds = recordListIds;
         try {
             for(Account accRec : renewalAccList) {
@@ -94,9 +98,22 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
                         //As per ALR-560 and ALR-796 - create BLA with status as excluded and create child records 
                         blaStatusMap.put(accRec.Id, includedAccIds.contains(accRec.Id) ? blaRenewalStatus : blaExcludedStatus);
                         renewalAccMap.put(accRec.Id, accRec);
+                        //Annual Renewal Fee - applicable only for accounts included in the renewal (BLA status Ready for Renewal)
+                        if(includedAccIds.contains(accRec.Id)) {
+                            annualFeeAccIds.add(accRec.Id);
+                        }
 
                         //**As per ALR-560 and ALR-796 - No more applicable -->if assets are not present dont create Fee records (change logic to remove nesting if later)
                         //ALR-560 & ALR-796 - Excluded Ids will also have Fee records generated if assets are present.
+                       
+                        System.debug(LoggingLevel.DEBUG, 'accRec: ' + accRec);
+System.debug(LoggingLevel.DEBUG, 'accRec.Id: ' + accRec.Id);
+System.debug(LoggingLevel.DEBUG, 'accRec.Assets is null: ' + (accRec.Assets == NULL));
+System.debug(
+    LoggingLevel.DEBUG,
+    'accRec.Assets size: ' + (accRec.Assets == NULL ? 0 : accRec.Assets.size())
+);
+                        
                         if(accRec.Assets != NULL && accRec.Assets.size() > 0) {//removed - includedAccIds.contains(accRec.Id) && 
                             renewalFeeAccMap.put(accRec.Id, accRec);
                         }
@@ -109,7 +126,7 @@ public with sharing class RenewalManagementControllerBatch implements Database.B
                         //2) create Trans Fee Record
             Map<Id, RegulatoryTrxnFee> transFeeMap = RenewalManagementController.createTransFeeRecords(renewalFeeAccMap, blaRecCreateMap);
                         //3) create Trans Fee Item rec
-            List<RegulatoryTrxnFeeItem> transFeeItemList = RenewalManagementController.createTransFeeItemRecords(renewalFeeAccMap, transFeeMap);
+            List<RegulatoryTrxnFeeItem> transFeeItemList = RenewalManagementController.createTransFeeItemRecords(renewalFeeAccMap, transFeeMap, annualFeeAccIds);
             //4) attach documents to bla records
             ServerSideDocumentGenerationController.startDocGenProcess(renewalAccList, blaRecCreateMap, transFeeMap, transFeeItemList);//?documents to be attached for ready for renewal and excluded?
         }
