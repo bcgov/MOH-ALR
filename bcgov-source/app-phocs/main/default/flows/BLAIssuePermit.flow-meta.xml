@@ -114,7 +114,8 @@
     <description>EHIS-2615
 EHIS-4849 remove AAA, and Business License will not be issued from Recreational Water Asset
 Regulatory Transaction Fee validation added before issuing permit/Licence as part of EHIS-4594
-Cloned v9 and creted this version as part of ehis-5983</description>
+Cloned v9 and creted this version as part of ehis-5983
+EHIS-6173 bug fix</description>
     <environments>Default</environments>
     <formulas>
         <name>BLContactId</name>
@@ -147,6 +148,11 @@ Cloned v9 and creted this version as part of ehis-5983</description>
     )
   )
 )</expression>
+    </formulas>
+    <formulas>
+        <name>isDairyCheck</name>
+        <dataType>Boolean</dataType>
+        <expression> IF(ISPICKVAL({!recordId.Account.Type},&apos;Dairy&apos;), true, false)</expression>
     </formulas>
     <interviewLabel>BLA Issue Permit {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Issue Permit</label>
@@ -226,6 +232,12 @@ Cloned v9 and creted this version as part of ehis-5983</description>
             <field>Status</field>
             <value>
                 <stringValue>Active</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>isDairy__c</field>
+            <value>
+                <elementReference>isDairyCheck</elementReference>
             </value>
         </inputAssignments>
         <object>BusinessLicense</object>
