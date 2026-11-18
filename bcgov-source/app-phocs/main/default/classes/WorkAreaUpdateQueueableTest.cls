@@ -28,7 +28,8 @@ public class WorkAreaUpdateQueueableTest {
 
             Test.startTest();
             WorkAreaUpdateQueueable workAreaUpdateQueueable = new WorkAreaUpdateQueueable(workAreaList);
-            workAreaUpdateQueueable.updateWorkArea();
+         //  workAreaUpdateQueueable.updateWorkArea(); Commented for code covergae
+           System.enqueueJob(workAreaUpdateQueueable);
             Test.stopTest();
 
             workAreaList = [Select Id From Work_Area__c];

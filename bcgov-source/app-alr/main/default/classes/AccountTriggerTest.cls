@@ -215,4 +215,82 @@ public class AccountTriggerTest {
         }
     }
     }
+    
+    @isTest
+static void testPhocsWaterRights() {
+
+    Id recordTypeId = Schema.SObjectType.Account
+        .getRecordTypeInfosByDeveloperName()
+        .get('DrinkingWaterSourceIntake')
+        .getRecordTypeId();
+
+    Account acc = new Account(
+        Name = 'Test Drinking Water',
+        RecordTypeId = recordTypeId,
+        Type = 'Drinking Water',
+        WaterLicenseNumber__c = 'WL001',
+        WaterLicenseApplicationNumber__c = 'APP001',
+        PODNumber__c = 'POD001',
+        PurposeUseCode__c = 'Test',
+        WellTagNumber__c = 100,
+        AquiferNumber__c = 55
+    );
+
+    insert acc;
+
+    // Get old Account values
+    Account oldAcc = [
+        SELECT Id, RecordTypeId, Type,
+               WaterLicenseNumber__c,
+               WaterLicenseApplicationNumber__c,
+               PODNumber__c,
+               PurposeUseCode__c,
+               WellTagNumber__c,
+               AquiferNumber__c
+        FROM Account
+        WHERE Id = :acc.Id
+    ];
+
+    // Change Water License Number
+    Account updatedAcc = oldAcc.clone(true, true, false, false);
+    updatedAcc.WaterLicenseNumber__c = 'WL002';
+
+    Test.startTest();
+
+    // Test with changed Water License Number
+    AccountTriggerHandler.phocsWaterRights(
+        new List<Account>{updatedAcc},
+        new Map<Id, Account>{oldAcc.Id => oldAcc}
+    );
+
+    // Test with changed Application Number
+    Account updatedAppAcc = oldAcc.clone(true, true, false, false);
+    updatedAppAcc.WaterLicenseApplicationNumber__c = 'APP002';
+
+    AccountTriggerHandler.phocsWaterRights(
+        new List<Account>{updatedAppAcc},
+        new Map<Id, Account>{oldAcc.Id => oldAcc}
+    );
+
+    // Test with no changes
+    Account unchangedAcc = oldAcc.clone(true, true, false, false);
+
+    AccountTriggerHandler.phocsWaterRights(
+        new List<Account>{unchangedAcc},
+        new Map<Id, Account>{oldAcc.Id => oldAcc}
+    );
+
+    // Test with incorrect Account Type
+    Account wrongTypeAcc = oldAcc.clone(true, true, false, false);
+    wrongTypeAcc.Type = 'Other';
+    wrongTypeAcc.WaterLicenseNumber__c = 'WL003';
+
+    AccountTriggerHandler.phocsWaterRights(
+        new List<Account>{wrongTypeAcc},
+        new Map<Id, Account>{oldAcc.Id => oldAcc}
+    );
+
+    Test.stopTest();
+}
+    
 }
