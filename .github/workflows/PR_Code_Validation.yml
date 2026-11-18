@@ -27,24 +27,21 @@ jobs:
     timeout-minutes: 60
     steps:
       # === Setup. We need to get the code, set up nodejs, and create the results directory. ===
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           # Full history is required so sfdx-git-delta can diff against the PR base commit.
           fetch-depth: 0
     #  ✅ Set correct Node.js version (required by scanner)
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: '20'
+          node-version: '24'
       - run: mkdir smoke-test-results
       
       # === Make three attempts to install sfdx ===
       - name: Install Salesforce CLI (official)
         run: |
-          wget https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/sf-linux-x64.tar.xz
-          mkdir ~/sf
-          tar xJf sf-linux-x64.tar.xz -C ~/sf --strip-components 1
-          echo "$HOME/sf/bin" >> $GITHUB_PATH
+          npm install @salesforce/cli --global
 
       - name: Verify CLI
         run: sf --version
