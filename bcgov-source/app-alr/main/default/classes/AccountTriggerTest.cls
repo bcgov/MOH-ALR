@@ -291,6 +291,8 @@ static void testPhocsWaterRights() {
     );
 
     Test.stopTest();
+    System.assertNotEquals(null, oldAcc.Id, 'Account Id should not be null.');
+
 }
     
 }
