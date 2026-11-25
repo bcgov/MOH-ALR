@@ -121,7 +121,7 @@ public with sharing class PhocsHealthAuthorityHandler {
                     continue;
                 }                
                 rec.put('HealthAuthority__c', parentAccounts.get(parentId).HealthAuthority__c);
-   				 if (rec.getSObjectType() != Asset.SObjectType && rec.getSObjectType() != RegulatoryTrxnFee.SObjectType && rec.getSObjectType() != PublicComplaint.SObjectType && rec.getSObjectType() != schema.Location.SObjectType ) {
+   				 if (rec.getSObjectType() != Asset.SObjectType && rec.getSObjectType() != RegulatoryTrxnFee.SObjectType && rec.getSObjectType() != PublicComplaint.SObjectType && rec.getSObjectType() != schema.Location.SObjectType && rec.getSObjectType() != Item__c.SObjectType ) {
 					rec.put('isDairy__c', parentAccounts.get(parentId).type == 'Dairy' ? true:false);
 
                  }
