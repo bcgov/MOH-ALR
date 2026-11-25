@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
     <sharingCriteriaRules>
-        <fullName>PHOCSItemSharingRuleBAandOfficerDairy</fullName>
+        <fullName>PHOCSItemSharingRuleBAandOfficerFH</fullName>
         <accessLevel>Edit</accessLevel>
-        <label>PHOCS Item Sharing Rule BA and Officer Dairy</label>
+        <label>PHOCS Item Sharing Rule BA and Officer FH</label>
         <sharedTo>
-            <group>EHISUsersPG</group>
+            <group>PHOCSBAandOfficerFHPG</group>
         </sharedTo>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Fraser Health - FH</value>
+        </criteriaItems>
         <criteriaItems>
             <field>RecordTypeId</field>
             <operation>equals</operation>
@@ -15,13 +20,169 @@
         <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
     </sharingCriteriaRules>
     <sharingCriteriaRules>
-        <fullName>Share_PHOCS_Items_to_Reporting_Users</fullName>
-        <accessLevel>Read</accessLevel>
-        <description>EHIS-3371</description>
-        <label>Share PHOCS Items to Reporting Users</label>
+        <fullName>PHOCSItemSharingRuleBAandOfficerIntH</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>PHOCS Item Sharing Rule BA and Officer IntH</label>
         <sharedTo>
-            <group>PHOCSReportingUserPG</group>
+            <group>PHOCSBAandOfficerIHPG</group>
         </sharedTo>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Interior Health - IH</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Food Item</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSItemSharingRuleBAandOfficerNH</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>PHOCS Item Sharing Rule BA and Officer NH</label>
+        <sharedTo>
+            <group>PHOCSBAandOfficerNHPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Northern Health - NH</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Food Item</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSItemSharingRuleBAandOfficerVCH</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>PHOCS Item Sharing Rule BA and Officer VCH</label>
+        <sharedTo>
+            <group>PHOCSBAandOfficerVCHPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Vancouver Coastal Health - VCH</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Food Item</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSItemSharingRuleReportingUserFH</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS Item Sharing Rule Reporting User FH</label>
+        <sharedTo>
+            <group>EHISFHAReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Fraser Health - FH</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Food Item</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSItemSharingRuleReportingUserIH</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS Item Sharing Rule Reporting User IH</label>
+        <sharedTo>
+            <group>EHISIHAReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Interior Health - IH</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Food Item</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSItemSharingRuleReportingUserIsland</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>PHOCS Item Sharing Rule Reporting User Island</label>
+        <sharedTo>
+            <group>PHOCSBAandOfficerIslandPG</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Island Health - Island</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Food Item</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSItemSharingRuleReportingUserNH</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS Item Sharing Rule Reporting User NH</label>
+        <sharedTo>
+            <group>EHISNHAReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Northern Health - NH</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Food Item</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSItemSharingRuleReportingUserVIHA</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS Item Sharing Rule Reporting User VIHA</label>
+        <sharedTo>
+            <group>EHISVCISReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Island Health - Island</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>PHOCS Food Item</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>PHOCSItemSharingRuleReportingVCH</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>PHOCS Item Sharing Rule Reporting VCH</label>
+        <sharedTo>
+            <group>EHISVCHReportingUser</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>HealthAuthority__c</field>
+            <operation>equals</operation>
+            <value>Vancouver Coastal Health - VCH</value>
+        </criteriaItems>
         <criteriaItems>
             <field>RecordTypeId</field>
             <operation>equals</operation>
