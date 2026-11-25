@@ -20,6 +20,8 @@ on:
       - '!sfdx-project.json'
 jobs:
   Code-Validation-Run:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     strategy:
       # By default, if any job in a matrix fails, all other jobs are immediately cancelled. This makes the jobs run to completion instead.
@@ -247,7 +249,7 @@ jobs:
 
       - name: Upload delta package & components
         if: always() && steps.delta.outputs.has_changes == 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: delta-package
           retention-days: 21

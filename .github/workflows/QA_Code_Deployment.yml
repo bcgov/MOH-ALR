@@ -24,6 +24,8 @@ on:
 # Jobs to be executed
 jobs:
   Code-Deploy-Run-QA:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     if: ${{ github.event.inputs.QA == 'true' }}
     environment: QA
@@ -82,6 +84,8 @@ jobs:
   #       run: sfdx force:source:deploy --sourcepath ${{ vars.RELEASE_PIPELINE_SOURCEPATH }} --wait 60 --verbose --testlevel RunLocalTests --targetusername DEMO
 
   Git-Tag-Run:
+    permissions:
+      contents: write    
     needs: Code-Deploy-Run-QA
     runs-on: ubuntu-24.04
     if: ${{ github.event.inputs.create-tag == 'true' }}
