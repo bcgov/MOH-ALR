@@ -31,7 +31,6 @@ public with sharing class PhocsHealthAuthorityHandler {
 * @Modification Log: [Date] - [Change Reference] - [Changed By] - [Description]
 */
     public static void populateHealthAuthority(List<SObject> childRecords) {
-        
         PHOCSBypassHealthAuthorityHandler__c bypassSetting = PHOCSBypassHealthAuthorityHandler__c.getInstance();
         
         if (bypassSetting != null && bypassSetting.BypassHealthAuthorityHandler__c) {
@@ -102,7 +101,7 @@ public with sharing class PhocsHealthAuthorityHandler {
                 return;
             }
             
-            Map<Id, Account> parentAccounts = new Map<Id, Account>([SELECT Id, HealthAuthority__c FROM Account WHERE Id IN :parentIds]);
+            Map<Id, Account> parentAccounts = new Map<Id, Account>([SELECT Id, HealthAuthority__c,type  FROM Account WHERE Id IN :parentIds]);
             
             for (SObject rec : childRecords) {
                 Id parentId = (Id) rec.get(parentIdField);
@@ -122,6 +121,10 @@ public with sharing class PhocsHealthAuthorityHandler {
                     continue;
                 }                
                 rec.put('HealthAuthority__c', parentAccounts.get(parentId).HealthAuthority__c);
+   				 if (rec.getSObjectType() != Asset.SObjectType && rec.getSObjectType() != RegulatoryTrxnFee.SObjectType && rec.getSObjectType() != PublicComplaint.SObjectType && rec.getSObjectType() != schema.Location.SObjectType && rec.getSObjectType() != Item__c.SObjectType ) {
+					rec.put('isDairy__c', parentAccounts.get(parentId).type == 'Dairy' ? true:false);
+
+                 }
             }
             
         } catch (Exception e) {
@@ -130,6 +133,7 @@ public with sharing class PhocsHealthAuthorityHandler {
             for (SObject rec : childRecords) {
                 rec.addError('Unable to populate Health Authority: ' + e.getMessage());
             }
+  			
         }
     }
 }

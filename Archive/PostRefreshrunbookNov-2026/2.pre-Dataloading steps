@@ -1,0 +1,47 @@
+
+[ ] ALR DATA load
+
+> Upload the objects in below sequence using workbench or dataloader (Folder: ALR-1180.zip)
+
+1.Regulatory Authority
+2.Regulatory Authorization Type
+3.Regulatory Code
+4.Assessment Indicator Definition
+5.Regulatory Code Assessment Indicator
+6.Assessment Task Definition
+7.Assessment Task Indicator Definition
+8.Inspection Type
+9.Assessment Indicator Defined Value
+
+> Data Seeding Instructions: 
+
+> Regulatory Authority: Insert the csv without any changes and download the results
+
+> Regulatory Authorization Type: In the filed “Issuing Department Id” update with Regulatory Authority Id inserted from previous step in csv save and import the file.
+
+> Regulatory Code: Update RegulatoryAuthorityId with the respective IDs and download the results
+
+> Assessment Indicator Definition: 
+
+-Insert the Assessment Indicator Definition_Updated csv without any changes and download the results
+
+> Regulatory Code Assessment Indicator: Copy Regulatory code Id, Assessment Ind Definition Id from previous results and paste/replace in column A and column B and now save the csv and import the csv
+
+> Assessment Task Definition: Insert the csv without any changes and download the results
+
+> Assessment Task Indicator Definition: Be careful while inserting these records
+
+- Go to “column B - AssessmentIndDefinitionId(AID) “ and give  vlookup (=vlookup(D2,H:I,2,FALSE)) vlookup expansion in D2 = ExternalId of AID and H:I are external id’s and salesforce Id’s of records inserted for AID and enter and drag / drop the records to bottom . similary for column C
+
+- Go to “column C – AssessmentTaskDefinitionId(ATD) “ and give vlookup (=vlookup(E2,L:M,2,FALSE)) vlookup expansion in E2 = ExternalId of ATD and L:M are external id’s and salesforce Id’s of records inserted for ATD and enter and drag / drop the records to bottom)
+
+> Now save the csv and import the csv select all the fields available in the csv provided
+
+> Inspection Types: Insert the csv without any changes
+
+> Assessment Indicator Defined Value:
+
+Replace Id’s of Operational History Assessment-Reportable Incidents , Operational History Assessment-Inspection and follow up, Operational History Assessment-Investigation from Assessment Indicator definition object
+
+Save the csv and import>
+
