@@ -14,6 +14,8 @@ on:
 # Jobs to be executed
 jobs:
   Code-Deploy-Run:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     environment: ST
     env:
@@ -46,6 +48,8 @@ jobs:
         run: sf project deploy start --ignore-conflicts --ignore-warnings --wait 60 --test-level RunLocalTests --target-org ST --source-dir ${{ vars.RELEASE_PIPELINE_SOURCEPATH }}
 
   Git-Tag-Run:
+    permissions:
+      contents: write
     needs: Code-Deploy-Run
     runs-on: ubuntu-latest
     if: ${{ github.event.inputs.create-tag == 'true' }}

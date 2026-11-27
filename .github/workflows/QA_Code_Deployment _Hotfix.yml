@@ -14,7 +14,9 @@ on:
 # Jobs to be executed
 jobs:
   Code-Deploy-Run:
-    runs-on: ubuntu-24.04
+    permissions:
+      contents: read    
+    runs-on: ubuntu-latest
     environment: HOTFIXQA
     env:
         SFDXAUTHURL: ${{ secrets.SFDXAUTHURL }}
@@ -46,6 +48,8 @@ jobs:
         run: sf project deploy start --wait 60 --ignore-conflicts --ignore-warnings --test-level RunLocalTests --target-org HOTFIXQA --source-dir ${{ vars.RELEASE_PIPELINE_SOURCEPATH }}
 
   Git-Tag-Run:
+    permissions:
+      contents: write    
     needs: Code-Deploy-Run
     runs-on: ubuntu-latest
     if: ${{ github.event.inputs.create-tag == 'true' }}
